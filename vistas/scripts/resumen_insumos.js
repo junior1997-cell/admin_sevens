@@ -443,7 +443,7 @@ function editar_detalle_compras(id) {
                 <input type="hidden" name="idproducto[]" value="${element.idproducto}">
                 <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
                 <div class="user-block text-nowrap">
-                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
+                  <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
                   <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
                   <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
                 </div>
@@ -532,7 +532,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -885,8 +885,7 @@ function guardar_y_editar_compras(e) {
       } else {
         ver_errores(result);
       }      
-    }
-    
+    }    
   });
 }
 
@@ -1332,6 +1331,11 @@ function actualizar_producto() {
     $(`.unidad_medida_${cont}`).html(unidad_medida_p); 
     $(`.unidad_medida_${cont}`).val(unidad_medida_p);
     $(`.precio_con_igv_${cont}`).val(precio_total_p);    
+
+    if ($('#foto2').val()) {
+      var src_img = $(`#foto2_i`).attr("src");
+      $(`.img_perfil_${cont}`).attr("src", src_img);
+    } 
   } 
   
   modificarSubtotales();
@@ -1399,24 +1403,6 @@ function formato_banco() {
       
     }).fail( function(e) { ver_errores(e); } ); 
   }
-}
-
-function decifrar_format_banco(format) {
-
-  var array_format =  format.split("-"); var format_final = "";
-
-  array_format.forEach((item, index)=>{
-
-    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
-
-    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
-  });
-
-  var ultima_letra = format_final.slice(-1);
-   
-  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
-
-  return format_final;
 }
 
 //guardar proveedor

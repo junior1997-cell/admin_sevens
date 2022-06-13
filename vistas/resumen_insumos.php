@@ -785,7 +785,7 @@
                       <div class="modal-header">
                         <h4 class="modal-title text-white nombre-img-material">Img producto</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
+                          <span class="text-white" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">                        

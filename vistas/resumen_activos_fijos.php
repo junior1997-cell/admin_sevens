@@ -27,11 +27,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['compra_insumos']==1){
-            require 'enmantenimiento.php';
+            //require 'enmantenimiento.php';
             ?>   
           
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper" style="display: none !important;">
+            <div class="content-wrapper" >
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">
@@ -550,10 +550,10 @@
                                   <label for="num_documento_prov">N° RUC / DNI</label>
                                   <div class="input-group">
                                     <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                       <span class="input-group-text" style="cursor: pointer;">
-                                        <i class="fas fa-search text-primary" id="search"></i>
-                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                        <i class="fas fa-search text-primary" id="search_prov"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge_prov" style="display: none;"></i>
                                       </span>
                                     </div>
                                   </div>
@@ -624,6 +624,15 @@
                                 <div class="form-group">
                                   <label for="c_detracciones_prov" class="chargue-format-3">Cuenta Detracciones</label>
                                   <input type="text" name="c_detracciones_prov" class="form-control" id="c_detracciones_prov" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                <div class="progress" id="barra_progress_proveeedor_div">
+                                  <div id="barra_progress_proveeedor" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
                                 </div>
                               </div>
                               
@@ -709,7 +718,7 @@
                               <!-- Nombre -->
                               <div class="col-lg-8 class_pading">
                                 <div class="form-group">
-                                  <label for="nombre_p">Nombre <sup class="text-danger">*</sup></label>
+                                  <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
                                 </div>
                               </div>
@@ -717,7 +726,7 @@
                               <!-- Categoria -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="categoria_insumos_af_p">Clasificación</label>
+                                  <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
                                   <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
                                   </select>
                                 </div>
@@ -726,7 +735,7 @@
                               <!-- Modelo -->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="modelo_p">Modelo <sup class="text-danger">*</sup> </label>
+                                  <label for="modelo_p">Modelo </label>
                                   <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
                                 </div>
                               </div>
@@ -750,7 +759,7 @@
                               <!-- Color -->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="color_p">Color</label>
+                                  <label for="color_p">Color <sup class="text-danger">(unico*)</sup></label>
                                   <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
@@ -758,7 +767,7 @@
                               <!-- Unnidad-->
                               <div class="col-lg-6" id="content-t-unidad">
                                 <div class="form-group">
-                                  <label for="unidad_medida_p">Unidad-medida</label>
+                                  <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                   <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
@@ -851,7 +860,7 @@
                                   </div>
                                   <!-- Recargar -->
                                   <div class="col-md-6 text-center comprobante">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'ficha_tecnica');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'material', 'ficha_tecnica');">
                                     <i class="fas fa-redo"></i> Recargar.
                                   </button>
                                   </div>                                  
@@ -860,6 +869,15 @@
                                   <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
                                 </div>
                                 <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                <div class="progress" id="barra_progress_activo_fijo_div">
+                                  <div id="barra_progress_activo_fijo" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
                               </div>
 
                             </div>
@@ -902,24 +920,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <!-- MODAL - VER IMG GRANDE PRODUCTO -->
-                <div class="modal fade" id="modal-ver-img-material">
-                  <div class="modal-dialog modal-dialog-scrollable modal-md">
-                    <div class="modal-content">
-                      <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title nombre-img-material">Img producto</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">                        
-                        <img onerror="this.src='../dist/svg/default_producto.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="100%" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                </div>                
 
                 <!-- Modal Ver compras - charge -->
                 <div class="modal fade" id="modal-ver-compras">
@@ -948,6 +949,25 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
+                        <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - VER IMG GRANDE PRODUCTO -->
+                <div class="modal fade" id="modal-ver-img-material">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white  nombre-img-material">Img producto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">                        
+                        <img onerror="this.src='../dist/svg/404-v2.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="100%" />
                       </div>
                     </div>
                   </div>
@@ -968,13 +988,14 @@
 
         <?php require 'script.php';  ?>
 
+        <!-- table export -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
+
         <script type="text/javascript" src="scripts/resumen_activos_fijos.js"></script>
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          })
-        </script>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
 
         <?php require 'extra_script.php'; ?>
         
