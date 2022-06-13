@@ -2072,6 +2072,10 @@ function probando_func() {
   console.log('holiiiiiiiiiiiiii');
 }
 
+function agregar_comprobante(doc, factura_name) {
+  console.log(doc, factura_name);
+}
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..

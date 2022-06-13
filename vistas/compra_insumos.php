@@ -263,7 +263,7 @@
                                   </div>
 
                                   <!-- fecha -->
-                                  <div class="col-lg-3">
+                                  <div class="col-lg-3" >
                                     <div class="form-group">
                                       <label for="fecha_compra">Fecha <sup class="text-danger">*</sup></label>
                                       <input type="date" name="fecha_compra" id="fecha_compra" class="form-control" placeholder="Fecha" />

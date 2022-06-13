@@ -416,8 +416,8 @@ if (!isset($_SESSION["nombre"])) {
               "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml((empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante)).'\', \''.$reg->razon_social.'\', \''.$reg->fecha_compra.'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
               "11" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
               "12" => '<div class="custom-control custom-checkbox">
-                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="Check_descarga_'.$reg->idcompra_proyecto.'">
-                        <label for="Check_descarga_'.$reg->idcompra_proyecto.'" class="custom-control-label"></label> 
+                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" '.$clss_disabled.' type="checkbox" id="check_descarga_'.$reg->idcompra_proyecto.'" onchange="agregar_comprobante(\''.$reg->comprobante.'\', \'' .encodeCadenaHtml('<b>' . $reg->tipo_comprobante .  '</b> '.(empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante)).'\')">
+                        <label for="check_descarga_'.$reg->idcompra_proyecto.'" class="custom-control-label  cursor-pointer"></label> 
                         <a class="btn '.$btn_tipo.' btn-xs '.$clss_disabled.'" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont.''.encodeCadenaHtml((empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante)).'-'.$reg->razon_social.'-'.$reg->fecha_compra.'" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" ><i class="fas fa-cloud-download-alt"></i></a> 
                       </div>'.$toltip,
             ];

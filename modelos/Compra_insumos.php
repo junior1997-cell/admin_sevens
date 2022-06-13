@@ -147,24 +147,15 @@ class Compra_insumos
 
   //Implementar un método para listar los registros
   public function listar_compra($nube_idproyecto) {
-    // $idproyecto=2;
-    $sql = "SELECT
-		cpp.idproyecto ,
-		cpp.idcompra_proyecto ,
-		cpp.idproveedor ,
-		cpp.fecha_compra ,
-		cpp.tipo_comprobante ,
-		cpp.serie_comprobante as serie_comprobante,
-		cpp.descripcion as descripcion,
-		cpp.total as total,
-		cpp.comprobante as comprobante,
-		cpp.estado_detraccion as estado_detraccion,
-		p.razon_social as razon_social, p.telefono,
-		cpp.estado as estado
+    $data = Array();
+    $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+
+    $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.idproveedor, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante,	
+    cpp.descripcion, cpp.total, cpp.comprobante, cpp.estado_detraccion, p.razon_social, p.telefono,	cpp.estado 
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1'
 		ORDER BY cpp.fecha_compra DESC ";
-    return ejecutarConsulta($sql);
+    return  ejecutarConsulta($sql);
   }
 
   //Implementar un método para listar los registros x proveedor
@@ -490,6 +481,32 @@ class Compra_insumos
     return ejecutarConsulta($sql);
   }
 
+}
+
+function validar_url( $host, $ruta, $file )  {
+  
+  $armar_ruta = $host . $ruta . $file;
+
+  if (empty($armar_ruta)) { return false; }
+
+  // get_headers() realiza una petición GET por defecto,
+  // cambiar el método predeterminadao a HEAD
+  // Ver http://php.net/manual/es/function.get-headers.php
+  stream_context_set_default([
+    'http' => [
+      'method' => 'HEAD',
+    ],
+  ]);
+  $headers = @get_headers($armar_ruta);
+  sscanf($headers[0], 'HTTP/%*d.%*d %d', $httpcode);
+
+  // Aceptar solo respuesta 200 (Ok), 301 (redirección permanente) o 302 (redirección temporal)
+  $accepted_response = [200, 301, 302];
+  if (in_array($httpcode, $accepted_response)) {
+    return true;
+  } else {
+    return false;
+  } 
 }
 
 ?>
