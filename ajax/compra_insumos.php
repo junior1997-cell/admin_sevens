@@ -411,9 +411,13 @@ if (!isset($_SESSION["nombre"])) {
               "7" => $list_segun_estado_detracc,
               "8" => number_format($rspta2['data']['total_pago_compras'], 2, '.', ','),
               "9" => number_format($saldo, 2, '.', ','),
-              "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+              "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml((empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante)).'\', \''.$reg->razon_social.'\', \''.$reg->fecha_compra.'\')"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
               "11" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
-              "12" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
+              "12" => '<div class="custom-control custom-checkbox">
+                        <input class="custom-control-input custom-control-input-danger custom-control-input-outline" type="checkbox" id="Check_descarga_'.$reg->idcompra_proyecto.'">
+                        <label for="Check_descarga_'.$reg->idcompra_proyecto.'" class="custom-control-label"></label> 
+                        <button class="btn btn-info btn-xs" ><i class="fas fa-cloud-download-alt"></i></button> 
+                      </div>',
             ];
           }
           $results = [

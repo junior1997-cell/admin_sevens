@@ -270,7 +270,8 @@ function tbla_principal(nube_idproyecto) {
         } else if (num < 0) {
           $("td", row).eq(8).addClass('bg-danger text-right');
         }
-      }      
+      }   
+      if (data[12] != '') { $("td", row).eq(1).addClass('text-nowrap'); }   
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -481,8 +482,8 @@ function eliminar_compra(idcompra_proyecto, nombre) {
 
 }
 
-function comprobante_compras(idcompra_proyecto, doc) {
-  //console.log(idcompra_proyecto,doc);
+function comprobante_compras(idcompra_proyecto, doc,nun_orden,num_comprobante,proveedor,fecha) {
+  console.log(idcompra_proyecto,doc);
   $("#modal-comprobantes-compra").modal("show");
   $("#comprobante_c").val(idcompra_proyecto);
   $("#doc1_nombre").html("");
@@ -506,7 +507,8 @@ function comprobante_compras(idcompra_proyecto, doc) {
     $(".descargar").removeClass("col-md-4").addClass("col-md-2");
 
     $("#ver_completo").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
-    $("#descargar_comprob").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
+   // $("#descargar_comprob").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
+    $(".descargar").html(`<a type="button" class="btn-xs btn btn-warning btn-block" href="../dist/docs/compra_insumo/comprobante_compra/${doc}"  download="${nun_orden} ${num_comprobante} - ${proveedor} - ${fecha}"> <i class="fas fa-download"></i> Descargar. </a>`);
   } else {
     $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
@@ -2063,6 +2065,12 @@ function actualizar_producto() {
 }
 
 // :::::::::::::::::::::::::: - F I N   S E C C I O N   M A T E R I A L E S -  ::::::::::::::::::::::::::
+
+// :::::::::::::::::::::::::: - S E C C I O N   D E S C A R G A S -  ::::::::::::::::::::::::::
+
+function probando_func() {
+  console.log('holiiiiiiiiiiiiii');
+}
 
 init();
 

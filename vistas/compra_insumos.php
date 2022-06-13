@@ -150,7 +150,7 @@
                                   <th>Saldo</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">CFDI.</th>
                                   <th>Descripción</th>
-                                  <th>Estado</th>
+                                  <th> <button class="btn btn-info btn-sm" onclick="probando_func();" ><i class="fas fa-cloud-download-alt"></i></button> </th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -1006,8 +1006,8 @@
                                   <div class="col-md-6 text-center comprobante">
                                     <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra', 'comprobante_compra');"><i class="fa fa-eye"></i> Comprobante.</button>
                                   </div>
-                                  <div class="col-md-4 text-center descargar" style="display: none;">
-                                    <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_comprob"  download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a>
+                                  <div class="col-md-4 text-center descargar" style="display: none;" id="proba">
+                                    <!-- <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_comprob"  download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a> -->
                                   </div>
                                   <div class="col-md-4 text-center ver_completo" style="display: none;">
                                     <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_completo"> <i class="fas fa-expand"></i> Ver completo. </a>
