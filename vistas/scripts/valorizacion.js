@@ -1,4 +1,5 @@
 var tabla_principal;
+var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/valorizacion/documento/` : `${window.location.origin}/dist/docs/valorizacion/documento/` ;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -86,7 +87,7 @@ function ver_quincenas(nube_idproyecto) {
   
           let fecha_ii = format_a_m_d(fecha_inicio); let fecha_ff = format_a_m_d(fecha);
           
-          $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
+          $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
           
           fecha_i = sumaFecha(1,fecha);
     
@@ -114,7 +115,7 @@ function ver_quincenas(nube_idproyecto) {
             
             // console.log(fecha_f + ' - '+e.data.fecha_fin);
 
-            $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -129,7 +130,7 @@ function ver_quincenas(nube_idproyecto) {
 
             $(".h1-titulo").html("Valorización - Al finalizar");
 
-            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
+            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
 
           } else {
             $('#lista_quincenas').html(`<div class="info-box shadow-lg w-600px"> 
@@ -185,15 +186,12 @@ function guardaryeditar(e) {
         e = JSON.parse(e);
         if (e.status == true) {	
 
-          Swal.fire("Correcto!", "Documento guardado correctamente", "success");			 
-          
+          Swal.fire("Correcto!", "Documento guardado correctamente", "success");	
           limpiar();
-
-          $("#modal-agregar-valorizacion").modal("hide");
-
           tabla_principal.ajax.reload(null, false);
-          mostrar_form_table(1);
-          // fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'))
+          mostrar_form_table(2);
+          fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'));
+          $("#modal-agregar-valorizacion").modal("hide");
 
         }else{
           ver_errores(e);
@@ -202,19 +200,13 @@ function guardaryeditar(e) {
       $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
-
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener("progress", function (evt) {
-
         if (evt.lengthComputable) {
-
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
           $("#barra_progress").css({"width": percentComplete+'%'});
-
           $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-
         }
       }, false);
       return xhr;
@@ -222,11 +214,11 @@ function guardaryeditar(e) {
     beforeSend: function () {
       $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
-      $("#barra_progress").text("0%");
+      $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
     },
     complete: function () {
       $("#barra_progress").css({ width: "0%", });
-      $("#barra_progress").text("0%");
+      $("#barra_progress").text("0%").removeClass('progress-bar-striped progress-bar-animated');
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
@@ -242,7 +234,7 @@ function listar_tbla_principal(nube_idproyecto) {
 
   tabla_principal = $('#tabla-principal').dataTable({
     responsive: true,
-    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200, ], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -287,40 +279,48 @@ function modal_comprobante(doc_valorizacion, indice, nombre, numero_q_s,) {
 
   if (doc_valorizacion=='' || doc_valorizacion==null) {
     $('#ver-documento').html(
-      '<div class="col-lg-6">'+
-      '<a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" >'+
-          '<i class="fas fa-download"></i> Descargar'+
-      '</a>'+
-      '</div>'+
-      '<div class="col-lg-6 mb-4">'+
-      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-          '<i class="fas fa-expand"></i> Ver completo'+
-      '</a>'+
-      '</div>'+
-      '<div class="col-lg-12 ">'+
-        '<div class="embed-responsive" style="padding-bottom:30%" >'+
-            '<div class="alert alert-warning alert-dismissible">'+
-                '<button type="button" class="close" data-dismiss="Alerta" aria-hidden="true">×</button><h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>'+
-                'No hay un documento para ver. Edite este registro y vuelva a intentar.'+
-            '</div>'+
-        '</div>'+
-      '</div>'
+      `<div class="col-lg-6"><a class="btn btn-warning btn-block btn-xs disabled" type="button" href="#"><i class="fas fa-download"></i> Descargar</a></div>
+      <div class="col-lg-6 mb-4"><a class="btn btn-info btn-block btn-xs disabled" href="#" type="button"><i class="fas fa-expand"></i> Ver completo</a></div>
+      <div class="col-lg-12 ">
+        <div class="embed-responsive" style="padding-bottom:30%" >
+          <div class="alert alert-warning alert-dismissible">
+            <button type="button" class="close" data-dismiss="Alerta" aria-hidden="true">×</button><h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+            No hay un documento para ver. Edite este registro y vuelva a intentar.
+          </div>
+        </div>
+      </div>`
     );
   } else {
-    var tipo_doc = doc_view_extencion(doc_valorizacion, 'valorizacion', 'documento', '100%', '400');
+    if (UrlExists(`${host}${doc_valorizacion}`) == 200) {
+      var tipo_doc = doc_view_extencion(doc_valorizacion, 'valorizacion', 'documento', '100%', '400');
 
-    $('#ver-documento').html(`
-      <div class="col-lg-6">
-        <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${doc_valorizacion}" download="${replace_punto_a_guion(indice)} ${nombre} - ${localStorage.getItem('nube_nombre_proyecto')} - Val${numero_q_s} - ${format[0]}-${format[1]}-${format[2]}" >
-          <i class="fas fa-download"></i> Descargar
-        </a>
-      </div>
-      <div class="col-lg-6 mb-4">
-        <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${doc_valorizacion}"  target="_blank" type="button" >
-          <i class="fas fa-expand"></i> Ver completo
-        </a>
-      </div>
-      <div class="col-lg-12 "> ${tipo_doc} </div>`);    
+      $('#ver-documento').html(`
+        <div class="col-lg-6">
+          <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${doc_valorizacion}" download="${replace_punto_a_guion(indice)} ${nombre} - ${localStorage.getItem('nube_nombre_proyecto')} - Val${numero_q_s} - ${format[0]}-${format[1]}-${format[2]}" >
+            <i class="fas fa-download"></i> Descargar
+          </a>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${doc_valorizacion}"  target="_blank" type="button" >
+            <i class="fas fa-expand"></i> Ver completo
+          </a>
+        </div>
+        <div class="col-lg-12 text-center"> ${tipo_doc} </div>`
+      );  
+    } else {
+      $('#ver-documento').html(
+        `<div class="col-lg-6"><a class="btn btn-warning btn-block btn-xs disabled" type="button" href="#"><i class="fas fa-download"></i> Descargar</a></div>
+        <div class="col-lg-6 mb-4"><a class="btn btn-info btn-block btn-xs disabled" href="#" type="button"><i class="fas fa-expand"></i> Ver completo</a></div>
+        <div class="col-lg-12 ">
+          <div class="embed-responsive" style="padding-bottom:30%" >
+            <div class="alert alert-warning alert-dismissible">
+              <button type="button" class="close" data-dismiss="Alerta" aria-hidden="true">×</button><h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+              El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar.
+            </div>
+          </div>
+        </div>`
+      );
+    }      
   }
 }
 
@@ -398,6 +398,7 @@ $(function () {
     },
 
     submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardaryeditar(e);
     },
 
@@ -408,6 +409,9 @@ $(function () {
 
 // captura las fechas de quincenas y trae los datos
 function fecha_quincena(fecha_i, fecha_f, i) {
+
+  $('.icon-resumen-cargando').html('<i class="fas fa-spinner fa-pulse fa-md"></i>');
+
   var cont_valor = parseInt(i) + 1;
   //console.log(cont_valor);
   $("#nombre_titulo").html("Valorización " + cont_valor);
@@ -440,3179 +444,619 @@ function fecha_quincena(fecha_i, fecha_f, i) {
     $("#boton-"+i).addClass('click-boton');
   }
 
+  // pintamos rojos los que no tienen docs
+  $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc');   
+  $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-5-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc');
+  $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc');
+
+  $('#documento2').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-1').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-2').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-3').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento3-4').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento5-1').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento5-2').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('','5.2');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>` );
+  $('#documento5-2-1').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('','5.2.1');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento6').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento7').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-4').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-5').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-6').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+  $('#documento8-7').html(`<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>` ); 
+
+
   // traemos loa documentos por fechas de la quincena
   $.post("../ajax/valorizacion.php?op=mostrar-docs-quincena", { nube_idproyecto: nube_idproyecto, fecha_i: fecha_i, fecha_f: fecha_f }, function (e, status) {
 
     e =JSON.parse(e); console.log(e);  
     
-    var vacio = "''";   var count_data2 = 0;
+    var vacio = "''";  var docs_total = 0; var porcent = 0;
 
     // validamos la data total
     if (e.status == true) {
-      if (e.data.data2.doc1 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
-      if (e.data.data2.doc4 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
-      if (e.data.data2.doc81 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
-      if (e.data.data2.doc82 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
-      if (e.data.data2.doc83 == "") { count_data2  = count_data2 + 0  } else { count_data2  = count_data2 + 1 }
       
-      var docs_total = count_data2 + parseInt(e.data.count_data1);
-      var porcent = (docs_total * 100 )/18;
-      // mostramos el resumen
-      $("#tabs-resumen").html(
-        '<div class="info-box bg-warning">'+
-          '<span class="info-box-icon"><i class="far fa-bookmark"></i></span>'+
-          '<div class="info-box-content">'+
-            '<span class="info-box-text">Documentos Subidos</span>'+
-            '<span class="info-box-number">Total ' + docs_total + '/18</span>'+
-            '<div class="progress" style="height: 10px !important;"> '+
-              '<div class="progress-bar" style="width: '+porcent.toFixed(1)+'%"></div>'+
-            '</div>'+
-            '<span class="progress-description">'+
-              'Tienes un <b> '+porcent.toFixed(1)+'%</b> de documentos subidos!!!'+
-            '</span>'+
-          '</div>'+
-        '</div>'
-      );
-
       // exraemos la fecha de HOY
       var tiempoTranscurrido = Date.now();
       var hoy = new Date(tiempoTranscurrido);
       var format = hoy.toLocaleDateString().split("/"); //console.log(format);
       
       // validamos la data1
-      if (e.data.data1.length === 0) {
-        //console.log('data 1 no existe');
-        // pintamos rojos los que no tienen docs
-        if ($("#tabs-2-tab").hasClass("si-doc") == false || $("#tabs-2-tab").hasClass("si-doc") == true) { $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc'); }   
-        if ($("#tabs-3-1-tab").hasClass("si-doc") == false || $("#tabs-3-1-tab").hasClass("si-doc") == true ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-2-tab").hasClass("si-doc") == false || $("#tabs-3-2-tab").hasClass("si-doc") == true ) { $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-3-tab").hasClass("si-doc") == false || $("#tabs-3-3-tab").hasClass("si-doc") == true ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-4-tab").hasClass("si-doc") == false || $("#tabs-3-4-tab").hasClass("si-doc") == true ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-5-1-tab").hasClass("si-doc") == false || $("#tabs-5-1-tab").hasClass("si-doc") == true ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-5-2-tab").hasClass("si-doc") == false || $("#tabs-5-2-tab").hasClass("si-doc") == true ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-6-tab").hasClass("si-doc") == false || $("#tabs-6-tab").hasClass("si-doc") == true ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-7-tab").hasClass("si-doc") == false || $("#tabs-7-tab").hasClass("si-doc") == true ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-4-tab").hasClass("si-doc") == false || $("#tabs-8-4-tab").hasClass("si-doc") == true ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-5-tab").hasClass("si-doc") == false || $("#tabs-8-5-tab").hasClass("si-doc") == true ) { $("#tabs-8-5-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-6-tab").hasClass("si-doc") == false || $("#tabs-8-6-tab").hasClass("si-doc") == true ) { $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-7-tab").hasClass("si-doc") == false || $("#tabs-8-7-tab").hasClass("si-doc") == true ) { $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); }
-        
-        $('#documento2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-3').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento3-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento5-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' );
-        $('#documento5-2-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-5').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-        $('#documento8-7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); 
-
-      } else {
-        // Borradmos las clases
-        if ($("#tabs-2-tab").hasClass("si-doc") == false || $("#tabs-2-tab").hasClass("si-doc") == true) { $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc'); }   
-        if ($("#tabs-3-1-tab").hasClass("si-doc") == false || $("#tabs-3-1-tab").hasClass("si-doc") == true ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-2-tab").hasClass("si-doc") == false || $("#tabs-3-2-tab").hasClass("si-doc") == true ) { $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-3-tab").hasClass("si-doc") == false || $("#tabs-3-3-tab").hasClass("si-doc") == true ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-3-4-tab").hasClass("si-doc") == false || $("#tabs-3-4-tab").hasClass("si-doc") == true ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-5-1-tab").hasClass("si-doc") == false || $("#tabs-5-1-tab").hasClass("si-doc") == true ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-5-2-tab").hasClass("si-doc") == false || $("#tabs-5-2-tab").hasClass("si-doc") == true ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-6-tab").hasClass("si-doc") == false || $("#tabs-6-tab").hasClass("si-doc") == true ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-7-tab").hasClass("si-doc") == false || $("#tabs-7-tab").hasClass("si-doc") == true ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-4-tab").hasClass("si-doc") == false || $("#tabs-8-4-tab").hasClass("si-doc") == true ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-5-tab").hasClass("si-doc") == false || $("#tabs-8-5-tab").hasClass("si-doc") == true ) { $("#tabs-8-5-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-6-tab").hasClass("si-doc") == false || $("#tabs-8-6-tab").hasClass("si-doc") == true ) { $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); }
-        if ($("#tabs-8-7-tab").hasClass("si-doc") == false || $("#tabs-8-7-tab").hasClass("si-doc") == true ) { $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); }
+      if (e.data.data1.length === 0) { console.log('data 1 no existe'); } else {
+        //console.log('data 1 existe');
         
         $.each(e.data.data1, function (index, value) {
 
-          if (value.indice == "2") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-2-tab").hasClass("no-doc") == false || $("#tabs-2-tab").hasClass("no-doc") == true) { $("#tabs-2-tab").removeClass('no-doc').addClass("si-doc"); }          
-            
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "2" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-2-tab").removeClass('no-doc').addClass("si-doc");      
+              
+              // cargamos la imagen adecuada par el archivo
               $('#documento2').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="2 Informe tecnico - ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              );  
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                 
-                $('#documento2').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                   
-                  $('#documento2').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento2').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento2').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento2').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento2').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento2').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="2 Informe tecnico - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+              $('#documento2').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              ); 
             }
-                      
           }
 
-          if (value.indice == "3.1") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-3-1-tab").hasClass("no-doc") == false || $("#tabs-3-1-tab").hasClass("no-doc") == true) { $("#tabs-3-1-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "3.1" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-3-1-tab").removeClass('no-doc').addClass("si-doc");         
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento3-1').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="3-1 Planilla de metrados -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              );    
+              
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento3-1').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento3-1').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento3-1').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento3-1').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento3-1').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento3-1').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento3-1').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-1 Planilla de metrados - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }         
+              $('#documento3-1').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "3.2") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-3-2-tab").hasClass("no-doc") == false || $("#tabs-3-2-tab").hasClass("no-doc") == true) { $("#tabs-3-2-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "3.2" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-3-2-tab").removeClass('no-doc').addClass("si-doc");   
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento3-2').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="3-2 Valorizaciones -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              ); 
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);  
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento3-2').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento3-2').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento3-2').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento3-2').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento3-2').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento3-2').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento3-2').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-2 Valorizaciones - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              $('#documento3-2').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }                 
           }
 
-          if (value.indice == "3.3") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-3-3-tab").hasClass("no-doc") == false || $("#tabs-3-3-tab").hasClass("no-doc") == true) { $("#tabs-3-3-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "3.3" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-3-3-tab").removeClass('no-doc').addClass("si-doc"); 
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento3-3').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="3-3 Resumen de valorizacion -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              );  
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento3-3').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento3-3').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento3-3').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento3-3').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento3-3').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento3-3').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento3-3').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-3 Resumen de valorizacion - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              $('#documento3-3').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "3.4") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-3-4-tab").hasClass("no-doc") == false || $("#tabs-3-4-tab").hasClass("no-doc") == true) { $("#tabs-3-4-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "3.4" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-3-4-tab").removeClass('no-doc').addClass("si-doc");     
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento3-4').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="3-4 Curva S -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              );  
+              
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento3-4').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento3-4').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento3-4').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento3-4').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento3-4').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento3-4').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento3-4').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="3-4 Curva S - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }         
+              $('#documento3-4').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "5.1") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-5-1-tab").hasClass("no-doc") == false || $("#tabs-5-1-tab").hasClass("no-doc") == true) { $("#tabs-5-1-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "5.1" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-5-1-tab").removeClass('no-doc').addClass("si-doc");        
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento5-1').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="5-1 Ensayo de consi. del concreto -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              );  
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento5-1').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento5-1').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento5-1').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento5-1').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento5-1').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento5-1').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento5-1').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-1 Ensayo de consi. del concreto - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }         
+              $('#documento5-1').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "5.2") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-5-2-tab").hasClass("no-doc") == false || $("#tabs-5-2-tab").hasClass("no-doc") == true) { $("#tabs-5-2-tab").removeClass('no-doc').addClass("si-doc"); }          
-             
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
+          if (value.indice == "5.2" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-5-2-tab").removeClass('no-doc').addClass("si-doc");        
               
+              // cargamos la imagen adecuada par el archivo
               $('#documento5-2').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta(${value.idvalorizacion},'5.2');">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="5-2 Ensayo de compresión -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
               );
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {                
-                
-                $('#documento5-2').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {                  
-                  
-                  $('#documento5-2').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-                    
-                    $('#documento5-2').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento5-2').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:30%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento5-2').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento5-2').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento5-2').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2' + "'" + ');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2 Ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
+              $('#documento5-2').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "5.2.1") {  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-              
+          if (value.indice == "5.2.1" ) {  
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // cargamos la imagen adecuada par el archivo
               $('#documento5-2-1').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2.1' + "'" + ');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc_respuesta(${value.idvalorizacion}, '5.2.1');">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="5-2-1 Respuesta de ensayo de compresión -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              );    
 
+              // mostramos el resumen
+              // docs_total += 1;
+              // porcent = (docs_total * 100 )/18;
+              // $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              // $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              // $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);               
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {                
-                
-                $('#documento5-2-1').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2.1' + "'" + ');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {                  
-                  
-                  $('#documento5-2-1').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' + "'" + '5.2.1' + "'" + ');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-                    
-                    $('#documento5-2-1').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs" href="#"  target="_blank"  type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento5-2-1').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:30%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento5-2-1').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento5-2-1').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento5-2-1').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+value.idvalorizacion+',' +  "'" + '5.2.1' + "'" + ');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="5-2-1 Respuesta de ensayo de compresión - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:30%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }              
-
+              $('#documento5-2-1').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }
             respuestadoc5_2 = true;
           }
 
-          if (value.indice == "6") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-6-tab").hasClass("no-doc") == false || $("#tabs-6-tab").hasClass("no-doc") == true) { $("#tabs-6-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "6" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-6-tab").removeClass('no-doc').addClass("si-doc");        
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento6').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/${value.doc_valorizacion}" download="6 Plan de seg y salud en el trabajo -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '700')}
+                </div>`
+              );   
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);      
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento6').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento6').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento6').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento6').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento6').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento6').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento6').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="6 Plan de seg y salud en el trabajo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              $('#documento6').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "7") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-7-tab").hasClass("no-doc") == false || $("#tabs-7-tab").hasClass("no-doc") == true) { $("#tabs-7-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "7"  ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-7-tab").removeClass('no-doc').addClass("si-doc");       
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento7').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="7 Plan de bioseguridad COVID19 -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
+                </div>`
+              );   
+              
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento7').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento7').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento7').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento7').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento7').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento7').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento7').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="7 Plan de bioseguridad COVID19 - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              $('#documento7').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "8.4") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-8-4-tab").hasClass("no-doc") == false || $("#tabs-8-4-tab").hasClass("no-doc") == true) { $("#tabs-8-4-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "8.4" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-8-4-tab").removeClass('no-doc').addClass("si-doc");        
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento8-4').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="8-4 Planilla del personal obrero -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
+                </div>`
+              );  
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento8-4').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento8-4').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento8-4').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento8-4').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento8-4').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento8-4').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento8-4').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-4 Planilla del personal obrero - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              $('#documento8-4').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }                   
           }
 
-          if (value.indice == "8.5") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-8-5-tab").hasClass("no-doc") == false || $("#tabs-8-5-tab").hasClass("no-doc") == true) { $("#tabs-8-5-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "8.5" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-8-5-tab").removeClass('no-doc').addClass("si-doc");      
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento8-5').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="8-5 Copia del seguro complement contra todo riesgo -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
+                </div>`
+              );   
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento8-5').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento8-5').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento8-5').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento8-5').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento8-5').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento8-5').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento8-5').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-5 Copia del seguro complement contra todo riesgo - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              $('#documento8-5').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }                 
           }
 
-          if (value.indice == "8.6") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-8-6-tab").hasClass("no-doc") == false || $("#tabs-8-6-tab").hasClass("no-doc") == true) { $("#tabs-8-6-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "8.6" ) {
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-8-6-tab").removeClass('no-doc').addClass("si-doc");       
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento8-6').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="8-6 Panel fotográfico -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
+                </div>`
+              );   
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);    
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento8-6').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento8-6').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento8-6').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento8-6').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento8-6').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento8-6').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento8-6').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-6 Panel fotográfico  - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              $('#documento8-6').html(
+                `<div class="col-lg-4"> <a class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }            
           }
 
-          if (value.indice == "8.7") {
-            // pintamos rojos los que no tienen docs
-            if ($("#tabs-8-7-tab").hasClass("no-doc") == false || $("#tabs-8-7-tab").hasClass("no-doc") == true) { $("#tabs-8-7-tab").removeClass('no-doc').addClass("si-doc"); }          
-  
-            // cargamos la imagen adecuada par el archivo
-            if ( extrae_extencion(value.doc_valorizacion) == "xls") {
-
+          if (value.indice == "8.7" ) {
+            //console.log('entramos');
+            if (UrlExists(`${host}${value.doc_valorizacion}`) == 200) {
+              // pintamos rojos los que no tienen docs
+              $("#tabs-8-7-tab").removeClass('no-doc').addClass("si-doc");     
+    
+              // cargamos la imagen adecuada par el archivo
               $('#documento8-7').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
+                `<div class="col-lg-4">
+                  <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});">
+                    <i class="fas fa-file-upload"></i> Subir
+                  </a>
+                </div>
+                <div class="col-lg-4">
+                  <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}" download="8-7 Copia del cuaderno de obra -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                    <i class="fas fa-download"></i> Descargar
+                  </a>
+                </div>
+                <div class="col-lg-4 mb-4">
+                  <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${value.doc_valorizacion}"  target="_blank"  type="button" >
+                    <i class="fas fa-expand"></i> Ver completo
+                  </a>
+                </div>
+                <div class="col-lg-12 text-center">
+                  ${doc_view_extencion(value.doc_valorizacion, 'valorizacion', 'documento', '100%', '100%')}
+                </div>`
+              );    
 
+              // mostramos el resumen
+              docs_total += 1;
+              porcent = (docs_total * 100 )/18;
+              $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+              $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+              $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`); 
             } else {
-
-              if ( extrae_extencion(value.doc_valorizacion) == "xlsx" ) {
-                
-                $('#documento8-7').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(value.doc_valorizacion) == "csv" ) {
-                  
-                  $('#documento8-7').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                      '</div>'+
-                    '</div>'
-                  );
-
-                }else{
-
-                  if ( extrae_extencion(value.doc_valorizacion) == "xlsm" ) {
-
-                    $('#documento8-7').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                          '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                        '</div>'+
-                      '</div>'
-                    );
-    
-                  }else{
-    
-                    if ( extrae_extencion(value.doc_valorizacion) == "pdf" ) {
-
-                      $('#documento8-7').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'"  target="_blank"  type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                            '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+value.doc_valorizacion+'" type="application/pdf" width="100%" height="100%" />'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(value.doc_valorizacion) == "doc" ) {
-
-                        $('#documento8-7').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );     
-                      }else{
-                        if ( extrae_extencion(value.doc_valorizacion) == "docx" ) {
-
-                          $('#documento8-7').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );     
-                        }else{
-                          $('#documento8-7').html(
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+value.idvalorizacion+');">'+
-                                '<i class="fas fa-file-upload"></i> Subir'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4">'+
-                              '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+value.doc_valorizacion+'" download="8-7 Copia del cuaderno de obra - '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                                '<i class="fas fa-download"></i> Descargar'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-4 mb-4">'+
-                              '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                                '<i class="fas fa-expand"></i> Ver completo'+
-                              '</a>'+
-                            '</div>'+
-                            '<div class="col-lg-12 ">'+
-                              '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                                '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                              '</div>'+
-                            '</div>'
-                          );
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }          
+              //console.log('entramos 2');
+              $('#documento8-7').html(
+                `<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${value.idvalorizacion});"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a class="btn btn-warning btn-block btn-xs" type="button" href="#" download="#"> <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs" href="#" target="_blank" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> El documento no esta disponible, porbablemente esta <b>eliminado</b> o se a <b>movido</b> a otra carpeta. Edite este registro y vuelva a intentar. </div>`
+              );
+            }               
           }
           
         });
 
-        // pintamos rojos los que no tienen docs
-        if ($("#tabs-2-tab").hasClass("si-doc") == false) { $("#tabs-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); } 
-        if ($("#tabs-3-1-tab").hasClass("si-doc") == false ) { $("#tabs-3-1-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-3-2-tab").hasClass("si-doc") == false ) { $("#tabs-3-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-3-3-tab").hasClass("si-doc") == false ) { $("#tabs-3-3-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-3').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-3-4-tab").hasClass("si-doc") == false ) { $("#tabs-3-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento3-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-5-1-tab").hasClass("si-doc") == false ) { $("#tabs-5-1-tab").addClass('no-doc').removeClass('si-doc'); $('#documento5-1').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-5-2-tab").hasClass("si-doc") == false ) { $("#tabs-5-2-tab").addClass('no-doc').removeClass('si-doc'); $('#documento5-2').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
-        if (respuestadoc5_2 == false) { $('#documento5-2-1').html('<div class="col-lg-4 "> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta('+vacio + ','+ "'" + '5.2.1' + "'" + ');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-6-tab").hasClass("si-doc") == false ) { $("#tabs-6-tab").addClass('no-doc').removeClass('si-doc'); $('#documento6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-7-tab").hasClass("si-doc") == false ) { $("#tabs-7-tab").addClass('no-doc').removeClass('si-doc'); $('#documento7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-4-tab").hasClass("si-doc") == false ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-4').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-5-tab").hasClass("si-doc") == false ) { $("#tabs-8-4-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-5').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-6-tab").hasClass("si-doc") == false ) { $("#tabs-8-6-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-6').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
-        if ($("#tabs-8-7-tab").hasClass("si-doc") == false ) { $("#tabs-8-7-tab").addClass('no-doc').removeClass('si-doc'); $('#documento8-7').html('<div class="col-lg-4"> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+vacio+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' ); }
+        if (respuestadoc5_2 == false) { $('#documento5-2-1').html(`<div class="col-lg-4 "> <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc_respuesta(${vacio}, '5.2.1');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning  btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a> </div> <div class="col-lg-4 mb-4"> <a  class="btn btn-info  btn-block btn-xs disabled" href="#" type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:30%" > No hay documento para mostrar </div> </div>` ); }
       }
 
       // validamos la data2
@@ -3620,223 +1064,38 @@ function fecha_quincena(fecha_i, fecha_f, i) {
         console.log('data 2 no existe');
       } else {
 
-        if (e.data.data2.doc1 != "") {
+        if (e.data.data2.doc1 != "" && UrlExists(`${host}${e.data.data2.doc1}`) == 200) {
 
           if ($("#tabs-1-tab").hasClass("no-doc")) { $("#tabs-1-tab").removeClass('no-doc'); }          
 
           // cargamos la imagen adecuada par el archivo
-          if ( extrae_extencion(e.data.data2.doc1) == "xls") {
+          $('#documento1').html(
+            `<div class="col-lg-4">
+              <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${e.data.data2.idproyecto});">
+                <i class="fas fa-file-upload"></i> Subir
+              </a>
+            </div>
+            <div class="col-lg-4">
+              <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${e.data.data2.doc1}" download="1 Copia del contrato -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                <i class="fas fa-download"></i> Descargar
+              </a>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${e.data.data2.doc1}"  target="_blank"  type="button" >
+                <i class="fas fa-expand"></i> Ver completo
+              </a>
+            </div>
+            <div class="col-lg-12 text-center">
+              ${doc_view_extencion(e.data.data2.doc1, 'valorizacion', 'documento', '100%', '700')}
+            </div>`
+          );
 
-            $('#documento1').html(
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                  '<i class="fas fa-file-upload"></i> Subir'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                  '<i class="fas fa-download"></i> Descargar'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4 mb-4">'+
-                '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                  '<i class="fas fa-expand"></i> Ver completo'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-12 ">'+
-                '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                  '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                '</div>'+
-              '</div>'
-            );
-
-          } else {
-
-            if ( extrae_extencion(e.data.data2.doc1) == "xlsx" ) {
-              
-              $('#documento1').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
-            }else{
-
-              if ( extrae_extencion(e.data.data2.doc1) == "csv" ) {
-                
-                $('#documento1').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(e.data.data2.doc1) == "xlsm" ) {
-
-                  $('#documento1').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                      '</div>'+
-                    '</div>'
-                  );
-  
-                }else{
-  
-                  if ( extrae_extencion(e.data.data2.doc1) == "pdf" ) {
-
-                    $('#documento1').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'"  target="_blank"  type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                          '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+e.data.data2.doc1+'" type="application/pdf" width="100%" height="100%" />'+
-                        '</div>'+
-                      '</div>'
-                    );      
-                  }else{
-                    if ( extrae_extencion(e.data.data2.doc1) == "doc" ) {
-
-                      $('#documento1').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(e.data.data2.doc1) == "docx" ) {
-
-                        $('#documento1').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );      
-                      }else{
-                        $('#documento1').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc1+'" download="1 Copia del contrato -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        ); 
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+          // mostramos el resumen
+          docs_total += 1;
+          porcent = (docs_total * 100 )/18;
+          $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+          $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+          $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
         
         } else {
 
@@ -3845,223 +1104,39 @@ function fecha_quincena(fecha_i, fecha_f, i) {
           $('#documento1').html('<div class="col-lg-4"> <a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a></div> <div class="col-lg-4 mb-4"><a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' );
         }
 
-        if (e.data.data2.doc4 != "") {
+        if (e.data.data2.doc4 != "" && UrlExists(`${host}${e.data.data2.doc4}`) == 200) {
 
           if ($("#tabs-4-tab").hasClass("no-doc")) { $("#tabs-4-tab").removeClass('no-doc'); }           
 
           // cargamos la imagen adecuada par el archivo
-          if ( extrae_extencion(e.data.data2.doc4) == "xls") {
+          $('#documento4').html(
+            `<div class="col-lg-4">
+              <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${e.data.data2.idproyecto});">
+                <i class="fas fa-file-upload"></i> Subir
+              </a>
+            </div>
+            <div class="col-lg-4">
+              <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${e.data.data2.doc4}" download="4 Cronograma de obra valorizado -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                <i class="fas fa-download"></i> Descargar
+              </a>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${e.data.data2.doc4}"  target="_blank"  type="button" >
+                <i class="fas fa-expand"></i> Ver completo
+              </a>
+            </div>
+            <div class="col-lg-12 text-center">
+            ${doc_view_extencion(e.data.data2.doc4, 'valorizacion', 'documento', '100%', '700')}
+            </div>`
+          );
 
-            $('#documento4').html(
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                  '<i class="fas fa-file-upload"></i> Subir'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                  '<i class="fas fa-download"></i> Descargar'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4 mb-4">'+
-                '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                  '<i class="fas fa-expand"></i> Ver completo'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-12 ">'+
-                '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                  '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                '</div>'+
-              '</div>'
-            );
+          // mostramos el resumen
+          docs_total += 1;
+          porcent = (docs_total * 100 )/18;
+          $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+          $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+          $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
 
-          } else {
-
-            if ( extrae_extencion(e.data.data2.doc4) == "xlsx" ) {
-              
-              $('#documento4').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
-            }else{
-
-              if ( extrae_extencion(e.data.data2.doc4) == "csv" ) {
-                
-                $('#documento4').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(e.data.data2.doc4) == "xlsm" ) {
-
-                  $('#documento4').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                      '</div>'+
-                    '</div>'
-                  );
-  
-                }else{
-  
-                  if ( extrae_extencion(e.data.data2.doc4) == "pdf" ) {
-
-                    $('#documento4').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'"  target="_blank"  type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                          '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+e.data.data2.doc4+'" type="application/pdf" width="100%" height="100%" />'+
-                        '</div>'+
-                      '</div>'
-                    );      
-                  }else{
-                    if ( extrae_extencion(e.data.data2.doc4) == "doc" ) {
-
-                      $('#documento4').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(e.data.data2.doc4) == "docx" ) {
-
-                        $('#documento4').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );      
-                      }else{
-                        $('#documento4').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc4+'" download="4 Cronograma de obra valorizado -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        ); 
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
         } else {
 
           if ($("#tabs-4-tab").hasClass("no-doc") == false) { $("#tabs-4-tab").addClass('no-doc'); }
@@ -4069,223 +1144,39 @@ function fecha_quincena(fecha_i, fecha_f, i) {
           $('#documento4').html('<div class="col-lg-4"> <a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a></div> <div class="col-lg-4 mb-4"><a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' );
         }
 
-        if (e.data.data2.doc81 != "") {
+        if (e.data.data2.doc81 != "" && UrlExists(`${host}${e.data.data2.doc81}`) == 200) {
 
           if ($("#tabs-8-1-tab").hasClass("no-doc")) { $("#tabs-8-1-tab").removeClass('no-doc'); }
 
           // cargamos la imagen adecuada par el archivo
-          if ( extrae_extencion(e.data.data2.doc81) == "xls") {
+          $('#documento8-1').html(
+            `<div class="col-lg-4">
+              <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${e.data.data2.idproyecto});">
+                <i class="fas fa-file-upload"></i> Subir
+              </a>
+            </div>
+            <div class="col-lg-4">
+              <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${e.data.data2.doc81}" download="8-1 Acta de entrega de terreno -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                <i class="fas fa-download"></i> Descargar
+              </a>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${e.data.data2.doc81}"  target="_blank"  type="button" >
+                <i class="fas fa-expand"></i> Ver completo
+              </a>
+            </div>
+            <div class="col-lg-12 text-center">
+              ${doc_view_extencion(e.data.data2.doc81, 'valorizacion', 'documento', '100%', '700')}
+            </div>`
+          );
 
-            $('#documento8-1').html(
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                  '<i class="fas fa-file-upload"></i> Subir'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                  '<i class="fas fa-download"></i> Descargar'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4 mb-4">'+
-                '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                  '<i class="fas fa-expand"></i> Ver completo'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-12 ">'+
-                '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                  '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                '</div>'+
-              '</div>'
-            );
+          // mostramos el resumen
+          docs_total += 1;
+          porcent = (docs_total * 100 )/18;
+          $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+          $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+          $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
 
-          } else {
-
-            if ( extrae_extencion(e.data.data2.doc81) == "xlsx" ) {
-              
-              $('#documento8-1').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
-            }else{
-
-              if ( extrae_extencion(e.data.data2.doc81) == "csv" ) {
-                
-                $('#documento8-1').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(e.data.data2.doc81) == "xlsm" ) {
-
-                  $('#documento8-1').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                      '</div>'+
-                    '</div>'
-                  );
-  
-                }else{
-  
-                  if ( extrae_extencion(e.data.data2.doc81) == "pdf" ) {
-
-                    $('#documento8-1').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'"  target="_blank"  type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                          '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+e.data.data2.doc81+'" type="application/pdf" width="100%" height="100%" />'+
-                        '</div>'+
-                      '</div>'
-                    );      
-                  }else{
-                    if ( extrae_extencion(e.data.data2.doc81) == "doc" ) {
-
-                      $('#documento8-1').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(e.data.data2.doc81) == "docx" ) {
-
-                        $('#documento8-1').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );      
-                      }else{
-                        $('#documento8-1').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc81+'" download="8-1 Acta de entrega de terreno -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        ); 
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
         } else {
 
           if ($("#tabs-8-1-tab").hasClass("no-doc") == false) { $("#tabs-8-1-tab").addClass('no-doc'); }
@@ -4293,223 +1184,39 @@ function fecha_quincena(fecha_i, fecha_f, i) {
           $('#documento8-1').html('<div class="col-lg-4"> <a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a></div> <div class="col-lg-4 mb-4"><a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' );
         }
 
-        if (e.data.data2.doc82 != "") {
+        if (e.data.data2.doc82 != "" && UrlExists(`${host}${e.data.data2.doc82}`) == 200) {
 
           if ($("#tabs-8-2-tab").hasClass("no-doc")) { $("#tabs-8-2-tab").removeClass('no-doc'); }
 
           // cargamos la imagen adecuada par el archivo
-          if ( extrae_extencion(e.data.data2.doc82) == "xls") {
+          $('#documento8-2').html(
+            `<div class="col-lg-4">
+              <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${e.data.data2.idproyecto});">
+                <i class="fas fa-file-upload"></i> Subir
+              </a>
+            </div>
+            <div class="col-lg-4">
+              <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${e.data.data2.doc82}" download="8-2 Acta de inicio de obra -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                <i class="fas fa-download"></i> Descargar
+              </a>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${e.data.data2.doc82}"  target="_blank"  type="button" >
+                <i class="fas fa-expand"></i> Ver completo
+              </a>
+            </div>
+            <div class="col-lg-12 text-center">
+              ${doc_view_extencion(e.data.data2.doc82, 'valorizacion', 'documento', '100%', '700')}
+            </div>`
+          );
 
-            $('#documento8-2').html(
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                  '<i class="fas fa-file-upload"></i> Subir'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                  '<i class="fas fa-download"></i> Descargar'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4 mb-4">'+
-                '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                  '<i class="fas fa-expand"></i> Ver completo'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-12 ">'+
-                '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                  '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                '</div>'+
-              '</div>'
-            );
+          // mostramos el resumen
+          docs_total += 1;
+          porcent = (docs_total * 100 )/18;
+          $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+          $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+          $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
 
-          } else {
-
-            if ( extrae_extencion(e.data.data2.doc82) == "xlsx" ) {
-              
-              $('#documento8-2').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
-            }else{
-
-              if ( extrae_extencion(e.data.data2.doc82) == "csv" ) {
-                
-                $('#documento8-2').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(e.data.data2.doc82) == "xlsm" ) {
-
-                  $('#documento8-2').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                      '</div>'+
-                    '</div>'
-                  );
-  
-                }else{
-  
-                  if ( extrae_extencion(e.data.data2.doc82) == "pdf" ) {
-
-                    $('#documento8-2').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'"  target="_blank"  type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                          '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+e.data.data2.doc82+'" type="application/pdf" width="100%" height="100%" />'+
-                        '</div>'+
-                      '</div>'
-                    );      
-                  }else{
-                    if ( extrae_extencion(e.data.data2.doc82) == "doc" ) {
-
-                      $('#documento8-2').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(e.data.data2.doc82) == "docx" ) {
-
-                        $('#documento8-2').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );      
-                      }else{
-                        $('#documento8-2').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc82+'" download="8-2 Acta de inicio de obra -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        ); 
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
         } else {
 
           if ($("#tabs-8-2-tab").hasClass("no-doc") == false) { $("#tabs-8-2-tab").addClass('no-doc'); }
@@ -4517,223 +1224,39 @@ function fecha_quincena(fecha_i, fecha_f, i) {
           $('#documento8-2').html('<div class="col-lg-4"> <a  class="btn btn-success btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');"> <i class="fas fa-file-upload"></i> Subir </a> </div> <div class="col-lg-4"> <a  class="btn btn-warning btn-block btn-xs disabled" type="button" href="#" > <i class="fas fa-download"></i> Descargar </a></div> <div class="col-lg-4 mb-4"><a  class="btn btn-info  btn-block btn-xs disabled" href="#"  target="_blank"  type="button" > <i class="fas fa-expand"></i> Ver completo </a> </div> <div class="col-lg-12 "> <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> </div>' );
         }
 
-        if (e.data.data2.doc83 != "") {
+        if (e.data.data2.doc83 != "" && UrlExists(`${host}${e.data.data2.doc83}`) == 200) {
 
           if ($("#tabs-8-3-tab").hasClass("no-doc")) { $("#tabs-8-3-tab").removeClass('no-doc'); }
 
           // cargamos la imagen adecuada par el archivo
-          if ( extrae_extencion(e.data.data2.doc83) == "xls") {
+          $('#documento8-3').html(
+            `<div class="col-lg-4">
+              <a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc(${e.data.data2.idproyecto});">
+                <i class="fas fa-file-upload"></i> Subir
+              </a>
+            </div>
+            <div class="col-lg-4">
+              <a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/${e.data.data2.doc83}" download="8-3 Certif de habil del ing resident -  ${localStorage.getItem('nube_nombre_proyecto')} - Val${cont_valor} - ${format[0]}-${format[1]}-${format[2]}" >
+                <i class="fas fa-download"></i> Descargar
+              </a>
+            </div>
+            <div class="col-lg-4 mb-4">
+              <a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/documento/${e.data.data2.doc83}"  target="_blank"  type="button" >
+                <i class="fas fa-expand"></i> Ver completo
+              </a>
+            </div>
+            <div class="col-lg-12 text-center">
+              ${doc_view_extencion(e.data.data2.doc83, 'valorizacion', 'documento', '100%', '700')}
+            </div>`
+          ); 
 
-            $('#documento8-3').html(
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                  '<i class="fas fa-file-upload"></i> Subir'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4">'+
-                '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                  '<i class="fas fa-download"></i> Descargar'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-4 mb-4">'+
-                '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                  '<i class="fas fa-expand"></i> Ver completo'+
-                '</a>'+
-              '</div>'+
-              '<div class="col-lg-12 ">'+
-                '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                  '<img src="../dist/svg/xls.svg" alt="" width="auto" height="300" >'+
-                '</div>'+
-              '</div>'
-            );
+          // mostramos el resumen
+          docs_total += 1;
+          porcent = (docs_total * 100 )/18;
+          $('.total_docs_subidos').html(`Total ${docs_total}/18`);
+          $('.porcentaje_progress').css({'width': `${porcent.toFixed(1)}%`});
+          $('.porcentaje_numero').html(`${porcent.toFixed(1)} %`);
 
-          } else {
-
-            if ( extrae_extencion(e.data.data2.doc83) == "xlsx" ) {
-              
-              $('#documento8-3').html(
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                    '<i class="fas fa-file-upload"></i> Subir'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4">'+
-                  '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                    '<i class="fas fa-download"></i> Descargar'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-4 mb-4">'+
-                  '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                    '<i class="fas fa-expand"></i> Ver completo'+
-                  '</a>'+
-                '</div>'+
-                '<div class="col-lg-12 ">'+
-                  '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                    '<img src="../dist/svg/xlsx.svg" alt="" width="auto" height="300" >'+
-                  '</div>'+
-                '</div>'
-              );
-
-            }else{
-
-              if ( extrae_extencion(e.data.data2.doc83) == "csv" ) {
-                
-                $('#documento8-3').html(
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                      '<i class="fas fa-file-upload"></i> Subir'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4">'+
-                    '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                      '<i class="fas fa-download"></i> Descargar'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-4 mb-4">'+
-                    '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                      '<i class="fas fa-expand"></i> Ver completo'+
-                    '</a>'+
-                  '</div>'+
-                  '<div class="col-lg-12 ">'+
-                    '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                      '<img src="../dist/svg/csv.svg" alt="" width="auto" height="300" >'+
-                    '</div>'+
-                  '</div>'
-                );
-
-              }else{
-
-                if ( extrae_extencion(e.data.data2.doc83) == "xlsm" ) {
-
-                  $('#documento8-3').html(
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                        '<i class="fas fa-file-upload"></i> Subir'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4">'+
-                      '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                        '<i class="fas fa-download"></i> Descargar'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-4 mb-4">'+
-                      '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                        '<i class="fas fa-expand"></i> Ver completo'+
-                      '</a>'+
-                    '</div>'+
-                    '<div class="col-lg-12 ">'+
-                      '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                        '<img src="../dist/svg/xlsm.svg" alt="" width="auto" height="300">'+
-                      '</div>'+
-                    '</div>'
-                  );
-  
-                }else{
-  
-                  if ( extrae_extencion(e.data.data2.doc83) == "pdf" ) {
-
-                    $('#documento8-3').html(
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                          '<i class="fas fa-file-upload"></i> Subir'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4">'+
-                        '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                          '<i class="fas fa-download"></i> Descargar'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-4 mb-4">'+
-                        '<a  class="btn btn-info  btn-block btn-xs" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'"  target="_blank"  type="button" >'+
-                          '<i class="fas fa-expand"></i> Ver completo'+
-                        '</a>'+
-                      '</div>'+
-                      '<div class="col-lg-12 ">'+
-                        '<div class="embed-responsive disenio-scroll" style="padding-bottom:90%" >'+
-                          '<embed class="disenio-scroll" src="../dist/docs/valorizacion/'+e.data.data2.doc83+'" type="application/pdf" width="100%" height="100%" />'+
-                        '</div>'+
-                      '</div>'
-                    );      
-                  }else{
-                    if ( extrae_extencion(e.data.data2.doc83) == "doc" ) {
-
-                      $('#documento8-3').html(
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                            '<i class="fas fa-file-upload"></i> Subir'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4">'+
-                          '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                            '<i class="fas fa-download"></i> Descargar'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-4 mb-4">'+
-                          '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                            '<i class="fas fa-expand"></i> Ver completo'+
-                          '</a>'+
-                        '</div>'+
-                        '<div class="col-lg-12 ">'+
-                          '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                            '<img src="../dist/svg/doc.svg" alt="" width="auto" height="300">'+
-                          '</div>'+
-                        '</div>'
-                      );      
-                    }else{
-                      if ( extrae_extencion(e.data.data2.doc83) == "docx" ) {
-
-                        $('#documento8-3').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/docx.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        );      
-                      }else{
-                        $('#documento8-3').html(
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-success  btn-block btn-xs" type="button" onclick="subir_doc('+e.data.data2.idproyecto+');">'+
-                              '<i class="fas fa-file-upload"></i> Subir'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4">'+
-                            '<a  class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/'+e.data.data2.doc83+'" download="8-3 Certif de habil del ing resident -  '+localStorage.getItem('nube_nombre_proyecto')+' - Val'+cont_valor+' - '+format[0]+'-'+format[1]+'-'+format[2]+'" >'+
-                              '<i class="fas fa-download"></i> Descargar'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-4 mb-4">'+
-                            '<a  class="btn btn-info  btn-block btn-xs disabled " href="#" type="button" >'+
-                              '<i class="fas fa-expand"></i> Ver completo'+
-                            '</a>'+
-                          '</div>'+
-                          '<div class="col-lg-12 ">'+
-                            '<div class="embed-responsive disenio-scroll text-center" style="padding-bottom:90%" >'+
-                              '<img src="../dist/svg/doc_si_extencion.svg" alt="" width="auto" height="300">'+
-                            '</div>'+
-                          '</div>'
-                        ); 
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
         } else {
 
           if ($("#tabs-8-3-tab").hasClass("no-doc") == false) { $("#tabs-8-3-tab").addClass('no-doc'); }
@@ -4746,6 +1269,7 @@ function fecha_quincena(fecha_i, fecha_f, i) {
       ver_errores(e);
     }
     // $('#lista_quincenas').html('');
+    $('.icon-resumen-cargando').html('<i class="far fa-bookmark"></i>');
 
   }).fail( function(e) { ver_errores(e); } );
 }

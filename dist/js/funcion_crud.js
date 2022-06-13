@@ -269,31 +269,25 @@ function crud_guardar_editar_modal_select2_xhr( url, formData, name_progress, ur
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener( "progress", function (evt) {
-
         if (evt.lengthComputable) {
           var prct = (evt.loaded / evt.total) * 100;
           prct = Math.round(prct);
-
-          $(`#barra_progress_${name_progress}`).css({ width: prct + "%", });
-
-          $(`#barra_progress_${name_progress}`).text(prct + "%");
-
+          $(`${name_progress}`).css({ width: prct + "%", });
+          $(`${name_progress}`).text(prct + "%");
         }
       }, false );
-
       return xhr;
     },
     beforeSend: function () {
-      $(`#div_barra_progress_${name_progress}`).show();
-      $(`#barra_progress_${name_progress}`).css({ width: "0%", });
-      $(`#barra_progress_${name_progress}`).text("0%");
+      $(`${name_progress}_div`).show();
+      $(`${name_progress}`).css({ width: "0%", });
+      $(`${name_progress}`).text("0%");
     },
     complete: function () {
-      $(`#div_barra_progress_${name_progress}`).hide();
-      $(`#barra_progress_${name_progress}`).css({ width: "0%", });
-      $(`#barra_progress_${name_progress}`).text("0%");
+      $(`${name_progress}_div`).hide();
+      $(`${name_progress}`).css({ width: "0%", });
+      $(`${name_progress}`).text("0%");
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });

@@ -579,11 +579,21 @@ function re_visualizacion(id, carpeta, sub_carpeta) {
 
 function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', height='auto') {
 
-  var html = ''; var ruta = sub_carpeta==''?  `../dist/docs/${carpeta}/${sub_carpeta}/${filename}`: `../dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
-  var extencion = '';
+  var html = ''; var extencion = '';
+  var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${sub_carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
+  var ruta = sub_carpeta==''?  `../dist/docs/${carpeta}/${sub_carpeta}/${filename}`: `../dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
+  
 
   // cargamos la imagen adecuada par el archivo
-  if ( extrae_extencion(filename) == "xls") {
+  if ( UrlExists(host) != 200 ) {
+
+    html = `<div class="callout callout-danger">
+      <p class="text-danger font-size-12px text-left">404 Documento no encontrado!!</p>
+      <p class="font-size-10px text-left">Hubo un <b>error</b> al <b>encontrar este archivo</b> , los mas probable es que se haya eliminado, o se haya movido a otro lugar, se <b>recomienda editar</b> en su módulo correspodiente.</p>
+    </div>`;
+    extencion = extrae_extencion(filename);
+
+  }else if ( extrae_extencion(filename) == "xls") {
 
     html = `<img src="../dist/svg/xls.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
@@ -815,7 +825,8 @@ function buscar_sunat_reniec(input='') {
                 $(`#charge${input}`).hide();
 
                 data.razonSocial == null ? $(`#nombre${input}`).val(data.nombreComercial) : $(`#nombre${input}`).val(data.razonSocial);
-                data.razonSocial == null ? $(`#empresa${input}`).val(data.empresaComercial) : $(`#empresa${input}`).val(data.razonSocial);
+                data.razonSocial == null ? $(`#empresa${input}`).val(data.nombreComercial) : $(`#empresa${input}`).val(data.razonSocial);
+                data.razonSocial == null ? $(`#razon_social${input}`).val(data.nombreComercial) : $(`#razon_social${input}`).val(data.razonSocial);
 
                 data.razonSocial == null ? $(`#titular_cuenta${input}`).val(data.nombreComercial) : $(`#titular_cuenta${input}`).val(data.razonSocial);
 

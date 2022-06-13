@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Valorización</title>
+        <title>Valorización | Admin Sevens</title>
 
         <?php $title = "Valorización"; require 'head.php'; ?>
 
@@ -30,11 +30,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['valorizacion']==1){
-            require 'enmantenimiento.php';
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper" style="display: none !important;">
+            <div class="content-wrapper" >
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">
@@ -62,11 +62,11 @@
                         <div class="card-header">
                           <!-- regresar -->
                           <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();" ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>
                           <!-- listar quincenas -->
                           <div id="lista_quincenas" class="row-horizon disenio-scroll" >
-                              <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                            <i class="fas fa-spinner fa-pulse fa-2x"></i>
                           </div>  
                         </div>
                         <!-- /.card-header -->
@@ -110,31 +110,13 @@
                                 <a class="nav-link ml-4" id="tabs-8-2-tab" data-toggle="pill" href="#tabs-8-2" role="tab" aria-controls="tabs-8-2" aria-selected="false" onclick="add_data_form('8.2', 'Acta de inicio de obra');">
                                   8.2 Acta de inicio de obra
                                 </a>
-                                <a
-                                  class="nav-link ml-4"
-                                  id="tabs-8-3-tab"
-                                  data-toggle="pill"
-                                  href="#tabs-8-3"
-                                  role="tab"
-                                  aria-controls="tabs-8-3"
-                                  aria-selected="false"
-                                  onclick="add_data_form('8.3', 'Certificado de habilidad del ingeniero residente');"
-                                >
+                                <a class="nav-link ml-4" id="tabs-8-3-tab" data-toggle="pill" href="#tabs-8-3" role="tab" aria-controls="tabs-8-3" aria-selected="false" onclick="add_data_form('8.3', 'Certificado de habilidad del ingeniero residente');" >
                                   8.3 Certificado de habilidad del ingeniero residente
                                 </a>
                                 <a class="nav-link ml-4" id="tabs-8-4-tab" data-toggle="pill" href="#tabs-8-4" role="tab" aria-controls="tabs-8-4" aria-selected="false" onclick="add_data_form('8.4', 'Planilla del personal obrero');">
                                   8.4 Planilla del personal obrero
                                 </a>
-                                <a
-                                  class="nav-link ml-4"
-                                  id="tabs-8-5-tab"
-                                  data-toggle="pill"
-                                  href="#tabs-8-5"
-                                  role="tab"
-                                  aria-controls="tabs-8-5"
-                                  aria-selected="false"
-                                  onclick="add_data_form('8.5', 'Copia del seguro complementario contra todo riesgo');"
-                                >
+                                <a class="nav-link ml-4" id="tabs-8-5-tab" data-toggle="pill" href="#tabs-8-5" role="tab" aria-controls="tabs-8-5" aria-selected="false" onclick="add_data_form('8.5', 'Copia del seguro complementario contra todo riesgo');" >
                                   8.5 Copia del seguro complementario contra todo riesgo
                                 </a>
                                 <a class="nav-link ml-4" id="tabs-8-6-tab" data-toggle="pill" href="#tabs-8-6" role="tab" aria-controls="tabs-8-6" aria-selected="false" onclick="add_data_form('8.6', 'Panel fotográfico');">
@@ -151,7 +133,19 @@
                               <div class="tab-content" id="tabs-tabContent">
                                 <!-- Resumen de documentos subidos -->
                                 <div class="tab-pane fade show active" id="tabs-resumen" role="tabpanel" aria-labelledby="tabs-resumen-tab">
-                                  <!-- aqui va el resumen -->
+                                  <div class="info-box bg-warning">
+                                    <span class="info-box-icon icon-resumen-cargando"><i class="fas fa-spinner fa-pulse fa-md"></i></span>
+                                    <div class="info-box-content">
+                                      <span class="info-box-text">Documentos Subidos</span>
+                                      <span class="info-box-number total_docs_subidos">Total 0/18</span>
+                                      <div class="progress" style="height: 10px !important;"> 
+                                        <div class="progress-bar porcentaje_progress" ></div>
+                                      </div>
+                                      <span class="progress-description">
+                                        Tienes un <b class="porcentaje_numero"> 0%</b> de documentos subidos!!!
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
 
                                 <!-- 1. Copia del contrato -->

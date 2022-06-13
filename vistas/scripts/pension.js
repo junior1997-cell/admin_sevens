@@ -164,7 +164,7 @@ function listar_botoness( nube_idproyecto ) {
             //asignamos los datos del primer boton
             if (estado_fecha_1) { fecha_inicial_1=fecha_i; fecha_inicial_2=fecha_f;  i_inicial=i;  cont_inial=cont; estado_fecha_1=false;}
 
-            $('#List_smnas_pen').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', '${cont}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $('#List_smnas_pen').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', '${cont}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -1308,6 +1308,7 @@ $(function () {
 
   // Aplicando la validacion del select cada vez que cambie
   $("#proveedor").on("change", function () { $(this).trigger("blur"); });
+  $("#servicio_p").on("change", function () { $(this).trigger("blur"); });
 
   // Aplicando la validacion del select cada vez que cambie
   $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
@@ -1391,6 +1392,7 @@ $(function () {
 
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
   $("#proveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#servicio_p").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
   $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });

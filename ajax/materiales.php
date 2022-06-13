@@ -32,7 +32,7 @@
       $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadena($_POST["monto_igv"]) : "";
       $precio_real = isset($_POST["precio_real"]) ? limpiarCadena($_POST["precio_real"]) : "";
       
-      $unid_medida = isset($_POST["unid_medida"]) ? limpiarCadena($_POST["unid_medida"]) : "";
+      $unidad_medida = isset($_POST["unidad_medida"]) ? limpiarCadena($_POST["unidad_medida"]) : "";
       $color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
       $total_precio = isset($_POST["total_precio"]) ? limpiarCadena($_POST["total_precio"]) : "";
 
@@ -80,7 +80,7 @@
 
           if (empty($idproducto)) {
             
-            $rspta = $materiales->insertar($idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
+            $rspta = $materiales->insertar($idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
             
             echo json_encode( $rspta, true);
 
@@ -99,7 +99,7 @@
               }
             }
              
-            $rspta = $materiales->editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio);
+            $rspta = $materiales->editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
             
             echo json_encode( $rspta, true) ;
           }
@@ -133,22 +133,18 @@
           $rspta = $materiales->tbla_principal();
           //Vamos a declarar un array
           $data = [];
-          $imagen = '';
-          $ficha_tecnica = '';
-          $monto_igv = '';
           $imagen_error = "this.src='../dist/svg/404-v2.svg'";
           $cont=1;
-
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
           if ($rspta['status']) {
             while ($reg = $rspta['data']->fetch_object()) {
 
-              if (empty($reg->imagen)) { $imagen = 'producto-sin-foto.svg';  } else { $imagen = $reg->imagen;   }
-  
-              empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
+              $imagen = (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen) ;
               
-              empty($reg->precio_igv) ? ($monto_igv = '-') : ($monto_igv = $reg->precio_igv);
+              $ficha_tecnica = empty($reg->ficha_tecnica) ? ( '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ( '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
+              
+              $monto_igv = (empty($reg->precio_igv) ?  '-' :  $reg->precio_igv);
               
               $data[] = [
                 "0"=>$cont++,
