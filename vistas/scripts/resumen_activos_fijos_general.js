@@ -514,7 +514,7 @@ function guardar_proveedor(e) {
   crud_guardar_editar_modal_select2_xhr( 
     "../ajax/resumen_activos_fijos_general.php?op=guardar_proveedor", 
     formData,
-    'proveeedor', 
+    '#barra_progress_proveeedor', 
     "../ajax/ajax_general.php?op=select2Proveedor", 
     '#idproveedor',
     function(){ limpiar_form_proveedor(); $("#modal-agregar-proveedor").modal("hide"); }, 
@@ -1712,6 +1712,9 @@ function ver_detalle_compras(idcompra_proyecto, op) {
   $("#cargando-5-fomulario").hide();
   $("#cargando-6-fomulario").show();
 
+  $("#print_pdf_compra").addClass('disabled');
+  $("#excel_compra").addClass('disabled');
+
   $("#modal-ver-compras").modal("show");
 
   $.post(`../ajax/resumen_activos_fijos_general.php?op=ver_detalle_compras_${op}&id_compra=${idcompra_proyecto}`, function (r) {
@@ -1719,7 +1722,16 @@ function ver_detalle_compras(idcompra_proyecto, op) {
     $('[data-toggle="tooltip"]').tooltip();
 
     $("#cargando-5-fomulario").show();
-    $("#cargando-6-fomulario").hide();    
+    $("#cargando-6-fomulario").hide();   
+
+    $("#print_pdf_compra").removeClass('disabled');    
+    $("#excel_compra").removeClass('disabled');
+    if (op == 'Insumos') {
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+    } else {
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=activo_fijo` );
+    }
+    
   });
 }
 

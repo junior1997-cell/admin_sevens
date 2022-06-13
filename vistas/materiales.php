@@ -181,7 +181,7 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="Unidad-medida">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
+                                  <select name="unidad_medida" id="unidad_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
 

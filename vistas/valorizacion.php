@@ -62,11 +62,11 @@
                         <div class="card-header">
                           <!-- regresar -->
                           <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();" ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>
                           <!-- listar quincenas -->
                           <div id="lista_quincenas" class="row-horizon disenio-scroll" >
-                              <i class="fas fa-spinner fa-pulse fa-2x"></i>
+                            <i class="fas fa-spinner fa-pulse fa-2x"></i>
                           </div>  
                         </div>
                         <!-- /.card-header -->

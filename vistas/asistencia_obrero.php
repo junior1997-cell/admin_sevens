@@ -37,7 +37,7 @@
                   <div class="row mb-2">
                     <div class="col-sm-6">
                       <h1>Asistencia 
-                        <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-fechas-actividades" onclick="limpiar_form_fechas_actividades();">
+                        <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-fechas-actividades" onclick="limpiar_form_fechas_actividades();">
                         <i class="far fa-calendar-alt"></i> Agregar Fechas de Actividades
                         </button>
                       </h1>
@@ -61,19 +61,19 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title" id="btn-registrar">
-                            <!-- <button type="button" class="btn bg-gradient-success"  data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();" style="margin-right: 10px; height: 61px;"><i class="fas fa-user-plus"></i> Agregar </button> -->
+                            <!-- <button type="button" class="btn bg-gradient-success"  data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();" style="margin-right: 10px;"><i class="fas fa-user-plus"></i> Agregar </button> -->
                           </h3>
                           <!-- regresar -->
                           <h3 class="card-title mr-3" id="btn-regresar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-warning" onclick="mostrar_form_table(1);despintar_btn_select();" style="height: 61px;"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>
                           <!-- Editar -->
                           <h3 class="card-title mr-3" id="btn-editar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-orange" onclick="show_hide_span_input(2);" style="height: 61px;"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
+                            <button type="button" class="btn bg-gradient-orange btn-sm h-50px" onclick="show_hide_span_input(2);"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
                           </h3>
                           <!-- Guardar -->
                           <h3 class="card-title mr-3" id="btn-guardar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia" onclick="guardar_fechas_asistencia();" style="margin-right: 10px; height: 61px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
+                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_fechas_asistencia();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
                           </h3>
                           <!-- Botones de quincenas -->
                           <div id="lista_quincenas" class="row-horizon disenio-scroll" >

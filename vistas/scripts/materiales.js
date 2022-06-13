@@ -13,14 +13,14 @@ function init() {
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
-  lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unid_medida', null);
+  lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
-  $("#unid_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
+  $("#unidad_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -93,7 +93,7 @@ function limpiar_form_material() {
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
 
-  $("#unid_medida").val("null").trigger("change");
+  $("#unidad_medida").val("null").trigger("change");
   $("#color").val("1").trigger("change");
   $("#my-switch_igv").prop("checked", true);
   $("#estado_igv").val("1");
@@ -274,7 +274,7 @@ function mostrar(idproducto) {
       $(".monto_igv").val(parseFloat(e.data.precio_igv).toFixed(2));
       $(".total_precio").val(parseFloat(e.data.precio_total).toFixed(2));    
       
-      $("#unid_medida").val(e.data.idunidad_medida).trigger("change");
+      $("#unidad_medida").val(e.data.idunidad_medida).trigger("change");
       $("#color").val(e.data.idcolor).trigger("change");
 
       if (e.data.estado_igv == "1") {
@@ -557,21 +557,21 @@ init();
 
 $(function () {   
 
-  $('#unid_medida').on('change', function() { $(this).trigger('blur'); });
+  $('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
   $('#color').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-materiales").validate({
     rules: {
       nombre_material:      { required: true },
       descripcion_material: { minlength: 4 },
-      unid_medida:          { required: true },
+      unidad_medida:          { required: true },
       color:                { required: true },
       precio_unitario:      { required: true },
     },
     messages: {
       nombre_material:      { required: "Campo requerido.", },
       descripcion_material: { minlength: "MINIMO 4 caracteres." },
-      unid_medida:          { required: "Campo requerido.", },
+      unidad_medida:          { required: "Campo requerido.", },
       color:                { required: "Campo requerido.", },
       precio_unitario:      { required: "Campo requerido.", },
     },
@@ -597,7 +597,7 @@ $(function () {
     },
   });
 
-  $('#unid_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 

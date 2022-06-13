@@ -701,8 +701,8 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-success float-right" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
-                        <button type="button" class="btn btn-info" onclick="$('.detalle_de_compra').print({addGlobalStyles : true,});"><i class="fas fa-print"></i> Imprimir</button>
+                        <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
+                        <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir</a>
                       </div>
                     </div>
                   </div>

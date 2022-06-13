@@ -101,7 +101,7 @@ function modal_comprobante(comprobante, ruta, carpeta, subcarpeta, proveedor) {
       $(".ver-comprobante").html(`<div class="alert alert-danger alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
         <h3><i class="icon fas fa-exclamation-triangle"></i> Documento no encontrado!</h3>
-        Hubo un error al encontrar este archivo, los mas probable es que se haya eliminado, o se haya movido a otro lugar, se recomiendar editar en su modulo correspodiente.
+        Hubo un error al encontrar este archivo, los mas probable es que se haya eliminado, o se haya movido a otro lugar, se recomienda editar en su módulo correspodiente.
       </div>`);      
     }
   } 

@@ -1496,7 +1496,7 @@ function guardar_proveedor(e) {
   crud_guardar_editar_modal_select2_xhr( 
     "../ajax/compra_activos_fijos.php?op=guardar_proveedor", 
     formData,
-    'proveeedor', 
+    '#barra_progress_proveeedor', 
     "../ajax/ajax_general.php?op=select2Proveedor", 
     '#idproveedor',
     function(){ limpiar_form_proveedor(); $("#modal-agregar-proveedor").modal("hide"); }, 
