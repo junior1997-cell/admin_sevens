@@ -11,6 +11,10 @@ var tabla_pagos1;
 var tabla_pagos2;
 var tabla_pagos3;
 
+var array_doc = [];
+var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/compra_insumo/comprobante_compra/` : `${window.location.origin}/dist/docs/compra_insumo/comprobante_compra/` ;
+
+
 var array_class_trabajador = [];
 //Requejo99@
 //Función que se ejecuta al inicio
@@ -902,6 +906,8 @@ function guardaryeditar_comprobante(e) {
       try {
         e = JSON.parse(e);
         if (e.status == true) {
+          // reiniciamos el array para descargar
+          array_doc = [];
 
           Swal.fire("Correcto!", "Documento guardado correctamente", "success");
 
@@ -2068,12 +2074,33 @@ function actualizar_producto() {
 
 // :::::::::::::::::::::::::: - S E C C I O N   D E S C A R G A S -  ::::::::::::::::::::::::::
 
+
 function probando_func() {
-  console.log('holiiiiiiiiiiiiii');
+  toastr.info(`Aun estamos en desarrollo`);
 }
 
-function agregar_comprobante(doc, factura_name) {
-  console.log(doc, factura_name);
+function add_remove_comprobante(id_doc, doc, factura_name) {
+  if ($(`#check_descarga_${id_doc}`).is(':checked')) {
+    if ( UrlExists(`${host}${doc}`) == 200) {
+      toastr.success(`Documento agregado <p class="h5">${factura_name}</p>`);
+      array_doc.push({ 
+        'id': id_doc,
+        'doc_ruta': `${host}${doc}`,
+      });
+    } else {
+      $(`#check_descarga_${id_doc}`).prop('checked', false);
+      toastr.error("No hay doc disponible!!!");
+    }    
+  } else {
+    // eliminamos el indice elegido
+    array_doc.forEach(function (car, index, object) {
+      if (car.id === id_doc) {
+        object.splice(index, 1);
+      }
+    });
+    toastr.info(`Documento quitado <p class="h5">${factura_name}</p>`);
+  }
+  console.log(array_doc);
 }
 
 init();
@@ -2225,7 +2252,6 @@ $(function () {
 
     errorPlacement: function (error, element) {
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
@@ -2257,7 +2283,6 @@ $(function () {
 
     errorPlacement: function (error, element) {
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 

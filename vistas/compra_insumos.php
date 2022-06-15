@@ -278,7 +278,7 @@
                                         <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
                                         <option title="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
                                       </select>
-                                    </div>
+                                    </div> 
                                   </div>
 
                                   <!-- Tipo de comprobante -->
@@ -1001,7 +1001,7 @@
                                   <div class="col-md-6 text-center subir">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
                                     <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                    <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" />
+                                    <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" accept="application/pdf, image/*" />
                                   </div>
                                   <div class="col-md-6 text-center comprobante">
                                     <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra', 'comprobante_compra');"><i class="fa fa-eye"></i> Comprobante.</button>
