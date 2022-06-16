@@ -513,6 +513,9 @@ table th {
 .shadow-1px06rem09rem-rgb-52-174-193-77 {
   box-shadow: 1px 0.6rem 0.9rem rgb(52 174 193 / 77%);
 }
+.shadow-0px1rem3rem-rgb-0-0-0-50 {
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 50%) !important;
+}
 
 /*  ══════════════════════════════════════════ - I N P U T - ══════════════════════════════════════════ */
 

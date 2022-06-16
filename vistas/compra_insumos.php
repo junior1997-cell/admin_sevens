@@ -14,7 +14,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Compras de Insumos</title>
+        <title> Compras de Insumos | Admin Sevens </title>
 
         <?php $title = "Compras  de Insumos"; require 'head.php'; ?>
 
@@ -150,7 +150,7 @@
                                   <th>Saldo</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">CFDI.</th>
                                   <th>Descripción</th>
-                                  <th> <button class="btn btn-info btn-sm" onclick="probando_func();" ><i class="fas fa-cloud-download-alt"></i></button> </th>
+                                  <th> <button class="btn btn-info btn-sm btn-descarga-multiple" onclick="download_multimple();" data-toggle="tooltip" data-original-title="Descarga múltiple" ><i class="fas fa-cloud-download-alt"></i></button> </th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -738,7 +738,16 @@
                                   <label for="c_detracciones_prov" class="chargue-format-3">Cuenta Detracciones</label>
                                   <input type="text" name="c_detracciones_prov" class="form-control" id="c_detracciones_prov" placeholder="Cuenta Detracciones" data-inputmask="" data-mask />
                                 </div>
-                              </div>                  
+                              </div>  
+                              
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="barra_progress_proveedor_div">
+                                  <div id="barra_progress_proveedor" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
 
                             </div>
                             <!-- /.card-body -->
@@ -1069,12 +1078,12 @@
 
                   <!-- Modal ver grande img producto -->
                   <div class="modal fade" id="modal-ver-img-material">
-                    <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-dialog modal-dialog-scrollable modal-md shadow-0px1rem3rem-rgb-0-0-0-50 rounded">
                       <div class="modal-content bg-color-0202022e shadow-none border-0" >
                         <div class="modal-header">
                           <h4 class="modal-title text-white nombre-img-material">Img producto</h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span class="text-danger" aria-hidden="true">&times;</span>
+                            <span class="text-white" aria-hidden="true">&times;</span>
                           </button>
                         </div>
                         <div class="modal-body">
@@ -1308,14 +1317,15 @@
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
+
+        <!-- ZIP -->
+        <script src="../plugins/jszip/jszip.js"></script>
+        <script src="../plugins/jszip/dist/jszip-utils.js"></script>
+        <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
         
         <script type="text/javascript" src="scripts/compra_insumos.js"></script>         
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
         <?php require 'extra_script.php'; ?>
         

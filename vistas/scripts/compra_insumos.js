@@ -162,9 +162,6 @@ function doc2_eliminar() {
 function limpiar_form_compra() {
   $(".tooltip").removeClass("show").addClass("hidde");
 
-  //Mostramos los select2Proveedor
-  //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
-
   $("#idcompra_proyecto").val("");
   $("#idproveedor").val("null").trigger("change");
   $("#tipo_comprobante").val("Ninguno").trigger("change");
@@ -443,17 +440,12 @@ function guardar_y_editar_compras(e) {
           }
         },
         xhr: function () {
-
-          var xhr = new window.XMLHttpRequest();
-    
-          xhr.upload.addEventListener("progress", function (evt) {
-    
-            if (evt.lengthComputable) {
-    
+          var xhr = new window.XMLHttpRequest();    
+          xhr.upload.addEventListener("progress", function (evt) {    
+            if (evt.lengthComputable) {    
               var percentComplete = (evt.loaded / evt.total)*100;
               /*console.log(percentComplete + '%');*/
-              $("#barra_progress").css({"width": percentComplete+'%'});
-    
+              $("#barra_progress").css({"width": percentComplete+'%'});    
               $("#barra_progress").text(percentComplete.toFixed(2)+" %");
             }
           }, false);
@@ -494,7 +486,7 @@ function comprobante_compras(idcompra_proyecto, doc,nun_orden,num_comprobante,pr
   $("#doc_old_1").val("doc");
   if (doc != "") {
     $("#doc_old_1").val(doc);
-    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_insumo', 'comprobante_compra','100%' ));
+    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_insumo', 'comprobante_compra','100%', '300' ));
     // cargamos la imagen adecuada par el archivo
     
     $(".ver_completo").val(doc);
@@ -575,7 +567,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <input type="hidden" name="idproducto[]" value="${idproducto}">
           <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
           <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
+            <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
             <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
           </div>
@@ -981,7 +973,7 @@ function mostrar_compra(idcompra_proyecto) {
     
     e = JSON.parse(e); // console.log(e);
 
-    if (e) {
+    if (e.status == true) {
 
       if (e.data.tipo_comprobante == "Factura") {
         $(".content-igv").show();
@@ -1044,7 +1036,7 @@ function mostrar_compra(idcompra_proyecto) {
               <input type="hidden" name="idproducto[]" value="${element.idproducto}">
               <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
                 <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
               </div>
@@ -1073,13 +1065,14 @@ function mostrar_compra(idcompra_proyecto) {
       } else {
         toastr.error("<h3>Sin productos.</h3> <br> Este registro no tiene productos para mostrar");        
       }
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
       
     } else {
-      toastr.error("<h3>Error.</h3> <br> Este registro tiene errores, o esta vacio");
+      ver_errores(e);
     }
-
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+    
   }).fail( function(e) { ver_errores(e); } );
 }
 
@@ -1095,13 +1088,18 @@ function ver_detalle_compras(idcompra_proyecto) {
   $("#modal-ver-compras").modal("show");
 
   $.post("../ajax/compra_insumos.php?op=ver_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
-    $(".detalle_de_compra").html(r); 
-    $("#cargando-5-fomulario").show();
-    $("#cargando-6-fomulario").hide();
+    r = JSON.parse(r);
+    if (r.status == true) {
+      $(".detalle_de_compra").html(r.data); 
+      $("#cargando-5-fomulario").show();
+      $("#cargando-6-fomulario").hide();
 
-    $("#print_pdf_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
-    $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").removeClass('disabled');
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+      $("#excel_compra").removeClass('disabled');
+    } else {
+      ver_errores(e);
+    }    
   }).fail( function(e) { ver_errores(e); } );
 }
 
@@ -1213,21 +1211,43 @@ function guardar_proveedor(e) {
     processData: false,
     success: function (e) {
       e = JSON.parse(e);
-      if (e.status == true) {
-        // toastr.success("proveedor registrado correctamente");
-        Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");
-         
-        limpiar_form_proveedor();
-
-        $("#modal-agregar-proveedor").modal("hide");
-
-        //Cargamos los items al select cliente
-        $.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) {  $("#idproveedor").html(r); });
-
-      } else {
-        ver_errores(e);
-      }
+      try {
+        if (e.status == true) {
+          // toastr.success("proveedor registrado correctamente");
+          Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");          
+          limpiar_form_proveedor();
+          $("#modal-agregar-proveedor").modal("hide");
+          //Cargamos los items al select cliente
+          lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', e.data);
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      
+      $("#guardar_registro_proveedor").html('Guardar Cambios').removeClass('disabled');
     },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_proveedor").css({"width": percentComplete+'%'});
+          $("#barra_progress_proveedor").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_proveedor").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_proveedor").css({ width: "0%",  });
+      $("#barra_progress_proveedor").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_proveedor").css({ width: "0%", });
+      $("#barra_progress_proveedor").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -1520,7 +1540,11 @@ function total_pagos(idcompra_proyecto) {
 
     e = JSON.parse(e);  //console.log(e);
 
-    $("#monto_total").html(formato_miles(e.data.total_monto));
+    if (e.status == true) {
+      $("#monto_total").html(formato_miles(e.data.total_monto));
+    } else {
+      ver_errores(e);
+    }    
   }).fail( function(e) { ver_errores(e); } );
 }
 
@@ -1533,66 +1557,78 @@ function total_pagos_detracc(idcompra_proyecto) {
   $.post("../ajax/compra_insumos.php?op=suma_total_pagos_prov", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {   
 
     e = JSON.parse(e); //console.log(e);
+    if (e.status == true) {
+      var inputValue = 0;
+      var x = 0;
+      var x_saldo = 0;
+      var diferencia = 0;
 
-    var inputValue = 0;
-    var x = 0;
-    var x_saldo = 0;
-    var diferencia = 0;
+      inputValue = parseFloat(quitar_formato_miles($(".t_proveedor").val()));
 
-    inputValue = parseFloat(quitar_formato_miles($(".t_proveedor").val()));
+      $("#monto_total_prov").html(formato_miles(e.data.total_montoo));
+      x = (e.data.total_montoo * 90) / inputValue;
+      $("#porcnt_prove").html(redondearExp(x, 2) + " %");
 
-    $("#monto_total_prov").html(formato_miles(e.data.total_montoo));
-    x = (e.data.total_montoo * 90) / inputValue;
-    $("#porcnt_prove").html(redondearExp(x, 2) + " %");
+      diferencia = 90 - x; console.log(inputValue+'xxxxxxxxxxxxxxxxxxxxx');
 
-    diferencia = 90 - x; console.log(inputValue+'xxxxxxxxxxxxxxxxxxxxx');
+      x_saldo = (diferencia * e.data.total_montoo) / x;
 
-    x_saldo = (diferencia * e.data.total_montoo) / x;
-
-    if (x_saldo == 0) {
-      $("#saldo_p").html("0.00");
-      $("#porcnt_sald_p").html("0.00" + " %");
+      if (x_saldo == 0) {
+        $("#saldo_p").html("0.00");
+        $("#porcnt_sald_p").html("0.00" + " %");
+      } else {
+        $("#saldo_p").html(formato_miles(redondearExp(x_saldo, 2)));
+        $("#porcnt_sald_p").html(redondearExp(diferencia, 2) + " %");
+      }
     } else {
-      $("#saldo_p").html(formato_miles(redondearExp(x_saldo, 2)));
-      $("#porcnt_sald_p").html(redondearExp(diferencia, 2) + " %");
+      ver_errores(e);
     }
+    
   }).fail( function(e) { ver_errores(e); } );
 
+  $("#monto_total_detracc").html("");
   //tabla 2 detracion
   $.post("../ajax/compra_insumos.php?op=suma_total_pagos_detracc", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {
-    $("#monto_total_detracc").html("");
-    var valor_tt_detrcc = 0;
-    var x_detrcc = 0;
-    var x_saldo_detrcc = 0;
-    var diferencia_detrcc = 0;
-
+    
     e = JSON.parse(e); //  console.log(e);
 
-    valor_tt_detrcc = parseFloat(quitar_formato_miles($(".t_detaccion").val()));
+    if (e.status == true) {
+      var valor_tt_detrcc = 0;
+      var x_detrcc = 0;
+      var x_saldo_detrcc = 0;
+      var diferencia_detrcc = 0;
 
-    $("#monto_total_detracc").html(formato_miles(e.data.total_montoo));
+      valor_tt_detrcc = parseFloat(quitar_formato_miles($(".t_detaccion").val()));
 
-    x_detrcc = (e.data.total_montoo * 10) / valor_tt_detrcc;
-    $("#porcnt_detrcc").html(redondearExp(x_detrcc, 2) + " %");
+      $("#monto_total_detracc").html(formato_miles(e.data.total_montoo));
 
-    diferencia_detrcc = 10 - x_detrcc;
+      x_detrcc = (e.data.total_montoo * 10) / valor_tt_detrcc;
+      $("#porcnt_detrcc").html(redondearExp(x_detrcc, 2) + " %");
 
-    x_saldo_detrcc = (diferencia_detrcc * e.data.total_montoo) / x_detrcc;
+      diferencia_detrcc = 10 - x_detrcc;
 
-    if (x_saldo_detrcc == 0) {
-      $("#saldo_d").html("0.00");
-      $("#porcnt_sald_d").html("0.00" + " %");
+      x_saldo_detrcc = (diferencia_detrcc * e.data.total_montoo) / x_detrcc;
+
+      if (x_saldo_detrcc == 0) {
+        $("#saldo_d").html("0.00");
+        $("#porcnt_sald_d").html("0.00" + " %");
+      } else {
+        $("#saldo_d").html(formato_miles(redondearExp(x_saldo_detrcc, 2)));
+        $("#porcnt_sald_d").html(redondearExp(diferencia_detrcc, 2) + " %");
+      }
     } else {
-      $("#saldo_d").html(formato_miles(redondearExp(x_saldo_detrcc, 2)));
-      $("#porcnt_sald_d").html(redondearExp(diferencia_detrcc, 2) + " %");
-    }
+      ver_errores(e);
+    }    
   }).fail( function(e) { ver_errores(e); } );
 }
 
 //mostrar
 function mostrar_pagos(idpago_compras) {
+
+  $("#cargando-3-fomulario").hide();
+  $("#cargando-4-fomulario").show();
+
   limpiar_form_pago_compra();
-  // console.log("___________ " + idpago_compras);
   $("#h4_mostrar_beneficiario").html("");
   $("#idproveedor_pago").val("");
   $("#modal-agregar-pago").modal("show");
@@ -1604,57 +1640,42 @@ function mostrar_pagos(idpago_compras) {
     
     e = JSON.parse(e);  console.log(e);
 
-    $("#idproveedor_pago").val(e.data.idproveedor);
-    $("#idcompra_proyecto_p").val(e.data.idcompra_proyecto);
-    // $("#maquinaria_pago").html(e.data.nombre_maquina);
-    $("#beneficiario_pago").val(e.data.beneficiario);
-    $("#h4_mostrar_beneficiario").html(e.data.beneficiario);
-    $("#cuenta_destino_pago").val(e.data.cuenta_destino);
-    $("#banco_pago").val(e.data.id_banco).trigger("change");
-    $("#titular_cuenta_pago").val(e.data.titular_cuenta);
-    $("#forma_pago").val(e.data.forma_pago).trigger("change");
-    $("#tipo_pago").val(e.data.tipo_pago).trigger("change");
-    $("#fecha_pago").val(e.data.fecha_pago);
-    $("#monto_pago").val(e.data.monto);
-    $("#numero_op_pago").val(e.data.numero_operacion);
-    $("#descripcion_pago").val(e.data.descripcion);
-    $("#idpago_compras").val(e.data.idpago_compras);
-    
-    // COMPROBANTE COMPRA
-    if (e.data.imagen == "" || e.data.imagen == null  ) {
-
-      $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-      $("#doc3_nombre").html('');
-
-      $("#doc_old_3").val(""); $("#doc3").val("");
-
-    } else {
-
-      $("#doc_old_3").val(e.data.imagen); 
-
-      $("#doc3_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.imagen)}</i></div></div>`);
+    if (e.status == true) {
+      $("#idproveedor_pago").val(e.data.idproveedor);
+      $("#idcompra_proyecto_p").val(e.data.idcompra_proyecto);
+      // $("#maquinaria_pago").html(e.data.nombre_maquina);
+      $("#beneficiario_pago").val(e.data.beneficiario);
+      $("#h4_mostrar_beneficiario").html(e.data.beneficiario);
+      $("#cuenta_destino_pago").val(e.data.cuenta_destino);
+      $("#banco_pago").val(e.data.id_banco).trigger("change");
+      $("#titular_cuenta_pago").val(e.data.titular_cuenta);
+      $("#forma_pago").val(e.data.forma_pago).trigger("change");
+      $("#tipo_pago").val(e.data.tipo_pago).trigger("change");
+      $("#fecha_pago").val(e.data.fecha_pago);
+      $("#monto_pago").val(e.data.monto);
+      $("#numero_op_pago").val(e.data.numero_operacion);
+      $("#descripcion_pago").val(e.data.descripcion);
+      $("#idpago_compras").val(e.data.idpago_compras);
       
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(e.data.imagen) == "pdf" ) {
+      // COMPROBANTE COMPRA
+      if (e.data.imagen == "" || e.data.imagen == null  ) {
 
-        $("#doc3_ver").html('<iframe src="../dist/docs/compra_insumo/comprobante_pago/'+e.data.imagen+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+        $("#doc3_nombre").html('');
+        $("#doc_old_3").val(""); $("#doc3").val("");
 
-      }else{
-        if (
-          extrae_extencion(e.data.imagen) == "jpeg" || extrae_extencion(e.data.imagen) == "jpg" || extrae_extencion(e.data.imagen) == "jpe" ||
-          extrae_extencion(e.data.imagen) == "jfif" || extrae_extencion(e.data.imagen) == "gif" || extrae_extencion(e.data.imagen) == "png" ||
-          extrae_extencion(e.data.imagen) == "tiff" || extrae_extencion(e.data.imagen) == "tif" || extrae_extencion(e.data.imagen) == "webp" ||
-          extrae_extencion(e.data.imagen) == "bmp" || extrae_extencion(e.data.imagen) == "svg" ) {
+      } else {
 
-          $("#doc3_ver").html(`<img src="../dist/docs/compra_insumo/comprobante_pago/${e.data.imagen}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-          
-        } else {
-          $("#doc3_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-        }        
-      }      
-    } 
-
+        $("#doc_old_3").val(e.data.imagen);
+        $("#doc3_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.imagen)}</i></div></div>`);
+        // cargamos la imagen adecuada par el archivo
+        $("#doc3_ver").html( doc_view_extencion(e.data.imagen, 'compra_insumo', 'comprobante_pago', '100%', '210') ); 
+      }
+      $("#cargando-3-fomulario").show();
+      $("#cargando-4-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }
   }).fail( function(e) { ver_errores(e); } );
 }
 
@@ -1846,60 +1867,63 @@ function mostrar_material(idproducto, cont) {
     
     e = JSON.parse(e); console.log(e);    
 
-    $("#idproducto_p").val(e.data.idproducto);
-    $("#cont").val(cont);
+    if (e.status == true) {
+      $("#idproducto_p").val(e.data.idproducto);
+      $("#cont").val(cont);
 
-    $("#nombre_p").val(e.data.nombre);
-    $("#modelo_p").val(e.data.modelo);
-    $("#serie_p").val(e.data.serie);
-    $("#marca_p").val(e.data.marca);
-    $("#descripcion_p").val(e.data.descripcion);
+      $("#nombre_p").val(e.data.nombre);
+      $("#modelo_p").val(e.data.modelo);
+      $("#serie_p").val(e.data.serie);
+      $("#marca_p").val(e.data.marca);
+      $("#descripcion_p").val(e.data.descripcion);
 
-    $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
-    $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));
-    $("#precio_sin_igv_p").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
-    $("#precio_igv_p").val(parseFloat(e.data.precio_igv).toFixed(2));
-    $("#precio_total_p").val(parseFloat(e.data.precio_total).toFixed(2));
-     
-    $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
-    $("#color_p").val(e.data.idcolor).trigger("change");  
-    $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");    
+      $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
+      $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));
+      $("#precio_sin_igv_p").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
+      $("#precio_igv_p").val(parseFloat(e.data.precio_igv).toFixed(2));
+      $("#precio_total_p").val(parseFloat(e.data.precio_total).toFixed(2));
+      
+      $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
+      $("#color_p").val(e.data.idcolor).trigger("change");  
+      $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");    
 
-    if (e.data.estado_igv == "1") {
-      $("#my-switch_igv").prop("checked", true);
+      if (e.data.estado_igv == "1") {
+        $("#my-switch_igv").prop("checked", true);
+      } else {
+        $("#my-switch_igv").prop("checked", false);
+      }
+      
+      if (e.data.imagen != "") {
+        
+        $("#foto2_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);
+
+        $("#foto2_actual").val(e.data.imagen);
+      }
+
+      // FICHA TECNICA
+      if (e.data.ficha_tecnica == "" || e.data.ficha_tecnica == null  ) {
+
+        $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+        $("#doc2_nombre").html('');
+
+        $("#doc_old_2").val(""); $("#doc2").val("");
+
+      } else {
+
+        $("#doc_old_2").val(e.data.ficha_tecnica); 
+
+        $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.ficha_tecnica)}</i></div></div>`);
+        
+        $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%', '210'));
+        
+      } 
+
+      $("#cargando-9-fomulario").show();
+      $("#cargando-10-fomulario").hide();
     } else {
-      $("#my-switch_igv").prop("checked", false);
-    }
-     
-    if (e.data.imagen != "") {
-      
-      $("#foto2_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);
-
-      $("#foto2_actual").val(e.data.imagen);
-    }
-
-    // FICHA TECNICA
-    if (e.data.ficha_tecnica == "" || e.data.ficha_tecnica == null  ) {
-
-      $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-      $("#doc2_nombre").html('');
-
-      $("#doc_old_2").val(""); $("#doc2").val("");
-
-    } else {
-
-      $("#doc_old_2").val(e.data.ficha_tecnica); 
-
-      $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.ficha_tecnica)}</i></div></div>`);
-      
-      $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%', '210'));
-      
-    } 
-
-    $("#cargando-9-fomulario").show();
-    $("#cargando-10-fomulario").hide();
-    
+      ver_errores(e);
+    }      
   }).fail( function(e) { ver_errores(e); } );
 }
 
@@ -2064,7 +2088,12 @@ function actualizar_producto() {
     $(`.color_${cont}`).val(color_p); 
     $(`.unidad_medida_${cont}`).html(unidad_medida_p); 
     $(`.unidad_medida_${cont}`).val(unidad_medida_p);
-    $(`.precio_con_igv_${cont}`).val(precio_total_p);    
+    $(`.precio_con_igv_${cont}`).val(precio_total_p);  
+
+    if ($('#foto2').val()) {
+      var src_img = $(`#foto2_i`).attr("src");
+      $(`.img_perfil_${cont}`).attr("src", src_img);
+    }  
   } 
   
   modificarSubtotales();
@@ -2074,9 +2103,44 @@ function actualizar_producto() {
 
 // :::::::::::::::::::::::::: - S E C C I O N   D E S C A R G A S -  ::::::::::::::::::::::::::
 
+function espera_dowload() {
+  toastr.error("Espera la descarga");
+}
 
-function probando_func() {
-  toastr.info(`Aun estamos en desarrollo`);
+function download_multimple() {
+  //toastr.info(`Aun estamos en desarrollo`);
+  $('.btn-descarga-multiple').html('<i class="fas fa-spinner fa-pulse "></i>').addClass('disabled btn-danger').removeClass('btn-success');
+  $('.btn-descarga-multiple').attr('onclick', 'espera_dowload();');
+  if (array_doc.length === 0) {
+    toastr.error("Selecciona algún documento");
+    $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
+    $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
+  } else {
+    const zip = new JSZip();  let count = 0; const zipFilename = "Comprobantes-de-insumos.zip";
+    array_doc.forEach(async function (value){
+
+      const urlArr = value.doc_ruta.split('/');
+      const filename = urlArr[urlArr.length - 1];
+
+      try {
+        const file = await JSZipUtils.getBinaryContent(value.doc_ruta)
+        zip.file(filename, file, { binary: true});
+        count++;
+        if(count === array_doc.length) {
+          zip.generateAsync({type:'blob'}).then(function(content) {
+            var download_zip = saveAs(content, zipFilename);
+            $( download_zip ).ready(function() { toastr.success('Descarga exitosa'); });
+            $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
+            $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
+          });
+        }
+      } catch (err) {
+        console.log(err); toastr.error('Error al descargar');
+        $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
+        $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
+      }
+    });
+  }  
 }
 
 function add_remove_comprobante(id_doc, doc, factura_name) {
@@ -2301,22 +2365,22 @@ $(function () {
 
   $("#form-materiales").validate({
     rules: {
-      nombre_p: { required: true, minlength:3, maxlength:200},
-      categoria_insumos_af_p: { required: true },
+      nombre_p: { required: true, minlength:3, maxlength:200},      
       color_p: { required: true },
-      unidad_medida_p: { required: true },
-      modelo_p: { minlength: 3 },
-      precio_unitario_p: { required: true },
       descripcion_p: { minlength: 3 },
+      modelo_p: { minlength: 3 },
+      unidad_medida_p: { required: true },
+      precio_unitario_p: { required: true },      
+      categoria_insumos_af_p: { required: true },
     },
     messages: {
-      nombre_p: { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
-      categoria_insumos_af_p: { required: "Campo requerido", },
+      nombre_p: { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },      
       color_p: { required: "Campo requerido" },
-      unidad_medida_p: { required: "Campo requerido" },
-      modelo_p: { minlength: "Minimo 3 caracteres", },
-      precio_unitario_p: { required: "Ingresar precio compra", },      
       descripcion_p: { minlength: "Minimo 3 caracteres" },
+      modelo_p: { minlength: "Minimo 3 caracteres", },
+      unidad_medida_p: { required: "Campo requerido" },
+      precio_unitario_p: { required: "Ingresar precio compra", },      
+      categoria_insumos_af_p: { required: "Campo requerido", },
     },
 
     errorElement: "span",

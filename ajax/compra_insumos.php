@@ -396,7 +396,7 @@ if (!isset($_SESSION["nombre"])) {
       
             $btn_tipo = (empty($reg->comprobante)) ? 'btn-outline-info' : 'btn-info';       
             $clss_disabled = (empty($reg->comprobante)) ? 'disabled' : '';       
-            $descrip_toltip = (empty($reg->comprobante)) ? 'Comprobante sin cargar' : 'Comprobante cargado';       
+            $descrip_toltip = (empty($reg->comprobante)) ? 'Vacío' : 'Comprobante cargado';       
       
             $data[] = [
               "0" => $cont++,
@@ -508,7 +508,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $subtotal = 0;    $ficha = ''; 
 
-        echo '<!-- Tipo de Empresa -->
+        $inputs = '<!-- Tipo de Empresa -->
           <div class="col-lg-6">
             <div class="form-group">
               <label class="font-size-15px" for="idproveedor">Proveedor</label>
@@ -563,13 +563,13 @@ if (!isset($_SESSION["nombre"])) {
         while ($reg = $rspta2['data']->fetch_object()) {
 
           empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-lg text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
-          
+          $img_product = '../dist/docs/material/img_perfil/'. (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen );
           $tbody .= '<tr class="filas">
             <td class="text-center p-6px">' . $cont++ . '</td>
             <td class="text-center p-6px">' . $ficha . '</td>
             <td class="text-left p-6px">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/'.$reg->imagen.'" alt="user image" onerror="this.src=\'../dist/svg/default_producto.svg\';" >
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img_product.'" alt="user image" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
                 <span class="username"><p class="mb-0 ">' . $reg->nombre . '</p></span>
                 <span class="description"><b>Color: </b>' . $reg->color . '</span>
               </div>
@@ -584,7 +584,7 @@ if (!isset($_SESSION["nombre"])) {
           </tr>';
         }         
 
-        echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+        $tabla_detalle = '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
           <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
             <thead style="background-color:#ff6c046b">
               <th class="text-center p-10px" >#</th>
@@ -626,6 +626,8 @@ if (!isset($_SESSION["nombre"])) {
             </tfoot>
           </table>
         </div> ';
+        $retorno = ['status' => true, 'message' => 'todo oka', 'data' => $inputs . $tabla_detalle ,];
+        echo json_encode( $retorno, true );
 
       break;
     
@@ -801,9 +803,9 @@ if (!isset($_SESSION["nombre"])) {
                   ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
               "2" => $reg->forma_pago,
               "3" => '<div class="user-block">
-                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
-                <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
-                <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+                <span class="username ml-0" ><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
+                <span class="description ml-0" ><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
+                <span class="description ml-0" ><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
               </div>',
               "4" => $reg->fecha_pago,
               "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
@@ -850,9 +852,9 @@ if (!isset($_SESSION["nombre"])) {
                   ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
               "2" => $reg->forma_pago,
               "3" => '<div class="user-block">
-                <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->beneficiario .'</p></span>
-                <span class="description" style="margin-left: 0px !important;"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
-                <span class="description" style="margin-left: 0px !important;"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
+                <span class="username ml-0" ><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
+                <span class="description ml-0" ><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
+                <span class="description ml-0" ><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
               </div>',
               "4" => $reg->fecha_pago,
               "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',

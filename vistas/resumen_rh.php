@@ -126,14 +126,14 @@
 
         <?php require 'script.php'; ?>
 
+        <!-- ZIP -->
         <script src="../plugins/jszip/jszip.js"></script>
         <script src="../plugins/jszip/dist/jszip-utils.js"></script>
         <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
+
         <script type="text/javascript" src="scripts/resumen_rh.js"></script>
 
-        <script>
-          $(function () { $('[data-toggle="tooltip"]').tooltip(); });
-        </script>
+        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
         <?php require 'extra_script.php'; ?>
       </body>

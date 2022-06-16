@@ -330,8 +330,15 @@
                   <!-- Resumend de Insumos -->
                   <li class="nav-item ">
                     <a href="resumen_activos_fijos.php" class="nav-link" id="lResumenActivosFijos">
-                      <i class="nav-icon fas fa-tasks"></i>
+                      <i class=" fas fa-tasks"></i> 
                       <p>Resumen de Activos Fijos</p>
+                    </a>
+                  </li> 
+                  <!-- graficos insumos -->
+                  <li class="nav-item ">
+                    <a href="chart_compra_insumo.php" class="nav-link" id="lChartCompraInsumo">
+                      <i class="nav-icon fas fa-chart-line"></i>
+                      <p>Gráficos</p>
                     </a>
                   </li> 
                 </ul>
