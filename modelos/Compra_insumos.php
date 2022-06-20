@@ -230,23 +230,6 @@ class Compra_insumos
     return ejecutarConsultaSimpleFila($sql);
   }
 
-  //----Comprobantes pagos-----
-
-  public function editar_comprobante($comprobante_c, $doc_comprobante) {
-    //var_dump($idfacturacompra);die();
-    $sql = "UPDATE compra_por_proyecto SET comprobante='$doc_comprobante' WHERE idcompra_proyecto ='$comprobante_c'";
-    return ejecutarConsulta($sql);
-  }
-
-  // obtebnemos los DOCS para eliminar
-  public function obtener_comprobante($comprobante_c) {
-
-    $sql = "SELECT comprobante FROM compra_por_proyecto WHERE idcompra_proyecto ='$comprobante_c'";
-
-    return ejecutarConsulta($sql);
-  }
-
-
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O S ::::::::::::::::::::::::::::::::::::::::: 
 
   public function insertar_pago( $idcompra_proyecto_p,  $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago,
@@ -407,13 +390,6 @@ class Compra_insumos
     return ejecutarConsulta($sql);
   }
 
-  //Seleccionar Trabajador Select2
-	public function obtenerImgPerfilProducto($idproducto)	{
-
-	  $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
-	  return ejecutarConsulta($sql);
-	}
-
   //mostrar datos del proveedor y maquina en form
   public function most_datos_prov_pago($idcompra_proyecto) {
 
@@ -421,8 +397,32 @@ class Compra_insumos
     WHERE cpp.idproveedor=p.idproveedor AND cpp.idcompra_proyecto='$idcompra_proyecto'";
     return ejecutarConsultaSimpleFila($sql);
   }
+  // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
+  public function tbla_comprobantes($id_compra) {
+    //var_dump($idfacturacompra);die();
+    $sql = "SELECT fci.idfactura_compra_insumo, fci.idcompra_proyecto, fci.comprobante, fci.estado, fci.estado_delete, fci.created_at, 
+    fci.updated_at, cpp.tipo_comprobante, cpp.serie_comprobante, p.razon_social, cpp.fecha_compra
+    FROM factura_compra_insumo as fci, compra_por_proyecto as cpp, proveedor as p
+    WHERE fci.idcompra_proyecto = cpp.idcompra_proyecto AND cpp.idproveedor = p.idproveedor AND fci.idcompra_proyecto = '$id_compra' AND fci.estado=1 AND fci.estado_delete=1;";
+    return ejecutarConsulta($sql);
+  }
 
-  //Listamos los productos a selecionar
+  public function editar_comprobante($comprobante_c, $doc_comprobante) {
+    //var_dump($idfacturacompra);die();
+    $sql = "UPDATE compra_por_proyecto SET comprobante='$doc_comprobante' WHERE idcompra_proyecto ='$comprobante_c'";
+    return ejecutarConsulta($sql);
+  }
+
+  // obtebnemos los DOCS para eliminar
+  public function obtener_comprobante($comprobante_c) {
+
+    $sql = "SELECT comprobante FROM compra_por_proyecto WHERE idcompra_proyecto ='$comprobante_c'";
+
+    return ejecutarConsulta($sql);
+  }
+
+  // :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S ::::::::::::::::::::::::::
+
   public function listar_productos() {
     $sql = "SELECT p.idproducto AS idproducto,
     p.idunidad_medida AS idunidad_medida,
@@ -449,6 +449,11 @@ class Compra_insumos
     return ejecutarConsulta($sql);
   }
 
+  public function obtenerImgPerfilProducto($idproducto)	{
+
+	  $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
+	  return ejecutarConsulta($sql);
+	}
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   S E L E C T 2  ::::::::::::::::::::::::::::::::::::::::: 
 
   //Select2 Proveedor

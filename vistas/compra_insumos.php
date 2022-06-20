@@ -986,8 +986,8 @@
                   <div class="modal fade" id="modal-comprobantes-compra">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Actualizar Comprobante</h4>
+                        <div class="modal-header"> 
+                          <h4 class="modal-title titulo-comprobante-compra">Comprobantes</h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
                           </button>
@@ -1002,40 +1002,60 @@
                               <input type="hidden" name="comprobante_c" id="comprobante_c" />
 
                               <!-- Doc  -->
-                              <div class="col-md-12 col-lg-12">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="row text-center">
-                                  <div class="col-md-12" >
-                                    <label for="cip" class="control-label">Documento </label>
-                                  </div>
-                                  <div class="col-md-6 text-center subir">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
-                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                    <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" accept="application/pdf, image/*" />
-                                  </div>
-                                  <div class="col-md-6 text-center comprobante">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra', 'comprobante_compra');"><i class="fa fa-eye"></i> Comprobante.</button>
-                                  </div>
-                                  <div class="col-md-4 text-center descargar" style="display: none;" id="proba">
-                                    <!-- <a type="button" class="btn-xs btn btn-warning btn-block" id="descargar_comprob"  download="Comprobantes"> <i class="fas fa-download"></i> Descargar. </a> -->
-                                  </div>
-                                  <div class="col-md-4 text-center ver_completo" style="display: none;">
-                                    <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" id="ver_completo"> <i class="fas fa-expand"></i> Ver completo. </a>
-                                  </div>
-                                </div>
-                                <div id="doc1_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
-                                </div>
-                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                                  <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 row">
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                      <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                      <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" accept="application/pdf, image/*" />
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_insumo', 'comprobante_compra', '100%', '100');"><i class="fa fa-eye"></i> Recargar.</button>
+                                    </div>
+                                    <div  class="text-center mt-4" id="doc1_ver"> 
+                                      <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
+                                    </div>
+                                  </div>                                   
+                                  <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 text-left" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>                                 
+                                </div>                                
+                                
+                              </div>
+
+                              <div class="col-12 mt-2">
+                                <button type="submit" class="btn btn-success btn-sm float-right" >Guardar Cambios</button>
                               </div>
 
                               <!-- ver_completo descargar comprobante subir -->
                               <!-- barprogress -->
-                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
-                                <div class="progress" id="div_barra_progress2">
-                                  <div id="barra_progress2" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mb-3" style="margin-top: 20px;">
+                                <div class="progress" id="barra_progress_comprobante_div">
+                                  <div id="barra_progress_comprobante" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                     0%
                                   </div>
                                 </div>
+                              </div> 
+                              <div class="col-xl-12 borde-arriba-naranja"></div>
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                                <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                                  <thead>
+                                    <tr>
+                                      <th class="">#</th>
+                                      <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                      <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
+                                      <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                                    </tr>
+                                  </thead>
+                                  <tbody></tbody>
+                                  <tfoot>
+                                    <tr>
+                                      <th class="">#</th>
+                                      <th class="">OP</th>
+                                      <th>Doc</th>
+                                      <th>Fecha</th>                                    
+                                    </tr>
+                                  </tfoot>
+                                </table>
                               </div>
                             </div>
 
@@ -1048,12 +1068,11 @@
                             </div>
                              
                             <!-- /.card-body -->
-                            <button type="submit" style="display: none;" id="submit-form-planootro">Submit</button>
+                            <!-- <button type="submit" style="display: none;" id="submit-form-comprobante-compra">Submit</button> -->
                           </form>
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-success" id="guardar_registro_2">Guardar Cambios</button>
                         </div>
                       </div>
                     </div>

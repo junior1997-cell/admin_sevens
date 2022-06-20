@@ -321,7 +321,7 @@
         <!-- AdminLTE for demo purposes -->
         <script src="../dist/js/demo.js"></script>
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="../dist/js/pages/dashboard3.js"></script>
+        <!-- <script src="../dist/js/pages/dashboard3.js"></script> -->
         
         <script type="text/javascript" src="scripts/chart_compra_insumo.js"></script>         
 

@@ -15,7 +15,7 @@ if (!isset($_SESSION["nombre"])) {
     require_once "../modelos/AllProveedor.php";
     require_once "../modelos/Activos_fijos.php";
 
-    $compra = new Compra_insumos();
+    $compra_insumos = new Compra_insumos();
     $proveedor = new AllProveedor();
     $activos_fijos = new Activos_fijos();      
     
@@ -169,7 +169,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'listarMaterialescompra':     
     
-        $rspta = $compra->listar_productos();
+        $rspta = $compra_insumos->listar_productos();
         //Vamos a declarar un array
         $datas = [];
          
@@ -229,7 +229,7 @@ if (!isset($_SESSION["nombre"])) {
 
         if (empty($idcompra_proyecto)) {
 
-          $rspta = $compra->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, $descripcion, 
+          $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, $descripcion, 
           $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -237,7 +237,7 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         } else {
 
-          $rspta = $compra->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, 
+          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, 
           $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -245,55 +245,17 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         }
     
-      break;
-
-      case 'guardaryeditar_comprobante':
-        // imgen de perfil
-        if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
-
-          $doc_comprobante = $_POST["doc_old_1"];
-
-          $flat_comprob = false;
-
-        } else {
-
-          $ext1 = explode(".", $_FILES["doc1"]["name"]);
-
-          $flat_comprob = true;
-    
-          $doc_comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
-    
-          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/compra_insumo/comprobante_compra/" . $doc_comprobante);
-        }
-
-        //Borramos el comprobante
-        if ($flat_comprob == true) {
-
-          $datos_f1 = $compra->obtener_comprobante($comprobante_c);
-    
-          $doc1_ant = $datos_f1['data']->fetch_object()->comprobante;
-    
-          if ($doc1_ant != "") {
-            unlink("../dist/docs/compra_insumo/comprobante_compra/" . $doc1_ant);
-          }
-        }
-    
-        // editamos un documento existente
-        $rspta = $compra->editar_comprobante($comprobante_c, $doc_comprobante);
-    
-        echo json_encode($rspta, true);
-    
-      break;
+      break;      
       
       case 'anular':
-        $rspta = $compra->desactivar($_GET["id_tabla"]);
+        $rspta = $compra_insumos->desactivar($_GET["id_tabla"]);
     
         echo json_encode($rspta, true);
     
       break;
     
       case 'des_anular':
-        $rspta = $compra->activar($_GET["id_tabla"]);
+        $rspta = $compra_insumos->activar($_GET["id_tabla"]);
     
         echo json_encode($rspta, true);
     
@@ -301,7 +263,7 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'eliminar_compra':
 
-        $rspta = $compra->eliminar($_GET["id_tabla"]);
+        $rspta = $compra_insumos->eliminar($_GET["id_tabla"]);
     
         echo json_encode($rspta, true);
     
@@ -309,7 +271,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'listar_compra':
         $nube_idproyecto = $_GET["nube_idproyecto"];
-        $rspta = $compra->listar_compra($nube_idproyecto);
+        $rspta = $compra_insumos->listar_compra($nube_idproyecto);
         //Vamos a declarar un array
         $data = []; $cont = 1;
         $c = "";
@@ -326,7 +288,7 @@ if (!isset($_SESSION["nombre"])) {
         
         if ($rspta['status'] == true) {
           while ($reg = $rspta['data']->fetch_object()) {
-            $rspta2 = $compra->pago_servicio($reg->idcompra_proyecto);
+            $rspta2 = $compra_insumos->pago_servicio($reg->idcompra_proyecto);
       
             empty($rspta2['data']) ? ($saldo = 0) : ($saldo = $reg->total - $rspta2['data']['total_pago_compras']);       
       
@@ -413,12 +375,12 @@ if (!isset($_SESSION["nombre"])) {
               "7" => $list_segun_estado_detracc,
               "8" => number_format($rspta2['data']['total_pago_compras'], 2, '.', ','),
               "9" => number_format($saldo, 2, '.', ','),
-              "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml((empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante)).'\', \''.$reg->razon_social.'\', \''.$reg->fecha_compra.'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+              "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml($reg->tipo_comprobante.' '.(empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante)).'\', \''.$reg->razon_social.'\', \''.format_d_m_a($reg->fecha_compra).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
               "11" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
               "12" => '<div class="custom-control custom-checkbox">
                         <input class="custom-control-input custom-control-input-danger custom-control-input-outline" '.$clss_disabled.' type="checkbox" id="check_descarga_'.$reg->idcompra_proyecto.'" onchange="add_remove_comprobante( '.$reg->idcompra_proyecto.', \''.$reg->comprobante.'\', \'' .encodeCadenaHtml('<b>' . $reg->tipo_comprobante .  '</b> '.(empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante)).'\')">
                         <label for="check_descarga_'.$reg->idcompra_proyecto.'" class="custom-control-label  cursor-pointer"></label> 
-                        <a class="btn '.$btn_tipo.' btn-xs '.$clss_disabled.'" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont.' '.encodeCadenaHtml((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" ><i class="fas fa-cloud-download-alt"></i></a> 
+                        <a class="btn '.$btn_tipo.' btn-xs '.$clss_disabled.'" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont.' '.encodeCadenaHtml($reg->tipo_comprobante.' '.(empty($reg->serie_comprobante) ?  "" :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" ><i class="fas fa-cloud-download-alt"></i></a> 
                       </div>'.$toltip,
             ];
           }
@@ -437,7 +399,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'listar_compraxporvee':
         $nube_idproyecto = $_GET["nube_idproyecto"];
-        $rspta = $compra->listar_compraxporvee($nube_idproyecto);
+        $rspta = $compra_insumos->listar_compraxporvee($nube_idproyecto);
         //Vamos a declarar un array
         $data = []; $cont = 1;
         $c = "info";
@@ -471,7 +433,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'listar_detalle_compraxporvee':
         
-        $rspta = $compra->listar_detalle_comprax_provee($_GET["idproyecto"], $_GET["idproveedor"]);
+        $rspta = $compra_insumos->listar_detalle_comprax_provee($_GET["idproyecto"], $_GET["idproveedor"]);
         //Vamos a declarar un array
         $data = []; $cont = 1;
         
@@ -503,8 +465,8 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'ver_detalle_compras':
         
-        $rspta = $compra->ver_compra($_GET['id_compra']);
-        $rspta2 = $compra->ver_detalle_compra($_GET['id_compra']);
+        $rspta = $compra_insumos->ver_compra($_GET['id_compra']);
+        $rspta2 = $compra_insumos->ver_detalle_compra($_GET['id_compra']);
 
         $subtotal = 0;    $ficha = ''; 
 
@@ -633,12 +595,85 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'ver_compra_editar':
 
-        $rspta = $compra->mostrar_compra_para_editar($idcompra_proyecto);
+        $rspta = $compra_insumos->mostrar_compra_para_editar($idcompra_proyecto);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
     
-      break;       
+      break;      
+      
+      // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
+      case 'tbla_comprobantes_compra':
+        $cont_compra = $_GET["num_orden"];
+        $rspta = $compra_insumos->tbla_comprobantes( $_GET["id_compra"] );
+        //Vamos a declarar un array
+        $data = []; $cont = 1;        
+        
+        if ($rspta['status']) {
+          while ($reg = $rspta['data']->fetch_object()) {
+            $data[] = [
+              "0" => $cont++,
+              "1" => '<div class="text-nowrap">'.
+              ' <a class="btn btn-warning btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.' '.encodeCadenaHtml((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>' .              
+              ' <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_comprobante_insumo(' . $reg->idfactura_compra_insumo .', \''.encodeCadenaHtml($reg->tipo_comprobante.''.$reg->serie_comprobante).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button> 
+              </div>'.$toltip,
+              "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
+              "3" => $reg->updated_at,
+            ];
+          }
+          $results = [
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true);
+        } else {
+          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+        }
+      break;
+
+      case 'guardaryeditar_comprobante':
+        // COMPROBANTE
+        if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
+
+          $doc_comprobante = $_POST["doc_old_1"];
+
+          $flat_comprob = false;
+
+        } else {
+
+          $ext1 = explode(".", $_FILES["doc1"]["name"]);
+
+          $flat_comprob = true;
     
+          $doc_comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+    
+          move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/compra_insumo/comprobante_compra/" . $doc_comprobante);
+        }
+
+        //Borramos el comprobante
+        if ($flat_comprob == true) {
+
+          $datos_f1 = $compra_insumos->obtener_comprobante($comprobante_c);
+    
+          $doc1_ant = $datos_f1['data']->fetch_object()->comprobante;
+    
+          if ($doc1_ant != "") {
+            unlink("../dist/docs/compra_insumo/comprobante_compra/" . $doc1_ant);
+          }
+        }
+    
+        // editamos un documento existente
+        $rspta = $compra_insumos->editar_comprobante($comprobante_c, $doc_comprobante);
+    
+        echo json_encode($rspta, true);
+    
+      break;
+
+      case 'eliminar_comprobante':
+        # code...
+      break;
+
       // :::::::::::::::::::::::::: S E C C I O N   P A G O  ::::::::::::::::::::::::::     
 
       case 'guardaryeditar_pago':
@@ -663,7 +698,7 @@ if (!isset($_SESSION["nombre"])) {
     
         if (empty($idpago_compras)) {
     
-          $rspta = $compra->insertar_pago( $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
+          $rspta = $compra_insumos->insertar_pago( $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
           $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
     
           echo json_encode($rspta, true);
@@ -673,7 +708,7 @@ if (!isset($_SESSION["nombre"])) {
           // validamos si existe LA IMG para eliminarlo
           if ($flat_img1 == true) {
     
-            $datos_f1 = $compra->obtenerComprobanteCompra($idpago_compras);
+            $datos_f1 = $compra_insumos->obtenerComprobanteCompra($idpago_compras);
     
             $img1_ant = $datos_f1['data']->fetch_object()->imagen;
     
@@ -683,7 +718,7 @@ if (!isset($_SESSION["nombre"])) {
             }
           }
     
-          $rspta = $compra->editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
+          $rspta = $compra_insumos->editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
           $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
     
           echo json_encode($rspta, true);
@@ -694,7 +729,7 @@ if (!isset($_SESSION["nombre"])) {
       case 'most_datos_prov_pago':
 
         $idcompra_proyecto = $_POST["idcompra_proyecto"];
-        $rspta = $compra->most_datos_prov_pago($idcompra_proyecto);
+        $rspta = $compra_insumos->most_datos_prov_pago($idcompra_proyecto);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
 
@@ -702,7 +737,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'desactivar_pagos':
 
-        $rspta = $compra->desactivar_pagos($_GET["idpago_compras"]);
+        $rspta = $compra_insumos->desactivar_pagos($_GET["idpago_compras"]);
 
         echo json_encode($rspta, true);
 
@@ -710,7 +745,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'activar_pagos':
 
-        $rspta = $compra->activar_pagos($_GET["idpago_compras"]);
+        $rspta = $compra_insumos->activar_pagos($_GET["idpago_compras"]);
 
         echo json_encode($rspta, true);
 
@@ -718,7 +753,7 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'eliminar_pago_compra':
         
-        $rspta = $compra->eliminar_pagos($_GET["idpago_compras"]);
+        $rspta = $compra_insumos->eliminar_pagos($_GET["idpago_compras"]);
     
         echo json_encode($rspta, true);
     
@@ -727,7 +762,7 @@ if (!isset($_SESSION["nombre"])) {
       case 'listar_pagos_proveedor':
         $idcompra_proyecto = $_GET["idcompra_proyecto"];
             
-        $rspta = $compra->listar_pagos($idcompra_proyecto);
+        $rspta = $compra_insumos->listar_pagos($idcompra_proyecto);
         //Vamos a declarar un array
           
         $data = []; $cont = 1;
@@ -783,7 +818,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $tipo_pago = 'Proveedor';
         
-        $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
+        $rspta = $compra_insumos->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
         //Vamos a declarar un array   
         $data = []; $cont  =1;
     
@@ -834,7 +869,7 @@ if (!isset($_SESSION["nombre"])) {
     
         $tipo_pago = 'Detraccion';
         
-        $rspta = $compra->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
+        $rspta = $compra_insumos->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
         //Vamos a declarar un array
         
         $data = []; $cont = 1;
@@ -884,7 +919,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $idcompra_proyecto = $_POST["idcompra_proyecto"];
         
-        $rspta = $compra->suma_total_pagos($idcompra_proyecto);
+        $rspta = $compra_insumos->suma_total_pagos($idcompra_proyecto);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
 
@@ -897,7 +932,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $tipopago = 'Proveedor';
     
-        $rspta = $compra->suma_total_pagos_detraccion($idcompra_proyecto, $tipopago);
+        $rspta = $compra_insumos->suma_total_pagos_detraccion($idcompra_proyecto, $tipopago);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
     
@@ -909,7 +944,7 @@ if (!isset($_SESSION["nombre"])) {
 
         $tipopago = 'Detraccion';
     
-        $rspta = $compra->suma_total_pagos_detraccion($idcompra_proyecto, $tipopago);
+        $rspta = $compra_insumos->suma_total_pagos_detraccion($idcompra_proyecto, $tipopago);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
     
@@ -920,7 +955,7 @@ if (!isset($_SESSION["nombre"])) {
         $idmaquinaria = $_POST["idmaquinaria"];
         $idproyecto = $_POST["idproyecto"];
     
-        $rspta = $compra->total_costo_parcial_pago($idmaquinaria, $idproyecto);
+        $rspta = $compra_insumos->total_costo_parcial_pago($idmaquinaria, $idproyecto);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
     
@@ -928,7 +963,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'mostrar_pagos':
 
-        $rspta = $compra->mostrar_pagos($idpago_compras);
+        $rspta = $compra_insumos->mostrar_pagos($idpago_compras);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
 
@@ -938,7 +973,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'select2Proveedor': 
     
-        $rspta=$compra->select2_proveedor();
+        $rspta=$compra_insumos->select2_proveedor();
     
         while ($reg = $rspta['data']->fetch_object())	{
     
@@ -950,7 +985,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'select2Banco': 
     
-        $rspta = $compra->select2_banco();
+        $rspta = $compra_insumos->select2_banco();
     
         while ($reg = $rspta['data']->fetch_object())  {
     
@@ -961,7 +996,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'select2Color': 
     
-        $rspta = $compra->select2_color();
+        $rspta = $compra_insumos->select2_color();
     
         while ($reg = $rspta['data']->fetch_object())  {
     
@@ -972,7 +1007,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'select2UnidaMedida': 
     
-        $rspta = $compra->select2_unidad_medida();
+        $rspta = $compra_insumos->select2_unidad_medida();
     
         while ($reg = $rspta['data']->fetch_object())  {
     
@@ -983,7 +1018,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'select2Categoria': 
     
-        $rspta = $compra->select2_categoria();
+        $rspta = $compra_insumos->select2_categoria();
     
         while ($reg = $rspta['data']->fetch_object())  {
     

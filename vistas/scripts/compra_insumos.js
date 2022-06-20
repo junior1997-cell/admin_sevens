@@ -1,3 +1,4 @@
+//Requejo99@
 var reload_detraccion = "";
 
 var tabla_compra;
@@ -14,9 +15,8 @@ var tabla_pagos3;
 var array_doc = [];
 var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/compra_insumo/comprobante_compra/` : `${window.location.origin}/dist/docs/compra_insumo/comprobante_compra/` ;
 
-
 var array_class_trabajador = [];
-//Requejo99@
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -49,8 +49,8 @@ function init() {
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
 
   $("#guardar_registro_pago").on("click", function (e) {  $("#submit-form-pago").submit(); });
-  //subir factura modal
-  $("#guardar_registro_2").on("click", function (e) {  $("#submit-form-planootro").submit();  });  
+
+  $("#guardar_registro_comprobante_compra").on("click", function (e) {  $("#submit-form-comprobante-compra").submit();  });  
 
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
 
@@ -114,9 +114,9 @@ function templateGlosa (state) {
 $("#doc3_i").click(function () { $("#doc3").trigger("click"); });
 $("#doc3").change(function (e) { addImageApplication(e, $("#doc3").attr("id")); });
 
-//factura - compra
+//comprobante - compra
 $("#doc1_i").click(function () {  $("#doc1").trigger("click"); });
-$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id")); });
+$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"),'', '100%', '100', true); });
 
 // Perfil - material
 $("#foto2_i").click(function () {  $("#foto2").trigger("click"); });
@@ -129,6 +129,7 @@ $("#doc2").change(function(e) {  addImageApplication(e,$("#doc2").attr("id")) })
 // Eliminamos el COMPROBANTE - PAGO
 function doc3_eliminar() {
   $("#doc3").val("");
+  $("#doc_old_3").val("");  
   $("#doc3_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
   $("#doc3_nombre").html("");
 }
@@ -136,6 +137,7 @@ function doc3_eliminar() {
 // Eliminamos el COMPROBANTE - COMPRA
 function doc1_eliminar() {
   $("#doc1").val("");
+  $("#doc_old_1").val("");
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
   $("#doc1_nombre").html("");
 }
@@ -152,6 +154,7 @@ function foto2_eliminar() {
 // Eliminamos el doc FICHA TECNICA - MATERIAL
 function doc2_eliminar() {
   $("#doc2").val("");
+  $("#doc_old_2").val("");
   $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
   $("#doc2_nombre").html("");
 }
@@ -377,19 +380,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
 //Función para guardar o editar - COMPRAS
 function guardar_y_editar_compras(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-compras")[0]);
-
-  var swal2_header = `<img class="swal2-image bg-color-252e38 b-radio-7px p-15px m-10px" src="../dist/gif/cargando.gif">`;
-
-  var swal2_content = `<div class="row sweet_loader" >    
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-      <div class="progress" id="div_barra_progress">
-        <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-          0%
-        </div>
-      </div>
-    </div>
-  </div>`;
+  var formData = new FormData($("#form-compras")[0]);  
 
   Swal.fire({
     title: "¿Está seguro que deseas guardar esta compra?",
@@ -399,59 +390,31 @@ function guardar_y_editar_compras(e) {
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
+    preConfirm: (input) => {
+      return fetch("../ajax/compra_insumos.php?op=guardaryeditarcompra", {
+        method: 'POST', // or 'PUT'
+        body: formData, // data can be `string` or {object}!        
+      }).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+    },
+    showLoaderOnConfirm: true,
   }).then((result) => {
     if (result.isConfirmed) {
-      $.ajax({
-        url: "../ajax/compra_insumos.php?op=guardaryeditarcompra",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        beforeSend: function() {
-          Swal.fire({
-            title: "Guardando...",
-            html: 'Tu <b>información</b> se esta guradando en la <b>base de datos</b>.',
-            showConfirmButton: false,
-            didRender: function() { 
-              /* solo habrá un swal2 abierta.*/               
-              $('.swal2-header').prepend(swal2_header); 
-              $('.swal2-content').prepend(swal2_content);
-            }
-          });
-        },
-        success: function (e) {
-          e = JSON.parse(e);
-          if (e.status == true ) {
-            // toastr.success("Usuario registrado correctamente");
-            Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+      if (result.value.status){        
+        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
-            tabla_compra.ajax.reload(null, false);
-            tabla_compra_x_proveedor.ajax.reload(null, false);
+        tabla_compra.ajax.reload(null, false);
+        tabla_compra_x_proveedor.ajax.reload(null, false);
 
-            limpiar_form_compra(); regresar();
-            
-            $("#modal-agregar-usuario").modal("hide");
-            l_m();
-            
-          } else {
-            // toastr.error(datos);
-            Swal.fire("Error!", datos, "error");
-            l_m();
-          }
-        },
-        xhr: function () {
-          var xhr = new window.XMLHttpRequest();    
-          xhr.upload.addEventListener("progress", function (evt) {    
-            if (evt.lengthComputable) {    
-              var percentComplete = (evt.loaded / evt.total)*100;
-              /*console.log(percentComplete + '%');*/
-              $("#barra_progress").css({"width": percentComplete+'%'});    
-              $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-            }
-          }, false);
-          return xhr;
-        }
-      });
+        limpiar_form_compra(); regresar();
+        
+        $("#modal-agregar-usuario").modal("hide");        
+      } else {
+        ver_errores(result);
+      }      
     }
   });  
 }
@@ -478,47 +441,7 @@ function eliminar_compra(idcompra_proyecto, nombre) {
 
 }
 
-function comprobante_compras(idcompra_proyecto, doc,nun_orden,num_comprobante,proveedor,fecha) {
-  console.log(idcompra_proyecto,doc);
-  $("#modal-comprobantes-compra").modal("show");
-  $("#comprobante_c").val(idcompra_proyecto);
-  $("#doc1_nombre").html("");
-  $("#doc_old_1").val("doc");
-  if (doc != "") {
-    $("#doc_old_1").val(doc);
-    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_insumo', 'comprobante_compra','100%', '300' ));
-    // cargamos la imagen adecuada par el archivo
-    
-    $(".ver_completo").val(doc);
-
-    //ver_completo descargar comprobante subir
-    // $(".subir").show();
-    $(".subir").removeClass("col-md-6").addClass("col-md-4");
-    $(".comprobante").removeClass("col-md-6").addClass("col-md-4");
-
-    $(".ver_completo").show();
-    $(".ver_completo").removeClass("col-md-4").addClass("col-md-2");
-
-    $(".descargar").show();
-    $(".descargar").removeClass("col-md-4").addClass("col-md-2");
-
-    $("#ver_completo").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
-   // $("#descargar_comprob").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
-    $(".descargar").html(`<a type="button" class="btn-xs btn btn-warning btn-block" href="../dist/docs/compra_insumo/comprobante_compra/${doc}"  download="${nun_orden} ${num_comprobante} - ${proveedor} - ${fecha}"> <i class="fas fa-download"></i> Descargar. </a>`);
-  } else {
-    $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    $("#doc_old_1").val("");
-
-    $(".ver_completo").hide();
-    $(".descargar").hide();
-
-    $(".subir").removeClass("col-md-4").addClass("col-md-6");
-    $(".comprobante").removeClass("col-md-4").addClass("col-md-6");
-  }
-}
-
-// .......:::::::::::::::::: AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
+// .......::::::::::::::::::::::::::::::::::::::::: AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC :::::::::::::::::::::::::::::::::::.......
 //Declaración de variables necesarias para trabajar con las compras y sus detalles
 var impuesto = 18;
 var cont = 0;
@@ -884,78 +807,6 @@ function eliminarDetalle(indice) {
   toastr.warning("Producto removido.");
 }
 
-function guardaryeditar_comprobante(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-comprobante")[0]);
-
-  $.ajax({
-    url: "../ajax/compra_insumos.php?op=guardaryeditar_comprobante",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (e) {
-      try {
-        e = JSON.parse(e);
-        if (e.status == true) {
-          // reiniciamos el array para descargar
-          array_doc = [];
-
-          Swal.fire("Correcto!", "Documento guardado correctamente", "success");
-
-          tabla_compra.ajax.reload(null, false);
-
-          limpiar_form_compra();
-
-          $("#modal-comprobantes-compra").modal("hide");
-        } else {
-
-          ver_errores(e);
-        }
-      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
-
-      $("#guardar_registro_2").html('Guardar Cambios').removeClass('disabled');
-    },
-    xhr: function () {
-      var xhr = new window.XMLHttpRequest();
-      xhr.upload.addEventListener(
-        "progress",
-        function (evt) {
-          if (evt.lengthComputable) {
-            var percentComplete = (evt.loaded / evt.total) * 100;
-            /*console.log(percentComplete + '%');*/
-            $("#barra_progress2").css({ width: percentComplete + "%" });
-            $("#barra_progress2").text(percentComplete.toFixed(2) + " %");
-          }
-        },
-        false
-      );
-      return xhr;
-    },
-    beforeSend: function () {
-      $("#guardar_registro_2").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress2").css({ width: "0%",  });
-      $("#barra_progress2").text("0%");
-    },
-    complete: function () {
-      $("#barra_progress2").css({ width: "0%", });
-      $("#barra_progress2").text("0%");
-    },
-    error: function (jqXhr) { ver_errores(jqXhr); },
-  });
-}
-
-function l_m() {
-  // limpiar_form_compra();
-  $("#barra_progress").css({ width: "0%" });
-
-  $("#barra_progress").text("0%");
-
-  $("#barra_progress2").css({ width: "0%" });
-
-  $("#barra_progress2").text("0%");
-}
-
 //mostramos para editar el datalle del comprobante de la compras
 function mostrar_compra(idcompra_proyecto) {
 
@@ -1112,7 +963,151 @@ $("#my-switch_detracc").on("click ", function (e) {
   }
 });
 
-// .......:::::::::::::::::: - FIN - AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC ::::::::::::.......
+// :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E   C O M P R A  ::::::::::::::::::::::::::
+
+function limpiar_form_comprobante() {
+  $("#doc1_nombre").html("");
+  $("#doc_old_1").val("");
+  $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+  $("#comprobante_c").val(idcompra_proyecto);
+  $("#barra_progress_comprobante_div").hide();
+}
+
+function tbla_comprobantes_compras(id_compra, num_orden) {
+  tabla_compra = $("#tabla-comprobantes-compra").dataTable({
+    responsive: true, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [ ],
+    ajax: {
+      url: `../ajax/compra_insumos.php?op=tbla_comprobantes_compra&id_compra=${id_compra}&num_orden=${num_orden}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    }, 
+    createdRow: function (row, data, ixdex) {
+      // columna: 1
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: {
+        copyTitle: "Tabla Copiada",
+        copySuccess: {
+          _: "%d líneas copiadas",
+          1: "1 línea copiada",
+        },
+      },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY hh:mm:ss a'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();
+}
+
+function guardaryeditar_comprobante(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-comprobante")[0]);
+
+  $.ajax({
+    url: "../ajax/compra_insumos.php?op=guardaryeditar_comprobante",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {
+          // reiniciamos el array para descargar
+          array_doc = [];
+
+          Swal.fire("Correcto!", "Documento guardado correctamente", "success");
+          tabla_compra.ajax.reload(null, false);
+          limpiar_form_comprobante();          
+
+          $("#modal-comprobantes-compra").modal("hide");
+          $("#barra_progress_comprobante_div").hide();
+        } else {
+
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+
+      $("#guardar_registro_comprobante_compra").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener(
+        "progress",
+        function (evt) {
+          if (evt.lengthComputable) {
+            var percentComplete = (evt.loaded / evt.total) * 100;
+            /*console.log(percentComplete + '%');*/
+            $("#barra_progress_comprobante").css({ width: percentComplete + "%" });
+            $("#barra_progress_comprobante").text(percentComplete.toFixed(2) + " %");
+          }
+        },
+        false
+      );
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_comprobante_div").show();
+      $("#guardar_registro_comprobante_compra").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_comprobante").css({ width: "0%",  });
+      $("#barra_progress_comprobante").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_comprobante").css({ width: "0%", });
+      $("#barra_progress_comprobante").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+function comprobante_compras(idcompra_proyecto, doc, num_orden, num_comprobante, proveedor, fecha) {
+  limpiar_form_comprobante();
+  tbla_comprobantes_compras(idcompra_proyecto, num_orden);
+
+  $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
+  $("#modal-comprobantes-compra").modal("show");  
+
+  if (doc != "") {
+    $("#doc_old_1").val(doc);
+    $("#ver_completo").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
+    
+    // cargamos la imagen adecuada par el archivo    
+    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_insumo', 'comprobante_compra','100%', '100' ));
+  }
+}
+
+function eliminar_comprobante_insumo(id_compra, nombre) {
+  crud_eliminar_papelera(
+    "../ajax/materiales.php?op=desactivar",
+    "../ajax/materiales.php?op=eliminar", 
+    id_compra, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla.ajax.reload(null, false) },
+    false, 
+    false, 
+    false,
+    false
+  );
+}
 
 // :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::
 //Función limpiar
@@ -2099,7 +2094,6 @@ function actualizar_producto() {
   modificarSubtotales();
 }
 
-// :::::::::::::::::::::::::: - F I N   S E C C I O N   M A T E R I A L E S -  ::::::::::::::::::::::::::
 
 // :::::::::::::::::::::::::: - S E C C I O N   D E S C A R G A S -  ::::::::::::::::::::::::::
 
@@ -2417,11 +2411,15 @@ $(function () {
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
-function l_m(){
-  
-  $("#barra_progress").css({"width":'0%'});
+function l_m() {
+  // limpiar_form_compra();
+  $("#barra_progress").css({ width: "0%" });
+
   $("#barra_progress").text("0%");
-  
+
+  $("#barra_progress2").css({ width: "0%" });
+
+  $("#barra_progress2").text("0%");
 }
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
@@ -2429,10 +2427,6 @@ function l_m(){
 
 function dowload_pdf() {
   toastr.success("El documento se descargara en breve!!");
-}
-
-function extrae_extencion(filename) {
-  return filename.split(".").pop();
 }
 
 //validando excedentes
@@ -2471,4 +2465,90 @@ function export_excel_detalle_factura() {
   let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
+}
+
+//Función para guardar o editar - COMPRAS
+function guardar_y_editar_compras____________plantilla_cargando_POST(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-compras")[0]);
+
+  var swal2_header = `<img class="swal2-image bg-color-252e38 b-radio-7px p-15px m-10px" src="../dist/gif/cargando.gif">`;
+
+  var swal2_content = `<div class="row sweet_loader" >    
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+      <div class="progress" id="barra_progress_compra_div">
+        <div id="barra_progress_compra" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+          0%
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  Swal.fire({
+    title: "¿Está seguro que deseas guardar esta compra?",
+    html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Guardar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: "../ajax/compra_insumos.php?op=guardaryeditarcompra",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        beforeSend: function() {
+          Swal.fire({
+            title: "Guardando...",
+            html: 'Tu <b>información</b> se esta guradando en la <b>base de datos</b>.',
+            showConfirmButton: false,
+            didRender: function() { 
+              /* solo habrá un swal2 abierta.*/               
+              $('.swal2-header').prepend(swal2_header); 
+              $('.swal2-content').prepend(swal2_content);
+            }
+          });
+          $("#barra_progress_compra").addClass('progress-bar-striped progress-bar-animated');
+        },
+        success: function (e) {
+          try {
+            e = JSON.parse(e);
+            if (e.status == true ) {
+              // toastr.success("Usuario registrado correctamente");
+              Swal.fire("Correcto!", "Compra guardada correctamente", "success");
+
+              tabla_compra.ajax.reload(null, false);
+              tabla_compra_x_proveedor.ajax.reload(null, false);
+
+              limpiar_form_compra(); regresar();
+              
+              $("#modal-agregar-usuario").modal("hide");
+              l_m();
+              
+            } else {
+              // toastr.error(datos);
+              Swal.fire("Error!", datos, "error");
+              l_m();
+            }
+          } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+
+        },
+        xhr: function () {
+          var xhr = new window.XMLHttpRequest();    
+          xhr.upload.addEventListener("progress", function (evt) {    
+            if (evt.lengthComputable) {    
+              var percentComplete = (evt.loaded / evt.total)*100;
+              /*console.log(percentComplete + '%');*/
+              $("#barra_progress_compra").css({"width": percentComplete+'%'});    
+              $("#barra_progress_compra").text(percentComplete.toFixed(2)+" %");
+            }
+          }, false);
+          return xhr;
+        }
+      });
+    }
+  });  
 }
