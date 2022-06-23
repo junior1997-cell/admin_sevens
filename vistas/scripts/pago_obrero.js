@@ -244,15 +244,10 @@ function listar_tbla_principal(id_proyecto) {
       }
       
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
@@ -456,15 +451,10 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
         $("td", row).eq(4).addClass('text-right text-nowrap');
       }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación

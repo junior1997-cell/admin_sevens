@@ -24,7 +24,7 @@
     
         case 'tabla_principal':
           
-          $rspta = $resumen_gasto->tabla_principal($_GET['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'] );
+          $rspta = $resumen_gasto->tabla_principal($_GET['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'], $_GET['estado_vb'] );
           // echo json_encode($rspta);
           //Vamos a declarar un array
           $data = []; $cont = 1;   
@@ -45,12 +45,13 @@
                 "3" => $value['fecha'] ,
                 "4" => $tipo_comprobante,
                 "5" => $value['modulo'],
-                "6" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',                
-                "7" => number_format($value['subtotal'], 2, ".", ","),
-                "8" => number_format($value['igv'], 2, ".", ","),
-                "9" => number_format($value['total'], 2, ".", ","),
-                "10" => $documento.$toltip,
-                "11" => $value['estado_user_vb'],                
+                "6" => $value['modulo'],
+                "7" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',                
+                "8" => number_format($value['subtotal'], 2, ".", ","),
+                "9" => number_format($value['igv'], 2, ".", ","),
+                "10" => number_format($value['total'], 2, ".", ","),
+                "11" => $documento.$toltip,
+                "12" => $value['estado_user_vb'],                
               ];
             }
   
@@ -69,7 +70,7 @@
 
         case 'suma_totales':
           
-          $rspta = $resumen_gasto->suma_totales($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante']);
+          $rspta = $resumen_gasto->suma_totales($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'], $_POST['estado_vb_suma']);
 
           echo json_encode($rspta, true);
 
@@ -77,7 +78,7 @@
 
         case 'data_comprobantes':                  
 
-          $rspta = $resumen_gasto->tabla_principal($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'] );
+          $rspta = $resumen_gasto->tabla_principal($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'], $_POST['estado_vb_zip']);
           
           echo json_encode($rspta, true);
 

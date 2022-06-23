@@ -322,15 +322,9 @@ function listar() {
       // columna: total
       if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,

@@ -57,28 +57,14 @@ function listar_tbla_principal(nube_idproyecto) {
     
     createdRow: function (row, data, ixdex) {
       // columna: sueldo mensual
-      if (data[4] != '') {
-        $("td", row).eq(4).css({
-          "text-align": "center"
-        });
-      }     
-
+      if (data[4] != '') { $("td", row).eq(4).addClass('text-center'); }
       // columna: sueldo mensual
-      if (data[5] != '') {
-        $("td", row).eq(5).css({
-          "text-align": "right"
-        });
-      }      
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-center'); }      
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación

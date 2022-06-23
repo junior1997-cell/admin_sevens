@@ -139,13 +139,8 @@ function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -247,13 +242,8 @@ function tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -358,13 +348,8 @@ function tbla_equipos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -465,13 +450,8 @@ function tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaja
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -572,13 +552,8 @@ function tbla_hospedajes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -680,13 +655,8 @@ function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -787,13 +757,8 @@ function tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -895,13 +860,8 @@ function tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajado
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -1003,13 +963,8 @@ function tbla_administrativo(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -1112,13 +1067,8 @@ function tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -1220,13 +1170,8 @@ function tbla_otros_gastos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaj
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -1313,13 +1258,8 @@ function tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaj
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -1550,13 +1490,8 @@ function table_all_sumas() {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 25, //Paginación
@@ -1686,13 +1621,8 @@ function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, p
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -1721,13 +1651,8 @@ function mostrar_comprobantes_breaks(idsemana_break) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -1757,13 +1682,8 @@ function mostrar_detalle_pension(idpension) {
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación
@@ -1794,13 +1714,8 @@ function mostrar_comprobantes_pension(idpension) {
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: {
-          copyTitle: "Tabla Copiada",
-          copySuccess: {
-            _: "%d líneas copiadas",
-            1: "1 línea copiada",
-          },
-        },
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
       },
       bDestroy: true,
       iDisplayLength: 5, //Paginación

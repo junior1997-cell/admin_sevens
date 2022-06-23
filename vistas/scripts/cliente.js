@@ -79,16 +79,11 @@ function listar()
 						console.log(e.responseText);	
 					}
 				},
-		"language": {
-            "lengthMenu": "Mostrar: _MENU_ registros",
-            "buttons": {
-            "copyTitle": "Tabla Copiada",
-            "copySuccess": {
-                    _: '%d líneas copiadas',
-                    1: '1 línea copiada'
-                }
-            }
-        },
+		language: {
+			lengthMenu: "Mostrar: _MENU_ registros",
+			buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+			sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+		},
 		"bDestroy": true,
 		"iDisplayLength": 5,//Paginación
 	    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)

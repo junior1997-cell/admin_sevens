@@ -179,30 +179,14 @@ function listar_tbla_principal(nube_idproyecto) {
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
-      if (data[0] != '') {
-        $("td", row).eq(0).css({
-          "text-align": "center"
-        });
-      }  
+      if (data[0] != '') {  $("td", row).eq(0).css('text-center'); }  
       // columna: sueldo mensual
-      if (data[5] != '') {
-        $("td", row).eq(5).css({
-          "text-align": "center"
-        });
-      }      
-
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-center');  }
       // columna: sueldo mensual
-      if (data[6] != '') {
-        $("td", row).eq(6).css({
-          "text-align": "right"
-        });
-      }
-
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
       // columna: pago total
       if (data[7] != '') {
-        $("td", row).eq(7).css({
-          "text-align": "right"
-        });
+        $("td", row).eq(7).addClass('text-right');
         // acumulamos el PAGO TOTAL
         var split = data[7].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
@@ -211,9 +195,7 @@ function listar_tbla_principal(nube_idproyecto) {
 
       // columna: pago acumuldo       
       if (data[8] != '') {
-        $("td", row).eq(8).css({
-          "text-align": "right"
-        });
+        $("td", row).eq(8).addClass('text-right');
         // acumulamos el PAGO acumulado hasta hoy
         var split = data[8].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
@@ -222,9 +204,7 @@ function listar_tbla_principal(nube_idproyecto) {
 
       // columna: saldo
       if (data[10] != '') {
-        $("td", row).eq(10).css({
-          "text-align": "right"
-        });
+        $("td", row).eq(10).css(text-right);
         // acumulamos el SALDO
         var split = data[10].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);
@@ -279,15 +259,10 @@ function listar_tbla_principal(nube_idproyecto) {
       }
       
     },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
@@ -608,30 +583,21 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/pago_administrador.php?op=listar_tbla_pagos_x_mes&idfechas_mes_pagos='+idfechas_mes_pagos_administrador,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: #0
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
+      url: '../ajax/pago_administrador.php?op=listar_tbla_pagos_x_mes&idfechas_mes_pagos='+idfechas_mes_pagos_administrador,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
       }
+    },
+    createdRow: function (row, data, ixdex) {   
+      // columna: #0
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
@@ -944,31 +910,22 @@ function reload_table_pagos_x_mes(id) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/pago_administrador.php?op=listar_tbla_pagos_x_mes&idfechas_mes_pagos='+id,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-      createdRow: function (row, data, ixdex) {    
-  
-        // columna: #0
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("text-center");   
-           
-        }
-      },
-      "language": {
-        "lengthMenu": "Mostrar: _MENU_ registros",
-        "buttons": {
-          "copyTitle": "Tabla Copiada",
-          "copySuccess": {
-            _: '%d líneas copiadas',
-            1: '1 línea copiada'
-          }
-        }
-      },
+      url: '../ajax/pago_administrador.php?op=listar_tbla_pagos_x_mes&idfechas_mes_pagos='+id,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
+      }
+    },
+    createdRow: function (row, data, ixdex) {  
+      // columna: #0
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center");   }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)

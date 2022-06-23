@@ -385,16 +385,11 @@ function listar() {
         }
 
       },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
@@ -741,47 +736,42 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
   $('#total_apagar').html('S/ '+formato_miles(total_pago));
 
   tabla_pagos_proveedor=$('#tabla-pagos-proveedor').dataTable({
-   "responsive": true,
-   lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-   "aProcessing": true,//Activamos el procesamiento del datatables
-   "aServerSide": true,//Paginación y filtrado realizados por el servidor
-   dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-   buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-   "ajax":{
+    "responsive": true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    "ajax":{
        url: '../ajax/sub_contrato.php?op=listar_pagos_proveedor&idsubcontrato='+idsubcontrato,
        type : "get",
        dataType : "json",						
        error: function(e){
          console.log(e.responseText);	
        }
-     },
-     createdRow: function (row, data, ixdex) {
-       // columna: #
-       if (data[0] != '') {
-         $("td", row).eq(0).addClass('text-center');
-       }
-       // columna: sub total
-       if (data[1] != "") {
-         $("td", row).eq(1).addClass("text-nowrap");
-       }
-       // columna: total
-       if (data[7] != '') {
-         $("td", row).eq(7).addClass('text-nowrap text-right');
-       }
-     },
-   "language": {
-     "lengthMenu": "Mostrar: _MENU_ registros",
-     "buttons": {
-       "copyTitle": "Tabla Copiada",
-       "copySuccess": {
-         _: '%d líneas copiadas',
-         1: '1 línea copiada'
-       }
-     }
-   },
-   "bDestroy": true,
-   "iDisplayLength": 5,//Paginación
-   "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') {
+        $("td", row).eq(0).addClass('text-center');
+      }
+      // columna: sub total
+      if (data[1] != "") {
+        $("td", row).eq(1).addClass("text-nowrap");
+      }
+      // columna: total
+      if (data[7] != '') {
+        $("td", row).eq(7).addClass('text-nowrap text-right');
+      }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    "bDestroy": true,
+    "iDisplayLength": 5,//Paginación
+    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
  
   tabla_pagos_detraccion=$('#tabla-pagos-detraccion').dataTable({
@@ -813,16 +803,11 @@ function listar_pagos(idsubcontrato, total_pago, total_deposito) {
           $("td", row).eq(7).addClass('text-nowrap text-right');
         }
       },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      }
-    },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación
     "order": [[ 0, "asc" ]]//Ordenar (columna,orden)

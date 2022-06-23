@@ -74,22 +74,17 @@ function listar( nube_idproyecto ) {
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
     "ajax":{
-        url: '../ajax/proveedor.php?op=listar&nube_idproyecto='+nube_idproyecto,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	
-        }
-      },
-    "language": {
-      "lengthMenu": "Mostrar: _MENU_ registros",
-      "buttons": {
-        "copyTitle": "Tabla Copiada",
-        "copySuccess": {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
+      url: '../ajax/proveedor.php?op=listar&nube_idproyecto='+nube_idproyecto,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	
       }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     "bDestroy": true,
     "iDisplayLength": 5,//Paginación

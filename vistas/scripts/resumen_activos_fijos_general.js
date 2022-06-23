@@ -178,11 +178,8 @@ function tbla_principal_maquinaria() {
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: { _: '%d líneas copiadas',  1: '1 línea copiada' }
-      },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
@@ -254,11 +251,8 @@ function tbla_principal_equipo() {
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: { _: '%d líneas copiadas',  1: '1 línea copiada' }
-      },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
@@ -330,11 +324,8 @@ function tbla_principal_herramienta() {
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: { _: '%d líneas copiadas',  1: '1 línea copiada' }
-      },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
@@ -405,11 +396,8 @@ function tbla_principal_oficina(){
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: { _: '%d líneas copiadas',  1: '1 línea copiada' }
-      },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
@@ -1001,8 +989,9 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
       if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
     },
 		language: {
-      lengthMenu: "Mostrar: _MENU_ registros", 
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación

@@ -49,13 +49,7 @@ function listar_c_insumos_af () {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,

@@ -301,14 +301,8 @@ function tbla_principal() {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
@@ -341,14 +335,8 @@ function tbla_principal() {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -381,14 +369,8 @@ function listar_facuras_x_proveedor(idproveedor, nombre_proveedor) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
@@ -1172,13 +1154,8 @@ function tbla_pagos_activo_fijo(idcompra_af_general, monto_total, total_deposito
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación

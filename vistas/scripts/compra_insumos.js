@@ -116,7 +116,7 @@ $("#doc3").change(function (e) { addImageApplication(e, $("#doc3").attr("id")); 
 
 //comprobante - compra
 $("#doc1_i").click(function () {  $("#doc1").trigger("click"); });
-$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"),'', '100%', '100', true); });
+$("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"),'', '100%', '320'); });
 
 // Perfil - material
 $("#foto2_i").click(function () {  $("#foto2").trigger("click"); });
@@ -140,6 +140,7 @@ function doc1_eliminar() {
   $("#doc_old_1").val("");
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
   $("#doc1_nombre").html("");
+  $("#idfactura_compra_insumo").val("");
 }
 
 // Eliminamos el doc FOTO PERFIL - MATERIAL
@@ -279,13 +280,7 @@ function tbla_principal(nube_idproyecto) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -321,13 +316,7 @@ function tbla_principal(nube_idproyecto) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -362,13 +351,7 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -970,7 +953,8 @@ function limpiar_form_comprobante() {
   $("#doc_old_1").val("");
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
-  $("#comprobante_c").val(idcompra_proyecto);
+  $("#id_compra_proyecto").val("");
+  $("#idfactura_compra_insumo").val("");
   $("#barra_progress_comprobante_div").hide();
 }
 
@@ -996,13 +980,7 @@ function tbla_comprobantes_compras(id_compra, num_orden) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -1036,7 +1014,7 @@ function guardaryeditar_comprobante(e) {
           tabla_compra.ajax.reload(null, false);
           limpiar_form_comprobante();          
 
-          $("#modal-comprobantes-compra").modal("hide");
+          $("#modal-tabla-comprobantes-compra").modal("hide");
           $("#barra_progress_comprobante_div").hide();
         } else {
 
@@ -1081,15 +1059,16 @@ function comprobante_compras(idcompra_proyecto, doc, num_orden, num_comprobante,
   tbla_comprobantes_compras(idcompra_proyecto, num_orden);
 
   $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
-  $("#modal-comprobantes-compra").modal("show");  
+  $("#modal-tabla-comprobantes-compra").modal("show"); 
+}
 
-  if (doc != "") {
-    $("#doc_old_1").val(doc);
-    $("#ver_completo").attr("href", "../dist/docs/compra_insumo/comprobante_compra/" + doc);
-    
-    // cargamos la imagen adecuada par el archivo    
-    $("#doc1_ver").html(doc_view_extencion(doc, 'compra_insumo', 'comprobante_compra','100%', '100' ));
-  }
+function mostrar_editar_comprobante(idcomprobante, id_compra, comprobante, nombre_comprobante) {
+  limpiar_form_comprobante();
+  $("#modal-comprobantes-compra").modal("show");  
+  $("#idfactura_compra_insumo").val(idcomprobante);
+  $("#doc_old_1").val(comprobante);   
+  $("#doc1_ver").html(doc_view_extencion(comprobante, 'compra_insumo', 'comprobante_compra','100%', '320' ));
+  $(`#doc1_ver`).append(`<div class="col-md-12 mt-2"><i> ${nombre_comprobante} </i></div><div class="col-md-12"><button class="btn btn-danger btn-block btn-xs" onclick="doc1_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button></div>`);
 }
 
 function eliminar_comprobante_insumo(id_compra, nombre) {
@@ -1294,13 +1273,7 @@ function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -1360,13 +1333,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -1391,13 +1358,7 @@ function listar_pagos_detraccion(idcompra_proyecto, idproyecto, monto_total, dep
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -1834,13 +1795,7 @@ function listarmateriales() {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,

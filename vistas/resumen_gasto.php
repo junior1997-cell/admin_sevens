@@ -123,6 +123,52 @@
                                   <th class="text-center">Fecha</th>
                                   <th>Tipo compr.</th>
                                   <th class="text-center">Módulo</th>
+                                  <th class="text-center">Glosa</th>
+                                  <th>Razón social</th>                                  
+                                  <th class="text-center ">Subtotal</th>                                
+                                  <th class="text-center">IGV</th>
+                                  <th class="text-center">Total</th> 
+                                  <th class="text-center">CFDI.</th>  
+                                  <th class="text-center">Estado</th>                                                   
+                                </tr>
+                              </thead>
+                              <tbody> </tbody>
+                              <tfoot> 
+                                <tr> 
+                                  <th class="text-center text-black-50">#</th> 
+                                  <th class="text-center">OP</th>
+                                  <th class="text-center">V°B°</th>
+                                  <th class="text-center text-black-50">Fecha</th>
+                                  <th class="text-black-50">Tipo compr.</th>
+                                  <th class="text-center">Módulo</th>
+                                  <th class="text-center">Glosa</th>
+                                  <th class="text-black-50">Razón social</th>                                  
+                                  <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
+                                  <th class="text-right text-nowrap total-igv">IGV</th>
+                                  <th class="text-right text-nowrap total-total">Total</th>  
+                                  <th class="text-center text-black-50">CFDI.</th>
+                                  <th class="text-center">Estado</th>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+
+                          <!-- tabla resumen facturas compras -->
+                          <div class="pb-3">
+                          <h4><b>Lista de Gastos Aceptados</b></h4>
+                            <!-- <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3> -->
+                            <table id="tabla-visto-bueno" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                </tr>
+                                <tr> 
+                                  <th class="text-center">#</th> 
+                                  <th class="text-center">OP</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Aprobado por:">V°B°</th>
+                                  <th class="text-center">Fecha</th>
+                                  <th>Tipo compr.</th>
+                                  <th class="text-center">Módulo</th>
                                   <th>Razón social</th>                                  
                                   <th class="text-center ">Subtotal</th>                                
                                   <th class="text-center">IGV</th>
@@ -141,9 +187,9 @@
                                   <th class="text-black-50">Tipo compr.</th>
                                   <th class="text-center">Módulo</th>
                                   <th class="text-black-50">Razón social</th>                                  
-                                  <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
-                                  <th class="text-right text-nowrap total-igv">IGV</th>
-                                  <th class="text-right text-nowrap total-total">Total</th>  
+                                  <th class="text-right text-nowrap total-subtotal-visto-bueno">Subtotal</th>                                
+                                  <th class="text-right text-nowrap total-igv-visto-bueno">IGV</th>
+                                  <th class="text-right text-nowrap total-total-visto-bueno">Total</th>  
                                   <th class="text-center text-black-50">CFDI.</th>
                                   <th class="text-center">Estado</th>
                                 </tr>
@@ -238,6 +284,7 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick="ver_detalle_visto_bueno();"><i class="fas fa-check"></i></button>
                         <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
                         <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir/PDF</a>
                       </div>

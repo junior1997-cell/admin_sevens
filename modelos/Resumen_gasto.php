@@ -9,11 +9,12 @@ class ResumenGasto
   {
   }
 
-  public function tabla_principal($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
+  public function tabla_principal($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $visto_bueno) {
     $data = Array(); $data_comprobante = Array(); $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
     $host       = $_SERVER['HTTP_HOST'];
+    $estado_vb = (empty($visto_bueno) ? "estado_user_vb >=0" : "estado_user_vb =$visto_bueno" );
 
     // FACTURAS - COMPRAS INSUMOS ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -40,7 +41,7 @@ class ResumenGasto
     cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante,
     cpp.id_user_vb, cpp.nombre_user_vb, cpp.imagen_user_vb, cpp.estado_user_vb
 		FROM compra_por_proyecto as cpp, proveedor as p 
-		WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' AND  cpp.idproyecto = $idproyecto
+		WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.$estado_vb AND  cpp.idproyecto = $idproyecto
     $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
     $compra = ejecutarConsultaArray($sql);
 
@@ -181,7 +182,7 @@ class ResumenGasto
     f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-    AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND f.$estado_vb AND f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY f.fecha_emision DESC;";
     $maquinaria_equipo =  ejecutarConsultaArray($sql2);
 
@@ -253,7 +254,7 @@ class ResumenGasto
     f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-    AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    AND f.estado = '1' AND f.estado_delete = '1' AND f.$estado_vb AND mq.tipo = '2' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY f.fecha_emision DESC;";
     $maquinaria_equipo =  ejecutarConsultaArray($sql2);
 
@@ -327,7 +328,7 @@ class ResumenGasto
     s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, p.razon_social, p.tipo_documento, 
     p.ruc, s.id_user_vb, s.nombre_user_vb, s.imagen_user_vb, s.estado_user_vb    
     FROM subcontrato AS s, proveedor as p
-    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
+    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.$estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
     $sub_contrato =  ejecutarConsultaArray($sql3);
 
     if ($sub_contrato['status'] == false) { return $sub_contrato; }
@@ -397,7 +398,7 @@ class ResumenGasto
     ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante,
     ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb
     FROM planilla_seguro as ps, proyecto as p
-    WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' 
+    WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
     AND ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY ps.fecha_p_s DESC;";
     $planilla_seguro =  ejecutarConsultaArray($sql3);
 
@@ -468,7 +469,7 @@ class ResumenGasto
     $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, tipo_comprobante, numero_comprobante, fecha_g, 
     costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
     FROM otro_gasto 
-    WHERE  estado = '1' AND estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
+    WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
     $otro_gasto =  ejecutarConsultaArray($sql3);
 
     if ($otro_gasto['status'] == false) { return $otro_gasto; }
@@ -538,7 +539,7 @@ class ResumenGasto
     $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, t.tipo_comprobante, t.numero_comprobante, t.fecha_viaje, t.precio_parcial, 
     t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada, t.id_user_vb, t.nombre_user_vb, t.imagen_user_vb, t.estado_user_vb
     FROM transporte AS t, proveedor AS p
-    WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND  t.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND t.$estado_vb AND  t.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY t.fecha_viaje DESC;";
     $transporte =  ejecutarConsultaArray($sql4);
 
@@ -609,7 +610,7 @@ class ResumenGasto
     $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
     precio_parcial, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
     FROM hospedaje 
-    WHERE estado = '1' AND estado_delete = '1' AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    WHERE estado = '1' AND estado_delete = '1' AND $estado_vb AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
     $hospedaje =  ejecutarConsultaArray($sql5);
 
@@ -681,7 +682,7 @@ class ResumenGasto
     fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa, fp.tipo_gravada, fp.id_user_vb, fp.nombre_user_vb, fp.imagen_user_vb, fp.estado_user_vb
 		FROM factura_pension as fp, pension as p, proveedor as prov
 		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
-    AND fp.estado = '1' AND fp.estado_delete = '1' AND  p.idproyecto = $idproyecto
+    AND fp.estado = '1' AND fp.estado_delete = '1' AND fp.$estado_vb AND  p.idproyecto = $idproyecto
      $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fp.fecha_emision DESC;";
     $factura_pension =  ejecutarConsultaArray($sql6);
@@ -754,7 +755,7 @@ class ResumenGasto
     fb.monto, fb.subtotal, fb.igv, fb.glosa, fb.comprobante, fb.tipo_gravada, fb.id_user_vb, fb.nombre_user_vb, fb.imagen_user_vb, fb.estado_user_vb
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break = sb.idsemana_break  
-    AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' AND  sb.idproyecto = $idproyecto
+    AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' AND fb.$estado_vb AND  sb.idproyecto = $idproyecto
      $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fb.fecha_emision DESC;";
     $factura_break =  ejecutarConsultaArray($sql7);
@@ -826,7 +827,7 @@ class ResumenGasto
     $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, 
     costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
 		FROM comida_extra
-		WHERE  estado = '1' AND estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+		WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comida DESC;";
     $comida_extra =  ejecutarConsultaArray($sql8);
 
@@ -1029,9 +1030,10 @@ class ResumenGasto
     return $retorno;
   }
 
-  public function suma_totales($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
+  public function suma_totales($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $visto_bueno) {
 
     $data = Array(); $total = 0; $subtotal = 0; $igv = 0;
+    $estado_vb = ($visto_bueno == '' ? "estado_user_vb >=0" : "estado_user_vb =$visto_bueno" );
 
     // SUMAS TOTALES - COMPRA INSUMO --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
@@ -1056,7 +1058,7 @@ class ResumenGasto
 
     $sql = "SELECT SUM(cpp.total) AS total, SUM(cpp.subtotal) AS subtotal, SUM(cpp.igv) AS igv
     FROM compra_por_proyecto AS cpp, proveedor p
-    WHERE cpp.idproveedor = p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' AND  cpp.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
+    WHERE cpp.idproveedor = p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.$estado_vb AND  cpp.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $compra = ejecutarConsultaSimpleFila($sql);
 
     if ($compra['status'] == false) { return $compra; }
@@ -1121,7 +1123,7 @@ class ResumenGasto
     $sql2 = "SELECT SUM(f.monto) AS total , SUM(f.subtotal) AS subtotal, SUM(f.igv) AS igv
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-    AND f.estado = '1' AND f.estado_delete = '1' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+    AND f.estado = '1' AND f.estado_delete = '1' AND f.$estado_vb AND f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $maquinaria = ejecutarConsultaSimpleFila($sql2);
 
     if ($maquinaria['status'] == false) { return $maquinaria; } 
@@ -1153,7 +1155,7 @@ class ResumenGasto
 
     $sql3 = "SELECT SUM(s.subtotal) as subtotal, SUM(s.igv) as igv, SUM(s.costo_parcial) as total
     FROM subcontrato AS s, proveedor as p
-    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND  idproyecto = $idproyecto 
+    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.$estado_vb AND  idproyecto = $idproyecto 
     $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $otro_gasto = ejecutarConsultaSimpleFila($sql3);
 
@@ -1187,7 +1189,7 @@ class ResumenGasto
 
     $sql3 = "SELECT SUM(ps.subtotal) AS subtotal, SUM(ps.igv) AS igv, SUM(ps.costo_parcial) AS total
     FROM planilla_seguro as ps, proyecto as p
-    WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1'
+    WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
      AND  ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $otro_gasto = ejecutarConsultaSimpleFila($sql3);
 
@@ -1220,7 +1222,7 @@ class ResumenGasto
 
     $sql3 = "SELECT SUM(costo_parcial) as total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
     FROM otro_gasto  
-    WHERE estado = '1' AND estado_delete = '1' AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+    WHERE estado = '1' AND estado_delete = '1' AND $estado_vb AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $otro_gasto = ejecutarConsultaSimpleFila($sql3);
 
     if ($otro_gasto['status'] == false) { return $otro_gasto; } 
@@ -1252,7 +1254,7 @@ class ResumenGasto
 
     $sql4 = "SELECT SUM(t.precio_parcial) AS total, SUM(t.subtotal) AS subtotal, SUM(t.igv) AS igv
     FROM transporte AS t, proveedor AS p
-    WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND  t.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+    WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND t.$estado_vb AND t.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $transporte = ejecutarConsultaSimpleFila($sql4);
 
     if ($transporte['status'] == false) { return $transporte; }
@@ -1282,7 +1284,7 @@ class ResumenGasto
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
     $sql5 = "SELECT SUM(precio_parcial) as total , SUM(subtotal) AS subtotal, SUM(igv) AS igv
-    FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+    FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
     $hospedaje = ejecutarConsultaSimpleFila($sql5);
 
@@ -1314,7 +1316,7 @@ class ResumenGasto
     }
     $sql6 = "SELECT SUM(fp.monto) AS total, SUM(fp.subtotal) AS subtotal, SUM(fp.igv) AS igv
 		FROM factura_pension as fp, pension as p, proveedor as prov
-		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND  p.idproyecto = $idproyecto
+		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND fp.$estado_vb AND  p.idproyecto = $idproyecto
     AND fp.estado = '1' AND fp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $factura_pension = ejecutarConsultaSimpleFila($sql6);
 
@@ -1346,7 +1348,7 @@ class ResumenGasto
     }
     $sql7 = "SELECT SUM(fb.monto) AS total, SUM(fb.subtotal) AS subtotal, SUM(fb.igv) AS igv
 		FROM factura_break as fb, semana_break as sb
-		WHERE  fb.idsemana_break = sb.idsemana_break AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND  sb.idproyecto = $idproyecto
+		WHERE  fb.idsemana_break = sb.idsemana_break AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND fb.$estado_vb AND  sb.idproyecto = $idproyecto
     AND sb.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $factura_break = ejecutarConsultaSimpleFila($sql7);
 
@@ -1378,7 +1380,7 @@ class ResumenGasto
     }
     $sql8 = "SELECT SUM(costo_parcial) AS total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
 		FROM comida_extra
-		WHERE  estado = '1' AND estado_delete = '1' AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+		WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $comida_extra = ejecutarConsultaSimpleFila($sql8);
 
     if ($comida_extra['status'] == false) { return $comida_extra; }
@@ -1646,30 +1648,30 @@ class ResumenGasto
   
 }
 
-function validar_url( $host, $ruta, $file )  {
+// function validar_url( $host, $ruta, $file )  {
 
-  $armar_ruta = $host . $ruta . $file;  
+//   $armar_ruta = $host . $ruta . $file;  
 
-  if (empty($armar_ruta)) { return false; }
+//   if (empty($armar_ruta)) { return false; }
 
-  // get_headers() realiza una petición GET por defecto,
-  // cambiar el método predeterminadao a HEAD
-  // Ver http://php.net/manual/es/function.get-headers.php
-  stream_context_set_default([
-    'http' => [
-      'method' => 'HEAD',
-    ],
-  ]);
-  $headers = @get_headers($armar_ruta);
-  sscanf($headers[0], 'HTTP/%*d.%*d %d', $httpcode);
+//   // get_headers() realiza una petición GET por defecto,
+//   // cambiar el método predeterminadao a HEAD
+//   // Ver http://php.net/manual/es/function.get-headers.php
+//   stream_context_set_default([
+//     'http' => [
+//       'method' => 'HEAD',
+//     ],
+//   ]);
+//   $headers = @get_headers($armar_ruta);
+//   sscanf($headers[0], 'HTTP/%*d.%*d %d', $httpcode);
 
-  // Aceptar solo respuesta 200 (Ok), 301 (redirección permanente) o 302 (redirección temporal)
-  $accepted_response = [200, 301, 302];
-  if (in_array($httpcode, $accepted_response)) {
-    return true;
-  } else {
-    return false;
-  }    
-}
+//   // Aceptar solo respuesta 200 (Ok), 301 (redirección permanente) o 302 (redirección temporal)
+//   $accepted_response = [200, 301, 302];
+//   if (in_array($httpcode, $accepted_response)) {
+//     return true;
+//   } else {
+//     return false;
+//   }    
+// }
 
 ?>

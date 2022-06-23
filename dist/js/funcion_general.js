@@ -326,7 +326,7 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
     
 		var sizeByte = file.size; console.log(file.type);
 		var sizekiloBytes = parseInt(sizeByte / 1024);
-		var sizemegaBytes = (sizeByte / 1000000);
+		var sizemegaBytes = (sizekiloBytes / 1024);
 		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
 
 		if (!file.type.match(archivoType) ){
@@ -384,15 +384,15 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
           } else {
             $(`#${id}_ver`).html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
           }
-          console.log(detalle_upload);
+          
           if (detalle_upload == true) {
             $(`#${id}_nombre`).html(`<div class="row">
-              <div class="col-md-11"> <br> <br>
+              <div class="col-sm-11 col-md-10 col-lg-11 col-xl-11 mt-2">
                 <p><b>Nombre:</b><i> ${file.name}</i></p>
-                <p><b>Tamaño:</b> ${sizekiloBytes}</p>
+                <p><b>Tamaño:</b> ${formato_miles(sizemegaBytes)} mb</p>
                 <p><b>Tipo:</b> ${file.type}</p>
               </div>
-              <div class="col-md-1">
+              <div class="col-sm-1 col-md-2 col-lg-1 col-xl-1 mt-2">
                 <button class="btn btn-danger btn-block btn-xs h-100" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
               </div>
             </div>`);

@@ -425,13 +425,8 @@ function listar(nube_idproyecto) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
@@ -487,13 +482,8 @@ function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -757,13 +747,8 @@ function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -797,13 +782,8 @@ function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
@@ -1252,13 +1232,8 @@ function listar_facturas(idmaquinaria, idproyecto) {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación

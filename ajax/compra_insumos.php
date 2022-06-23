@@ -604,7 +604,8 @@ if (!isset($_SESSION["nombre"])) {
       // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
       case 'tbla_comprobantes_compra':
         $cont_compra = $_GET["num_orden"];
-        $rspta = $compra_insumos->tbla_comprobantes( $_GET["id_compra"] );
+        $id_compra = $_GET["id_compra"];
+        $rspta = $compra_insumos->tbla_comprobantes( $id_compra );
         //Vamos a declarar un array
         $data = []; $cont = 1;        
         
@@ -613,7 +614,8 @@ if (!isset($_SESSION["nombre"])) {
             $data[] = [
               "0" => $cont++,
               "1" => '<div class="text-nowrap">'.
-              ' <a class="btn btn-warning btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.' '.encodeCadenaHtml((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>' .              
+              ' <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_editar_comprobante(' . $reg->idfactura_compra_insumo .','.$id_compra.', \''.$reg->comprobante.'\', \''.$cont.'. '.date("d/m/Y h:i:s a", strtotime($reg->updated_at)).'\')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.              
+              ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.' '.encodeCadenaHtml((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>' .              
               ' <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_comprobante_insumo(' . $reg->idfactura_compra_insumo .', \''.encodeCadenaHtml($reg->tipo_comprobante.''.$reg->serie_comprobante).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button> 
               </div>'.$toltip,
               "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,

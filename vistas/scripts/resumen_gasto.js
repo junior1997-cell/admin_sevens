@@ -1,4 +1,6 @@
 var tabla_principal;
+var tabla_visto_bueno;
+var nube_idproyecto_r="", fecha_1_r="", fecha_2_r="", id_proveedor_r="", comprobante_r="";
 
 //Función que se ejecuta al inicio
 function init() {  
@@ -25,7 +27,9 @@ function init() {
 
 //Función Listar - tabla compras
 function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
-   
+
+  nube_idproyecto_r=nube_idproyecto, fecha_1_r=fecha_1, fecha_2_r=fecha_2, id_proveedor_r=id_proveedor, comprobante_r=comprobante;
+
   $('.total-subtotal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-total').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
@@ -36,9 +40,82 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, "colvis"],
+    ajax:	{
+      url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='0'`,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);	
+      }
+		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
+      // columna: sub total
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
+      // columna: igv
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
+      // columna: total
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right');  }
+      // columna: 4
+      if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [ 
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [12], visible: false, searchable: false },
+    ],
+  }).DataTable();
+  
+  $( tabla_principal ).ready(function() {
+    sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
+  });
+  
+}
+
+function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
+  $('.btn-zip').addClass('disabled');
+  $.post("../ajax/resumen_gasto.php?op=suma_totales", { 'id_proyecto': nube_idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, 'estado_vb_suma':'0' }, function (e, status) {
+    
+    e = JSON.parse(e);  //console.log(e); 
+
+    if (e.status == true) {
+      $('.total-total').html(`S/ ${formato_miles(parseFloat(e.data.total).toFixed(2))}`);
+      $('.total-subtotal').html(`S/ ${formato_miles(parseFloat(e.data.subtotal).toFixed(2))}`);
+      $('.total-igv').html(`S/ ${formato_miles(parseFloat(e.data.igv).toFixed(2))}`);
+
+      $('.cargando').hide();
+      $('.btn-zip').removeClass('disabled');
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } ); 
+}
+
+//Función Listar - tabla compras
+function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
+   
+  $('.total-subtotal-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.total-igv-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.total-total-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  tabla_visto_bueno = $('#tabla-visto-bueno').dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, "colvis"],
     ajax:	{
-      url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
+      url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='1'`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -59,13 +136,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: '%d líneas copiadas',
-          1: '1 línea copiada'
-        }
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
@@ -78,21 +149,21 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
   }).DataTable();
   
   $( tabla_principal ).ready(function() {
-    sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
+    sumas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
   });
   
 }
 
-function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
+function sumas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
   $('.btn-zip').addClass('disabled');
-  $.post("../ajax/resumen_gasto.php?op=suma_totales", { 'id_proyecto': nube_idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (e, status) {
+  $.post("../ajax/resumen_gasto.php?op=suma_totales", { 'id_proyecto': nube_idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, 'estado_vb_suma':'1' }, function (e, status) {
     
     e = JSON.parse(e);  //console.log(e); 
 
     if (e.status == true) {
-      $('.total-total').html(`S/ ${formato_miles(parseFloat(e.data.total).toFixed(2))}`);
-      $('.total-subtotal').html(`S/ ${formato_miles(parseFloat(e.data.subtotal).toFixed(2))}`);
-      $('.total-igv').html(`S/ ${formato_miles(parseFloat(e.data.igv).toFixed(2))}`);
+      $('.total-total-visto-bueno').html(`S/ ${formato_miles(parseFloat(e.data.total).toFixed(2))}`);
+      $('.total-subtotal-visto-bueno').html(`S/ ${formato_miles(parseFloat(e.data.subtotal).toFixed(2))}`);
+      $('.total-igv-visto-bueno').html(`S/ ${formato_miles(parseFloat(e.data.igv).toFixed(2))}`);
 
       $('.cargando').hide();
       $('.btn-zip').removeClass('disabled');
@@ -169,7 +240,8 @@ function filtros() {
   $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
   //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
-  tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante)
+  tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante);
+  tbla_visto_bueno(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante);
 }
 
 function descargar_zip_comprobantes() {   
@@ -191,7 +263,7 @@ function descargar_zip_comprobantes() {
   // filtro de trabajdor
   if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; }
 
-  $.post("../ajax/resumen_gasto.php?op=data_comprobantes", { 'id_proyecto': localStorage.getItem("nube_idproyecto"), 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante, }, function (e, status) {
+  $.post("../ajax/resumen_gasto.php?op=data_comprobantes", { 'id_proyecto': localStorage.getItem("nube_idproyecto"), 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante,'estado_vb_zip':'' }, function (e, status) {
     
     e = JSON.parse(e);  console.log(e);    
     
@@ -235,6 +307,10 @@ function descargar_zip_comprobantes() {
   }).fail( function(e) { ver_errores(e); } ); 
 }
 
+function ver_detalle_visto_bueno() {
+  toastr.info("Aun ESTAMOS EN DESARROLLO");
+}
+
 function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $(".tooltip").removeClass("show").addClass("hidde");
   console.log(name_tabla, name_id_tabla, id_tabla, accion);
@@ -260,6 +336,9 @@ function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar
       if (result.value.status){        
         Swal.fire("Correcto!", "Visto bueno asignado", "success");
         if (tabla_principal) { tabla_principal.ajax.reload(null, false); } 
+        if (tabla_visto_bueno) { tabla_visto_bueno.ajax.reload(null, false); } 
+        sumas_totales(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
+        sumas_totales_visto_bueno(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
       } else {
         ver_errores(result);
       }      

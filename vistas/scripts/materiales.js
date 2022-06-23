@@ -124,7 +124,6 @@ function tbla_principal() {
       },
     },
     createdRow: function (row, data, ixdex) {    
-
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
@@ -140,13 +139,7 @@ function tbla_principal() {
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: {
-        copyTitle: "Tabla Copiada",
-        copySuccess: {
-          _: "%d líneas copiadas",
-          1: "1 línea copiada",
-        },
-      },
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
