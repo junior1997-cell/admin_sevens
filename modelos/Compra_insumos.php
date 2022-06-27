@@ -478,7 +478,25 @@ class Compra_insumos
   // :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S ::::::::::::::::::::::::::
 
 
-  // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   S E L E C T 2  ::::::::::::::::::::::::::::::::::::::::: 
+  // ::::::::::::::::::::::::::::::::::::::::: S I N C R O N I Z A R  ::::::::::::::::::::::::::::::::::::::::: 
+  public function sincronizar_comprobante() {
+    $sql = "SELECT idcompra_proyecto, comprobante FROM compra_por_proyecto WHERE comprobante != 'null' AND comprobante != '';";
+    $comprobantes = ejecutarConsultaArray($sql);
+    if ($comprobantes == false) {  return $comprobantes; }
+
+    foreach ($comprobantes['data'] as $key => $value) {
+      $id_compra = $value['idcompra_proyecto']; $comprobante = $value['comprobante'];
+      $sql2 = "INSERT INTO factura_compra_insumo ( idcompra_proyecto, comprobante ) VALUES ( '$id_compra', '$comprobante')";
+      $factura_compra = ejecutarConsulta($sql2);
+      if ($factura_compra == false) {  return $factura_compra; }
+    }
+
+    $sql3 = "SELECT	idcompra_proyecto, comprobante FROM factura_compra_insumo ;";
+    $factura_compras = ejecutarConsultaArray($sql3);
+    if ($factura_compras == false) {  return $factura_compras; }
+
+    return $retorno = ['status'=>true, 'message'=>'todo oka', 'data'=>['comprobante'=>$comprobantes['data'],'factura_compras'=>$factura_compras['data'],], ];
+  }
 
 }
 

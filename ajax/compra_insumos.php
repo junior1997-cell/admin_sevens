@@ -940,8 +940,14 @@ if (!isset($_SESSION["nombre"])) {
 
       break;    
     
-      // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   S E L E C T 2  :::::::::::::::::::::::::::::::::::::::::
-       
+      // ::::::::::::::::::::::::::::::::::::::::: S I N C R O N I Z A R  :::::::::::::::::::::::::::::::::::::::::
+      case 'sincronizar_comprobante':
+
+        $rspta = $compra_insumos->sincronizar_comprobante();
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+
+      break; 
     }
 
   } else {

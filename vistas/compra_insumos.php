@@ -5,11 +5,11 @@
 
   if (!isset($_SESSION["nombre"])){
 
-    header("Location: index.php");
+    header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
 
   }else{ ?>
 
-    <!DOCTYPE html>
+    <!DOCTYPE html> 
     <html lang="es">
       <head>
         <meta charset="utf-8" />
@@ -70,12 +70,15 @@
                         <div class="main-top">
                           <div class="container-fluid border-bottom">
                             <div class="row">
-                              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12"> 
                                 <div class="card-header">
                                   <h3 class="card-title">
                                     <!--data-toggle="modal" data-target="#modal-agregar-compra"  onclick="limpiar();"-->
                                     <button type="button" class="btn bg-gradient-success" id="btn_agregar" onclick="ver_form_add(); limpiar_form_compra();">
                                       <i class="fas fa-plus-circle"></i> Agregar
+                                    </button>
+                                    <button type="button" class="btn bg-gradient-danger" id="btn_sincronizar" onclick="sincronizar_comprobante();">
+                                      <i class="fas fa-plus-circle"></i> sincronizar comprobante
                                     </button>
                                     <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar();">
                                       <i class="fas fa-arrow-left"></i> Regresar

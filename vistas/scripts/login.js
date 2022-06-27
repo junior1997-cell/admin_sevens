@@ -9,7 +9,7 @@ $("#frmAcceso").on('submit',function(e) {
 
     $.post("../ajax/usuario.php?op=verificar",{"logina":logina,"clavea":clavea}, function(e){
         try {
-            e = JSON.parse(e); console.log(e);
+            e = JSON.parse(e); //console.log(e);
 
             setTimeout(validar_response(e), 1000);
             
@@ -37,12 +37,37 @@ function validar_response(e) {
                 subtitle: 'cerrar',
                 body: 'Se inicio sesion correctamente. Te hemos extrañado, estamos muy contentos de tenerte de vuelta.'
             });
+            var redirecinando = varaibles_get();
 
-            $(location).attr("href","escritorio.php");
+            if (redirecinando.file == '' || redirecinando.file == null ) {
+                //console.log('vacio perrro');
+                $(location).attr("href","escritorio.php");
+            } else {
+                //console.log(redirecinando.file);
+                $(location).attr("href",redirecinando.file);                                
+            }
+            //console.log(redirecinando);            
         }
         
     } else {
         $('.login-btn').html('Ingresar').removeClass('disabled btn-info').addClass('btn-outline-warning');
         ver_errores(e); 
     }
+}
+
+function varaibles_get() {
+    var v_args = location.search.substring(1).split("&");
+    var param_values = [];
+    if ( v_args != '' && v_args != 'undefined')
+    for (var i = 0; i < v_args.length; i++) {
+        var pair = v_args[i].split("=");
+        if ( typeOfVar( pair ) === 'array' ) {
+            param_values[ decodeURIComponent( pair[0] ) ] = decodeURIComponent( pair[1] );
+        }
+    }
+    return param_values;
+}
+
+function typeOfVar (obj) {
+    return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
 }

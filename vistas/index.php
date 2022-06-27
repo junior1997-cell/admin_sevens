@@ -1,22 +1,22 @@
 <?php  
 
-    $ruta = "";
+    $ruta = ""; $file_go = isset($_GET["file"]) ? $_GET["file"] : "";
 
-    function enrutamiento($tipo) {
+    function enrutamiento($tipo, $file) {
         if ($tipo == 'nube') {
-            $link_host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/';
+            $link_host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/vistas/login.html?file='.$file;
         }else{
             if ($tipo == 'local') {
-                $link_host = "http://localhost/admin_sevens/";
+                $link_host = "http://localhost/admin_sevens/vistas/login.html?file=".$file;
             }            
         }
         return $link_host;
     }
 
     if ($_SERVER['HTTP_HOST'] == "localhost") {
-        $ruta = enrutamiento('local');
+        $ruta = enrutamiento('local', $file_go);
     } else {
-        $ruta = enrutamiento('nube');
+        $ruta = enrutamiento('nube', $file_go);
     }  
 
     header("Location: $ruta");

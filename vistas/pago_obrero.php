@@ -4,7 +4,7 @@
   session_start();
 
   if (!isset($_SESSION["nombre"])){
-    header("Location: index.php");
+    header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
   }else{ ?>
     <!DOCTYPE html>
     <html lang="es">
