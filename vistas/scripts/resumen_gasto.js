@@ -113,7 +113,7 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,], } }, "colvis"],
+    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, "colvis"],
     ajax:	{
       url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='1'`,
       type : "get",
@@ -126,13 +126,13 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
       // columna: sub total
-      if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
       // columna: igv
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
       // columna: total
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right');  }
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right');  }
       // columna: 4
-      if (data[11] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
+      if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -144,7 +144,7 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [11], visible: false, searchable: false },
+      { targets: [12], visible: false, searchable: false },
     ],
   }).DataTable();
   
@@ -273,7 +273,7 @@ function descargar_zip_comprobantes() {
       if (e.data.data_comprobante.length === 0) {
         $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
         $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Comprobantes .zip');
-        toastr.error("No hay docs para descargar!!!");
+        toastr_error("Vacio!!","No hay docs para descargar", 700);
       }else{
         e.data.data_comprobante.forEach(async function (value){
            
@@ -288,13 +288,13 @@ function descargar_zip_comprobantes() {
             if(count === e.data.data_comprobante.length) {
               zip.generateAsync({type:'blob'}).then(function(content) {
                 var download_zip = saveAs(content, zipFilename);
-                $( download_zip ).ready(function() { toastr.success('Descarga exitosa'); });
+                $( download_zip ).ready(function() {  toastr_success("Exito!!","Descarga exitosa.", 700); });
                 $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
                 $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Comprobantes .zip');
               });
             }
           } catch (err) {
-            console.log(err); toastr.error('Error al descargar');
+            console.log(err); toastr_error("Error!!","Error al descargar", 700);
             $('.btn-zip').removeClass('disabled btn-danger').addClass('btn-success');
             $('.btn-zip').html('<i class="far fa-file-archive fa-lg"></i> Comprobantes .zip');
           }
@@ -307,9 +307,6 @@ function descargar_zip_comprobantes() {
   }).fail( function(e) { ver_errores(e); } ); 
 }
 
-function ver_detalle_visto_bueno() {
-  toastr.info("Aun ESTAMOS EN DESARROLLO");
-}
 
 function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $(".tooltip").removeClass("show").addClass("hidde");
@@ -337,6 +334,7 @@ function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar
         Swal.fire("Correcto!", "Visto bueno asignado", "success");
         if (tabla_principal) { tabla_principal.ajax.reload(null, false); } 
         if (tabla_visto_bueno) { tabla_visto_bueno.ajax.reload(null, false); } 
+        $('#modal-ver-compras').modal('hide');
         sumas_totales(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
         sumas_totales_visto_bueno(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
       } else {
@@ -348,8 +346,11 @@ function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar
 
 // .....::::::::::::::::::::::::::::::::::::: D E T A L L E S   D E   M O D U L O S  :::::::::::::::::::::::::::::::::::::::..
 
-function detalle_compra_insumo(id_tabla) {
-  
+function detalle_compra_insumo(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -367,11 +368,15 @@ function detalle_compra_insumo(id_tabla) {
     $("#print_pdf_compra").removeClass('disabled');
     $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${id_tabla}&op=insumo` );
     $("#excel_compra").removeClass('disabled');
+    $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_servicio_maquina(id_tabla) {
-  
+function detalle_servicio_maquina(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
@@ -462,6 +467,8 @@ function detalle_servicio_maquina(id_tabla) {
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
 
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
+
     } else {
       ver_errores(e);
     }
@@ -469,7 +476,10 @@ function detalle_servicio_maquina(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_servicio_equipo(id_tabla) {
+function detalle_servicio_equipo(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -559,7 +569,7 @@ function detalle_servicio_equipo(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
-
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
     } else {
       ver_errores(e);
     }
@@ -567,7 +577,10 @@ function detalle_servicio_equipo(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_sub_contrato(id_tabla) {
+function detalle_sub_contrato(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -661,7 +674,7 @@ function detalle_sub_contrato(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
-
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
     } else {
       ver_errores(e);
     }
@@ -669,7 +682,10 @@ function detalle_sub_contrato(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_planilla_seguro(id_tabla) {
+function detalle_planilla_seguro(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -759,6 +775,7 @@ function detalle_planilla_seguro(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
 
     } else {
       ver_errores(e);
@@ -767,7 +784,10 @@ function detalle_planilla_seguro(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_otro_gasto(id_tabla) {
+function detalle_otro_gasto(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -865,6 +885,7 @@ function detalle_otro_gasto(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
 
     } else {
       ver_errores(e);
@@ -873,7 +894,10 @@ function detalle_otro_gasto(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_transporte(id_tabla) {
+function detalle_transporte(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -991,6 +1015,7 @@ function detalle_transporte(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
 
     } else {
       ver_errores(e);
@@ -999,7 +1024,10 @@ function detalle_transporte(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_hospedaje(id_tabla) {
+function detalle_hospedaje(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1113,6 +1141,7 @@ function detalle_hospedaje(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
 
     } else {
       ver_errores(e);
@@ -1121,7 +1150,10 @@ function detalle_hospedaje(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_pension(id_tabla) {
+function detalle_pension(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1219,6 +1251,7 @@ function detalle_pension(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
 
     } else {
       ver_errores(e);
@@ -1227,7 +1260,10 @@ function detalle_pension(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_break(id_tabla) {
+function detalle_break(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1325,6 +1361,7 @@ function detalle_break(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
 
     } else {
       ver_errores(e);
@@ -1333,7 +1370,10 @@ function detalle_break(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_comida_extra(id_tabla) {
+function detalle_comida_extra(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1431,6 +1471,7 @@ function detalle_comida_extra(id_tabla) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
 
     } else {
       ver_errores(e);
@@ -1439,7 +1480,7 @@ function detalle_comida_extra(id_tabla) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_otro_ingreso(id_tabla) {
+function detalle_otro_ingreso(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1450,7 +1491,7 @@ function detalle_otro_ingreso(id_tabla) {
   $("#modal-ver-compras").modal("show");
 }
 
-function detalle_otra_factura(id_tabla) {
+function detalle_otra_factura(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1478,3 +1519,4 @@ function export_excel_detalle_factura() {
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
 }
+

@@ -1,6 +1,7 @@
 <?php 
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion_v2.php";
+
 Class Cargo
 {
 	//Implementamos nuestro constructor

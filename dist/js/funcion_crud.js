@@ -394,7 +394,7 @@ function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, men
   });  
 }
 
-/*  ══════════════════════════════════════════ - A L E R T A S - ══════════════════════════════════════════ */
+/*  ══════════════════════════════════════════ - A L E R T A S   S w e e t A l e r t 2 - ══════════════════════════════════════════ */
 
 function sw_cancelar(title='Cancelado!', txt = "Acción cancelada.", timer = 3000) {
   Swal.fire({
@@ -441,6 +441,27 @@ function confirmar_formulario(flat, callback) {
       icon: "error",
     });
   }
+}
+
+/*  ══════════════════════════════════════════ - A L E R T A S   T o a s t r - ══════════════════════════════════════════ */
+function toastr_error(titulo = "Error!!", mensaje = "Acción ejecutada con error.", timer_duration = 700) {
+  // console.log(titulo, mensaje, timer_duration );
+  toastr.error( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
+}
+
+function toastr_success(titulo = "Éxito!!", mensaje = "Acción ejecutada con éxito.", timer_duration = 1700) {
+  // console.log(titulo, mensaje, timer_duration );
+  toastr.success( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
+}
+
+function toastr_info(titulo = "Informa!!", mensaje = "Verificar esta accion.", timer_duration = 700) {
+  // console.log(titulo, mensaje, timer_duration );
+  toastr.info( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
+}
+
+function toastr_warning(titulo = "Alerta!!", mensaje = "Verificar esta accion.", timer_duration = 700) {
+  // console.log(titulo, mensaje, timer_duration );
+  toastr.warning( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
 }
 
 /*  ══════════════════════════════════════════ - E R R O R E S - ══════════════════════════════════════════ */
@@ -520,6 +541,18 @@ function alert_danger(html) {
     <span class="font-weight-medium">¡ERROR!</span>     
     ${html}     
   </div>`);
+}
+
+/*  ══════════════════════════════════════════ - D O W N L O A D - ══════════════════════════════════════════ */
+function download_file(ruta, file, name_file) {
+  const dowload_file = document.createElement('a');
+  dowload_file.href =  `${ruta}${file}`;
+  dowload_file.target = '_blank';
+  dowload_file.download = name_file;
+
+  document.body.appendChild(dowload_file);
+  dowload_file.click();
+  document.body.removeChild(dowload_file);
 }
 
 /*************************************************************/

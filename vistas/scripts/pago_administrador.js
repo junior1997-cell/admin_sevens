@@ -204,7 +204,7 @@ function listar_tbla_principal(nube_idproyecto) {
 
       // columna: saldo
       if (data[10] != '') {
-        $("td", row).eq(10).css(text-right);
+        $("td", row).eq(10).addClass('text-right');
         // acumulamos el SALDO
         var split = data[10].split(' '); console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]); console.log(quitar_format_mil);

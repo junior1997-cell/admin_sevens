@@ -120,33 +120,29 @@ class Compra_insumos
   //Implementamos un método para desactivar categorías
   public function desactivar($idcompra_proyecto) {
     $sql = "UPDATE compra_por_proyecto SET estado='0' WHERE idcompra_proyecto='$idcompra_proyecto'";
-
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para activar categorías
   public function activar($idcompra_por_proyecto) {
     $sql = "UPDATE compra_por_proyecto SET estado='1' WHERE idcompra_proyecto='$idcompra_por_proyecto'";
-
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para activar categorías
   public function eliminar($idcompra_por_proyecto) {
     $sql = "UPDATE compra_por_proyecto SET estado_delete='0' WHERE idcompra_proyecto='$idcompra_por_proyecto'";
-
     return ejecutarConsulta($sql);
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idcompra_por_proyecto) {
     $sql = "SELECT * FROM compra_por_proyecto WHERE idcompra_por_proyecto='$idcompra_por_proyecto'";
-
     return ejecutarConsultaSimpleFila($sql);
   }
 
   //Implementar un método para listar los registros
-  public function listar_compra($nube_idproyecto) {
+  public function tbla_principal($nube_idproyecto) {
     $data = Array();
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
@@ -155,7 +151,48 @@ class Compra_insumos
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1'
 		ORDER BY cpp.fecha_compra DESC ";
-    return  ejecutarConsulta($sql);
+    $compra = ejecutarConsultaArray($sql);
+    if ($compra['status'] == false) { return $compra; }
+
+    foreach ($compra['data'] as $key => $value) {
+      $idcompra_proyecto = $value['idcompra_proyecto'];
+      $sql2 = "SELECT SUM(monto) as total_pago_compras FROM pago_compras WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+      $pagos = ejecutarConsultaSimpleFila($sql2);
+      if ($pagos['status'] == false) { return $pagos; }
+
+      $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+      $cant_comprobantes = ejecutarConsultaSimpleFila($sql3);
+      if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
+
+      $data[] = [
+        'idproyecto' => $value['idproyecto'],
+        'idcompra_proyecto' => $value['idcompra_proyecto'],
+        'idproveedor' => $value['idproveedor'],
+        'fecha_compra' => $value['fecha_compra'],
+        'tipo_comprobante' => $value['tipo_comprobante'],
+        'serie_comprobante' => $value['serie_comprobante'],
+        'descripcion' => $value['descripcion'],
+        'total' => $value['total'],
+        'comprobante' => $value['comprobante'],
+        'estado_detraccion' => $value['estado_detraccion'],
+        'razon_social' => $value['razon_social'],
+        'telefono' => $value['telefono'],
+        'estado'  => $value['estado'],
+        'total_pago_compras' => (empty($pagos['data']['total_pago_compras']) ? 0 : floatval($pagos['data']['total_pago_compras']) ),
+        'cant_comprobantes' => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
+      ];
+    }
+
+    return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data, 'affected_rows' =>$compra['affected_rows'],  ] ;
+  }
+
+  //pago servicio
+  public function pago_servicio($idcompra_proyecto) {
+
+    $sql = "SELECT SUM(monto) as total_pago_compras
+		FROM pago_compras 
+		WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+    return ejecutarConsultaSimpleFila($sql);
   }
 
   //Implementar un método para listar los registros x proveedor
@@ -219,15 +256,6 @@ class Compra_insumos
 		WHERE p.idunidad_medida = um.idunidad_medida AND idcompra_proyecto='$id_compra' AND  dp.idproducto=p.idproducto";
 
     return ejecutarConsulta($sql);
-  }
-
-  //pago servicio
-  public function pago_servicio($idcompra_proyecto) {
-
-    $sql = "SELECT SUM(monto) as total_pago_compras
-		FROM pago_compras 
-		WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
-    return ejecutarConsultaSimpleFila($sql);
   }
 
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O S ::::::::::::::::::::::::::::::::::::::::: 
@@ -397,6 +425,7 @@ class Compra_insumos
     WHERE cpp.idproveedor=p.idproveedor AND cpp.idcompra_proyecto='$idcompra_proyecto'";
     return ejecutarConsultaSimpleFila($sql);
   }
+
   // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
   public function tbla_comprobantes($id_compra) {
     //var_dump($idfacturacompra);die();
@@ -407,113 +436,50 @@ class Compra_insumos
     return ejecutarConsulta($sql);
   }
 
-  public function editar_comprobante($comprobante_c, $doc_comprobante) {
+  public function agregar_comprobante( $id_compra_proyecto, $doc_comprobante ) {
     //var_dump($idfacturacompra);die();
-    $sql = "UPDATE compra_por_proyecto SET comprobante='$doc_comprobante' WHERE idcompra_proyecto ='$comprobante_c'";
+    $sql = "INSERT INTO factura_compra_insumo ( idcompra_proyecto, comprobante ) 
+    VALUES ( '$id_compra_proyecto', '$doc_comprobante')";
+    return ejecutarConsulta($sql);
+  }
+
+  public function editar_comprobante($idfactura_compra_insumo, $doc_comprobante) {
+    //var_dump($idfacturacompra);die();
+    $sql = "UPDATE factura_compra_insumo SET comprobante='$doc_comprobante'
+    WHERE idfactura_compra_insumo ='$idfactura_compra_insumo'";
     return ejecutarConsulta($sql);
   }
 
   // obtebnemos los DOCS para eliminar
-  public function obtener_comprobante($comprobante_c) {
+  public function comprobantes_compra($id_compra) {
+    $sql = "SELECT idfactura_compra_insumo, idcompra_proyecto, comprobante
+    FROM factura_compra_insumo WHERE estado=1 AND estado_delete=1 AND idcompra_proyecto ='$id_compra'";
+    return ejecutarConsultaArray($sql);
+  }
 
-    $sql = "SELECT comprobante FROM compra_por_proyecto WHERE idcompra_proyecto ='$comprobante_c'";
+  // obtebnemos los DOCS para eliminar
+  public function obtener_comprobante($idfactura_compra_insumo) {
+    $sql = "SELECT comprobante FROM factura_compra_insumo WHERE idfactura_compra_insumo ='$idfactura_compra_insumo'";
+    return ejecutarConsulta($sql);
+  }
 
+  //Implementamos un método para activar categorías
+  public function eliminar_comprobante($idpago_compras) {
+    $sql = "UPDATE factura_compra_insumo SET estado_delete='0' WHERE idfactura_compra_insumo ='$idpago_compras'";
+    return ejecutarConsulta($sql);
+  }
+
+  //Implementamos un método para activar categorías
+  public function desactivar_comprobante($idpago_compras) {
+    $sql = "UPDATE factura_compra_insumo SET estado_delete='0' WHERE idfactura_compra_insumo ='$idpago_compras'";
     return ejecutarConsulta($sql);
   }
 
   // :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S ::::::::::::::::::::::::::
 
-  public function listar_productos() {
-    $sql = "SELECT p.idproducto AS idproducto,
-    p.idunidad_medida AS idunidad_medida,
-    p.idcolor AS idcolor,
-    p.nombre AS nombre,
-    p.marca AS marca,
-    ciaf.nombre AS categoria,
-    p.descripcion AS descripcion,
-    p.imagen AS imagen,
-    p.estado_igv AS estado_igv,
-    p.precio_unitario AS precio_unitario,
-    p.precio_igv AS precio_igv,
-    p.precio_sin_igv AS precio_sin_igv,
-    p.precio_total AS precio_total,
-    p.ficha_tecnica AS ficha_tecnica,
-    p.estado AS estado,
-    c.nombre_color AS nombre_color,
-    um.nombre_medida AS nombre_medida
-    FROM producto p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
-    WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor  AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af
-    AND p.estado = '1' AND p.estado_delete = '1'
-    ORDER BY p.nombre ASC";
 
-    return ejecutarConsulta($sql);
-  }
-
-  public function obtenerImgPerfilProducto($idproducto)	{
-
-	  $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
-	  return ejecutarConsulta($sql);
-	}
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   S E L E C T 2  ::::::::::::::::::::::::::::::::::::::::: 
 
-  //Select2 Proveedor
-  public function select2_proveedor() {
-    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado='1'";
-    return ejecutarConsulta($sql);
-  }
-
-  //Select2 banco
-  public function select2_banco() {
-    $sql = "SELECT idbancos as id, nombre, alias FROM bancos WHERE estado='1'  ORDER BY idbancos ASC;";
-    return ejecutarConsulta($sql);
-  }
-
-  //Select2 color
-  public function select2_color() {
-    $sql = "SELECT idcolor AS id, nombre_color AS nombre FROM color WHERE estado='1' ORDER BY idcolor ASC;";
-    return ejecutarConsulta($sql);
-  }
-
-  //Select2 unidad medida
-  public function select2_unidad_medida() {
-    $sql = "SELECT idunidad_medida AS id, nombre_medida AS nombre, abreviacion FROM unidad_medida WHERE estado='1' ORDER BY nombre_medida ASC;";
-    return ejecutarConsulta($sql);
-  }
-
-  //Select2 categoria
-  public function select2_categoria() {
-    $sql = "SELECT idcategoria_insumos_af as id, nombre FROM categoria_insumos_af WHERE estado='1' ORDER BY idcategoria_insumos_af ASC;";
-    return ejecutarConsulta($sql);
-  }
-
 }
-
-function validar_url( $host, $ruta, $file )  {
-  
-  $armar_ruta = $host . $ruta . $file;
-
-  if (empty($armar_ruta)) { return false; }
-
-  // get_headers() realiza una petición GET por defecto,
-  // cambiar el método predeterminadao a HEAD
-  // Ver http://php.net/manual/es/function.get-headers.php
-  stream_context_set_default([
-    'http' => [
-      'method' => 'HEAD',
-    ],
-  ]);
-  $headers = @get_headers($armar_ruta);
-  sscanf($headers[0], 'HTTP/%*d.%*d %d', $httpcode);
-
-  // Aceptar solo respuesta 200 (Ok), 301 (redirección permanente) o 302 (redirección temporal)
-  $accepted_response = [200, 301, 302];
-  if (in_array($httpcode, $accepted_response)) {
-    return true;
-  } else {
-    return false;
-  } 
-}
-
-
 
 ?>

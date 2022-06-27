@@ -130,7 +130,7 @@ class Pension
           "presupuesto" => $presupuesto,
           "descripcion" => $descripcion,
 
-          "dias_q_comieron" => $datos_rangos_fechas,
+          "dias_q_comieron" => $datos_rangos_fechas['data'],
         ];
       }
     }

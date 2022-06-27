@@ -136,12 +136,12 @@
                               <tfoot> 
                                 <tr> 
                                   <th class="text-center text-black-50">#</th> 
-                                  <th class="text-center">OP</th>
-                                  <th class="text-center">V°B°</th>
+                                  <th class="text-center text-black-50">OP</th>
+                                  <th class="text-center text-black-50">V°B°</th>
                                   <th class="text-center text-black-50">Fecha</th>
-                                  <th class="text-black-50">Tipo compr.</th>
-                                  <th class="text-center">Módulo</th>
-                                  <th class="text-center">Glosa</th>
+                                  <th class="text-center text-black-50">Tipo compr.</th>
+                                  <th class="text-center text-black-50">Módulo</th>
+                                  <th class="text-center text-black-50">Glosa</th>
                                   <th class="text-black-50">Razón social</th>                                  
                                   <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
                                   <th class="text-right text-nowrap total-igv">IGV</th>
@@ -169,6 +169,7 @@
                                   <th class="text-center">Fecha</th>
                                   <th>Tipo compr.</th>
                                   <th class="text-center">Módulo</th>
+                                  <th class="text-center">Glosa</th>
                                   <th>Razón social</th>                                  
                                   <th class="text-center ">Subtotal</th>                                
                                   <th class="text-center">IGV</th>
@@ -181,12 +182,13 @@
                               <tfoot> 
                                 <tr> 
                                   <th class="text-center text-black-50">#</th> 
-                                  <th class="text-center">OP</th>
-                                  <th class="text-center">V°B°</th>
+                                  <th class="text-center text-black-50">OP</th>
+                                  <th class="text-center text-black-50">V°B°</th>
                                   <th class="text-center text-black-50">Fecha</th>
-                                  <th class="text-black-50">Tipo compr.</th>
-                                  <th class="text-center">Módulo</th>
-                                  <th class="text-black-50">Razón social</th>                                  
+                                  <th class="text-center text-black-50">Tipo compr.</th>
+                                  <th class="text-center text-black-50">Módulo</th>
+                                  <th class="text-center text-black-50">Glosa</th>
+                                  <th class=" text-black-50">Razón social</th>                                  
                                   <th class="text-right text-nowrap total-subtotal-visto-bueno">Subtotal</th>                                
                                   <th class="text-right text-nowrap total-igv-visto-bueno">IGV</th>
                                   <th class="text-right text-nowrap total-total-visto-bueno">Total</th>  
@@ -225,7 +227,7 @@
                   </div>
                 </div>
 
-                <!-- MODAL - COMPROBANTE  -->
+                <!-- MODAL - MODULOS INCLUIDOS  -->
                 <div class="modal fade" id="modal-modulos-incluidos">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -284,7 +286,7 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick="ver_detalle_visto_bueno();"><i class="fas fa-check"></i></button>
+                        <button type="button" class="btn btn-outline-success modal-add-remove-visto-bueno" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick="ver_detalle_visto_bueno();"><i class="fas fa-check"></i></button>
                         <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
                         <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir/PDF</a>
                       </div>

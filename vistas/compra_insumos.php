@@ -995,7 +995,7 @@
 
                         <div class="modal-body row">
                           <div class="col-12">
-                            <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-comprobantes-compra" >Agregar</button>
+                            <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-comprobantes-compra" onclick="limpiar_form_comprobante();" >Agregar</button>
                           </div>
                           <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
                             <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
@@ -1041,27 +1041,27 @@
                           <!-- form start -->
                           <form id="form-comprobante" name="form-comprobante" method="POST" >
                              
-                            <div class="row" id="cargando-7-fomulario">
+                            <div class="row mx-2" id="cargando-7-fomulario">
                               <!-- id Comprobante -->
                               <input type="hidden" name="id_compra_proyecto" id="id_compra_proyecto" />
                               <input type="hidden" name="idfactura_compra_insumo" id="idfactura_compra_insumo" />
 
                               <!-- Doc  -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row">
-                                
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-3 text-center">
-                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
-                                  <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                  <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" accept="application/pdf, image/*" />
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
+                                <div class="row">
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 pl-0 mb-3 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                    <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" accept="application/pdf, image/*" />
+                                  </div>
+                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 pr-0 mb-3 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_insumo', 'comprobante_compra', '100%', '320');"><i class="fa fa-eye"></i> Recargar.</button>
+                                  </div>                                                                     
+                                  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mt-1" id="doc1_ver"> 
+                                    <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />                           
+                                  </div>                                                                
+                                  <div class="col-12 col-sm-12 col-md-7 col-lg-12 col-xl-12 text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>                                                                   
                                 </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-3 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_insumo', 'comprobante_compra', '100%', '320');"><i class="fa fa-eye"></i> Recargar.</button>
-                                </div>                                                                     
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 row text-center mt-4" id="doc1_ver"> 
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
-                                </div>                                                                
-                                <div class="col-12 col-sm-12 col-md-7 col-lg-12 col-xl-12 text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>                                                                   
-                                
                               </div>
                               <!-- barprogress -->
                               <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mb-3" style="margin-top: 20px;">
@@ -1132,7 +1132,7 @@
                   </div>
 
                   <!-- Modal agregar MATERIALES Y ACTIVOS FIJOS - charge -->                 
-                  <div class="modal fade" id="modal-agregar-material-activos-fijos">
+                  <div class="modal fade bg-color-02020263" id="modal-agregar-material-activos-fijos">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">

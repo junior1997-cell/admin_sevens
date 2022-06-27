@@ -1,6 +1,7 @@
 <?php
 require_once "global_local.php";
 //require_once "global_nube_remoto.php";
+require "../config/funcion_general.php";
 
 $conexion = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
 

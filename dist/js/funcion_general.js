@@ -318,7 +318,7 @@ function addImage(e, id, img_default='') {
 /* PREVISUALIZA: img, pdf, doc, excel,  */
 function addImageApplication(e, id, img_default='', width='100%', height='310', detalle_upload=false) {
   console.log(id, img_default, width, height, detalle_upload);
-  $(`#${id}_ver`).html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	
+  $(`#${id}_ver`).html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br>');	
 
 	var file = e.target.files[0], archivoType = /image.*|application.*/; console.log(file);
 	

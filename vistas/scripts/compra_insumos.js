@@ -1,7 +1,8 @@
 //Requejo99@
 var reload_detraccion = "";
 
-var tabla_compra;
+var tabla_compra_insumo;
+var tabla_comprobantes;
 
 var tabla_compra_x_proveedor;
 var tabla_detalle_compra_x_proveedor;
@@ -244,7 +245,7 @@ function regresar() {
 //TABLA - COMPRAS
 function tbla_principal(nube_idproyecto) {
   //console.log(idproyecto);
-  tabla_compra = $("#tabla-compra").dataTable({
+  tabla_compra_insumo = $("#tabla-compra").dataTable({
     responsive: true, 
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
@@ -254,7 +255,7 @@ function tbla_principal(nube_idproyecto) {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,8,9], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,8,9,11], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6,8,9,11], } }, {extend: "colvis"} ,        
     ],
     ajax: {
-      url: "../ajax/compra_insumos.php?op=listar_compra&nube_idproyecto=" + nube_idproyecto,
+      url: "../ajax/compra_insumos.php?op=tbla_principal&nube_idproyecto=" + nube_idproyecto,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -389,7 +390,7 @@ function guardar_y_editar_compras(e) {
       if (result.value.status){        
         Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
-        tabla_compra.ajax.reload(null, false);
+        tabla_compra_insumo.ajax.reload(null, false);
         tabla_compra_x_proveedor.ajax.reload(null, false);
 
         limpiar_form_compra(); regresar();
@@ -415,7 +416,7 @@ function eliminar_compra(idcompra_proyecto, nombre) {
     `<b class="text-danger">${nombre}</b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu compra ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu compra ha sido Eliminado.' ) }, 
-    function(){ tabla_compra.ajax.reload(null, false); tabla_compra_x_proveedor.ajax.reload(null, false); },
+    function(){ tabla_compra_insumo.ajax.reload(null, false); tabla_compra_x_proveedor.ajax.reload(null, false); },
     false, 
     false, 
     false,
@@ -438,7 +439,8 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
   if (idproducto != "") {
     // $('.producto_'+idproducto).addClass('producto_selecionado');
     if ($(".producto_" + idproducto).hasClass("producto_selecionado")) {
-      toastr.success("Material: " + nombre + " agregado !!");
+      
+      toastr_success("Agregado!!",`Material: ${nombre} agregado !!`, 700);
 
       var cant_producto = $(".producto_" + idproducto).val();
 
@@ -495,15 +497,15 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
       array_class_trabajador.push({ id_cont: cont });
 
       modificarSubtotales();
-
-      toastr.success("Material: " + nombre + " agregado !!");
+      
+      toastr_success("Agregado!!",`Material: ${nombre} agregado !!`, 700);
 
       cont++;
       evaluar();
     }
   } else {
     // alert("Error al ingresar el detalle, revisar los datos del artículo");
-    toastr.error("Error al ingresar el detalle, revisar los datos del material.");
+    toastr_error("Error!!",`Error al ingresar el detalle, revisar los datos del material.`, 700);
   }
 }
 
@@ -648,7 +650,7 @@ function modificarSubtotales() {
       }
     }
   }
-  toastr.success("Precio Actualizado !!!");
+  toastr_success("Actualizado!!",`Precio Actualizado.`, 700);
 }
 
 function calcularTotalesSinIgv() {
@@ -751,7 +753,7 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
   
     default:
       $(".val_igv").html('IGV (0%)');
-      toastr.success('No has difinido un tipo de calculo de IGV.')
+      toastr_error("Vacio!!","No has difinido un tipo de calculo de IGV", 700);
     break;
   } 
   
@@ -787,7 +789,7 @@ function eliminarDetalle(indice) {
 
   evaluar();
 
-  toastr.warning("Producto removido.");
+  toastr_warning("Removido!!","Producto removido", 700);
 }
 
 //mostramos para editar el datalle del comprobante de la compras
@@ -896,8 +898,8 @@ function mostrar_compra(idcompra_proyecto) {
         });
 
         modificarSubtotales();
-      } else {
-        toastr.error("<h3>Sin productos.</h3> <br> Este registro no tiene productos para mostrar");        
+      } else {  
+        toastr_error("Sin productos!!","Este registro no tiene productos para mostrar", 700);     
       }
 
       $("#cargando-1-fomulario").show();
@@ -953,13 +955,13 @@ function limpiar_form_comprobante() {
   $("#doc_old_1").val("");
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
-  $("#id_compra_proyecto").val("");
+  //$("#id_compra_proyecto").val("");
   $("#idfactura_compra_insumo").val("");
   $("#barra_progress_comprobante_div").hide();
 }
 
 function tbla_comprobantes_compras(id_compra, num_orden) {
-  tabla_compra = $("#tabla-comprobantes-compra").dataTable({
+  tabla_comprobantes = $("#tabla-comprobantes-compra").dataTable({
     responsive: true, 
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
@@ -1011,16 +1013,17 @@ function guardaryeditar_comprobante(e) {
           array_doc = [];
 
           Swal.fire("Correcto!", "Documento guardado correctamente", "success");
-          tabla_compra.ajax.reload(null, false);
+          tabla_compra_insumo.ajax.reload(null, false);
+          tabla_comprobantes.ajax.reload(null, false);
           limpiar_form_comprobante();          
 
-          $("#modal-tabla-comprobantes-compra").modal("hide");
+          $("#modal-comprobantes-compra").modal("hide");
           $("#barra_progress_comprobante_div").hide();
         } else {
 
           ver_errores(e);
-        }
-      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+        } 
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
 
       $("#guardar_registro_comprobante_compra").html('Guardar Cambios').removeClass('disabled');
     },
@@ -1058,6 +1061,8 @@ function comprobante_compras(idcompra_proyecto, doc, num_orden, num_comprobante,
   limpiar_form_comprobante();
   tbla_comprobantes_compras(idcompra_proyecto, num_orden);
 
+  $("#id_compra_proyecto").val(idcompra_proyecto);
+
   $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
   $("#modal-tabla-comprobantes-compra").modal("show"); 
 }
@@ -1066,6 +1071,7 @@ function mostrar_editar_comprobante(idcomprobante, id_compra, comprobante, nombr
   limpiar_form_comprobante();
   $("#modal-comprobantes-compra").modal("show");  
   $("#idfactura_compra_insumo").val(idcomprobante);
+  $("#id_compra_proyecto").val(id_compra);
   $("#doc_old_1").val(comprobante);   
   $("#doc1_ver").html(doc_view_extencion(comprobante, 'compra_insumo', 'comprobante_compra','100%', '320' ));
   $(`#doc1_ver`).append(`<div class="col-md-12 mt-2"><i> ${nombre_comprobante} </i></div><div class="col-md-12"><button class="btn btn-danger btn-block btn-xs" onclick="doc1_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button></div>`);
@@ -1073,19 +1079,143 @@ function mostrar_editar_comprobante(idcomprobante, id_compra, comprobante, nombr
 
 function eliminar_comprobante_insumo(id_compra, nombre) {
   crud_eliminar_papelera(
-    "../ajax/materiales.php?op=desactivar",
-    "../ajax/materiales.php?op=eliminar", 
+    "../ajax/compra_insumos.php?op=desactivar_comprobante",
+    "../ajax/compra_insumos.php?op=eliminar_comprobante", 
     id_compra, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload(null, false) },
-    false, 
+    function(){ tabla_compra_insumo.ajax.reload(null, false);},
+    function(){ tabla_comprobantes.ajax.reload(null, false); },
     false, 
     false,
     false
   );
+}
+
+// :::::::::::::::::::::::::: - S E C C I O N   D E S C A R G A S -  ::::::::::::::::::::::::::
+
+function download_no_multimple(id_compra, nombre_doc) {
+  $(`.descarga_compra_${id_compra}`).html('<i class="fas fa-spinner fa-pulse"></i>');
+  //console.log(id_compra, nombre_doc);
+  var cant_download_ok = 0; var cant_download_error = 0;
+  $.post("../ajax/compra_insumos.php?op=ver_comprobante_compra", { 'id_compra': id_compra }, function (e, textStatus, jqXHR) {
+    e = JSON.parse(e); console.log(e);
+    e.data.forEach((val, index) => {
+      if ( UrlExists(`${host}${val.comprobante}`) == 200 ) {
+        download_file(host,val.comprobante,nombre_doc);
+        cant_download_ok++;
+      } else {
+        cant_download_error++;
+      }      
+    });
+
+    if (cant_download_ok == 0 && cant_download_error == 0) { toastr_error('Vacio!!', 'No hay documentos para descargar.', 700); }
+    if (cant_download_ok > 0 ) { toastr_success('Exito!!', `${cant_download_ok} Descargas con exito`, 700); }
+    if (cant_download_error > 0 ) { toastr_error('No existe!!', `Hay ${cant_download_error} docs que problabe que este eliminado o se haya movido el documento.`, 700); }
+
+    $(`.descarga_compra_${id_compra}`).html('<i class="fas fa-cloud-download-alt"></i>');
+    
+  }).fail( function(e) { ver_errores(e); } );
+  
+}
+
+function add_remove_comprobante(id_compra, doc, factura_name) {
+  
+  $('.check_add_doc').addClass('hidden');
+  $('.custom-control').addClass('pl-0');
+  $('.cargando_check').removeClass('hidden');
+
+  if ($(`#check_descarga_${id_compra}`).is(':checked')) {
+    $.post("../ajax/compra_insumos.php?op=ver_comprobante_compra", { 'id_compra': id_compra }, function (e, textStatus, jqXHR) {
+      e = JSON.parse(e); console.log(e);
+      var cont_docs_ok = 0; var cont_docs_error = 0;
+      e.data.forEach((val, index) => {
+        if (UrlExists(`${host}${val.comprobante}`) == 200) {
+          array_doc.push({ 
+            'id_compra': id_compra,
+            'id_factura_compra': val.idfactura_compra_insumo,
+            'doc_ruta': `${host}${val.comprobante}`,
+          });
+          cont_docs_ok++;
+        } else {          
+          cont_docs_error++;
+        }         
+      });
+
+      if (cont_docs_ok == 0 && cont_docs_error == 0) {
+        toastr_success("Vacio!!",`No hay Documentos para agregar `, 700);
+      } else if (cont_docs_ok > 0) {
+        toastr_success("Agregado!!",`${cont_docs_ok} Documentos agregado <p class="h5">${factura_name}</p>`, 700);
+      } else if (cont_docs_error > 0) {
+        toastr_error("Error!!",`${cont_docs_error} Documentos no encontrados <p class="h5">${factura_name}</p>`, 700);
+        $(`#check_descarga_${id_compra}`).prop('checked', false);
+      }   
+      if (cont_docs_error > 0) { toastr_error("Error!!",`${cont_docs_error} Documentos no encontrados <p class="h5">${factura_name}</p>`, 700); }   
+      
+      $('.check_add_doc').removeClass('hidden');
+      $('.custom-control').removeClass('pl-0');   
+      $('.cargando_check').addClass('hidden');
+      console.log(array_doc);
+    }).fail( function(e) { ver_errores(e); } );
+    
+  } else {
+    $.post("../ajax/compra_insumos.php?op=ver_comprobante_compra", { 'id_compra': id_compra }, function (e, textStatus, jqXHR) {
+      e = JSON.parse(e); console.log(e);
+      var cont_doc = 0;
+      e.data.forEach((val, index) => {
+        // eliminamos el indice elegido
+        array_doc.forEach(function (car, index, object) {
+          if (car.id_factura_compra === val.idfactura_compra_insumo) {
+            object.splice(index, 1); cont_doc++;
+          }
+        });     
+      });  
+      toastr_info("Quitado!!",`${cont_doc} Documento quitado <p class="h5">${factura_name}</p>`, 700);  
+      
+      $('.check_add_doc').removeClass('hidden');
+      $('.custom-control').removeClass('pl-0');   
+      $('.cargando_check').addClass('hidden');
+      console.log(array_doc);   
+    }).fail( function(e) { ver_errores(e); } );     
+  }  
+}
+
+function download_multimple() {
+  //toastr.info(`Aun estamos en desarrollo`);
+  $('.btn-descarga-multiple').html('<i class="fas fa-spinner fa-pulse "></i>').addClass('disabled btn-danger').removeClass('btn-success');
+  $('.btn-descarga-multiple').attr('onclick', `toastr_error('Espera!!', 'Espera la descarga que esta en curso.', 700);`);
+  if (array_doc.length === 0) {
+    toastr_error("Vacío!!","Selecciona algún documento", 700);
+    $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
+    $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
+  } else {
+    const zip = new JSZip();  let count = 0; const zipFilename = "Comprobantes-de-insumos.zip";
+    array_doc.forEach(async function (value){
+
+      const urlArr = value.doc_ruta.split('/');
+      const filename = urlArr[urlArr.length - 1];
+
+      try {
+        const file = await JSZipUtils.getBinaryContent(value.doc_ruta)
+        zip.file(filename, file, { binary: true});
+        count++;
+        if(count === array_doc.length) {
+          zip.generateAsync({type:'blob'}).then(function(content) {
+            var download_zip = saveAs(content, zipFilename);
+            $( download_zip ).ready(function() { toastr_success("Exito!!","Descarga exitosa", 700); });
+            $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
+            $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
+          });
+        }
+      } catch (err) {
+        console.log(err); toastr_success("Error!!","Error al descargar", 700);
+        $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
+        $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
+      }
+    });
+  }  
 }
 
 // :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::
@@ -1196,7 +1326,7 @@ function guardar_proveedor(e) {
         } else {
           ver_errores(e);
         }
-      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }       
       
       $("#guardar_registro_proveedor").html('Guardar Cambios').removeClass('disabled');
     },
@@ -1458,7 +1588,7 @@ function guardaryeditar_pago(e) {
          
         Swal.fire("Correcto!", "Pago guardado correctamente", "success");	    
 
-        tabla_compra.ajax.reload(null, false);
+        tabla_compra_insumo.ajax.reload(null, false);
 
         $("#modal-agregar-pago").modal("hide");
 
@@ -1782,7 +1912,7 @@ function listarmateriales() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/compra_insumos.php?op=listarMaterialescompra",
+      url: "../ajax/ajax_general.php?op=tblaInsumosYActivosFijos",
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -1937,7 +2067,7 @@ function guardar_y_editar_materiales(e) {
         } else {
           ver_errores(e);
         }
-      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); } 
       $("#guardar_registro_material").html('Guardar Cambios').removeClass('disabled');
     },
     beforeSend: function () {
@@ -2047,73 +2177,6 @@ function actualizar_producto() {
   } 
   
   modificarSubtotales();
-}
-
-
-// :::::::::::::::::::::::::: - S E C C I O N   D E S C A R G A S -  ::::::::::::::::::::::::::
-
-function espera_dowload() {
-  toastr.error("Espera la descarga");
-}
-
-function download_multimple() {
-  //toastr.info(`Aun estamos en desarrollo`);
-  $('.btn-descarga-multiple').html('<i class="fas fa-spinner fa-pulse "></i>').addClass('disabled btn-danger').removeClass('btn-success');
-  $('.btn-descarga-multiple').attr('onclick', 'espera_dowload();');
-  if (array_doc.length === 0) {
-    toastr.error("Selecciona algún documento");
-    $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
-    $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
-  } else {
-    const zip = new JSZip();  let count = 0; const zipFilename = "Comprobantes-de-insumos.zip";
-    array_doc.forEach(async function (value){
-
-      const urlArr = value.doc_ruta.split('/');
-      const filename = urlArr[urlArr.length - 1];
-
-      try {
-        const file = await JSZipUtils.getBinaryContent(value.doc_ruta)
-        zip.file(filename, file, { binary: true});
-        count++;
-        if(count === array_doc.length) {
-          zip.generateAsync({type:'blob'}).then(function(content) {
-            var download_zip = saveAs(content, zipFilename);
-            $( download_zip ).ready(function() { toastr.success('Descarga exitosa'); });
-            $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
-            $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
-          });
-        }
-      } catch (err) {
-        console.log(err); toastr.error('Error al descargar');
-        $('.btn-descarga-multiple').html('<i class="fas fa-cloud-download-alt"></i>').removeClass('disabled btn-danger').addClass('btn-info');
-        $('.btn-descarga-multiple').attr('onclick', 'download_multimple();');
-      }
-    });
-  }  
-}
-
-function add_remove_comprobante(id_doc, doc, factura_name) {
-  if ($(`#check_descarga_${id_doc}`).is(':checked')) {
-    if ( UrlExists(`${host}${doc}`) == 200) {
-      toastr.success(`Documento agregado <p class="h5">${factura_name}</p>`);
-      array_doc.push({ 
-        'id': id_doc,
-        'doc_ruta': `${host}${doc}`,
-      });
-    } else {
-      $(`#check_descarga_${id_doc}`).prop('checked', false);
-      toastr.error("No hay doc disponible!!!");
-    }    
-  } else {
-    // eliminamos el indice elegido
-    array_doc.forEach(function (car, index, object) {
-      if (car.id === id_doc) {
-        object.splice(index, 1);
-      }
-    });
-    toastr.info(`Documento quitado <p class="h5">${factura_name}</p>`);
-  }
-  console.log(array_doc);
 }
 
 init();
@@ -2395,9 +2458,9 @@ function validando_excedentes() {
   //console.log(typeof total_suma);
 
   if (total_suma > totattotal) {
-    toastr.error("ERROR monto excedido al total del monto a pagar!");
+    toastr_error("Exedente!!",`Monto excedido al total del monto a pagar!`, 700);
   } else {
-    toastr.success("Monto Aceptado.");
+    toastr_success("Aceptado!!",`Monto Aceptado.`, 700);
   }
 }
 
@@ -2475,7 +2538,7 @@ function guardar_y_editar_compras____________plantilla_cargando_POST(e) {
               // toastr.success("Usuario registrado correctamente");
               Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
-              tabla_compra.ajax.reload(null, false);
+              tabla_compra_insumo.ajax.reload(null, false);
               tabla_compra_x_proveedor.ajax.reload(null, false);
 
               limpiar_form_compra(); regresar();
@@ -2488,7 +2551,7 @@ function guardar_y_editar_compras____________plantilla_cargando_POST(e) {
               Swal.fire("Error!", datos, "error");
               l_m();
             }
-          } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+          } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); } 
 
         },
         xhr: function () {

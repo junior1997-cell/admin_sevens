@@ -412,7 +412,8 @@
 
       case 'tblaInsumosYActivosFijos':
           
-        $rspta = $ajax_general->tblaInsumosYActivosFijos();
+        $rspta = $ajax_general->tblaInsumosYActivosFijos(); 
+        //echo json_encode($rspta, true);
         //Vamos a declarar un array
         $datas = []; 
 
@@ -420,7 +421,7 @@
 
           while ($reg = $rspta['data']->fetch_object()) {
 
-            $img_parametro = ""; $img = "";  $ficha_tecnica = "";  $color_stock = "";
+            $img_parametro = ""; $img = "";  $color_stock = "";
   
             if (empty($reg->imagen)) {
               $img = 'src="../dist/docs/material/img_perfil/producto-sin-foto.svg"';
@@ -429,14 +430,14 @@
               $img_parametro = $reg->imagen;
             }
   
-            !empty($reg->ficha_tecnica) ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
-              : ($ficha_tecnica = '<center><span class="text-center" data-toggle="tooltip" data-original-title="Vacío"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
+            $ficha_tecnica = !empty($reg->ficha_tecnica) ? ( '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
+              : ( '<center><span class="text-center" data-toggle="tooltip" data-original-title="Vacío"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
   
             $datas[] = [
               "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->igv . '\', \'' . $reg->precio_con_igv . '\', \'' .  $img_parametro . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
               "1" => '<div class="user-block w-250px">'.
                 '<img class="profile-user-img img-responsive img-circle" ' .  $img . ' alt="user image" onerror="' . $imagen_error .  '">'.
-                '<span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                '<span class="username"><p class="mb-0" >' . $reg->nombre . '</p></span>
                 <span class="description"><b>Color: </b>' . $reg->nombre_color . '</span>'.
               '</div>',
               "2" => $reg->categoria,
