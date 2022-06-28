@@ -4,7 +4,7 @@
 
   session_start();
   if (!isset($_SESSION["nombre"])){
-      header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
+    header("Location: index.php");
   }else{
     ?>
     <!DOCTYPE html>
@@ -34,7 +34,7 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1 id="nomb_pension_head" ><i class="fas fa-utensils nav-icon"></i> Pensión</h1>
+                      <h1>Pensión - <b id="nomb_pension_head"></b></h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
@@ -55,35 +55,49 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <!-- Guardar pension -->
-                          <h3 class="card-title mr-3" id="btn_guardar_pension" style="padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pension" onclick="limpiar_pension()" >
+                          <h3 class="card-title mr-3" id="guardar_pension" style="padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-success btn-sm h-50px" data-toggle="modal" data-target="#modal-agregar-pension" onclick="limpiar_pension()" style="margin-right: 10px;">
                               <i class="far fa-save"></i> Agregar Pensión
                             </button>
                           </h3>
                           <!-- regresar -->
-                          <h3 class="card-title mr-3" id="btn_regresar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="mostrar_form_table(1); limpiar_comprobante();" >
+                          <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();" >
                               <i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span>
                             </button>
                           </h3>
-                          <!-- agregar detalle pension -->
-                          <h3 class="card-title mr-3" id="btn_guardar_detalle_pension" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-detalle-pension" onclick="limpiar_form_detalle_pension()">
-                              <i class="far fa-save"></i> Agregar Detalle
+                          <!-- Editar -->
+                          <h3 class="card-title mr-3" id="card-editar" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-orange btn-sm h-50px" onclick="editarbreak();" ><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span></button>
+                          </h3>
+                          <!-- Guardar -->
+                          <h3 class="card-title mr-3" id="card-guardar" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-success btn-sm h-50px" onclick="guardaryeditar_semana_pension();" style="margin-right: 10px;">
+                              <i class="far fa-save"></i> <span class="d-none d-sm-inline-block">Guardar</span>
                             </button>
+                          </h3>
+                          <!-- regresar de comprobantes -->
+                          <h3 class="card-title mr-3" id="regresar_aprincipal" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="regresar(); limpiar_comprobante();" ><i class="fas fa-arrow-left"></i> Regresar</button>
                           </h3>
                           <!-- Guardar comporbantees -->
-                          <h3 class="card-title mr-3" id="btn_guardar_comprobante" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-comprobante" onclick="limpiar_comprobante()">
-                              <i class="far fa-save"></i> Agregar Pago
+                          <h3 class="card-title mr-3" id="guardar" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-success btn-sm h-50px" data-toggle="modal" data-target="#modal-agregar-comprobante" onclick="limpiar_comprobante()" style="margin-right: 10px; height: 61px;">
+                              <i class="far fa-save"></i> Agregar
                             </button>
                           </h3>
+
+                          <!-- Botones de quincenas -->
+                          <div id="List_smnas_pen" style="display: none; padding-left: 2px;" class="row-horizon disenio-scroll">
+                            <!-- <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>
+                                        <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
+                          </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                           <!-- Tabla principal resumen de las penciones -->
-                          <div id="div-tabla-principal">
-                            <table id="tabla-pension" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <div id="mostrar-tabla">
+                            <table id="tabla-resumen-break-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
                                   <th class="text-center">#</th>
@@ -112,37 +126,51 @@
                             </table>
                           </div>
                           <!-- Registrar pension al sistema -->
-                          <div id="div-tabla-detalle" style="display: none;">
-                            <table id="tabla-detalle-pension" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="text-center">#</th> 
-                                  <th>OP</th>                                 
-                                  <th>Descripción</th>
-                                  <th>Fechas</th>
-                                  <th>Cant</th>
-                                  <th>Monto</th>
-                                  <th>0</th>
-                                </tr>
-                              </thead>
-                              <tbody></tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th>OP</th> 
-                                  <th>Descripción</th>
-                                  <th>Fechas</th>
-                                  <th id="total_cantidad_personas" class="text-right"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th id="total_monto" class="text-right">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-right">0</th>
-                                </tr>
-                              </tfoot>
-                            </table>
+                          <div id="tabla-registro" style="display: none;">
+                            <style> .clas_pading { padding: 0.2rem 0.75rem 0.2rem 0.75rem !important; } </style>
+                            <div class="table-responsive disenio-scroll" >
+                              <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;" border="1" style="width: 100%;">
+                                <thead style="background-color: #bebebe1f; color: black;">
+                                  <tr>
+                                    <th rowspan="2" colspan="1" class="text-center w-300px">Descripción</th>
+                                    <th rowspan="2" colspan="1" class="text-center w-135px">Precio actual</th>
+                                    <th colspan="7" class="text-center clas_pading">Días de la semana</th>
+                                    <th rowspan="2" colspan="1" class="text-center">Cantidad</th>
+                                    <th rowspan="2" colspan="1" class="text-center">Adicional</th>
+                                    <th rowspan="2" colspan="1" class="text-center">Parcial</th>
+                                    <th rowspan="2" colspan="1" class="text-center">Presupuesto</th>
+                                    <th rowspan="2" colspan="1" class="text-center">Descripción</th>
+                                  </tr>
+                                  <tr id="bloque_fechas"></tr>
+                                </thead>
+                                <tbody class="tcuerpo" id="data_table_body">
+                                  <!--aqui va el listado de los días-->
+                                </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="10" style="border-bottom: hidden; border-left: hidden;"></th>
+                                    <th class="text-center">Total</th>
+                                    <th class="text-center" id="parcial_total_x_semana">----</th>
+                                    <th class="text-center" style="border-bottom: hidden; border-right: hidden;"></th>
+                                    <th class="text-center" style="border-bottom: hidden; border-right: hidden;"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </div>
+
+                          <!-- cargando tabla registro de pension -->
+                          <div class="row" id="cargando-registro-pension" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
                           </div>
 
                           <!-- Listar comprobantes-->
-                          <div id="div-tabla-comprobantes" style="display: none;">
-                            <table id="tabla-comprobantes" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <div id="tabla-comprobantes" style="display: none;">
+                            <table id="t-comprobantes" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
                                   <th class="text-center">#</th>
@@ -185,9 +213,38 @@
                 </div>
                 <!-- /.container-fluid -->
 
+                <!-- Modal cargando -->
+                <div class="modal fade" id="modal-cargando" data-keyboard="false" data-backdrop="static">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <div id="icono-respuesta">
+                          <!-- icon ERROR -->
+                          <!-- icon success -->
+                        </div>
+
+                        <!-- barprogress -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                          <div class="progress h-px-30" id="div_barra_progress">
+                            <div id="barra_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              0%
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <input type="hidden" class="class_fecha_${i}" value="${fecha_i}"/><input type="hidden" class="class_fecha_${i}" value="${fecha_f}"/>
+                                    boton -->
+                        <div class="swal2-actions">
+                          <div class="swal2-loader"></div>
+                          <button onclick="cerrar_modal()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <!--===============Modal agregar pension =========-->
                 <div class="modal fade" id="modal-agregar-pension">
-                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">Agregar nueva pensión</h4>
@@ -207,10 +264,44 @@
                               <input type="hidden" name="idpension" id="idpension" />
 
                               <!-- proveedor -->
-                              <div class="col-lg-12">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label>Proveedor <sup class="text-danger">*</sup> </label>
                                   <select name="proveedor" id="proveedor" class="form-control select2" style="width: 100%;"> </select>
+                                </div>
+                              </div>
+                              <!-- Servicio -->
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label>Servicio <sup class="text-danger">*</sup> <small class="text-danger">los compos que seleccione, al editar no se borraran</small> </label>
+                                  <div class="select2-purple">
+                                    <select class="form-control select2" multiple="multiple" name="servicio_p[]" id="servicio_p" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione" style="width: 100%;">
+                                      <option value="Desayuno">Desayuno</option>
+                                      <option value="Almuerzo">Almuerzo</option>
+                                      <option value="Cena">Cena</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Precio desayuno -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto">Precio Desayuno</label>
+                                  <input type="number" name="p_desayuno" id="p_desayuno" class="form-control" placeholder="Precio Desayuno" />
+                                </div>
+                              </div>
+                              <!-- Precio almuerzo -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto">Precio Almuerzo</label>
+                                  <input type="number" name="p_almuerzo" id="p_almuerzo" class="form-control" placeholder="Precio Almuerzo" />
+                                </div>
+                              </div>
+                              <!-- Precio cena -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto">Precio Cena</label>
+                                  <input type="number" name="p_cena" id="p_cena" class="form-control" placeholder="Precio Cena" />
                                 </div>
                               </div>
                               <!-- Descripcion-->
@@ -245,117 +336,6 @@
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_pension();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_pension">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!--===============Modal agregar detalle pension =========-->
-                <div class="modal fade" id="modal-agregar-detalle-pension">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Agregar Detalle Pensión</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-agregar-detalle-pension" name="form-agregar-detalle-pension" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-5-fomulario">
-                              <!-- iddetalle_pension  -->
-                              <input type="hidden" name="iddetalle_pension" id="iddetalle_pension" />
-                              <!-- id_pension -->
-                              <input type="hidden" name="id_pension" id="id_pension" />
-                              
-                              <!-- Fecha inicial -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="fecha_inicial">Fecha inicial</label>
-                                  <input class="form-control" type="date" id="fecha_inicial" name="fecha_inicial" />
-                                </div>
-                              </div>
-                              <!-- Fecha final -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="fecha_final">Fecha final</label>
-                                  <input class="form-control" type="date" id="fecha_final" name="fecha_final" />
-                                </div>
-                              </div>
-                              
-                              <!-- Cantidad Persona -->
-                              <div class="col-lg-2">
-                                <div class="form-group">
-                                  <label for="cantidad_persona">Cantidad Persona</label>
-                                  <input class="form-control" type="number" id="cantidad_persona" name="cantidad_persona" placeholder="Cantidad de personas" readonly />
-                                </div>
-                              </div>
-
-                              <!-- Monto-->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="monto_detalle">Monto</label>
-                                  <input type="number" class="form-control" name="monto_detalle" id="monto_detalle" placeholder="Monto" />
-                                </div>
-                              </div>
-
-                              <!-- Descripcion-->
-                              <div class="col-lg-12">
-                                <div class="form-group">
-                                  <label for="descripcion_detalle">Descripción </label> <br />
-                                  <textarea name="descripcion_detalle" id="descripcion_detalle" class="form-control" rows="2"></textarea>
-                                </div>
-                              </div>
-
-                              <!-- Factura -->
-                              <div class="col-md-6">
-                                <div class="row text-center">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="cip" class="control-label"> Baucher de deposito </label>
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i"><i class="fas fa-upload"></i> Subir.</button>
-                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
-                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" />
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'pension', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
-                                  </div>
-                                </div>
-                                <div id="doc2_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
-                                </div>
-                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
-                              </div>
-
-                              <!-- barprogress -->
-                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="div_barra_progress_detalle_pension">
-                                  <div id="barra_progress_detalle_pension" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                    0%
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="row" id="cargando-6-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-detalle-pension">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_comprobante();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_detalle_pension">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
@@ -569,7 +549,6 @@
                     </div>
                   </div>
                 </div>
-
               </section>
               <!-- /.content -->
             </div>         

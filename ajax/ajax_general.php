@@ -98,7 +98,7 @@
 
       case 'select2CargoTrabajdorId':         
          
-        $rspta=$ajax_general->select2_cargo_trabajador_id( $_POST["idtipo"] ); $cont = 1; $data = "";
+        $rspta=$ajax_general->select2_cargo_trabajador_id( $_GET["idtipo"] ); $cont = 1; $data = "";
 
         if ($rspta['status']) {
 

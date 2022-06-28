@@ -19,10 +19,11 @@ function init() {
   $("[data-mask]").inputmask();
 
   //Mostramos los trabajadores
-  $.post("../ajax/ajax_general.php?op=select2Trabajador&id=", function (r) { $("#trabajador").html(r); });
+  lista_select2("../ajax/ajax_general.php?op=select2Trabajador", '#trabajador', null);
 
   //Mostramos los tipo
-  $.post("../ajax/ajax_general.php?op=select2TipoTrabajador", function (r) { $("#tipo_trabajador").html(r); });
+  lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#tipo_trabajador', null);
+
 
   //Initialize Select2 Elements
   $("#trabajador").select2({
@@ -101,8 +102,7 @@ function captura_idtipo() {
     var idtipo= $("#tipo_trabajador").select2("val");
 
     if (idtipo != null || idtipo != ' ' ) {
-       
-      $.post('../ajax/ajax_general.php?op=select2CargoTrabajdorId', { idtipo: idtipo } , function (r) { $("#cargo").html(r); });
+      lista_select2(`../ajax/ajax_general.php?op=select2CargoTrabajdorId&idtipo=${idtipo}`, '#cargo', null);
     }
   }
 
@@ -401,7 +401,7 @@ function mostrar(idtrabajador,idtipo) {
 
   show_hide_form(true);
 
-  $.post('../ajax/ajax_general.php?op=select2CargoTrabajdorId', { idtipo: idtipo }, function (r) { $("#cargo").html(r); });
+  lista_select2(`../ajax/ajax_general.php?op=select2CargoTrabajdorId&idtipo=${idtipo}`, '#cargo', null);
 
   estado_editar(true);
 
