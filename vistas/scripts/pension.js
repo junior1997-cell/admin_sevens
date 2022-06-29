@@ -18,7 +18,6 @@ var fecha_inicial_2="";
 var id_pension="";
 var i_inicial="";
 var cont_inial="";
-
 //Función que se ejecuta al inicio
 function init() {  
 
@@ -129,7 +128,7 @@ function l_m(){ $(".progress-bar").removeClass("progress-bar-striped")}
 
 // .....:::::::::::::::::::::::::::::::::::::  P E N S I O N  :::::::::::::::::::::::::::::::::::::::..
 function limpiar_pension() {
-
+  $(".edit").html('Agregar nueva pensión')
   $("#idpension").val("");
   $("#p_desayuno").val("");
   $("#p_almuerzo").val("");
@@ -158,12 +157,13 @@ function guardaryeditar_pension(e) {
     processData: false,
     success: function (e) {
       try {
-        e = JSON.parse(e); 
+        e = JSON.parse(e);
+        console.log(e); 
         if (e.status == true) {
           toastr.success('servicio registrado correctamente');  
-          tabla_comprobantes.ajax.reload(null, false);  
+          tabla_pension.ajax.reload(null, false);  
           $("#modal-agregar-pension").modal("hide");  
-         limpiar_pension();
+          limpiar_pension();
         }else{  
           ver_errores(e);
         } 
@@ -268,43 +268,22 @@ function tbla_principal(nube_idproyecto) {
 
 //mostrar
 function mostrar_pension(idpension) {
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
   limpiar_pension();
-  var array_datosselect=[];
+  $(".edit").html('Editar pensión')
   $("#modal-agregar-pension").modal("show");
 
   $.post("../ajax/pension.php?op=mostrar_pension", { idpension: idpension }, function (e, status) {
 
-    e = JSON.parse(e); console.log(e);   
+    e = JSON.parse(e); console.log('jjjjjjjjjjjjjjjjjjjj'); console.log(e);   
 
-    $("#proveedor").val(e.idproveedor).trigger("change"); 
-    $("#idproyecto_p").val(e.idproyecto);
-    $("#idpension").val(e.idpension);
-    $("#descripcion_pension").val(e.descripcion);
-
-    e.servicio_pension['data'].forEach( (value, item )=> {
-
-      console.log(value.precio, value.nombre_servicio);
-      if (value.nombre_servicio=="Desayuno") {
-        $("#p_desayuno").val(value.precio);
-        array_datosselect.push(value.nombre_servicio);
-      }
-
-      if (value.nombre_servicio=="Almuerzo") {  
-        $("#p_almuerzo").val(value.precio);
-        array_datosselect.push(value.nombre_servicio);
-      }
-
-      if (value.nombre_servicio=="Cena") {     
-        $("#p_cena").val(value.precio);
-        array_datosselect.push(value.nombre_servicio);
-      }
-
-    });
-
-    $("#servicio_p").val(array_datosselect).trigger("change");
+    $("#proveedor").val(e.data.idproveedor).trigger("change"); 
+    $("#idproyecto_p").val(e.data.idproyecto);
+    $("#idpension").val(e.data.idpension);
+    $("#descripcion_pension").val(e.data.descripcion);
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();

@@ -190,7 +190,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar nueva pensión</h4>
+                        <h4 class="modal-title edit">Agregar nueva pensión</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -252,10 +252,10 @@
 
                 <!--===============Modal agregar detalle pension =========-->
                 <div class="modal fade" id="modal-agregar-detalle-pension">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Detalle Pensión</h4>
+                        <h4 class="modal-title edit_detall_pens">Agregar Detalle Pensión</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -274,30 +274,30 @@
                               <!-- Fecha inicial -->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="fecha_inicial">Fecha inicial</label>
+                                  <label for="fecha_inicial">Fecha inicial <sup class="text-danger">*</sup></label>
                                   <input class="form-control" type="date" id="fecha_inicial" name="fecha_inicial" />
                                 </div>
                               </div>
                               <!-- Fecha final -->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="fecha_final">Fecha final</label>
+                                  <label for="fecha_final">Fecha final <sup class="text-danger">*</sup></label>
                                   <input class="form-control" type="date" id="fecha_final" name="fecha_final" />
                                 </div>
                               </div>
                               
                               <!-- Cantidad Persona -->
-                              <div class="col-lg-2">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="cantidad_persona">Cantidad Persona</label>
-                                  <input class="form-control" type="number" id="cantidad_persona" name="cantidad_persona" placeholder="Cantidad de personas" readonly />
+                                  <input class="form-control" type="number" id="cantidad_persona" name="cantidad_persona" placeholder="Cantidad de personas"/>
                                 </div>
                               </div>
 
                               <!-- Monto-->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="monto_detalle">Monto</label>
+                                  <label for="monto_detalle">Monto <sup class="text-danger">*</sup></label>
                                   <input type="number" class="form-control" name="monto_detalle" id="monto_detalle" placeholder="Monto" />
                                 </div>
                               </div>
@@ -305,30 +305,9 @@
                               <!-- Descripcion-->
                               <div class="col-lg-12">
                                 <div class="form-group">
-                                  <label for="descripcion_detalle">Descripción </label> <br />
-                                  <textarea name="descripcion_detalle" id="descripcion_detalle" class="form-control" rows="2"></textarea>
+                                  <label for="descripcion_detalle">Descripción <sup class="text-danger">*</sup> </label> <br />
+                                  <textarea name="descripcion_detalle" id="descripcion_detalle" class="form-control" rows="3"></textarea>
                                 </div>
-                              </div>
-
-                              <!-- Factura -->
-                              <div class="col-md-6">
-                                <div class="row text-center">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="cip" class="control-label"> Baucher de deposito </label>
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i"><i class="fas fa-upload"></i> Subir.</button>
-                                    <input type="hidden" id="doc_old_2" name="doc_old_2" />
-                                    <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" />
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'pension', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
-                                  </div>
-                                </div>
-                                <div id="doc2_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
-                                </div>
-                                <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                               </div>
 
                               <!-- barprogress -->

@@ -788,23 +788,9 @@ $(function () {
 // restringimos la fecha para no elegir mañana
 no_select_tomorrow("#fecha_inicio");
 
+function restrigir_fecha_input() {  restrigir_fecha_ant("#fecha_fin",$("#fecha_inicio").val());}
 
-// restringimos la fecha para no elegir mañana
-function restrigir_fecha_ant() {
-  
-  var today2 = new Date($("#fecha_inicio").val());
-  var dd2 = today2.getDate()+1;
-  var mm2 = today2.getMonth()+1; //January is 0!
-  var yyyy2 = today2.getFullYear();
-  console.log(dd2);
-  if(dd2<10){ dd2='0'+dd2  }
-  if(mm2<10){ mm2='0'+mm2 }
-  
-  today2 = yyyy2+'-'+mm2+'-'+dd2;
-  console.log(today2);
 
-  document.getElementById("fecha_fin").setAttribute("min", today2);
-}
 
 
 

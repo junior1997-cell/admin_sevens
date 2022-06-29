@@ -204,7 +204,7 @@
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="fecha">Fecha del <sup class="text-danger">*</sup></label>
-                                  <input type="date" name="fecha_inicio" class="form-control" id="fecha_inicio" onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); calculando_totales();" />
+                                  <input type="date" name="fecha_inicio" class="form-control" id="fecha_inicio" onchange="calculando_cantidad(); restrigir_fecha_input();" onkeyup="calculando_cantidad(); calculando_totales();" />
                                 </div>
                               </div>
 

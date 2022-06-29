@@ -22,36 +22,16 @@ class Pension
     return  ejecutarConsulta($sql);
   }
 
-  public function editar_pension($idproyecto_p, $idpension, $proveedor,$descripcion_pension) {
+  public function editar_pension($idproyecto_p,$idpension,$proveedor,$descripcion_pension) {
     $sql = "UPDATE pension SET idproyecto='$idproyecto_p',idproveedor='$proveedor',descripcion='$descripcion_pension' WHERE idpension='$idpension'";
     return ejecutarConsulta($sql);
   }
 
   public function mostrar_pension($idpension) {
-    $datos_edit_pension = [];
 
-    $sql = "SELECT p.idpension,p.idproyecto,p.idproveedor, p.descripcion FROM pension as p, proyecto as py WHERE p.idpension ='$idpension'  AND py.idproyecto=p.idproyecto";
-    $return_pension = ejecutarConsultaSimpleFila($sql);
-
-    $sql_2 = "SELECT sp.idservicio_pension,sp.nombre_servicio,sp.precio FROM servicio_pension AS sp, pension as p WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
-
-    $servicio_pension = ejecutarConsultaArray($sql_2);
-
-    $sql_3 = "SELECT sp.nombre_servicio FROM servicio_pension AS sp, pension as p WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
-
-    $select_s_pension = ejecutarConsultaArray($sql_3);
-
-    $datos_edit_pension = [
-      "idpension" => $return_pension['data']['idpension'],
-      "idproyecto" => $return_pension['data']['idproyecto'],
-      "idproveedor" => $return_pension['data']['idproveedor'],
-      "descripcion" => $return_pension['data']['descripcion'],
-
-      "servicio_pension" => $servicio_pension,
-      "select_s_pension" => $select_s_pension,
-    ];
-
-    return $datos_edit_pension;
+    $sql = "SELECT * FROM pension WHERE idpension = '$idpension';";
+    return ejecutarConsultaSimpleFila($sql);
+     
   }
 
   public function total_pension($idproyecto ) {
