@@ -46,7 +46,15 @@
       $descripcion_pension = isset($_POST["descripcion_pension"])? limpiarCadena($_POST["descripcion_pension"]):"";
       //$idproyecto_p,$idpension,$proveedor,$p_desayuno,$p_almuerzo,$p_cena
       //$idfactura_pension ,$idpension_f,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv
-
+      //------------------pension-------------
+      $iddetalle_pension     = isset($_POST["iddetalle_pension"])? limpiarCadena($_POST["iddetalle_pension"]):"";
+      $id_pension            = isset($_POST["id_pension"])? limpiarCadena($_POST["id_pension"]):"";
+      $fecha_inicial           = isset($_POST["fecha_inicial"])? limpiarCadena($_POST["fecha_inicial"]):"";
+      $fecha_final           = isset($_POST["fecha_final"])? limpiarCadena($_POST["fecha_final"]):"";
+      $cantidad_persona      = isset($_POST["cantidad_persona"])? limpiarCadena($_POST["cantidad_persona"]):"";
+      $monto_detalle         = isset($_POST["monto_detalle"])? limpiarCadena($_POST["monto_detalle"]):"";
+      $descripcion_detalle   = isset($_POST["descripcion_detalle"])? limpiarCadena($_POST["descripcion_detalle"]):"";
+      //$id_pension,$fecha_final,$fecha_final,$cantidad_persona,$monto_detalle,$descripcion_detalle
       switch ($_GET["op"]){
         // :::::::::::::::::::::::::: S E C C I O N   P E N S I O N  ::::::::::::::::::::::::::::::::::::::::::
         case 'guardaryeditar_pension':
@@ -113,17 +121,16 @@
               $data[]=array(
                 "0"=>$cont++,
                 "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg->idpension.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg->idpension.','.$reg->idproyecto.',\'' . $reg->razon_social.  '\')"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
+                ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg->idpension.',\'' . $reg->razon_social.  '\')"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
                 "2"=>'<div class="user-block">
                   <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Pensión. '.$reg->razon_social.'</p></span>
                   <span style="font-weight: bold; font-size: 15px;">'.$reg->direccion.' </span>
                   </div>',
                 "3"=>'<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-                "4"=>'<b>'.number_format($total_a_pagar, 2, '.', ',').'</b>', 
-                "5"=>' <button class="btn btn-info btn-sm" onclick="ver_detalle_x_servicio( '.$reg->idpension.')">Ver Servicios <i class="far fa-eye"></i></button>',
-                "6"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-sm m-t-2px" onclick="tbla_comprobante('.$reg->idpension.', \''.encodeCadenaHtml($reg->razon_social).'\')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 
+                "4"=>'<b>'.number_format($total_a_pagar, 2, '.', ',').'</b>',
+                "5"=>'<div class="text-center"> <button class="btn btn-'.$c.' btn-sm m-t-2px" onclick="tbla_comprobante('.$reg->idpension.', \''.encodeCadenaHtml($reg->razon_social).'\')"><i class="fas fa-'. $icon.'"> </i>'.$nombre.'</button> 
                 <button class="btn btn-'.$cc.' btn-sm">'.number_format($total_pagos, 2, '.', ',').'</button></div>',
-                "7"=>number_format($saldo, 2, '.', ',')
+                "6"=>number_format($saldo, 2, '.', ',')
                   
               );
 
@@ -158,6 +165,22 @@
         break;
 
         // :::::::::::::::::::::::::: S E C C I O N   D E T A L L E   P E N S I O N  ::::::::::::::::::::::::::
+        case 'guardaryeditar_detalle_pension':
+
+          if (empty($iddetalle_pension)){
+            
+            $rspta=$pension->insertar_detalles_pension($id_pension,$fecha_inicial,$fecha_final,$cantidad_persona,$monto_detalle,$descripcion_detalle);
+            echo json_encode($rspta);
+          }
+          else {
+            
+            $rspta=$pension->editar_detalles_pension($iddetalle_pension,$id_pension,$fecha_inicial,$fecha_final,$cantidad_persona,$monto_detalle,$descripcion_detalle);
+            
+            echo json_encode($rspta);
+          }
+
+        break;
+
         case 'tbla_detalle_comprobante':
 
           $rspta=$pension->tbla_detalle_pension($_GET['id_pension']);
@@ -170,9 +193,9 @@
             while ($reg=$rspta['data']->fetch_object()){ 
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostar_editar_detalle_pension('.$reg->iddetalle_pension  .')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_comprobante('.$reg->iddetalle_pension  .', \''. $reg->fecha_inicial .' '.$reg->fecha_final.'\')"><i class="fas fa-skull-crossbones"></i></button>':
-                '<button class="btn btn-warning btn-sm" onclick="mostar_editar_detalle_pension('.$reg->iddetalle_pension  .')"><i class="fa fa-pencil-alt"></i></button>'.
+                "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostar_editar_detalle_pension('.$reg->iddetalle_pension.')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_detalle_pension('.$reg->iddetalle_pension  .', \''. $reg->fecha_inicial.'\', \''.$reg->fecha_final.'\')"><i class="fas fa-skull-crossbones"></i></button>':
+                '<button class="btn btn-warning btn-sm" onclick="mostar_editar_detalle_pension('.$reg->iddetalle_pension.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->iddetalle_pension  .')"><i class="fa fa-check"></i></button>',                
                 "2"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
                 "3"=> $reg->fecha_inicial.' - '.$reg->fecha_final,
@@ -197,6 +220,36 @@
           }
 
         break;
+
+        case 'mostar_editar_detalle_pension':
+          $rspta=$pension->mostrar_detalle_pension($_POST['id_detalle_pension']);
+            //Codificar el resultado utilizando json
+            echo json_encode($rspta,true);
+        break;
+
+        case 'total_detalle_pension':
+
+          //$idpago_Comprobante='1';
+          $rspta=$pension->total_detalle_pension($_POST['id_pension']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta,true);
+
+        break;
+        
+        case 'desactivar_detalle_comprobante':
+
+          $rspta=$pension->desactivar_detalle_comprobante($_GET['id_tabla']);
+          echo json_encode($rspta,true);
+		
+        break;
+
+        case 'eliminar_detalle_comprobante':
+
+          $rspta=$pension->eliminar_detalle_comprobante($_GET['id_tabla']);
+          echo json_encode($rspta,true);
+		
+        break;
+
         // :::::::::::::::::::::::::: S E C C I O N   P A G O S  ::::::::::::::::::::::::::::::::::::::::::::::
         case 'guardaryeditar_Comprobante':
 
@@ -313,7 +366,7 @@
 
         case 'eliminar_comprobante':
 
-          $rspta=$pension->eliminar_comprobante($idfactura_pension);
+          $rspta=$pension->eliminar_comprobante($_GET["id_tabla"]);
           echo json_encode($rspta,true);
 		
         break;

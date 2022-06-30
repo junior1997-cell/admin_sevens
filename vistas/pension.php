@@ -91,7 +91,6 @@
                                   <th>Pension</th>
                                   <th>Descripción</th>
                                   <th>Total</th>
-                                  <th>Servicios</th>
                                   <th>Comprobantes</th>
                                   <th>Saldo</th>
                                 </tr>
@@ -103,10 +102,9 @@
                                   <th><i class="fas fa-cogs"></i></th>
                                   <th>Pension</th>
                                   <th>Descripción</th>
-                                  <th id="total_pension" class="text-right">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th>Servicios</th>
-                                  <th id="total_deposito" class="text-right">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th id="total_saldo" class="text-right">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th id="total_pension" class="text-right text-nowrap">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th id="total_deposito" class="text-right text-nowrap">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th id="total_saldo" class="text-right text-nowrap">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -132,8 +130,8 @@
                                   <th>OP</th> 
                                   <th>Descripción</th>
                                   <th>Fechas</th>
-                                  <th id="total_cantidad_personas" class="text-right"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th id="total_monto" class="text-right">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th id="total_cantidad_personas" class="text-right text-nowrap"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th id="total_monto" class="text-right text-nowrap">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="text-right">0</th>
                                 </tr>
                               </tfoot>
@@ -275,7 +273,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="fecha_inicial">Fecha inicial <sup class="text-danger">*</sup></label>
-                                  <input class="form-control" type="date" id="fecha_inicial" name="fecha_inicial" />
+                                  <input class="form-control" type="date" id="fecha_inicial" name="fecha_inicial"  onchange="restrigir_fecha_input();"/>
                                 </div>
                               </div>
                               <!-- Fecha final -->
@@ -298,7 +296,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="monto_detalle">Monto <sup class="text-danger">*</sup></label>
-                                  <input type="number" class="form-control" name="monto_detalle" id="monto_detalle" placeholder="Monto" />
+                                  <input type="number" class="form-control" name="monto_detalle" id="monto_detalle" placeholder="Monto"/>
                                 </div>
                               </div>
 
