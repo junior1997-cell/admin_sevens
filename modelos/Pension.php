@@ -72,6 +72,48 @@ class Pension
     $sql = "SELECT * FROM detalle_pension WHERE  idpension ='$idpension' AND estado='1' AND  estado_delete='1' ORDER BY fecha_inicial DESC";
     return ejecutarConsulta($sql);
   }
+
+  public function insertar_detalles_pension($id_pension,$fecha_inicial,$fecha_final,$cantidad_persona,$monto_detalle,$descripcion_detalle)  {
+   
+    $sql = "INSERT INTO detalle_pension(idpension, fecha_inicial, fecha_final,cantidad_persona, monto, descripcion) 
+            VALUES ('$id_pension','$fecha_inicial','$fecha_final','$cantidad_persona','$monto_detalle','$descripcion_detalle')";
+    return  ejecutarConsulta($sql);
+  }
+
+  public function editar_detalles_pension($iddetalle_pension,$id_pension,$fecha_inicial,$fecha_final,$cantidad_persona,$monto_detalle,$descripcion_detalle) {
+    $sql = "UPDATE detalle_pension SET idpension='$id_pension',descripcion='$descripcion_detalle',fecha_inicial='$fecha_inicial',
+    fecha_final='$fecha_final',cantidad_persona='$cantidad_persona',monto='$monto_detalle' WHERE iddetalle_pension='$iddetalle_pension'";
+    return ejecutarConsulta($sql);
+  }
+
+  public function mostrar_detalle_pension($iddetalle_pension) {
+
+    $sql = "SELECT * FROM detalle_pension WHERE  iddetalle_pension ='$iddetalle_pension';";
+    return ejecutarConsultaSimpleFila($sql);
+     
+  }
+
+  public function total_detalle_pension($idpension) {
+
+    $sql = "SELECT SUM(cantidad_persona) AS total_pers, SUM(monto) AS total_monto FROM `detalle_pension` WHERE idpension='$idpension' AND estado=1 AND estado_delete=1;";
+    return ejecutarConsultaSimpleFila($sql);
+
+  }
+  
+  //Implementamos un método para activar
+  public function desactivar_detalle_comprobante($iddetalle_pension)
+  {
+    $sql = "UPDATE detalle_pension SET estado_delete='0' WHERE iddetalle_pension ='$iddetalle_pension'";
+    return ejecutarConsulta($sql);
+  }
+
+  //Implementamos un método para activar
+  public function eliminar_detalle_comprobante($iddetalle_pension)
+  {
+    $sql = "UPDATE detalle_pension SET estado='0' WHERE iddetalle_pension ='$iddetalle_pension'";
+    return ejecutarConsulta($sql);
+  }
+
   // :::::::::::::::::::::::::: S E C C I O N   P A G O S  ::::::::::::::::::::::::::::::::::::::::::::::
 
   public function insertar_comprobante($idpension_f, $forma_pago, $tipo_comprobante, $nro_comprobante, $monto, $fecha_emision, $descripcion, $subtotal, $igv, $val_igv, $tipo_gravada, $imagen2)
@@ -84,7 +126,7 @@ class Pension
   //Implementamos un método para editar registros
   public function editar_comprobante($idfactura_pension, $idpension_f, $forma_pago, $tipo_comprobante, $nro_comprobante, $monto, $fecha_emision, $descripcion, $subtotal, $igv, $val_igv, $tipo_gravada, $imagen2)
   {
-    $sql = "UPDATE `factura_pension` SET idpension ='$idpension_f', forma_de_pago='$forma_pago', nro_comprobante='$nro_comprobante', fecha_emision='$fecha_emision',	monto='$monto',	igv='$igv',	val_igv='$val_igv',	tipo_gravada='$tipo_gravada',	subtotal='$subtotal',	tipo_comprobante='$tipo_comprobante',	descripcion='$descripcion',	comprobante='$imagen2' WHERE idfactura_pension='$idfactura_pension';";
+    $sql = "UPDATE factura_pension SET idpension ='$idpension_f', forma_de_pago='$forma_pago', nro_comprobante='$nro_comprobante', fecha_emision='$fecha_emision',	monto='$monto',	igv='$igv',	val_igv='$val_igv',	tipo_gravada='$tipo_gravada',	subtotal='$subtotal',	tipo_comprobante='$tipo_comprobante',	descripcion='$descripcion',	comprobante='$imagen2' WHERE idfactura_pension='$idfactura_pension';";
     return ejecutarConsulta($sql);
     //return $vaa;
   }
