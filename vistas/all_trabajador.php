@@ -256,7 +256,7 @@
                               </div>
 
                               <!-- banco -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
                                 <div class="form-group">
                                   <label for="banco">Banco</label>
                                   <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
@@ -281,6 +281,18 @@
                                   <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
                                 </div>
                               </div>
+
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1">
+                                <div class="form-group">
+                                  <label >Add </label> <br>
+                                  <button type="button" class="btn bg-gradient-success"  onclick="add_remove_bancos();"><i class="fas fa-university"></i></button>
+                                </div>
+                              </div>
+
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                                <div class="row" id="lista_bancos"> </div>
+                              </div>
+                              
 
                               <!-- Titular de la cuenta -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">

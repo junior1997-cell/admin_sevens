@@ -784,6 +784,43 @@ function eliminar(idtrabajador, nombre) {
 
 init();
 
+// .....::::::::::::::::::::::::::::::::::::: B A N C O   M U L T I P L E  :::::::::::::::::::::::::::::::::::::::..
+function add_remove_bancos() {
+  $('#lista_bancos').append(`   
+    <!-- banco -->
+    <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+      <div class="form-group">
+        <label for="banco">Banco</label>
+        <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
+          <!-- Aqui listamos los bancos -->
+        </select>
+        <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+      </div>
+    </div>
+
+    <!-- Cuenta bancaria -->
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+      <div class="form-group">
+        <label for="c_bancaria" class="chargue-format-1">Cuenta Bancaria</label>
+        <input type="text" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+      </div>
+    </div>
+
+    <!-- CCI -->
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+      <div class="form-group">
+        <label for="c_bancaria" class="chargue-format-2">CCI</label>
+        <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-6 col-lg-1">
+      <div class="form-group">
+        <label >Add </label> <br>
+        <button type="button" class="btn bg-gradient-danger"  onclick="add_remove_bancos();"><i class="far fa-trash-alt"></i></button>
+      </div>
+    </div>`);
+}
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {   
