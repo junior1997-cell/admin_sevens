@@ -60,6 +60,12 @@
                     <div class="col-12">
                       <div class="card card-primary card-outline">
                         <div class="card-header">
+                          <!-- agregar pago  -->
+                          <h3 class="card-title " id="btn-agregar-resumen"  >
+                            <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-resumen_valorizacion">
+                            <i class="fas fa-plus-circle"></i> Agregar pago 
+                            </button>                     
+                          </h3>   
                           <!-- regresar -->
                           <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
                             <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();" ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
@@ -485,6 +491,89 @@
 
                         <div class="row" id="ver-documento"> </div>            
                           
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - AGREGAR RESUMEN Q S-->
+                <div class="modal fade" id="modal-agregar-resumen_valorizacion">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-bold ">Documentos valorización</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">                          
+
+                        <form id="form-materiales" name="form-resumen-valorizacion" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-1-fomulario">
+                              <!-- id proyecto -->
+                              <input type="hidden" name="idproyecto" id="idproyecto" />
+                              <!-- id proveedores -->
+                              <input type="text" name="numero_q_s_resumen_oculto" id="numero_q_s_resumen_oculto" />
+                              
+                              <!-- Tipo de documento -->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="proveedor">Valorizxacion</label>
+                                  <select name="numero_q_s_resumen" id="numero_q_s_resumen" onchange="recoger_fecha_q_s();" class="form-control select2" style="width: 100%;" > </select>
+                                  
+                                </div>
+                              </div>
+
+                              <!-- Nombre -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                                <div class="form-group">
+                                  <label for="fecha_inicial">fecha_inicial <sup class="text-danger">(unico*)</sup></label>
+                                  <input type="text" name="fecha_inicial" class="form-control" id="fecha_inicial" placeholder="Nombre del Insumo." />
+                                </div>
+                              </div>
+
+                              <!-- Nombre -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                                <div class="form-group">
+                                  <label for="fecha_final">fecha_final <sup class="text-danger">(unico*)</sup></label>
+                                  <input type="text" name="fecha_final" class="form-control" id="fecha_final" placeholder="Nombre del Insumo." />
+                                </div>
+                              </div>
+
+                             
+
+                              
+
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="div_barra_progress">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-resumen-valorizacion">Submit</button>
+                        </form>
+                                  
+                          
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_material();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_resumen_valorizacion">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>

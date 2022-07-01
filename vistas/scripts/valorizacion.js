@@ -18,6 +18,9 @@ function init() {
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
 
+  //Initialize Select2 Elements
+  $("#numero_q_s_resumen").select2({ theme: "bootstrap4", placeholder: "Selecione Valorizacion", allowClear: true, });
+
   // Formato para telefono
   $("[data-mask]").inputmask();  
 
@@ -88,7 +91,7 @@ function ver_quincenas(nube_idproyecto) {
           let fecha_ii = format_a_m_d(fecha_inicio); let fecha_ff = format_a_m_d(fecha);
           
           $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
-          
+          $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
           fecha_i = sumaFecha(1,fecha);
     
           i++;
@@ -116,6 +119,7 @@ function ver_quincenas(nube_idproyecto) {
             // console.log(fecha_f + ' - '+e.data.fecha_fin);
 
             $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
+            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -131,7 +135,7 @@ function ver_quincenas(nube_idproyecto) {
             $(".h1-titulo").html("Valorización - Al finalizar");
 
             $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
-
+            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
           } else {
             $('#lista_quincenas').html(`<div class="info-box shadow-lg w-600px"> 
               <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
@@ -1320,4 +1324,14 @@ function cantDiasEnUnMes(mes, año) {
 
 function despintar_btn_select() {  
   if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
+}
+
+// ::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   A G R E G A R   R E S U M E N   Q  S ::::::::::::::::::::::::::::::::
+function recoger_fecha_q_s() {
+  var numero_f1_f2 = $("#numero_q_s_resumen").select2("val").split(" ");
+  $("#numero_q_s_resumen_oculto").val(numero_f1_f2[0]);
+  $("#fecha_inicial").val(numero_f1_f2[1]);
+  $("#fecha_final").val(numero_f1_f2[2]);
+  console.log(numero_f1_f2);
+
 }
