@@ -81,7 +81,7 @@
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item dropdown-footer"> <small>Más informacion cominicarse con el administrador </small>  </a>
             <!-- /.row -->
-            <a href="../ajax/usuario.php?op=salir" class="btn btn-danger btn-block">Cerrar sesion</a>
+            <a href="../ajax/usuario.php?op=salir&file=<?php echo basename($_SERVER['PHP_SELF']); ?> " class="btn btn-danger btn-block">Cerrar sesion</a>
           </div>
         </div>
         <!-- /.widget-user -->

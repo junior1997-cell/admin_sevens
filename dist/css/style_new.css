@@ -162,6 +162,10 @@ table th {
   background: #17a2b8 linear-gradient( 180deg, #3ab0c3, #041604) repeat-x !important;
 }
 
+.click-boton-success{
+  background: #28a745  linear-gradient( 180deg, #48b461, #041604) repeat-x !important;
+}
+
 .table td, .table th {
   vertical-align: middle !important;
 }
@@ -516,6 +520,21 @@ table th {
 }
 .shadow-0px1rem3rem-rgb-0-0-0-50 {
   box-shadow: 0 1rem 3rem rgb(0 0 0 / 50%) !important;
+}
+
+/*  ═══════════════════════════════════ - P A R P A D E A N T E    M U L T I C O L O R    C O L O R - ═══════════════════════════════════ */
+
+@keyframes animacion{
+  0% {background-color: #17a2b8;} /*Amarillo*/
+ 25% {background-color: #15c3df;} /*Naranja*/
+ 50% {background-color: #17cce9;} /*Negro*/
+ 75% {background-color: #0fdafb;} /*Otra vez naranja*/
+100% {background-color: #17a2b8;} /*Otra vez amarillo*/
+}
+.parpadeante_color_17a2b8 {
+animation-name: animacion;
+animation-duration: 4s;
+animation-iteration-count: infinite;
 }
 
 /*  ══════════════════════════════════════════ - I N P U T - ══════════════════════════════════════════ */

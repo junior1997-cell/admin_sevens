@@ -120,6 +120,27 @@ function restrigir_fecha_ant(nombre_input,fecha_minima) {
   $(nombre_input).attr('min',today2);
 }
 
+
+
+function validarFechaEnRango(fechaI, fechaF, fechaV){
+  
+  const fechaInicio=new Date(fechaI);
+  const fechaFin=new Date(fechaF);
+  const fechaValidar=new Date(fechaV);
+
+  const fechaInicioMs = fechaInicio.getTime();
+  const fechaFinMs = fechaFin.getTime();
+  const fechaValidarMs = fechaValidar.getTime();
+
+  if(fechaValidarMs >= fechaInicioMs && fechaValidarMs <= fechaFinMs){
+    //console.log(fechaI, fechaF, fechaV + ' este es');
+    return true;
+  }else{
+    //console.log(fechaI, fechaF, fechaV+ ' este no es');
+    return false;
+  }
+}
+
 /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
 
 // Formato de miles
@@ -248,6 +269,15 @@ function quitar_guion(str) {
     return str.replace("-", "");
   }  
 }
+
+//capitalize all words of a string. 
+function capitalizeWords(str) {
+  var string = "";
+  if (str == "" || str == null || str === undefined) { } else {     
+    string = str.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+  }
+  return string;
+};
 
 /*  ══════════════════════════════════════════ - S U B I R   D O C S  - ══════════════════════════════════════════ */
 

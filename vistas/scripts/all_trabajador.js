@@ -253,37 +253,33 @@ function guardar_y_editar_trabajador(e) {
     contentType: false,
     processData: false,
     success: function (e) {
-      e = JSON.parse(e);  //console.log(e); 
-      if (e.status == true) {	
+      try {
+        e = JSON.parse(e);  //console.log(e); 
+        if (e.status == true) {	
 
-        Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");			 
+          Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");			 
 
-	      tabla.ajax.reload(null, false);
-         
-				limpiar_form_trabajador();
+          tabla.ajax.reload(null, false);
+          
+          limpiar_form_trabajador();
 
-        $("#modal-agregar-trabajador").modal("hide");
+          $("#modal-agregar-trabajador").modal("hide");         
 
-        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+        }else{
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
 
-			}else{
-        ver_errores(e);
-			}
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
-
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener("progress", function (evt) {
-
         if (evt.lengthComputable) {
-
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
           $("#barra_progress").css({"width": percentComplete+'%'});
-
           $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-
         }
       }, false);
       return xhr;

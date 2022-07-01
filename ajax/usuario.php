@@ -90,7 +90,7 @@
       //Destruìmos la sesión
       session_destroy();
       //Redireccionamos al login
-      header("Location: ../index.php");
+      header("Location: index.php?file=".(isset($_GET["file"]) ? $_GET["file"] : ""));
 
     break;
     

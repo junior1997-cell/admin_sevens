@@ -76,10 +76,7 @@
                                     <!--data-toggle="modal" data-target="#modal-agregar-compra"  onclick="limpiar();"-->
                                     <button type="button" class="btn bg-gradient-success" id="btn_agregar" onclick="ver_form_add(); limpiar_form_compra();">
                                       <i class="fas fa-plus-circle"></i> Agregar
-                                    </button>
-                                    <button type="button" class="btn bg-gradient-danger" id="btn_sincronizar" onclick="sincronizar_comprobante();">
-                                      <i class="fas fa-plus-circle"></i> sincronizar comprobante
-                                    </button>
+                                    </button>                                    
                                     <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar();">
                                       <i class="fas fa-arrow-left"></i> Regresar
                                     </button>

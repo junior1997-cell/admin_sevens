@@ -31,7 +31,7 @@
             //require 'enmantenimiento.php';
             ?>           
             <!--Contenido-->
-            <div class="content-wrapper">
+            <div class="content-wrapper ">
               <!-- Content Header (Page header) -->
               <div class="content-header">
                 <div class="container-fluid">
@@ -80,16 +80,32 @@
                             <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_q_s();">
                             <i class="fas fa-plus-circle"></i> Agregar pago 
                             </button>                     
-                          </h3> 
-                          
+                          </h3>                           
                           <h3 class="  " id="btn-nombre-mes" style="display: none; padding-left: 2px;" >&nbsp; - Enero </h3> 
 
+                          <!-- Quincena actual-->
+                          <div class="row-horizon disenio-scroll hidden" id="div_btn_quincenas_semanas">
+                            <h3 class="card-title mr-2" id="btn_q_s_actual" style="padding-left: 2px;">                              
+                              <div class="alert alert-danger alert-dismissible bg-white text-black">
+                                <button type="button" class="close text-danger" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <i class="icon fas fa-exclamation-triangle text-danger"></i> No hay semana actual.                                
+                              </div>
+                            </h3>
+                            <!-- Quincenas o Semanas -->
+                            <div id="btn_quincenas_semanas"  >
+                            </div>
+                          </div>
+
+                          <div class="btn_cargando_s_q ">
+                            <div class="my-3" ><i class="fas fa-spinner fa-pulse fa-2x"></i>&nbsp;&nbsp;&nbsp;Cargando...</div>
+                          </div>
+                          
                         </div>
 
                         <!-- /.card-header -->
                         <div class="card-body">
 
-                          <!-- tabla principal -->
+                          <!-- tabla: principal -->
                           <div class="row row-horizon disenio-scroll pb-3" id="tbl-principal">
                             <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                               <thead>
@@ -179,7 +195,7 @@
                             </div>
                           </div>      
                           
-                          <!-- tabla ingresos de pagos -->
+                          <!-- tabla: ingresos de pagos -->
                           <div class=" " id="tbl-ingreso-pagos" style="display: none !important;">
                             <table id="tabla-ingreso-pagos" class="table table-bordered  table-striped display" style="width: 100% !important;">
                               <thead>
@@ -210,7 +226,40 @@
                                 </tr>
                               </tfoot>
                             </table>
-                          </div>    
+                          </div> 
+                          
+                          <!-- tabla: pago multiple obrero quincena - semana -->
+                          <div class="table-responsive" id="tbl-pago-multiple_obrero" style="display: none;">
+                            <div class="row-horizon disenio-scroll" >
+                              <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
+                                <thead>                                  
+                                  <tr class="bg-gradient-info"> 
+                                    <th class="stile-celda">N°</th> 
+                                    <th class="stile-celda text-center nombre_q_s_obrero">Quincena</th>
+                                    <th class="stile-celda text-center">Trabajador</th>
+                                    <th class="stile-celda text-center">Banco</th>
+                                    <th class="stile-celda text-center">Cuenta</th>
+                                    <th class="stile-celda">Horas Normal/Extra</th>                                  
+                                    <th class="stile-celda">Monto total</th>                                    
+                                    <th class="stile-celda">Pagar</th>
+                                    <th class="stile-celda">Saldo</th>
+                                    <th class="stile-celda" data-toggle="tooltip" data-original-title="Recibos por Honorarios">R/H</th>
+                                  </tr>
+                                </thead>
+                                <tbody class="tcuerpo data-trabajadores-q-s">  <!-- Detalle -->   </tbody>                                
+                                <tfoot>
+                                  <tr>                                    
+                                    <th colspan="5" ></th> 
+                                    <th class="stile-celda-right multiple_total_hn_he"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
+                                    <th class="stile-celda-right multiple_total_deuda">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                    <th class="stile-celda-right multiple_total_deposito">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                    <th class="stile-celda-right multiple_total_saldo">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                    <th class="stile-celda       multiple_rh_total"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </div>  
 
                         </div>
                         <!-- /.card-body -->
@@ -221,139 +270,9 @@
                   </div>
                   <!-- /.row -->
                 </div>
-                <!-- /.container-fluid -->
+                <!-- /.container-fluid -->               
 
-                <!-- Modal agregar PAGOS X QUINCENA O SEMANA -->
-                <div class="modal fade" id="modal-agregar-pago-trabajdor">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Agregar pago: <b class="nombre_de_trabajador_modal"> <!-- NOMBRE DEL TRABAJDOR--> </b></h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-pagos-x-q-s" name="form-pagos-x-q-s"  method="POST" >                      
-                          <div class="card-body">
-                            <div class="row" id="cargando-1-fomulario">
-
-                              <!-- id idpagos_q_s_obrero  -->
-                              <input type="hidden" name="idpagos_q_s_obrero" id="idpagos_q_s_obrero" />
-                              
-                              <!-- id idresumen_q_s_asistencia -->
-                              <input type="hidden" name="idresumen_q_s_asistencia" id="idresumen_q_s_asistencia" />         
-
-                              <!-- Forma de pago hacia el trabajdor -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                <label for="forma_pago">Forma Pago</label>
-                                <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                  <option value="Transferencia">Transferencia</option>
-                                  <option value="Efectivo">Efectivo</option>
-                                </select>
-                                </div>
-                              </div>
-
-                              <!-- Cuenta deposito enviada -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
-                                  <input type="text" name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Cuenta deposito">  
-                                </div>                                                        
-                              </div>
-
-                              <!-- Monto (de cantidad a depositado) -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
-                                  <input type="text" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
-                                </div>                                                        
-                              </div>
-                              
-                              <!-- Mes del pago -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="nombre_mes" class="text-gray nombre_q_s">-- </label>
-                                  <span class="numero_q_s text-gray form-control"> <sup>S/</sup> 0.00</span>
-                                </div>
-                              </div>
-
-                              <!-- Monto faltante -->
-                              <div class="col-lg-3">
-                                <div class="form-group">
-                                  <label for="nombre_mes" class="text-gray">Faltante </label>
-                                  <span class="faltante_mes_modal form-control"> <sup>S/</sup> 0.00</span>
-                                </div>
-                              </div>
-                              
-                              <!-- Descripcion-->
-                              <div class="col-lg-12">
-                                <div class="form-group">
-                                  <label for="descripcion">Descripción </label> <br>
-                                  <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                                </div>                                                        
-                              </div>
-                              
-                              <!-- Pdf 1 -->
-                              <div class="col-md-12" >                               
-                                <div class="row text-center">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="cip" class="control-label" > Baucher de deposito </label>
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
-                                      <i class="fas fa-upload"></i> Subir.
-                                    </button>
-                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                    <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'baucher_deposito');">
-                                    <i class="fas fa-redo"></i> Recargar.
-                                    </button>
-                                  </div>
-                                </div>                              
-                                <div id="doc1_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
-                                </div>
-                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
-                              </div>
-
-                              <!-- barprogress -->
-                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="div_barra_progress">
-                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                    0%
-                                  </div>
-                                </div>
-                              </div>                                          
-
-                            </div>  
-
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                                <h4>Cargando...</h4>
-                              </div>
-                            </div>
-                            
-                          </div>
-                          <!-- /.card-body -->                      
-                          <button type="submit" style="display: none;" id="submit-form-pagos-x-mes">Submit</button>                      
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
-                      </div>                  
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Modal recibo por honorarios -->
+                <!-- MDOAL - recibo por honorarios -->
                 <div class="modal fade" id="modal-recibos-x-honorarios">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -409,7 +328,7 @@
                                 </div>
                                 <!-- Recargar -->
                                 <div class="col-md-3 text-center comprobante">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'recibos_x_honorarios');">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'pago_obrero', 'recibos_x_honorarios');">
                                   <i class="fas fa-redo"></i> Recargar.
                                 </button>
                                 </div>
@@ -430,9 +349,9 @@
                             </div>
 
                             <!-- barprogress -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
-                              <div class="progress" id="div_barra_progress2">
-                                <div id="barra_progress2" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-4">
+                              <div class="progress" id="barra_progress_r_h_div">
+                                <div id="barra_progress_r_h" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                   0%
                                 </div>
                               </div>
@@ -453,11 +372,191 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_2">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_recibo_x_honorario">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <!-- MODAL -  -->
+                <div class="modal fade" id="modal-tabla-pagos">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body ">
+                        <div class="row">
+                          <div class="col-12">
+                            <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_q_s();" >Agregar</button>
+                          </div>
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                            <table id="tabla-ingreso-pagos-modal" class="table table-bordered table-striped display " style="width: 100% !important;">
+                              <thead>
+                                <tr> 
+                                  <th class="text-center">#</th> 
+                                  <th>Op.</th> 
+                                  <th>Cuenta depósito</th> 
+                                  <th>Monto</th>
+                                  <th>Baucher</th>
+                                  <th>Descripcion</th>                                                   
+                                </tr>
+                              </thead>
+                              <tbody>  </tbody>
+                              <tfoot>
+                                <tr> 
+                                  <th class="text-center">#</th> 
+                                  <th>Op.</th> 
+                                  <th>Cuenta depósito</th>
+                                  <th>Monto</th>
+                                  <th>Baucher</th>
+                                  <th>Descripcion</th>                   
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                      </div> 
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- MODAL - agregar PAGOS X QUINCENA O SEMANA -->
+                <div class="modal fade" id="modal-agregar-pago-trabajdor">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Agregar pago: <b class="nombre_de_trabajador_modal"> <!-- NOMBRE DEL TRABAJDOR--> </b></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-pagos-x-q-s" name="form-pagos-x-q-s"  method="POST" >                      
+                          <div class="card-body">
+                            <div class="row" id="cargando-1-fomulario">
+
+                              <!-- id idpagos_q_s_obrero  -->
+                              <input type="hidden" name="idpagos_q_s_obrero" id="idpagos_q_s_obrero" />
+                              
+                              <!-- id idresumen_q_s_asistencia -->
+                              <input type="hidden" name="idresumen_q_s_asistencia" id="idresumen_q_s_asistencia" />         
+
+                              <!-- Forma de pago hacia el trabajdor -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                <label for="forma_pago">Forma Pago</label>
+                                <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                  <option value="Transferencia">Transferencia</option>
+                                  <option value="Efectivo">Efectivo</option>
+                                </select>
+                                </div>
+                              </div>
+
+                              <!-- Cuenta deposito enviada -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
+                                  <input type="text" name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Cuenta deposito">  
+                                </div>                                                        
+                              </div>
+
+                              <!-- Monto (de cantidad a depositado) -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
+                                  <input type="number" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
+                                </div>                                                        
+                              </div>
+                              
+                              <!-- Mes del pago -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="nombre_mes" class="text-gray nombre_q_s">-- </label>
+                                  <span class="numero_q_s text-gray form-control"> <sup>S/</sup> 0.00</span>
+                                </div>
+                              </div>
+
+                              <!-- Monto faltante -->
+                              <div class="col-lg-3">
+                                <div class="form-group">
+                                  <label for="nombre_mes" class="text-gray">Faltante </label>
+                                  <span class="faltante_mes_modal form-control"> <sup>S/</sup> 0.00</span>
+                                </div>
+                              </div>
+                              
+                              <!-- Descripcion-->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="descripcion">Descripción </label> <br>
+                                  <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                </div>                                                        
+                              </div>
+                              
+                              <!-- Pdf 1 -->
+                              <div class="col-md-6" >                               
+                                <div class="row text-center">
+                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                    <label for="cip" class="control-label" > Baucher de deposito </label>
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
+                                      <i class="fas fa-upload"></i> Subir.
+                                    </button>
+                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                    <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
+                                  </div>
+                                  <div class="col-md-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1,'pago_obrero', 'baucher_deposito');">
+                                    <i class="fas fa-redo"></i> Recargar.
+                                    </button>
+                                  </div>
+                                </div>                              
+                                <div id="doc1_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                                </div>
+                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="barra_progress_pagos_x_mes_div">
+                                  <div id="barra_progress_pagos_x_mes" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>                                          
+
+                            </div>  
+
+                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                            
+                          </div>
+                          <!-- /.card-body -->                      
+                          <button type="submit" style="display: none;" id="submit-form-pagos-x-mes">Submit</button>                      
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_pagos_x_mes">Guardar Cambios</button>
+                      </div>                  
+                    </div>
+                  </div>
+                </div>                 
 
               </section>
               <!-- /.content -->
