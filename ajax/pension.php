@@ -198,7 +198,7 @@
                 '<button class="btn btn-warning btn-sm" onclick="mostar_editar_detalle_pension('.$reg->iddetalle_pension.')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar_comprobante('.$reg->iddetalle_pension  .')"><i class="fa fa-check"></i></button>',                
                 "2"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-                "3"=> $reg->fecha_inicial.' - '.$reg->fecha_final,
+                "3"=> date("d/m/Y", strtotime($reg->fecha_inicial)) .' - '. date("d/m/Y", strtotime($reg->fecha_final)),
                 "4"=>number_format($reg->cantidad_persona, 2, '.', ','),
                 "5"=>'S/ '.number_format($reg->monto, 2, '.', ','),
                 "6"=> $toltip

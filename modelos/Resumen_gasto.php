@@ -658,77 +658,77 @@ class ResumenGasto
     }
 
     // FACTURAS - PENSION ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-    // $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
-    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
-    //   $filtro_fecha = "AND fp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
-    // } else {
-    //   if (!empty($fecha_1)) {
-    //     $filtro_fecha = "AND fp.fecha_emision = '$fecha_1'";
-    //   }else{
-    //     if (!empty($fecha_2)) {
-    //       $filtro_fecha = "AND fp.fecha_emision = '$fecha_2'";
-    //     }     
-    //   }      
-    // }    
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND fp.fecha_emision = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND fp.fecha_emision = '$fecha_2'";
+        }     
+      }      
+    }    
 
-    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    // if ( empty($comprobante) ) { } else {
-    //   $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
-    // }
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
+    }
 
-    // $sql6 = "SELECT p.idproyecto, fp.idfactura_pension, prov.razon_social, fp.tipo_comprobante, fp.nro_comprobante, fp.fecha_emision, 
-    // fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa, fp.tipo_gravada, fp.id_user_vb, fp.nombre_user_vb, fp.imagen_user_vb, fp.estado_user_vb
-		// FROM factura_pension as fp, pension as p, proveedor as prov
-		// WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
-    // AND fp.estado = '1' AND fp.estado_delete = '1' AND fp.$estado_vb AND  p.idproyecto = $idproyecto
-    //  $filtro_proveedor $filtro_comprobante $filtro_fecha
-    // ORDER BY fp.fecha_emision DESC;";
-    // $factura_pension =  ejecutarConsultaArray($sql6);
+    $sql6 = "SELECT p.idproyecto, fp.idfactura_pension, prov.razon_social, fp.tipo_comprobante, fp.nro_comprobante, fp.fecha_emision, 
+    fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa, fp.tipo_gravada, fp.id_user_vb, fp.nombre_user_vb, fp.imagen_user_vb, fp.estado_user_vb
+		FROM factura_pension as fp, pension as p, proveedor as prov
+		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
+    AND fp.estado = '1' AND fp.estado_delete = '1' AND fp.$estado_vb AND  p.idproyecto = $idproyecto
+     $filtro_proveedor $filtro_comprobante $filtro_fecha
+    ORDER BY fp.fecha_emision DESC;";
+    $factura_pension =  ejecutarConsultaArray($sql6);
 
-    // if ($factura_pension['status'] == false) { return $factura_pension; }
+    if ($factura_pension['status'] == false) { return $factura_pension; }
 
-    // if (!empty($factura_pension['data'])) {
-    //   foreach ($factura_pension['data'] as $key => $value) {
-    //     $data[] = array(
-    //     	"idproyecto"        => $value['idproyecto'],
-    //       "idtabla"           => $value['idfactura_pension'],
-    //       "bd_nombre_tabla"   => 'factura_pension',
-    //       "bd_nombre_id_tabla"=> 'idfactura_pension',
-    //       "fecha"             => $value['fecha_emision'],
-    //       "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
-    //       "serie_comprobante" => $value['nro_comprobante'],
-    //       "proveedor"         => $value['razon_social'],
-    //       "total"             => $value['monto'],          
-    //       "subtotal"          => $value['subtotal'],
-    //       "igv"               => $value['igv'],
-    //       "glosa"             => $value['glosa'],
-    //       "tipo_gravada"      => $value['tipo_gravada'],
-    //       "comprobante"       => $value['comprobante'],
-    //       "carpeta"           => 'pension',
-    //       "subcarpeta"        => 'comprobante',
-    //       "ruta"              => 'dist/docs/pension/comprobante/',
-    //       "modulo"            => 'PENSION',
-    //       "id_user_vb"        => $value['id_user_vb'],
-    //       "nombre_user_vb"    => $value['nombre_user_vb'],
-    //       "imagen_user_vb"    => $value['imagen_user_vb'],
-    //       "estado_user_vb"    => $value['estado_user_vb'],
-    //       "detalle"           => false,
-    //     );
-    //     if (!empty($value['comprobante'])) {
-    //       if ( validar_url( $scheme_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
-    //         $data_comprobante[] = array(
-    //           "comprobante"       => $value['comprobante'],
-    //           "carpeta"           => 'pension',
-    //           "subcarpeta"        => 'comprobante',
-    //           "host"              => $host,
-    //           "ruta_file"         => $scheme_host.'dist/docs/pension/comprobante/'.$value['comprobante'],
-    //         );
-    //       }          
-    //     }
-    //   }
-    // }
+    if (!empty($factura_pension['data'])) {
+      foreach ($factura_pension['data'] as $key => $value) {
+        $data[] = array(
+        	"idproyecto"        => $value['idproyecto'],
+          "idtabla"           => $value['idfactura_pension'],
+          "bd_nombre_tabla"   => 'factura_pension',
+          "bd_nombre_id_tabla"=> 'idfactura_pension',
+          "fecha"             => $value['fecha_emision'],
+          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante'] ),
+          "serie_comprobante" => $value['nro_comprobante'],
+          "proveedor"         => $value['razon_social'],
+          "total"             => $value['monto'],          
+          "subtotal"          => $value['subtotal'],
+          "igv"               => $value['igv'],
+          "glosa"             => $value['glosa'],
+          "tipo_gravada"      => $value['tipo_gravada'],
+          "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'pension',
+          "subcarpeta"        => 'comprobante',
+          "ruta"              => 'dist/docs/pension/comprobante/',
+          "modulo"            => 'PENSION',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
+          "detalle"           => false,
+        );
+        if (!empty($value['comprobante'])) {
+          if ( validar_url( $scheme_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
+            $data_comprobante[] = array(
+              "comprobante"       => $value['comprobante'],
+              "carpeta"           => 'pension',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/pension/comprobante/'.$value['comprobante'],
+            );
+          }          
+        }
+      }
+    }
 
     // FACTURAS - BREACK ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
@@ -1295,36 +1295,36 @@ class ResumenGasto
     $igv      += (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['igv']) ? 0 : floatval($hospedaje['data']['igv']) );
 
     // SUMAS TOTALES - FACTURA PENSION --------------------------------------------------------------------------------
-    // $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
+    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
 
-    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
-    //   $filtro_fecha = "AND fp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
-    // } else {
-    //   if (!empty($fecha_1)) {
-    //     $filtro_fecha = "AND fp.fecha_emision = '$fecha_1'";
-    //   }else{
-    //     if (!empty($fecha_2)) {
-    //       $filtro_fecha = "AND fp.fecha_emision = '$fecha_2'";
-    //     }     
-    //   }      
-    // }    
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND fp.fecha_emision = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND fp.fecha_emision = '$fecha_2'";
+        }     
+      }      
+    }    
 
-    // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    // if ( empty($comprobante) ) { } else {
-    //   $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
-    // }
-    // $sql6 = "SELECT SUM(fp.monto) AS total, SUM(fp.subtotal) AS subtotal, SUM(fp.igv) AS igv
-		// FROM factura_pension as fp, pension as p, proveedor as prov
-		// WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND fp.$estado_vb AND  p.idproyecto = $idproyecto
-    // AND fp.estado = '1' AND fp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
-    // $factura_pension = ejecutarConsultaSimpleFila($sql6);
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
+    }
+    $sql6 = "SELECT SUM(fp.monto) AS total, SUM(fp.subtotal) AS subtotal, SUM(fp.igv) AS igv
+		FROM factura_pension as fp, pension as p, proveedor as prov
+		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND fp.$estado_vb AND  p.idproyecto = $idproyecto
+    AND fp.estado = '1' AND fp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
+    $factura_pension = ejecutarConsultaSimpleFila($sql6);
 
-    // if ($factura_pension['status'] == false) { return $factura_pension; }
+    if ($factura_pension['status'] == false) { return $factura_pension; }
     
-    // $total    += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['total']) ? 0 : floatval($factura_pension['data']['total']) );
-    // $subtotal += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['subtotal']) ? 0 : floatval($factura_pension['data']['subtotal']) );
-    // $igv      += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['igv']) ? 0 : floatval($factura_pension['data']['igv']) );
+    $total    += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['total']) ? 0 : floatval($factura_pension['data']['total']) );
+    $subtotal += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['subtotal']) ? 0 : floatval($factura_pension['data']['subtotal']) );
+    $igv      += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['igv']) ? 0 : floatval($factura_pension['data']['igv']) );
 
     // SUMAS TOTALES - FACTURA BREACK --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";

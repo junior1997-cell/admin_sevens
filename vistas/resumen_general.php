@@ -806,21 +806,21 @@
                             <table id="tabla-detalles-semanal" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th class="">Tipo comida</th>
-                                  <th class="">Precio</th>
-                                  <th>Total platos</th>
-                                  <th>Adicional</th>
-                                  <th>total</th>
+                                  <th class="">#</th>
+                                  <th class="">Descripcion</th>
+                                  <th>Fecha</th>
+                                  <th>Cantidad</th>
+                                  <th>Monto</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
-                                  <th class="">Tipo comida</th>
-                                  <th class="">Precio</th>
-                                  <th>Total platos</th>
-                                  <th>Adicional</th>
-                                  <th>total</th>
+                                  <th class="">#</th>
+                                  <th class="">Descripcion</th>
+                                  <th>Fecha</th>
+                                  <th>Cantidad</th>
+                                  <th>Monto</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -846,28 +846,26 @@
                               <thead>
                                 <tr>
                                   <th data-toggle="tooltip" data-original-title="Forma de pago">Forma</th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Factura</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th>Monto</th>
                                   <th>Descripción</th>
-                                  <th>Comprobante</th>
+                                  <th>CFDI.</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
                                   <th data-toggle="tooltip" data-original-title="Forma de pago">Forma</th>
-                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Comprobante">Número</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Factura</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th>Monto</th>
                                   <th>Descripción</th>
-                                  <th>Comprobante</th>
+                                  <th>CFDI.</th>
                                 </tr>
                               </tfoot>
                             </table>

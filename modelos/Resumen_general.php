@@ -283,27 +283,13 @@ class Resumen_general
       foreach ($pension['data'] as $key => $value) {
         $idpension = $value['idpension'];
 
-        $total_monto = 0;
+        $sql_2 = "SELECT  SUM(monto) as gasto_pension FROM detalle_pension WHERE estado='1' AND estado_delete='1' AND idpension='$idpension'";
+        $gasto_pension = ejecutarConsultaSimpleFila($sql_2);
+        if ($gasto_pension['status'] == false) {  return $gasto_pension;}
 
-        $sql_2 = "SELECT sp.idservicio_pension FROM servicio_pension As sp, pension AS p WHERE sp.idpension='$idpension' AND sp.idpension=p.idpension";
-        $servicio_pension = ejecutarConsulta($sql_2);
-        if ($servicio_pension['status'] == false) {  return $servicio_pension;}
-
-        $sql_3 = "SELECT SUM(monto) as total_deposito FROM factura_pension WHERE estado=1 AND idpension='$idpension'";
+        $sql_3 = "SELECT SUM(monto) as total_deposito FROM factura_pension WHERE estado='1' AND estado_delete='1' AND idpension='$idpension'";
         $deposito = ejecutarConsultaSimpleFila($sql_3);         
-        if ($deposito['status'] == false) {  return $deposito;}
-
-        foreach ($servicio_pension['data'] as $key => $valor) {
-          $idservicio_p = $valor['idservicio_pension'];
-
-          $sql_4 = "SELECT SUM(total) as total FROM semana_pension as sp, servicio_pension as serv_p 
-					WHERE sp.idservicio_pension='$idservicio_p' AND sp.idservicio_pension=serv_p.idservicio_pension";
-          $monto_semana = ejecutarConsultaSimpleFila($sql_4);
-          if ($monto_semana['status'] == false) {  return $monto_semana;}
-
-          $total_monto += $retVal_1 = (empty($monto_semana['data'])) ? 0 : $retVal_2 = (empty($monto_semana['data']['total'])) ? 0 : floatval($monto_semana['data']['total']);
-          
-        }         
+        if ($deposito['status'] == false) {  return $deposito;}         
 
         $serv_pension[] = [
           "idpension" => $value['idpension'],
@@ -312,8 +298,8 @@ class Resumen_general
           "proveedor" => $value['razon_social'],
           "direccion" => $value['direccion'],
 
-          "monto_total_pension" => $total_monto,
-          "deposito" => $retVal_3 = (empty($deposito['data'])) ? 0 : $retVal_4 = (empty($deposito['data']['total_deposito'])) ? 0 : $deposito['data']['total_deposito']
+          "monto_total_pension" => (empty($gasto_pension['data']) ? 0 : (empty($gasto_pension['data']['gasto_pension']) ? 0 : $gasto_pension['data']['gasto_pension']) ),
+          "deposito" => (empty($deposito['data']) ? 0 : (empty($deposito['data']['total_deposito']) ? 0 : $deposito['data']['total_deposito']) )
         ];
       }
     }
@@ -322,10 +308,7 @@ class Resumen_general
   }
 
   public function ver_detalle_x_servicio($idpension)  {
-    $sql = "SELECT SUM(se_p.total) as total,sp.nombre_servicio,SUM(se_p.adicional_descuento) as adicional_descuento,SUM(se_p.cantidad_total_platos) as cantidad_total_platos, sp.precio
-		FROM servicio_pension as sp, pension as p, semana_pension as se_p 
-		WHERE p.idpension='$idpension' AND sp.idpension=p.idpension AND se_p.idservicio_pension=sp.idservicio_pension 
-		GROUP BY se_p.idservicio_pension";
+    $sql = "SELECT * FROM detalle_pension WHERE  idpension ='$idpension' AND estado='1' AND  estado_delete='1' ORDER BY fecha_inicial DESC";
     return ejecutarConsulta($sql);
   }
 

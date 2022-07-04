@@ -988,19 +988,13 @@
           $cont = 1;
           while ($reg = $rspta['data']->fetch_object()) {
             $data[] = [
-              "0" =>
-                '<div class="user-block">
-              <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' .
-                $cont .
-                '. ' .
-                $reg->nombre_servicio .
-                '</p></span></div>',
-              "1" => '<b>' . number_format($reg->precio, 2, '.', ',') . '</b>',
-              "2" => '<b>' . $reg->cantidad_total_platos . '</b>',
-              "3" => '<b>' . number_format($reg->adicional_descuento, 2, '.', ',') . '</b>',
-              "4" => '<b>' . number_format($reg->total, 2, '.', ',') . '</b>',
+              "0" =>$cont++,
+              "1"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
+              "2"=> date("d/m/Y", strtotime($reg->fecha_inicial)) .' - '. date("d/m/Y", strtotime($reg->fecha_final)),
+              "3"=>number_format($reg->cantidad_persona, 2, '.', ','),
+              "4"=>'S/ '.number_format($reg->monto, 2, '.', ','),
             ];
-            $cont++;
+            
           }
           $results = [
             "sEcho" => 1, //Información para el datatables
@@ -1044,14 +1038,13 @@
 
             $data[] = [
               "0" => empty($reg->forma_de_pago) ? ' - ' : $reg->forma_de_pago,
-              "1" => empty($reg->tipo_comprobante) ? ' - ' : $reg->tipo_comprobante,
-              "2" => empty($reg->nro_comprobante) ? ' - ' : $reg->nro_comprobante,
-              "3" => date("d/m/Y", strtotime($reg->fecha_emision)),
-              "4" => number_format($subtotal, 2, '.', ','),
-              "5" => number_format($igv, 2, '.', ','),
-              "6" => number_format($monto, 2, '.', ','),
-              "7" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
-              "8" => $comprobante,
+              "1" => (empty($reg->tipo_comprobante) ? ' - ' : $reg->tipo_comprobante ).' ─ ' . (empty($reg->nro_comprobante) ? ' - ' : $reg->nro_comprobante),
+              "2" => date("d/m/Y", strtotime($reg->fecha_emision)),
+              "3" => number_format($subtotal, 2, '.', ','),
+              "4" => number_format($igv, 2, '.', ','),
+              "5" => number_format($monto, 2, '.', ','),
+              "6" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+              "7" => $comprobante,
             ];
           }
           //$suma=array_sum($rspta->fetch_object()->monto);
