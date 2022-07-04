@@ -56,6 +56,8 @@
                         <div class="card-header">
                           <h3 class="card-title">
                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-trabajador" onclick="limpiar_form_trabajador();"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" onclick="recuperar_banco();" id="recuperar_banco"><i class="fas fa-user-plus"></i> Recuperar</button>
+                            
                             Admnistra de manera eficiente a los trabajdores
                           </h3>
                         </div>
@@ -258,35 +260,39 @@
                               <!-- banco -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-3">
                                 <div class="form-group">
-                                  <label for="banco">Banco</label>
-                                  <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
+                                  <label for="banco_0">Banco</label>
+                                  <select name="banco_0" id="banco_0" class="form-control select2 banco_0" style="width: 100%;" onchange="formato_banco(0);">
                                     <!-- Aqui listamos los bancos -->
                                   </select>
-                                  <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+                                  <input type="hidden" name="banco_array[]" id="banco_array_0">
                                 </div>
                               </div>
 
                               <!-- Cuenta bancaria -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="c_bancaria" class="chargue-format-1">Cuenta Bancaria</label>
-                                  <input type="text" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+                                  <label for="cta_bancaria" class="0_chargue-format-1">Cuenta Bancaria</label>
+                                  <input type="text" name="cta_bancaria[]" class="form-control cta_bancaria_0" id="cta_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
                                 </div>
                               </div>
 
                               <!-- CCI -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="c_bancaria" class="chargue-format-2">CCI</label>
-                                  <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
+                                  <label for="cci" class="0_chargue-format-2">CCI</label>
+                                  <input type="text" name="cci[]" class="form-control cci_0" id="cci" placeholder="CCI" data-inputmask="" data-mask />
                                 </div>
-                              </div>
+                              </div> 
 
                               <div class="col-12 col-sm-12 col-md-6 col-lg-1">
-                                <div class="form-group">
-                                  <label >Add </label> <br>
-                                  <button type="button" class="btn bg-gradient-success"  onclick="add_remove_bancos();"><i class="fas fa-university"></i></button>
+                                <div class="form-group mb-2">
+                                  <div class="custom-control custom-radio ">
+                                    <input class="custom-control-input custom-control-input-danger" type="radio" id="banco_seleccionado_0" name="banco_seleccionado" value="0" checked>
+                                    <label for="banco_seleccionado_0" class="custom-control-label">Usar</label>
+                                  </div>
                                 </div>
+                                <button type="button" class="btn bg-gradient-success btn-sm" onclick="add_bancos();" data-toggle="tooltip" data-original-title="Agregar neva fila"><i class="fas fa-plus"></i></button>
+
                               </div>
 
                               <div class="col-12 col-sm-12 col-md-6 col-lg-12">

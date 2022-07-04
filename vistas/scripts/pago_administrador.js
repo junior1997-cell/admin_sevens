@@ -174,7 +174,7 @@ function listar_tbla_principal(nube_idproyecto) {
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
+        console.log(e.responseText);	ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {
@@ -587,7 +587,7 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
+        console.log(e.responseText);	ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {   
@@ -914,7 +914,7 @@ function reload_table_pagos_x_mes(id) {
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
+        console.log(e.responseText);	ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {  

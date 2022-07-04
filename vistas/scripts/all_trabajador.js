@@ -1,5 +1,5 @@
 var tabla; var tabla2;
-
+var cant_banco_multimple = 1;
 //Función que se ejecuta al inicio
 function init() {
 
@@ -12,7 +12,7 @@ function init() {
   tbla_principal();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_0', null);
   lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#tipo', null);
   lista_select2("../ajax/ajax_general.php?op=select2OcupacionTrabajador", '#ocupacion', null);  
 
@@ -20,13 +20,15 @@ function init() {
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });  
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#banco").select2({templateResult: formatState, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
+  $("#banco_0").select2({templateResult: formatState, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
   $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+init();
 
 function formatState (state) {
   //console.log(state);
@@ -102,7 +104,7 @@ function doc5_eliminar() {
 
 //Función limpiar
 function limpiar_form_trabajador() {
-
+  cant_banco_multimple = 1;
   $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
 
   $("#idtrabajador").val("");
@@ -114,9 +116,10 @@ function limpiar_form_trabajador() {
   $("#email").val(""); 
   $("#nacimiento").val("");
   $("#edad").val("0");  $("#p_edad").html("0");    
-  $("#c_bancaria").val("");  
+  $("#cta_bancaria").val("");  
   $("#cci").val("");  
-  $("#banco").val("").trigger("change");
+  $("#banco_0").val("").trigger("change"); $("#lista_bancos").html("");
+
   $("#tipo").val("").trigger("change");
   $("#ocupacion").val("").trigger("change");
   $("#titular_cuenta").val("");
@@ -187,14 +190,7 @@ function tbla_principal() {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [9], visible: false, searchable: false, },
-      { targets: [10], visible: false, searchable: false, },
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },
-      { targets: [13], visible: false, searchable: false, },
-      { targets: [14], visible: false, searchable: false, },
-      { targets: [15], visible: false, searchable: false, },   
-      { targets: [16], visible: false, searchable: false, },      
+      { targets: [8, 9, 10, 11, 12, 13, 14, 15, 16], visible: false, searchable: false, }, 
     ],
   }).DataTable();
 
@@ -229,14 +225,7 @@ function tbla_principal() {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [8], visible: false, searchable: false, },
-      { targets: [9], visible: false, searchable: false, },
-      { targets: [10], visible: false, searchable: false, },
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },
-      { targets: [13], visible: false, searchable: false, },
-      { targets: [14], visible: false, searchable: false, },
-      { targets: [15], visible: false, searchable: false, },   
+      { targets: [8, 9, 10, 11, 12, 13, 14, 15], visible: false, searchable: false, },
     ],
   }).DataTable();
 }
@@ -256,15 +245,11 @@ function guardar_y_editar_trabajador(e) {
       try {
         e = JSON.parse(e);  //console.log(e); 
         if (e.status == true) {	
-
-          Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");			 
-
-          tabla.ajax.reload(null, false);
-          
+          Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");
+          tabla.ajax.reload(null, false);          
           limpiar_form_trabajador();
-
-          $("#modal-agregar-trabajador").modal("hide");         
-
+          $("#modal-agregar-trabajador").modal("hide"); 
+          cant_banco_multimple = 1; 
         }else{
           ver_errores(e);
         }
@@ -330,110 +315,116 @@ function verdatos(idtrabajador){
     if (e.status) {
       
     
-      if (e.data.imagen_perfil != '') {
+      if (e.data.trabajador.imagen_perfil != '') {
 
-        imagen_perfil=`<img src="../dist/docs/all_trabajador/perfil/${e.data.imagen_perfil}" alt="" class="img-thumbnail">`
+        imagen_perfil=`<img src="../dist/docs/all_trabajador/perfil/${e.data.trabajador.imagen_perfil}" alt="" class="img-thumbnail">`
         
         btn_imagen_perfil=`
         <div class="row">
           <div class="col-6"">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/perfil/${e.data.imagen_perfil}"> <i class="fas fa-expand"></i></a>
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/perfil/${e.data.trabajador.imagen_perfil}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/perfil/${e.data.imagen_perfil}" download="PERFIL ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/perfil/${e.data.trabajador.imagen_perfil}" download="PERFIL ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
       } else {
-
         imagen_perfil='No hay imagen';
         btn_imagen_perfil='';
-
       }
 
-      if (e.data.imagen_dni_anverso != '') {
+      if (e.data.trabajador.imagen_dni_anverso != '') {
 
-        imagen_dni_anverso=`<img src="../dist/docs/all_trabajador/dni_anverso/${e.data.imagen_dni_anverso}" alt="" class="img-thumbnail">`
+        imagen_dni_anverso=`<img src="../dist/docs/all_trabajador/dni_anverso/${e.data.trabajador.imagen_dni_anverso}" alt="" class="img-thumbnail">`
         
         btn_imagen_dni_anverso=`
         <div class="row">
           <div class="col-6"">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_anverso/${e.data.imagen_dni_anverso}"> <i class="fas fa-expand"></i></a>
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_anverso/${e.data.trabajador.imagen_dni_anverso}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_anverso/${e.data.imagen_dni_anverso}" download="DNI ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_anverso/${e.data.trabajador.imagen_dni_anverso}" download="DNI ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
       } else {
-
         imagen_dni_anverso='No hay imagen';
         btn_imagen_dni_anverso='';
-
       }
 
-      if (e.data.imagen_dni_reverso != '') {
+      if (e.data.trabajador.imagen_dni_reverso != '') {
 
-        imagen_dni_reverso=`<img src="../dist/docs/all_trabajador/dni_reverso/${e.data.imagen_dni_reverso}" alt="" class="img-thumbnail">`
+        imagen_dni_reverso=`<img src="../dist/docs/all_trabajador/dni_reverso/${e.data.trabajador.imagen_dni_reverso}" alt="" class="img-thumbnail">`
         
         btn_imagen_dni_reverso=`
         <div class="row">
           <div class="col-6"">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_reverso/${e.data.imagen_dni_reverso}"> <i class="fas fa-expand"></i></a>
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_reverso/${e.data.trabajador.imagen_dni_reverso}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_reverso/${e.data.imagen_dni_reverso}" download="DNI ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_reverso/${e.data.trabajador.imagen_dni_reverso}" download="DNI ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
       } else {
-
         imagen_dni_reverso='No hay imagen';
         btn_imagen_dni_reverso='';
-
       }
 
-      if (e.data.cv_documentado != '') {
+      if (e.data.trabajador.cv_documentado != '') {
         
-        cv_documentado=doc_view_extencion(e.data.cv_documentado, 'all_trabajador', 'cv_documentado', '100%');
+        cv_documentado=doc_view_extencion(e.data.trabajador.cv_documentado, 'all_trabajador', 'cv_documentado', '100%');
         
         btn_cv_documentado=`
         <div class="row">
           <div class="col-6"">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_documentado/${e.data.cv_documentado}"> <i class="fas fa-expand"></i></a>
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_documentado/${e.data.trabajador.cv_documentado}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_documentado/${e.data.cv_documentado}" download="CV DOCUMENTADO ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_documentado/${e.data.trabajador.cv_documentado}" download="CV DOCUMENTADO ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
       } else {
-
         cv_documentado='Sin CV documentado';
         btn_cv_documentado='';
-
       }
 
-      if (e.data.cv_no_documentado != '') {
+      if (e.data.trabajador.cv_no_documentado != '') {
         
-        cv_no_documentado=  doc_view_extencion(e.data.cv_no_documentado, 'all_trabajador', 'cv_no_documentado', '100%');
+        cv_no_documentado=  doc_view_extencion(e.data.trabajador.cv_no_documentado, 'all_trabajador', 'cv_no_documentado', '100%');
         
         btn_cv_no_documentado=`
         <div class="row">
           <div class="col-6"">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.cv_no_documentado}"> <i class="fas fa-expand"></i> </a>
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.trabajador.cv_no_documentado}"> <i class="fas fa-expand"></i> </a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.cv_no_documentado}" download="CV NO DOCUMENTADO ${e.data.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.trabajador.cv_no_documentado}" download="CV NO DOCUMENTADO ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
       } else {
-
         cv_no_documentado='Sin CV no documentado';
         btn_cv_no_documentado='';
-
       }
+
+      var banco ="";
+
+      e.data.bancos.forEach((valor, index) => {
+        banco = banco.concat( `<tr data-widget="expandable-table" aria-expanded="false">
+          <th>Banco <br> Cta. <br> CCI </th>
+          <td> 
+            <div class="user-block">
+              ${(valor.banco_seleccionado == 1? '<img class="img-circle" src="../dist/svg/check-mark.svg" >': '<img class="img-circle" src="../dist/svg/close-mark.svg" >' )}
+              <span class="username">${valor.banco}</span>
+              <span class="description">${valor.cuenta_bancaria}</span>    
+              <span class="description">${valor.cci}</span>              
+            </div>
+          </td>
+        </tr>`);
+      });
 
       verdatos=`                                                                            
       <div class="col-12">
@@ -442,47 +433,34 @@ function verdatos(idtrabajador){
             <table class="table table-hover table-bordered">        
               <tbody>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}
-                  
-                  </th>
-                  <td> <b>Nombre: </b> ${e.data.nombres}</td>
+                  <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil} </th>
+                  <td> <b>Nombre: </b> ${e.data.trabajador.nombres}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <td> <b>DNI: </b>  ${e.data.numero_documento}</td>
+                  <td> <b>DNI: </b>  ${e.data.trabajador.numero_documento}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Dirección</th>
-                  <td>${e.data.direccion}</td>
+                  <td>${e.data.trabajador.direccion}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Correo</th>
-                  <td>${e.data.email}</td>
+                  <td>${e.data.trabajador.email}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Teléfono</th>
-                  <td>${e.data.telefono}</td>
+                  <td>${e.data.trabajador.telefono}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Fecha nacimiento</th>
-                    <td>${e.data.fecha_nacimiento}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Cuenta bancaria</th>
-                  <td>${e.data.cuenta_bancaria_format}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>CCI </th>
-                  <td>${e.data.cci_format}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Banco</th>
-                  <td>${e.data.banco}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Titular cuenta </th>
-                  <td>${e.data.titular_cuenta}</td>
+                  <th>Fecha Nac.</th>
+                  <td>${e.data.trabajador.fecha_nacimiento}</td>
                 </tr>
                 
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Titular cuenta </th>
+                  <td>${e.data.trabajador.titular_cuenta}</td>
+                </tr>
+                ${banco}
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>DNI anverso</th>
                   <td> ${imagen_dni_anverso} <br>${btn_imagen_dni_anverso}</td>
@@ -492,11 +470,11 @@ function verdatos(idtrabajador){
                   <td> ${imagen_dni_reverso}<br>${btn_imagen_dni_reverso}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>CV documentado</th>
+                  <th>CV Doc.</th>
                   <td> ${cv_documentado} <br>${btn_cv_documentado}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>CV no documentado</th>
+                  <th>CV no Doc.</th>
                   <td> ${cv_no_documentado} <br>${btn_cv_no_documentado}</td>
                 </tr>
               </tbody>
@@ -528,85 +506,82 @@ function mostrar(idtrabajador) {
 
     e = JSON.parse(e);  console.log(e);   
 
-    if (e.status) {
-      $("#tipo_documento option[value='"+e.data.tipo_documento+"']").attr("selected", true);
-      $("#nombre").val(e.data.nombres);
-      $("#num_documento").val(e.data.numero_documento);
-      $("#direccion").val(e.data.direccion);
-      $("#telefono").val(e.data.telefono);
-      $("#email").val(e.data.email);
-      $("#nacimiento").val(e.data.fecha_nacimiento);
-      $("#c_bancaria").val(e.data.cuenta_bancaria);
-      $("#cci").val(e.data.cci);
-      $("#banco").val(e.data.idbancos).trigger("change");
-      $("#tipo").val(e.data.idtipo_trabajador).trigger("change");
-      $("#ocupacion").val(e.data.idocupacion).trigger("change");
-      $("#titular_cuenta").val(e.data.titular_cuenta);
-      $("#idtrabajador").val(e.data.idtrabajador);
-      $("#ruc").val(e.data.ruc);
+    if (e.status == true) {       
+
+      $("#tipo_documento option[value='"+e.data.trabajador.tipo_documento+"']").attr("selected", true);
+      $("#nombre").val(e.data.trabajador.nombres);
+      $("#num_documento").val(e.data.trabajador.numero_documento);
+      $("#direccion").val(e.data.trabajador.direccion);
+      $("#telefono").val(e.data.trabajador.telefono);
+      $("#email").val(e.data.trabajador.email);
+      $("#nacimiento").val(e.data.trabajador.fecha_nacimiento);      
+      $("#tipo").val(e.data.trabajador.idtipo_trabajador).trigger("change");
+      $("#ocupacion").val(e.data.trabajador.idocupacion).trigger("change");
+      $("#titular_cuenta").val(e.data.trabajador.titular_cuenta);
+      $("#idtrabajador").val(e.data.trabajador.idtrabajador);
+      $("#ruc").val(e.data.trabajador.ruc);         
       
-      if (e.data.imagen_perfil!="") {
-
-        $("#foto1_i").attr("src", "../dist/docs/all_trabajador/perfil/" + e.data.imagen_perfil);
-
-        $("#foto1_actual").val(e.data.imagen_perfil);
+      e.data.bancos.forEach(function(valor, index){ 
+        
+        if ( index > 0 ) { 
+          add_bancos(valor.idbancos); 
+          $(`.cta_bancaria_${index}`).val(valor.cuenta_bancaria);
+          $(`.cci_${index}`).val(valor.cci);
+          if (valor.banco_seleccionado == '1') { $(`#banco_seleccionado_${index}`).prop('checked', true); } 
+          console.log('crear - banco: ' + valor.idbancos + ' index: '+ index + ' select: '+ valor.banco_seleccionado);
+        } else {
+          $(`.cta_bancaria_${index}`).val(valor.cuenta_bancaria);
+          $(`.cci_${index}`).val(valor.cci);
+          $(`#banco_${index}`).val(valor.idbancos).trigger("change");
+          if (valor.banco_seleccionado == '1') { $(`#banco_seleccionado_${index}`).prop('checked', true); } 
+          console.log('editar - banco: ' + valor.idbancos + ' index: '+ index + ' select: '+ valor.banco_seleccionado);
+        }
+        
+         
+      }); 
+      
+      if (e.data.trabajador.imagen_perfil!="") {
+        $("#foto1_i").attr("src", "../dist/docs/all_trabajador/perfil/" + e.data.trabajador.imagen_perfil);
+        $("#foto1_actual").val(e.data.trabajador.imagen_perfil);
       }
 
-      if (e.data.imagen_dni_anverso != "") {
-
-        $("#foto2_i").attr("src", "../dist/docs/all_trabajador/dni_anverso/" + e.data.imagen_dni_anverso);
-
-        $("#foto2_actual").val(e.data.imagen_dni_anverso);
+      if (e.data.trabajador.imagen_dni_anverso != "") {
+        $("#foto2_i").attr("src", "../dist/docs/all_trabajador/dni_anverso/" + e.data.trabajador.imagen_dni_anverso);
+        $("#foto2_actual").val(e.data.trabajador.imagen_dni_anverso);
       }
 
-      if (e.data.imagen_dni_reverso != "") {
-
-        $("#foto3_i").attr("src", "../dist/docs/all_trabajador/dni_reverso/" + e.data.imagen_dni_reverso);
-
-        $("#foto3_actual").val(e.data.imagen_dni_reverso);
+      if (e.data.trabajador.imagen_dni_reverso != "") {
+        $("#foto3_i").attr("src", "../dist/docs/all_trabajador/dni_reverso/" + e.data.trabajador.imagen_dni_reverso);
+        $("#foto3_actual").val(e.data.trabajador.imagen_dni_reverso);
       }
 
       //validamoos DOC-4
-      if (e.data.cv_documentado != "" ) {
-
-        $("#doc_old_4").val(e.data.cv_documentado);
-
-        $("#doc4_nombre").html('CV documentado.' + extrae_extencion(e.data.cv_documentado));
-
-        var doc_html = doc_view_extencion(e.data.cv_documentado, 'all_trabajador', 'cv_documentado', '100%', '210' );
-
-        $("#doc4_ver").html(doc_html);        
-         
+      if (e.data.trabajador.cv_documentado != "" ) {
+        $("#doc_old_4").val(e.data.trabajador.cv_documentado);
+        $("#doc4_nombre").html('CV documentado.' + extrae_extencion(e.data.trabajador.cv_documentado));
+        var doc_html = doc_view_extencion(e.data.trabajador.cv_documentado, 'all_trabajador', 'cv_documentado', '100%', '210' );
+        $("#doc4_ver").html(doc_html);         
       } else {
-
         $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-
         $("#doc4_nombre").html('');
-
         $("#doc_old_4").val("");
       }
 
       //validamoos DOC-5
-      if (e.data.cv_no_documentado != "" ) {
-
-        $("#doc_old_5").val(e.data.cv_no_documentado);
-
-        $("#doc5_nombre").html('CV no documentado.' + extrae_extencion(e.data.cv_no_documentado));
-
-        var doc_html = doc_view_extencion(e.data.cv_no_documentado, 'all_trabajador', 'cv_no_documentado', '100%', '210' );
-
-        $("#doc5_ver").html(doc_html);
-        
+      if (e.data.trabajador.cv_no_documentado != "" ) {
+        $("#doc_old_5").val(e.data.trabajador.cv_no_documentado);
+        $("#doc5_nombre").html('CV no documentado.' + extrae_extencion(e.data.trabajador.cv_no_documentado));
+        var doc_html = doc_view_extencion(e.data.trabajador.cv_no_documentado, 'all_trabajador', 'cv_no_documentado', '100%', '210' );
+        $("#doc5_ver").html(doc_html);        
       } else {
-
         $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-
         $("#doc5_nombre").html('');
-
         $("#doc_old_5").val("");
       }
 
       calcular_edad('#nacimiento','#p_edad','#edad');
+
+       
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
@@ -782,50 +757,80 @@ function eliminar(idtrabajador, nombre) {
   });
 }
 
-init();
-
 // .....::::::::::::::::::::::::::::::::::::: B A N C O   M U L T I P L E  :::::::::::::::::::::::::::::::::::::::..
-function add_remove_bancos() {
+function add_bancos(id_select_banco = null) {
   $('#lista_bancos').append(`   
     <!-- banco -->
-    <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${cant_banco_multimple}">
       <div class="form-group">
         <label for="banco">Banco</label>
-        <select name="banco" id="banco" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
+        <select name="banco_${cant_banco_multimple}" id="banco_${cant_banco_multimple}" class="form-control select2 banco_${cant_banco_multimple}" style="width: 100%;" onchange="formato_banco(${cant_banco_multimple});">
           <!-- Aqui listamos los bancos -->
         </select>
-        <small id="banco_validar" class="text-danger" style="display: none;">Por favor selecione un cargo</small>
+        <input type="hidden" name="banco_array[]" id="banco_array_${cant_banco_multimple}">
       </div>
     </div>
 
     <!-- Cuenta bancaria -->
-    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 delete_multiple_${cant_banco_multimple}">
       <div class="form-group">
-        <label for="c_bancaria" class="chargue-format-1">Cuenta Bancaria</label>
-        <input type="text" name="c_bancaria" class="form-control" id="c_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+        <label for="cta_bancaria" class="${cant_banco_multimple}_chargue-format-1">Cuenta Bancaria</label>
+        <input type="text" name="cta_bancaria[]" class="form-control cta_bancaria_${cant_banco_multimple}" id="cta_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
       </div>
     </div>
 
     <!-- CCI -->
-    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 delete_multiple_${cant_banco_multimple}">
       <div class="form-group">
-        <label for="c_bancaria" class="chargue-format-2">CCI</label>
-        <input type="text" name="cci" class="form-control" id="cci" placeholder="CCI" data-inputmask="" data-mask />
+        <label for="cta_bancaria" class="${cant_banco_multimple}_chargue-format-2">CCI</label>
+        <input type="text" name="cci[]" class="form-control cci_${cant_banco_multimple}" id="cci" placeholder="CCI" data-inputmask="" data-mask />
       </div>
     </div>
 
-    <div class="col-12 col-sm-12 col-md-6 col-lg-1">
-      <div class="form-group">
-        <label >Add </label> <br>
-        <button type="button" class="btn bg-gradient-danger"  onclick="add_remove_bancos();"><i class="far fa-trash-alt"></i></button>
+    <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${cant_banco_multimple}">
+      <div class="form-group mb-2">
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-danger" type="radio" id="banco_seleccionado_${cant_banco_multimple}" name="banco_seleccionado" value="${cant_banco_multimple}">
+          <label for="banco_seleccionado_${cant_banco_multimple}" class="custom-control-label">Usar</label>
+        </div>
       </div>
-    </div>`);
+      <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_bancos(${cant_banco_multimple});"><i class="far fa-trash-alt"></i></button>        
+      
+  </div>`);
+
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", `#banco_${cant_banco_multimple}`, id_select_banco);
+
+  $(`#banco_${cant_banco_multimple}`).select2({templateResult: formatState, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
+  
+  $(`#banco_${cant_banco_multimple}`).on('change', function() { $(this).trigger('blur'); });
+  $(`#banco_${cant_banco_multimple}`).rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  cant_banco_multimple++;
+    
 }
+
+function remove_bancos(id) { $(`.delete_multiple_${id}`).remove(); }
+
+/* =========================== S E C C I O N   R E C U P E R A R   B A N C O S =========================== */
+
+function recuperar_banco() {
+  
+  $.post("../ajax/all_trabajador.php?op=recuperar_banco", function (e, textStatus, jqXHR) {
+    e = JSON.parse(e); console.log(e);
+    if (e.status == true) {
+      toastr_success('oka', 'se realzo toda la transaccion', 700);
+      tabla.ajax.reload(null, false); 
+    } else {
+      ver_errores(e);
+    }
+    $('#recuperar_banco').addClass('disabled');
+  });
+}
+
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {   
 
-  $("#banco").on('change', function() { $(this).trigger('blur'); });
+  $("#banco_0").on('change', function() { $(this).trigger('blur'); });
   $("#tipo").on('change', function() { $(this).trigger('blur'); });
   $("#ocupacion").on('change', function() { $(this).trigger('blur'); });
 
@@ -839,8 +844,9 @@ $(function () {
       telefono:       { minlength: 8 },
       tipo_trabajador:{ required: true},
       cargo:          { required: true},
-      c_bancaria:     { minlength: 10,},
-      banco:          { required: true},
+      cta_bancaria:   { minlength: 10,},
+      banco_0:      { required: true},
+      banco_seleccionado:{ required: true},
       tipo:           { required: true},
       ocupacion:      { required: true},
       ruc:            { minlength: 11, maxlength: 11},
@@ -854,10 +860,11 @@ $(function () {
       telefono:       { minlength: "MÍNIMO 8 caracteres.", },
       tipo_trabajador:{ required: "Campo requerido.", },
       cargo:          { required: "Campo requerido.", },
-      c_bancaria:     { minlength: "MÍNIMO 10 caracteres.", },
+      cta_bancaria:   { minlength: "MÍNIMO 10 caracteres.", },
       tipo:           { required: "Campo requerido.", },
       ocupacion:      { required: "Campo requerido.", },
-      banco:          { required: "Campo requerido.", },
+      banco_0:      { required: "Campo requerido.", },
+      banco_seleccionado:{ required: "Requerido.", },
       ruc:            { minlength: "MÍNIMO 11 caracteres.", maxlength: "MÁXIMO 11 caracteres.", },
     },
         
@@ -880,131 +887,38 @@ $(function () {
     },
   });
 
-  $("#banco").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#banco_0").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#tipo").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#ocupacion").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-/*Validación Fecha de Nacimiento Mayoria de edad del usuario*/
-function calcular_edad() {
-
-  var fechaUsuario = $("#nacimiento").val();
-
-  if (fechaUsuario) {         
-  
-    //El siguiente fragmento de codigo lo uso para igualar la fecha de nacimiento con la fecha de hoy del usuario
-    let d = new Date(),    month = '' + (d.getMonth() + 1),    day = '' + d.getDate(),   year = d.getFullYear();
-    
-    if (month.length < 2) 
-      month = '0' + month;
-    if (day.length < 2) 
-      day = '0' + day;
-    d=[year, month, day].join('-')
-
-    /*------------*/
-    var hoy = new Date(d);//fecha del sistema con el mismo formato que "fechaUsuario"
-
-    var cumpleanos = new Date(fechaUsuario);
-    
-    //Calculamos años
-    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
-
-    var m = hoy.getMonth() - cumpleanos.getMonth();
-
-    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
-
-      edad--;
-    }
-
-    // calculamos los meses
-    var meses=0;
-
-    if(hoy.getMonth()>cumpleanos.getMonth()){
-
-      meses=hoy.getMonth()-cumpleanos.getMonth();
-
-    }else if(hoy.getMonth()<cumpleanos.getMonth()){
-
-      meses=12-(cumpleanos.getMonth()-hoy.getMonth());
-
-    }else if(hoy.getMonth()==cumpleanos.getMonth() && hoy.getDate()>cumpleanos.getDate() ){
-
-      if(hoy.getMonth()-cumpleanos.getMonth()==0){
-
-        meses=0;
-      }else{
-
-        meses=11;
-      }            
-    }
-
-    // Obtener días: día actual - día de cumpleaños
-    let dias  = hoy.getDate() - cumpleanos.getDate();
-
-    if(dias < 0) {
-      // Si días es negativo, día actual es mayor al de cumpleaños,
-      // hay que restar 1 mes, si resulta menor que cero, poner en 11
-      meses = (meses - 1 < 0) ? 11 : meses - 1;
-      // Y obtener días faltantes
-      dias = 30 + dias;
-    }
-
-    // console.log(`Tu edad es de ${edad} años, ${meses} meses, ${dias} días`);
-    $("#edad").val(edad);
-
-    $("#p_edad").html(`${edad} años`);
-    // calcular mayor de 18 años
-    if(edad>=18){
-
-      console.log("Eres un adulto");
-
-    }else{
-      // Calcular faltante con base en edad actual
-      // 18 menos años actuales
-      let edadF = 18 - edad;
-      // El mes solo puede ser 0 a 11, se debe restar (mes actual + 1)
-      let mesesF = 12 - (meses + 1);
-      // Si el mes es mayor que cero, se debe restar 1 año
-      if(mesesF > 0) {
-          edadF --;
-      }
-      let diasF = 30 - dias;
-      // console.log(`Te faltan ${edadF} años, ${mesesF} meses, ${diasF} días para ser adulto`);
-    }
-
-  } else {
-
-    $("#edad").val("");
-
-    $("#p_edad").html(`0 años`); 
-  }
-}
-
 // damos formato a: Cta, CCI
-function formato_banco() {
+function formato_banco(id) {
 
-  if ($("#banco").select2("val") == null || $("#banco").select2("val") == "" || $("#banco").select2("val") == '1') {
+  if ($(`#banco_${id}`).select2("val") == null || $(`#banco_${id}`).select2("val") == "" || $(`#banco_${id}`).select2("val") == '1') {
 
-    $("#c_bancaria").prop("readonly",true);   $("#cci").prop("readonly",true);
+    $(`.cta_bancaria_${id}`).prop("readonly",true);   $(`.cci_${id}`).prop("readonly",true);
   } else {
     
-    $(".chargue-format-1").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+    $(`.${id}_chargue-format-1`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(`.${id}_chargue-format-2`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
 
-    $("#c_bancaria").prop("readonly",false);   $("#cci").prop("readonly",false);
+    $(`#banco_array_${id}`).val($(`#banco_${id}`).select2("val"));
 
-    $.post("../ajax/all_trabajador.php?op=formato_banco", { idbanco: $("#banco").select2("val") }, function (data, status) {
+    $(`.cta_bancaria_${id}`).prop("readonly",false);   $(`.cci_${id}`).prop("readonly",false);
 
-      data = JSON.parse(data);  console.log(data); 
+    $.post("../ajax/all_trabajador.php?op=formato_banco", { idbanco: $(`#banco_${id}`).select2("val") }, function (data, status) {
 
-      $(".chargue-format-1").html('Cuenta Bancaria'); $(".chargue-format-2").html('CCI');
+      data = JSON.parse(data);  //console.log(data); 
+
+      $(`.${id}_chargue-format-1`).html('Cuenta Bancaria'); $(`.${id}_chargue-format-2`).html('CCI');
 
       var format_cta = decifrar_format_banco(data.data.formato_cta); var format_cci = decifrar_format_banco(data.data.formato_cci);
 
-      $("#c_bancaria").inputmask(`${format_cta}`);
+      $(`.cta_bancaria_${id}`).inputmask(`${format_cta}`);
 
-      $("#cci").inputmask(`${format_cci}`);
+      $(`.cci_${id}`).inputmask(`${format_cci}`);
     }).fail( function(e) { ver_errores(e); } );  
   }  
 }
@@ -1020,12 +934,4 @@ function sueld_mensual(){
   $("#sueldo_diario").val(sueldo_diario);
 
   $("#sueldo_hora").val(sueldo_horas);
-}
-
-function no_pdf() {
-  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
-}
-
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!")
 }

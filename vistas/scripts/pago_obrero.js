@@ -144,7 +144,7 @@ function listar_tbla_principal(id_proyecto) {
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
+        console.log(e.responseText);	ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {          
@@ -535,7 +535,7 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
+        console.log(e.responseText);	ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {
@@ -980,7 +980,7 @@ function modal_pago_obrero(idresumen_q_s_asistencia, fecha_i, fecha_f, pago_quin
       type : "get",
       dataType : "json",						
       error: function(e){
-        console.log(e.responseText);	
+        console.log(e.responseText);	ver_errores(e);
       }
     },
     createdRow: function (row, data, ixdex) {

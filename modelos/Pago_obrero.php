@@ -13,14 +13,14 @@ class PagoObrero
   public function listar_tbla_principal($nube_idproyecto) {
     $data = [];
 
-    $sql_1 = "SELECT t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento, t.cuenta_bancaria_format AS cuenta_bancaria, ban.nombre as banco, 
+    $sql_1 = "SELECT t.idtrabajador, t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento,
 		tt.nombre AS nombre_tipo, ct.nombre AS nombre_cargo, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   
 		SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, SUM(rqsa.total_dias_asistidos) AS total_dias_asistidos, SUM(rqsa.sabatical) AS sabatical, 
 		SUM(rqsa.sabatical_manual_1) AS sabatical_manual_1, SUM(rqsa.sabatical_manual_2) AS sabatical_manual_2, SUM(rqsa.pago_parcial_hn) AS pago_parcial_hn, 
 		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, SUM(rqsa.adicional_descuento) AS adicional_descuento,  SUM(rqsa.pago_quincenal) AS pago_quincenal, 
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
-		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct, bancos as ban
-		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 	AND tpp.idtrabajador = t.idtrabajador AND t.idbancos = ban.idbancos 
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct
+		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 	AND tpp.idtrabajador = t.idtrabajador  
     AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  
 		AND p.idproyecto = tpp.idproyecto AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' 
 		AND tpp.idproyecto = '$nube_idproyecto'  
@@ -40,15 +40,26 @@ class PagoObrero
       $depositos = ejecutarConsultaSimpleFila($sql_2);
       if ($depositos['status'] == false) { return $depositos; }
 
+      $idtrabajador = $value['idtrabajador'];
+      $sql_3 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
+      FROM cuenta_banco_trabajador as cbt, bancos as b
+      WHERE cbt.idbancos = b.idbancos AND cbt.banco_seleccionado ='1' AND cbt.idtrabajador='$idtrabajador' ;";
+      $bancos = ejecutarConsultaSimpleFila($sql_3);
+      if ($bancos['status'] == false) { return  $bancos;}
+
       $data[] = [
+        'idtrabajador' => $value['idtrabajador'],
         'nombres_trabajador' => $value['nombres_trabajador'],
         'fecha_pago_obrero' => $value['fecha_pago_obrero'],
         'telefono' => $value['telefono'],
         'imagen_perfil' => $value['imagen_perfil'],
         'tipo_documento' => $value['tipo_documento'],
         'numero_documento' => $value['numero_documento'],
-        'banco' => $value['banco'],
-        'cuenta_bancaria' => $value['cuenta_bancaria'],
+
+        'banco'           => (empty($bancos['data']) ? "": $bancos['data']['banco']), 
+        'cuenta_bancaria' => (empty($bancos['data']) ? "" : $bancos['data']['cuenta_bancaria']), 
+        'cci'             => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
+
         'nombre_tipo' => $value['nombre_tipo'],
         'nombre_cargo' => $value['nombre_cargo'],
         'idtrabajador_por_proyecto' => $value['idtrabajador_por_proyecto'],
@@ -234,10 +245,10 @@ class PagoObrero
     $data = [];
     $sql = "SELECT  rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto,  rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
     rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, 
-    rqsa.pago_quincenal, rqsa.recibos_x_honorarios, t.nombres as trabajador, t.tipo_documento, t.numero_documento, t.imagen_perfil, 
-    b.nombre as banco, t.cuenta_bancaria, ct.nombre as cargo_trabajador, tt.nombre as tipo_trabajador
-    FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador as t, bancos AS b, cargo_trabajador AS ct, tipo_trabajador as tt
-    WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador AND t.idbancos = b.idbancos 
+    rqsa.pago_quincenal, rqsa.recibos_x_honorarios, t.idtrabajador, t.nombres as trabajador, t.tipo_documento, t.numero_documento, t.imagen_perfil, 
+     ct.nombre as cargo_trabajador, tt.nombre as tipo_trabajador
+    FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador as t, cargo_trabajador AS ct, tipo_trabajador as tt
+    WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador  
     AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador
     AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND rqsa.estado_envio_contador = '1' 
     AND rqsa.numero_q_s = '$num_quincena' AND tpp.idproyecto ='$nube_idproyecto'";
@@ -251,6 +262,13 @@ class PagoObrero
         $sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1' AND idresumen_q_s_asistencia = '$id';";
         $depositos = ejecutarConsultaSimpleFila($sql_2);
         if ($depositos['status'] == false) { return $depositos; }
+
+        $idtrabajador = $trabajador['idtrabajador'];
+        $sql_3 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
+        FROM cuenta_banco_trabajador as cbt, bancos as b
+        WHERE cbt.idbancos = b.idbancos AND cbt.banco_seleccionado ='1' AND cbt.idtrabajador='$idtrabajador' ;";
+        $bancos = ejecutarConsultaSimpleFila($sql_3);
+        if ($bancos['status'] == false) { return  $bancos;}
 
         $data[] = [
           'idresumen_q_s_asistencia' => $trabajador['idresumen_q_s_asistencia'],
@@ -271,8 +289,11 @@ class PagoObrero
           'tipo_documento' => $trabajador['tipo_documento'],
           'numero_documento' => $trabajador['numero_documento'],
           'imagen_perfil' => $trabajador['imagen_perfil'],
-          'banco' => $trabajador['banco'],
-          'cuenta_bancaria' => $trabajador['cuenta_bancaria'],
+
+          'banco'           => (empty($bancos['data']) ? "": $bancos['data']['banco']), 
+          'cuenta_bancaria' => (empty($bancos['data']) ? "" : $bancos['data']['cuenta_bancaria']), 
+          'cci'             => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
+
           'cargo_trabajador' => $trabajador['cargo_trabajador'],
           'tipo_trabajador' => $trabajador['tipo_trabajador'],
 
