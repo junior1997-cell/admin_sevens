@@ -28,11 +28,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['pago_trabajador']==1){
-            //require 'enmantenimiento.php';
+            require 'enmantenimiento.php';
             ?>  
 
             <!--Contenido-->
-            <div class="content-wrapper">
+            <div class="content-wrapper hidden">
               <!-- Content Header (Page header) -->
               <div class="content-header">
                 <div class="container-fluid">

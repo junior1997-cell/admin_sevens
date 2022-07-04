@@ -62,8 +62,8 @@
                         <div class="card-header">
                           <!-- agregar pago  -->
                           <h3 class="card-title " id="btn-agregar-resumen"  >
-                            <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-resumen_valorizacion">
-                            <i class="fas fa-plus-circle"></i> Agregar pago 
+                            <button type="button" class="btn bg-gradient-success btn-sm h-50px mr-1"  onclick="limpiar_resumen_q_s();" data-toggle="modal" data-target="#modal-agregar-resumen_valorizacion">
+                            <i class="fas fa-plus-circle"></i> Agregar 
                             </button>                     
                           </h3>   
                           <!-- regresar -->
@@ -501,7 +501,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title text-bold ">Documentos valorización</h4>
+                        <h4 class="modal-title text-bold ">valorización</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -510,42 +510,61 @@
 
                         <form id="form-materiales" name="form-resumen-valorizacion" method="POST">
                           <div class="card-body">
-                            <div class="row" id="cargando-1-fomulario">
+                            <div class="row" id="cargando-3-fomulario">
                               <!-- id proyecto -->
                               <input type="hidden" name="idproyecto" id="idproyecto" />
                               <!-- id proveedores -->
-                              <input type="text" name="numero_q_s_resumen_oculto" id="numero_q_s_resumen_oculto" />
+                              <input type="hidden" name="numero_q_s_resumen_oculto" id="numero_q_s_resumen_oculto" />
                               
                               <!-- Tipo de documento -->
-                              <div class="col-lg-12">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="proveedor">Valorizxacion</label>
+                                  <label for="numero_q_s_resumen">Valorización</label>
                                   <select name="numero_q_s_resumen" id="numero_q_s_resumen" onchange="recoger_fecha_q_s();" class="form-control select2" style="width: 100%;" > </select>
                                   
                                 </div>
                               </div>
 
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                              <!-- fecha_inicial -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="fecha_inicial">fecha_inicial <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="fecha_inicial" class="form-control" id="fecha_inicial" placeholder="Nombre del Insumo." />
+                                  <label for="fecha_inicial">Fecha inicial <sup class="text-danger">(unico*)</sup></label>
+                                  <input type="text" name="fecha_inicial" class="form-control" id="fecha_inicial" placeholder="Fecha inicial" readonly />
                                 </div>
                               </div>
 
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                              <!-- fecha_final -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="fecha_final">fecha_final <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="fecha_final" class="form-control" id="fecha_final" placeholder="Nombre del Insumo." />
+                                  <label for="fecha_final">Fecha final <sup class="text-danger">(unico*)</sup></label>
+                                  <input type="text" name="fecha_final" class="form-control" id="fecha_final" placeholder="Fecha final" readonly />
                                 </div>
                               </div>
 
+                              <!-- monto_programado -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto_programado">Monto programado <sup class="text-danger">(*)</sup></label>
+                                  <input type="number" name="monto_programado" class="form-control" id="monto_programado" placeholder="Monto programado" />
+                                </div>
+                              </div>
+
+                              <!-- monto_valorizado -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto_valorizado">Monto valorizado <sup class="text-danger">(*)</sup></label>
+                                  <input type="number" name="monto_valorizado" class="form-control" id="monto_valorizado" placeholder="Monto valorizado" />
+                                </div>
+                              </div>
                              
-
+                              <!-- monto_gastado -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto_gastado">Monto gastado <sup class="text-danger">(*)</sup></label>
+                                  <input type="number" name="monto_gastado" class="form-control" id="monto_gastado" placeholder="Monto gastado" readonly />
+                                </div>
+                              </div>
                               
-
-
                               <!-- barprogress -->
                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
                                 <div class="progress" id="div_barra_progress">
@@ -557,7 +576,7 @@
 
                             </div>
 
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="row" id="cargando-4-fomulario" style="display: none;">
                               <div class="col-lg-12 text-center">
                                 <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                                 <br />
@@ -567,8 +586,7 @@
                           </div>
                           <!-- /.card-body -->
                           <button type="submit" style="display: none;" id="submit-form-resumen-valorizacion">Submit</button>
-                        </form>
-                                  
+                        </form>   
                           
                       </div>
                       <div class="modal-footer justify-content-between">
