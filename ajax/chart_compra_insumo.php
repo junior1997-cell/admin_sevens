@@ -30,9 +30,29 @@
         break;
 
         case 'chart_linea':
-          $rspta = $chart_compra_insumo->chart_linea($_POST["idnubeproyecto"], 2022);
+          $rspta = $chart_compra_insumo->chart_linea($_POST["idnubeproyecto"], $_POST["year_filtro"], $_POST["month_filtro"], $_POST["dias_por_mes"]);
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true) ;
+        break;
+
+        case 'anios_select2':
+          $rspta = $chart_compra_insumo->anios_select2($_GET["nube_idproyecto"]);
+
+          $data ="";
+         
+          if ($rspta['status']) {
+            foreach ($rspta['data'] as $key => $value) {    
+              $data .= '<option value=' . $value['anios'] . '>' . $value['anios'] .'</option>';
+            }  
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => $data, 
+            );    
+            echo json_encode($retorno, true);  
+          } else {  
+            echo json_encode($rspta, true); 
+          }
         break;
        
       }

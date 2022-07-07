@@ -117,13 +117,45 @@
                       </div>
                       <!-- /.col -->
                     </div>
+
+                    <div class="align-content-between row">
+                      <!-- Año -->
+                      <div class="col-6 col-lg-6">
+                        <div class="form-group">
+                          <!-- <label for="year_filtro">Año </label> -->
+                          <select name="year_filtro" id="year_filtro" class="form-control select2" style="width: 100%;" onchange="chart_linea_barra();"> </select>
+                        </div>
+                      </div>
+
+                      <!-- Mes -->
+                      <div class="col-6 col-lg-6">
+                        <div class="form-group">
+                          <!-- <label for="month_filtro">Mes </label> -->
+                          <select name="month_filtro" id="month_filtro" class="form-control select2" style="width: 100%;" onchange="chart_linea_barra();">
+                            <option value="1">Enero</option> 
+                            <option value="2">Febrero</option> 
+                            <option value="3">Marzo</option> 
+                            <option value="4">Abril</option> 
+                            <option value="5">Mayo</option> 
+                            <option value="6">Junio</option> 
+                            <option value="7">Julio</option> 
+                            <option value="8">Agosto</option> 
+                            <option value="9">Setiembre</option> 
+                            <option value="19">Octubre</option> 
+                            <option value="11">Noviembre</option> 
+                            <option value="12">Diciembre</option> 
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="row">
 
                       <div class="col-lg-12">
                         <div class="card">
-                          <div class="card-header border-0">
-                            <div class="d-flex justify-content-between">
-                              <h3 class="card-title">Compras y pagos por mes</h3>
+                          <div class="card-header border-0 ">
+                            <div class=" d-flex justify-content-center ">
+                              <h3 class="card-title font-weight-bold">Compras y Pagos por Mes</h3>
                               <!-- <a href="javascript:void(0);">View Report</a> -->
                             </div>
                           </div>
@@ -166,9 +198,9 @@
                       <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0">
-                            <div class="d-flex justify-content-between">
-                              <h3 class="card-title">Compras y pagos por mes</h3>
-                              <a href="javascript:void(0);">View Report</a>
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Compras y Pagos por Mes</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
                             </div>
                           </div>
                           <div class="card-body">
@@ -208,27 +240,37 @@
                                 </p>
 
                                 <div class="progress-group">
-                                  <span class="progress-text font-weight-bold text--success">Facturas aceptadas</span>
-                                  <span class="float-right"><b>756</b>/800</span>
+                                  <span class="progress-text text--success">Facturas aceptadas</span>
+                                  <span class="float-right cant_ft_aceptadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
                                   <div class="progress progress-sm">
-                                    <div class="progress-bar bg-success" style="width: 93%"></div>
+                                    <div class="progress-bar bg-success progress_ft_aceptadas" style="width: 0%"></div>
                                   </div>
                                 </div>
                                 <!-- /.progress-group -->
 
                                 <div class="progress-group">
-                                  <span class="progress-text font-weight-bold text--warning">Facturas rechazadas</span>
-                                  <span class="float-right"><b>40</b>/800</span>
+                                  <span class="progress-text text--warning">Facturas rechazadas</span>
+                                  <span class="float-right cant_ft_rechazadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
                                   <div class="progress progress-sm">
-                                    <div class="progress-bar bg-warning" style="width: 5%"></div>
+                                    <div class="progress-bar bg-warning progress_ft_rechazadas" style="width: 0%"></div>
                                   </div>
                                 </div>
+                                <!-- /.progress-group -->
                                
                                 <div class="progress-group">
-                                  <span class="progress-text font-weight-bold text--danger">Facturas eliminadas</span>
-                                  <span class="float-right"><b>4</b>/800</span>
+                                  <span class="progress-text text--danger">Facturas eliminadas</span>
+                                  <span class="float-right cant_ft_eliminadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
                                   <div class="progress progress-sm">
-                                    <div class="progress-bar bg-danger" style="width: 3%"></div>
+                                    <div class="progress-bar bg-danger progress_ft_eliminadas" style="width: 0%"></div>
+                                  </div>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <div class="progress-group">
+                                  <span class="progress-text text--danger">Facturas rechazada y eliminadas</span>
+                                  <span class="float-right cant_ft_rechazadas_eliminadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
+                                  <div class="progress progress-sm">
+                                    <div class="progress-bar bg-danger progress_ft_rechazadas_eliminadas" style="width: 0%"></div>
                                   </div>
                                 </div>
                                 <!-- /.progress-group -->

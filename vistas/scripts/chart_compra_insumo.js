@@ -1,4 +1,5 @@
-
+var visitorsChart ;
+var salesChart;
 //Función que se ejecuta al inicio
 function init() {
 
@@ -13,15 +14,18 @@ function init() {
   $("#lChartCompraInsumo").addClass("active");
 
   box_content_reporte(localStorage.getItem("nube_idproyecto"));
-  chart_linea_barra(localStorage.getItem("nube_idproyecto"));
+  //chart_linea_barra(localStorage.getItem("nube_idproyecto"));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
+  var anio_actual = moment().format('YYYY');
+  lista_select2(`../ajax/chart_compra_insumo.php?op=anios_select2&nube_idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#year_filtro', anio_actual);
 
-  // ══════════════════════════════════════ INITIALIZE SELECT2 - COMPRAS ══════════════════════════════════════
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
 
-  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+  $("#year_filtro").select2({ theme: "bootstrap4", placeholder: "Filtro Año", allowClear: false, });
+  $("#month_filtro").select2({ theme: "bootstrap4", placeholder: "Filtro Mes", allowClear: true, });
 
+  $("#month_filtro").val("null").trigger("change");
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -55,42 +59,60 @@ function box_content_reporte(idnubeproyecto) {
 function chart_linea_barra(idnubeproyecto) {
   'use strict'
 
+  $('.cant_ft_aceptadas').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+  $('.cant_ft_rechazadas').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+  $('.cant_ft_eliminadas').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+  $('.cant_ft_rechazadas_eliminadas').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+
   var ticksStyle = { fontColor: '#495057', fontStyle: 'bold' };
 
   var mode = 'index'; var intersect = true;
 
+  var idnubeproyecto = localStorage.getItem("nube_idproyecto");
+  var year_filtro = $("#year_filtro").select2("val");
+  var month_filtro = $("#month_filtro").select2("val");
+  var dias_por_mes =cant_dias_mes(year_filtro, month_filtro);
   
-  $.post("../ajax/chart_compra_insumo.php?op=chart_linea", { 'idnubeproyecto': idnubeproyecto }, function (e, status) {
+  $.post("../ajax/chart_compra_insumo.php?op=chart_linea", { 'idnubeproyecto': idnubeproyecto , 'year_filtro': year_filtro, 'month_filtro':month_filtro, 'dias_por_mes':dias_por_mes }, function (e, status) {
     e = JSON.parse(e);   console.log(e);
     if (e.status == true) {
+      // :::::::::::::::::::::::::::::::::::::::::::: C H A R T    P R O G R E S ::::::::::::::::::::::::::::::::::::
+      $('.cant_ft_aceptadas').html(`<b>${e.data.factura_aceptadas}</b>/${e.data.factura_total}`);
+      $('.cant_ft_rechazadas').html(`<b>${e.data.factura_rechazadas}</b>/${e.data.factura_total}`);
+      $('.cant_ft_eliminadas').html(`<b>${e.data.factura_eliminadas}</b>/${e.data.factura_total}`);
+      $('.cant_ft_rechazadas_eliminadas').html(`<b>${e.data.factura_rechazadas_eliminadas}</b>/${e.data.factura_total}`);
+      var aceptadas = (e.data.factura_aceptadas/e.data.factura_total)*100;
+      var rechazadas = (e.data.factura_rechazadas/e.data.factura_total)*100;
+      var eliminadas = (e.data.factura_eliminadas/e.data.factura_total)*100;
+      var rechazadas_eliminadas = (e.data.factura_rechazadas_eliminadas/e.data.factura_total)*100;
+
+      $('.progress_ft_aceptadas').css({ width: `${aceptadas.toFixed(2)}%`, });
+      $('.progress_ft_rechazadas').css({ width: `${rechazadas.toFixed(2)}%`, });
+      $('.progress_ft_eliminadas').css({ width: `${eliminadas.toFixed(2)}%`, });
+      $('.progress_ft_rechazadas_eliminadas').css({ width: `${rechazadas_eliminadas.toFixed(2)}%`, });
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   B A R R A S ::::::::::::::::::::::::::::::::::::
-      console.log(e.data.total_gasto);
-      console.log(e.data.total_deposito);
-      var $visitorsChart = $('#visitors-chart')
+      
+      var $visitorsChart = $('#visitors-chart');
+      if (visitorsChart) {  visitorsChart.destroy();  } 
       // eslint-disable-next-line no-unused-vars
-      var visitorsChart = new Chart($visitorsChart, {
+      visitorsChart = new Chart($visitorsChart, {
         data: {
-          labels: [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+          labels: mes_o_dia(year_filtro, month_filtro),
           datasets: [
             {
-              type: 'line',
-              data: e.data.total_gasto,
-              backgroundColor: 'transparent',
-              borderColor: '#007bff',
-              pointBorderColor: '#007bff',
-              pointBackgroundColor: '#007bff',
-              fill: false
+              type: 'line', data: e.data.total_gasto, 
+              backgroundColor: 'transparent', borderColor: '#007bff',
+              pointBorderColor: '#007bff', pointBackgroundColor: '#007bff',
+              fill: false, label: 'Compras',
               // pointHoverBackgroundColor: '#007bff',
               // pointHoverBorderColor    : '#007bff'
             },
             {
               type: 'line',
               data: e.data.total_deposito,
-              backgroundColor: 'tansparent',
-              borderColor: '#ced4da',
-              pointBorderColor: '#ced4da',
-              pointBackgroundColor: '#ced4da',
-              fill: false
+              backgroundColor: 'tansparent', borderColor: '#ced4da',
+              pointBorderColor: '#ced4da', pointBackgroundColor: '#ced4da',
+              fill: false, label: 'Pago',
               // pointHoverBackgroundColor: '#ced4da',
               // pointHoverBorderColor    : '#ced4da'
             }
@@ -100,24 +122,16 @@ function chart_linea_barra(idnubeproyecto) {
           maintainAspectRatio: false,
           tooltips: { mode: mode,  intersect: intersect },
           hover: { mode: mode, intersect: intersect },
-          legend: { display: false },
+          legend: { display: true,  },
           scales: {
             yAxes: [{
-              // display: false,
-              gridLines: {
-                display: true,
-                lineWidth: '4px',
-                color: 'rgba(0, 0, 0, .2)',
-                zeroLineColor: 'transparent'
-              },
-              ticks: $.extend({
-                beginAtZero: true,
-                suggestedMax: 200
-              }, ticksStyle)
-            }],
-            xAxes: [{
               display: true,
-              gridLines: { display: false },
+              gridLines: { display: false, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
+              ticks: $.extend({ beginAtZero: true, suggestedMax: 200 }, ticksStyle)
+            }],
+            xAxes: [{ 
+              display: true, 
+              gridLines: { display: false, },
               ticks: ticksStyle
             }]
           }
@@ -125,22 +139,15 @@ function chart_linea_barra(idnubeproyecto) {
       });
       // ::::::::::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  ::::::::::::::::::::::::::::::::::::
       var $salesChart = $('#sales-chart');
+      if (salesChart) {  salesChart.destroy();  }
       // eslint-disable-next-line no-unused-vars
-      var salesChart = new Chart($salesChart, {
+      salesChart = new Chart($salesChart, {
         type: 'bar',
         data: {
-          labels: [ 'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+          labels: mes_o_dia(year_filtro, month_filtro),
           datasets: [
-            {
-              backgroundColor: '#007bff',
-              borderColor: '#007bff',
-              data: e.data.total_gasto,
-            },
-            {
-              backgroundColor: '#ced4da',
-              borderColor: '#ced4da',
-              data: e.data.total_deposito,
-            }
+            { backgroundColor: '#007bff', borderColor: '#007bff', data: e.data.total_gasto, },
+            { backgroundColor: '#ced4da', borderColor: '#ced4da', data: e.data.total_deposito, }
           ]
         },
         options: {
@@ -154,14 +161,9 @@ function chart_linea_barra(idnubeproyecto) {
               gridLines: { display: true, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
               ticks: $.extend({
                 beginAtZero: true,
-
                 // Include a dollar sign in the ticks
                 callback: function (value) {
-                  if (value >= 1000) {
-                    value /= 1000
-                    value += 'k'
-                  }
-
+                  if (value >= 1000) { value /= 1000; value += 'k'; }
                   return '$' + value;
                 }
               }, ticksStyle)
@@ -175,17 +177,25 @@ function chart_linea_barra(idnubeproyecto) {
         }
       });
     } else {
-      
+      ver_errores(e);
     }
-  });
-  
-
-  
+  });  
 }
 
 
 init();
 
-$(function () {
+function mes_o_dia(data_anio, data_mes) {
   
-})
+  if (data_anio == null || data_anio == '' || data_mes == null || data_mes == "") {
+    return [ 'ENE.', 'FEB.', 'MAR.', 'ABR.', 'MAY.', 'JUN.', 'JUL.', 'AUG', 'SEP.', 'OCT.', 'NOV.', 'DIC.'];
+  } else {
+    var array_cant_dias = [];
+    var cant_dias = cant_dias_mes(data_anio, data_mes);
+    for (var dia = 1; dia <= cant_dias; dia++) {
+      array_cant_dias.push(dia);
+      
+    }
+    return array_cant_dias;
+  } 
+}

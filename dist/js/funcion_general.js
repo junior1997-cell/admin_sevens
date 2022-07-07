@@ -120,7 +120,25 @@ function restrigir_fecha_ant(nombre_input,fecha_minima) {
   $(nombre_input).attr('min',today2);
 }
 
+function cant_dias_mes(date_anio, date_mes) {
+	var año = date_anio;
+  var mes = date_mes;
 
+  if (date_anio == '' || date_anio == null || date_mes =='' || date_mes ==null ) {
+    return '';
+  } else {
+    var diasMes = new Date(año, mes, 0).getDate();
+    var diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    
+    // for (var dia = 1; dia <= diasMes; dia++) {
+    //   // Ojo, hay que restarle 1 para obtener el mes correcto
+    //   var indice = new Date(año, mes - 1, dia).getDay();
+    //   console.log(`El día número ${dia} del mes ${mes} del año ${año} es ${diasSemana[indice]}`);
+    // }
+    return diasMes;
+  }   
+  
+}
 
 function validarFechaEnRango(fechaI, fechaF, fechaV){
   
