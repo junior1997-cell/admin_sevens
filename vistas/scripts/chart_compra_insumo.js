@@ -85,11 +85,19 @@ function chart_linea_barra(idnubeproyecto) {
       var rechazadas = (e.data.factura_rechazadas/e.data.factura_total)*100;
       var eliminadas = (e.data.factura_eliminadas/e.data.factura_total)*100;
       var rechazadas_eliminadas = (e.data.factura_rechazadas_eliminadas/e.data.factura_total)*100;
-
       $('.progress_ft_aceptadas').css({ width: `${aceptadas.toFixed(2)}%`, });
       $('.progress_ft_rechazadas').css({ width: `${rechazadas.toFixed(2)}%`, });
       $('.progress_ft_eliminadas').css({ width: `${eliminadas.toFixed(2)}%`, });
       $('.progress_ft_rechazadas_eliminadas').css({ width: `${rechazadas_eliminadas.toFixed(2)}%`, });
+
+      $('.monto_pagado').html(`<b><small>S/.</small> ${formato_miles(e.data.factura_total_pago)}</b>/ <small>S/.</small> ${formato_miles(e.data.factura_total_gasto)}`);
+      var no_pagado = e.data.factura_total_gasto - e.data.factura_total_pago;
+      $('.monto_no_pagado').html(`<b><small>S/.</small> ${ formato_miles(no_pagado)}</b>/ <small>S/.</small> ${formato_miles(e.data.factura_total_gasto)}`);
+      var monto_pagado = (e.data.factura_total_pago/e.data.factura_total_gasto)*100;
+      var monto_no_pagado = (no_pagado/e.data.factura_total_gasto)*100;
+      $('.progress_monto_pagado').css({ width: `${monto_pagado.toFixed(2)}%`, });
+      $('.progress_monto_no_pagado').css({ width: `${monto_no_pagado.toFixed(2)}%`, });
+
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   B A R R A S ::::::::::::::::::::::::::::::::::::
       
       var $visitorsChart = $('#visitors-chart');
@@ -137,6 +145,7 @@ function chart_linea_barra(idnubeproyecto) {
           }
         }
       });
+
       // ::::::::::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  ::::::::::::::::::::::::::::::::::::
       var $salesChart = $('#sales-chart');
       if (salesChart) {  salesChart.destroy();  }
@@ -176,6 +185,28 @@ function chart_linea_barra(idnubeproyecto) {
           }
         }
       });
+
+      // :::::::::::::::::::::::::::::::::::::::::::: P R O D U C T O S   M A S   V E N D I D O S ::::::::::::::::::::::::::::::::::::
+      var productos_mas_vendidos = "";
+      e.data.productos_mas_vendidos.forEach((key, indice) => {
+        productos_mas_vendidos = productos_mas_vendidos.concat(`
+          <tr>
+            <td>
+              <img src="../dist/docs/material/img_perfil/${key.imagen}" alt="Product 1" onerror="this.src='../dist/svg/404-v2.svg';" class="img-thumbnail img-circle img-size-32 mr-2">
+              ${key.producto}
+            </td>
+            <td class="text-right">S/ ${formato_miles(key.precio_referencial)}</td>
+            <td>              
+              ${formato_miles(key.cantidad_vendida)}
+            </td>
+            <td class="text-right">
+              <a href="resumen_insumos.php" class="text-muted"> <i class="fas fa-search"></i> </a>
+            </td>
+          </tr>
+        `);
+      });
+
+      $('#tbla_productos_mas_vendidos').html(productos_mas_vendidos);
     } else {
       ver_errores(e);
     }

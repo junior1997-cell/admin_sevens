@@ -281,19 +281,19 @@
                                  <!-- /.seccion -->
 
                                 <div class="progress-group">
-                                  <span class="progress-text font-weight-bold text--success">Facturas Pagadas</span>
-                                  <span class="float-right"><b>750</b>/800</span>
+                                  <span class="progress-text font-weight-bold text--success">Montos Pagadas</span>
+                                  <span class="float-right monto_pagado"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
                                   <div class="progress progress-sm">
-                                    <div class="progress-bar bg-success" style="width: 87%"></div>
+                                    <div class="progress-bar bg-success progress_monto_pagado" style="width: 0%"></div>
                                   </div>
                                 </div>
                                 <!-- /.progress-group -->
                                 
                                 <div class="progress-group">
-                                  <span class="progress-text font-weight-bold text-danger">Facturas NO Pagadas</span>
-                                  <span class="float-right"><b>50</b>/800</span>
+                                  <span class="progress-text font-weight-bold text-danger">Montos NO Pagadas</span>
+                                  <span class="float-right monto_no_pagado"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
                                   <div class="progress progress-sm">
-                                    <div class="progress-bar bg-danger" style="width: 13%"></div>
+                                    <div class="progress-bar bg-danger progress_monto_no_pagado" style="width: 0%"></div>
                                   </div>
                                 </div>
                                 <!-- /.progress-group -->
@@ -308,7 +308,7 @@
                       <div class="col-lg-6">
                         <div class="card">
                           <div class="card-header border-0">
-                            <h3 class="card-title">Productos mas usados</h3>
+                            <h3 class="card-title text-center">Productos mas usados</h3>
                             <div class="card-tools">
                               <a href="#" class="btn btn-tool btn-sm">
                                 <i class="fas fa-download"></i>
@@ -316,76 +316,20 @@
                               <a href="#" class="btn btn-tool btn-sm">
                                 <i class="fas fa-bars"></i>
                               </a>
-                            </div>
+                            </div> 
                           </div>
                           <div class="card-body table-responsive p-0">
                             <table class="table table-striped table-valign-middle">
                               <thead>
                               <tr>
                                 <th>Producto</th>
-                                <th>Precio</th>
-                                <th>Compra</th>
+                                <th>Precio referencial</th>
+                                <th>Cantidad</th>
                                 <th>Mas</th>
                               </tr>
                               </thead>
-                              <tbody>
-                              <tr>
-                                <td>
-                                  <img src="dist/img/default-150x150.png" alt="Product 1" onerror="this.src='../dist/svg/404-v2.svg';" class="img-thumbnail img-circle img-size-32 mr-2">
-                                  CONCRETO PREMEZCLADO 210 KG/CM2
-                                </td>
-                                <td>S/ 13.00</td>
-                                <td>
-                                  <small class="text-success mr-1"> <i class="fas fa-arrow-up"></i> 12% </small>
-                                  12,000 Sold
-                                </td>
-                                <td>
-                                  <a href="resumen_insumos.php" class="text-muted"> <i class="fas fa-search"></i> </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <img src="dist/img/default-150x150.png" alt="Product 1" onerror="this.src='../dist/svg/404-v2.svg';" class="img-thumbnail img-circle img-size-32 mr-2">
-                                  GASOLINA 90
-                                </td>
-                                <td>S/ 29.00</td>
-                                <td>
-                                  <small class="text-warning mr-1"> <i class="fas fa-arrow-down"></i> 0.5% </small>
-                                  123,234 Sold
-                                </td>
-                                <td>
-                                  <a href="resumen_insumos.php" class="text-muted"> <i class="fas fa-search"></i> </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <img src="dist/img/default-150x150.png" alt="Product 1" onerror="this.src='../dist/svg/404-v2.svg';" class="img-thumbnail img-circle img-size-32 mr-2">
-                                  TABLAS DE 1X8X10 PIES LUPUNA
-                                </td>
-                                <td>S/ 1,230.00</td>
-                                <td>
-                                  <small class="text-danger mr-1"> <i class="fas fa-arrow-down"></i> 3% </small>
-                                  198 Sold
-                                </td>
-                                <td>
-                                  <a href="resumen_insumos.php" class="text-muted"> <i class="fas fa-search"></i> </a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <img src="dist/img/default-150x150.png" alt="Product 1" onerror="this.src='../dist/svg/404-v2.svg';" class="img-thumbnail img-circle img-size-32 mr-2">
-                                  FIERRO CORRUGADO 5/8" ACEROS AREQUIPA
-                                  <span class="badge bg-danger">NEW</span>
-                                </td>
-                                <td>S/ 199.00</td>
-                                <td>
-                                  <small class="text-success mr-1"> <i class="fas fa-arrow-up"></i> 63%  </small>
-                                  87 Sold
-                                </td>
-                                <td>
-                                  <a href="resumen_insumos.php" class="text-muted"> <i class="fas fa-search"></i> </a>
-                                </td>
-                              </tr>
+                              <tbody id="tbla_productos_mas_vendidos">
+                                <!-- aqui van los productos -->
                               </tbody>
                             </table>
                           </div>
@@ -393,7 +337,7 @@
                         <!-- /.card -->
                       </div>                     
 
-                      <div class="col-lg-6">
+                      <div class="col-lg-6 hidden">
                         <div class="card">
                           <div class="card-header border-0">
                             <h3 class="card-title">Resumen</h3>
