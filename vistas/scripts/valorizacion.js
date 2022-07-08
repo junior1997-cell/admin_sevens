@@ -1,4 +1,5 @@
 var tabla_principal;
+var tabla_principal_resumen_q_s;
 var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/valorizacion/documento/` : `${window.location.origin}/dist/docs/valorizacion/documento/` ;
 
 //Función que se ejecuta al inicio
@@ -11,16 +12,20 @@ function init() {
   $("#lValorizacion").addClass("active bg-primary");
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+  $("#idproyecto_q_s").val(localStorage.getItem('nube_idproyecto'));
+  
 
-  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+  //listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+  l_tbla_listar_resumen_q_s(localStorage.getItem('nube_idproyecto'))
 
   ver_quincenas(localStorage.getItem('nube_idproyecto'));  
 
-  $("#guardar_registro").on("click", function (e) {  $("#submit-form-trabajador").submit(); });
+  $("#guardar_registro").on("click", function (e) {  $("#submit-form-valorizacion").submit(); });
+  $("#guardar_registro_resumen_valorizacion").on("click", function (e) {  $("#submit-form-resumen-valorizacion").submit(); console.log('kkkk'); });
 
   //Initialize Select2 Elements
   $("#numero_q_s_resumen").select2({ theme: "bootstrap4", placeholder: "Selecione Valorizacion", allowClear: true, });
-  $("#numero_q_s_resumen").val("null").trigger("change");
+  
   // Formato para telefono
   $("[data-mask]").inputmask();  
 
@@ -92,7 +97,7 @@ function ver_quincenas(nube_idproyecto) {
           let fecha_ii = format_a_m_d(fecha_inicio); let fecha_ff = format_a_m_d(fecha);
           
           $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
-          $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
+          $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
           // if (estado ==1) {
           //   $("#numero_q_s_resumen").append(`<option>Seleccionar Valorización</option>`);
           //   estado = 0;
@@ -126,7 +131,7 @@ function ver_quincenas(nube_idproyecto) {
             // console.log(fecha_f + ' - '+e.data.fecha_fin);
 
             $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
-            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
+            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
             // if (estado ==1) {
             //   $("#numero_q_s_resumen").append(`<option>Seleccionar Valorización</option>`);
             //   estado = 0;
@@ -148,7 +153,7 @@ function ver_quincenas(nube_idproyecto) {
             $(".h1-titulo").html("Valorización - Al finalizar");
 
             $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
-            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
+            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
             // if (estado ==1) {
             //   $("#numero_q_s_resumen").append(`<option>Seleccionar Valorización</option>`);
             //   estado = 0;
@@ -253,37 +258,37 @@ function l_m(){
 }
 
 //Función Listar - tabla principal
-function listar_tbla_principal(nube_idproyecto) {
+// function listar_tbla_principal(nube_idproyecto) {
 
-  tabla_principal = $('#tabla-principal').dataTable({
-    responsive: true,
-    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200, ], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    aProcessing: true,//Activamos el procesamiento del datatables
-    aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    ajax:{
-      url: `../ajax/valorizacion.php?op=listar_tbla_principal&nube_idproyecto=${nube_idproyecto}`,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	ver_errores(e);
-      }
-    },
-    createdRow: function (row, data, ixdex) {
-      // columna: sueldo mensual
-      if (data[0] != '') { $("td", row).eq(0).addClass('text-nowrap'); }           
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 10,//Paginación
-    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();  
-}
+//   tabla_principal = $('#tabla-principal').dataTable({
+//     responsive: true,
+//     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200, ], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+//     aProcessing: true,//Activamos el procesamiento del datatables
+//     aServerSide: true,//Paginación y filtrado realizados por el servidor
+//     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+//     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+//     ajax:{
+//       url: `../ajax/valorizacion.php?op=listar_tbla_principal&nube_idproyecto=${nube_idproyecto}`,
+//       type : "get",
+//       dataType : "json",						
+//       error: function(e){
+//         console.log(e.responseText);	ver_errores(e);
+//       }
+//     },
+//     createdRow: function (row, data, ixdex) {
+//       // columna: sueldo mensual
+//       if (data[0] != '') { $("td", row).eq(0).addClass('text-nowrap'); }           
+//     },
+//     language: {
+//       lengthMenu: "Mostrar: _MENU_ registros",
+//       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+//       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+//     },
+//     bDestroy: true,
+//     iDisplayLength: 10,//Paginación
+//     order: [[ 0, "asc" ]]//Ordenar (columna,orden)
+//   }).DataTable();  
+// }
 
 function modal_comprobante(doc_valorizacion, indice, nombre, numero_q_s,) {
   $(".nombre_documento").html("");
@@ -381,6 +386,177 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
 }
 
 
+// ::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   A G R E G A R   R E S U M E N   Q  S ::::::::::::::::::::::::::::::::
+  function limpiar_resumen_q_s() {
+
+    $("#numero_q_s_resumen_oculto").val("");
+    $("#numero_q_s_resumen").val("").trigger('change');
+    $("#fecha_inicial").val("");
+    $("#fecha_final").val("");
+  
+  }
+
+  function formato_miles_input (name_id) {  
+    // input con comas de miles
+    input  ="#"+name_id;
+    $(input).on({
+      focus: function (event) {
+        $(event.target).select();
+      },
+      keyup: function (event) {
+        $(event.target).val(function (index, value) {
+          return value.replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, "$1.$2").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
+      },
+    });
+  }
+
+  //Función para guardar o editar
+  function guardaryeditar_resumen_q_s(e) {
+    // e.preventDefault(); //No se activará la acción predeterminada del evento
+    var formData = new FormData($("#form-resumen-valorizacion")[0]);
+  
+    $.ajax({
+      url: "../ajax/valorizacion.php?op=guardaryeditar_resumen_q_s",
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function (e) {   
+        try {
+          e = JSON.parse(e);
+          if (e.status == true) {	
+  
+            Swal.fire("Correcto!", "Resumen guardado correctamente", "success");	
+            limpiar_resumen_q_s();
+            tabla_principal_resumen_q_s.ajax.reload(null, false);
+            l_tbla_listar_resumen_q_s(localStorage.getItem('nube_idproyecto'));
+            $("#modal-agregar-resumen_valorizacion").modal("hide");
+          }else{
+            ver_errores(e);
+          }
+        } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+        $("#guardar_registro_resumen_valorizacion").html('Guardar Cambios').removeClass('disabled');
+      },
+      xhr: function () {
+        var xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function (evt) {
+          if (evt.lengthComputable) {
+            var percentComplete = (evt.loaded / evt.total)*100;
+            /*console.log(percentComplete + '%');*/
+            $("#barra_progress").css({"width": percentComplete+'%'});
+            $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+          }
+        }, false);
+        return xhr;
+      },
+      beforeSend: function () {
+        $("#guardar_registro_resumen_valorizacion").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+        $("#barra_progress").css({ width: "0%",  });
+        $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
+      },
+      complete: function () {
+        $("#barra_progress").css({ width: "0%", });
+        $("#barra_progress").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+      },
+      error: function (jqXhr) { ver_errores(jqXhr); },
+    });
+  }
+
+  //Función Listar - tabla principal
+  function l_tbla_listar_resumen_q_s(nube_idproyecto) {
+
+    tabla_principal_resumen_q_s = $('#tabla-principal').dataTable({
+      responsive: true,
+      lengthMenu: [[-1, 5, 10, 25, 75, 100, 200, ], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+      aProcessing: true,//Activamos el procesamiento del datatables
+      aServerSide: true,//Paginación y filtrado realizados por el servidor
+      dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+      ajax:{
+        url: `../ajax/valorizacion.php?op=listar_resumen_q_s&idproyecto_q_s=${nube_idproyecto}`,
+        type : "get",
+        dataType : "json",						
+        error: function(e){
+          console.log(e.responseText);	ver_errores(e);
+        }
+      },
+      createdRow: function (row, data, ixdex) {
+        // columna: sueldo mensual
+        if (data[0] != '') { $("td", row).eq(0).addClass('text-nowrap'); }           
+        if (data[4] != '') { $("td", row).eq(4).addClass('text-right'); }           
+        if (data[5] != '') { $("td", row).eq(5).addClass('text-right'); }           
+        if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }           
+      },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      },
+      bDestroy: true,
+      iDisplayLength: 10,//Paginación
+      order: [[ 0, "asc" ]]//Ordenar (columna,orden)
+    }).DataTable(); 
+    
+        // suma totales x proyecto
+    $.post("../ajax/valorizacion.php?op=total_montos_resumen_q_s", { 'idproyecto_q_s': nube_idproyecto }, function (e, status) {
+
+      e = JSON.parse(e); console.log(e); 
+      if (e.status == true) {
+        $('.suma_total_monto_programado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_programado)}</b>`);
+        $('.suma_total_monto_valorizado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_valorizado)}</b>`);
+        $('.suma_total_monto_gastado').html(`<sup>S/</sup> <b><i class="fas fa-spinner fa-pulse fa-sm"></i></b>`); 
+      } else {
+        ver_errores(e);
+      }    
+    }).fail( function(e) { ver_errores(e); } );
+    
+  }
+
+  function mostrar_resumen_q_s(idresumen_q_s_valorizacion,idproyecto,numero_q_s,fecha_inicio,fecha_fin,monto_programado ,monto_valorizado,monto_gastado ) {
+
+    limpiar_resumen_q_s();
+
+    $("#cargando-3-fomulario").hide();
+    $("#cargando-4-fomulario").show();
+
+    $("#modal-agregar-resumen_valorizacion").modal("show");
+  
+   // $("#idproyecto").val(); 
+
+    $("#numero_q_s_resumen").val("").trigger('change');
+    $("#idresumen_q_s_valorizacion").val(idresumen_q_s_valorizacion);
+    $("#idproyecto_q_s").val(idproyecto);
+    $("#numero_q_s_resumen_oculto").val(numero_q_s);
+    $("#numero_q_s_resumen").val(`${numero_q_s} ${fecha_inicio} ${fecha_fin}`).trigger("change");
+    $("#monto_programado").val(monto_programado);
+    $("#monto_valorizado").val(monto_valorizado);
+    $("#monto_gastado").val(monto_gastado);
+
+    $("#cargando-3-fomulario").show();
+    $("#cargando-4-fomulario").hide();
+    
+  
+   }
+
+  function eliminarr_resumen_q_s(idresumen_q_s_valorizacion, numero_q_s, fecha_inicio, fecha_fin ) {
+    crud_eliminar_papelera(
+      `../ajax/valorizacion.php?op=desactivar_resumen_q_s`,
+      `../ajax/valorizacion.php?op=eliminar_resumen_q_s`, 
+      idresumen_q_s_valorizacion, 
+      "!Elija una opción¡", 
+      `<b class="text-danger"><del>Valorización N°-${numero_q_s} : ${fecha_inicio} al ${fecha_fin} </del> </b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+      function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+      function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+      function(){ l_tbla_listar_resumen_q_s(localStorage.getItem('nube_idproyecto')); },
+      false, 
+      false, 
+      false,
+      false
+    );
+  }
+  
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -420,6 +596,53 @@ $(function () {
     },
 
   });
+
+  $("#numero_q_s_resumen").on("change", function () { $(this).trigger("blur"); });
+
+  $("#form-resumen-valorizacion").validate({
+
+    rules: {
+      numero_q_s_resumen: { required: true },
+      fecha_inicial: { required: true },
+      fecha_final: { required: true },
+      monto_programado: {  minlength: 1, maxlength: 20 },
+      monto_valorizado: {  minlength: 1, maxlength: 20 },
+      //monto_gastado: { required: true, min:0 },
+    },
+
+    messages: {
+      numero_q_s_resumen: {required: "Por favor selecione un tipo de documento",},       
+      fecha_inicial: {required: "Campo requerido",},       
+      fecha_final: {required: "Campo requerido",},       
+      monto_programado: { minlength: "1 dígitos como minimo.", maxlength: "20 dígitos como máximo."},       
+      monto_valorizado: {minlength: "1 dígitos como minimo.", maxlength: "20 dígitos como máximo."},       
+      //monto_gastado: {required: "Campo requerido",},       
+    },
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardaryeditar_resumen_q_s(e);
+    },
+
+  });
+
+  $("#numero_q_s_resumen").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
@@ -1344,22 +1567,20 @@ function cantDiasEnUnMes(mes, año) {
 function despintar_btn_select() {  
   if (localStorage.getItem('boton_id')) { let id = localStorage.getItem('boton_id'); $("#boton-" + id).removeClass('click-boton'); }
 }
-
 // ::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   A G R E G A R   R E S U M E N   Q  S ::::::::::::::::::::::::::::::::
-function limpiar_resumen_q_s() {
-
- $("#numero_q_s_resumen_oculto").val("");
- $("#numero_q_s_resumen").val("");
- $("#fecha_inicial").val("");
- $("#fecha_final").val("");
-
-}
 
 function recoger_fecha_q_s() {
-  var numero_f1_f2 = $("#numero_q_s_resumen").select2("val").split(" ");
-  $("#numero_q_s_resumen_oculto").val(numero_f1_f2[0]);
-  $("#fecha_inicial").val(numero_f1_f2[1]);
-  $("#fecha_final").val(numero_f1_f2[2]);
-  console.log(numero_f1_f2);
 
+  var numero_f1_f2 = $("#numero_q_s_resumen").select2("val");
+
+  if (numero_f1_f2 != null && numero_f1_f2 != '') {
+
+    numero_f1_f2 = numero_f1_f2.split(" ");
+    $("#numero_q_s_resumen_oculto").val(numero_f1_f2[0]);
+    $("#fecha_inicial").val(numero_f1_f2[1]);
+    $("#fecha_final").val(numero_f1_f2[2]);
+    console.log(numero_f1_f2);
+
+  }  
+ 
 }

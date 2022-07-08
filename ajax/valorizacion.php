@@ -35,6 +35,19 @@
       $doc_old_7		  = isset($_POST["doc_old_7"])? limpiarCadena($_POST["doc_old_7"]):"";
       $doc7		        = isset($_POST["doc7"])? limpiarCadena($_POST["doc7"]):"";
 
+      //--------------------------R E S U M E N   Q S ---------------------------------
+      
+      $idresumen_q_s_valorizacion	= isset($_POST["idresumen_q_s_valorizacion"])? limpiarCadena($_POST["idresumen_q_s_valorizacion"]):"";
+      $numero_q_s_resumen_oculto	= isset($_POST["numero_q_s_resumen_oculto"])? limpiarCadena($_POST["numero_q_s_resumen_oculto"]):"";
+      $idproyecto_q_s		          = isset($_POST["idproyecto_q_s"])? limpiarCadena($_POST["idproyecto_q_s"]):"";
+      $fecha_inicial		          = isset($_POST["fecha_inicial"])? limpiarCadena($_POST["fecha_inicial"]):"";
+      $fecha_final		            = isset($_POST["fecha_final"])? limpiarCadena($_POST["fecha_final"]):"";
+      $monto_programado		        = isset($_POST["monto_programado"])? limpiarCadena($_POST["monto_programado"]):"";
+      $monto_valorizado		        = isset($_POST["monto_valorizado"])? limpiarCadena($_POST["monto_valorizado"]):"";
+      $monto_gastado		          = isset($_POST["monto_gastado"])? limpiarCadena($_POST["monto_gastado"]):"";
+
+     // $idresumen_q_s_valorizacion, $numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,$monto_programado,$monto_valorizado,$monto_gastado
+
       switch ($_GET["op"]) {
 
         case 'guardaryeditar':
@@ -277,7 +290,92 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
          
-        break;        
+        break; 
+        
+        //--------------------------R E S U M E N   Q S ---------------------------------
+        case 'guardaryeditar_resumen_q_s':
+
+            if (empty($idresumen_q_s_valorizacion)){
+              // Registramos docs en valorización
+              $rspta=$valorizacion->insertar_valorizacion_resumen_q_s($numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);
+              
+              echo json_encode($rspta, true) ;
+              
+            }else {
+  
+              // editamos un trabajador existente
+              $rspta=$valorizacion->editar_valorizacion_resumen_q_s($idresumen_q_s_valorizacion, $numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);
+              
+              echo json_encode($rspta, true) ;              
+            }                 
+
+        break; 
+
+        case 'listar_resumen_q_s':
+
+          $rspta=$valorizacion->listar_resumen_q_s($_GET['idproyecto_q_s']);
+          //echo json_encode($rspta);
+          $data= Array();
+          
+          $cont=1;    
+          $_eliminar="";
+          $_editar="";
+
+          if ($rspta['status'] == true) {
+
+            while ($reg = $rspta['data']->fetch_object()) {
+
+              $_eliminar='\'' .$reg->idresumen_q_s_valorizacion .'\', \'' . $reg->numero_q_s .'\', \'' . $reg->fecha_inicio .'\', \'' . $reg->fecha_fin .'\'';
+              $_editar='\'' .$reg->idresumen_q_s_valorizacion .'\', \'' . $reg->idproyecto .'\', \'' . $reg->numero_q_s .'\', \'' . $reg->fecha_inicio .'\', \'' . $reg->fecha_fin .'\', \'' . $reg->monto_programado .'\', \'' . $reg->monto_valorizado .'\',\'' . $reg->monto_gastado .'\'';
+
+              $data[]=array(
+                "0"=> $cont++,
+                "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_resumen_q_s('.$_editar.')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-danger btn-sm" onclick="eliminarr_resumen_q_s('.$_eliminar.')" data-toggle="tooltip" data-original-title="Eliminar"><i class="fas fa-skull-crossbones"></i></button>',
+                "2"=>'<span class="text-bold">Valorización Nº '. $reg->numero_q_s.'</span>', 
+                "3"=>'<span class="text-primary text-bold">'.date("d/m/Y", strtotime($reg->fecha_inicio)) .' - ' .  date("d/m/Y", strtotime($reg->fecha_fin))  .'</span>', 
+                "4" => 'S/. '.number_format($reg->monto_programado, 2, ".", ","), 
+                "5" => 'S/. '.number_format($reg->monto_valorizado, 2, ".", ","), 
+                "6" => number_format($reg->monto_gastado, 2, ".", ",")  
+              );
+
+            }
+
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data
+            );
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+         
+        break;
+        
+        case 'desactivar_resumen_q_s':
+
+          $rspta=$valorizacion->desactivar_resumen_q_s($_GET['id_tabla']);
+          echo json_encode($rspta, true) ;
+
+        break;
+
+        case 'eliminar_resumen_q_s':
+
+          $rspta=$valorizacion->eliminar_resumen_q_s($_GET['id_tabla']);
+          echo json_encode($rspta, true) ;
+	
+        break;
+            
+
+        case 'total_montos_resumen_q_s':
+
+          $rspta=$valorizacion->list_total_montos_resumen_q_s($_POST['idproyecto_q_s']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true) ;
+
+        break;
       }
 
       //Fin de las validaciones de acceso
@@ -288,5 +386,15 @@
   }
 
   ob_end_flush();
+
+  function quitar_formato_miles($number) {
+
+    $sin_format = 0;
+
+    if ( !empty($number) ) { $sin_format = floatval(str_replace(",", "", $number)); }
+    
+    return $sin_format;
+  }
+
 
 ?>

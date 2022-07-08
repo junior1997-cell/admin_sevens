@@ -219,6 +219,57 @@ class Valorizacion
 
     return ejecutarConsulta($sql);
   }
+
+  //--------------------------------R ES U E M E N _Q_S --------------------------------
+
+  public function insertar_valorizacion_resumen_q_s($numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,$monto_programado,$monto_valorizado,$monto_gastado)
+  {
+    $sql = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, monto_programado, monto_valorizado, monto_gastado) 
+                        VALUES ('$idproyecto_q_s','$numero_q_s_resumen_oculto','$fecha_inicial','$fecha_final','$monto_programado','$monto_valorizado','$monto_gastado')";
+    return ejecutarConsulta($sql);                   
+
+  }
+
+  public function editar_valorizacion_resumen_q_s($idresumen_q_s_valorizacion, $numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,$monto_programado,$monto_valorizado,$monto_gastado)
+  {
+    $sql = "UPDATE resumen_q_s_valorizacion SET 
+            idproyecto='$idproyecto_q_s',
+            numero_q_s='$numero_q_s_resumen_oculto',
+            fecha_inicio='$fecha_inicial',
+            fecha_fin='$fecha_final',
+            monto_programado='$monto_programado',
+            monto_valorizado='$monto_valorizado',
+            monto_gastado='$monto_gastado' 
+            WHERE idresumen_q_s_valorizacion='$idresumen_q_s_valorizacion'";
+    return ejecutarConsulta($sql); 
+  }
+
+  public function listar_resumen_q_s($idproyecto_q_s)
+  {
+    $sql = "SELECT * FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto_q_s' AND estado=1 AND estado_delete=1;";
+    return ejecutarConsulta($sql); 
+  }
+
+  public function list_total_montos_resumen_q_s($idproyecto_q_s)
+  {
+    $sql = "SELECT SUM(monto_programado) as m_programado,  SUM(monto_valorizado) as m_valorizado FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto_q_s' AND estado=1 AND estado_delete=1;";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  //Implementamos un método para desactivar
+  public function desactivar_resumen_q_s($idtabla)
+  {
+    $sql = "UPDATE resumen_q_s_valorizacion SET estado='0' WHERE idresumen_q_s_valorizacion ='$idtabla'";
+    return ejecutarConsulta($sql);
+  }
+
+  //Implementamos un método para elimnar
+  public function eliminar_resumen_q_s($idtabla)
+  {
+    $sql = "UPDATE resumen_q_s_valorizacion SET estado_delete='0' WHERE idresumen_q_s_valorizacion ='$idtabla'";
+    return ejecutarConsulta($sql);
+  }
+
 }
 
 ?>
