@@ -802,7 +802,7 @@ function listar_botones_q_s(nube_idproyecto) {
 
                 
                 if (validarFechaEnRango(format_a_m_d( fecha_i), format_a_m_d(fecha_f), moment().format('YYYY-MM-DD')) == true) {
-                  $('#btn_q_s_actual').html(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-success btn-sm text-center " onclick="trabajador_deuda_q_s('${fecha_inicio}', '${fecha}', ${i}, 14); table_show_hide(4); pintar_boton_selecionado_succes(${i});"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`);                
+                  $('#btn_q_s_actual').html(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-success btn-sm text-center " onclick="trabajador_deuda_q_s('${fecha_i}', '${fecha_f}', ${i}, 14); table_show_hide(4); pintar_boton_selecionado_succes(${i});"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_i} // ${fecha_f}</button>`);                
                 } else{
                   $('#btn_quincenas_semanas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="trabajador_deuda_q_s('${fecha_i}', '${fecha_f}', ${i}, 7); table_show_hide(4); pintar_boton_selecionado(${i});"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`);
                 }

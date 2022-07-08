@@ -56,7 +56,7 @@
                         <div class="card-header">
                           <h3 class="card-title">
                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-trabajador" onclick="limpiar_form_trabajador();"><i class="fas fa-user-plus"></i> Agregar</button>
-                            <button type="button" class="btn bg-gradient-success" onclick="recuperar_banco();" id="recuperar_banco"><i class="fas fa-user-plus"></i> Recuperar</button>
+                            
                             
                             Admnistra de manera eficiente a los trabajdores
                           </h3>
