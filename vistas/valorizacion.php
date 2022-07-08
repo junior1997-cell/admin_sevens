@@ -354,7 +354,7 @@
                                 </div>
                               </div>
                             </div>
-                            <!-- tab info -->
+                            <!-- tab info resumen valorizaciones -->
                             <div class="col-lg-12 col-xl-12" id="tab-info">
                                 <!-- tabla principal -->
                                 <div class=" pb-3">
@@ -363,10 +363,11 @@
                                       <tr> 
                                         <th>#</th> 
                                         <th>Acciones</th>
-                                        <th>Semana</th>
-                                        <th>Nombre documento</th>
+                                        <th>N° Valorización</th>
                                         <th>Fecha</th>
-                                        <th>Documento</th>         
+                                        <th>Monto Programado</th>
+                                        <th>Monto valorizado</th>         
+                                        <th>Monto gastado</th>         
                                       </tr>
                                     </thead>
                                     <tbody>                         
@@ -374,12 +375,13 @@
                                     </tbody>
                                     <tfoot>
                                       <tr> 
-                                        <th>#</th> 
+                                      <th>#</th> 
                                         <th>Acciones</th>
-                                        <th>Semana</th>
-                                        <th>Nombre documento</th>
+                                        <th>N° Valorización</th>
                                         <th>Fecha</th>
-                                        <th>Documento</th>                              
+                                        <th class="text-nowrap text-right suma_total_monto_programado h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                        <th class="text-nowrap text-right suma_total_monto_valorizado h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>         
+                                        <th class="text-nowrap text-right suma_total_monto_gastado h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>                              
                                       </tr>
                                     </tfoot>
                                   </table>
@@ -466,7 +468,7 @@
                             </div>
                           </div>
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-trabajador">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-valorizacion">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
@@ -501,18 +503,19 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title text-bold ">valorización</h4>
+                        <h4 class="modal-title text-bold _edith">valorización</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">                          
 
-                        <form id="form-materiales" name="form-resumen-valorizacion" method="POST">
+                        <form id="form-resumen-valorizacion" name="form-resumen-valorizacion" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
-                              <!-- id proyecto -->
-                              <input type="hidden" name="idproyecto" id="idproyecto" />
+                              <!-- id proyecto --> 
+                              <input type="hidden" name="idresumen_q_s_valorizacion" id="idresumen_q_s_valorizacion" />
+                              <input type="hidden" name="idproyecto_q_s" id="idproyecto_q_s" />
                               <!-- id proveedores -->
                               <input type="hidden" name="numero_q_s_resumen_oculto" id="numero_q_s_resumen_oculto" />
                               
@@ -545,7 +548,12 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="monto_programado">Monto programado <sup class="text-danger">(*)</sup></label>
-                                  <input type="number" name="monto_programado" class="form-control" id="monto_programado" placeholder="Monto programado" />
+                                  <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">S/. </span>
+                                    </div>
+                                    <input type="text"  name="monto_programado" id="monto_programado" class="form-control" onkeyup="formato_miles_input('monto_programado');"  placeholder="Monto programado" >
+                                  </div>
                                 </div>
                               </div>
 
@@ -553,15 +561,25 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="monto_valorizado">Monto valorizado <sup class="text-danger">(*)</sup></label>
-                                  <input type="number" name="monto_valorizado" class="form-control" id="monto_valorizado" placeholder="Monto valorizado" />
+                                  <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">S/. </span>
+                                    </div>
+                                    <input type="text"  name="monto_valorizado" id="monto_valorizado" class="form-control"  onkeyup="formato_miles_input('monto_valorizado');"  placeholder="Monto valorizado" >
+                                  </div>
                                 </div>
                               </div>
-                             
+
                               <!-- monto_gastado -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="monto_gastado">Monto gastado <sup class="text-danger">(*)</sup></label>
-                                  <input type="number" name="monto_gastado" class="form-control" id="monto_gastado" placeholder="Monto gastado" readonly />
+                                  <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">S/. </span>
+                                    </div>
+                                    <input type="text"  name="monto_gastado" id="monto_gastado" class="form-control"  placeholder="Monto gastado" readonly >
+                                  </div>
                                 </div>
                               </div>
                               
@@ -590,7 +608,7 @@
                           
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_material();">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_resumen_q_s();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_resumen_valorizacion">Guardar Cambios</button>
                       </div>
                     </div>
