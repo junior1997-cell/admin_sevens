@@ -77,7 +77,7 @@
 
                       <div class="col-6 col-sm-6 col-md-3 col-lg-3  col-xl-3">
                         <div class="info-box mb-3">
-                          <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-layer-group"></i></span>
+                          <span class="info-box-icon bg-dark elevation-1"><i class="fas fa-layer-group"></i></span>
                           <div class="info-box-content">
                             <span class="info-box-text">Monto programado</span>
                             <span class="info-box-number monto_programado_box"> <i class="fas fa-spinner fa-pulse fa-lg"></i></span>
@@ -93,7 +93,7 @@
 
                       <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                         <div class="info-box mb-3">
-                          <span class="info-box-icon bg-success elevation-1"><i class="fas fa-hand-holding-usd"></i></span>
+                          <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hand-holding-usd"></i></span>
                           <div class="info-box-content">
                             <span class="info-box-text">Monto valorizado</span>
                             <span class="info-box-number monto_valorizado_box"> <i class="fas fa-spinner fa-pulse fa-lg"></i></span>
@@ -106,7 +106,7 @@
 
                       <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
                         <div class="info-box mb-3">
-                          <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-dollar-sign"></i></span>
+                          <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-dollar-sign"></i></span>
                           <div class="info-box-content">
                             <span class="info-box-text">Monto gastado</span>
                             <span class="info-box-number monto_gastado_box"> <i class="fas fa-spinner fa-pulse fa-lg"></i></span>
@@ -151,13 +151,9 @@
                             </div>
 
                             <div class="d-flex flex-row justify-content-end">
-                              <span class="mr-2">
-                                <i class="fas fa-square text-primary"></i>Compra
-                              </span>
-
-                              <span>
-                                <i class="fas fa-square text-gray"></i> Pago
-                              </span>
+                              <span class="mr-2"><i class="fas fa-square text-dark"></i> Programado</span>
+                              <span>&nbsp;<i class="fas fa-square text-warning"></i> Valorizado</span>
+                              <span>&nbsp;<i class="fas fa-square text-danger"></i> Gastado</span>
                             </div>
                           </div>
                         </div>
@@ -194,13 +190,7 @@
                                 </div>
 
                                 <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2">
-                                    <i class="fas fa-square text-primary"></i> Compra
-                                  </span>
-
-                                  <span>
-                                    <i class="fas fa-square text-gray"></i> Pago
-                                  </span>
+                                  <span class="mr-2"><i class="fas fa-square text-success"></i> Utildiad</span>
                                 </div>
                               </div>
                               <div class="col-md-4">

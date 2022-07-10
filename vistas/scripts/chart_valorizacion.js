@@ -183,20 +183,20 @@ function chart_linea_barra() {
           datasets: [
             {
               type: 'line', data: e.data.monto_programado, 
-              backgroundColor: 'transparent', borderColor: '#007bff',
-              pointBorderColor: '#007bff', pointBackgroundColor: '#007bff',
+              backgroundColor: 'transparent', borderColor: '#000000',
+              pointBorderColor: '#000000', pointBackgroundColor: '#000000',
               fill: false, label: 'Programado',
-              // pointHoverBackgroundColor: '#007bff',
-              // pointHoverBorderColor    : '#007bff'
+              // pointHoverBackgroundColor: '#000000',
+              // pointHoverBorderColor    : '#000000'
             },
             {
               type: 'line',
               data: e.data.monto_valorizado,
-              backgroundColor: 'tansparent', borderColor: '#ced4da',
-              pointBorderColor: '#ced4da', pointBackgroundColor: '#ced4da',
+              backgroundColor: 'tansparent', borderColor: '#ffc107',
+              pointBorderColor: '#ffc107', pointBackgroundColor: '#ffc107',
               fill: false, label: 'Valorizado',
-              // pointHoverBackgroundColor: '#ced4da',
-              // pointHoverBorderColor    : '#ced4da'
+              // pointHoverBackgroundColor: '#ffc107',
+              // pointHoverBorderColor    : '#ffc107'
             },
             {
               type: 'line',
@@ -241,7 +241,7 @@ function chart_linea_barra() {
               type: 'line', data: e.data.monto_utilidad, 
               backgroundColor: 'transparent', borderColor: '#008000',
               pointBorderColor: '#008000', pointBackgroundColor: '#008000',
-              fill: false, label: 'Programado',
+              fill: false, label: 'Utilidad',
               // pointHoverBackgroundColor: '#008000',
               // pointHoverBorderColor    : '#008000'
             }
