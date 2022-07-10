@@ -323,20 +323,20 @@
 
           if ($rspta['status'] == true) {
 
-            while ($reg = $rspta['data']->fetch_object()) {
+            foreach ( $rspta['data'] as $key => $value) { 
 
-              $_eliminar='\'' .$reg->idresumen_q_s_valorizacion .'\', \'' . $reg->numero_q_s .'\', \'' . $reg->fecha_inicio .'\', \'' . $reg->fecha_fin .'\'';
-              $_editar='\'' .$reg->idresumen_q_s_valorizacion .'\', \'' . $reg->idproyecto .'\', \'' . $reg->numero_q_s .'\', \'' . $reg->fecha_inicio .'\', \'' . $reg->fecha_fin .'\', \'' . $reg->monto_programado .'\', \'' . $reg->monto_valorizado .'\',\'' . $reg->monto_gastado .'\'';
+              $_eliminar='\'' .$value['idresumen_q_s_valorizacion'] .'\', \'' . $value['numero_q_s'] .'\', \'' . $value['fecha_inicio'] .'\', \'' . $value['fecha_fin'] .'\'';
+              $_editar='\'' .$value['idresumen_q_s_valorizacion'] .'\', \'' . $value['idproyecto'] .'\', \'' . $value['numero_q_s'] .'\', \'' . $value['fecha_inicio'] .'\', \'' . $value['fecha_fin'] .'\', \'' . $value['monto_programado'] .'\', \'' . $value['monto_valorizado'] .'\',\'' . $value['monto_gastado'] .'\'';
 
               $data[]=array(
                 "0"=> $cont++,
                 "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_resumen_q_s('.$_editar.')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-danger btn-sm" onclick="eliminarr_resumen_q_s('.$_eliminar.')" data-toggle="tooltip" data-original-title="Eliminar"><i class="fas fa-skull-crossbones"></i></button>',
-                "2"=>'<span class="text-bold">Valorización Nº '. $reg->numero_q_s.'</span>', 
-                "3"=>'<span class="text-primary text-bold">'.date("d/m/Y", strtotime($reg->fecha_inicio)) .' - ' .  date("d/m/Y", strtotime($reg->fecha_fin))  .'</span>', 
-                "4" => 'S/. '.number_format($reg->monto_programado, 2, ".", ","), 
-                "5" => 'S/. '.number_format($reg->monto_valorizado, 2, ".", ","), 
-                "6" => number_format($reg->monto_gastado, 2, ".", ",")  
+                "2"=>'<span class="text-bold">Valorización Nº '. $value['numero_q_s'].'</span>', 
+                "3"=>'<span class="text-primary text-bold">'.date("d/m/Y", strtotime($value['fecha_inicio'])) .' - ' .  date("d/m/Y", strtotime($value['fecha_fin']))  .'</span>', 
+                "4" => 'S/. '.number_format($value['monto_programado'], 2, ".", ","), 
+                "5" => 'S/. '.number_format($value['monto_valorizado'], 2, ".", ","), 
+                "6" => number_format($value['monto_gastado'], 2, ".", ",")  
               );
 
             }

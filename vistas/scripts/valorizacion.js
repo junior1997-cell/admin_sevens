@@ -73,7 +73,7 @@ function ver_quincenas(nube_idproyecto) {
     $('#lista_quincenas').html('');
 
     // VALIDAMOS LAS FECHAS DE QUINCENA
-    if (e.data) {     
+    if (e.data) { 
         
       if (e.data.fecha_valorizacion == "quincenal") {
 
@@ -391,6 +391,8 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
 
     $("#numero_q_s_resumen_oculto").val("");
     $("#numero_q_s_resumen").val("").trigger('change');
+    $("#monto_programado").val("");
+    $("#monto_valorizado").val("");
     $("#fecha_inicial").val("");
     $("#fecha_final").val("");
   
@@ -499,13 +501,13 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     }).DataTable(); 
     
         // suma totales x proyecto
-    $.post("../ajax/valorizacion.php?op=total_montos_resumen_q_s", { 'idproyecto_q_s': nube_idproyecto }, function (e, status) {
+    $.post("../ajax/valorizacion.php?op=total_montos_resumen_q_s", { 'idproyecto_q_s': nube_idproyecto}, function (e, status) {
 
       e = JSON.parse(e); console.log(e); 
       if (e.status == true) {
         $('.suma_total_monto_programado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_programado)}</b>`);
         $('.suma_total_monto_valorizado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_valorizado)}</b>`);
-        $('.suma_total_monto_gastado').html(`<sup>S/</sup> <b><i class="fas fa-spinner fa-pulse fa-sm"></i></b>`); 
+        $('.suma_total_monto_gastado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_gastado)}</b>`); 
       } else {
         ver_errores(e);
       }    
