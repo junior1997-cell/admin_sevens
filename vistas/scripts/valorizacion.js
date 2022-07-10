@@ -388,7 +388,7 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
 
 // ::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   A G R E G A R   R E S U M E N   Q  S ::::::::::::::::::::::::::::::::
   function limpiar_resumen_q_s() {
-
+    $("#idresumen_q_s_valorizacion").val("");
     $("#numero_q_s_resumen_oculto").val("");
     $("#numero_q_s_resumen").val("").trigger('change');
     $("#monto_programado").val("");

@@ -68,6 +68,8 @@ function chart_linea_barra(idnubeproyecto) {
   $('.progress_ft_rechazadas').css({ width: `0%`, });
   $('.progress_ft_eliminadas').css({ width: `0%`, });
   $('.progress_ft_rechazadas_eliminadas').css({ width: `0%`, });
+  $('.progress_monto_pagado').css({ width: `0%`, });
+  $('.progress_monto_no_pagado').css({ width: `0%`, });
 
   var ticksStyle = { fontColor: '#495057', fontStyle: 'bold' };
 

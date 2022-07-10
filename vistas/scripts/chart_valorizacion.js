@@ -282,7 +282,7 @@ function valorizacion_x(valorizacion_filtro, cant_valorizacion) {
   
   if (valorizacion_filtro == null || valorizacion_filtro == '' || valorizacion_filtro == '0' || cant_valorizacion == null || cant_valorizacion == "") {
     var array_cant_val = [];
-    for (let val = 1; val <= cant_valorizacion; val++) { array_cant_val.push(val); }
+    for (let val = 1; val <= cant_valorizacion; val++) { array_cant_val.push(`Val. ${val}`); }
     return array_cant_val;
   } else {
     var array_cant_val = [];
