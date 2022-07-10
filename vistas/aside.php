@@ -240,6 +240,13 @@
               </li>
             <?php  }  ?>
 
+            <!-- graficos insumos -->
+            <li class="nav-item ">
+              <a href="chart_valorizacion.php" class="nav-link" id="lChartValorizacion">
+                <i class="nav-icon fas fa-chart-line"></i> <p>Gráficos</p>
+              </a>
+            </li> 
+
             <?php if ($_SESSION['asistencia_obrero']==1) {  ?>
               <!-- REGISTRO DE ASISTENCIA -->
               <li class="nav-item ver-otros-modulos-1">
@@ -316,29 +323,25 @@
                   <!-- Compras del proyecto -->
                   <li class="nav-item ">
                     <a href="compra_insumos.php" class="nav-link" id="lCompras">
-                      <i class="nav-icon fas fa-cart-plus"></i>
-                      <p>Compras de insumos</p>
+                      <i class="nav-icon fas fa-cart-plus"></i> <p>Compras de insumos</p>
                     </a>
                   </li>
                   <!-- Resumend de Insumos -->
                   <li class="nav-item ">
                     <a href="resumen_insumos.php" class="nav-link" id="lResumenInsumos">
-                      <i class="nav-icon fas fa-tasks"></i>
-                      <p>Resumen de insumos</p>
+                      <i class="nav-icon fas fa-tasks"></i> <p>Resumen de insumos</p>
                     </a>
                   </li> 
                   <!-- Resumend de Insumos -->
                   <li class="nav-item ">
                     <a href="resumen_activos_fijos.php" class="nav-link" id="lResumenActivosFijos">
-                      <i class=" fas fa-tasks"></i> 
-                      <p>Resumen de Activos Fijos</p>
+                      <i class=" fas fa-tasks"></i> <p>Resumen de Activos Fijos</p>
                     </a>
                   </li> 
                   <!-- graficos insumos -->
                   <li class="nav-item ">
                     <a href="chart_compra_insumo.php" class="nav-link" id="lChartCompraInsumo">
-                      <i class="nav-icon fas fa-chart-line"></i>
-                      <p>Gráficos</p>
+                      <i class="nav-icon fas fa-chart-line"></i> <p>Gráficos</p>
                     </a>
                   </li> 
                 </ul>

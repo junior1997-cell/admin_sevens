@@ -1,6 +1,7 @@
 <?php
 // validamos la repeticion de funciones
 if (!function_exists('ejecutarConsulta')) {
+
   function validar_url( $host, $ruta, $file )  {
     
     $armar_ruta = $host . $ruta . $file;
@@ -25,6 +26,45 @@ if (!function_exists('ejecutarConsulta')) {
     } else {
       return false;
     } 
+  }
+
+  function nombre_dia_mes_anio( $fecha_entrada ) {
+
+    $fecha_parse = new FechaEs($fecha_entrada);
+    $dia = $fecha_parse->getDDDD().PHP_EOL;
+    $mun_dia = $fecha_parse->getdd().PHP_EOL;
+    $mes = $fecha_parse->getMMMM().PHP_EOL;
+    $anio = $fecha_parse->getYYYY().PHP_EOL;
+    $fecha_nombre_completo = "$dia, <br> $mun_dia de <b>$mes</b>  del $anio";
+
+    return $fecha_nombre_completo;
+  }
+
+  function nombre_mes( $fecha_entrada ) {
+
+    $fecha_parse = new FechaEs($fecha_entrada);
+    
+    $mes_nombre = $fecha_parse->getMMMM().PHP_EOL;
+
+    return $mes_nombre;
+  }
+
+  function sumar_dias( $cant, $fecha )  {    
+    return date("Y-m-d",strtotime( "$cant days" , strtotime( $fecha ) ) ); 
+  }
+
+  function validar_fecha_menor_que($fecha_menor, $fecha_mayor) {
+    $fecha_1 = strtotime( $fecha_menor );
+    $fecha_2 = strtotime( $fecha_mayor );
+    if ($fecha_1 < $fecha_2) { return true; }    
+    return false;
+  }
+
+  function validar_fecha_menor_igual_que($fecha_menor, $fecha_mayor) {
+    $fecha_1 = strtotime( $fecha_menor );
+    $fecha_2 = strtotime( $fecha_mayor );
+    if ($fecha_1 <= $fecha_2) { return true; }    
+    return false;
   }
 }
   

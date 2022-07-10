@@ -64,6 +64,11 @@ function chart_linea_barra(idnubeproyecto) {
   $('.cant_ft_eliminadas').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
   $('.cant_ft_rechazadas_eliminadas').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
 
+  $('.progress_ft_aceptadas').css({ width: `0%`, });
+  $('.progress_ft_rechazadas').css({ width: `0%`, });
+  $('.progress_ft_eliminadas').css({ width: `0%`, });
+  $('.progress_ft_rechazadas_eliminadas').css({ width: `0%`, });
+
   var ticksStyle = { fontColor: '#495057', fontStyle: 'bold' };
 
   var mode = 'index'; var intersect = true;
@@ -155,15 +160,15 @@ function chart_linea_barra(idnubeproyecto) {
         data: {
           labels: mes_o_dia(year_filtro, month_filtro),
           datasets: [
-            { backgroundColor: '#007bff', borderColor: '#007bff', data: e.data.total_gasto, },
-            { backgroundColor: '#ced4da', borderColor: '#ced4da', data: e.data.total_deposito, }
+            { backgroundColor: '#007bff', borderColor: '#007bff', data: e.data.total_gasto, label: 'Compras', },
+            { backgroundColor: '#ced4da', borderColor: '#ced4da', data: e.data.total_deposito, label: 'Pago', }
           ]
         },
         options: {
           maintainAspectRatio: false,
           tooltips: {  mode: mode, intersect: intersect },
           hover: { mode: mode, intersect: intersect },
-          legend: { display: false  },
+          legend: { display: true  },
           scales: {
             yAxes: [{
               // display: false,
