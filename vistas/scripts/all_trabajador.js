@@ -312,7 +312,7 @@ function verdatos(idtrabajador){
 
     e = JSON.parse(e);  //console.log(e); 
     
-    if (e.status) {
+    if (e.status == true) {
       
     
       if (e.data.trabajador.imagen_perfil != '') {
@@ -434,10 +434,10 @@ function verdatos(idtrabajador){
               <tbody>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil} </th>
-                  <td> <b>Nombre: </b> ${e.data.trabajador.nombres}</td>
+                  <td> <b>Nombre: </b>${e.data.trabajador.nombres}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <td> <b>DNI: </b>  ${e.data.trabajador.numero_documento}</td>
+                  <td> <b>DNI: </b>${e.data.trabajador.numero_documento}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Dirección</th>

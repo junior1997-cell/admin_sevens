@@ -137,7 +137,7 @@
           $cont=1;
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
 
               $imagen = (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen) ;

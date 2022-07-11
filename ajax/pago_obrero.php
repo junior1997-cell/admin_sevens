@@ -351,63 +351,6 @@
     }
   }
 
-  function quitar_guion($numero){ return str_replace("-", "", $numero); }
-
-  function nombre_dia_mes_anio( $fecha_entrada ) {
-
-    $fecha_parse = new FechaEs($fecha_entrada);
-    $dia = $fecha_parse->getDDDD().PHP_EOL;
-    $mun_dia = $fecha_parse->getdd().PHP_EOL;
-    $mes = $fecha_parse->getMMMM().PHP_EOL;
-    $anio = $fecha_parse->getYYYY().PHP_EOL;
-    $fecha_nombre_completo = "$dia, <br> $mun_dia de <b>$mes</b>  del $anio";
-
-    return $fecha_nombre_completo;
-  }
-
-  function nombre_mes( $fecha_entrada ) {
-
-    $fecha_parse = new FechaEs($fecha_entrada);
-    
-    $mes_nombre = $fecha_parse->getMMMM().PHP_EOL;
-
-    return $mes_nombre;
-  }
-
-  // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
-  function format_a_m_d( $fecha ) {
-
-    if (!empty($fecha)) {
-
-      $fecha_expl = explode("-", $fecha);
-
-      $fecha_convert =  $fecha_expl[0]."-".$fecha_expl[1]."-".$fecha_expl[2];
-
-    }else{
-
-      $fecha_convert = "";
-    }   
-
-    return $fecha_convert;
-  }
-
-  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-  function format_d_m_a( $fecha ) {
-
-    if (!empty($fecha)) {
-
-      $fecha_expl = explode("-", $fecha);
-
-      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
-
-    }else{
-
-      $fecha_convert = "";
-    }   
-
-    return $fecha_convert;
-  }
-
 	ob_end_flush();
 
 ?>

@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Trabajadores</title>
+        <title>Trabajadores | Admin Sevens</title>
 
         <?php $title = "Trabajadores"; require 'head.php'; ?>
 
@@ -55,7 +55,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(true); estado_editar(false);"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(2); estado_editar(false);"><i class="fas fa-user-plus"></i> Agregar</button>
                             Administra de manera eficiente a los trabajdores
                           </h3>
                         </div>
@@ -199,7 +199,16 @@
                                       <label for="cantidad_dias">Cantidad de dias</label>
                                       <input type="number" name="cantidad_dias" class="form-control" id="cantidad_dias" step="any" readonly />
                                     </div>
-                                  </div>                            
+                                  </div> 
+
+                                  <!-- barprogress -->
+                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                    <div class="progress" id="barra_progress_trabajador_div">
+                                      <div id="barra_progress_trabajador" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                        0%
+                                      </div>
+                                    </div>
+                                  </div>
                                   
                                 </div>
 
@@ -213,8 +222,8 @@
                               </div>
                               <!-- /.card-body -->
                               <div class=" justify-content-between">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="show_hide_form(false);"> <i class="fas fa-arrow-left"></i> Close</button>
-                                <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="show_hide_form(1);"> <i class="fas fa-arrow-left"></i> Close</button>
+                                <button type="submit" class="btn btn-success" id="guardar_registro_trabajador">Guardar Cambios</button>
                               </div>
                             </form>
 

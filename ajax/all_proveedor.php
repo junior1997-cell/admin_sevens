@@ -133,9 +133,5 @@
     }    
   }  
 
-  function quitar_guion($numero) {
-    return str_replace("-", "", $numero);
-  }
-
   ob_end_flush();
 ?>

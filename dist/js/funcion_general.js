@@ -159,6 +159,12 @@ function validarFechaEnRango(fechaI, fechaF, fechaV){
   }
 }
 
+function diferencia_de_dias(fecha_i, fecha_f) {
+  var fecha1 = moment(fecha_i);
+  var fecha2 = moment(fecha_f); 
+  return fecha2.diff(fecha1, 'days');
+}
+
 /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
 
 // Formato de miles

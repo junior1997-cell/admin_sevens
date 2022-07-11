@@ -537,22 +537,5 @@
     return $sin_format;
   }
 
-  // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
-  function format_a_m_d( $fecha ) {
-
-    if (!empty($fecha)) {
-
-      $fecha_expl = explode("-", $fecha);
-
-      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
-
-    }else{
-
-      $fecha_convert = "";
-    }   
-
-    return $fecha_convert;
-  }
-
   ob_end_flush();
 ?>

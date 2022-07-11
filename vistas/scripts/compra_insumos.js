@@ -2317,21 +2317,11 @@ $(function () {
       titular_cuenta_pago: { minlength: 1 },
     },
     messages: {
-      forma_pago: {
-        required: "Por favor selecione una forma de pago",
-      },
-      tipo_pago: {
-        required: "Por favor selecione un tipo de pago",
-      },
-      banco_pago: {
-        required: "Por favor selecione un banco",
-      },
-      fecha_pago: {
-        required: "Por favor ingresar una fecha",
-      },
-      monto_pago: {
-        required: "Por favor ingresar el monto a pagar",
-      },
+      forma_pago: { required: "Campo requerido.", },
+      tipo_pago: { required: "Campo requerido.", },
+      banco_pago: { required: "Campo requerido.", },
+      fecha_pago: { required: "Campo requerido.", },
+      monto_pago: { required: "Campo requerido.", },
     },
 
     errorElement: "span",
@@ -2360,9 +2350,7 @@ $(function () {
     },
 
     messages: {
-      nombre: {
-        required: "Este campo es requerido",
-      },
+      nombre: {  required: "Este campo es requerido", },
     },
 
     errorElement: "span",
@@ -2409,7 +2397,6 @@ $(function () {
 
     errorPlacement: function (error, element) {
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 

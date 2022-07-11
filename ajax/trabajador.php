@@ -45,13 +45,13 @@
 
             $rspta=$trabajadorproyecto->insertar($idproyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos del usuario";
+            echo json_encode($rspta, true);
 
           }else {
             // editamos un trabajador existente
             $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto,$trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias);
             
-            echo $rspta ? "ok" : "Trabador no se pudo actualizar";
+            echo json_encode($rspta, true);
           }
 
         break;
@@ -60,7 +60,7 @@
 
           $rspta=$trabajadorproyecto->desactivar($idtrabajador_por_proyecto);
 
-          echo $rspta ? "Usuario Desactivado" : "Usuario no se puede desactivar";	
+          echo json_encode($rspta, true);	
 
         break;
 
@@ -68,7 +68,7 @@
 
           $rspta=$trabajadorproyecto->activar($idtrabajador_por_proyecto);
 
-          echo $rspta ? "Usuario activado" : "Usuario no se puede activar";
+          echo json_encode($rspta, true);
 
         break;
 
@@ -76,89 +76,71 @@
 
           $rspta=$trabajadorproyecto->mostrar($idtrabajador_por_proyecto);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
 
         break;
         
-        case 'verdatos':
+        case 'ver_datos_trabajador':
 
-          $rspta=$trabajadorproyecto->verdatos($idtrabajador_por_proyecto);
+          $rspta=$trabajadorproyecto->ver_datos_trabajador($idtrabajador_por_proyecto);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta, true);
 
         break;
 
-        case 'listar':
+        case 'tbla_principal':
           $nube_idproyecto = $_GET["nube_idproyecto"];
 
-          $rspta=$trabajadorproyecto->listar($nube_idproyecto);
+          $rspta=$trabajadorproyecto->tbla_principal($nube_idproyecto);
           //Vamos a declarar un array
           $data= Array(); $cont = 1;
+          // '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data'] as $key => $value) { 
+              $data[]=array(
+                "0"=> $cont++,
+                "1"=>($value['estado'])?'<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$value['idtrabajador_por_proyecto'].','.$value['idtipo_trabjador'].')"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-danger btn-sm mb-1" onclick="desactivar('.$value['idtrabajador_por_proyecto'].')"><i class="far fa-trash-alt  "></i></button>'.
+                  ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$value['idtrabajador_por_proyecto'].')"><i class="far fa-eye"></i></button>':
+                  '<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$value['idtrabajador_por_proyecto'].','.$value['idtipo_trabjador'].')"><i class="fa fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-primary btn-sm mb-1" onclick="activar('.$value['idtrabajador_por_proyecto'].')"><i class="fa fa-check"></i></button>'.
+                  ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$value['idtrabajador_por_proyecto'].')"><i class="far fa-eye"></i></button>',
+                "2"=>'<div class="user-block">
+                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                  <span class="username"><p class="text-primary m-b-02rem" >'. $value['trabajador'] .'</p></span>
+                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+                  </div>',
+                "3"=>'<div class="text-nowrap"><b>Fecha inicio: </b>'. ( empty($value['fecha_inicio']) ? '--' : format_d_m_a($value['fecha_inicio']) ). '<br> 
+                  <b>Fecha fin: </b>'.( empty($value['fecha_fin']) ? '--' : format_d_m_a($value['fecha_fin']) ) . '</div>',
+                "4"=>'<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'],
+                "5"=>'S/ '.number_format( $value['sueldo_mensual'], 2, '.', ','),
+                "6"=>$value['nombre_tipo'].' / '.$value['cargo'],
+                "7"=>($value['estado'])?'<span class="text-center badge badge-success">Activado</span>':
+                '<span class="text-center badge badge-danger">Desactivado</span>'
+                );
+            }
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data);
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }          
           
-          while ($reg=$rspta->fetch_object()){
-            $data[]=array(
-              "0"=> $cont++,
-              "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm mb-1" onclick="desactivar('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-trash-alt  "></i></button>'.
-                ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>':
-                '<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$reg->idtrabajador_por_proyecto.','.$reg->idtipo_trabjador.')"><i class="fa fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-primary btn-sm mb-1" onclick="activar('.$reg->idtrabajador_por_proyecto.')"><i class="fa fa-check"></i></button>'.
-                ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$reg->idtrabajador_por_proyecto.')"><i class="far fa-eye"></i></button>',
-              "2"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $reg->imagen .'" alt="User Image" onerror="'.$imagen_error.'">
-                <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombres .'</p></span>
-                <span class="description">'. $reg->tipo_documento .': '. $reg->numero_documento .' </span>
-                </div>',
-              "3"=>'<div class="text-nowrap"><b>Fecha inicio: </b>'. ( empty($reg->fecha_inicio) ? '--' : format_d_m_a($reg->fecha_inicio) ). '<br> 
-                <b>Fecha fin: </b>'.( empty($reg->fecha_fin) ? '--' : format_d_m_a($reg->fecha_fin) ) . '</div>',
-              "4"=>'<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria,
-              "5"=>'S/ '.number_format( $reg->sueldo_mensual, 2, '.', ','),
-              "6"=>$reg->nombre_tipo.' / '.$reg->cargo,
-              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':
-              '<span class="text-center badge badge-danger">Desactivado</span>'
-              );
-          }
-          $results = array(
-            "sEcho"=>1, //Información para el datatables
-            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-            "data"=>$data);
-          echo json_encode($results);
-        break;
-
-        case 'select2Trabajador': 
-
-          $rspta = $trabajadorproyecto->select2_trabajador();
-      
-          while ($reg = $rspta->fetch_object())  {
-
-            echo '<option  value=' . $reg->id . '>' . $reg->nombre .' - '. $reg->numero_documento . '</option>';
-          }
-
-        break;
+        break;        
 
         case 'm_datos_trabajador':
           $idtrabajador = $_POST["idtrabajador"];
           // $idtrabajador = '8';
-           $rspta=$trabajadorproyecto->m_datos_trabajador($idtrabajador);
-           //Codificar el resultado utilizando json
-           echo json_encode($rspta);
+          $rspta=$trabajadorproyecto->m_datos_trabajador($idtrabajador);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
  
-         break;
-
-         case 'select_cargo':
-           $id_tipo = $_GET["id_tipo"];
-           // $idtrabajador = '8';
-            $rspta=$trabajadorproyecto->select_cargo($id_tipo);
-
-            while ($reg = $rspta->fetch_object())  {
-
-              echo '<option  value=' . $reg->idcargo_trabajador  . '>' . $reg->nombre .'</option>';
-            }
-  
-         break;
+        break;       
         
       }
 
@@ -166,40 +148,6 @@
       $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
       echo json_encode($retorno);
     }
-  }
-
-  // convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
-  function format_a_m_d( $fecha ) {
-
-    if (!empty($fecha)) {
-
-      $fecha_expl = explode("-", $fecha);
-
-      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
-
-    }else{
-
-      $fecha_convert = "";
-    }   
-
-    return $fecha_convert;
-  }
-
-  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-  function format_d_m_a( $fecha ) {
-
-    if (!empty($fecha)) {
-
-      $fecha_expl = explode("-", $fecha);
-
-      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
-
-    }else{
-
-      $fecha_convert = "";
-    }   
-
-    return $fecha_convert;
   }
 
 	ob_end_flush();

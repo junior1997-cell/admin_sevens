@@ -289,7 +289,7 @@
 
         <?php  require 'script.php'; ?>         
 
-        <script type="text/javascript" src="scripts/estado_financiero.js"></script>
+        <script type="text/javascript" src="scripts/pago_valorizacion.js"></script>
          
         <script>
           $(function () {

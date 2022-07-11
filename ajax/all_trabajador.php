@@ -340,40 +340,6 @@
     }
   }
 
-  function quitar_guion($numero){ return str_replace("-", "", $numero); } 
-
-  // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
-  function format_a_m_d( $fecha ) {
-
-    if (!empty($fecha)) {
-
-      $fecha_expl = explode("-", $fecha);
-
-      $fecha_convert =  $fecha_expl[0]."-".$fecha_expl[1]."-".$fecha_expl[2];
-
-    }else{
-
-      $fecha_convert = "";
-    }   
-
-    return $fecha_convert;
-  }
-
-  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-  function format_d_m_a( $fecha ) {
-
-    $fecha_convert = "-";
-
-    if (empty($fecha) || $fecha == '0000-00-00') { }else{
-      
-      $fecha_expl = explode("-", $fecha);
-      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
-      
-    }   
-
-    return $fecha_convert;
-  }
-
   function calculaedad($fechanacimiento){
     $ano_diferencia = '-';
     if (empty($fechanacimiento) || $fechanacimiento=='0000-00-00') { } else{

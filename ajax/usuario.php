@@ -434,17 +434,5 @@
     break;
   }
   
-  function multiplo_number($numero, $multiplo) {  
-    
-    if($numero%$multiplo == 0){
-      return true;
-    }else{
-      return false;
-    }
-    
-  }
-
-  function quitar_guion($numero){ return str_replace("-", "", $numero); } 
-
   ob_end_flush();
 ?>
