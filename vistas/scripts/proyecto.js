@@ -14,7 +14,7 @@ function init(){
   // mostramos las fechas feriadas
   $.post("../ajax/proyecto.php?op=listar_feriados",  function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);
+    data = JSON.parse(data);  //console.log(data);
     var fecha_feriada = [];
 
     if (data.status) {
@@ -51,16 +51,16 @@ function init(){
 init();
 
 // input con comas de miles
-$("#costo").on({
-  focus: function (event) {
-    $(event.target).select();
-  },
-  keyup: function (event) {
-    $(event.target).val(function (index, value) {
-      return value.replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, "$1.$2").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
-    });
-  },
-});
+// $("#costo").on({
+//   focus: function (event) {
+//     $(event.target).select();
+//   },
+//   keyup: function (event) {
+//     $(event.target).val(function (index, value) {
+//       return value.replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, "$1.$2").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+//     });
+//   },
+// });
 
 function validar_permanent() { if ($("#fecha_pago_obrero").select2('val') == null) {  $("#definiendo").prop('checked', false); } }
 
@@ -282,7 +282,7 @@ function guardaryeditar(e) {
     processData: false,
     success: function (e) {
       try {
-        e = JSON.parse(e);  console.log(e);  
+        e = JSON.parse(e);  //console.log(e);  
         if (e) {
 
           tabla.ajax.reload(null, false);	
@@ -742,7 +742,7 @@ function mostrar(idproyecto) {
 
   $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data);   
 
     if (data.status) {
       $("#cargando-1-fomulario").show();
@@ -935,11 +935,9 @@ function mostrar_detalle(idproyecto) {
 
   $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    data = JSON.parse(data);  //console.log(data);   
 
     var ruta_carpeta = window.location.host;
-
-    console.log();
 
     if (ruta_carpeta == 'localhost') {
       ruta_carpeta = 'http://localhost/admin_sevens/dist/docs/valorizacion/documento/'
@@ -1185,7 +1183,7 @@ function tablero() {
 
   $.post("../ajax/proyecto.php?op=tablero",  function (data, status) {
 
-    data = JSON.parse(data);  console.log(data);
+    data = JSON.parse(data);  //console.log(data);
 
     if (data.status) {
       $("#cantidad_proyectos").html(data.data.proyecto.cantidad_proyectos);
@@ -1254,7 +1252,7 @@ function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final)
 
 function ver_modal_docs_valorizaciones(idproyecto, documento) {
 
-  console.log(idproyecto, extrae_extencion( documento));
+  //console.log(idproyecto, extrae_extencion( documento));
 
   $('#verdoc7').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
 
@@ -1348,7 +1346,7 @@ function calcular_plazo_fechafin() {
 
           $.post("../ajax/proyecto.php?op=mostrar-rango-fechas-feriadas", { fecha_i: format_a_m_d($("#fecha_inicio").val()), fecha_f: format_a_m_d(fecha_fin) }, function (data, status) {
             
-            data = JSON.parse(data);  console.log(data);
+            data = JSON.parse(data);  //console.log(data);
             if (data.status) {
               var fecha_fin_es_feriado = true;
               // sumamos el new plazo            
@@ -1364,7 +1362,7 @@ function calcular_plazo_fechafin() {
               // sumamos las fechas con el nuevo plazo
               fecha_fin = sumaFecha( new_plazo, $("#fecha_inicio").val());
 
-              console.log(cant_sabados);
+              //console.log(cant_sabados);
               // while (fecha_fin_es_feriado == false) {            
               //   fecha_fin_es_feriado = false;
               //   // $.post("../ajax/proyecto.php?op=fecha_fin-es-feriado", { fecha_fin: format_a_m_d(fecha_fin) }, function (data, status) {
@@ -1488,7 +1486,7 @@ $(function () {
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 function cuentaSabado(fi, ff){
-  console.log(fi + " / "+ ff);
+  //console.log(fi + " / "+ ff);
   var inicio = new Date(fi); //Fecha inicial
   var fin = new Date(ff); //Fecha final
   var timeDiff = Math.abs(fin.getTime() - inicio.getTime());
@@ -1498,7 +1496,7 @@ function cuentaSabado(fi, ff){
 
   for (var i=0; i < diffDays; i++) {
     //0 => Domingo - 6 => Sábado
-    console.log(inicio.getDay());
+    //console.log(inicio.getDay());
     if (inicio.getDay() == 5) {
       cuentaFinde++;
     }
@@ -1510,7 +1508,7 @@ function cuentaSabado(fi, ff){
 }
 
 function template_sleect2_empresa (state) {
-  console.log(state);
+  //console.log(state);
   if (!state.id) { return state.text; }
   var baseUrl = state.title != '' ? `../dist/svg/${state.title}`: '../dist/svg/user_default.svg'; 
   var onerror = `onerror="this.src='../dist/svg/user_default.svg';"`;

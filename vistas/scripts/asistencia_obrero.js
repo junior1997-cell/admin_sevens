@@ -2697,14 +2697,6 @@ function l_m(){
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-// retrazamos la ejecuccion de una funcion
-var delay = (function(){
-  var timer = 0;
-  return function(callback, ms){ clearTimeout (timer); timer = setTimeout(callback, ms); };
-})();
-
-
-
 // SCROLL - IR AL INICIO
 $('.ir_a_top').on('click', function (e) { $('html, body').animate({ scrollTop: '0px' }, 600); /*Scrollea hasta abajo de la página*/ });
 

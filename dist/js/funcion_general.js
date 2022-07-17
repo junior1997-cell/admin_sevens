@@ -1,5 +1,13 @@
 /*  ══════════════════════════════════════════ - F E C H A S - ══════════════════════════════════════════ */
 
+function sumar_mes(fecha) {
+  var split_fecha =  fecha.split("-");
+  var dias_total_mes = cantDiasEnUnMes( parseInt(split_fecha[1]), parseInt(split_fecha[0]) );  
+  var mes_next =  sumaFecha(dias_total_mes-1, fecha); 
+  // console.log(`🚀 ${fecha} + ${dias_total_mes-1} =  fecha_f:${mes_next}`);
+  return mes_next;
+}
+
 // Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
   var Fecha = new Date();
@@ -166,6 +174,20 @@ function diferencia_de_dias(fecha_i, fecha_f) {
 }
 
 /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
+// Formato de miles a INPUT
+function formato_miles_input (nombre_input) {  
+  // input con comas de miles
+  $(nombre_input).on({
+    focus: function (event) {
+      $(event.target).select();
+    },
+    keyup: function (event) {
+      $(event.target).val(function (index, value) {
+        return value.replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, "$1.$2").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+      });
+    },
+  });
+}
 
 // Formato de miles
 function formato_miles(num) {
@@ -198,7 +220,7 @@ function quitar_formato_miles(num) {
 }
 
 // Redondear a un exponente
-function redondearExp(numero, digitos) {
+function redondearExp(numero, digitos=2) {
   function toExp(numero, digitos) {
     let arr = numero.toString().split("e");
     let mantisa = arr[0], exponente = digitos;
@@ -209,7 +231,7 @@ function redondearExp(numero, digitos) {
   return Math.sign(numero) * toExp(entero, -digitos);
 }
 
-//Redondear 2 decimales (1.56 = 1.60, 1.52 = 1.50)
+//Redondear 2 decimales (1.56 = 1.60, 1.52 = 1.50), para dinero
 function roundTwo(num) { return Number(+(Math.round(num + "e+1") + "e-1")).toFixed(2); }
 
 // Unico ID
@@ -302,6 +324,14 @@ function capitalizeWords(str) {
   }
   return string;
 };
+
+/*  ══════════════════════════════════════════ - T I E M P O S - ══════════════════════════════════════════ */
+
+// retrazamos la ejecuccion de una funcion
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){ clearTimeout (timer); timer = setTimeout(callback, ms); };
+})();
 
 /*  ══════════════════════════════════════════ - S U B I R   D O C S  - ══════════════════════════════════════════ */
 

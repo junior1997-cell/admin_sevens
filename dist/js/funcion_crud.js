@@ -397,49 +397,23 @@ function crud_eliminar_papelera(url_papelera, url_eliminar, id_tabla, title, men
 /*  ══════════════════════════════════════════ - A L E R T A S   S w e e t A l e r t 2 - ══════════════════════════════════════════ */
 
 function sw_cancelar(title='Cancelado!', txt = "Acción cancelada.", timer = 3000) {
-  Swal.fire({
-    title: title,
-    html: txt,
-    timer: timer,
-    icon: "info",
-  });
+  Swal.fire({ title: title, html: txt, timer: timer, icon: "info", });
 }
 
 function sw_error(title='Error!', txt = "Acción con error.", timer = 3000) {
-  Swal.fire({
-    title: title,
-    html: txt,
-    timer: timer,
-    icon: "error",
-  });
+  Swal.fire({ title: title, html: txt, timer: timer, icon: "error", });
 }
 
 function sw_success(title='Exito!', txt = "Acción ejecutada con éxito", timer = 3000) {
-  Swal.fire({
-    title: title,
-    html: txt,
-    timer: timer,
-    icon: "success",
-  });
+  Swal.fire({ title: title, html: txt, timer: timer, icon: "success", });
 }
 
 function confirmar_formulario(flat, callback) {
   if (flat) {
-    Swal.fire({
-      title: "Exito",
-      timer: 2000,
-      icon: "success",
-    });
-
-    if (callback) {
-      callback();
-    }
+    Swal.fire({ title: "Exito", timer: 2000, icon: "success", });
+    if (callback) { callback(); }
   } else {
-    Swal.fire({
-      title: "Error " + datos,
-      timer: 2000,
-      icon: "error",
-    });
+    Swal.fire({ title: "Error " + datos, timer: 2000, icon: "error", });
   }
 }
 
@@ -527,7 +501,9 @@ function ver_errores(e) {
         window.location.href = `${window.location.host=='localhost'?'http://localhost/admin_sevens/vistas/escritorio.php':window.location.origin+'/vistas/escritorio.php'}`;
       }
     });
-
+  
+  }else if (e.status == 'error_code') {
+    sw_error(title='Error de escritura de <b>codigo</b>!', txt = `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, timer = 5000);
   } else {
     console.group("Error"); console.warn('Error Grave -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, "error");

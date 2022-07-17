@@ -234,15 +234,9 @@
         break;
         
         case 'listarquincenas':
-
-          // $nube_idproyecto = $_POST["nube_idproyecto"];
-          $nube_idproyecto = 1;
-
-          $rspta=$valorizacion->listarquincenas($nube_idproyecto);
-
+          $rspta=$valorizacion->listarquincenas($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta, true) ;	
-
+          echo json_encode($rspta, true);
         break; 
 
         case 'listar_tbla_principal':
@@ -294,94 +288,37 @@
         
         //--------------------------R E S U M E N   Q S ---------------------------------
         case 'guardaryeditar_resumen_q_s':
-
-            if (empty($idresumen_q_s_valorizacion)){
-              // Registramos docs en valorización
-              $rspta=$valorizacion->insertar_valorizacion_resumen_q_s($numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);
-              
-              echo json_encode($rspta, true) ;
-              
-            }else {
-  
-              // editamos un trabajador existente
-              $rspta=$valorizacion->editar_valorizacion_resumen_q_s($idresumen_q_s_valorizacion, $numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);
-              
-              echo json_encode($rspta, true) ;              
-            }                 
-
+          if (empty($idresumen_q_s_valorizacion)){
+            // Registramos docs en valorización
+            $rspta=$valorizacion->insertar_valorizacion_resumen_q_s($numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);            
+            echo json_encode($rspta, true) ;            
+          }else {
+            // editamos un trabajador existente
+            $rspta=$valorizacion->editar_valorizacion_resumen_q_s($idresumen_q_s_valorizacion, $numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);            
+            echo json_encode($rspta, true) ;              
+          }
         break; 
 
-        case 'listar_resumen_q_s':
-
-          $rspta=$valorizacion->listar_resumen_q_s($_GET['idproyecto_q_s']);
-          //echo json_encode($rspta);
-          $data= Array();
-          
-          $cont=1;    
-          $_eliminar="";
-          $_editar="";
-
-          if ($rspta['status'] == true) {
-
-            foreach ( $rspta['data'] as $key => $value) { 
-
-              $_eliminar='\'' .$value['idresumen_q_s_valorizacion'] .'\', \'' . $value['numero_q_s'] .'\', \'' . $value['fecha_inicio'] .'\', \'' . $value['fecha_fin'] .'\'';
-              $_editar='\'' .$value['idresumen_q_s_valorizacion'] .'\', \'' . $value['idproyecto'] .'\', \'' . $value['numero_q_s'] .'\', \'' . $value['fecha_inicio'] .'\', \'' . $value['fecha_fin'] .'\', \'' . $value['monto_programado'] .'\', \'' . $value['monto_valorizado'] .'\',\'' . $value['monto_gastado'] .'\'';
-
-              $data[]=array(
-                "0"=> $cont++,
-                "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_resumen_q_s('.$_editar.')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger btn-sm" onclick="eliminarr_resumen_q_s('.$_eliminar.')" data-toggle="tooltip" data-original-title="Eliminar"><i class="fas fa-skull-crossbones"></i></button>',
-                "2"=>'<span class="text-bold">Valorización Nº '. $value['numero_q_s'].'</span>', 
-                "3"=>'<span class="text-primary text-bold">'.date("d/m/Y", strtotime($value['fecha_inicio'])) .' - ' .  date("d/m/Y", strtotime($value['fecha_fin']))  .'</span>', 
-                "4" => 'S/. '.number_format($value['monto_programado'], 2, ".", ","), 
-                "5" => 'S/. '.number_format($value['monto_valorizado'], 2, ".", ","), 
-                "6" => number_format($value['monto_gastado'], 2, ".", ",")  
-              );
-
-            }
-
-            $results = array(
-              "sEcho"=>1, //Información para el datatables
-              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
-              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
-              "data"=>$data
-            );
-            echo json_encode($results, true);
-          } else {
-            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
-          }
-         
-        break;
-        
-        case 'desactivar_resumen_q_s':
-
-          $rspta=$valorizacion->desactivar_resumen_q_s($_GET['id_tabla']);
-          echo json_encode($rspta, true) ;
-
-        break;
-
-        case 'eliminar_resumen_q_s':
-
-          $rspta=$valorizacion->eliminar_resumen_q_s($_GET['id_tabla']);
-          echo json_encode($rspta, true) ;
-	
-        break;
-            
+        case 'tbla_resumen_q_s':
+          $rspta=$valorizacion->tbla_resumen_q_s($_POST['idproyecto'], $_POST['array_fechas'] );
+          echo json_encode($rspta, true); 
+        break;                 
 
         case 'total_montos_resumen_q_s':
-
           $rspta=$valorizacion->list_total_montos_resumen_q_s($_POST['idproyecto_q_s']);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true) ;
+        break;
 
+        default: 
+          $rspta = ['status'=>'error_code', 'message'=>'todo oka', 'data'=>[]]; echo json_encode($rspta, true); 
         break;
       }
 
       //Fin de las validaciones de acceso
     } else {
-      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
-      echo json_encode($retorno);
+      $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data'=>[] ];
+      echo json_encode($retorno, true);
     }
   }
 

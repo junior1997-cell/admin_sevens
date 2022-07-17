@@ -67,7 +67,7 @@ if (!function_exists('ejecutarConsulta')) {
     $fecha_convert = "";
     if (empty($fecha) || $fecha == '0000-00-00') { }else{
       $fecha_expl = explode("-", $fecha);
-      $fecha_convert =  $fecha_expl[0]."-".$fecha_expl[1]."-".$fecha_expl[2];
+      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
     }
     return $fecha_convert;
   }

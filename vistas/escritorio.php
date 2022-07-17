@@ -436,7 +436,7 @@
                                       <div class="input-group-prepend">
                                         <span class="input-group-text">S/. </span>
                                       </div>
-                                      <input type="text"  name="costo" id="costo" class="form-control"  placeholder="Costo" >
+                                      <input type="text"  name="costo" id="costo" class="form-control"  placeholder="Costo" onkeyup="formato_miles_input('#costo')" >
                                     </div>
                                   </div>
                                 </div> 

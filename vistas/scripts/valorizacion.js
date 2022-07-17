@@ -2,6 +2,10 @@ var tabla_principal;
 var tabla_principal_resumen_q_s;
 var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/valorizacion/documento/` : `${window.location.origin}/dist/docs/valorizacion/documento/` ;
 
+var array_fechas_q_s = [];
+
+var cant_valorizaciones = 0;
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -14,14 +18,10 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
   $("#idproyecto_q_s").val(localStorage.getItem('nube_idproyecto'));
   
-
-  //listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
-  l_tbla_listar_resumen_q_s(localStorage.getItem('nube_idproyecto'))
-
   ver_quincenas(localStorage.getItem('nube_idproyecto'));  
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-valorizacion").submit(); });
-  $("#guardar_registro_resumen_valorizacion").on("click", function (e) {  $("#submit-form-resumen-valorizacion").submit(); console.log('kkkk'); });
+  $("#guardar_registro_resumen_valorizacion").on("click", function (e) {  $("#submit-form-resumen-valorizacion").submit(); });
 
   //Initialize Select2 Elements
   $("#numero_q_s_resumen").select2({ theme: "bootstrap4", placeholder: "Selecione Valorizacion", allowClear: true, });
@@ -66,9 +66,9 @@ function ver_quincenas(nube_idproyecto) {
 
   $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>'); //console.log(nube_idproyecto);
 
-  $.post("../ajax/valorizacion.php?op=listarquincenas", { nube_idproyecto: nube_idproyecto }, function (e, status) {
+  $.post("../ajax/valorizacion.php?op=listarquincenas", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
 
-    e =JSON.parse(e); console.log(e);    
+    e =JSON.parse(e); //console.log(e);    
 
     $('#lista_quincenas').html('');
 
@@ -83,7 +83,7 @@ function ver_quincenas(nube_idproyecto) {
         
         var fecha_i = sumaFecha(0,fecha);
   
-        var cal_quincena  =e.data.plazo/15; var i=0;  var cont=0;
+        var cal_quincena=e.data.plazo/15; var i=0;  var cont=0;
         var estado = 1;
 
         while (i <= cal_quincena) {
@@ -98,16 +98,13 @@ function ver_quincenas(nube_idproyecto) {
           
           $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
           $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
-          // if (estado ==1) {
-          //   $("#numero_q_s_resumen").append(`<option>Seleccionar Valorización</option>`);
-          //   estado = 0;
-          // }else{
-          //   $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
-          // }
+          array_fechas_q_s.push({ 'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
+          cant_valorizaciones = i+1;
           fecha_i = sumaFecha(1,fecha);
     
           i++;
         }
+        tbla_resumen_q_s(nube_idproyecto);
       } else {
 
         if (e.data.fecha_valorizacion == "mensual") {
@@ -132,12 +129,8 @@ function ver_quincenas(nube_idproyecto) {
 
             $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
             $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
-            // if (estado ==1) {
-            //   $("#numero_q_s_resumen").append(`<option>Seleccionar Valorización</option>`);
-            //   estado = 0;
-            // }else{
-            //   $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
-            // }
+            array_fechas_q_s.push({ 'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
+            cant_valorizaciones = i+1;
             
             if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
@@ -145,7 +138,7 @@ function ver_quincenas(nube_idproyecto) {
 
             i++;
           }          
-
+          tbla_resumen_q_s(nube_idproyecto);
         } else {
 
           if (e.data.fecha_valorizacion == "al finalizar") {
@@ -154,12 +147,10 @@ function ver_quincenas(nube_idproyecto) {
 
             $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
             $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
-            // if (estado ==1) {
-            //   $("#numero_q_s_resumen").append(`<option>Seleccionar Valorización</option>`);
-            //   estado = 0;
-            // }else{
-            //   $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorizacion ${i+1}</option>`);
-            // }
+            array_fechas_q_s.push({'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
+            cant_valorizaciones = i+1;
+
+            tbla_resumen_q_s(nube_idproyecto);
           } else {
             $('#lista_quincenas').html(`<div class="info-box shadow-lg w-600px"> 
               <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
@@ -256,39 +247,6 @@ function l_m(){
   $("#barra_progress").css({"width":'0%'});  
   $("#barra_progress").text("0%");  
 }
-
-//Función Listar - tabla principal
-// function listar_tbla_principal(nube_idproyecto) {
-
-//   tabla_principal = $('#tabla-principal').dataTable({
-//     responsive: true,
-//     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200, ], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-//     aProcessing: true,//Activamos el procesamiento del datatables
-//     aServerSide: true,//Paginación y filtrado realizados por el servidor
-//     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-//     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-//     ajax:{
-//       url: `../ajax/valorizacion.php?op=listar_tbla_principal&nube_idproyecto=${nube_idproyecto}`,
-//       type : "get",
-//       dataType : "json",						
-//       error: function(e){
-//         console.log(e.responseText);	ver_errores(e);
-//       }
-//     },
-//     createdRow: function (row, data, ixdex) {
-//       // columna: sueldo mensual
-//       if (data[0] != '') { $("td", row).eq(0).addClass('text-nowrap'); }           
-//     },
-//     language: {
-//       lengthMenu: "Mostrar: _MENU_ registros",
-//       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-//       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-//     },
-//     bDestroy: true,
-//     iDisplayLength: 10,//Paginación
-//     order: [[ 0, "asc" ]]//Ordenar (columna,orden)
-//   }).DataTable();  
-// }
 
 function modal_comprobante(doc_valorizacion, indice, nombre, numero_q_s,) {
   $(".nombre_documento").html("");
@@ -387,6 +345,36 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
 
 
 // ::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   A G R E G A R   R E S U M E N   Q  S ::::::::::::::::::::::::::::::::
+  function show_hide_span_input(flag){
+
+    if (flag == 1) {
+      // ocultamos los span
+      $(".span_val").show();
+      // mostramos los inputs
+      $(".input_val").hide();
+
+      // ocultamos el boton editar
+      $("#btn-editar").show();
+      // mostramos el boton guardar
+      $("#btn-guardar").hide();
+
+      estado_editar_asistencia = false;
+    } else if (flag == 2) {
+      
+      // ocultamos los span
+      $(".span_val").hide();
+      // mostramos los inputs
+      $(".input_val").show();
+
+      // ocultamos el boton editar
+      $("#btn-editar").hide();
+      // mostramos el boton guardar
+      $("#btn-guardar").show();
+
+      estado_editar_asistencia = true;    
+    }  
+  }
+
   function limpiar_resumen_q_s() {
     $("#idresumen_q_s_valorizacion").val("");
     $("#numero_q_s_resumen_oculto").val("");
@@ -396,21 +384,6 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     $("#fecha_inicial").val("");
     $("#fecha_final").val("");
   
-  }
-
-  function formato_miles_input (name_id) {  
-    // input con comas de miles
-    input  ="#"+name_id;
-    $(input).on({
-      focus: function (event) {
-        $(event.target).select();
-      },
-      keyup: function (event) {
-        $(event.target).val(function (index, value) {
-          return value.replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, "$1.$2").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
-        });
-      },
-    });
   }
 
   //Función para guardar o editar
@@ -466,48 +439,80 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
   }
 
   //Función Listar - tabla principal
-  function l_tbla_listar_resumen_q_s(nube_idproyecto) {
+  function tbla_resumen_q_s(nube_idproyecto) {   
 
-    tabla_principal_resumen_q_s = $('#tabla-principal').dataTable({
-      responsive: true,
-      lengthMenu: [[-1, 5, 10, 25, 75, 100, 200, ], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-      aProcessing: true,//Activamos el procesamiento del datatables
-      aServerSide: true,//Paginación y filtrado realizados por el servidor
-      dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-      ajax:{
-        url: `../ajax/valorizacion.php?op=listar_resumen_q_s&idproyecto_q_s=${nube_idproyecto}`,
-        type : "get",
-        dataType : "json",						
-        error: function(e){
-          console.log(e.responseText);	ver_errores(e);
-        }
-      },
-      createdRow: function (row, data, ixdex) {
-        // columna: sueldo mensual
-        if (data[0] != '') { $("td", row).eq(0).addClass('text-nowrap'); }           
-        if (data[4] != '') { $("td", row).eq(4).addClass('text-right'); }           
-        if (data[5] != '') { $("td", row).eq(5).addClass('text-right'); }           
-        if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }           
-      },
-      language: {
-        lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-      },
-      bDestroy: true,
-      iDisplayLength: 10,//Paginación
-      order: [[ 0, "asc" ]]//Ordenar (columna,orden)
-    }).DataTable(); 
+    $('#tabla-principal').html(`<tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`);
     
-        // suma totales x proyecto
-    $.post("../ajax/valorizacion.php?op=total_montos_resumen_q_s", { 'idproyecto_q_s': nube_idproyecto}, function (e, status) {
+    var total_programado = 0, total_valorizado = 0, total_gastado = 0;
+    var total_porcent_programado = 0, total_porcent_valorizado = 0, total_porcent_gastado = 0;
+
+    // suma totales x proyecto
+    $.post(`../ajax/valorizacion.php?op=tbla_resumen_q_s`, { 'idproyecto': nube_idproyecto, 'array_fechas':JSON.stringify(array_fechas_q_s) }, function (e, status) {
 
       e = JSON.parse(e); console.log(e); 
+
       if (e.status == true) {
-        $('.suma_total_monto_programado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_programado)}</b>`);
-        $('.suma_total_monto_valorizado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_valorizado)}</b>`);
-        $('.suma_total_monto_gastado').html(`<sup>S/</sup> <b>${formato_miles(e.data.m_gastado)}</b>`); 
+
+        var html_tabla = '';
+
+        var m_programado =0, m_valorizado =0, m_gastado =0;
+
+        var acum_porcent_programado = 0, acum_porcent_valorizado = 0, acum_porcent_gastado = 0;
+
+        e.data.montos.forEach((key, indice) => {
+          var bg_hoy_q_s = ''; 
+          var porcent_programado  = (key.monto_programado / e.data.proyecto) * 100;
+          var porcent_valorizado  = (key.monto_valorizado / e.data.proyecto) * 100;
+          var porcent_gastado     = (key.monto_gastado / e.data.proyecto) * 100;
+
+          acum_porcent_programado += (key.monto_programado / e.data.proyecto) * 100;
+          acum_porcent_valorizado += (key.monto_valorizado / e.data.proyecto) * 100;
+          acum_porcent_gastado    += (key.monto_gastado / e.data.proyecto) * 100;
+
+          total_porcent_programado += porcent_programado, 
+          total_porcent_valorizado += porcent_valorizado, 
+          total_porcent_gastado += porcent_gastado;
+
+          total_programado+= key.monto_programado; 
+          total_valorizado+= key.monto_valorizado; 
+          total_gastado   += key.monto_gastado;
+
+          if (validarFechaEnRango( key.fecha_inicio, key.fecha_fin, moment().format('YYYY-MM-DD')) == true) {
+            bg_hoy_q_s = 'bg-color-48acc6'; //console.log(bg_hoy_q_s);
+          } 
+
+          html_tabla = html_tabla.concat(`<tr>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${indice+1}</td>
+            <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" >${format_d_m_a(key.fecha_inicio)} - ${format_d_m_a(key.fecha_fin)}</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
+              <div class="formato-numero-conta span_val"><span>S/</span><span>${formato_miles(key.monto_programado)}</span></div>
+              <input class="hidden w-100 input_val" type="text" id="programado_${indice+1}" value="${key.monto_programado==0?'':formato_miles(key.monto_programado)}" onkeyup="formato_miles_input('#programado_${indice+1}'); delay(function(){ calcular_procentajes_programado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto}) }, 200 );">
+            </td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_programado_${indice+1}">${porcent_programado.toFixed(2)}</span>%</td>            
+            <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" >${acum_porcent_programado.toFixed(2)}%</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
+              <div class="formato-numero-conta span_val"><span>S/</span><span>${formato_miles(key.monto_valorizado)}</span></div>
+              <input class="hidden w-100 input_val" type="text" id="valorizado_${indice+1}" value="${key.monto_valorizado==0?'':formato_miles(key.monto_valorizado)}" onkeyup="formato_miles_input('#valorizado_${indice+1}'); delay(function(){ calcular_procentajes_valorizado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto}) }, 200 );">
+            </td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_valorizado_${indice+1}">${porcent_valorizado.toFixed(2)}</span>%</td>            
+            <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" >${acum_porcent_valorizado.toFixed(2)}%</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
+              <div class="formato-numero-conta"><span>S/</span><span>${formato_miles(key.monto_gastado)}</span></div>              
+            </td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${porcent_gastado.toFixed(2)}%</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${acum_porcent_gastado.toFixed(2)}%</td>
+          </tr>`); 
+        });
+
+        $('#tabla-principal').html(html_tabla);
+
+        $('.suma_total_monto_programado').html(`<b>${formato_miles(total_programado)}</b>`);        
+        $('.suma_total_monto_valorizado').html(`<b>${formato_miles(total_valorizado)}</b>`);        
+        $('.suma_total_monto_gastado').html(`<b>${formato_miles(total_gastado)}</b>`); 
+
+        $('.total_porcent_valorizado').html(`<b>${redondearExp(total_porcent_valorizado, 2)}%</b>`);
+        $('.total_porcent_programado').html(`<b>${redondearExp(total_porcent_programado, 2)}%</b>`);
+        $('.total_porcent_gastado').html(`<b>${redondearExp(total_porcent_gastado, 2)}%</b>`);
       } else {
         ver_errores(e);
       }    
@@ -515,47 +520,55 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     
   }
 
-  function mostrar_resumen_q_s(idresumen_q_s_valorizacion,idproyecto,numero_q_s,fecha_inicio,fecha_fin,monto_programado ,monto_valorizado,monto_gastado ) {
-
-    limpiar_resumen_q_s();
-
-    $("#cargando-3-fomulario").hide();
-    $("#cargando-4-fomulario").show();
-
-    $("#modal-agregar-resumen_valorizacion").modal("show");
-  
-   // $("#idproyecto").val(); 
-
-    $("#numero_q_s_resumen").val("").trigger('change');
-    $("#idresumen_q_s_valorizacion").val(idresumen_q_s_valorizacion);
-    $("#idproyecto_q_s").val(idproyecto);
-    $("#numero_q_s_resumen_oculto").val(numero_q_s);
-    $("#numero_q_s_resumen").val(`${numero_q_s} ${fecha_inicio} ${fecha_fin}`).trigger("change");
-    $("#monto_programado").val(monto_programado);
-    $("#monto_valorizado").val(monto_valorizado);
-    $("#monto_gastado").val(monto_gastado);
-
-    $("#cargando-3-fomulario").show();
-    $("#cargando-4-fomulario").hide();
+  function calcular_procentajes_programado(num_val, cant_valorizaciones, costo_proyecto) {
+    var porcentaje_calculado = 0;
+    if ($(`#programado_${num_val}`).val() == '-' || $(`#programado_${num_val}`).val() == null || $(`#programado_${num_val}`).val() == '' ) {  } else {
+      var monto_val = $(`#programado_${num_val}`).val();
+      porcentaje_calculado = (parseFloat(quitar_formato_miles(monto_val))/costo_proyecto)*100;
+    }
+    $(`.porcent_programado_${num_val}`).html(redondearExp(porcentaje_calculado));
+    calcular_totales('.suma_total_monto_programado','#programado_', cant_valorizaciones, '');
+    calcular_totales('.total_porcent_programado','.porcent_programado_', cant_valorizaciones, 'porcentaje');
     
-  
-   }
+  }
 
-  function eliminarr_resumen_q_s(idresumen_q_s_valorizacion, numero_q_s, fecha_inicio, fecha_fin ) {
-    crud_eliminar_papelera(
-      `../ajax/valorizacion.php?op=desactivar_resumen_q_s`,
-      `../ajax/valorizacion.php?op=eliminar_resumen_q_s`, 
-      idresumen_q_s_valorizacion, 
-      "!Elija una opción¡", 
-      `<b class="text-danger"><del>Valorización N°-${numero_q_s} : ${fecha_inicio} al ${fecha_fin} </del> </b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
-      function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
-      function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-      function(){ l_tbla_listar_resumen_q_s(localStorage.getItem('nube_idproyecto')); },
-      false, 
-      false, 
-      false,
-      false
-    );
+  function calcular_procentajes_valorizado(num_val, cant_valorizaciones, costo_proyecto) {
+    var porcentaje_calculado = 0;
+    if ($(`#valorizado_${num_val}`).val() == '-' || $(`#valorizado_${num_val}`).val() == null || $(`#valorizado_${num_val}`).val() == '' ) {  } else {
+      var monto_val = $(`#valorizado_${num_val}`).val();
+      porcentaje_calculado = (parseFloat(quitar_formato_miles(monto_val))/costo_proyecto)*100;
+    }
+    $(`.porcent_valorizado_${num_val}`).html(redondearExp(porcentaje_calculado));
+    calcular_totales('.suma_total_monto_valorizado', '#valorizado_', cant_valorizaciones, '');
+    calcular_totales('.total_porcent_valorizado','.porcent_valorizado_', cant_valorizaciones, 'porcentaje');
+  }
+
+  function calcular_procentajes_gastado(cant_valorizaciones, costo_proyecto) {
+    calcular_totales('.total_porcent_gastado', '#gastado_', cant_valorizaciones);    
+  }
+
+  function calcular_totales(name_div, name_input_span, cant_valorizaciones, tipo) {
+    console.log('hola estamos calculado totales');
+    var sum_total_programado = 0, cant_por_fecha = 0;
+    for (let index = 1; index <= cant_valorizaciones; index++) {
+      if (tipo == 'porcentaje') {
+        cant_por_fecha = $(`${name_input_span}${index}`).text(); console.log(`${name_input_span}_${index} - ` + cant_por_fecha);
+        if (cant_por_fecha == '-' || cant_por_fecha == null || cant_por_fecha == '' ) {  } else {
+          sum_total_programado +=  parseFloat(quitar_formato_miles(cant_por_fecha));
+        }
+      } else {
+        cant_por_fecha = $(`${name_input_span}${index}`).val(); console.log(`${name_input_span}_${index} - ` + cant_por_fecha);
+        if (cant_por_fecha == '-' || cant_por_fecha == null || cant_por_fecha == '' ) {  } else {
+          sum_total_programado +=  parseFloat(quitar_formato_miles(cant_por_fecha));
+        }
+      }
+    }
+
+    if (tipo == 'porcentaje') {
+      $(name_div).html(`${formato_miles(sum_total_programado)}%`);
+    } else {
+      $(name_div).html(`<b>${formato_miles(sum_total_programado)}</b>`);
+    }    
   }
   
 
@@ -572,9 +585,7 @@ $(function () {
     },
 
     messages: {
-      nombre: {
-        required: "Por favor selecione un tipo de documento", 
-      },       
+      nombre: {  required: "Por favor selecione un tipo de documento", },       
     },
         
     errorElement: "span",
@@ -1544,20 +1555,7 @@ function subir_doc_respuesta(idvalorizacion, indice) {
   $("#modal-agregar-valorizacion").modal('show'); 
 }
 
-function sumar_mes(fecha) {
 
-  var split_fecha =  fecha.split("-");
-
-  // var format_fecha = format_d_m_a(fecha);
-
-  var dias_total_mes = cantDiasEnUnMes( parseInt(split_fecha[1]), parseInt(split_fecha[0]) );  
-
-  var mes_next =  sumaFecha(dias_total_mes-1, fecha); 
-
-  // console.log(`🚀 ${fecha} + ${dias_total_mes-1} =  fecha_f:${mes_next}`);  
-
-  return mes_next;
-}
 
 function cantDiasEnUnMes(mes, año) {
    

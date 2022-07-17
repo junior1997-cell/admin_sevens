@@ -59,12 +59,14 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="card card-primary card-outline">
-                        <div class="card-header">
-                          <!-- agregar pago  -->
-                          <h3 class="card-title " id="btn-agregar-resumen"  >
-                            <button type="button" class="btn bg-gradient-success btn-sm h-50px mr-1"  onclick="limpiar_resumen_q_s();" data-toggle="modal" data-target="#modal-agregar-resumen_valorizacion">
-                            <i class="fas fa-plus-circle"></i> Agregar 
-                            </button>                     
+                        <div class="card-header" > 
+                          <!-- Editar -->
+                          <h3 class="card-title mr-3" id="btn-editar" style="padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-orange btn-sm h-50px" onclick="show_hide_span_input(2);"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
+                          </h3>
+                          <!-- Guardar -->
+                          <h3 class="card-title mr-3" id="btn-guardar" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_fechas_asistencia();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
                           </h3>   
                           <!-- regresar -->
                           <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
@@ -76,8 +78,7 @@
                           </div>  
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body">
-                          <h4 id="nombre_titulo">Valorización</h4>
+                        <div class="card-body">                          
                           <div class="row">
                             <!-- tab seleciones -->
                             <div class="col-lg-3 col-xl-4" id="tab-seleccione" style="display: none;">
@@ -356,36 +357,60 @@
                             </div>
                             <!-- tab info resumen valorizaciones -->
                             <div class="col-lg-12 col-xl-12" id="tab-info">
-                                <!-- tabla principal -->
-                                <div class=" pb-3">
-                                  <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                                    <thead>
-                                      <tr> 
-                                        <th>#</th> 
-                                        <th>Acciones</th>
-                                        <th>N° Valorización</th>
-                                        <th>Fecha</th>
-                                        <th>Monto Programado</th>
-                                        <th>Monto valorizado</th>         
-                                        <th>Monto gastado</th>         
-                                      </tr>
-                                    </thead>
-                                    <tbody>                         
-                                      
-                                    </tbody>
-                                    <tfoot>
-                                      <tr> 
-                                      <th>#</th> 
-                                        <th>Acciones</th>
-                                        <th>N° Valorización</th>
-                                        <th>Fecha</th>
-                                        <th class="text-nowrap text-right suma_total_monto_programado h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                        <th class="text-nowrap text-right suma_total_monto_valorizado h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>         
-                                        <th class="text-nowrap text-right suma_total_monto_gastado h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>                              
-                                      </tr>
-                                    </tfoot>
-                                  </table>
-                                </div>  
+                              <!-- tabla principal -->
+                              <div class="table-responsive pb-3">
+                                <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" >
+                                  <thead>
+                                    <tr class="text-center bg-color-48acc6">
+                                      <th class="pt-1 pb-1 celda-b-r-2px" colspan="2"></th>
+                                      <th class="pt-1 pb-1 celda-b-r-2px" colspan="3">Programado</th>
+                                      <th class="pt-1 pb-1 celda-b-r-2px" colspan="3">Valorizado</th>
+                                      <th class="pt-1 pb-1" colspan="3">Gastado</th>
+                                    </tr>
+                                    <tr class="text-center bg-color-48acc6">
+                                      <th class="pt-1 pb-1">N° de</th>
+                                      <th class="pt-1 pb-1 celda-b-r-2px">Periodo del</th>
+                                      <th class="pt-1 pb-1">Monto</th>
+                                      <th class="pt-1 pb-1 celda-b-r-2px" colspan="2">porcentaje %</th>
+                                      <th class="pt-1 pb-1">Monto</th>
+                                      <th class="pt-1 pb-1 celda-b-r-2px" colspan="2">porcentaje %</th>
+                                      <th class="pt-1 pb-1">Monto</th>
+                                      <th class="pt-1 pb-1" colspan="2">porcentaje %</th>
+                                    </tr>
+                                    <tr class="text-center bg-color-48acc6"> 
+                                      <th class="pt-1 pb-1 celda-b-b-2px">Inf.</th> 
+                                      <th class="pt-1 pb-1 celda-b-r-2px celda-b-b-2px">Informe</th>
+                                      <th class="pt-1 pb-1 celda-b-b-2px">S/.</th>
+                                      <th class="pt-1 pb-1 celda-b-b-2px">Programado</th>
+                                      <th class="pt-1 pb-1 celda-b-r-2px celda-b-b-2px">Acumulado</th>         
+                                      <th class="pt-1 pb-1 celda-b-b-2px">S/.</th>  
+                                      <th class="pt-1 pb-1 celda-b-b-2px">Valorizado</th>  
+                                      <th class="pt-1 pb-1 celda-b-r-2px celda-b-b-2px">Acumulado</th>
+                                      <th class="pt-1 pb-1 celda-b-b-2px">S/.</th>  
+                                      <th class="pt-1 pb-1 celda-b-b-2px">Gastado</th>  
+                                      <th class="pt-1 pb-1 celda-b-b-2px">Acumulado</th>     
+                                    </tr>
+                                  </thead>
+                                  <tbody id="tabla-principal">                         
+                                    <tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>
+                                  </tbody>
+                                  <tfoot>
+                                    <tr> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px" ></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px">Total</th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
+                                      <th class="pt-1 pb-1 celda-b-t-2px text-center total_porcent_programado"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px"></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_valorizado"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px text-center total_porcent_valorizado"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_gastado"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px text-center total_porcent_gastado"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px"></th>                               
+                                    </tr> 
+                                  </tfoot>
+                                </table>
+                              </div>  
                             </div>
                           </div>
                         </div>
@@ -552,10 +577,10 @@
                                     <div class="input-group-prepend">
                                       <span class="input-group-text">S/. </span>
                                     </div>
-                                    <input type="text"  name="monto_programado" id="monto_programado" class="form-control" onkeyup="formato_miles_input('monto_programado');"  placeholder="Monto programado" >
+                                    <input type="text"  name="monto_programado" id="monto_programado" class="form-control" onkeyup="formato_miles_input('#monto_programado');"  placeholder="Monto programado" >
                                   </div>
                                 </div>
-                              </div>
+                              </div> 
 
                               <!-- monto_valorizado -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
@@ -565,7 +590,7 @@
                                     <div class="input-group-prepend">
                                       <span class="input-group-text">S/. </span>
                                     </div>
-                                    <input type="text"  name="monto_valorizado" id="monto_valorizado" class="form-control"  onkeyup="formato_miles_input('monto_valorizado');"  placeholder="Monto valorizado" >
+                                    <input type="text"  name="monto_valorizado" id="monto_valorizado" class="form-control"  onkeyup="formato_miles_input('#monto_valorizado');"  placeholder="Monto valorizado" >
                                   </div>
                                 </div>
                               </div>
