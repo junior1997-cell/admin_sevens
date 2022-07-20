@@ -45,19 +45,22 @@ function doc7_eliminar() {
 }
 
 function mostrar_form_table(estados) {
-
   if (estados=='1') {
+    $("#btn-editar").show();
+    $("#btn-guardar").hide();
+
     $('#tab-seleccione').hide(); 
     $('#tab-contenido').hide(); 
     $('#tab-info').show();
     $('#card-regresar').hide();
-  } else {
-    if (estados=='2') {
-      $('#tab-seleccione').show(); 
-      $('#tab-contenido').show(); 
-      $('#tab-info').hide();
-      $('#card-regresar').show();
-    }    
+  } else if (estados=='2') {
+    $("#btn-editar").hide();
+    $("#btn-guardar").hide();
+
+    $('#tab-seleccione').show(); 
+    $('#tab-contenido').show(); 
+    $('#tab-info').hide();
+    $('#card-regresar').show();      
   }
 }
 
@@ -387,55 +390,76 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
   }
 
   //Función para guardar o editar
-  function guardaryeditar_resumen_q_s(e) {
+  function guardar_y_editar_resumen_q_s_valorizacion() {
     // e.preventDefault(); //No se activará la acción predeterminada del evento
-    var formData = new FormData($("#form-resumen-valorizacion")[0]);
-  
-    $.ajax({
-      url: "../ajax/valorizacion.php?op=guardaryeditar_resumen_q_s",
-      type: "POST",
-      data: formData,
-      contentType: false,
-      processData: false,
-      success: function (e) {   
-        try {
-          e = JSON.parse(e);
-          if (e.status == true) {	
-  
-            Swal.fire("Correcto!", "Resumen guardado correctamente", "success");	
-            limpiar_resumen_q_s();
-            tabla_principal_resumen_q_s.ajax.reload(null, false);
-            l_tbla_listar_resumen_q_s(localStorage.getItem('nube_idproyecto'));
-            $("#modal-agregar-resumen_valorizacion").modal("hide");
-          }else{
-            ver_errores(e);
-          }
-        } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
-        $("#guardar_registro_resumen_valorizacion").html('Guardar Cambios').removeClass('disabled');
-      },
-      xhr: function () {
-        var xhr = new window.XMLHttpRequest();
-        xhr.upload.addEventListener("progress", function (evt) {
-          if (evt.lengthComputable) {
-            var percentComplete = (evt.loaded / evt.total)*100;
-            /*console.log(percentComplete + '%');*/
-            $("#barra_progress").css({"width": percentComplete+'%'});
-            $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-          }
-        }, false);
-        return xhr;
-      },
-      beforeSend: function () {
-        $("#guardar_registro_resumen_valorizacion").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-        $("#barra_progress").css({ width: "0%",  });
-        $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
-      },
-      complete: function () {
-        $("#barra_progress").css({ width: "0%", });
-        $("#barra_progress").text("0%").removeClass('progress-bar-striped progress-bar-animated');
-      },
-      error: function (jqXhr) { ver_errores(jqXhr); },
-    });
+    //var formData = new FormData($("#form-resumen-valorizacion")[0]);
+    var array_resumen_qs = [];
+    for (let index = 1; index <= cant_valorizaciones; index++) {
+      array_resumen_qs.push({
+        'idresumen_q_s_valorizacion':$(`.idresumen_q_s_valorizacion_${index}`).text(),
+        'idproyecto':       $(`.idproyecto_${index}`).text(),        
+        'fecha_inicio':     $(`.f_inicio_${index}`).text(),
+        'fecha_fin':        $(`.f_fin_${index}`).text(),
+        'numero_q_s':       $(`.numero_q_s_actual_${index}`).text(),
+        'monto_programado': quitar_formato_miles($(`#programado_${index}`).val()),
+        'monto_valorizado': quitar_formato_miles($(`#valorizado_${index}`).val()),
+      });      
+    }    
+
+    if (array_resumen_qs.length === 0) {
+      toastr_error('Sin datos!', ' No hay datos para guardar', 7000);
+    } else {
+      // abrimos el modal cargando
+      $("#modal-cargando").modal("show");
+
+      $.ajax({
+        url: "../ajax/valorizacion.php?op=guardaryeditar_resumen_q_s",
+        type: "POST",
+        data: {
+          'resumen_qs':JSON.stringify(array_resumen_qs),
+        },
+        // contentType: false,
+        // processData: false,
+        success: function (e) {   
+          try {
+            e = JSON.parse(e);
+            if (e.status == true) {	    
+              $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );             
+              $(".progress-bar").addClass("bg-success"); $("#barra_progress_cargando").text("100% Completado!");
+              show_hide_span_input(1);
+              tbla_resumen_q_s(localStorage.getItem('nube_idproyecto')); 
+            }else{
+              $("#icono-respuesta").html(`<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${e.data}</div> </div>`);
+              $(".progress-bar").addClass("bg-danger"); $("#barra_progress_cargando").text("100% Error!");
+              //ver_errores(e);
+            }
+          } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+
+        },
+        xhr: function () {
+          var xhr = new window.XMLHttpRequest();
+          xhr.upload.addEventListener("progress", function (evt) {
+            if (evt.lengthComputable) {
+              var percentComplete = (evt.loaded / evt.total)*100;
+              /*console.log(percentComplete + '%');*/
+              $("#barra_progress_cargando").css({"width": percentComplete+'%'});
+              $("#barra_progress_cargando").text(percentComplete.toFixed(2)+" %");
+            }
+          }, false);
+          return xhr;
+        },
+        beforeSend: function () {
+          $("#barra_progress_cargando").css({ width: "0%",  });
+          $("#barra_progress_cargando").text("0%").addClass('progress-bar-striped progress-bar-animated');
+        },
+        complete: function () {
+          $("#barra_progress_cargando").css({ width: "0%", });
+          $("#barra_progress_cargando").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+        },
+        error: function (jqXhr) { ver_errores(jqXhr); },
+      });
+    }
+    
   }
 
   //Función Listar - tabla principal
@@ -482,25 +506,30 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
           } 
 
           html_tabla = html_tabla.concat(`<tr>
-            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${indice+1}</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >
+              <span class="numero_q_s_actual_${indice+1}">${indice+1}</span>
+              <span class="hidden idproyecto_${indice+1}">${key.idproyecto}</span>
+              <span class="hidden idresumen_q_s_valorizacion_${indice+1}">${key.idresumen_q_s_valorizacion}</span>
+              <span class="hidden f_inicio_${indice+1}" >${key.fecha_inicio}</span> <span class="hidden f_fin_${indice+1}">${key.fecha_fin}</span>
+            </td>
             <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" >${format_d_m_a(key.fecha_inicio)} - ${format_d_m_a(key.fecha_fin)}</td>
             <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
               <div class="formato-numero-conta span_val"><span>S/</span><span>${formato_miles(key.monto_programado)}</span></div>
               <input class="hidden w-100 input_val" type="text" id="programado_${indice+1}" value="${key.monto_programado==0?'':formato_miles(key.monto_programado)}" onkeyup="formato_miles_input('#programado_${indice+1}'); delay(function(){ calcular_procentajes_programado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto}) }, 200 );">
             </td>
-            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_programado_${indice+1}">${porcent_programado.toFixed(2)}</span>%</td>            
-            <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" >${acum_porcent_programado.toFixed(2)}%</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_programado_${indice+1}">${redondearExp(porcent_programado)}</span>%</td>            
+            <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" ><span class="acum_porcent_programado_${indice+1}">${redondearExp(acum_porcent_programado)}</span>%</td>
             <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
               <div class="formato-numero-conta span_val"><span>S/</span><span>${formato_miles(key.monto_valorizado)}</span></div>
               <input class="hidden w-100 input_val" type="text" id="valorizado_${indice+1}" value="${key.monto_valorizado==0?'':formato_miles(key.monto_valorizado)}" onkeyup="formato_miles_input('#valorizado_${indice+1}'); delay(function(){ calcular_procentajes_valorizado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto}) }, 200 );">
             </td>
-            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_valorizado_${indice+1}">${porcent_valorizado.toFixed(2)}</span>%</td>            
-            <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" >${acum_porcent_valorizado.toFixed(2)}%</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_valorizado_${indice+1}">${redondearExp(porcent_valorizado)}</span>%</td>            
+            <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" ><span class="acum_porcent_valorizado_${indice+1}">${redondearExp(acum_porcent_valorizado)}</span>%</td>
             <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
               <div class="formato-numero-conta"><span>S/</span><span>${formato_miles(key.monto_gastado)}</span></div>              
             </td>
-            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${porcent_gastado.toFixed(2)}%</td>
-            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${acum_porcent_gastado.toFixed(2)}%</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${redondearExp(porcent_gastado)}%</td>
+            <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" >${redondearExp(acum_porcent_gastado)}%</td>
           </tr>`); 
         });
 
@@ -529,7 +558,7 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     $(`.porcent_programado_${num_val}`).html(redondearExp(porcentaje_calculado));
     calcular_totales('.suma_total_monto_programado','#programado_', cant_valorizaciones, '');
     calcular_totales('.total_porcent_programado','.porcent_programado_', cant_valorizaciones, 'porcentaje');
-    
+    calcular_porcentaje_acumulado('.porcent_programado_', '.acum_porcent_programado_', cant_valorizaciones, costo_proyecto);
   }
 
   function calcular_procentajes_valorizado(num_val, cant_valorizaciones, costo_proyecto) {
@@ -541,6 +570,7 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     $(`.porcent_valorizado_${num_val}`).html(redondearExp(porcentaje_calculado));
     calcular_totales('.suma_total_monto_valorizado', '#valorizado_', cant_valorizaciones, '');
     calcular_totales('.total_porcent_valorizado','.porcent_valorizado_', cant_valorizaciones, 'porcentaje');
+    calcular_porcentaje_acumulado('.porcent_valorizado_', '.acum_porcent_valorizado_', cant_valorizaciones, costo_proyecto);
   }
 
   function calcular_procentajes_gastado(cant_valorizaciones, costo_proyecto) {
@@ -548,16 +578,16 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
   }
 
   function calcular_totales(name_div, name_input_span, cant_valorizaciones, tipo) {
-    console.log('hola estamos calculado totales');
+    //console.log('hola estamos calculado totales');
     var sum_total_programado = 0, cant_por_fecha = 0;
     for (let index = 1; index <= cant_valorizaciones; index++) {
       if (tipo == 'porcentaje') {
-        cant_por_fecha = $(`${name_input_span}${index}`).text(); console.log(`${name_input_span}_${index} - ` + cant_por_fecha);
+        cant_por_fecha = $(`${name_input_span}${index}`).text(); //console.log(`${name_input_span}_${index} - ` + cant_por_fecha);
         if (cant_por_fecha == '-' || cant_por_fecha == null || cant_por_fecha == '' ) {  } else {
           sum_total_programado +=  parseFloat(quitar_formato_miles(cant_por_fecha));
         }
       } else {
-        cant_por_fecha = $(`${name_input_span}${index}`).val(); console.log(`${name_input_span}_${index} - ` + cant_por_fecha);
+        cant_por_fecha = $(`${name_input_span}${index}`).val(); //console.log(`${name_input_span}_${index} - ` + cant_por_fecha);
         if (cant_por_fecha == '-' || cant_por_fecha == null || cant_por_fecha == '' ) {  } else {
           sum_total_programado +=  parseFloat(quitar_formato_miles(cant_por_fecha));
         }
@@ -569,6 +599,17 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     } else {
       $(name_div).html(`<b>${formato_miles(sum_total_programado)}</b>`);
     }    
+  }
+
+  function calcular_porcentaje_acumulado(name_input_span, name_output_span, cant_valorizaciones, costo_proyecto) {
+    var sum_total_acumulado = 0;
+    for (let index = 1; index <= cant_valorizaciones; index++) {
+      var cant_por_fecha = $(`${name_input_span}${index}`).text(); //console.log(`${name_input_span}_${index} - ` + cant_por_fecha);
+      if (cant_por_fecha == '-' || cant_por_fecha == null || cant_por_fecha == '' ) {  } else {
+        sum_total_acumulado +=  parseFloat(quitar_formato_miles(cant_por_fecha));
+        $(`${name_output_span}${index}`).html(redondearExp(sum_total_acumulado));
+      }
+    }
   }
   
 

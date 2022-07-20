@@ -287,16 +287,11 @@
         break; 
         
         //--------------------------R E S U M E N   Q S ---------------------------------
-        case 'guardaryeditar_resumen_q_s':
-          if (empty($idresumen_q_s_valorizacion)){
-            // Registramos docs en valorización
-            $rspta=$valorizacion->insertar_valorizacion_resumen_q_s($numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);            
-            echo json_encode($rspta, true) ;            
-          }else {
-            // editamos un trabajador existente
-            $rspta=$valorizacion->editar_valorizacion_resumen_q_s($idresumen_q_s_valorizacion, $numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,quitar_formato_miles($monto_programado),quitar_formato_miles($monto_valorizado),$monto_gastado);            
-            echo json_encode($rspta, true) ;              
-          }
+        case 'guardaryeditar_resumen_q_s':         
+            
+          $rspta=$valorizacion->insertar_editar_resumen_q_s($_POST["resumen_qs"]);            
+          echo json_encode($rspta, true) ;            
+         
         break; 
 
         case 'tbla_resumen_q_s':

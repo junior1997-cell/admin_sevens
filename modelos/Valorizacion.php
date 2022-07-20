@@ -210,41 +210,35 @@ class Valorizacion
 
   //--------------------------------R ES U E M E N _Q_S --------------------------------
 
-  public function insertar_valorizacion_resumen_q_s($numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,$monto_programado,$monto_valorizado,$monto_gastado) {
-    $sql_1 = "SELECT * FROM `resumen_q_s_valorizacion` WHERE `idproyecto`='$idproyecto_q_s' AND `numero_q_s`='$numero_q_s_resumen_oculto'";
-    $buscando=ejecutarConsultaArray($sql_1);
-    if ($buscando['status'] == false) { return $buscando; }
+  public function insertar_editar_resumen_q_s($array_val) {
+    foreach (json_decode( $array_val, true) as $key => $value) {
+      $idresumen_q_s_valorizacion   = $value['idresumen_q_s_valorizacion'];
+      $idproyecto       = $value['idproyecto'];
+      $numero_q_s       = $value['numero_q_s'];
+      $fecha_inicial    = $value['fecha_inicio'];
+      $fecha_final      = $value['fecha_fin'];
+      $monto_programado = $value['monto_programado'];
+      $monto_valorizado = $value['monto_valorizado'];
 
-    if ( empty($buscando['data']) ) {
-      $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, monto_programado, monto_valorizado, monto_gastado) 
-      VALUES ('$idproyecto_q_s','$numero_q_s_resumen_oculto','$fecha_inicial','$fecha_final','$monto_programado','$monto_valorizado','$monto_gastado')";
-      return ejecutarConsulta($sql_2); 
+      $sql_1 = "SELECT * FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto' AND numero_q_s='$numero_q_s'";
+      $buscando=ejecutarConsultaArray($sql_1);
+      if ($buscando['status'] == false) { return $buscando; }
 
-    } else {
-      $info_repetida = ''; 
-
-      foreach ($buscando['data'] as $key => $value) {
-        $info_repetida .= '<li class="text-left font-size-13px">
-          <b>Valorización: </b>'.$value['numero_q_s'].'<br>
-          <b>Fecha inicio: </b>'.$value['fecha_inicio'].'<br>
-          <b>Fecha fin: </b>'.$value['fecha_fin'].'<br>
-          <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
-          <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
-          <hr class="m-t-2px m-b-2px">
-        </li>'; 
-      }
-
-      $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
-      return $sw;
-    } 
-  }
-
-  public function editar_valorizacion_resumen_q_s($idresumen_q_s_valorizacion, $numero_q_s_resumen_oculto,$idproyecto_q_s, $fecha_inicial,$fecha_final,$monto_programado,$monto_valorizado,$monto_gastado) {
-    $sql = "UPDATE resumen_q_s_valorizacion SET idproyecto='$idproyecto_q_s', numero_q_s='$numero_q_s_resumen_oculto', fecha_inicio='$fecha_inicial',
-    fecha_fin='$fecha_final', monto_programado='$monto_programado', monto_valorizado='$monto_valorizado', monto_gastado='$monto_gastado' 
-    WHERE idresumen_q_s_valorizacion='$idresumen_q_s_valorizacion'";
-    return ejecutarConsulta($sql); 
-  }
+      if ( empty($buscando['data']) ) {
+        $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, monto_programado, monto_valorizado, monto_gastado) 
+        VALUES ('$idproyecto','$numero_q_s','$fecha_inicial','$fecha_final','$monto_programado','$monto_valorizado','0')";
+        $insertando = ejecutarConsulta($sql_2); 
+        if ($insertando['status'] == false) { return $insertando; }
+      } else {         
+        $sql_3 = "UPDATE resumen_q_s_valorizacion SET idproyecto='$idproyecto', numero_q_s='$numero_q_s', fecha_inicio='$fecha_inicial',
+        fecha_fin='$fecha_final', monto_programado='$monto_programado', monto_valorizado='$monto_valorizado', monto_gastado='0' 
+        WHERE numero_q_s='$numero_q_s'";
+        $editando =  ejecutarConsulta($sql_3); 
+        if ($editando['status'] == false) { return $editando; }
+      } 
+    }    
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => [], ];
+  }  
 
   public function tbla_resumen_q_s($idproyecto, $array_fechas) {
     $data = [];
@@ -270,7 +264,7 @@ class Valorizacion
     }
 
     $sql_2 = "SELECT idproyecto,  nombre_codigo,  costo, fecha_inicio, fecha_fin, feriado_domingo,  fecha_valorizacion, permanente_pago_obrero
-    FROM proyecto WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1';";
+    FROM proyecto WHERE idproyecto='$idproyecto';";
     $proyecto =  ejecutarConsultaSimpleFila($sql_2);
     if ($proyecto['status'] == false) { return $proyecto; }
     

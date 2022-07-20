@@ -419,16 +419,29 @@
           echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead class="bg-color-127ab6ba">
-                <th class="text-center p-10px" >#</th>
-                <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
-                <th class="p-10px">Material</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Valor Unitario">V/U</th>
-                <th class="p-10px">IGV</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Descuento">Desct.</th>
-                <th class="p-10px">Subtotal</th>
+                <tr class="text-center hidden">
+                  <th class="p-10px">Proveedor:</th>
+                  <th class="text-center p-10px" colspan="9" >'.$rspta['data']['razon_social'].'</th>
+                </tr>
+                <tr class="text-center hidden">                
+                  <th class="text-center p-10px" colspan="2" >'.((empty($rspta['data']['tipo_comprobante'])) ? '' :  $rspta['data']['tipo_comprobante']). ' ─ ' . ((empty($rspta['data']['serie_comprobante'])) ? '' :  $rspta['data']['serie_comprobante']) .'</th>
+                  <th class="p-10px">Fecha:</th>
+                  <th class="text-center p-10px" colspan="3" >'.format_d_m_a($rspta['data']['fecha_compra']).'</th>
+                  <th class="p-10px">Glosa:</th>
+                  <th class="text-center p-10px" colspan="3" >'.$rspta['data']['glosa'].'</th>
+                </tr>
+                <tr class="text-center">    
+                  <th class="text-center p-10px" >#</th>
+                  <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
+                  <th class="p-10px">Material</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Valor Unitario">V/U</th>
+                  <th class="p-10px">IGV</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Descuento">Desct.</th>
+                  <th class="p-10px">Subtotal</th>
+                </tr>
               </thead>
               <tbody>'.$tbody.'</tbody>          
               <tfoot>
@@ -850,16 +863,29 @@
           echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead class="bg-color-ff6c046b">
-                <th class="text-center p-10px" >#</th>
-                <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
-                <th class="p-10px">Material</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Valor Unitario">V/U</th>
-                <th class="p-10px">IGV</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
-                <th class="p-10px" data-toggle="tooltip" data-original-title="Descuento">Desct.</th>
-                <th class="p-10px">Subtotal</th>
+                <tr class="text-center hidden">
+                  <th class="p-10px">Proveedor:</th>
+                  <th class="text-center p-10px" colspan="9" >'.$rspta['data']['razon_social'].'</th>
+                </tr>
+                <tr class="text-center hidden">                
+                  <th class="text-center p-10px" colspan="2" >'.((empty($rspta['data']['tipo_comprobante'])) ? '' :  $rspta['data']['tipo_comprobante']). ' ─ ' . ((empty($rspta['data']['serie_comprobante'])) ? '' :  $rspta['data']['serie_comprobante']) .'</th>
+                  <th class="p-10px">Fecha:</th>
+                  <th class="text-center p-10px" colspan="3" >'.format_d_m_a($rspta['data']['fecha_compra']).'</th>
+                  <th class="p-10px">Glosa:</th>
+                  <th class="text-center p-10px" colspan="3" >'.$rspta['data']['glosa'].'</th>
+                </tr>
+                <tr class="text-center "> 
+                  <th class="text-center p-10px" >#</th>
+                  <th class="text-center p-10px" data-toggle="tooltip" data-original-title="Ficha Técnica">F.T.</th>
+                  <th class="p-10px">Material</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Valor Unitario">V/U</th>
+                  <th class="p-10px">IGV</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                  <th class="p-10px" data-toggle="tooltip" data-original-title="Descuento">Desct.</th>
+                  <th class="p-10px">Subtotal</th>
+                </tr>
               </thead>
               <tbody>'.$tbody.'</tbody>          
               <tfoot>

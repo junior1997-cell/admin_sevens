@@ -1357,8 +1357,7 @@ function guardar_fechas_asistencia() {
   show_hide_span_input(2);
 
   if (array_datos_asistencia.length === 0) {
-
-    toastr.error(`<h5>Sin datos!</h5> No hay datos para guardar.`);
+    toastr_error('Sin datos!', ' No hay datos para guardar', 7000);    
   } else {
 
     // abrimos el modal cargando
@@ -1395,26 +1394,17 @@ function guardar_fechas_asistencia() {
 
             // Swal.fire("Error!", datos, "error");
           }
-        } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }
+        } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }
       },
       xhr: function () {
-
         var xhr = new window.XMLHttpRequest();
-
         xhr.upload.addEventListener("progress", function (evt) {
-
           if (evt.lengthComputable) {
-
             var percentComplete = (evt.loaded / evt.total)*100;
             /*console.log(percentComplete + '%');*/
             $("#barra_progress").css({"width": percentComplete+'%'});
-
             $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-
-            if (percentComplete === 100) {
-
-              setTimeout(l_m, 600);
-            }
+            if (percentComplete === 100) {  setTimeout(l_m, 600); }
           }
         }, false);
         return xhr;

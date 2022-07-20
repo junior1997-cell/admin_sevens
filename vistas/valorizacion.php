@@ -66,7 +66,7 @@
                           </h3>
                           <!-- Guardar -->
                           <h3 class="card-title mr-3" id="btn-guardar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_fechas_asistencia();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
+                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_y_editar_resumen_q_s_valorizacion();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
                           </h3>   
                           <!-- regresar -->
                           <h3 class="card-title mr-3" id="card-regresar" style="display: none; padding-left: 2px;">
@@ -636,6 +636,36 @@
                         <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_resumen_q_s();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_resumen_valorizacion">Guardar Cambios</button>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - cargando -->
+                <div class="modal fade" id="modal-cargando" data-keyboard="false" data-backdrop="static">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        
+                        <div id="icono-respuesta">
+                          <!-- icon ERROR -->
+                          <!-- icon success -->
+                        </div>
+                        
+                        <!-- barprogress -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                          <div class="progress h-px-30" id="barra_progress_cargando_div">
+                            <div id="barra_progress_cargando" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              0%
+                            </div>
+                          </div>
+                        </div> 
+                        
+                        <!-- boton -->
+                        <div class="swal2-actions" >
+                          <div class="swal2-loader"></div>
+                          <button type="button" class="swal2-confirm swal2-styled" data-dismiss="modal" aria-label="Close" style="display: inline-block;">OK</button>                         
+                        </div>
+                      </div>                     
                     </div>
                   </div>
                 </div>
