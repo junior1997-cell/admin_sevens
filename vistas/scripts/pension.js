@@ -245,15 +245,7 @@ function tbla_principal(nube_idproyecto) {
   $.post("../ajax/pension.php?op=total_pension", { idproyecto: nube_idproyecto }, function (e, status) {
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
-      $("#total_pension").html('S/. '+formato_miles(e.data.total));
-      $("#total_deposito").html('S/. '+formato_miles(e.data.total_deposito));
-      if (es_numero(e.data.total) && es_numero(e.data.total_deposito) ) {
-        var saldo = e.data.total - e.data.total_deposito;
-        $("#total_saldo").html('S/. '+`${formato_miles(saldo)}`);
-      } else {
-        $("#total_saldo").html('S/. '+`0`);
-      }
-      
+      $("#total_pension").html('S/. '+formato_miles(e.data.total));      
     } else {
       ver_errores(e);
     }
@@ -285,15 +277,34 @@ function mostrar_pension(idpension) {
 
   }).fail( function(e) { ver_errores(e); } );
 }
-// .....:::::::::::::::::::::::::::::::::::::  D E T A L L E   P E N S I O N  :::::::::::::::::::::::::::::::::::..
-function limpiar_form_detalle_pension() {
 
+// .....:::::::::::::::::::::::::::::::::::::  D E T A L L E   P E N S I O N  :::::::::::::::::::::::::::::::::::..
+
+function limpiar_form_detalle_pension() {
+  $(".edit_detall_pens").html('Agregar detalle pensión');
+
+  $("#iddetalle_pension").val(""); 
   $("#idpension").val("");
   $("#fecha_inicial").val("");
   $("#fecha_final").val("");
   $("#cantidad_persona").val("");
-  $("#monto_detalle").val("");
   $("#descripcion_detalle").val("");
+
+  $("#nro_comprobante").val("");
+  $("#fecha_emision").val("");
+  $("#subtotal").val("");
+  $("#igv").val("");
+  $("#monto").val("");
+  $("#val_igv").val(""); 
+  $("#tipo_gravada").val("");
+  $("#tipo_comprobante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
+
+  $("#doc_old_1").val("");
+  $("#doc1").val("");  
+  $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc1_nombre').html("");
+
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -430,24 +441,54 @@ function guardaryeditar_detalle_pension(e) {
 function mostar_editar_detalle_pension(id_detalle_pension) {
 
   limpiar_form_detalle_pension();
-  $("#modal-agregar-detalle-pension").modal("show");
 
   $("#cargando-5-fomulario").hide();
   $("#cargando-6-fomulario").show();
 
   $(".edit_detall_pens").html('Editar detalle pensión')
+  $("#tipo_comprobante").val("null").trigger("change");
+  $("#forma_pago").val("null").trigger("change");
+
+  $("#modal-agregar-detalle-pension").modal("show");
 
   $.post("../ajax/pension.php?op=mostar_editar_detalle_pension", {id_detalle_pension: id_detalle_pension }, function (e, status) {
 
-    e = JSON.parse(e); console.log('jjjjjjjjjjjjjjjjjjjj'); console.log(e);   
+    e = JSON.parse(e); 
 
     $("#iddetalle_pension").val(e.data.iddetalle_pension ); 
     $("#id_pension").val(e.data.idpension );
     $("#fecha_inicial").val(e.data.fecha_inicial);
     $("#fecha_final").val(e.data.fecha_final);
     $("#cantidad_persona").val(e.data.cantidad_persona);
-    $("#monto_detalle").val(e.data.monto);
+
+    $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+    $("#nro_comprobante").val(e.data.numero_comprobante);
+    $("#monto").val(parseFloat(e.data.precio_parcial).toFixed(2));
+    $("#fecha_emision").val(e.data.fecha_emision);
+    $("#subtotal").val(parseFloat(e.data.subtotal).toFixed(2));
+    $("#igv").val(parseFloat(e.data.igv).toFixed(2));
+    $("#val_igv").val(e.data.val_igv); 
     $("#descripcion_detalle").val(e.data.descripcion);
+    $("#tipo_gravada").val(e.data.glosa);
+    $("#forma_pago").val(e.data.forma_pago).trigger("change");
+
+    if (e.data.comprobante == "" || e.data.comprobante == null  ) {
+
+      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+      $("#doc1_nombre").html('');
+
+      $("#doc_old_1").val(""); $("#doc1").val("");
+
+    } else {
+
+      $("#doc_old_1").val(e.data.comprobante); 
+
+      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
+      // cargamos la imagen adecuada par el archivo
+      $("#doc1_ver").html(doc_view_extencion(e.data.comprobante,'pension', 'comprobante', '100%', '210' ));       
+           
+    }
 
     $("#cargando-5-fomulario").show();
     $("#cargando-6-fomulario").hide();
@@ -477,141 +518,26 @@ function eliminar_detalle_pension(iddetalle_pension, fecha_inicial,fecha_final) 
 
 }
 
-// .....:::::::::::::::::::::::::::::::::::::  C O M P R O B A N T E    P E N S I O N  :::::::::::::::::::::::::::::::::::::::..
+function ver_modal_comprobante(comprobante){
+  var comprobante = comprobante;
+  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
+  //console.log(extencion);
+  $('#ver_fact_pdf').html('');
+  $('#img-factura').attr("src", "");
+  $('#modal-ver-comprobante').modal("show");
 
-//Función limpiar-factura
-function limpiar_comprobante() {
-  //idpension_f,idfactura_pension
-  $("#nro_comprobante").val("");
-  $("#idfactura_pension").val("");
-  $("#fecha_emision").val("");
-  $("#descripcion").val("");
-
-  $("#subtotal").val("");
-
-  $("#igv").val("");
-
-  $("#monto").val("");
-
-  $("#val_igv").val(""); 
-
-  $("#tipo_gravada").val("");
-  $("#tipo_comprobante").val("null").trigger("change");
-  $("#forma_pago").val("null").trigger("change");
-
-  $("#doc_old_1").val("");
-  $("#doc1").val("");  
-  $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc1_nombre').html("");
-
-    // Limpiamos las validaciones
-    $(".form-control").removeClass('is-valid');
-    $(".is-invalid").removeClass("error is-invalid");
-
-}
-
-//Guardar y editar
-function guardaryeditar_factura(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-agregar-comprobante")[0]);
- 
-  $.ajax({
-    url: "../ajax/pension.php?op=guardaryeditar_Comprobante",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (e) {
-      try {
-        e = JSON.parse(e);                       
-        if (e.status ==true) {
-          toastr.success('servicio registrado correctamente');
-          tabla_comprobantes.ajax.reload(null, false);
-          $("#modal-agregar-comprobante").modal("hide");
-          tbla_comprobante(localStorage.getItem('idpension_f_nube'));
-          total_monto(localStorage.getItem('idpension_f_nube'));
-          tbla_principal( localStorage.getItem('nube_idproyecto'));
-          limpiar_comprobante();
-        }else{
-          ver_errores(e);
-        }        
-      } catch (err) {
-        console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
-      }
-      $("#guardar_registro_comprobaante").html('Guardar Cambios').removeClass('disabled');
-    },
-    xhr: function () {
-
-      var xhr = new window.XMLHttpRequest();
-
-      xhr.upload.addEventListener("progress", function (evt) {
-
-        if (evt.lengthComputable) {
-          var percentComplete = (evt.loaded / evt.total)*100;
-          /*console.log(percentComplete + '%');*/
-          $("#barra_progress_comprobante_pension").css({"width": percentComplete+'%'});
-          $("#barra_progress_comprobante_pension").text(percentComplete.toFixed(2)+" %");
-        }
-      }, false);
-      return xhr;
-    },
-    beforeSend: function () {
-      $("#guardar_registro_comprobaante").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress_comprobante_pension").css({ width: "0%",  });
-      $("#barra_progress_comprobante_pension").text("0%").addClass('progress-bar-striped progress-bar-animated');
-    },
-    complete: function () {
-      $("#barra_progress_comprobante_pension").css({ width: "0%", });
-      $("#barra_progress_comprobante_pension").text("0%").removeClass('progress-bar-striped progress-bar-animated');
-    },
-    error: function (jqXhr) { ver_errores(jqXhr); },
-  });
-}
-
-function tbla_comprobante(idpension, razon_social) {
-  localStorage.setItem('idpension_f_nube',idpension);
-  $("#nomb_pension_head").html(`<i class="fas fa-utensils nav-icon"></i> Pensión - <b>${razon_social}</b>`);
-  mostrar_form_table(3)
-  $("#idpension_f").val(idpension);
-  
-  tabla_comprobantes =$('#tabla-comprobantes').dataTable({  
-    responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    aProcessing: true,//Activamos el procesamiento del datatables
-    aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    ajax:{
-      url: '../ajax/pension.php?op=tbla_comprobante&idpension='+idpension,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);		ver_errores(e);
-      }
-    },
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
-      // columna: sub total
-      if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right'); }
-      // columna: igv
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
-      // columna: total
-      if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 10,//Paginación
-    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
-    columnDefs: [
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-    ],
-  }).DataTable();
-  total_monto(localStorage.getItem('idpension_f_nube'));
+  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
+    $('#ver_fact_pdf').hide();
+    $('#img-factura').show();
+    $('#img-factura').attr("src", "../dist/docs/pension/comprobante/" +comprobante);
+    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
+  }else{
+    $('#img-factura').hide();
+    $('#ver_fact_pdf').show();
+    $('#ver_fact_pdf').html('<iframe src="../dist/docs/pension/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
+    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
+  } 
+ $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 function comprob_factura() {
@@ -736,137 +662,6 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
   return precio_sin_igv; 
 }
 
-//mostrar
-function mostrar_comprobante(idfactura_pension ) {
-
-  $("#cargando-3-fomulario").hide();
-  $("#cargando-4-fomulario").show();
-
-  limpiar_comprobante();
-  $("#modal-agregar-comprobante").modal("show");
-  $("#tipo_comprobante").val("null").trigger("change");
-  $("#forma_pago").val("null").trigger("change");
-
-  $.post("../ajax/pension.php?op=mostrar_comprobante", { idfactura_pension : idfactura_pension  }, function (e, status) {
-
-    e = JSON.parse(e);  console.log(e); 
-
-    if (e.status) {
-      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
-      $("#idfactura_pension  ").val(e.data.idfactura_pension);
-      $("#nro_comprobante").val(e.data.nro_comprobante);
-      $("#monto").val(parseFloat(e.data.monto).toFixed(2));
-      $("#fecha_emision").val(e.data.fecha_emision);
-      $("#descripcion").val(e.data.descripcion);
-      $("#subtotal").val(parseFloat(e.data.subtotal).toFixed(2));
-      $("#igv").val(parseFloat(e.data.igv).toFixed(2));
-      $("#val_igv").val(e.data.val_igv); 
-      $("#tipo_gravada").val(e.data.tipo_gravada);
-      $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
-
-      if (e.data.comprobante == "" || e.data.comprobante == null  ) {
-
-        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-        $("#doc1_nombre").html('');
-
-        $("#doc_old_1").val(""); $("#doc1").val("");
-
-      } else {
-
-        $("#doc_old_1").val(e.data.comprobante); 
-
-        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
-        // cargamos la imagen adecuada par el archivo
-        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante,'pension', 'comprobante', '100%', '210' ));       
-             
-      }
-      $("#cargando-3-fomulario").show();
-      $("#cargando-4-fomulario").hide();
-
-    } else {
-      ver_errores(e);
-    }
-  }).fail( function(e) { ver_errores(e); } );
-}
-
-//Función para desactivar registros
-function eliminar_comprobante(idfactura_pension,nombre) {
-
-  crud_eliminar_papelera(
-    "../ajax/pension.php?op=desactivar_comprobante",
-    "../ajax/pension.php?op=eliminar_comprobante", 
-    idfactura_pension, 
-    "!Elija una opción¡", 
-    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
-    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
-    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ total_monto(localStorage.getItem('idpension_f_nube')); tabla_comprobantes.ajax.reload(null, false); },
-    function(){ tbla_principal( localStorage.getItem('nube_idproyecto')); },
-    false, 
-    false,
-    false
-  );
-
-}
-
-function activar_comprobante(idfactura_pension ) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  comprobante?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/pension.php?op=activar_comprobante", { idfactura_pension : idfactura_pension  }, function (e) {
-
-        Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
-        total_monto(localStorage.getItem('idpension_f_nube'));
-        tabla_comprobantes.ajax.reload(null, false);
-        tbla_principal(localStorage.getItem('nube_idproyecto'));
-      }).fail( function(e) { ver_errores(e); } );      
-    }
-  });  
-}
-
-function ver_modal_comprobante(comprobante){
-  var comprobante = comprobante;
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-  //console.log(extencion);
-  $('#ver_fact_pdf').html('');
-  $('#img-factura').attr("src", "");
-  $('#modal-ver-comprobante').modal("show");
-
-  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
-    $('#ver_fact_pdf').hide();
-    $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/docs/pension/comprobante/" +comprobante);
-    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
-  }else{
-    $('#img-factura').hide();
-    $('#ver_fact_pdf').show();
-    $('#ver_fact_pdf').html('<iframe src="../dist/docs/pension/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
-  } 
- $(".tooltip").removeClass("show").addClass("hidde");
-}
-
-//-total Pagos
-function total_monto(idpension) {
-  $("#monto_total_f").html("00.0");
-  $.post("../ajax/pension.php?op=total_monto", { idpension:idpension }, function (e, status) {    
-    e = JSON.parse(e); console.log(e);
-    if (e.status == true) {
-      $("#monto_total_f").html('S/ '+ formato_miles(e.data.total));
-    } else {
-      ver_errores(e);
-    } 
-  }).fail( function(e) { ver_errores(e); } );
-}
-
 
 init();
 
@@ -914,7 +709,6 @@ $(function () {
 
   });
 
-  
   $("#form-agregar-detalle-pension").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
@@ -922,38 +716,7 @@ $(function () {
       fecha_final:{required: true},
       cantidad_persona:{required: true, min:0},
       descripcion_detalle:{required: true},
-    },
-    messages: {
-      fecha_inicial: {required: "Campo requerido",},
-      fecha_final: {required: "Campo requerido",},
-      cantidad_persona: {required: "Campo requerido",},
-      descripcion_detalle: {required: "Campo requerido",},
-    },
-        
-    errorElement: "span",
 
-    errorPlacement: function (error, element) {
-      error.addClass("invalid-feedback");
-      element.closest(".form-group").append(error);
-    },
-
-    highlight: function (element, errorClass, validClass) {
-      $(element).addClass("is-invalid").removeClass("is-valid");
-    },
-
-    unhighlight: function (element, errorClass, validClass) {
-      $(element).removeClass("is-invalid").addClass("is-valid");     
-    },
-    submitHandler: function (e) {
-      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-     guardaryeditar_detalle_pension(e);
-    }
-
-  });
-
-  $("#form-agregar-comprobante").validate({
-    ignore: '.select2-input, .select2-focusser',
-    rules: {
       forma_pago:     {required: true},
       tipo_comprobante:{required: true},
       monto:          {required: true},
@@ -961,8 +724,14 @@ $(function () {
       descripcion:    {minlength: 1},
       foto2_i:        {required: true},
       val_igv:        { required: true, number: true, min:0, max:1 },
+
     },
     messages: {
+      fecha_inicial: {required: "Campo requerido",},
+      fecha_final: {required: "Campo requerido",},
+      cantidad_persona: {required: "Campo requerido",},
+      descripcion_detalle: {required: "Campo requerido",},
+
       forma_pago:     { required: "Seleccionar una forma de pago", },
       tipo_comprobante:{ required: "Seleccionar un tipo de comprobante", },
       monto:          { required: "Por favor ingresar el monto", },
@@ -987,7 +756,7 @@ $(function () {
 
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardaryeditar_factura(e);      
+      guardaryeditar_detalle_pension(e);      
     }
   });
 
