@@ -387,6 +387,23 @@ table th { vertical-align: top !important; }
 .m-r-10px{ margin-right: 10px !important; }
 .m-r-15px{ margin-right: 15px !important; }
 
+.m-l-1px{ margin-left: 1px !important; }
+.m-l-2px{ margin-left: 2px !important; }
+.m-l-5px{ margin-left: 5px !important; }
+.m-l-10px{ margin-left: 10px !important; }
+.m-l-15px{ margin-left: 15px !important; }
+.m-l-20px{ margin-left: 20px !important; }
+.m-l-30px{ margin-left: 30px !important; }
+.m-l-40px{ margin-left: 40px !important; }
+.m-l-50px{ margin-left: 50px !important; }
+.m-l-60px{ margin-left: 60px !important; }
+.m-l-70px{ margin-left: 70px !important; }
+.m-l-90px{ margin-left: 90px !important; }
+.m-l-100px{ margin-left: 100px !important; }
+.m-l-120px{ margin-left: 120px !important; }
+.m-l-150px{ margin-left: 150px !important; }
+.m-l-200px{ margin-left: 200px !important; }
+
 .m-0rem{ margin: 0rem !important; }
 .m-01rem{ margin: 0.1rem !important; }
 .m-02rem{ margin: 0.2rem !important; }

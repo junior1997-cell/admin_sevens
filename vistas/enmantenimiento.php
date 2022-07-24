@@ -24,7 +24,7 @@
     <div class="error-page"  >
       <h2 class="headline text-success">307</h2>
 
-      <div class="error-content">
+      <div class="error-content m-l-150px">
         <h3><i class="fas fa-exclamation-triangle text-success"></i> ¡Hola! Estamos en <b>Mantenimiento</b>.</h3>
 
         <p>Estamos actualizando el <b>sistema</b> para una mejor experiencia. Puedes <a href="escritorio.php">regresar al inicio</a> o comunicate con el <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" ><i class="fas fa-user-secret"></i> administrador</a>  de este sistema.</p>
