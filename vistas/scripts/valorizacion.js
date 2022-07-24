@@ -89,13 +89,21 @@ function ver_quincenas(nube_idproyecto) {
         var cal_quincena=e.data.plazo/15; var i=0;  var cont=0;
         var estado = 1;
 
+        var dia_regular = 0; var weekday_regular = extraer_dia_semana(e.data.fecha_inicio); var estado_regular = false;
+        if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
+          
+
         while (i <= cal_quincena) {
 
           cont = cont+1;
     
           var fecha_inicio = fecha_i;
-          
-          fecha = sumaFecha(14,fecha_inicio); 
+
+          if (estado_regular) {
+            fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
+          } else {
+            fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
+          }
   
           let fecha_ii = format_a_m_d(fecha_inicio); let fecha_ff = format_a_m_d(fecha);
           
@@ -1624,4 +1632,16 @@ function recoger_fecha_q_s() {
 
   }  
  
+}
+function export_excel_valorizacion() {
+  $tabla = document.querySelector("#tbla_export_excel_valorizacion");
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: "Detalle comprobante", //Nombre del archivo de Excel
+    sheetname: "detalle factura", //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+  let preferenciasDocumento = datos.tbla_export_excel_valorizacion.xlsx;
+  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+
 }

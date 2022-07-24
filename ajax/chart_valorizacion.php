@@ -40,7 +40,11 @@
           $rspta=$chart_valorizacion->listar_btn_q_s($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true) ;	
-        break;        
+        break;       
+        
+        default: 
+          $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+        break;
        
       }
     } else {

@@ -332,7 +332,11 @@
         case 'activar_pago_x_mes':
           $rspta=$pago_administrador->activar_pago_x_mes($_POST["idpagos_x_mes_administrador"]);
           echo $rspta ? "ok" : "NO se puede ReActivar";
-        break;        
+        break;    
+        
+        default: 
+          $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+        break;
       }
 
     } else {

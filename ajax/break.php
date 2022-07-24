@@ -350,10 +350,13 @@
         case 'total_monto':
           //falta
           $rspta=$breaks->total_monto_comp($idsemana_break);
-           echo json_encode($rspta);
+          echo json_encode($rspta);
      
         break;
-
+        
+        default: 
+          $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+        break;
         
       }
 

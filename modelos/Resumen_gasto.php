@@ -1647,6 +1647,12 @@ class ResumenGasto
     WHERE  estado = '1' AND estado_delete = '1' AND idcomida_extra = '$id';";
     return ejecutarConsultaSimpleFila($sql);
   }
+
+  // eliminar permanente
+  public function eliminar_permanente($nombre_tabla, $nombre_id_tabla, $id_tabla) {
+    $sql = "UPDATE $nombre_tabla SET estado_delete='0' WHERE $nombre_id_tabla ='$id_tabla'";
+    return ejecutarConsulta($sql);
+  }
   
 }
 

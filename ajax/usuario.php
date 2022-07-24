@@ -91,8 +91,11 @@
       session_destroy();
       //Redireccionamos al login
       header("Location: index.php?file=".(isset($_GET["file"]) ? $_GET["file"] : ""));
-
     break;
+
+    // default: 
+    //   $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+    // break;
     
   }
  
@@ -432,6 +435,10 @@
       }            
 
     break;
+
+    // default: 
+    //   $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+    // break;
   }
   
   ob_end_flush();

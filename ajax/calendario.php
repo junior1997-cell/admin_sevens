@@ -110,6 +110,11 @@
           echo json_encode($rspta);         
 
         break;
+
+        default: 
+          $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+        break;
+
       }
 
       //Fin de las validaciones de acceso

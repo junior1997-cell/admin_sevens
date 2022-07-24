@@ -40,7 +40,11 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1 class="h1-titulo">Valorización -</h1>
+                      <h1 >
+                        <span class="h1-titulo">Valorización</span> 
+                        <button type="button" class="btn btn-success" onclick="export_excel_valorizacion()" ><i class="far fa-file-excel"></i> Export Excel</button>
+                      </h1> 
+                      
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
@@ -359,7 +363,7 @@
                             <div class="col-lg-12 col-xl-12" id="tab-info">
                               <!-- tabla principal -->
                               <div class="table-responsive pb-3">
-                                <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" >
+                                <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_valorizacion" >
                                   <thead>
                                     <tr class="text-center bg-color-48acc6">
                                       <th class="pt-1 pb-1 celda-b-r-2px" colspan="2"></th>
@@ -684,6 +688,11 @@
         <!-- /.content-wrapper -->
 
         <?php require 'script.php'; ?>
+
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <script type="text/javascript" src="scripts/valorizacion.js"></script>
 

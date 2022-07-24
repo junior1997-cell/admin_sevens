@@ -286,9 +286,10 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-outline-success modal-add-remove-visto-bueno" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick="ver_detalle_visto_bueno();"><i class="fas fa-check"></i></button>
-                        <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
-                        <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir/PDF</a>
+                        <button type="button" class="btn btn-outline-danger modal-eliminar-permanente" data-toggle="tooltip" data-original-title="Eliminar permanente" onclick=""><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btn btn-outline-success modal-add-remove-visto-bueno" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick=""><i class="fas fa-check"></i></button>
+                        <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> <span class="d-none d-sm-inline-block">Excel</span></button>
+                        <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i><span class="d-none d-sm-inline-block">Imprimir/PDF</span></a>
                       </div>
                     </div>
                   </div>

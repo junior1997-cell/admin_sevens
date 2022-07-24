@@ -258,11 +258,8 @@ function listar_botones_q_s(nube_idproyecto) {
               cont=cont+1; var fecha_inicio = fecha_i;
 
               if (estado_regular) {
-
                 fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
-
               } else {
-
                 fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
               }           
 
@@ -286,11 +283,8 @@ function listar_botones_q_s(nube_idproyecto) {
                 cont = cont+1; fecha_i = fecha;
 
                 if (estado_regular) {
-
                   fecha_f = sumaFecha(6, fecha_i);
-
                 } else {
-
                   fecha_f = sumaFecha(7+dia_regular, fecha_i); estado_regular = true;
                 }            
 

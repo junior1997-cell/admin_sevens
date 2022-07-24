@@ -288,6 +288,10 @@
           echo json_encode($results);
 
         break;
+
+        default: 
+          $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
+        break;
         
       }
 

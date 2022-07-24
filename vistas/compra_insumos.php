@@ -14,9 +14,9 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title> Compras de Insumos | Admin Sevens </title>
+        <title> Compras | Admin Sevens </title>
 
-        <?php $title = "Compras  de Insumos"; require 'head.php'; ?>
+        <?php $title = "Compras"; require 'head.php'; ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -43,13 +43,13 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1 class="m-0">Compras de Insumos</h1>
+                      <h1 class="m-0">Compras</h1>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="compra_insumos.php">Home</a></li>
-                        <li class="breadcrumb-item active">Compras  de Insumos</li>
+                        <li class="breadcrumb-item active">Compras</li>
                       </ol>
                     </div>
                     <!-- /.col -->
@@ -277,6 +277,7 @@
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
                                         <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
                                         <option title="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
+                                        <option title="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
                                       </select>
                                     </div> 
                                   </div>

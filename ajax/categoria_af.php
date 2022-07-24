@@ -74,7 +74,7 @@
           echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
         }
 
-      break;    
+      break; 
 
       case 'salir':
         //Limpiamos las variables de sesión
@@ -84,6 +84,10 @@
         //Redireccionamos al login
         header("Location: ../index.php");
 
+      break;
+
+      default: 
+        $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
       break;
     }
   }
