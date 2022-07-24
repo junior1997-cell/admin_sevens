@@ -63,7 +63,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [1], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [11], visible: false, searchable: false, }, 
+      //{ targets: [11], visible: false, searchable: false, }, 
     ],
   }).DataTable();
   

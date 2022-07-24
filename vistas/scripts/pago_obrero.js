@@ -3,7 +3,7 @@ var tabla_principal; var tabla_ingreso_pagos; var tabla_pagos_modal;
 var id_trabajdor_x_proyecto_r = "", tipo_pago_r = "", nombre_trabajador_r = "", cuenta_bancaria_r = "";
 
 var f1_load = "" , f2_load = "" , i_load = "" , cant_dias_asistencia_load = "";
-          
+
 //Función que se ejecuta al inicio
 function init() {
   
@@ -19,7 +19,7 @@ function init() {
   $("#lPagosObrero").addClass("active");
 
   listar_botones_q_s(localStorage.getItem('nube_idproyecto')) ; 
-  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+  sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
 
   // efectuamos SUBMIT  registro de: PAGOS POR MES
   $("#guardar_registro_pagos_x_mes").on("click", function (e) { $("#submit-form-pagos-x-mes").submit(); });
@@ -64,6 +64,7 @@ function doc2_eliminar() {
 
 function table_show_hide(flag) {
   if (flag == 1) {
+    location.reload();
     $("#btn-regresar").hide();
     $("#btn-regresar-todo").hide();
     $("#btn-regresar-bloque").hide();
@@ -78,7 +79,7 @@ function table_show_hide(flag) {
     $("#tbl-principal").show();
     $("#tbl-fechas").hide();
     $("#tbl-ingreso-pagos").hide();
-    $("#tbl-pago-multiple_obrero").hide();
+    $("#tbl-pago-multiple_obrero").hide();    
 
     // detalle pago quincena semana
   } else if (flag == 2) {
@@ -127,19 +128,38 @@ function table_show_hide(flag) {
   }
 }
 
+function sumas_totales_tabla_orincipal(id_proyecto) {
+  // suma totales x proyecto
+  $.post("../ajax/pago_obrero.php?op=mostrar_sumas_totales_tbla_principal", { 'id_proyecto': id_proyecto }, function (e, status) {
+
+    e = JSON.parse(e); console.log(e); 
+    if (e.status == true) {
+      $('.total_tbla_principal_sabatical').html(`${e.data.total_sabatical}`);
+      $(".total_tbla_principal_pago").html(`${formato_miles(e.data.total_pago_quincenal)}`);
+      $(".total_tbla_principal_deposito").html(`${formato_miles(e.data.total_deposito)}`);
+      $('.total_tbla_principal_saldo').html(`${formato_miles(e.data.total_pago_quincenal - e.data.total_deposito)}`);
+      $('.total_tbla_principal_cant_s_q').html(`${e.data.total_envio_contador}`);
+
+      listar_tbla_principal(id_proyecto);
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
 // LISTAR TABLA PRINCIPAL
-function listar_tbla_principal(id_proyecto) {
-
-  var sabatical_total = 0, pago_acumulado_total = 0, saldo_total = 0, cant_q_s_total = 0;
-
+function listar_tbla_principal(id_proyecto) {   
+  
   tabla_principal=$('#tabla-principal').dataTable({
     // "responsive": true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } } ,      
+    ],
+    ajax:{
       url: `../ajax/pago_obrero.php?op=listar_tbla_principal&nube_idproyecto=${id_proyecto}`,
       type : "get",
       dataType : "json",						
@@ -150,62 +170,53 @@ function listar_tbla_principal(id_proyecto) {
     createdRow: function (row, data, ixdex) {          
       // columna:# 0
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }  
-      // columna: Horas Normal/Extra
+      // columna: banco
       if (data[2] != '') { $("td", row).eq(2).addClass('text-center'); }         
-      // columna: Sabaticales  
-      if (data[3] != '') { $("td", row).eq(3).addClass('text-center'); sabatical_total += parseFloat(data[3]); }
-      // columna: Sueldo Mensual
-      if (data[4] != '') { $("td", row).eq(4).addClass('text-right');  }      
-
-      // columna: Pago acumulado Semana/Quincena
-      if (data[5] != '') {
-        var split = data[5].split(' '); //console.log(split);
-        var quitar_format_mil = quitar_formato_miles( split[1]);
-        pago_acumulado_total += parseFloat(quitar_format_mil);          
-        $("td", row).eq(5).addClass('text-right');
-      }
-      // columna: Depositos
-      if (data[6] != '') { $("td", row).eq(6).addClass('justify-content-between'); }
-      // columna: Saldo
+      // columna: cuyenta bancaria  
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-center'); }
+      // columna: total hn / total he
+      if (data[4] != '') { $("td", row).eq(4).addClass('text-center');  }
+      // columna: Psabatical
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-center'); }
+      // columna: sueldo
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
+      // columna: pago a realizar
       if (data[7] != '') {
         var split = data[7].split(' '); //console.log(split);
         var quitar_format_mil = quitar_formato_miles( split[1]);
-        saldo_total += parseFloat(quitar_format_mil);
         if (parseFloat(quitar_format_mil) < 0) {
           $("td", row).eq(7).addClass('text-right bg-danger');
         }else{
           $("td", row).eq(7).addClass('text-right');
         }        
       }
-      // columna: Cantidad Semana/Quincena
-      if (data[8] != '') { cant_q_s_total += parseFloat(data[8]); $("td", row).eq(8).addClass('text-center'); }      
+      // columna: pago acumulado
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-center'); }  
+      // columna: saldo
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }
+      // columna: cantidad de pago al contador
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-center'); } 
+      // columna: fecha inicio
+      if (data[11] != '') { $("td", row).eq(11).addClass('text-center'); }
+      // columna: fecha hoy
+      if (data[12] != '') { $("td", row).eq(12).addClass('text-center'); }
+      // columna: fecha fin
+      if (data[13] != '') { $("td", row).eq(13).addClass('text-center'); }   
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
-  // suma totales x proyecto
-  $.post("../ajax/pago_obrero.php?op=mostrar_deposito_total_tbla_principal", { 'id_proyecto': id_proyecto }, function (e, status) {
-
-    e = JSON.parse(e); console.log(e); 
-    if (e.status == true) {
-      $(".deposito_total_tbla_principal").html(`<sup>S/</sup> <b>${e.data.total_deposito_x_proyecto}</b>`);
-      // $(".sueldo_total_tbla_principal").html(`<sup>S/</sup> <b>${e.data.sueldo_mesual_x_proyecto}</b>`);
-
-      $('.sabatical_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(sabatical_total)}</b>`);
-      $('.pago_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(pago_acumulado_total)}</b>`);
-      $('.saldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(saldo_total)}</b>`);  
-      $('.cant_s_q_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(cant_q_s_total)}</b>`);
-    } else {
-      ver_errores(e);
-    }    
-  }).fail( function(e) { ver_errores(e); } );
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
+    ],
+  }).DataTable(); 
+  
 }
 
 // :::::::::::::::::::::::::: R E C I B O S   P O R   H O N O R A R I O ::::::::::::::::::::::::::::::::::::::::::::::
@@ -310,7 +321,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
 
           detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r, cuenta_bancaria_r);
           trabajador_deuda_q_s(f1_load, f2_load, i_load, cant_dias_asistencia_load);
-          tabla_principal.ajax.reload(null, false);
+          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("Correcto!", "Recibo por honorario guardado correctamente", "success");         
           limpiar_form_recibos_x_honorarios();
           $("#modal-recibos-x-honorarios").modal("hide");        
@@ -394,9 +405,7 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
     if (tipo_pago == "semanal") {
       $(".nombre-bloque-asistencia").html(`<b> Semana </b>`);
     }
-  }
-  
-  
+  } 
 
   $.post("../ajax/pago_obrero.php?op=listar_tbla_q_s", { 'id_trabajdor_x_proyecto': id_trabajdor_x_proyecto }, function (e, status) {
 
@@ -436,22 +445,24 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
           }
   
           data_s_q = data_s_q.concat(`<tr>
-            <td>${indice + 1}</td>
-            <td> ${key.numero_q_s}</td>
-            <td>${format_d_m_a(key.fecha_q_s_inicio)}</td>
-            <td>${format_d_m_a(key.fecha_q_s_fin)}</td>
-            <td><sup>S/ </sup>${key.sueldo_hora}</td>
-            <td>${formato_miles(key.total_hn)}<b> / </b>${formato_miles(key.total_he)}</td>
-            <td>${key.sabatical}</td>          
-            <td><sup>S/ </sup>${formato_miles(key.pago_parcial_hn)}<b> / </b><sup>S/ </sup>${formato_miles(key.pago_parcial_he)}</td>
-            <td style="text-align: right !important;"><sup>S/ </sup>${formato_miles(key.adicional_descuento)}</td>
-            <td style="text-align: right !important;"><sup>S/ </sup>${formato_miles(key.pago_quincenal)}</td>
+            <td class="text-center">${indice + 1}</td>
+            <td class="text-center"> ${key.numero_q_s}</td>
+            <td class="text-center">${format_d_m_a(key.fecha_q_s_inicio)}</td>
+            <td class="text-center">${format_d_m_a(key.fecha_q_s_fin)}</td>
+            <td><div class="formato-numero-conta"><span>S/ </span>${key.sueldo_hora}</div></td>
+            <td class="text-center">${formato_miles(key.total_hn)}<b> / </b>${formato_miles(key.total_he)}</td>
+            <td class="text-center">${key.sabatical}</td>          
+            <td class="text-center"><div class="formato-numero-conta"> <span>S/ </span>${formato_miles(key.pago_parcial_hn)}<b> / </b><span>S/ </span>${formato_miles(key.pago_parcial_he)}</div></td>
+            <td ><div class="formato-numero-conta"><span>S/ </span>${formato_miles(key.adicional_descuento)}</div></td>
+            <td ><div class="formato-numero-conta"><span>S/ </span>${formato_miles(key.pago_quincenal)}</div></td>
             <td>
-              <button class="btn btn-info btn-sm" onclick="listar_tbla_pagos_x_q_s('${key.idresumen_q_s_asistencia}', '${format_d_m_a(key.fecha_q_s_inicio)}', '${format_d_m_a(key.fecha_q_s_fin)}', '${key.pago_quincenal}', '${key.numero_q_s}', '${tipo_pago}', '${nombre_trabajador}','${cuenta_bancaria}', '${saldo}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-              <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">${formato_miles(key.deposito)}</button></div>
+              <div class="formato-numero-conta">
+                <button class="btn ${btn_tipo_deposito} btn-sm mr-1" onclick="listar_tbla_pagos_x_q_s('${key.idresumen_q_s_asistencia}', '${format_d_m_a(key.fecha_q_s_inicio)}', '${format_d_m_a(key.fecha_q_s_fin)}', '${key.pago_quincenal}', '${key.numero_q_s}', '${tipo_pago}', '${nombre_trabajador}','${cuenta_bancaria}', '${saldo}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">${formato_miles(key.deposito)}</button></div>
+              </div>
             </td>
-            <td style="text-align: right !important;" class="${bg_saldo}"><sup>S/ </sup>${formato_miles(saldo)}</td>
-            <td> 
+            <td class="${bg_saldo}"><div class="formato-numero-conta"><span>S/ </span>${formato_miles(saldo)}</div></td>
+            <td class="text-center"> 
               <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.recibos_x_honorarios}', '${tipo_pago}', '${nombre_trabajador}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
               </button> 
@@ -472,13 +483,13 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
         });
   
         $('.data-q-s').html(data_s_q);
-        $('.total_hn_he').html(`${formato_miles(total_hn)} / ${formato_miles(total_he)}`);
-        $('.total_sabatical').html(`${formato_miles(total_sabatical)} `);
-        $('.total_monto_hn_he').html(`<sup>S/ </sup>${formato_miles(total_monto_hn)} / <sup>S/ </sup>${formato_miles(total_monto_he)}`);
-        $('.total_descuento').html(`<sup>S/ </sup>${formato_miles(total_descuento)}`);
-        $('.total_quincena').html(`<sup>S/ </sup>${formato_miles(total_quincena)}`);
-        $('.total_deposito').html(`<sup>S/ </sup>${formato_miles(total_deposito)}`); 
-        $('.total_saldo').html(`<sup>S/ </sup>${formato_miles(total_saldo)}`); 
+        $('.total_hn_he').html(`${formato_miles(total_hn)}<b> / </b>${formato_miles(total_he)}`);
+        $('.total_sabatical').html(`${total_sabatical} `);
+        $('.total_monto_hn_he').html(`<span>S/ </span>${formato_miles(total_monto_hn)} <b> / </b> <span>S/ </span>${formato_miles(total_monto_he)}`);
+        $('.total_descuento').html(`${formato_miles(total_descuento)}`);
+        $('.total_quincena').html(`${formato_miles(total_quincena)}`);
+        $('.total_deposito').html(`${formato_miles(total_deposito)}`); 
+        $('.total_saldo').html(`${formato_miles(total_saldo)}`); 
         $('.rh_total').html(`${rh_total} <small class="text-gray">(docs.)</small>`);
       }
     } else {
@@ -518,19 +529,18 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
   } else {
     $('.nombre_q_s').html(`<b>Semana</b>`);
     $('.numero_q_s').html(`<b>${numero_q_s}</b>`);
-  }
-  
+  }  
 
   $('#idresumen_q_s_asistencia').val(idresumen_q_s_asistencia);
 
   tabla_ingreso_pagos=$('#tabla-ingreso-pagos').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf', "colvis"],
+    ajax:{
       url: '../ajax/pago_obrero.php?op=listar_tbla_pagos_x_q_s&idresumen_q_s_asistencia='+idresumen_q_s_asistencia,
       type : "get",
       dataType : "json",						
@@ -553,9 +563,9 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
 
@@ -577,7 +587,7 @@ function guardar_y_editar_pagos_x_q_s(e) {
           if (tabla_ingreso_pagos) {  tabla_ingreso_pagos.ajax.reload(null, false);  }
           if (tabla_pagos_modal) {  tabla_pagos_modal.ajax.reload(null, false); trabajador_deuda_q_s(f1_load, f2_load, i_load, cant_dias_asistencia_load);  }
 
-          listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("Correcto!", "Pago guardado correctamente", "success");         
           limpiar_pago_q_s();
           $("#modal-agregar-pago-trabajdor").modal("hide");        
@@ -675,7 +685,7 @@ function desactivar_pago_x_q_s(id) {
 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
-          listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
         } else {
           ver_errores(e);
@@ -701,7 +711,7 @@ function activar_pago_x_q_s(id) {
 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
-          listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("ReActivado!", "Tu registro ha sido ReActivado.", "success");
         } else {
           ver_errores(e);
@@ -853,11 +863,11 @@ function trabajador_deuda_q_s(f1, f2, i, cant_dias_asistencia) {
 
     if (e.status == true) {
       if (e.data.length === 0) {
-        $('.data-trabajadores-q-s').html(`<td></td> <td></td> <td colspan="6" class="text-center" ><div class="callout callout-danger text-left"> <h5 ><b>Vacío!</b></h5><p>Asigne pagos dando click en enviar pagos al contador, en el módulo de <a href="asistencia_obrero.php" class="text-primary" target="_blank" rel="noopener noreferrer"><b>asistencia de obreros</b></a>.</p> </div></td>`);
-        $('.multiple_total_hn_he').html(`0 / 0`);
-        $('.multiple_total_deuda').html(`<sup>S/ </sup>0`);
-        $('.multiple_total_deposito').html(`<sup>S/ </sup>0`); 
-        $('.multiple_total_saldo').html(`<sup>S/ </sup>0`); 
+        $('.data-trabajadores-q-s').html(`<td></td> <td></td> <td colspan="6" class="text-center" ><div class="callout callout-danger text-left mb-0"> <h5 ><b>Vacío!</b></h5><p>Asigne pagos dando click en enviar pagos al contador, en el módulo de <a href="asistencia_obrero.php" class="text-primary" target="_blank" rel="noopener noreferrer"><b>asistencia de obreros</b></a>.</p> </div></td> <td></td> <td></td>`);
+        $('.multiple_total_hn_he').html(`0.00 / 0.00`);
+        $('.multiple_total_deuda').html(`0.00`);
+        $('.multiple_total_deposito').html(`0.00`); 
+        $('.multiple_total_saldo').html(`0.00`); 
         $('.multiple_rh_total').html(`0 <small class="text-gray">(docs.)</small>`);
         console.log('vacio');
       } else {
@@ -888,25 +898,27 @@ function trabajador_deuda_q_s(f1, f2, i, cant_dias_asistencia) {
           }
 
           data_trabajadores_q_s = data_trabajadores_q_s.concat(`<tr>
-            <td>${indice + 1}</td>
-            <td> ${key.numero_q_s}</td>
-            <td> 
+            <td class="pt-1 pb-1 text-center" >${indice + 1}</td>
+            <td class="pt-1 pb-1 text-center" > ${key.numero_q_s}</td>
+            <td class="pt-1 pb-1"> 
               <div class="user-block">
                 <img class="img-circle" src="../dist/docs/all_trabajador/perfil/${key.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'">
                 <span class="username"><p class="text-primary m-b-02rem" >${key.trabajador}</p></span>
                 <span class="description text-left" >${key.tipo_trabajador} / ${key.cargo_trabajador} ─ ${key.tipo_documento}: ${key.numero_documento} </span>                  
               </div>
             </td>
-            <td>${key.banco}</td>
-            <td>${key.cuenta_bancaria}</td>
-            <td>${formato_miles(key.total_hn)}<b> / </b>${formato_miles(key.total_he)}</td>
-            <td style="text-align: right !important;"><sup>S/ </sup>${key.pago_quincenal}</td>
-            <td>
-              <button class="btn btn-info btn-sm" onclick="modal_pago_obrero('${key.idresumen_q_s_asistencia}', '${format_d_m_a(key.fecha_q_s_inicio)}', '${format_d_m_a(key.fecha_q_s_fin)}', '${key.pago_quincenal}', '${key.numero_q_s}', '${s_q_pago}', '${key.trabajador}','${key.cuenta_bancaria}',${saldo} );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-              <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">${formato_miles(key.deposito)}</button></div>
+            <td class="pt-1 pb-1">${key.banco}</td>
+            <td class="pt-1 pb-1">${key.cuenta_bancaria}</td>
+            <td class="pt-1 pb-1 text-center">${formato_miles(key.total_hn)}<b> / </b>${formato_miles(key.total_he)}</td>
+            <td class="pt-1 pb-1"><div class="formato-numero-conta"><span>S/</span>${key.pago_quincenal}</div></td>
+            <td class="pt-1 pb-1">
+              <div class="formato-numero-conta">
+                <button class="btn ${btn_tipo_deposito} btn-sm mr-1" onclick="modal_pago_obrero('${key.idresumen_q_s_asistencia}', '${format_d_m_a(key.fecha_q_s_inicio)}', '${format_d_m_a(key.fecha_q_s_fin)}', '${key.pago_quincenal}', '${key.numero_q_s}', '${s_q_pago}', '${key.trabajador}','${key.cuenta_bancaria}',${saldo} );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">${formato_miles(key.deposito)}</button></div>
+              </div>
             </td>
-            <td>${formato_miles(saldo)}</td>
-            <td> 
+            <td class="pt-1 pb-1"><div class="formato-numero-conta"><span>S/</span>${formato_miles(saldo)}</div></td>
+            <td class="pt-1 pb-1 text-center"> 
               <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.recibos_x_honorarios}', '${s_q_pago}', '${key.trabajador}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
               </button> 
@@ -926,9 +938,9 @@ function trabajador_deuda_q_s(f1, f2, i, cant_dias_asistencia) {
   
         $('.data-trabajadores-q-s').html(data_trabajadores_q_s);
         $('.multiple_total_hn_he').html(`${formato_miles(total_hn)} / ${formato_miles(total_he)}`);
-        $('.multiple_total_deuda').html(`<sup>S/ </sup>${formato_miles(total_quincena)}`);
-        $('.multiple_total_deposito').html(`<sup>S/ </sup>${formato_miles(total_deposito)}`); 
-        $('.multiple_total_saldo').html(`<sup>S/ </sup>${formato_miles(total_saldo)}`); 
+        $('.multiple_total_deuda').html(`${formato_miles(total_quincena)}`);
+        $('.multiple_total_deposito').html(`${formato_miles(total_deposito)}`); 
+        $('.multiple_total_saldo').html(`${formato_miles(total_saldo)}`); 
         $('.multiple_rh_total').html(`${rh_total} <small class="text-gray">(docs.)</small>`);
       }
     } else {

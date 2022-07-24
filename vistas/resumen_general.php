@@ -692,6 +692,8 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
+                          <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir/PDF</a>
                         </div>
                       </div>
                     </div>
@@ -1067,31 +1069,22 @@
             border-radius: 6px;
           }
         </style>
-        <!-- Bootstrap 4 -->
-        <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- jquery-validation -->
-        <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>
-        <!-- InputMask -->
-        <script src="../plugins/moment/moment.min.js"></script>
-        <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
-        <!-- sweetalert2 -->
-        <script src="../plugins/sweetalert2/sweetalert2.all.min.js"></script>
 
         <!-- table export -->
-        <script src="../plugins/table_export_jquery/libs/FileSaver/FileSaver.min.js"></script>
+        <!-- <script src="../plugins/table_export_jquery/libs/FileSaver/FileSaver.min.js"></script>
         <script src="../plugins/table_export_jquery/libs/js-xlsx/xlsx.core.min.js"></script>
         <script src="../plugins/table_export_jquery/libs/html2canvas/html2canvas.min.js"></script>
-        <script src="../plugins/table_export_jquery/tableExport.min.js"></script>
+        <script src="../plugins/table_export_jquery/tableExport.min.js"></script> -->
+
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
         <script type="text/javascript" src="scripts/resumen_general.js"></script>
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
+        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
         <?php require 'extra_script.php'; ?>
         

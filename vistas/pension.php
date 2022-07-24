@@ -4,7 +4,7 @@
 
   session_start();
   if (!isset($_SESSION["nombre"])){
-      header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
+    header("Location: index.php?file=".basename($_SERVER['PHP_SELF']));
   }else{
     ?>
     <!DOCTYPE html>
@@ -85,16 +85,18 @@
                                   <th>Pension</th>
                                   <th>Descripción</th>
                                   <th>Total</th>
+                                  <th>Actualización</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
                                   <th class="text-center">#</th>
-                                  <th><i class="fas fa-cogs"></i></th>
+                                  <th><i class="fas fa-cogs"></i></th> 
                                   <th>Pension</th>
                                   <th>Descripción</th>
-                                  <th id="total_pension" class="text-right text-nowrap">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-right text-nowrap pl-2 pr-2"><div class="formato-numero-conta"><span>S/</span><span id="total_pension"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>                                  
+                                  <th>Actualización</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -115,7 +117,13 @@
                                   <th>Sub total</th>
                                   <th>IGV</th>
                                   <th>Total</th>
-                                  <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                  <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
+
+                                  <th>Fecha Inicial</th>
+                                  <th>Fecha Final</th>
+                                  <th>Tipo Comprobante</th>
+                                  <th>Número Comprobante</th>
+                                  <th>Val. IGV</th>
                                 </tr>
 
                               </thead>
@@ -126,14 +134,20 @@
                                   <th>OP</th> 
                                   <th>Descripción</th>
                                   <th>Fechas</th>
-                                  <th id="total_cantidad_personas" class="text-right text-nowrap"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th  class="text-right text-nowrap pr-2" id="total_cantidad_personas"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th data-toggle="tooltip" data-original-title="Forma de pago">Forma</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
-                                  <th>Sub total</th>
-                                  <th>IGV</th>
-                                  <th id="total_monto" class="text-right text-nowrap">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                  <th class="text-right text-nowrap pr-2" id="total_subtotal"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-right text-nowrap pr-2" id="total_igv"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-right text-nowrap pr-2" id="total_monto">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th >CFDI.</th>
+
+                                  <th>Fecha Inicial</th>
+                                  <th>Fecha Final</th>
+                                  <th>Tipo Comprobante</th>
+                                  <th>Número Comprobante</th>
+                                  <th>Val. IGV</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -262,175 +276,177 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-agregar-detalle-pension" name="form-agregar-detalle-pension" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-5-fomulario">
-                              <!-- iddetalle_pension  -->
-                              <input type="hidden" name="iddetalle_pension" id="iddetalle_pension" />
-                              <!-- id_pension -->
-                              <input type="hidden" name="id_pension" id="id_pension" />
+                        <form class="mx-2" id="form-agregar-detalle-pension" name="form-agregar-detalle-pension" method="POST">
+                          
+                          <div class="row" id="cargando-5-fomulario">
+                            <!-- iddetalle_pension  -->
+                            <input type="hidden" name="iddetalle_pension" id="iddetalle_pension" />
+                            <!-- id_pension -->
+                            <input type="hidden" name="id_pension" id="id_pension" />
+                            <!-- tipo_gravada -->
+                            <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
 
-                              <!-- Descripcion Pensión-->
-                              <div class="col-12">
-                                <div class="text-primary"><label for="">DETALLES PENSIÓN</label></div>
-                              </div>
-                              <div class="card col-12" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%); margin-bottom: 1rem;">
-                                <div class="row">
-                                  <!-- Fecha inicial -->
-                                  <div class="col-lg-4">
-                                    <div class="form-group">
-                                      <label for="fecha_inicial">Fecha inicial <sup class="text-danger">*</sup></label>
-                                      <input class="form-control" type="date" id="fecha_inicial" name="fecha_inicial" onchange="restrigir_fecha_input();" />
-                                    </div>
-                                  </div>
-
-                                  <!-- Fecha final -->
-                                  <div class="col-lg-4">
-                                    <div class="form-group">
-                                      <label for="fecha_final">Fecha final <sup class="text-danger">*</sup></label>
-                                      <input class="form-control" type="date" id="fecha_final" name="fecha_final" />
-                                    </div>
-                                  </div>
-
-                                  <!-- Cantidad Persona -->
-                                  <div class="col-lg-4">
-                                    <div class="form-group">
-                                      <label for="cantidad_persona">Cantidad Persona</label>
-                                      <input class="form-control" type="number" id="cantidad_persona" name="cantidad_persona" placeholder="Cantidad de personas" />
-                                    </div>
+                            <!-- Descripcion Pensión-->
+                            <div class="col-12 pl-0">
+                              <div class="text-primary"><label for="">DETALLES PENSIÓN</label></div>
+                            </div>
+                            <div class="card col-12 px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%); ">
+                              <div class="row">
+                                <!-- Fecha inicial -->
+                                <div class="col-lg-4">
+                                  <div class="form-group">
+                                    <label for="fecha_inicial">Fecha inicial <sup class="text-danger">*</sup></label>
+                                    <input class="form-control" type="date" id="fecha_inicial" name="fecha_inicial" onchange="restrigir_fecha_input();" />
                                   </div>
                                 </div>
-                              </div>
 
-                              <!-- Descripcion Comporbante-->
-                              <div class="col-12">
-                                <div class="text-primary"><label for="">COMPROBANTE </label></div>
-                              </div>
-                              <div class="card col-12" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%); margin-bottom: 1rem;">
-                                <div class="row">
-                                  <!--forma pago-->
-                                  <div class="col-lg-6">
-                                    <div class="form-group">
-                                      <label for="forma_pago">Forma Pago</label>
-                                      <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                        <option value="Transferencia">Transferencia</option>
-                                        <option value="Efectivo">Efectivo</option>
-                                        <option value="Crédito">Crédito</option>
-                                      </select>
-                                    </div>
-                                  </div>
-
-                                  <!-- Tipo de comprobante -->
-                                  <div class="col-lg-6" id="content-t-comprob">
-                                    <div class="form-group">
-                                      <label for="tipo_comprobante">Tipo Comprobante</label>
-                                      <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
-                                        <option value="Ninguno">Ninguno</option>
-                                        <option value="Boleta">Boleta</option>
-                                        <option value="Factura">Factura</option>
-                                        <option value="Nota de venta">Nota de venta</option>
-                                      </select>
-                                    </div>
-                                  </div>
-
-                                  <!-- Código-->
-                                  <div class="col-lg-6">
-                                    <div class="form-group">
-                                      <label for="codigo">Núm. comprobante </label>
-                                      <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
-                                    </div>
-                                  </div>
-
-                                  <!-- Fecha Emisión -->
-                                  <div class="col-lg-6">
-                                    <div class="form-group">
-                                      <label for="fecha_emision">Fecha Emisión</label>
-                                      <input class="form-control" type="date" id="fecha_emision" name="fecha_emision" />
-                                    </div>
-                                  </div>
-
-                                  <!-- Sub total -->
-                                  <div class="col-lg-4">
-                                    <div class="form-group">
-                                      <label for="subtotal">Sub total</label>
-                                      <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
-                                    </div>
-                                  </div>
-
-                                  <!-- Fecha IGV -->
-                                  <div class="col-lg-2">
-                                    <div class="form-group">
-                                      <label for="igv">IGV</label>
-                                      <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
-                                    </div>
-                                  </div>
-
-                                  <!-- valor IGV -->
-                                  <div class="col-lg-2">
-                                    <div class="form-group">
-                                      <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                      <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
-                                      <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
-                                    </div>
-                                  </div>
-
-                                  <!-- Monto-->
-                                  <div class="col-lg-4">
-                                    <div class="form-group">
-                                      <label for="monto">Total</label>
-                                      <input type="number" class="form-control" name="monto" id="monto" onkeyup="comprob_factura();" placeholder="Monto" />
-                                    </div>
-                                  </div>
-
-                                  <!-- Descripcion-->
-                                  <div class="col-lg-12">
-                                    <div class="form-group">
-                                      <label for="descripcion_detalle">Descripción <sup class="text-danger">*</sup> </label> <br />
-                                      <textarea name="descripcion_detalle" id="descripcion_detalle" class="form-control" rows="3"></textarea>
-                                    </div>
+                                <!-- Fecha final -->
+                                <div class="col-lg-4">
+                                  <div class="form-group">
+                                    <label for="fecha_final">Fecha final <sup class="text-danger">*</sup></label>
+                                    <input class="form-control" type="date" id="fecha_final" name="fecha_final" />
                                   </div>
                                 </div>
-                              </div>
 
-                              <!-- Factura -->
-                              <div class="col-md-6">
-                                <div class="row text-center">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="cip" class="control-label"> Baucher de deposito </label>
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-upload"></i> Subir.</button>
-                                    <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                    <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'pension', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
-                                  </div>
-                                </div>
-                                <div id="doc1_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
-                                </div>
-                                <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
-                              </div>
-
-                              <!-- barprogress -->
-                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
-                                <div class="progress" id="div_barra_progress_detalle_pension">
-                                  <div id="barra_progress_detalle_pension" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                    0%
+                                <!-- Cantidad Persona -->
+                                <div class="col-lg-4">
+                                  <div class="form-group">
+                                    <label for="cantidad_persona">Cantidad Persona</label>
+                                    <input class="form-control" type="number" id="cantidad_persona" name="cantidad_persona" placeholder="Cantidad de personas" />
                                   </div>
                                 </div>
                               </div>
                             </div>
 
-                            <div class="row" id="cargando-6-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
+                            <!-- Descripcion Comporbante-->
+                            <div class="col-12 pl-0">
+                              <div class="text-primary"><label for="">COMPROBANTE </label></div>
+                            </div>
+                            <div class="card col-12 px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                              <div class="row">
+                                <!--forma pago-->
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label for="forma_pago">Forma Pago</label>
+                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                      <option value="Transferencia">Transferencia</option>
+                                      <option value="Efectivo">Efectivo</option>
+                                      <option value="Crédito">Crédito</option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                <!-- Tipo de comprobante -->
+                                <div class="col-lg-6" id="content-t-comprob">
+                                  <div class="form-group">
+                                    <label for="tipo_comprobante">Tipo Comprobante</label>
+                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
+                                      <option value="Ninguno">Ninguno</option>
+                                      <option value="Boleta">Boleta</option>
+                                      <option value="Factura">Factura</option>
+                                      <option value="Nota de venta">Nota de venta</option>
+                                    </select>
+                                  </div>
+                                </div>
+
+                                <!-- Código-->
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label for="codigo">Núm. comprobante </label>
+                                    <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
+                                  </div>
+                                </div>
+
+                                <!-- Fecha Emisión -->
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label for="fecha_emision">Fecha Emisión</label>
+                                    <input class="form-control" type="date" id="fecha_emision" name="fecha_emision" />
+                                  </div>
+                                </div>
+
+                                <!-- Sub total -->
+                                <div class="col-lg-4">
+                                  <div class="form-group">
+                                    <label for="subtotal">Sub total</label>
+                                    <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
+                                  </div>
+                                </div>
+
+                                <!-- Fecha IGV -->
+                                <div class="col-lg-2">
+                                  <div class="form-group">
+                                    <label for="igv">IGV</label>
+                                    <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
+                                  </div>
+                                </div>
+
+                                <!-- valor IGV -->
+                                <div class="col-lg-2">
+                                  <div class="form-group">
+                                    <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
+                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
+                                    
+                                  </div>
+                                </div>
+
+                                <!-- Monto-->
+                                <div class="col-lg-4">
+                                  <div class="form-group">
+                                    <label for="monto">Total</label>
+                                    <input type="number" class="form-control" name="monto" id="monto" onkeyup="comprob_factura();" placeholder="Monto" />
+                                  </div>
+                                </div>
+
+                                <!-- Descripcion-->
+                                <div class="col-lg-12">
+                                  <div class="form-group">
+                                    <label for="descripcion_detalle">Descripción <sup class="text-danger">*</sup> </label> <br />
+                                    <textarea name="descripcion_detalle" id="descripcion_detalle" class="form-control" rows="3"></textarea>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Factura -->
+                            <div class="col-md-6">
+                              <div class="row text-center">
+                                <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                  <label for="cip" class="control-label"> Baucher de deposito </label>
+                                </div>
+                                <div class="col-6 col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-upload"></i> Subir.</button>
+                                  <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
+                                </div>
+                                <div class="col-6 col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'pension', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
+                                </div>
+                              </div>
+                              <div id="doc1_ver" class="text-center mt-4">
+                                <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
+                              </div>
+                              <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+
+                            <!-- barprogress -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                              <div class="progress" id="div_barra_progress_detalle_pension">
+                                <div id="barra_progress_detalle_pension" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  0%
+                                </div>
                               </div>
                             </div>
                           </div>
+
+                          <div class="row" id="cargando-6-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>
+                          
                           <!-- /.card-body -->
                           <button type="submit" style="display: none;" id="submit-form-detalle-pension">Submit</button>
                         </form>

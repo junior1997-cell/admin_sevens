@@ -38,18 +38,16 @@
       $cantidad_persona      = isset($_POST["cantidad_persona"])? limpiarCadena($_POST["cantidad_persona"]):"";
 
       $descripcion_detalle   = isset($_POST["descripcion_detalle"])? limpiarCadena($_POST["descripcion_detalle"]):"";
-
       $forma_pago          = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
       $tipo_comprobante    = isset($_POST["tipo_comprobante"])? limpiarCadena($_POST["tipo_comprobante"]):"";
-
       $nro_comprobante     = isset($_POST["nro_comprobante"])? limpiarCadena($_POST["nro_comprobante"]):"";
       $monto               = isset($_POST["monto"])? limpiarCadena($_POST["monto"]):"";
       $fecha_emision       = isset($_POST["fecha_emision"])? limpiarCadena($_POST["fecha_emision"]):"";
-
       $subtotal            = isset($_POST["subtotal"])? limpiarCadena($_POST["subtotal"]):"";
       $igv                 = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
       $val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
       $tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
+      
 
       $imagen2             = isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";
 
@@ -76,57 +74,23 @@
           $rspta=$pension->tabla_principal($_GET['nube_idproyecto']);
           //Vamos a declarar un array
           $data= Array();
-          $total=0;
-          $total_pagos=0;
-          $Saldo=0;
-          $cont=1;
-
-          $c="";
-          $nombre="";
-          $icon="";
-          $cc="";
+          
+          $cont=1;          
 
           if ($rspta['status']) {
-
-            while ($reg=$rspta['data']->fetch_object()){ 
-
-              $total=$pension->total_x_pension($reg->idpension);
-              $rspta2=$pension->total_pago_x_pension($reg->idpension);
-
-              $total_a_pagar =$total['data']['precio_parcial'];
-              $total_pagos =$rspta2['data']['total_pago'];
-
-              $saldo = $total_a_pagar-$total_pagos;
-
-              if($saldo==$total){
-                $c="danger";
-                $nombre=" Pagar";
-                $icon="dollar-sign";
-                $cc="danger";
-              }else if ($saldo<$total && $saldo>"0" ) {
-                $c="warning";
-                $nombre=" Pagar";
-                $icon="dollar-sign";
-                $cc="warning";
-              } else if ($saldo<="0" || $saldo=="0") {               
-                $c="success";
-                $nombre=" Ver";
-                $info="info";
-                $icon="eye";
-                $cc="success"; 
-              }
+            foreach ($rspta['data'] as $key => $reg) {
 
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg->idpension.')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg->idpension.',\'' . $reg->razon_social.  '\')"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
+                "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg['idpension'].')"><i class="fas fa-pencil-alt"></i></button>'.
+                ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg['idpension'].',\'' . $reg['razon_social'].  '\')"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
                 "2"=>'<div class="user-block">
-                  <span style="font-weight: bold;" ><p class="text-primary"style="margin-bottom: 0.2rem !important"; > Pensión. '.$reg->razon_social.'</p></span>
-                  <span style="font-weight: bold; font-size: 15px;">'.$reg->direccion.' </span>
+                  <span ><p class="text-primary m-b-02rem font-weight-bold" > Pensión. '.$reg['razon_social'].'</p></span>
+                  <span class=" text-gray font-size-13px">'.$reg['direccion'].' </span>
                   </div>',
-                "3"=>'<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-                "4"=>'<b>'.number_format($total_a_pagar, 2, '.', ',').'</b>',
-                 
+                "3"=>'<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',
+                "4"=>'<div class="formato-numero-conta"> S/ <b>'.number_format($reg['total_gasto'], 2, '.', ',').'</b></div>',       
+                "5"=>date("d-m-Y", strtotime($reg['updated_at'])) .' <b>'. date("h:i", strtotime($reg['updated_at'])) .'</b> '. date("a", strtotime($reg['updated_at']))               
               );
 
             }
@@ -226,14 +190,19 @@
                 "3"=> date("d/m/Y", strtotime($reg->fecha_inicial)) .' - '. date("d/m/Y", strtotime($reg->fecha_final)),
                 "4"=>number_format($reg->cantidad_persona, 2, '.', ','),
                 "5"=> empty($reg->forma_pago)?' - ':$reg->forma_pago, 
-                "6"=>'<span class="text-nowrap"><b class="text-primary">'.$reg->tipo_comprobante.'</b> - '.(empty($reg->nro_comprobante)?" - ":$reg->nro_comprobante).'</span>',
+                "6"=>'<span class="text-nowrap"><b class="text-primary">'.$reg->tipo_comprobante.'</b>'.(empty($reg->numero_comprobante)?"":' ─ '.$reg->numero_comprobante).'</span>',
                 "7"=>$reg->fecha_emision,
                 "8"=>'S/ '.number_format($reg->subtotal, 2, '.', ','), 
                 "9"=>'S/ '.number_format($reg->igv, 2, '.', ','),
                 "10"=>'S/ '.number_format($reg->precio_parcial, 2, '.', ','),
-                "11"=>$comprobante . $toltip
-                );
+                "11"=>$comprobante . $toltip,
 
+                "12"=>date("d/m/Y", strtotime($reg->fecha_inicial)),
+                "13"=>date("d/m/Y", strtotime($reg->fecha_final)),
+                "14"=>$reg->tipo_comprobante,
+                "15"=>$reg->numero_comprobante,
+                "16"=>$reg->val_igv,                
+              );
             }
             //$suma=array_sum($rspta->fetch_object()->monto);
             $results = array(

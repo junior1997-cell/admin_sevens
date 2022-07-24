@@ -283,13 +283,9 @@ class Resumen_general
       foreach ($pension['data'] as $key => $value) {
         $idpension = $value['idpension'];
 
-        $sql_2 = "SELECT  SUM(monto) as gasto_pension FROM detalle_pension WHERE estado='1' AND estado_delete='1' AND idpension='$idpension'";
+        $sql_2 = "SELECT  SUM(precio_parcial) as gasto_pension FROM detalle_pension WHERE estado='1' AND estado_delete='1' AND idpension='$idpension'";
         $gasto_pension = ejecutarConsultaSimpleFila($sql_2);
-        if ($gasto_pension['status'] == false) {  return $gasto_pension;}
-
-        $sql_3 = "SELECT SUM(monto) as total_deposito FROM factura_pension WHERE estado='1' AND estado_delete='1' AND idpension='$idpension'";
-        $deposito = ejecutarConsultaSimpleFila($sql_3);         
-        if ($deposito['status'] == false) {  return $deposito;}         
+        if ($gasto_pension['status'] == false) {  return $gasto_pension;}     
 
         $serv_pension[] = [
           "idpension" => $value['idpension'],
@@ -299,7 +295,7 @@ class Resumen_general
           "direccion" => $value['direccion'],
 
           "monto_total_pension" => (empty($gasto_pension['data']) ? 0 : (empty($gasto_pension['data']['gasto_pension']) ? 0 : $gasto_pension['data']['gasto_pension']) ),
-          "deposito" => (empty($deposito['data']) ? 0 : (empty($deposito['data']['total_deposito']) ? 0 : $deposito['data']['total_deposito']) )
+          "deposito" =>  (empty($gasto_pension['data']) ? 0 : (empty($gasto_pension['data']['gasto_pension']) ? 0 : $gasto_pension['data']['gasto_pension']) )
         ];
       }
     }
@@ -313,8 +309,7 @@ class Resumen_general
   }
 
   public function listar_comprobantes_pension($idpension)  {
-    $sql = "SELECT * FROM factura_pension 
-		WHERE idpension  ='$idpension'";
+    $sql = "SELECT * FROM detalle_pension	WHERE idpension  ='$idpension'";
     return ejecutarConsulta($sql);
   }
 

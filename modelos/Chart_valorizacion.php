@@ -348,21 +348,21 @@ function suma_totales($idproyecto, $fecha_1, $fecha_2) {
   $filtro_fecha = "";
 
   if ( !empty($fecha_1) && !empty($fecha_2) ) {
-    $filtro_fecha = "AND fp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    $filtro_fecha = "AND dp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
   } else {
     if (!empty($fecha_1)) {
-      $filtro_fecha = "AND fp.fecha_emision = '$fecha_1'";
+      $filtro_fecha = "AND dp.fecha_emision = '$fecha_1'";
     }else{
       if (!empty($fecha_2)) {
-        $filtro_fecha = "AND fp.fecha_emision = '$fecha_2'";
+        $filtro_fecha = "AND dp.fecha_emision = '$fecha_2'";
       }     
     }      
   }    
 
-  $sql6 = "SELECT SUM(fp.monto) AS total, SUM(fp.subtotal) AS subtotal, SUM(fp.igv) AS igv
-  FROM factura_pension as fp, pension as p, proveedor as prov
-  WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND  p.idproyecto = $idproyecto
-  AND fp.estado = '1' AND fp.estado_delete = '1' $filtro_fecha ;";
+  $sql6 = "SELECT SUM(dp.precio_parcial) AS total, SUM(dp.subtotal) AS subtotal, SUM(dp.igv) AS igv
+  FROM detalle_pension as dp, pension as p, proveedor as prov
+  WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND  p.idproyecto = $idproyecto
+  AND dp.estado = '1' AND dp.estado_delete = '1' $filtro_fecha ;";
   $factura_pension = ejecutarConsultaSimpleFila($sql6);
 
   if ($factura_pension['status'] == false) { return $factura_pension; }

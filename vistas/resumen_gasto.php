@@ -147,7 +147,7 @@
                                   <th class="text-right text-nowrap total-igv">IGV</th>
                                   <th class="text-right text-nowrap total-total">Total</th>  
                                   <th class="text-center text-black-50">CFDI.</th>
-                                  <th class="text-center">Estado</th>
+                                  <th class="text-center">Estado</th> 
                                 </tr>
                               </tfoot>
                             </table>

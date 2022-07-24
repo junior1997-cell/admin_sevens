@@ -18,7 +18,7 @@
       require_once "../modelos/Compra_insumos.php";
 
       $resumen_general = new Resumen_general();
-      $compra = new Compra_insumos();
+      $compra_insumos = new Compra_insumos();
 
       switch ($_GET["op"]) {
 
@@ -135,12 +135,12 @@
 
         case 'mostrar_detalle_compras':
           
-          $rspta = $compra->ver_compra($_GET['id_compra']);
-          $rspta2 = $compra->ver_detalle_compra($_GET['id_compra']);
+          $rspta = $compra_insumos->ver_compra($_GET['id_compra']);
+          $rspta2 = $compra_insumos->ver_detalle_compra($_GET['id_compra']);
 
           $subtotal = 0;    $ficha = ''; 
 
-          echo '<!-- Tipo de Empresa -->
+          $inputs = '<!-- Tipo de Empresa -->
             <div class="col-lg-6">
               <div class="form-group">
                 <label class="font-size-15px" for="idproveedor">Proveedor</label>
@@ -195,13 +195,13 @@
           while ($reg = $rspta2['data']->fetch_object()) {
 
             empty($reg->ficha_tecnica) ? ($ficha = '<i class="far fa-file-pdf fa-lg text-gray-50"></i>') : ($ficha = '<a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-primary"></i></a>');
-            
+            $img_product = '../dist/docs/material/img_perfil/'. (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen );
             $tbody .= '<tr class="filas">
               <td class="text-center p-6px">' . $cont++ . '</td>
               <td class="text-center p-6px">' . $ficha . '</td>
               <td class="text-left p-6px">
                 <div class="user-block text-nowrap">
-                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/'.$reg->imagen.'" alt="user image" onerror="this.src=\'../dist/svg/default_producto.svg\';" >
+                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img_product.'" alt="user image" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
                   <span class="username"><p class="mb-0 ">' . $reg->nombre . '</p></span>
                   <span class="description"><b>Color: </b>' . $reg->color . '</span>
                 </div>
@@ -216,19 +216,32 @@
             </tr>';
           }         
 
-          echo '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+          $tabla_detalle = '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_factura">
               <thead style="background-color:#ff6c046b">
-                <th class="text-center p-10px" >#</th>
-                <th class="text-center p-10px">F.T.</th>
-                <th class="p-10px">Material</th>
-                <th class="p-10px">U.M.</th>
-                <th class="p-10px">Cant.</th>
-                <th class="p-10px">V/U</th>
-                <th class="p-10px">IGV</th>
-                <th class="p-10px">P/U</th>
-                <th class="p-10px">Desct.</th>
-                <th class="p-10px">Subtotal</th>
+                <tr class="text-center hidden">
+                  <th class="p-10px">Proveedor:</th>
+                  <th class="text-center p-10px" colspan="9" >'.$rspta['data']['razon_social'].'</th>
+                </tr>
+                <tr class="text-center hidden">                
+                  <th class="text-center p-10px" colspan="2" >'.((empty($rspta['data']['tipo_comprobante'])) ? '' :  $rspta['data']['tipo_comprobante']). ' ─ ' . ((empty($rspta['data']['serie_comprobante'])) ? '' :  $rspta['data']['serie_comprobante']) .'</th>
+                  <th class="p-10px">Fecha:</th>
+                  <th class="text-center p-10px" colspan="3" >'.format_d_m_a($rspta['data']['fecha_compra']).'</th>
+                  <th class="p-10px">Glosa:</th>
+                  <th class="text-center p-10px" colspan="3" >'.$rspta['data']['glosa'].'</th>
+                </tr>
+                <tr class="text-center">
+                  <th class="text-center p-10px" >#</th>
+                  <th class="text-center p-10px">F.T.</th>
+                  <th class="p-10px">Material</th>
+                  <th class="p-10px">U.M.</th>
+                  <th class="p-10px">Cant.</th>
+                  <th class="p-10px">V/U</th>
+                  <th class="p-10px">IGV</th>
+                  <th class="p-10px">P/U</th>
+                  <th class="p-10px">Desct.</th>
+                  <th class="p-10px">Subtotal</th>
+                </tr>
               </thead>
               <tbody>'.$tbody.'</tbody>          
               <tfoot>
@@ -236,7 +249,7 @@
                     <td class="p-0" colspan="8"></td>
                     <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
                     <td class="p-0 text-right">
-                      <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                      <h6 class="mt-1 mb-1 mr-1 pl-1 font-weight-bold text-nowrap formato-numero-conta"><span>S/</span>' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
                     </td>
                   </tr>
                   <tr>
@@ -245,19 +258,21 @@
                       <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
                     </td>
                     <td class="p-0 text-right">
-                      <h6 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                      <h6 class="mt-1 mb-1 mr-1 pl-1 font-weight-bold text-nowrap formato-numero-conta"><span>S/</span>' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
                     </td>
                   </tr>
                   <tr>
                     <td class="p-0" colspan="8"></td>
                     <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
                     <td class="p-0 text-right">
-                      <h5 class="mt-1 mb-1 mr-1 font-weight-bold text-nowrap">S/ ' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                      <h5 class="mt-1 mb-1 mr-1 pl-1 font-weight-bold text-nowrap formato-numero-conta"><span>S/</span>' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
                     </td>
                   </tr>
               </tfoot>
             </table>
           </div> ';
+          $retorno = ['status' => true, 'message' => 'todo oka', 'data' => $inputs . $tabla_detalle ,];
+          echo json_encode( $retorno, true );
 
         break;
 
@@ -894,7 +909,7 @@
                 '1' => $value['proveedor'],
                 '2' => '- - -',
                 '3' => '- - -',
-                '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_pension('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>
+                '4' => '<!-- <button class="btn btn-info btn-sm" onclick="mostrar_detalle_pension('.$value['idpension'].')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button> -->
                         <button class="btn btn-info btn-sm" onclick="mostrar_comprobantes_pension('.$value['idpension'].')"><i class="far fa-file-pdf fa-lg btn-info nav-icon"></i></button>',
                 '5' => number_format($value['monto_total_pension'], 2, '.', ',' ),
                 '6' => number_format($value['deposito'], 2, '.', ',' ),
@@ -1012,38 +1027,25 @@
           $rspta = $resumen_general->listar_comprobantes_pension($_GET['idpension']);
 
           //Vamos a declarar un array
-          $data = [];
-          $comprobante = '';
-          $subtotal = 0;
-          $igv = 0;
-          $monto = 0;
+          $data = [];      
 
           while ($reg = $rspta['data']->fetch_object()) {
-            $subtotal = round($reg->subtotal, 2);
-            $igv = round($reg->igv, 2);
-            $monto = round($reg->monto, 2);
 
-            if (strlen($reg->descripcion) >= 20) {
-              $descripcion = substr($reg->descripcion, 0, 20) . '...';
-            } else {
-              $descripcion = $reg->descripcion;
-            }
-
-            empty($reg->comprobante)
-              ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
-              : ($comprobante = '<div><center><a type="btn btn-danger" target="_blank"  href="../dist/img/comprob_pension/' . $reg->comprobante . '" ><i class="fas fa-file-invoice fa-2x"></i></a></center></div>');
+            $comprobante = empty($reg->comprobante)
+              ? ( '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>')
+              : ('<div><center><a type="btn btn-danger" target="_blank"  href="../dist/docs/pension/comprobante/' . $reg->comprobante . '" ><i class="fas fa-file-invoice fa-2x"></i></a></center></div>');
 
             $tool = '"tooltip"';
             $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
             $data[] = [
-              "0" => empty($reg->forma_de_pago) ? ' - ' : $reg->forma_de_pago,
-              "1" => (empty($reg->tipo_comprobante) ? ' - ' : $reg->tipo_comprobante ).' ─ ' . (empty($reg->nro_comprobante) ? ' - ' : $reg->nro_comprobante),
+              "0" => empty($reg->forma_pago) ? ' - ' : $reg->forma_pago,
+              "1" => (empty($reg->tipo_comprobante) ? ' - ' : $reg->tipo_comprobante ). (empty($reg->numero_comprobante) ? '' : ' ─ ' .$reg->numero_comprobante),
               "2" => date("d/m/Y", strtotime($reg->fecha_emision)),
-              "3" => number_format($subtotal, 2, '.', ','),
-              "4" => number_format($igv, 2, '.', ','),
-              "5" => number_format($monto, 2, '.', ','),
-              "6" => empty($reg->descripcion) ? '-' : '<div data-toggle="tooltip" data-original-title="' . $reg->descripcion . '">' . $descripcion . '</div>',
+              "3" => number_format($reg->subtotal, 2, '.', ','),
+              "4" => number_format($reg->igv, 2, '.', ','),
+              "5" => number_format($reg->precio_parcial, 2, '.', ','),
+              "6" => '<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'. $reg->descripcion.'</textarea>',
               "7" => $comprobante,
             ];
           }

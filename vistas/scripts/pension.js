@@ -195,8 +195,6 @@ function guardaryeditar_pension(e) {
 //Función Listar
 function tbla_principal(nube_idproyecto) {
 
-  var sumatotal=0; var totalsaldo=0; 
-
   tabla_pension = $('#tabla-pension').dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
@@ -218,19 +216,8 @@ function tbla_principal(nube_idproyecto) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center text-nowrap');  }
       if (data[1] != '') { $("td", row).eq(1).addClass('text-center text-nowrap'); }
-      if (data[3]!="") { $("td", row).eq(4).addClass('text-right');  sumatotal += parseFloat(data[4]);  } else { sumatotal +=0; }
-      if (data[4]!="") {$("td", row).eq(4).addClass('text-right text-nowrap');}
-      if (data[6]!="") {$("td", row).eq(6).addClass('text-right text-nowrap');}
-      //console.log(data);
-      if (quitar_formato_miles(data[6]) > 0) {
-        $("td", row).eq(6).css({ "background-color": "#ffc107", color: "black", });          
-      } else if (quitar_formato_miles(data[6]) == 0) {
-        $("td", row).eq(6).css({ "background-color": "#28a745", color: "white",  });
-      } else {
-        $("td", row).eq(6).css({ "background-color": "#ff5252", color: "white", });          
-      }
-      if (data[6]!="") {  var saldo=quitar_formato_miles(data[6]); }
-      totalsaldo += parseFloat(saldo);
+      if (data[4] != '') {$("td", row).eq(4).addClass('text-right text-nowrap');} 
+      if (data[5] != '') {$("td", row).eq(5).addClass('text-right text-nowrap');}  
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -239,13 +226,17 @@ function tbla_principal(nube_idproyecto) {
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
-    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      //{ targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:MM:SS', 'DD-MM-YYYY'), },
+      //{ targets: [14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
+    ],
   }).DataTable();
 
   $.post("../ajax/pension.php?op=total_pension", { idproyecto: nube_idproyecto }, function (e, status) {
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
-      $("#total_pension").html('S/. '+formato_miles(e.data.total));      
+      $("#total_pension").html(formato_miles(e.data.total));      
     } else {
       ver_errores(e);
     }
@@ -334,7 +325,7 @@ function ingresar_a_pension(idpension,razon_social) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,6,7], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,6,7], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,6,7], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,12,13,4,5,14,15,7,8,9,16,10], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,12,13,4,5,14,15,7,8,9,16,10], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,12,13,4,5,14,15,7,8,9,16,10], } }, {extend: "colvis"} ,
     ],
     ajax:{
       url: '../ajax/pension.php?op=tbla_detalle_comprobante&id_pension='+idpension,
@@ -350,7 +341,10 @@ function ingresar_a_pension(idpension,razon_social) {
       if (data[1]) { $("td", row).eq(1).addClass('text-nowrap');   }
       if (data[3]) { $("td", row).eq(3).addClass('text-nowrap');   }
       if (data[4]) {$("td", row).eq(4).addClass('text-right');} 
-      if (data[5]) {$("td", row).eq(5).addClass('text-right');}      
+      if (data[5]) {$("td", row).eq(5).addClass('text-center');}  
+      if (data[8]) {$("td", row).eq(8).addClass('text-right');}  
+      if (data[9]) {$("td", row).eq(9).addClass('text-right');}  
+      if (data[10]) {$("td", row).eq(10).addClass('text-right');}
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -361,7 +355,8 @@ function ingresar_a_pension(idpension,razon_social) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [6], visible: false, searchable: false, },   
+      { targets: [7], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [12,13,14,15,16], visible: false, searchable: false, },   
     ],
   }).DataTable();
 
@@ -369,6 +364,8 @@ function ingresar_a_pension(idpension,razon_social) {
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
       $("#total_cantidad_personas").html(formato_miles(e.data.total_pers));
+      $("#total_subtotal").html('S/. '+formato_miles(e.data.subtotal));
+      $("#total_igv").html('S/. '+formato_miles(e.data.igv));
       $("#total_monto").html('S/. '+formato_miles(e.data.total_monto));
     } else {
       ver_errores(e);
@@ -391,12 +388,9 @@ function guardaryeditar_detalle_pension(e) {
     processData: false,
     success: function (e) {
       try {
-        e = JSON.parse(e);
-        console.log(e); 
+        e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           toastr.success('Servicio registrado correctamente');  
-
-          tabla_detalle_pension.ajax.reload(null, false);  
 
           tbla_principal( localStorage.getItem('nube_idproyecto')); 
 
@@ -469,7 +463,6 @@ function mostar_editar_detalle_pension(id_detalle_pension) {
     $("#igv").val(parseFloat(e.data.igv).toFixed(2));
     $("#val_igv").val(e.data.val_igv); 
     $("#descripcion_detalle").val(e.data.descripcion);
-    $("#tipo_gravada").val(e.data.glosa);
     $("#forma_pago").val(e.data.forma_pago).trigger("change");
 
     if (e.data.comprobante == "" || e.data.comprobante == null  ) {
@@ -587,26 +580,22 @@ function validando_igv() {
   if ($("#tipo_comprobante").select2("val") == "Factura") {
     $("#val_igv").prop("readonly",false);
     $("#val_igv").val(0.18); 
-    var aa=$("#val_igv").val(0.18); 
-    console.log('..........'+aa);
+    $("#tipo_gravada").val('GRAVADA');
   }else {
     $("#val_igv").val(0); 
+    $("#tipo_gravada").val('NO GRAVADA');
   }  
 }
 
 function calculandototales_fact() {
 
   var precio_parcial =  $("#monto").val();
-
   var val_igv = $('#val_igv').val();
-  console.log('---------------------------------------------');
-  console.log(precio_parcial);
-  console.log(val_igv);
 
   if (precio_parcial == null || precio_parcial == "") {
     $("#subtotal").val(0);
     $("#igv").val(0); 
-
+    $("#tipo_gravada").val('NO GRAVADA');
   } else {
  
     var subtotal = 0;
@@ -616,6 +605,7 @@ function calculandototales_fact() {
 
       $("#subtotal").val(parseFloat(precio_parcial));
       $("#igv").val(0);
+      $("#tipo_gravada").val('NO GRAVADA');
 
     }else{
 
@@ -627,7 +617,8 @@ function calculandototales_fact() {
 
       $("#subtotal").val(parseFloat(subtotal).toFixed(2));
       $("#igv").val(parseFloat(igv).toFixed(2));
-
+      
+      val_igv > 0 && val_igv <= 1 ? $("#tipo_gravada").val('GRAVADA') : $("#tipo_gravada").val('NO GRAVADA') ;
     }
   }
 }

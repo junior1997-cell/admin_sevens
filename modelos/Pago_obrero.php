@@ -87,26 +87,37 @@ class PagoObrero
 
   // Obtenemos los totales - TABLA PRINCIPAL
   public function mostrar_total_tbla_principal($id) {
-    $sql_1 = "SELECT SUM(pqso.monto_deposito) AS total_deposito_x_proyecto 
+    $sql_1 = "SELECT SUM(pqso.monto_deposito) AS total_deposito
 		FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
 		WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
 		AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$id';";
     $monto_1 = ejecutarConsultaSimpleFila($sql_1);
     if ($monto_1['status'] == false) { return $monto_1; }
 
-    // $sql_2 = "SELECT
-    // FROM trabajador_por_proyecto AS tpp,  cargo_trabajador AS ct, tipo_trabajador AS tt
-    // WHERE tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador
-    // AND tt.nombre = 'Obrero' AND tpp.idproyecto = '$id' ;";
-    // $monto_2 = ejecutarConsultaSimpleFila($sql_2);
+    $sql_2 = "SELECT SUM(rqsa.total_hn) as total_hn, SUM(rqsa.total_he) as total_he, SUM(rqsa.total_dias_asistidos) as total_dias_asistidos, 
+    SUM(rqsa.sabatical) as sabatical,  SUM(rqsa.pago_parcial_hn) as pago_parcial_hn, SUM(rqsa.pago_parcial_he) as pago_parcial_he, 
+    SUM(rqsa.adicional_descuento) as adicional_descuento, SUM(rqsa.pago_quincenal) as pago_quincenal, 
+    SUM(rqsa.estado_envio_contador) as estado_envio_contador
+    FROM resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp
+    WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='1' AND  rqsa.estado_envio_contador = '1' 
+    AND rqsa.estado = '1' AND rqsa.estado_delete = '1';";
+    $monto_2 = ejecutarConsultaSimpleFila($sql_2);
 
     $data = [
       'status'=> true, 
       'message'=> 'todo oka bro',
       'data'=>[
-        'total_deposito_x_proyecto' => (empty($monto_1['data']) ? 0 : ( empty($monto_1['data']['total_deposito_x_proyecto']) ? 0 : $monto_1['data']['total_deposito_x_proyecto'])),
-      ] 
-      // 'sueldo_mesual_x_proyecto' => $n2 = (empty($monto_1)) ? 0 : $retVal_2 = (empty($monto_1['sueldo_mesual_x_proyecto'])) ? 0 : $monto_1['sueldo_mesual_x_proyecto']
+        'total_deposito'  => (empty($monto_1['data']) ? 0 : ( empty($monto_1['data']['total_deposito']) ? 0 : floatval($monto_1['data']['total_deposito']) )),
+        'total_hn'        => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['total_hn']) ? 0 : floatval($monto_2['data']['total_hn']) )),
+        'total_he'        => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['total_he']) ? 0 : floatval($monto_2['data']['total_he']) )),        
+        'total_sabatical'       => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['sabatical']) ? 0 : floatval($monto_2['data']['sabatical']) )),
+        'total_pago_parcial_hn' => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['pago_parcial_hn']) ? 0 : floatval($monto_2['data']['pago_parcial_hn']) )),
+        'total_pago_parcial_he' => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['pago_parcial_he']) ? 0 : floatval($monto_2['data']['pago_parcial_he']) )),
+        'total_pago_quincenal'  => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['pago_quincenal']) ? 0 : floatval($monto_2['data']['pago_quincenal']) )),
+        'total_adicional_descuento'   => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['adicional_descuento']) ? 0 : floatval($monto_2['data']['adicional_descuento']) )),        
+        'total_envio_contador' => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['estado_envio_contador']) ? 0 : floatval($monto_2['data']['estado_envio_contador']) )),
+        'total_dias_asistidos'  => (empty($monto_2['data']) ? 0 : ( empty($monto_2['data']['total_dias_asistidos']) ? 0 : floatval($monto_2['data']['total_dias_asistidos']) )),
+      ]
     ];
 
     return $data;
@@ -251,7 +262,7 @@ class PagoObrero
     WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador  
     AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador
     AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND rqsa.estado_envio_contador = '1' 
-    AND rqsa.numero_q_s = '$num_quincena' AND tpp.idproyecto ='$nube_idproyecto'";
+    AND rqsa.numero_q_s = '$num_quincena' AND tpp.idproyecto ='$nube_idproyecto' ORDER BY t.nombres ASC";
     $trabajador = ejecutarConsultaArray($sql);
     if ($trabajador['status'] == false) { return $trabajador; }
 

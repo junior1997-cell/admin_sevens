@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Pagos de Obrero</title>
+        <title>Pagos de Obrero | Admin Sevens</title>
 
         <?php $title = "Pagos de Obrero"; require 'head.php'; ?>
 
@@ -115,8 +115,8 @@
                                   <th>Banco</th>                                
                                   <th>Cuenta</th>   
                                   <th class="text-center">Horas <br> Normal/Extra</th>
-                                  <th>Sabaticales</th>                              
-                                  <th>Sueldo Mensual</th>                                
+                                  <th data-toggle="tooltip" data-original-title="Sabatical">Sab.</th>                              
+                                  <th >Sueldo Mensual</th>                                
                                   <th class="text-center" data-toggle="tooltip" data-original-title="Pagos que a estado acumulando con sus dias de asistencia.">Pago a <br> realizar</th>
                                   <th class="text-center" data-toggle="tooltip" data-original-title="Despositos que se ha estado enviando a trabajador.">Pago <br> Acumulado</th>
                                   <th>Saldo</th>
@@ -124,28 +124,43 @@
                                   <th>Fecha inicio</th>
                                   <th>Hoy</th>
                                   <th class="text-center">Fecha <br> culminacion</th>
+
+                                  <th>Trabajador</th>  
+                                  <th>Cargo</th>
+                                  <th>Tipo</th>
+                                  <th>Tipo Doc</th>
+                                  <th>Num. Doc.</th>
+                                  <th>Hora Normal</th>
+                                  <th>Hora Extra</th>
+                                  <th>Pago Acumulado</th>
                                 </tr>
                               </thead>
-                              <tbody>                         
-                                
-                              </tbody>
+                              <tbody>   </tbody>
                               <tfoot>
                                 <tr> 
-                                  <th class="text-center text-gray">#</th>                                 
-                                  <th class="text-gray">Trabajdor</th>                                                              
-                                  <th>Banco</th>                                
-                                  <th>Cuenta</th>
-                                  <th class="text-center text-gray">Horas Nrm/Extr</th>
-                                  <th>Sabaticales</th>   
-                                  <!-- <th class="text-center"><h5 class="sabatical_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>   -->                            
-                                  <th class="text-center text-gray">Sueldo Mensual</th>                                
-                                  <th class="text-right"><h5 class="pago_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right"><h5 class="deposito_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right"><h5 class="saldo_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right"><h5 class="cant_s_q_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-center text-gray">Fecha inicio</th>
-                                  <th class="text-center text-gray">Hoy</th>
-                                  <th class="text-center text-gray">Fecha fin</th>                       
+                                  <th class="text-center text-gray"><small>#</small></th>                                 
+                                  <th class="text-gray"><small>Trabajdor</small></th>                                                              
+                                  <th class="text-gray"><small>Banco</small></th>                                
+                                  <th class="text-gray"><small>Cuenta</small></th>
+                                  <th class="text-center text-gray"><small>Horas Nrm/Extr</small></th>
+                                  <th class="total_tbla_principal_sabatical"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
+                                  <th class="text-center text-gray"><small>Sueldo Mensual</small></th>                                
+                                  <th class="pr-2" ><div class="formato-numero-conta "><span>S/</span> <span class="total_tbla_principal_pago"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>
+                                  <th class="pr-2" ><div class="formato-numero-conta "><span>S/</span> <span class="total_tbla_principal_deposito"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>
+                                  <th class="pr-2" ><div class="formato-numero-conta "><span>S/</span> <span class="total_tbla_principal_saldo"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>
+                                  <th class="text-center"><span class="total_tbla_principal_cant_s_q"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></th>
+                                  <th class="text-center text-gray"><small>Fecha inicio</small></th>
+                                  <th class="text-center text-gray"><small>Hoy</small></th>
+                                  <th class="text-center text-gray"><small>Fecha fin</small></th>        
+                                  
+                                  <th>Trabajador</th>
+                                  <th>Cargo</th>
+                                  <th>Tipo</th>
+                                  <th>Tipo Doc</th>
+                                  <th>Num. Doc.</th>
+                                  <th>Hora Normal</th>
+                                  <th>Hora Extra</th> 
+                                  <th ><span>S/</span> <span class="total_tbla_principal_deposito"></span></th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -154,41 +169,41 @@
                           <!-- tabla: quincena - semana -->
                           <div class="table-responsive" id="tbl-fechas" style="display: none;">
                             <div class="row-horizon disenio-scroll" >
-                              <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
+                              <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" >
                                 <thead>                                  
-                                  <tr class="bg-gradient-info">
-                                    <th rowspan="2" class="stile-celda">N°</th>                                   
-                                    <th colspan="3" class="stile-celda pt-0 pb-0 nombre-bloque-asistencia">Semana </th>
-                                    <th rowspan="2" class="stile-celda text-center">Sueldo Hora</th>
-                                    <th rowspan="2" class="stile-celda text-center">Horas Normal/Extra</th>
-                                    <th rowspan="2" class="stile-celda text-center">Sabatical</th>
-                                    <th rowspan="2" class="stile-celda">Monto Normal/Extra</th>
-                                    <th rowspan="2" class="stile-celda text-center">Adicional</th>                                  
-                                    <th rowspan="2" class="stile-celda">Monto total</th>
-                                    <th rowspan="2" class="stile-celda ">Pagar/Acumulado</th> 
-                                    <th rowspan="2" class="stile-celda ">Saldo</th>
-                                    <th rowspan="2" class="stile-celda" data-toggle="tooltip" data-original-title="Recibos por Honorarios">R/H</th>
+                                  <tr class="text-center bg-gradient-info">
+                                    <th rowspan="2" class="">N°</th>                                   
+                                    <th colspan="3" class="pt-0 pb-0 nombre-bloque-asistencia">Semana </th>
+                                    <th rowspan="2" class="">Sueldo Hora</th>
+                                    <th rowspan="2" class="">Horas Normal/Extra</th>
+                                    <th rowspan="2" class="">Sabatical</th>
+                                    <th rowspan="2" class="">Monto Normal/Extra</th>
+                                    <th rowspan="2" class="">Adicional</th>                                  
+                                    <th rowspan="2" class="">Monto total</th>
+                                    <th rowspan="2" class="">Pagar/Acumulado</th> 
+                                    <th rowspan="2" class="">Saldo</th>
+                                    <th rowspan="2" class="" data-toggle="tooltip" data-original-title="Recibos por Honorarios">R/H</th>
                                   </tr>
-                                  <tr class="bg-gradient-info">                                                                     
-                                    <th class="stile-celda pt-0 pb-0">N°</th>
-                                    <th class="stile-celda pt-0 pb-0">Inicial</th>
-                                    <th class="stile-celda pt-0 pb-0">Final</th>
+                                  <tr class="text-center bg-gradient-info">                                                                     
+                                    <th class="pt-0 pb-0">N°</th>
+                                    <th class="pt-0 pb-0">Inicial</th>
+                                    <th class="pt-0 pb-0">Final</th>
                                   </tr>
                                 </thead>
-                                <tbody class="tcuerpo data-q-s">                                  
+                                <tbody class="data-q-s">                                  
                                                                 
                                 </tbody>
                                 <tfoot>
                                   <tr>                                    
                                     <th colspan="5" ></th> 
-                                    <th class="stile-celda total_hn_he"></th>
-                                    <th class="stile-celda total_sabatical"></th>
-                                    <th class="stile-celda total_monto_hn_he"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda-right total_descuento">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                    <th class="stile-celda-right total_quincena">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda-right total_deposito">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
-                                    <th class="stile-celda-right total_saldo">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda rh_total"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                    <th class="text-center total_hn_he"></th>
+                                    <th class="text-center total_sabatical"></th>
+                                    <th> <div class="formato-numero-conta total_monto_hn_he"><i class="fas fa-spinner fa-pulse fa-sm"></i></div></th> 
+                                    <th> <div class="formato-numero-conta"><span>S/</span> <span class="total_descuento"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>
+                                    <th> <div class="formato-numero-conta"><span>S/</span> <span class="total_quincena"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th> 
+                                    <th> <div class="formato-numero-conta"><span>S/</span> <span class="total_deposito"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>                           
+                                    <th> <div class="formato-numero-conta"><span>S/</span> <span class="total_saldo"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th> 
+                                    <th class="text-center rh_total"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -231,30 +246,30 @@
                           <!-- tabla: pago multiple obrero quincena - semana -->
                           <div class="table-responsive" id="tbl-pago-multiple_obrero" style="display: none;">
                             <div class="row-horizon disenio-scroll" >
-                              <table class="table styletabla table-hover text-nowrap" style="border: black 1px solid;">
+                              <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" >
                                 <thead>                                  
-                                  <tr class="bg-gradient-info"> 
-                                    <th class="stile-celda">N°</th> 
-                                    <th class="stile-celda text-center nombre_q_s_obrero">Quincena</th>
-                                    <th class="stile-celda text-center">Trabajador</th>
-                                    <th class="stile-celda text-center">Banco</th>
-                                    <th class="stile-celda text-center">Cuenta</th>
-                                    <th class="stile-celda">Horas Normal/Extra</th>                                  
-                                    <th class="stile-celda">Monto total</th>                                    
-                                    <th class="stile-celda">Pagar</th>
-                                    <th class="stile-celda">Saldo</th>
-                                    <th class="stile-celda" data-toggle="tooltip" data-original-title="Recibos por Honorarios">R/H</th>
+                                  <tr class="text-center bg-gradient-info"> 
+                                    <th class="">N°</th> 
+                                    <th class=" text-center nombre_q_s_obrero">Quincena</th>
+                                    <th class=" text-center">Trabajador</th>
+                                    <th class=" text-center">Banco</th>
+                                    <th class=" text-center">Cuenta</th>
+                                    <th class="">Horas Normal/Extra</th>                                  
+                                    <th class="">Monto total</th>                                    
+                                    <th class="">Pagar</th>
+                                    <th class="">Saldo</th>
+                                    <th class="" data-toggle="tooltip" data-original-title="Recibos por Honorarios">R/H</th>
                                   </tr>
                                 </thead>
-                                <tbody class="tcuerpo data-trabajadores-q-s">  <!-- Detalle -->   </tbody>                                
+                                <tbody class="data-trabajadores-q-s">  <!-- Detalle -->   </tbody>                                
                                 <tfoot>
                                   <tr>                                    
                                     <th colspan="5" ></th> 
-                                    <th class="stile-celda-right multiple_total_hn_he"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
-                                    <th class="stile-celda-right multiple_total_deuda">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda-right multiple_total_deposito">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda-right multiple_total_saldo">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                    <th class="stile-celda       multiple_rh_total"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                    <th class="text-center multiple_total_hn_he"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
+                                    <th class=""><div class="formato-numero-conta"><span>S/</span><span class="multiple_total_deuda"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th> 
+                                    <th class=""><div class="formato-numero-conta"><span>S/</span><span class="multiple_total_deposito"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th> 
+                                    <th class=""><div class="formato-numero-conta"><span>S/</span><span class="multiple_total_saldo"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th> 
+                                    <th class="text-center multiple_rh_total"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   </tr>
                                 </tfoot>
                               </table>

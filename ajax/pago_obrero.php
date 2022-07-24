@@ -77,25 +77,33 @@
                   <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['nombres_trabajador'] .'</p></span>
                   <span class="description">'. $value['nombre_tipo'].' / '.$value['nombre_cargo'] .' ─ '. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>                  
-                </div>',
-                
+                </div>',                
                 "2"=>$value['banco'],
                 "3"=>$value['cuenta_bancaria'],            
                 "4"=>$value['total_hn'].' / '. $value['total_he'],      
                 "5"=>$value['sabatical'],           
                 "6"=>'S/ '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
                 "7"=>'S/ '.  number_format($value['pago_quincenal'], 2, '.', ','),
-                "8"=>'<div class="justify-content-between "> 
-                  <button class="btn '.$btn_depositos.' btn-sm " onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' ); table_show_hide(2);">
+                "8"=>'<div class="formato-numero-conta "> 
+                  <button class="btn '.$btn_depositos.' btn-sm mr-1" onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' ); table_show_hide(2);">
                     <i class="far fa-eye"></i> Pagar
                   </button> 
                   <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-sm">S/ '.number_format($value['total_deposito'], 2, '.', ',').'</button>
                 </div>',
                 "9"=>'S/ ' . number_format($saldo, 2, '.', ','),
                 "10"=>$value['sum_estado_envio_contador'], 
-                "11"=>format_d_m_a($value['fecha_inicio']),
+                "11"=>$value['fecha_inicio'],
                 "12"=> $date_actual,
-                "13"=>format_d_m_a($value['fecha_fin']),              
+                "13"=>$value['fecha_fin'],    
+
+                "14"=>$value['nombres_trabajador'], 
+                "15"=>$value['nombre_tipo'], 
+                "16"=>$value['nombre_cargo'],   
+                "17"=>$value['tipo_documento'],
+                "18"=>$value['numero_documento'],
+                "19"=>$value['total_hn'],
+                "20"=>$value['total_he'],
+                "21"=>'S/ '.number_format($value['total_deposito'], 2, '.', ','),     
               );
             }
             $results = array(
@@ -110,7 +118,7 @@
           
         break;
 
-        case 'mostrar_deposito_total_tbla_principal':
+        case 'mostrar_sumas_totales_tbla_principal':
           $rspta=$pagoobrero->mostrar_total_tbla_principal($_POST["id_proyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true);

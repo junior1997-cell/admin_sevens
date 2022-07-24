@@ -106,8 +106,7 @@ function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [ { extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) { 
         // columna: #
         if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center"); }
         // columna: fecha
@@ -117,13 +116,11 @@ function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
         // columna: montos
         if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }        
         // columna: depositos  
-        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }   
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
           }else{              
@@ -195,38 +192,21 @@ function tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) { 
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }  
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }        
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }   
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
           }else{              
@@ -296,43 +276,23 @@ function tbla_equipos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) { 
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center"); }
         // columna: Proveedor
-        if (data[1] != '') {
-          $("td", row).eq(1).removeClass("w-px-35 text-nowrap text-center");         
-        }
-
+        if (data[1] != '') { $("td", row).eq(1).removeClass("w-px-35 text-nowrap text-center"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }         
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }   
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
           }else{              
@@ -403,38 +363,21 @@ function tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaja
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) {
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }  
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }        
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }     
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
           }else{              
@@ -508,35 +451,19 @@ function tbla_hospedajes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
       createdRow: function (row, data, ixdex) {          
 
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap");  } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }  
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }        
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }  
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
           }else{              
@@ -608,38 +535,21 @@ function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) { 
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }  
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }         
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); } 
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
           }else{              
@@ -710,38 +620,21 @@ function tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) { 
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }         
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }  
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
           }else{              
@@ -1378,11 +1271,8 @@ function table_all_sumas() {
     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
     data: insert_table,
     createdRow: function (row, data, ixdex) {   
-
       // columna: detalle
       if (data[4] != '') {   
-
-        // console.log(data[4]);
 
         if (data[4] == 'Compras de Insumos') {
           $("td", row).eq(5).removeClass('text-right monto_compras_all').addClass('text-right monto_compras_all');
@@ -1458,14 +1348,9 @@ function table_all_sumas() {
       }  
 
       // columna: montos
-      if (data[5] != '') {
-        $("td", row).eq(5).addClass("text-right");         
-      }   
-      
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }      
       // columna: depositos  
-      if (data[6] != '') {
-        $("td", row).eq(6).addClass("text-right");
-      }              
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
 
       // columna: saldos
       if (data[7] != '') {
@@ -1562,14 +1447,26 @@ function filtros() {
 function mostrar_detalle_compras(idcompra_proyecto) {
   $('#cargando-1-fomulario').hide();
   $('#cargando-2-fomulario').show();
+
+  $("#print_pdf_compra").addClass('disabled');
+  $("#excel_compra").addClass('disabled');
+
   $("#modal-ver-compras").modal("show");  
 
   $.post("../ajax/resumen_general.php?op=mostrar_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
+    r = JSON.parse(r);
+    if (r.status == true) {
+      $(".detalles_compra").html(r.data);
+      $('#cargando-1-fomulario').show();
+      $('#cargando-2-fomulario').hide();
 
-    $(".detalles_compra").html(r);
+      $("#print_pdf_compra").removeClass('disabled');
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+      $("#excel_compra").removeClass('disabled');
+    }else {
+      ver_errores(e);
+    }  
 
-    $('#cargando-1-fomulario').show();
-    $('#cargando-2-fomulario').hide();
   }).fail( function(e) { ver_errores(e); } );
 }
 
@@ -1597,27 +1494,15 @@ function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, p
         console.log(e.responseText);
       },
     },
-    createdRow: function (row, data, ixdex) {    
-
+    createdRow: function (row, data, ixdex) {
       // columna: unidad
-      if (data[1] != '') {
-        $("td", row).eq(1).addClass("text-center");         
-      } 
-      
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }       
       // columna: cantidad
-      if (data[2] != '') {
-        $("td", row).eq(2).addClass("text-center");         
-      } 
-
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-center"); }
       // columna: costo unitario
-      if (data[3] != '') {
-        $("td", row).eq(3).addClass("text-right");         
-      }  
-
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-right"); }
       // columna: costo parcial
-      if (data[4] != '') {
-        $("td", row).eq(4).addClass("text-right");         
-      } 
+      if (data[4] != '') { $("td", row).eq(4).addClass("text-right"); } 
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -1696,32 +1581,30 @@ function mostrar_detalle_pension(idpension) {
 function mostrar_comprobantes_pension(idpension) {
   $("#modal-ver-comprobantes_pension").modal("show");
 
-  tabla2 = $("#t-comprobantes-pension")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5",  "pdf"],
-      ajax: {
-        url: "../ajax/resumen_general.php?op=mostrar_comprobantes_pension&idpension=" + idpension,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
+  tabla2 = $("#t-comprobantes-pension").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5",  "pdf"],
+    ajax: {
+      url: "../ajax/resumen_general.php?op=mostrar_comprobantes_pension&idpension=" + idpension,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
       },
-      language: {
-        lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "desc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "desc"]], //Ordenar (columna,orden)
+  }).DataTable();
 }
 
 // MODAL - ADMINISTRAIVOS
@@ -1748,14 +1631,14 @@ function mostrar_detalle_administrativo(idtrabajador_por_proyecto, nombres) {
       $(".tabla").show();
       e.data.forEach((value, index) => {
         detalle = `<tr>
-                  <td>${index + 1}</td>
-                  <td>${value.nombre_mes}</td>
-                  <td>${format_d_m_a(value.fecha_inicial)}</td>
-                  <td>${format_d_m_a(value.fecha_final)}</td>
-                  <td>${value.cant_dias_laborables}</td>
-                  <td class="m-r-10px" style="text-align: end !important;">S/ ${formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
-                  <td class="m-r-10px" style="text-align: end !important;">S/ ${formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
-              </tr>`;
+          <td>${index + 1}</td>
+          <td>${value.nombre_mes}</td>
+          <td>${format_d_m_a(value.fecha_inicial)}</td>
+          <td>${format_d_m_a(value.fecha_final)}</td>
+          <td>${value.cant_dias_laborables}</td>
+          <td class="m-r-10px" style="text-align: end !important;">S/ ${formato_miles(parseFloat(value.monto_x_mes).toFixed(2))}</td>
+          <td class="m-r-10px" style="text-align: end !important;">S/ ${formato_miles(parseFloat(value.return_monto_pago).toFixed(2))}</td>
+        </tr>`;
 
         $(".data-detalle-pagos-administador").append(detalle);
         sueldo_estimado += parseFloat(value.monto_x_mes);
@@ -1812,19 +1695,19 @@ function mostrar_detalle_obrero(idtrabajador_por_proyecto, nombres) {
       $(".tabla_obrero").show();
       e.data.forEach((value, index) => {
         detalle = `<tr>
-                  <td>${index + 1}</td>
-                  <td>${value.numero_q_s}</td>
-                  <td>${format_d_m_a(value.fecha_q_s_inicio)}</td>
-                  <td>${format_d_m_a(value.fecha_q_s_fin)}</td>
-                  <td>${value.sueldo_hora}</td>
-                  <td>${value.total_hn}<b> / </b>${value.total_he}</td>
-                  <td>${value.sabatical}</td>          
-                  <td> ${formato_miles(value.pago_parcial_hn)}<b> / </b>${formato_miles(value.pago_parcial_he)}</td>
-                  <td style="text-align: right !important;">${formato_miles(value.adicional_descuento)}</td>
-                  <td style="text-align: right !important;">${formato_miles(value.pago_quincenal)}</td>
-                  <td style="text-align: right !important;">${formato_miles(value.deposito)}</td>
-                  <td style="text-align: right !important;">${formato_miles(parseFloat(value.pago_quincenal) - parseFloat(value.deposito))}</td>
-              </tr>`;
+          <td>${index + 1}</td>
+          <td>${value.numero_q_s}</td>
+          <td>${format_d_m_a(value.fecha_q_s_inicio)}</td>
+          <td>${format_d_m_a(value.fecha_q_s_fin)}</td>
+          <td>${value.sueldo_hora}</td>
+          <td>${value.total_hn}<b> / </b>${value.total_he}</td>
+          <td>${value.sabatical}</td>          
+          <td> ${formato_miles(value.pago_parcial_hn)}<b> / </b>${formato_miles(value.pago_parcial_he)}</td>
+          <td style="text-align: right !important;">${formato_miles(value.adicional_descuento)}</td>
+          <td style="text-align: right !important;">${formato_miles(value.pago_quincenal)}</td>
+          <td style="text-align: right !important;">${formato_miles(value.deposito)}</td>
+          <td style="text-align: right !important;">${formato_miles(parseFloat(value.pago_quincenal) - parseFloat(value.deposito))}</td>
+        </tr>`;
 
         $(".detalle-data-q-s").append(detalle);
 
@@ -1862,3 +1745,16 @@ init();
 
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function export_excel_detalle_factura() {
+  $tabla = document.querySelector("#tabla_detalle_factura");
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: "Detalle comprobante", //Nombre del archivo de Excel
+    sheetname: "detalle factura", //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+  let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
+  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+
+}

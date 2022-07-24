@@ -339,29 +339,30 @@ class Resumenfacturas
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND fp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+      $filtro_fecha = "AND dp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
     } else {
       if (!empty($fecha_1)) {
-        $filtro_fecha = "AND fp.fecha_emision = '$fecha_1'";
+        $filtro_fecha = "AND dp.fecha_emision = '$fecha_1'";
       }else{
         if (!empty($fecha_2)) {
-          $filtro_fecha = "AND fp.fecha_emision = '$fecha_2'";
+          $filtro_fecha = "AND dp.fecha_emision = '$fecha_2'";
         }     
       }      
     }    
 
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { $filtro_comprobante = "AND fp.tipo_comprobante IN ('Factura','Boleta')"; } else {
-      $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND dp.tipo_comprobante IN ('Factura','Boleta')"; } else {
+      $filtro_comprobante = "AND dp.tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql6 = "SELECT p.idproyecto, fp.idfactura_pension, prov.razon_social, fp.tipo_comprobante, fp.nro_comprobante, fp.fecha_emision, 
-    fp.monto, fp.subtotal, fp.igv, fp.comprobante, fp.glosa , fp.tipo_gravada
-		FROM factura_pension as fp, pension as p, proveedor as prov
-		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND fp.estado = '1' AND fp.estado_delete = '1'
+    $sql6 = "SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_inicial, dp.fecha_final, dp.cantidad_persona, dp.subtotal, dp.igv, 
+    dp.val_igv, dp.precio_parcial, dp.forma_pago, dp.tipo_comprobante, dp.fecha_emision, dp.tipo_gravada, dp.glosa, dp.numero_comprobante, dp.descripcion, 
+    dp.comprobante, dp.id_user_vb, dp.nombre_user_vb, dp.imagen_user_vb, dp.estado_user_vb, prov.razon_social, p.idproyecto
+    FROM detalle_pension as dp, pension as p, proveedor as prov
+		WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND dp.estado = '1' AND dp.estado_delete = '1'
      $filtro_proveedor $filtro_comprobante $filtro_fecha
-    ORDER BY fp.fecha_emision DESC;";
+    ORDER BY dp.fecha_emision DESC;";
     $factura_pension =  ejecutarConsultaArray($sql6);
 
     if ($factura_pension['status'] == false) { return $factura_pension; }
@@ -370,12 +371,12 @@ class Resumenfacturas
       foreach ($factura_pension['data'] as $key => $value) {
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
-          "idtabla"           => $value['idfactura_pension'],
+          "idtabla"           => $value['iddetalle_pension'],
           "fecha"             => $value['fecha_emision'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
-          "serie_comprobante" => $value['nro_comprobante'],
+          "serie_comprobante" => $value['numero_comprobante'],
           "proveedor"         => $value['razon_social'],
-          "total"             => $value['monto'],          
+          "total"             => $value['precio_parcial'],          
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
           "glosa"             => $value['glosa'],
@@ -384,7 +385,7 @@ class Resumenfacturas
           "carpeta"           => 'pension',
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/pension/comprobante/',
-          "modulo"              => 'PENSION',
+          "modulo"            => 'PENSION',
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
@@ -774,26 +775,26 @@ class Resumenfacturas
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND fp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+      $filtro_fecha = "AND dp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
     } else {
       if (!empty($fecha_1)) {
-        $filtro_fecha = "AND fp.fecha_emision = '$fecha_1'";
+        $filtro_fecha = "AND dp.fecha_emision = '$fecha_1'";
       }else{
         if (!empty($fecha_2)) {
-          $filtro_fecha = "AND fp.fecha_emision = '$fecha_2'";
+          $filtro_fecha = "AND dp.fecha_emision = '$fecha_2'";
         }     
       }      
     }    
 
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { $filtro_comprobante = "AND fp.tipo_comprobante IN ('Factura','Boleta')"; } else {
-      $filtro_comprobante = "AND fp.tipo_comprobante = '$comprobante'"; 
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND dp.tipo_comprobante IN ('Factura','Boleta')"; } else {
+      $filtro_comprobante = "AND dp.tipo_comprobante = '$comprobante'"; 
     }
-    $sql6 = "SELECT SUM(fp.monto) AS total, SUM(fp.subtotal) AS subtotal, SUM(fp.igv) AS igv
-		FROM factura_pension as fp, pension as p, proveedor as prov
-		WHERE fp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
-    AND fp.estado = '1' AND fp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
+    $sql6 = "SELECT SUM(dp.precio_parcial) AS total, SUM(dp.subtotal) AS subtotal, SUM(dp.igv) AS igv
+		FROM detalle_pension as dp, pension as p, proveedor as prov
+		WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' 
+    AND dp.estado = '1' AND dp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $factura_pension = ejecutarConsultaSimpleFila($sql6);
 
     if ($factura_pension['status'] == false) { return $factura_pension; }

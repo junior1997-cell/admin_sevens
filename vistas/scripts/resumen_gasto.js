@@ -1199,11 +1199,11 @@ function detalle_pension(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, 
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Forma de pago:</th> 
-                  <td>${e.data.forma_de_pago}</td>
+                  <td>${e.data.forma_pago}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Tipo comprobante:</th>
-                  <td>${e.data.tipo_comprobante} - ${e.data.nro_comprobante}</td>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Fecha emisión:</th>
@@ -1223,7 +1223,7 @@ function detalle_pension(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, 
                 </tr>            
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Total</th>
-                  <td>${formato_miles(e.data.total)}</td>
+                  <td>${formato_miles(e.data.precio_parcial)}</td>
                 </tr>                                         
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Glosa</th>
