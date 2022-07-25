@@ -256,7 +256,7 @@ function mostrar_pension(idpension) {
 
   $.post("../ajax/pension.php?op=mostrar_pension", { idpension: idpension }, function (e, status) {
 
-    e = JSON.parse(e); console.log('jjjjjjjjjjjjjjjjjjjj'); console.log(e);   
+    e = JSON.parse(e); console.log(e);   
 
     $("#proveedor").val(e.data.idproveedor).trigger("change"); 
     $("#idproyecto_p").val(e.data.idproyecto);

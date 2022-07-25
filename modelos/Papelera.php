@@ -280,23 +280,23 @@ class Papelera
       }
     }
 
-    $sql_12 = "SELECT fp.idfactura_pension, fp.tipo_comprobante, fp.nro_comprobante, fp.descripcion, fp.estado,  fp.created_at, 
-    fp.updated_at, proy.nombre_codigo, prov.razon_social, fp.monto
-    FROM factura_pension AS fp, pension AS p, proyecto AS proy, proveedor AS prov
-    WHERE fp.idpension = p.idpension  AND p.idproyecto = proy.idproyecto AND p.idproveedor = prov.idproveedor AND fp.estado = '0' AND fp.estado_delete = '1' AND p.idproyecto = '$nube_idproyecto'  ;";
-    $factura_pension = ejecutarConsultaArray($sql_12);
+    $sql_12 = "SELECT dp.iddetalle_pension, dp.tipo_comprobante, dp.numero_comprobante, dp.descripcion, dp.estado,  dp.created_at, 
+    dp.updated_at, proy.nombre_codigo, prov.razon_social, dp.precio_parcial
+    FROM detalle_pension AS dp, pension AS p, proyecto AS proy, proveedor AS prov
+    WHERE dp.idpension = p.idpension  AND p.idproyecto = proy.idproyecto AND p.idproveedor = prov.idproveedor AND dp.estado = '0' AND     dp.estado_delete = '1' AND p.idproyecto = '$nube_idproyecto';";
+      $detalle_pension = ejecutarConsultaArray($sql_12);
 
-    if ($factura_pension['status'] == false) { return $factura_pension; }
+    if ($detalle_pension['status'] == false) { return $detalle_pension; }
 
-    if (!empty($factura_pension['data'])) {
-      foreach ($factura_pension['data'] as $key => $value12) {
+    if (!empty($detalle_pension['data'])) {
+      foreach ($detalle_pension['data'] as $key => $value12) {
         $data[] = array(
-          'nombre_tabla'    => 'factura_pension',
-          'nombre_id_tabla' => 'idfactura_pension',
-          'modulo'          => 'Pensión',
-          'id_tabla'        => $value12['idfactura_pension'],
-          'nombre_archivo'  => '<b>'.$value12['tipo_comprobante'].': </b>'.$value12['nro_comprobante'].'<br>'.
-          '<b>Monto: </b>'.number_format($value12['monto'], 2, '.', ',').'<br>' .
+          'nombre_tabla'    => 'detalle_pension',
+          'nombre_id_tabla' => 'iddetalle_pension',
+          'modulo'          => 'Detalle Pensión',
+          'id_tabla'        => $value12['iddetalle_pension'],
+          'nombre_archivo'  => '<b>'.$value12['tipo_comprobante'].': </b>'.$value12['numero_comprobante'].'<br>'.
+          '<b>Monto: </b>'.number_format($value12['precio_parcial'], 2, '.', ',').'<br>' .
           '<b>Proveedor: </b>'. $value12['razon_social']. '<br>' ,
           'descripcion'     => $value12['descripcion'],
           'nombre_proyecto'  => $value12['nombre_codigo'],
@@ -1004,55 +1004,55 @@ class Papelera
       }
     }
 
-    $sql41 = "SELECT sp.idsemana_pension, sp.fecha_inicio, sp.fecha_fin, sp.numero_semana, sp.created_at, sp.updated_at, ser_p.nombre_servicio, p.nombre_codigo, prov.razon_social
-    FROM semana_pension as sp, servicio_pension ser_p, pension as pen, proyecto as p, proveedor as prov
-    WHERE sp.estado='0' AND sp.estado_delete='1' AND sp.idservicio_pension=ser_p.idservicio_pension AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
-    $semana_pension = ejecutarConsultaArray($sql41);
+    // $sql41 = "SELECT sp.idsemana_pension, sp.fecha_inicio, sp.fecha_fin, sp.numero_semana, sp.created_at, sp.updated_at, ser_p.nombre_servicio, p.nombre_codigo, prov.razon_social
+    // FROM semana_pension as sp, servicio_pension ser_p, pension as pen, proyecto as p, proveedor as prov
+    // WHERE sp.estado='0' AND sp.estado_delete='1' AND sp.idservicio_pension=ser_p.idservicio_pension AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
+    // $semana_pension = ejecutarConsultaArray($sql41);
 
-    if ($semana_pension['status'] == false) { return $semana_pension; }
+    // if ($semana_pension['status'] == false) { return $semana_pension; }
 
-    if (!empty($semana_pension['data'])) {
-      foreach ($semana_pension['data'] as $key => $value41) {
-        $data[] = array(
-          'nombre_tabla'    => 'semana_pension',
-          'nombre_id_tabla' => 'idsemana_pension',
-          'modulo'          => 'Pensión por semanas',
-          'id_tabla'        => $value41['idsemana_pension'],
-          'nombre_archivo'  => '<b>Semana '.$value41['numero_semana'].'</b>: '.$value41['fecha_inicio'].' ─ '.$value41['fecha_fin']. '<br>'.
-          '<b>Servicio:</b> '.$value41['nombre_servicio']. '<br>'.
-          '<b>Proveedor:</b> '.$value41['razon_social'] .'<br>',
-          'descripcion'     => ' - - - ',
-          'nombre_proyecto'  => $value41['nombre_codigo'],
-          'created_at'      => $value41['created_at'],
-          'updated_at'      => $value41['updated_at'],
-        );
-      }
-    }
+    // if (!empty($semana_pension['data'])) {
+    //   foreach ($semana_pension['data'] as $key => $value41) {
+    //     $data[] = array(
+    //       'nombre_tabla'    => 'semana_pension',
+    //       'nombre_id_tabla' => 'idsemana_pension',
+    //       'modulo'          => 'Pensión por semanas',
+    //       'id_tabla'        => $value41['idsemana_pension'],
+    //       'nombre_archivo'  => '<b>Semana '.$value41['numero_semana'].'</b>: '.$value41['fecha_inicio'].' ─ '.$value41['fecha_fin']. '<br>'.
+    //       '<b>Servicio:</b> '.$value41['nombre_servicio']. '<br>'.
+    //       '<b>Proveedor:</b> '.$value41['razon_social'] .'<br>',
+    //       'descripcion'     => ' - - - ',
+    //       'nombre_proyecto'  => $value41['nombre_codigo'],
+    //       'created_at'      => $value41['created_at'],
+    //       'updated_at'      => $value41['updated_at'],
+    //     );
+    //   }
+    // }
 
     
-    $sql42 = "SELECT ser_p.idservicio_pension, ser_p.nombre_servicio, ser_p.precio, ser_p.created_at, ser_p.updated_at, p.nombre_codigo, prov.razon_social
-    FROM servicio_pension  as ser_p, pension as pen, proyecto as p, proveedor as prov 
-    WHERE ser_p.estado='0' AND ser_p.estado_delete='1' AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
-    $servicio_pension = ejecutarConsultaArray($sql42);
+    // $sql42 = "SELECT ser_p.idservicio_pension, ser_p.nombre_servicio, ser_p.precio, ser_p.created_at, ser_p.updated_at, p.nombre_codigo, prov.razon_social
+    // FROM servicio_pension  as ser_p, pension as pen, proyecto as p, proveedor as prov 
+    // WHERE ser_p.estado='0' AND ser_p.estado_delete='1' AND ser_p.idpension=pen.idpension AND pen.idproyecto=p.idproyecto AND pen.idproveedor=prov.idproveedor AND pen.idproyecto='$nube_idproyecto'";
+    // $servicio_pension = ejecutarConsultaArray($sql42);
 
-    if ($servicio_pension['status'] == false) { return $servicio_pension; }
+    // if ($servicio_pension['status'] == false) { return $servicio_pension; }
 
-    if (!empty($servicio_pension['data'])) {
-      foreach ($servicio_pension['data'] as $key => $value42) {
-        $data[] = array(
-          'nombre_tabla'    => 'servicio_pension',
-          'nombre_id_tabla' => 'idservicio_pension',
-          'modulo'          => 'Servicio pensión',
-          'id_tabla'        => $value42['idservicio_pension'],
-          'nombre_archivo'  => '<b>Servicio:</b> '.$value42['nombre_servicio'].'('.$value42['precio'].')'.'<br>'.
-          '<b>Proveedor:</b> '.$value42['razon_social'] .'<br>', 
-          'descripcion'     => '- - - ',
-          'nombre_proyecto'  => $value42['nombre_codigo'],
-          'created_at'      => $value42['created_at'],
-          'updated_at'      => $value42['updated_at'],
-        );
-      }
-    }
+    // if (!empty($servicio_pension['data'])) {
+    //   foreach ($servicio_pension['data'] as $key => $value42) {
+    //     $data[] = array(
+    //       'nombre_tabla'    => 'servicio_pension',
+    //       'nombre_id_tabla' => 'idservicio_pension',
+    //       'modulo'          => 'Servicio pensión',
+    //       'id_tabla'        => $value42['idservicio_pension'],
+    //       'nombre_archivo'  => '<b>Servicio:</b> '.$value42['nombre_servicio'].'('.$value42['precio'].')'.'<br>'.
+    //       '<b>Proveedor:</b> '.$value42['razon_social'] .'<br>', 
+    //       'descripcion'     => '- - - ',
+    //       'nombre_proyecto'  => $value42['nombre_codigo'],
+    //       'created_at'      => $value42['created_at'],
+    //       'updated_at'      => $value42['updated_at'],
+    //     );
+    //   }
+    // }
 
    $sql43 = "SELECT v.idvalorizacion,v.nombre, v.fecha_inicio, v.fecha_fin, v.created_at, v.updated_at, p.nombre_codigo FROM valorizacion as v, proyecto as p
    WHERE v.estado='0' AND v.estado_delete='1' AND v.idproyecto=p.idproyecto AND v.idproyecto='$nube_idproyecto'";
