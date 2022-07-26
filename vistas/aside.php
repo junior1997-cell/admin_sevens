@@ -33,7 +33,16 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        
+        <!-- MANUAL DE USUARIO -->
+        <li class="nav-item">
+          <a href="manual_de_usuario.php" class="nav-link pl-2" id="mManualDeUsuario">
+            <i class="nav-icon fas fa-book"></i>
+            <p>
+              Manual de Usuario
+              <span class="right badge badge-success">new</span>
+            </p>
+          </a>
+        </li>
         <?php if ($_SESSION['escritorio']==1) {  ?>
           <!-- ESCRITORIO -->
           <li class="nav-item">

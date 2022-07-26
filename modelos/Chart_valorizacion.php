@@ -103,14 +103,27 @@ class ChartValorizacion
       while (true) {
         if (validar_fecha_menor_igual_que($fecha_iterativa, $fecha_f) == true) {
 
-          $cant_monto_gastado = suma_totales($id_proyecto, $fecha_iterativa, '');
-          $total_monto_gastado = $total_monto_gastado + $cant_monto_gastado;
-
-          array_push($monto_programado, (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_programado']) ? 0 : floatval($valorizacion['data']['monto_programado']) ) ));
+          
+          $val_monto_programado = (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_programado']) ? 0 : floatval($valorizacion['data']['monto_programado']) ) );
           $val_monto_valorizado = (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_valorizado']) ? 0 : floatval($valorizacion['data']['monto_valorizado']) ) );
+          $cant_monto_gastado   = suma_totales($id_proyecto, $fecha_iterativa, '');
+          $total_monto_gastado += $cant_monto_gastado;
+          $val_monto_utilidad   = $val_monto_valorizado - $cant_monto_gastado;
+
+          array_push($monto_programado, $val_monto_programado);          
           array_push($monto_valorizado, $val_monto_valorizado);          
           array_push($monto_gastado, (empty($cant_monto_gastado) ? 0 :  floatval($cant_monto_gastado)) );
-          array_push($monto_utilidad, ($val_monto_valorizado - $cant_monto_gastado) );
+          array_push($monto_utilidad, $val_monto_utilidad);
+
+          $acumulado_monto_programado  = $val_monto_programado;
+          $acumulado_monto_valorizado  = $val_monto_valorizado;
+          $acumulado_monto_gastado    += $cant_monto_gastado;
+          $acumulado_monto_utilidad   += $val_monto_utilidad;
+
+          array_push($monto_programado_acumulado, $acumulado_monto_programado);        
+          array_push($monto_valorizado_acumulado, $acumulado_monto_valorizado);
+          array_push($monto_gastado_acumulado, $acumulado_monto_gastado);
+          array_push($monto_utilidad_acumulado, $acumulado_monto_utilidad);
         } else {
           break;
         } 
