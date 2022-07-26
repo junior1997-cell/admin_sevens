@@ -289,7 +289,7 @@
         //--------------------------R E S U M E N   Q S ---------------------------------
         case 'guardaryeditar_resumen_q_s':         
             
-          $rspta=$valorizacion->insertar_editar_resumen_q_s($_POST["resumen_qs"]);            
+          $rspta=$valorizacion->insertar_editar_resumen_q_s($_POST["resumen_qs"], $_POST["idproyecto"]);            
           echo json_encode($rspta, true) ;            
          
         break; 

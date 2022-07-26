@@ -71,7 +71,7 @@ function ver_quincenas(nube_idproyecto) {
 
   $.post("../ajax/valorizacion.php?op=listarquincenas", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
 
-    e =JSON.parse(e); //console.log(e);    
+    e =JSON.parse(e); console.log(e);    
 
     $('#lista_quincenas').html('');
 
@@ -81,40 +81,15 @@ function ver_quincenas(nube_idproyecto) {
       if (e.data.fecha_valorizacion == "quincenal") {
 
         $(".h1-titulo").html("Valorización - Quincenal");
+        var fechas_btn = fechas_valorizacion_quincena(e.data.fecha_inicio, e.data.fecha_fin); 
+        //console.log(fechas_btn);  
 
-        var fecha = format_d_m_a(e.data.fecha_inicio);  
+        fechas_btn.forEach((key, indice) => {
+          $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
+          array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(key.fecha_inicio), 'fecha_fin':format_a_m_d(key.fecha_fin), 'num_q_s': key.num_q_s, });
+          cant_valorizaciones = key.num_q_s;
+        });
         
-        var fecha_i = sumaFecha(0,fecha);
-  
-        var cal_quincena=e.data.plazo/15; var i=0;  var cont=0;
-        var estado = 1;
-
-        var dia_regular = 0; var weekday_regular = extraer_dia_semana(e.data.fecha_inicio); var estado_regular = false;
-        if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
-          
-
-        while (i <= cal_quincena) {
-
-          cont = cont+1;
-    
-          var fecha_inicio = fecha_i;
-
-          if (estado_regular) {
-            fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
-          } else {
-            fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
-          }
-  
-          let fecha_ii = format_a_m_d(fecha_inicio); let fecha_ff = format_a_m_d(fecha);
-          
-          $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${fecha_ii}', '${fecha_ff}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
-          $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
-          array_fechas_q_s.push({ 'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
-          cant_valorizaciones = i+1;
-          fecha_i = sumaFecha(1,fecha);
-    
-          i++;
-        }
         tbla_resumen_q_s(nube_idproyecto);
       } else {
 
@@ -122,33 +97,15 @@ function ver_quincenas(nube_idproyecto) {
 
           $(".h1-titulo").html("Valorización - Mensual");
 
-          var fecha = format_d_m_a(e.data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //e.data.fecha_inicio
+          var fechas_btn = fechas_valorizacion_mensual(e.data.fecha_inicio, e.data.fecha_fin); 
+          //console.log(fechas_btn);  
 
-          var cal_mes  = false; var i=0;  var cont=0;
-          var estado = 1;
-          while (cal_mes == false) {
+          fechas_btn.forEach((key, indice) => {
+            $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
+            array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(key.fecha_inicio), 'fecha_fin':format_a_m_d(key.fecha_fin), 'num_q_s': key.num_q_s, });
+            cant_valorizaciones = key.num_q_s;
+          });
 
-            cont = cont+1;
-
-            fecha_i = fecha;
-
-            fecha_f = sumaFecha(29, fecha_i);
-
-            let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(e.data.fecha_fin);
-            
-            // console.log(fecha_f + ' - '+e.data.fecha_fin);
-
-            $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${format_a_m_d(fecha_i)}', '${format_a_m_d(fecha_f)}', '${i}');"><i class="far fa-calendar-alt"></i> Valorización ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
-            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
-            array_fechas_q_s.push({ 'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
-            cant_valorizaciones = i+1;
-            
-            if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
-
-            fecha = sumaFecha(1,fecha_f);
-
-            i++;
-          }          
           tbla_resumen_q_s(nube_idproyecto);
         } else {
 
@@ -401,9 +358,9 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
   function guardar_y_editar_resumen_q_s_valorizacion() {
     // e.preventDefault(); //No se activará la acción predeterminada del evento
     //var formData = new FormData($("#form-resumen-valorizacion")[0]);
-    var array_resumen_qs = [];
+    var array_resumen_q_s = [];
     for (let index = 1; index <= cant_valorizaciones; index++) {
-      array_resumen_qs.push({
+      array_resumen_q_s.push({
         'idresumen_q_s_valorizacion':$(`.idresumen_q_s_valorizacion_${index}`).text(),
         'idproyecto':       $(`.idproyecto_${index}`).text(),        
         'fecha_inicio':     $(`.f_inicio_${index}`).text(),
@@ -414,8 +371,8 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
       });      
     }    
 
-    if (array_resumen_qs.length === 0) {
-      toastr_error('Sin datos!', ' No hay datos para guardar', 7000);
+    if (array_resumen_q_s.length === 0) {
+      toastr_error('Sin datos!', ' No hay datos para guardar', 700);
     } else {
       // abrimos el modal cargando
       $("#modal-cargando").modal("show");
@@ -424,7 +381,8 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
         url: "../ajax/valorizacion.php?op=guardaryeditar_resumen_q_s",
         type: "POST",
         data: {
-          'resumen_qs':JSON.stringify(array_resumen_qs),
+          'resumen_qs':JSON.stringify(array_resumen_q_s),
+          'idproyecto': localStorage.getItem('nube_idproyecto')
         },
         // contentType: false,
         // processData: false,
@@ -461,8 +419,8 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
           $("#barra_progress_cargando").text("0%").addClass('progress-bar-striped progress-bar-animated');
         },
         complete: function () {
-          $("#barra_progress_cargando").css({ width: "0%", });
-          $("#barra_progress_cargando").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+          //$("#barra_progress_cargando").css({ width: "0%", }).text("0%");
+          $("#barra_progress_cargando").removeClass('progress-bar-striped progress-bar-animated');
         },
         error: function (jqXhr) { ver_errores(jqXhr); },
       });

@@ -49,6 +49,24 @@ function extraer_dia_semana_completo(fecha) {
   return nombreDia;
 }
 
+function extraer_dia_mes(fecha) {
+  var dia_mes = "";
+
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') {  } else {
+    dia_mes = parseFloat(moment(fecha).format('DD'));
+  }
+  return dia_mes;
+}
+
+function extraer_ultimo_dia_mes(fecha) {
+  var ultimo_dia_mes = "";
+
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') {  } else {
+    ultimo_dia_mes = moment(fecha).endOf("month").format('DD-MM-YYYY');
+  }
+  return ultimo_dia_mes;
+}
+
 function extraer_nombre_mes(fecha) {
 
   var nombre_completo = "";
@@ -64,6 +82,12 @@ function extraer_nombre_mes(fecha) {
   }
 
   return nombre_completo;
+}
+
+// calulamos la cantidad de dias de una mes especifico
+function cantidad_dias_mes(year, month) {
+  var diasMes = new Date(year, month, 0).getDate();
+  return diasMes;
 }
 
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
@@ -92,6 +116,24 @@ function format_m_d_a(fecha) {
   if (fecha == '' || fecha == null || fecha == '00-00-0000') { format = "-"; } else {
     let splits = fecha.split("-"); //console.log(splits);
     format = `${splits[1]}-${splits[0]}-${splits[2]}`;
+  } 
+  return format;
+}
+
+// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(aa-mm): 2021-12
+function format_a_m(fecha) {
+  var format = "";
+  if (fecha == '' || fecha == null || fecha == '00-00-0000') { format = "-"; } else {
+    format = moment(fecha).format('YYYY-MM');
+  } 
+  return format;
+}
+
+// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(aa-mm): 12-2021
+function format_m_a(fecha) {
+  var format = "";
+  if (fecha == '' || fecha == null || fecha == '00-00-0000') { format = "-"; } else {
+    format = moment(fecha).format('MM-YYYY');
   } 
   return format;
 }
@@ -148,6 +190,25 @@ function cant_dias_mes(date_anio, date_mes) {
   
 }
 
+function fecha_dentro_de_rango(fecha, rango_inicial, rango_final) {
+
+  var fechar_validar = new Date(fecha);
+  var f1 = new Date(rango_inicial);
+  var f2 = new Date(rango_final);
+
+  //nos aseguramos que no tengan hora
+  fechar_validar.setHours(0,0,0,0);
+  f1.setHours(0,0,0,0);
+  f2.setHours(0,0,0,0);
+ 
+  // validamos las fechas con un IF
+  if (fechar_validar.getTime() >= f1.getTime() && fechar_validar.getTime() <= f2.getTime() ){
+    return true;
+  }
+
+  return false;
+}
+
 function validarFechaEnRango(fechaI, fechaF, fechaV){
   
   const fechaInicio=new Date(fechaI);
@@ -159,6 +220,58 @@ function validarFechaEnRango(fechaI, fechaF, fechaV){
   const fechaValidarMs = fechaValidar.getTime();
 
   if(fechaValidarMs >= fechaInicioMs && fechaValidarMs <= fechaFinMs){
+    //console.log(fechaI, fechaF, fechaV + ' este es');
+    return true;
+  }else{
+    //console.log(fechaI, fechaF, fechaV+ ' este no es');
+    return false;
+  }
+}
+
+function validarFechaMayorIgualQue(fecha_1, fecha_2) {
+  const fecha_a=new Date(fecha_1);
+  const fecha_b=new Date(fecha_2);
+  if(fecha_a >= fecha_b ){
+    //console.log(fechaI, fechaF, fechaV + ' este es');
+    return true;
+  }else{
+    //console.log(fechaI, fechaF, fechaV+ ' este no es');
+    return false;
+  }
+}
+
+function validarFechaMenorIgualQue(fecha_1, fecha_2) {
+  const fecha_a=new Date(fecha_1);
+  const fecha_b=new Date(fecha_2);
+  if(fecha_a <= fecha_b ){
+    //console.log(fechaI, fechaF, fechaV + ' este es');
+    return true;
+  }else{
+    //console.log(fechaI, fechaF, fechaV+ ' este no es');
+    return false;
+  }
+}
+
+function valida_fecha_menor_que(fecha_menor, fecha_mayor) {
+  var f1 = new Date(fecha_menor); //fecha "fecha_menor" parseado a "Date()"
+  var f2 = new Date(fecha_mayor); //fecha "fecha_mayor" parseado a "Date()"
+
+  var estado = false;
+
+  //nos aseguramos que no tengan hora
+  f1.setHours(0,0,0,0);
+  f2.setHours(0,0,0,0);
+
+  // validamos las fechas con un IF
+  if (f1.getTime() < f2.getTime()){  estado = true; }
+
+  return estado;
+}
+
+function validarFechaMenorQue(fecha_1, fecha_2) {
+  const fecha_a=new Date(fecha_1);
+  const fecha_b=new Date(fecha_2);
+  if(fecha_a < fecha_b ){
     //console.log(fechaI, fechaF, fechaV + ' este es');
     return true;
   }else{
@@ -466,7 +579,7 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
             $(`#${id}_ver`).html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
           } else if ( extrae_extencion(file.name) == "docx" ) {             
             $(`#${id}_ver`).html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-          }else if ( extrae_extencion(file.name) == "pdf" ) {              
+          }else if ( extrae_extencion(file.name) == "pdf" || extrae_extencion(file.name) == "PDF" ) {              
             $(`#${id}_ver`).html(`<iframe src="${result}" frameborder="0" scrolling="no" width="${width}" height="${height}"></iframe>`);
           }else if ( extrae_extencion(file.name) == "csv" ) {              
             $(`#${id}_ver`).html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
@@ -612,7 +725,7 @@ function re_visualizacion(id, carpeta, sub_carpeta, width='100%', height='310') 
       
       $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
       toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-    } else if ( extrae_extencion(pdffile.name) == "pdf" ) {
+    } else if ( extrae_extencion(pdffile.name) == "pdf" || extrae_extencion(pdffile.name) == "PDF" ) {
         
       $("#doc"+id+"_ver").html(`<iframe src="${pdffile_url}" frameborder="0" scrolling="no" width="${width}" height="${height}"> </iframe>`);
       toastr.success('Documento vizualizado correctamente!!!');
@@ -705,7 +818,7 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
     html = `<img src="../dist/img/default/zip.png" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
-  }else if ( extrae_extencion(filename) == "pdf" ) {
+  }else if ( extrae_extencion(filename) == "pdf" || extrae_extencion(filename) == "PDF" ) {
     //recomendado - height="210" 
     html = `<iframe src="${ruta}" onerror="this.src='../dist/svg/404-v2.svg';" frameborder="0" scrolling="no" width="${width}" height="${height}"> </iframe>`;
     extencion = extrae_extencion(filename);
@@ -1094,5 +1207,60 @@ function UrlExists(url) {
   http.open("HEAD", url, false);
   http.send(); //console.log(http.status);
   return http.status;
+}
+
+function fechas_valorizacion_quincena(fecha_inicial, fecha_final) {
+  var fecha_ii = format_d_m_a(fecha_inicial);
+  var fecha_ff = "";
+  var fecha_iterativa = format_d_m_a(fecha_inicial);
+  var fechas_array = [];
+  var i = 1;
+  var cal_mes = false;
+
+  while (cal_mes == false) {
+
+    var dia_mes = extraer_dia_mes(format_a_m_d(fecha_ii));
+    if (dia_mes < 15) {
+      fecha_ff = `15-${format_m_a(format_a_m_d(fecha_ii))}`;
+    } else if (dia_mes >= 15 ) {
+      fecha_ff =  extraer_ultimo_dia_mes(format_a_m_d(fecha_ii));
+    }    
+    
+    if (validarFechaMenorQue( format_a_m_d(fecha_ff), fecha_final) == false) { 
+      cal_mes = true; fecha_ff = format_d_m_a(fecha_final);       
+    }
+
+    fechas_array.push({ 'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i, });
+    //console.log(fecha_ii, fecha_ff); console.log(cal_mes);
+    fecha_ii = sumaFecha(1,fecha_ff);
+    i++;
+  }
+  return fechas_array;
+}
+
+function fechas_valorizacion_mensual(fecha_inicial, fecha_final) {
+  var fecha_ii = format_d_m_a(fecha_inicial);
+  var fecha_ff = "";
+  var fecha_iterativa = format_d_m_a(fecha_inicial);
+  var fechas_array = [];
+  var i = 1;
+  var cal_mes = false;
+
+  while (cal_mes == false) {
+
+    var dia_mes = extraer_dia_mes(format_a_m_d(fecha_ii));
+    
+    fecha_ff =  extraer_ultimo_dia_mes(format_a_m_d(fecha_ii));     
+    
+    if (validarFechaMenorQue( format_a_m_d(fecha_ff), fecha_final) == false) { 
+      cal_mes = true; fecha_ff = format_d_m_a(fecha_final);       
+    }
+    
+    fechas_array.push({ 'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i, });
+    //console.log(fecha_ii, fecha_ff); console.log(cal_mes);
+    fecha_ii = sumaFecha(1,fecha_ff);
+    i++;
+  }
+  return fechas_array;
 }
 

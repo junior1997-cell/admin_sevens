@@ -19,7 +19,8 @@
 
       $pago_administrador = new PagoAdministrador();
 
-      // setlocale(LC_TIME, "spanish");
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h.i.s A");
 
       // DATA - agregar pago x mes
       $idpagos_x_mes_administrador = isset($_POST["idpagos_x_mes_administrador"])? limpiarCadena($_POST["idpagos_x_mes_administrador"]):"";
@@ -67,7 +68,7 @@
 
             $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);            
               
-            $doc1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
+            $doc1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/pago_administrador/baucher_deposito/" . $doc1);
             
@@ -120,7 +121,7 @@
 
             $ext_doc2  = explode(".", $_FILES["doc2"]["name"]);
               
-            $doc2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
+            $doc2 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
 
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/pago_administrador/recibos_x_honorarios/" . $doc2);
             

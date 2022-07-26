@@ -43,10 +43,12 @@ class ChartValorizacion
   public function chart_linea($id_proyecto, $valorizacion_filtro, $array_fechas_valorizacion, $numero_valorizacion, $fecha_i, $fecha_f, $cant_valorizacion) {
     
     $monto_programado = Array(); $monto_valorizado = Array(); $monto_gastado = Array(); $monto_utilidad = Array();
+    $monto_programado_acumulado = Array(); $monto_valorizado_acumulado = Array(); $monto_gastado_acumulado = Array(); $monto_utilidad_acumulado = Array();
 
     $factura_total = 0; 
     
     $total_monto_programado = 0; $total_monto_valorizado = 0;  $total_monto_gastado = 0; 
+    $acumulado_monto_programado = 0; $acumulado_monto_valorizado = 0;  $acumulado_monto_gastado = 0; $acumulado_monto_utilidad = 0; 
 
     if ($valorizacion_filtro == null || $valorizacion_filtro == '' || $valorizacion_filtro == '0' ) {
 
@@ -55,16 +57,29 @@ class ChartValorizacion
         $sql_1 = "SELECT numero_q_s, monto_programado, monto_valorizado FROM resumen_q_s_valorizacion 
         WHERE idproyecto = '$id_proyecto' AND numero_q_s = '$num_val' AND estado = '1' AND estado_delete = '1'";
         $valorizacion = ejecutarConsultaSimpleFila($sql_1);
-        if ($valorizacion['status'] == false) { return $valorizacion; }
+        if ($valorizacion['status'] == false) { return $valorizacion; }        
 
-        $cant_monto_gastado = suma_totales($id_proyecto, $value['fecha_i'], $value['fecha_f']);
-        $total_monto_gastado = $total_monto_gastado + $cant_monto_gastado;
-
-        array_push($monto_programado, (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_programado']) ? 0 : floatval($valorizacion['data']['monto_programado']) ) ));
+        $val_monto_programado = (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_programado']) ? 0 : floatval($valorizacion['data']['monto_programado']) ) );
         $val_monto_valorizado = (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_valorizado']) ? 0 : floatval($valorizacion['data']['monto_valorizado']) ) );
+        $cant_monto_gastado = suma_totales($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $total_monto_gastado += $cant_monto_gastado;
+        $val_monto_utilidad = $val_monto_valorizado - $cant_monto_gastado;
+
+        array_push($monto_programado, $val_monto_programado);        
         array_push($monto_valorizado, $val_monto_valorizado);
         array_push($monto_gastado, (empty($cant_monto_gastado) ? 0 :  floatval($cant_monto_gastado)) );
-        array_push($monto_utilidad, ($val_monto_valorizado - $cant_monto_gastado) );
+        array_push($monto_utilidad, $val_monto_utilidad );
+
+        $acumulado_monto_programado += $val_monto_programado;
+        $acumulado_monto_valorizado += $val_monto_valorizado;
+        $acumulado_monto_gastado += $cant_monto_gastado;
+        $acumulado_monto_utilidad += $val_monto_utilidad;
+
+        array_push($monto_programado_acumulado, $acumulado_monto_programado);        
+        array_push($monto_valorizado_acumulado, $acumulado_monto_valorizado);
+        array_push($monto_gastado_acumulado, $acumulado_monto_gastado);
+        array_push($monto_utilidad_acumulado, $acumulado_monto_utilidad);
+
       }  
       
       $sql_2 = "SELECT SUM(monto_programado) as monto_programado, SUM(monto_valorizado) as monto_valorizado FROM resumen_q_s_valorizacion 
@@ -110,6 +125,11 @@ class ChartValorizacion
         'monto_valorizado'=>$monto_valorizado, 
         'monto_gastado'=>$monto_gastado, 
         'monto_utilidad'=> $monto_utilidad,
+
+        'monto_programado_acumulado'=>$monto_programado_acumulado, 
+        'monto_valorizado_acumulado'=>$monto_valorizado_acumulado, 
+        'monto_gastado_acumulado'=>$monto_gastado_acumulado,
+        'monto_utilidad_acumulado'=>$monto_utilidad_acumulado,
         
         'total_monto_programado'=>$total_monto_programado,
         'total_monto_valorizado'=>$total_monto_valorizado,

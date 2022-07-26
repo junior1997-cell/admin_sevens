@@ -61,7 +61,7 @@
                   <div class="container-fluid">
                     <div class="row">
 
-                      <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                         <div class="info-box">
                           <span class="info-box-icon bg-info elevation-1 cargando_filtro_valorizacion cursor-pointer" data-toggle="tooltip" data-original-title="Ver Módulos" onclick="ver_modulos();"><i class="fas fa-spinner fa-pulse"></i></span>
                           <div class="info-box-content">
@@ -75,7 +75,7 @@
                       </div>
                       <!-- /.col -->
 
-                      <div class="col-6 col-sm-6 col-md-3 col-lg-3  col-xl-3">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3  col-xl-3">
                         <div class="info-box mb-3">
                           <span class="info-box-icon bg-dark elevation-1"><i class="fas fa-layer-group"></i></span>
                           <div class="info-box-content">
@@ -91,7 +91,7 @@
                       <!-- fix for small devices only -->
                       <div class="clearfix hidden-md-up"></div>
 
-                      <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                         <div class="info-box mb-3">
                           <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hand-holding-usd"></i></span>
                           <div class="info-box-content">
@@ -104,7 +104,7 @@
                       </div>
                       <!-- /.col -->
 
-                      <div class="col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3">
                         <div class="info-box mb-3">
                           <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-dollar-sign"></i></span>
                           <div class="info-box-content">
@@ -119,7 +119,7 @@
                     </div>                    
 
                     <div class="row">
-
+                      <!-- CHART LINEA -->
                       <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0 ">
@@ -144,7 +144,7 @@
                             <!-- /.d-flex -->
 
                             <div class="position-relative mb-4">
-                              <canvas id="visitors-chart" height="350">
+                              <canvas id="chart-line-curva-s" height="350">
                                 
                               </canvas>
                               
@@ -159,7 +159,115 @@
                         </div>
                         <!-- /.card -->
                       </div>
+                      
+                      <!-- CHART BARRAS -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Montos por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
 
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-barra-curva-s" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square text-dark"></i> Programado</span>
+                                  <span>&nbsp;<i class="fas fa-square text-warning"></i> Valorizado</span>
+                                  <span>&nbsp;<i class="fas fa-square text-danger"></i> Gastado</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4 hidden">
+                                <p class="text-center">
+                                  <strong>Detalles de Factura</strong>
+                                </p>
+
+                                <div class="progress-group">
+                                  <span class="progress-text text--success">Facturas aceptadas</span>
+                                  <span class="float-right cant_ft_aceptadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
+                                  <div class="progress progress-sm">
+                                    <div class="progress-bar bg-success progress_ft_aceptadas" style="width: 0%"></div>
+                                  </div>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <div class="progress-group">
+                                  <span class="progress-text text--warning">Facturas rechazadas</span>
+                                  <span class="float-right cant_ft_rechazadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
+                                  <div class="progress progress-sm">
+                                    <div class="progress-bar bg-warning progress_ft_rechazadas" style="width: 0%"></div>
+                                  </div>
+                                </div>
+                                <!-- /.progress-group -->
+                               
+                                <div class="progress-group">
+                                  <span class="progress-text text--danger">Facturas eliminadas</span>
+                                  <span class="float-right cant_ft_eliminadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
+                                  <div class="progress progress-sm">
+                                    <div class="progress-bar bg-danger progress_ft_eliminadas" style="width: 0%"></div>
+                                  </div>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <div class="progress-group">
+                                  <span class="progress-text text--danger">Facturas rechazada y eliminadas</span>
+                                  <span class="float-right cant_ft_rechazadas_eliminadas"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
+                                  <div class="progress progress-sm">
+                                    <div class="progress-bar bg-danger progress_ft_rechazadas_eliminadas" style="width: 0%"></div>
+                                  </div>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center mt-4">
+                                  <strong class="mt-2">Pagos de Factura</strong>
+                                </p>
+                                 <!-- /.seccion -->
+
+                                <div class="progress-group">
+                                  <span class="progress-text font-weight-bold text--success">Montos Pagadas</span>
+                                  <span class="float-right monto_pagado"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
+                                  <div class="progress progress-sm">
+                                    <div class="progress-bar bg-success progress_monto_pagado" style="width: 0%"></div>
+                                  </div>
+                                </div>
+                                <!-- /.progress-group -->
+                                
+                                <div class="progress-group">
+                                  <span class="progress-text font-weight-bold text-danger">Montos NO Pagadas</span>
+                                  <span class="float-right monto_no_pagado"><i class="fas fa-spinner fa-pulse fa-lg"></i></span>
+                                  <div class="progress progress-sm">
+                                    <div class="progress-bar bg-danger progress_monto_no_pagado" style="width: 0%"></div>
+                                  </div>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA -->
                       <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0">
@@ -186,11 +294,11 @@
                                 <!-- /.d-flex -->
 
                                 <div class="position-relative mb-4">
-                                  <canvas id="sales-chart" height="350"></canvas>
+                                  <canvas id="chart-line-utilidad" height="350"></canvas>
                                 </div>
 
                                 <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square text-success"></i> Utildiad</span>
+                                  <span class="mr-2"><i class="fas fa-square text-success"></i> Utilidad</span>
                                 </div>
                               </div>
                               <div class="col-md-4">

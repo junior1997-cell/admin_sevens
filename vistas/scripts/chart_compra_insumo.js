@@ -105,7 +105,7 @@ function chart_linea_barra(idnubeproyecto) {
       $('.progress_monto_pagado').css({ width: `${monto_pagado.toFixed(2)}%`, });
       $('.progress_monto_no_pagado').css({ width: `${monto_no_pagado.toFixed(2)}%`, });
 
-      // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   B A R R A S ::::::::::::::::::::::::::::::::::::
+      // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   L I N E A ::::::::::::::::::::::::::::::::::::
       
       var $visitorsChart = $('#visitors-chart');
       if (visitorsChart) {  visitorsChart.destroy();  } 
@@ -153,7 +153,7 @@ function chart_linea_barra(idnubeproyecto) {
         }
       });
 
-      // ::::::::::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  ::::::::::::::::::::::::::::::::::::
+      // ::::::::::::::::::::::::::::::::::::::::::::  C H A R T  B A R R A S   ::::::::::::::::::::::::::::::::::::
       var $salesChart = $('#sales-chart');
       if (salesChart) {  salesChart.destroy();  }
       // eslint-disable-next-line no-unused-vars
