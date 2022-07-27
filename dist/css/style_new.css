@@ -670,6 +670,12 @@ table th { vertical-align: top !important; }
   width: 90% !important;
 } */
 
+
+/* clase que nos permite modificar el car en view modulos en papelera */
+
+.bb-m{ border-bottom: 1px;}
+.cur_point {  cursor: pointer;}
+
 /*  ══════════════════════════════════════════ - @ M E D I A  - M I N - ══════════════════════════════════════════ */
 /* min-width = como minimo ─|──────── */
 @media (min-width: 576px) {
