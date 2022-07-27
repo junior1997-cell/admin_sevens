@@ -242,7 +242,7 @@
                           <p class="ml-4">2.1. <i class="nav-icon fas fa-users-cog"></i> Trabajador (All_trabajador)</p>
                           <p class="ml-4">2.2. <i class="nav-icon fas fa-truck"></i> Provedeor (All_proveedores)</p>
                           <p class="ml-4">2.3. <i class="nav-icon fas fa-tractor"></i> Maquinaria (Máquinas-equipos)</p>
-                          <p class="ml-4">2.4. <img src="../dist/svg/palana-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> Producto (Insumos)</p>
+                          <p class="ml-4">2.4. <img src="../dist/svg/negro-palana-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> Producto (Insumos)</p>
                           <p class="ml-4">2.5. <i class="nav-icon fas fa-truck-pickup"></i> Producto(Activos fijjos)</p>
                           <p class="ml-4">2.6. <i class="nav-icon far fa-calendar-alt"></i> calendario_por_proyecto (All_calendario)</p>
                           <p class="ml-4">2.7. <i class="nav-icon fas fa-coins"></i> Otros</p>
@@ -278,27 +278,27 @@
                         <!-- /.card-header -->
                         <div class="card-body">
 
-                          <p class="ml-4">6.1. <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> trabajador_por_proyecto (Trabajador)</p>
+                          <p class="ml-4">6.1. <img src="../dist/svg/negro-constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> trabajador_por_proyecto (Trabajador)</p>
                           
                           <p class="ml-4">6.2. <i class="fas fa-shopping-cart nav-icon"></i> Compras</p>
                           <p class="ml-5">6.2.1 <i class="fas fa-shopping-cart nav-icon"></i> Compra_por_proyecto (Compra de Insumos)</p>
                           <p class="ml-5">6.2.2 <i class="fas fa-shopping-cart nav-icon"></i> Factura_compra_insumos (pago compras)</p>
 
-                          <p class="ml-4">6.3 <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> Servicios - Maquinarias</p>
-                          <p class="ml-5">6.3.1 <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> servicio (Detelle)</p>
-                          <p class="ml-5">6.3.2 <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> pago_servicio (Pagos) </p>
-                          <p class="ml-5">6.3.3 <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> factura (Facturas) </p>
+                          <p class="ml-4">6.3 <img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> Servicios - Maquinarias</p>
+                          <p class="ml-5">6.3.1 <img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> servicio (Detelle)</p>
+                          <p class="ml-5">6.3.2 <img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> pago_servicio (Pagos) </p>
+                          <p class="ml-5">6.3.3 <img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> factura (Facturas) </p>
 
-                          <p class="ml-4">6.4 <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> Servicios - Equipos</p>
-                          <p class="ml-5">6.4.1 <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> servicio (Detelle)</p>
-                          <p class="ml-5">6.4.2 <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> pago_servicio (Pagos) </p>
-                          <p class="ml-5">6.4.3 <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> factura (Facturas) </p>
+                          <p class="ml-4">6.4 <img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> Servicios - Equipos</p>
+                          <p class="ml-5">6.4.1 <img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> servicio (Detelle)</p>
+                          <p class="ml-5">6.4.2 <img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> pago_servicio (Pagos) </p>
+                          <p class="ml-5">6.4.3 <img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> factura (Facturas) </p>
                           
                           <p class="ml-4">6.5 <i class="nav-icon fas fa-hands-helping"></i> Sub contrato</p>
                           <p class="ml-5">6.5.1 <i class="nav-icon fas fa-hands-helping"></i> subcontrato (Principal)</p>
                           <p class="ml-5">6.5.2 <i class="nav-icon fas fa-hands-helping"></i> pago_subcontrato (Pagos) </p>
 
-                          <p class="ml-4">6.6. <img src="../dist/svg/planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> planilla_seguro (Planillas y seguros)</p>
+                          <p class="ml-4">6.6. <img src="../dist/svg/negro-planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> planilla_seguro (Planillas y seguros)</p>
                           <p class="ml-4">6.7. <i class="nav-icon fas fa-network-wired"></i> otro_gasto (Otros Gastos)</p>
                           
                           <p class="ml-4">6.8 <i class="nav-icon fas fa-plane"></i> Víaticos</p>
@@ -310,6 +310,24 @@
                           <p class="ml-6">6.8.3.2 <i class="fas fa-hamburger nav-icon"></i> factura_break (Comprobantes Break) </p>
                           <p class="ml-6">6.8.3.3 <i class="fas fa-drumstick-bite nav-icon"></i> detalle_pension (Comidas Extras) </p>
                           
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+
+                      <!-- CARD - Técnico --------------------------------------------- -->
+                      <div class="card card-outline collapsed-card cur_point" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
+                        <div class="card-header bb-m">
+                            <h3 class="card-title">7. <i class="nav-icon far fa-circle"></i> Contable y financiero</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                          <p class="ml-4">7.1 <i class="fas fa-users"></i> Pagos Trabajadores </p>
+                          <p class="ml-5">7.1.1 <i class="fas fa-users"></i> pagos_q_s_obrero (Pagos de Obreros)</p>
+                          <p class="ml-5">7.1.2. <i class="fas fa-briefcase"></i> pagos_x_mes_administrador (Pago administrador)</p>
+                          <!-- <p class="ml-4">7.1 <i class="fas fa-users"></i> Pagos Trabajadores </p> -->
+
+
                         </div>
                         <!-- /.card-body -->
                       </div>
