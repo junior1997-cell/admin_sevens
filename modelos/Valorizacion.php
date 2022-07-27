@@ -210,7 +210,12 @@ class Valorizacion
 
   //--------------------------------R ES U E M E N _Q_S --------------------------------
 
-  public function insertar_editar_resumen_q_s($array_val) {
+  public function insertar_editar_resumen_q_s($array_val, $idproyecto) {
+
+    //$sql = "DELETE FROM resumen_q_s_valorizacion WHERE idproyecto = '$idproyecto';";
+    //$elimnar_valorizacion = ejecutarConsulta($sql);
+    //if ($elimnar_valorizacion['status'] == false) { return $elimnar_valorizacion; }
+
     foreach (json_decode( $array_val, true) as $key => $value) {
       $idresumen_q_s_valorizacion   = $value['idresumen_q_s_valorizacion'];
       $idproyecto       = $value['idproyecto'];
