@@ -191,6 +191,7 @@
                                     <option value="PERSONALES">PERSONALES</option>
                                     <option value="PASAJE">PASAJE</option>
                                     <option value="EPPS">EPPS</option>
+                                    <option value="DONACIONES">DONACIONES</option>
                                     <option value="OTROS">OTROS</option>
                                     
                                   </select>
