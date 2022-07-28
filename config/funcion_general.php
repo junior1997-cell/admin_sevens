@@ -82,6 +82,27 @@ if (!function_exists('ejecutarConsulta')) {
     return $fecha_convert;
   }
 
+  function diferencia_days_months_years($fecha_1, $fecha_2, $tipo = 'days') {
+
+    $diferencia = 0;
+
+    if (empty($fecha_1) || $fecha_1 == '0000-00-00' || empty($fecha_2) || $fecha_2 == '0000-00-00' ) { }else{
+
+      $dateDifference = abs(strtotime($fecha_2) - strtotime($fecha_1));
+
+      $years  = floor($dateDifference / (365 * 60 * 60 * 24));
+      $months = floor(($dateDifference - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+      $days   = floor(($dateDifference - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 *24) / (60 * 60 * 24));
+
+      if        ($tipo == 'days')   {  $diferencia = $days + 1;
+      } else if ($tipo == 'months') {  $diferencia = $months;
+      } else if ($tipo == 'years')  {  $diferencia = $years;
+      }
+    }    
+    
+    return $diferencia;
+  }
+
   /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
 
   function multiplo_number($numero, $multiplo) {  if($numero%$multiplo == 0){ return true; }else{ return false; } }

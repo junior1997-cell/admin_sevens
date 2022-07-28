@@ -14,7 +14,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Manual de Usuario | Admin Sevens</title>
-        <?php $title = "Insumos"; require 'head.php';  ?>       
+        <?php $title = "Manual de usuario"; require 'head.php';  ?>       
 
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
@@ -26,11 +26,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['recurso']==1){
-            //require 'enmantenimiento.php';
+            require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
+            <div class="content-wrapper hidden">
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">

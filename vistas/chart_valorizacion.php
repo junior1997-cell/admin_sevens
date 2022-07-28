@@ -119,7 +119,7 @@
                     </div>                    
 
                     <div class="row">
-                      <!-- CHART LINEA -->
+                      <!-- CHART LINEA ══════════════════════════════════════════ -->
                       <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0 ">
@@ -160,7 +160,7 @@
                         <!-- /.card -->
                       </div>
                       
-                      <!-- CHART BARRAS -->
+                      <!-- CHART BARRAS ══════════════════════════════════════════ -->
                       <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0">
@@ -187,7 +187,7 @@
                                 <!-- /.d-flex -->
 
                                 <div class="position-relative mb-4">
-                                  <canvas id="chart-barra-curva-s" height="350"></canvas>
+                                  <canvas id="chart-barra-curva-s" height="350"></canvas> 
                                 </div>
 
                                 <div class="d-flex flex-row justify-content-end">
@@ -267,7 +267,7 @@
                         <!-- /.card -->
                       </div>
 
-                      <!-- CHART LINEA -->
+                      <!-- CHART LINEA ══════════════════════════════════════════ -->
                       <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0">
@@ -298,16 +298,20 @@
                                 </div>
 
                                 <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square text-success"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Gasto</span>
                                 </div>
                               </div>
                               <div class="col-md-4">
-                                <p class="text-center">
-                                  <strong>Utilidad Total</strong>
-                                </p>
-
-                                <div class="progress-group text-center">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
                                   <h2 class="progress_utilidad_total" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Gasto Total</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="monto_gastado_box" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
                                 </div>
                                 <!-- /.progress-group -->
                               </div>
@@ -318,32 +322,591 @@
                         <!-- /.card -->
                       </div>
 
-                      <div class="col-lg-6 hidden">
+                      <div class="col-lg-12 my-4 text-center">
+                        <h1>Gastos en los Módulos</h1>
+                      </div>
+
+                      <!-- CHART LINEA - C O M P R A S   D E   I N S U M O S ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0">
-                            <h3 class="card-title text-center">Productos mas usados</h3>
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Compras de Insumos por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-compra-de-insumos" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_compra_insumos"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Compra de Insumo</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_compra_insumo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Compra de Insumo</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_compra_insumo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - M A Q U I N A S   Y   E Q U I P O S ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Maquinas y Equipos por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-maquina-y-equipo" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_maquina_y_equipo"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Maquinas y Equipos</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_maquina_y_equipo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Maquinas y Equipos</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_maquina_y_equipo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - S U B C O N T R A T O ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Subcontrato por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-subcontrato" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_subcontrato"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Subcontrato</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_subcontrato" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Subcontrato</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_subcontrato" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - P L A N I L L A   S E G U R O ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Planilla Seguro por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-planilla-seguro" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_planilla_seguro"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Planilla Seguro</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_planilla_seguro" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Planilla Seguro</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_planilla_seguro" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - O T R O   G A S T O ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Otro Gasto por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-otro-gasto" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_otro_gasto"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Otro Gasto</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_otro_gasto" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Otro Gasto</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_otro_gasto" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - T R A N S P O R T E ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Transporte por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-transporte" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_transporte"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Transporte</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_transporte" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Transporte</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_transporte" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - H O S P E D A J E ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Hospedaje por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-hospedaje" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_hospedaje"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Hospedaje</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_hospedaje" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Hospedaje</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_hospedaje" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - P E N S I O N ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Pension por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-pension" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_pension"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Pension</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_pension" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Pension</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_pension" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - B R E A C K ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Breack por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-breack" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_breack"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> breack</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_breack" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>breack</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_breack" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - C O M I D A   E X T R A ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Comida Extra por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <!-- <div class="d-flex">
+                                  <p class="d-flex flex-column">
+                                    <span class="text-bold text-lg">$18,230.00</span>
+                                    <span>Sales Over Time</span>
+                                  </p>
+                                  <p class="ml-auto d-flex flex-column text-right">
+                                    <span class="text-success">
+                                      <i class="fas fa-arrow-up"></i> 33.1%
+                                    </span>
+                                    <span class="text-muted">Since last month</span>
+                                  </p>
+                                </div> -->
+                                <!-- /.d-flex -->
+
+                                <div class="position-relative mb-4">
+                                  <canvas id="chart-line-comida-extra" height="350"></canvas>
+                                </div>
+
+                                <div class="d-flex flex-row justify-content-end">
+                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_comida_extra"></i> Utilidad</span>
+                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Comida Extra</span>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                <div class="progress-group text-center mb-4">
+                                  <h2 class="progress_total_utilidad_comida_extra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+
+                                <p class="text-center"> <strong>Comida Extra</strong> </p>
+                                <div class="progress-group text-center">
+                                  <h2 class="progress_total_comida_extra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                </div>
+                                <!-- /.progress-group -->
+                              </div>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- TABLA -  ══════════════════════════════════════════ -->
+                      <div class="col-lg-6 ">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <h3 class="card-title text-center">Resumen de gastos por módulos</h3>
                             <div class="card-tools">
-                              <a href="#" class="btn btn-tool btn-sm">
-                                <i class="fas fa-download"></i>
-                              </a>
-                              <a href="#" class="btn btn-tool btn-sm">
-                                <i class="fas fa-bars"></i>
-                              </a>
+                              <button onclick="export_excel_resumen();" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                              <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
                             </div> 
                           </div>
                           <div class="card-body table-responsive p-0">
-                            <table class="table table-striped table-valign-middle">
+                            <table class="table table-striped table-valign-middle" id="tabla_resumen_gastos_modulos">
                               <thead>
-                              <tr>
-                                <th>Producto</th>
-                                <th>Precio referencial</th>
-                                <th>Cantidad</th>
-                                <th>Mas</th>
-                              </tr>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center" >Módulo</th>
+                                  <th class="text-center">Gasto</th>
+                                  <th class="text-center">Utilidad</th>
+                                  <th class="text-center">Mas</th>
+                                </tr>
                               </thead>
-                              <tbody id="tbla_productos_mas_vendidos">
-                                <!-- aqui van los productos -->
-                              </tbody>
+                              <tbody id="tbla_modulos_total_gasto"> <!-- aqui van los productos --> </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="text-center"></th>
+                                  <th class="text-center" ></th>
+                                  <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_modulo_gasto"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                  <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_modulo_utilidad"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                  <th class="text-center"></th>
+                                </tr>
+                              </tfoot>
                             </table>
                           </div>
                         </div>
@@ -466,14 +1029,15 @@
 
         <!-- REQUIRED SCRIPTS -->
 
-        <?php require 'script.php'; ?>
-        
+        <?php require 'script.php'; ?>        
         <!-- OPTIONAL SCRIPTS -->
         <script src="../plugins/chart.js/Chart.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="../dist/js/demo.js"></script>
-        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <!-- <script src="../dist/js/pages/dashboard3.js"></script> -->
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
         
         <script type="text/javascript" src="scripts/chart_valorizacion.js"></script>         
 
