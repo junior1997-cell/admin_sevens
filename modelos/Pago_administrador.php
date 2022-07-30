@@ -10,7 +10,7 @@ class PagoAdministrador
   }
 
   //Implementamos un método para insertar registros
-  public function insertar_pagos_x_mes( $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1  ) {
+  public function insertar_pagos_x_mes( $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1  ) {
     $id_fecha_mes = "";
 
     if (empty($idfechas_mes_pagos_administrador_pxm)) {
@@ -22,8 +22,8 @@ class PagoAdministrador
       $id_fecha_mes = $idfechas_mes_pagos_administrador_pxm;
     }
 
-    $sql_2 = "INSERT INTO pagos_x_mes_administrador ( idfechas_mes_pagos_administrador, cuenta_deposito, forma_de_pago, monto, baucher, descripcion)
-		VALUES ('$id_fecha_mes', '$cuenta_deposito', '$forma_pago', '$monto', '$doc1', '$descripcion')";
+    $sql_2 = "INSERT INTO pagos_x_mes_administrador ( idfechas_mes_pagos_administrador, cuenta_deposito, forma_de_pago, monto, fecha_pago, baucher, descripcion)
+		VALUES ('$id_fecha_mes', '$cuenta_deposito', '$forma_pago', '$monto', '$fecha_pago', '$doc1', '$descripcion')";
 
     $pagos_x_mes = ejecutarConsulta($sql_2);
 
@@ -33,8 +33,7 @@ class PagoAdministrador
   }
 
   //Implementamos un método para editar registros
-  public function editar_pagos_x_mes(
-    $idpagos_x_mes_administrador, $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1 ) {
+  public function editar_pagos_x_mes( $idpagos_x_mes_administrador, $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1 ) {
     $id_fecha_mes = "";
 
     if (empty($idfechas_mes_pagos_administrador_pxm)) {
@@ -47,7 +46,7 @@ class PagoAdministrador
     }
 
     $sql_2 = "UPDATE pagos_x_mes_administrador SET  idfechas_mes_pagos_administrador='$id_fecha_mes', cuenta_deposito='$cuenta_deposito', 
-		forma_de_pago='$forma_pago', monto='$monto', baucher='$doc1', descripcion='$descripcion'
+		forma_de_pago='$forma_pago', monto='$monto', fecha_pago='$fecha_pago', baucher='$doc1', descripcion='$descripcion'
 		WHERE idpagos_x_mes_administrador='$idpagos_x_mes_administrador'";
     $pagos_x_mes = ejecutarConsulta($sql_2);
 
@@ -57,17 +56,17 @@ class PagoAdministrador
   }
 
   //Implementamos un método para insertar registros
-  public function insertar_recibo_x_honorario($id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $doc2) {
-    $sql = "INSERT INTO fechas_mes_pagos_administrador (idtrabajador_por_proyecto, fecha_inicial, fecha_final, nombre_mes, cant_dias_mes, cant_dias_laborables, sueldo_mensual, monto_x_mes, recibos_x_honorarios)
-		VALUES ('$id_tabajador_x_proyecto_rh', '$fecha_inicial_rh', '$fecha_final_rh', '$mes_nombre_rh', '$dias_mes_rh', '$dias_regular_rh', '$sueldo_mensual_rh', '$monto_x_mes_rh', '$doc2')";
+  public function insertar_recibo_x_honorario($id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $numero_comprobante_rh, $doc2) {
+    $sql = "INSERT INTO fechas_mes_pagos_administrador (idtrabajador_por_proyecto, fecha_inicial, fecha_final, nombre_mes, cant_dias_mes, cant_dias_laborables, sueldo_mensual, monto_x_mes, numero_comprobante, recibos_x_honorarios)
+		VALUES ('$id_tabajador_x_proyecto_rh', '$fecha_inicial_rh', '$fecha_final_rh', '$mes_nombre_rh', '$dias_mes_rh', '$dias_regular_rh', '$sueldo_mensual_rh', '$monto_x_mes_rh', '$numero_comprobante_rh', '$doc2')";
 
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para editar registros
-  public function editar_recibo_x_honorario($idfechas_mes_pagos_administrador_rh, $id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $doc2) {
+  public function editar_recibo_x_honorario($idfechas_mes_pagos_administrador_rh, $id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $numero_comprobante_rh, $doc2) {
     $sql = "UPDATE fechas_mes_pagos_administrador SET idtrabajador_por_proyecto='$id_tabajador_x_proyecto_rh', fecha_inicial='$fecha_inicial_rh', fecha_final='$fecha_final_rh', nombre_mes='$mes_nombre_rh', cant_dias_mes='$dias_mes_rh',
-		 cant_dias_laborables='$dias_regular_rh', sueldo_mensual='$sueldo_mensual_rh',	monto_x_mes='$monto_x_mes_rh', recibos_x_honorarios='$doc2' 
+		 cant_dias_laborables='$dias_regular_rh', sueldo_mensual='$sueldo_mensual_rh',	monto_x_mes='$monto_x_mes_rh', numero_comprobante='$numero_comprobante_rh', recibos_x_honorarios='$doc2' 
 		WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_administrador_rh'";
 
     return ejecutarConsulta($sql);
@@ -100,7 +99,7 @@ class PagoAdministrador
           $cant_depo = $depositos['deposito_por_trabajdor'];
         }
 
-        $sql_3 = "SELECT idfechas_mes_pagos_administrador, idtrabajador_por_proyecto, fecha_inicial, fecha_final, nombre_mes, cant_dias_mes, cant_dias_laborables, sueldo_mensual, monto_x_mes, recibos_x_honorarios, estado
+        $sql_3 = "SELECT idfechas_mes_pagos_administrador, idtrabajador_por_proyecto, fecha_inicial, fecha_final, nombre_mes, cant_dias_mes, cant_dias_laborables, sueldo_mensual, monto_x_mes, numero_comprobante, recibos_x_honorarios, estado
 				FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto = '$id_trabajdor' ;";
         $fechas_mes = ejecutarConsultaArray($sql_3);
 
@@ -121,6 +120,7 @@ class PagoAdministrador
               "cant_dias_laborables" => $element['cant_dias_laborables'],
               "sueldo_mensual" => $element['sueldo_mensual'],
               "monto_x_mes" => $element['monto_x_mes'],
+              "numero_comprobante" => $element['numero_comprobante'],
               "recibos_x_honorarios" => $element['recibos_x_honorarios'],
               "estado" => $element['estado'],
               "suma_monto_depositado" => ($retVal = !empty($pagos_x_mes['suma_monto_depositado']) ? $pagos_x_mes['suma_monto_depositado'] : 0),
@@ -192,7 +192,7 @@ class PagoAdministrador
   public function mostrar_fechas_mes($idtrabajador_x_proyecto) {
     $data_array = [];
 
-    $sql = "SELECT idfechas_mes_pagos_administrador, idtrabajador_por_proyecto, fecha_inicial, fecha_final, nombre_mes, cant_dias_mes, cant_dias_laborables, sueldo_mensual, monto_x_mes, recibos_x_honorarios, estado
+    $sql = "SELECT idfechas_mes_pagos_administrador, idtrabajador_por_proyecto, fecha_inicial, fecha_final, nombre_mes, cant_dias_mes, cant_dias_laborables, sueldo_mensual, monto_x_mes, numero_comprobante, recibos_x_honorarios, estado
 		FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' ;";
     $fechas_mes = ejecutarConsultaArray($sql);
 
@@ -213,6 +213,7 @@ class PagoAdministrador
           "cant_dias_laborables" => $value['cant_dias_laborables'],
           "sueldo_mensual" => $value['sueldo_mensual'],
           "monto_x_mes" => $value['monto_x_mes'],
+          "numero_comprobante" => $value['numero_comprobante'],
           "recibos_x_honorarios" => $value['recibos_x_honorarios'],
           "estado" => $value['estado'],
           "suma_monto_depositado" => ($retVal = !empty($pagos_x_mes['suma_monto_depositado']) ? $pagos_x_mes['suma_monto_depositado'] : 0),
@@ -225,7 +226,7 @@ class PagoAdministrador
 
   //Implementar un método para mostrar los datos de un registro a modificar
   public function listar_pagos_x_mes($idfechas_mes_pagos) {
-    $sql = "SELECT idpagos_x_mes_administrador, idfechas_mes_pagos_administrador, cuenta_deposito, forma_de_pago, monto, baucher, descripcion, estado
+    $sql = "SELECT idpagos_x_mes_administrador, idfechas_mes_pagos_administrador, cuenta_deposito, forma_de_pago, monto, fecha_pago, baucher, descripcion, estado
 		FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador = '$idfechas_mes_pagos' ";
 
     return ejecutarConsulta($sql);
@@ -233,7 +234,7 @@ class PagoAdministrador
 
   // Mostramos datos: pagos por mes, para editar
   public function mostrar_pagos_x_mes($id) {
-    $sql = "SELECT idpagos_x_mes_administrador, idfechas_mes_pagos_administrador, cuenta_deposito, forma_de_pago, monto, baucher, descripcion 
+    $sql = "SELECT idpagos_x_mes_administrador, idfechas_mes_pagos_administrador, cuenta_deposito, forma_de_pago, monto, fecha_pago, baucher, descripcion 
 		FROM pagos_x_mes_administrador WHERE idpagos_x_mes_administrador = '$id';";
 
     return ejecutarConsultaSimpleFila($sql);

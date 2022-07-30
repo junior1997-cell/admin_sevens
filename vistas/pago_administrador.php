@@ -187,6 +187,7 @@
                                 <tr> 
                                   <th class="text-center">#</th>
                                   <th>Opciones</th>
+                                  <th>Fecha deposito</th>
                                   <th>Cuenta depósito</th> 
                                   <th>Forma de pago</th>
                                   <th>Monto</th>
@@ -202,6 +203,7 @@
                                 <tr> 
                                   <th class="text-center">#</th>
                                   <th>Opciones</th>
+                                  <th>Fecha deposito</th>
                                   <th>Cuenta depósito</th>
                                   <th>Forma de pago</th>
                                   <th>Monto</th>
@@ -287,6 +289,14 @@
                                 <div class="form-group">
                                   <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
                                   <input type="text" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
+                                </div>                                                        
+                              </div>
+
+                              <!-- Fecha de deposito -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_pago">Fecha de deposito </label>                               
+                                  <input class="form-control" type="date" id="fecha_pago" name="fecha_pago" /> 
                                 </div>                                                        
                               </div>
                               
@@ -404,6 +414,22 @@
                             <input type="hidden" name="sueldo_mensual_rh" id="sueldo_mensual_rh" />
                             <!-- monto_x_mes -->
                             <input type="hidden" name="monto_x_mes_rh" id="monto_x_mes_rh" />
+                            
+                            <!--N° de Comprobante -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="numero_comprobante">N° de Comprobante  </label>                               
+                                <input type="text" name="numero_comprobante" id="numero_comprobante" class="form-control"  placeholder="N° de Comprobante">  
+                              </div>                                                        
+                            </div>
+
+                            <!-- tipo comprobante -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="">Tipo Comprobante  </label>    
+                                <span class="form-control">Recibo por Honorario</span>
+                              </div>                                                        
+                            </div>
 
                             <!-- Pdf 2 -->
                             <div class="col-md-12 col-lg-12">
@@ -462,7 +488,7 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_2">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_recibo-x-honorario">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>

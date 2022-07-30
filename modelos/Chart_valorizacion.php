@@ -41,7 +41,11 @@ class ChartValorizacion
   }
 
   public function chart_linea($id_proyecto, $valorizacion_filtro, $array_fechas_valorizacion, $numero_valorizacion, $fecha_i, $fecha_f, $cant_valorizacion) {
-    
+    $monto_valorizacion_gastado = 0;
+    $monto_valorizacion_valorizado = 0;
+    $monto_valorizacion_utilidad = 0;
+
+    $cont = 1;
     // valorizaciones
     $monto_programado = Array(); $monto_valorizado = Array(); $monto_gastado = Array(); $monto_utilidad = Array();
     $monto_acumulado_programado = Array(); $monto_acumulado_valorizado = Array(); $monto_acumulado_gastado = Array(); $monto_acumulado_utilidad = Array();
@@ -51,31 +55,58 @@ class ChartValorizacion
     $total_monto_programado = 0; $total_monto_valorizado = 0;  $total_monto_gastado = 0; 
     $acumulado_monto_programado = 0; $acumulado_monto_valorizado = 0;  $acumulado_monto_gastado = 0; $acumulado_monto_utilidad = 0; 
 
-    // modulos
-    $tabla_resumen = Array();
-    // compras de insumos
-    $total_monto_compra_insumos = 0;  $total_utilidad_compra_insumos = 0;   $monto_acumulado_compra_insumos = Array();  $utilidad_acumulado_compra_insumos = Array();
-    // maquina y equipo
-    $total_monto_maquina_y_equipo = 0;$total_utilidad_maquina_y_equipo = 0; $monto_acumulado_maquina_y_equipo = Array();$utilidad_acumulado_maquina_y_equipo = Array();
+    // resumen_modulos
+    $tabla_resumen = Array();  $monto_resumen_modulos = Array();  $utilidad_resumen_modulos = Array();
+    // compra_insumos
+    $total_monto_compra_insumos = 0;  $total_utilidad_compra_insumos = 0;   $monto_acumulado_compra_insumos = Array();  $utilidad_acumulado_compra_insumos = Array();   $monto_compra_insumos = Array();  $utilidad_compra_insumos = Array();
+    $tabla_compra_insumos = Array();
+    // maquina_y_equipo
+    $total_monto_maquina_y_equipo = 0;$total_utilidad_maquina_y_equipo = 0; $monto_acumulado_maquina_y_equipo = Array();$utilidad_acumulado_maquina_y_equipo = Array(); $monto_maquina_y_equipo = Array();$utilidad_maquina_y_equipo = Array();
+    $tabla_maquina_y_equipo = Array();
     // subcontrato
-    $total_monto_subcontrato = 0;     $total_utilidad_subcontrato = 0;      $monto_acumulado_subcontrato = Array();     $utilidad_acumulado_subcontrato = Array();
-    // planilla seguro
-    $total_monto_planilla_seguro = 0; $total_utilidad_planilla_seguro = 0;  $monto_acumulado_planilla_seguro = Array(); $utilidad_acumulado_planilla_seguro = Array();
-    // otro gasto
-    $total_monto_otro_gasto = 0;      $total_utilidad_otro_gasto = 0;       $monto_acumulado_otro_gasto = Array();      $utilidad_acumulado_otro_gasto = Array();
+    $total_monto_subcontrato = 0;     $total_utilidad_subcontrato = 0;      $monto_acumulado_subcontrato = Array();     $utilidad_acumulado_subcontrato = Array();      $monto_subcontrato = Array();     $utilidad_subcontrato = Array();
+    $tabla_subcontrato = Array();
+    // planilla_seguro
+    $total_monto_planilla_seguro = 0; $total_utilidad_planilla_seguro = 0;  $monto_acumulado_planilla_seguro = Array(); $utilidad_acumulado_planilla_seguro = Array();  $monto_planilla_seguro = Array(); $utilidad_planilla_seguro = Array();
+    $tabla_planilla_seguro = Array();
+    // otro_gasto
+    $total_monto_otro_gasto = 0;      $total_utilidad_otro_gasto = 0;       $monto_acumulado_otro_gasto = Array();      $utilidad_acumulado_otro_gasto = Array();       $monto_otro_gasto = Array();      $utilidad_otro_gasto = Array();
+    $tabla_otro_gasto = Array();
     // trasnporte
-    $total_monto_transporte = 0;      $total_utilidad_transporte = 0;       $monto_acumulado_transporte = Array();      $utilidad_acumulado_transporte = Array();
+    $total_monto_transporte = 0;      $total_utilidad_transporte = 0;       $monto_acumulado_transporte = Array();      $utilidad_acumulado_transporte = Array();       $monto_transporte = Array();      $utilidad_transporte = Array();
+    $tabla_transporte = Array();
     // hospedaje
-    $total_monto_hospedaje = 0;       $total_utilidad_hospedaje = 0;        $monto_acumulado_hospedaje = Array();       $utilidad_acumulado_hospedaje = Array();
+    $total_monto_hospedaje = 0;       $total_utilidad_hospedaje = 0;        $monto_acumulado_hospedaje = Array();       $utilidad_acumulado_hospedaje = Array();        $monto_hospedaje = Array();       $utilidad_hospedaje = Array();
+    $tabla_hospedaje = Array();
     // pension
-    $total_monto_pension = 0;         $total_utilidad_pension = 0;          $monto_acumulado_pension = Array();         $utilidad_acumulado_pension = Array();
+    $total_monto_pension = 0;         $total_utilidad_pension = 0;          $monto_acumulado_pension = Array();         $utilidad_acumulado_pension = Array();          $monto_pension = Array();         $utilidad_pension = Array();
+    $tabla_pension = Array();
     // breack
-    $total_monto_breack = 0;          $total_utilidad_breack = 0;           $monto_acumulado_breack = Array();          $utilidad_acumulado_breack = Array();
-    // comida extra
-    $total_monto_comida_extra = 0;    $total_utilidad_comida_extra = 0;     $monto_acumulado_comida_extra = Array();    $utilidad_acumulado_comida_extra = Array(); 
+    $total_monto_breack = 0;          $total_utilidad_breack = 0;           $monto_acumulado_breack = Array();          $utilidad_acumulado_breack = Array();           $monto_breack = Array();          $utilidad_breack = Array();
+    $tabla_breack = Array();
+    // comida_extra
+    $total_monto_comida_extra = 0;    $total_utilidad_comida_extra = 0;     $monto_acumulado_comida_extra = Array();    $utilidad_acumulado_comida_extra = Array();     $monto_comida_extra = Array();    $utilidad_comida_extra = Array(); 
+    $tabla_comida_extra = Array();
 
     // TODAS LAS VALORIZACIONES :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     if ($valorizacion_filtro == null || $valorizacion_filtro == '' || $valorizacion_filtro == '0' ) {
+      // extraemos datos generales
+      $sql_date = "SELECT fecha_inicio_actividad, fecha_fin_actividad, fecha_inicio, fecha_fin  FROM proyecto WHERE idproyecto = '$id_proyecto';";
+      $fecha_proyecto = ejecutarConsultaSimpleFila($sql_date);
+      if ($fecha_proyecto['status'] == false) { return $fecha_proyecto; } 
+
+      $sql_val = "SELECT SUM(monto_valorizado) AS monto_valorizado FROM resumen_q_s_valorizacion WHERE idproyecto = '$id_proyecto' AND estado = '1' AND estado_delete = '1'";
+      $init_valorizado = ejecutarConsultaSimpleFila($sql_val);
+      if ($init_valorizado['status'] == false) { return $init_valorizado; }
+
+      if (empty($fecha_proyecto['data']['fecha_inicio']) || empty($fecha_proyecto['data']['fecha_fin'])) {       
+        return $retorno = ['status'=>'error_ing_pool', 'mesage'=>'No ha definido las fechas de <b>INICIO</b> o <b>FIN</b> de proyecto.', 'data'=>'sin data', ]; 
+      } 
+
+      $monto_valorizacion_gastado   = suma_totales($id_proyecto, $fecha_proyecto['data']['fecha_inicio'],$fecha_proyecto['data']['fecha_fin']);
+      $monto_valorizacion_valorizado = (empty($init_valorizado['data']) ? 0 : (empty($init_valorizado['data']['monto_valorizado']) ? 0 : floatval($init_valorizado['data']['monto_valorizado']) ) );
+      $monto_valorizacion_utilidad = $monto_valorizacion_valorizado - $monto_valorizacion_gastado;
+      // end - extraemos datos generales
 
       foreach (json_decode($array_fechas_valorizacion, true) as $key => $value) {
         // valorizacion --------
@@ -108,78 +139,127 @@ class ChartValorizacion
 
         //  ---------------------------------------------- modulos ----------------------------------------------
 
-        // compras de insumos
+        // compra_insumos
         $cant_monto_compra_insumos     = suma_totales_compra_insumos($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_compra_insumos   += $cant_monto_compra_insumos;
-        $val_utilidad_compra_insumos   = $val_monto_valorizado - $cant_monto_compra_insumos;
+        $val_utilidad_compra_insumos   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_compra_insumos )/$monto_valorizacion_gastado)  ;
         $total_utilidad_compra_insumos+= $val_utilidad_compra_insumos;
         array_push($monto_acumulado_compra_insumos,   round($total_monto_compra_insumos,2) );
-        array_push($utilidad_acumulado_compra_insumos,   round($total_utilidad_compra_insumos,2) );        
-        // maquina y equipo
+        array_push($utilidad_acumulado_compra_insumos,   round($total_utilidad_compra_insumos,2) ); 
+        array_push($monto_compra_insumos,   round($cant_monto_compra_insumos,2) );
+        array_push($utilidad_compra_insumos,   round($val_utilidad_compra_insumos,2) );  
+        $tabla_compra_insumos[]= array(
+          "modulo"=>'Compra de insumos',"val"=>'Val'.$cont, "gasto"=>$cant_monto_compra_insumos, "utilidad"=>$val_utilidad_compra_insumos, "gasto_t"=>$cant_monto_gastado, "utilidad_t"=>$val_utilidad_compra_insumos,  "ver_mas"=>'compra_insumos.php',
+        );          
+        // maquina_y_equipo
         $cant_monto_maquina_y_equipo     = suma_totales_maquina_y_equipo($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_maquina_y_equipo   += $cant_monto_maquina_y_equipo;
-        $val_utilidad_maquina_y_equipo   = $val_monto_valorizado - $cant_monto_maquina_y_equipo;
+        $val_utilidad_maquina_y_equipo   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_maquina_y_equipo)/$monto_valorizacion_gastado);
         $total_utilidad_maquina_y_equipo+= $val_utilidad_maquina_y_equipo;
         array_push($monto_acumulado_maquina_y_equipo,   round($total_monto_maquina_y_equipo,2) );
         array_push($utilidad_acumulado_maquina_y_equipo,   round($total_utilidad_maquina_y_equipo,2) );
+        array_push($monto_maquina_y_equipo,   round($cant_monto_maquina_y_equipo,2) );
+        array_push($utilidad_maquina_y_equipo,   round($val_utilidad_maquina_y_equipo,2) );
+        $tabla_maquina_y_equipo[]= array(
+          "modulo"=>'Maquinas y Equipos',"val"=>'Val'.$cont, "gasto"=>$cant_monto_maquina_y_equipo, "utilidad"=>$val_utilidad_maquina_y_equipo, "ver_mas"=>'servicio_maquina.php',
+        );
         // subcontrato
         $cant_monto_subcontrato     = suma_totales_subcontrato($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_subcontrato   += $cant_monto_subcontrato;
-        $val_utilidad_subcontrato   = $val_monto_valorizado - $cant_monto_subcontrato;
+        $val_utilidad_subcontrato   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_subcontrato)/$monto_valorizacion_gastado);
         $total_utilidad_subcontrato+= $val_utilidad_subcontrato;
         array_push($monto_acumulado_subcontrato,   round($total_monto_subcontrato,2) );
         array_push($utilidad_acumulado_subcontrato,   round($total_utilidad_subcontrato,2) );
-        // planilla seguro
+        array_push($monto_subcontrato,   round($cant_monto_subcontrato,2) );
+        array_push($utilidad_subcontrato,   round($val_utilidad_subcontrato,2) );
+        $tabla_subcontrato[]= array(
+          "modulo"=>'Subcontrato',"val"=>'Val'.$cont, "gasto"=>$cant_monto_subcontrato, "utilidad"=>$val_utilidad_subcontrato, "ver_mas"=>'sub_contrato.php',
+        );
+        // planilla_seguro
         $cant_monto_planilla_seguro     = suma_totales_planilla_seguro($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_planilla_seguro   += $cant_monto_planilla_seguro;
-        $val_utilidad_planilla_seguro   = $val_monto_valorizado - $cant_monto_planilla_seguro;
+        $val_utilidad_planilla_seguro   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_planilla_seguro)/$monto_valorizacion_gastado);
         $total_utilidad_planilla_seguro+= $val_utilidad_planilla_seguro;
         array_push($monto_acumulado_planilla_seguro,   round($total_monto_planilla_seguro,2) );
         array_push($utilidad_acumulado_planilla_seguro,   round($total_utilidad_planilla_seguro,2) );
-        // otro gasto
+        array_push($monto_planilla_seguro,   round($cant_monto_planilla_seguro,2) );
+        array_push($utilidad_planilla_seguro,   round($val_utilidad_planilla_seguro,2) );
+        $tabla_planilla_seguro[]= array(
+          "modulo"=>'Planilla Seguro',"val"=>'Val'.$cont, "gasto"=>$cant_monto_planilla_seguro, "utilidad"=>$val_utilidad_planilla_seguro, "ver_mas"=>'planillas_seguros.php',
+        );
+        // otro_gasto
         $cant_monto_otro_gasto     = suma_totales_otro_gasto($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_otro_gasto   += $cant_monto_otro_gasto;
-        $val_utilidad_otro_gasto   = $val_monto_valorizado - $cant_monto_otro_gasto;
+        $val_utilidad_otro_gasto   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_otro_gasto)/$monto_valorizacion_gastado);
         $total_utilidad_otro_gasto+= $val_utilidad_otro_gasto;
         array_push($monto_acumulado_otro_gasto,   round($total_monto_otro_gasto,2) );
         array_push($utilidad_acumulado_otro_gasto,   round($total_utilidad_otro_gasto,2) );
+        array_push($monto_otro_gasto,   round($cant_monto_otro_gasto,2) );
+        array_push($utilidad_otro_gasto,   round($val_utilidad_otro_gasto,2) );
+        $tabla_otro_gasto[]= array(
+          "modulo"=>'Otro Gasto',"val"=>'Val'.$cont, "gasto"=>$cant_monto_otro_gasto, "utilidad"=>$val_utilidad_otro_gasto, "ver_mas"=>'otro_gasto.php',
+        );
         // transporte
         $cant_monto_transporte     = suma_totales_transporte($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_transporte   += $cant_monto_transporte;
-        $val_utilidad_transporte   = $val_monto_valorizado - $cant_monto_transporte;
+        $val_utilidad_transporte   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_transporte)/$monto_valorizacion_gastado);
         $total_utilidad_transporte+= $val_utilidad_transporte;
         array_push($monto_acumulado_transporte,   round($total_monto_transporte,2) );
         array_push($utilidad_acumulado_transporte,   round($total_utilidad_transporte,2) );
+        array_push($monto_transporte,   round($cant_monto_transporte,2) );
+        array_push($utilidad_transporte,   round($val_utilidad_transporte,2) );
+        $tabla_transporte[]= array(
+          "modulo"=>'Transporte',"val"=>'Val'.$cont, "gasto"=>$cant_monto_transporte, "utilidad"=>$val_utilidad_transporte, "ver_mas"=>'transporte.php',
+        );
         // hospedaje
         $cant_monto_hospedaje     = suma_totales_hospedaje($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_hospedaje   += $cant_monto_hospedaje;
-        $val_utilidad_hospedaje   = $val_monto_valorizado - $cant_monto_hospedaje;
+        $val_utilidad_hospedaje   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_hospedaje)/$monto_valorizacion_gastado);
         $total_utilidad_hospedaje+= $val_utilidad_hospedaje;
         array_push($monto_acumulado_hospedaje,   round($total_monto_hospedaje,2) );
         array_push($utilidad_acumulado_hospedaje,   round($total_utilidad_hospedaje,2) );
+        array_push($monto_hospedaje,   round($cant_monto_hospedaje,2) );
+        array_push($utilidad_hospedaje,   round($val_utilidad_hospedaje,2) );
+        $tabla_hospedaje[]= array(
+          "modulo"=>'Hospedaje',"val"=>'Val'.$cont, "gasto"=>$cant_monto_hospedaje, "utilidad"=>$val_utilidad_hospedaje, "ver_mas"=>'hospedaje.php',
+        );
         // pension
         $cant_monto_pension     = suma_totales_pension($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_pension   += $cant_monto_pension;
-        $val_utilidad_pension   = $val_monto_valorizado - $cant_monto_pension;
+        $val_utilidad_pension   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pension)/$monto_valorizacion_gastado);
         $total_utilidad_pension+= $val_utilidad_pension;
         array_push($monto_acumulado_pension,   round($total_monto_pension,2) );
         array_push($utilidad_acumulado_pension,   round($total_utilidad_pension,2) );
+        array_push($monto_pension,   round($cant_monto_pension,2) );
+        array_push($utilidad_pension,   round($val_utilidad_pension,2) );
+        $tabla_pension[]= array(
+          "modulo"=>'Pension',"val"=>'Val'.$cont, "gasto"=>$cant_monto_pension, "utilidad"=>$val_utilidad_pension, "ver_mas"=>'pension.php',
+        );
         // breack
         $cant_monto_breack     = suma_totales_breack($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_breack   += $cant_monto_breack;
-        $val_utilidad_breack   = $val_monto_valorizado - $cant_monto_breack;
+        $val_utilidad_breack   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_breack)/$monto_valorizacion_gastado);
         $total_utilidad_breack+= $val_utilidad_breack;
         array_push($monto_acumulado_breack,   round($total_monto_breack,2) );
         array_push($utilidad_acumulado_breack,   round($total_utilidad_breack,2) );
-        // comida extra
+        array_push($monto_breack,   round($cant_monto_breack,2) );
+        array_push($utilidad_breack,   round($val_utilidad_breack,2) );
+        $tabla_breack[]= array(
+          "modulo"=>'Breack',"val"=>'Val'.$cont, "gasto"=>$cant_monto_breack, "utilidad"=>$val_utilidad_breack, "ver_mas"=>'break.php',
+        );
+        // comida_extra
         $cant_monto_comida_extra     = suma_totales_comida_extra($id_proyecto, $value['fecha_i'], $value['fecha_f']);
         $total_monto_comida_extra   += $cant_monto_comida_extra;
-        $val_utilidad_comida_extra   = $val_monto_valorizado - $cant_monto_comida_extra;
+        $val_utilidad_comida_extra   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_comida_extra)/$monto_valorizacion_gastado);
         $total_utilidad_comida_extra+= $val_utilidad_comida_extra;
         array_push($monto_acumulado_comida_extra,   round($total_monto_comida_extra,2) );
         array_push($utilidad_acumulado_comida_extra,   round($total_utilidad_comida_extra,2) );
-        
-
+        array_push($monto_comida_extra,   round($cant_monto_comida_extra,2) );
+        array_push($utilidad_comida_extra,   round($val_utilidad_comida_extra,2) );
+        $tabla_comida_extra[]= array(
+          "modulo"=>'Comida Extra',"val"=>'Val'.$cont, "gasto"=>$cant_monto_comida_extra, "utilidad"=>$val_utilidad_comida_extra, "ver_mas"=>'comidas_extras.php',
+        );
+        $cont++;
       }  
       
       $sql_2 = "SELECT SUM(monto_programado) as monto_programado, SUM(monto_valorizado) as monto_valorizado FROM resumen_q_s_valorizacion 
@@ -190,6 +270,19 @@ class ChartValorizacion
       $total_monto_programado = (empty($totales['data']) ? 0 : (empty($totales['data']['monto_programado']) ? 0 : floatval($totales['data']['monto_programado']) ) );
       $total_monto_valorizado = (empty($totales['data']) ? 0 : (empty($totales['data']['monto_valorizado']) ? 0 : floatval($totales['data']['monto_valorizado']) ) );
     }else{
+      // extraemos datos generales
+      $sql_val = "SELECT monto_valorizado AS monto_valorizado FROM resumen_q_s_valorizacion WHERE idproyecto = '$id_proyecto' AND numero_q_s = '$numero_valorizacion' AND estado = '1' AND estado_delete = '1'";
+      $init_valorizado = ejecutarConsultaSimpleFila($sql_val);
+      if ($init_valorizado['status'] == false) { return $init_valorizado; }
+
+      if (empty($fecha_i) || empty($fecha_f)) {       
+        return $retorno = ['status'=>'error_ing_pool', 'mesage'=>'No ha definido las fechas de <b>INICIO</b> o <b>FIN</b> de proyecto.', 'data'=>'sin data', ]; 
+      } 
+
+      $monto_valorizacion_gastado   = suma_totales($id_proyecto, $fecha_i,$fecha_f);
+      $monto_valorizacion_valorizado = (empty($init_valorizado['data']) ? 0 : (empty($init_valorizado['data']['monto_valorizado']) ? 0 : floatval($init_valorizado['data']['monto_valorizado']) ) );
+      $monto_valorizacion_utilidad = $monto_valorizacion_valorizado - $monto_valorizacion_gastado;
+      // end - extraemos datos generales
 
       // UNA SOLA VALORIZACION :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
       $sql_1 = "SELECT numero_q_s, monto_programado, monto_valorizado FROM resumen_q_s_valorizacion 
@@ -232,14 +325,127 @@ class ChartValorizacion
 
           //  ---------------------------------------------- modulos ----------------------------------------------
 
-          // compras de insumos
+          // compra_insumos
           $cant_monto_compra_insumos     = suma_totales_compra_insumos($id_proyecto, $fecha_iterativa, '');
           $total_monto_compra_insumos   += $cant_monto_compra_insumos;
-          $val_utilidad_compra_insumos   = $val_monto_valorizado - $cant_monto_compra_insumos;
+          $val_utilidad_compra_insumos   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_compra_insumos )/$monto_valorizacion_gastado)  ;
           $total_utilidad_compra_insumos+= $val_utilidad_compra_insumos;
           array_push($monto_acumulado_compra_insumos,   round($total_monto_compra_insumos,2) );
-          array_push($utilidad_acumulado_compra_insumos,   round($total_utilidad_compra_insumos,2) );
-
+          array_push($utilidad_acumulado_compra_insumos,   round($total_utilidad_compra_insumos,2) ); 
+          array_push($monto_compra_insumos,   round($cant_monto_compra_insumos,2) );
+          array_push($utilidad_compra_insumos,   round($val_utilidad_compra_insumos,2) );  
+          $tabla_compra_insumos[]= array(
+            "modulo"=>'Compra de insumos',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_compra_insumos, "utilidad"=>$val_utilidad_compra_insumos, "ver_mas"=>'compra_insumos.php',
+          );  
+          // maquina_y_equipo
+          $cant_monto_maquina_y_equipo     = suma_totales_maquina_y_equipo($id_proyecto, $fecha_iterativa, '');
+          $total_monto_maquina_y_equipo   += $cant_monto_maquina_y_equipo;
+          $val_utilidad_maquina_y_equipo   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_maquina_y_equipo)/$monto_valorizacion_gastado);
+          $total_utilidad_maquina_y_equipo+= $val_utilidad_maquina_y_equipo;
+          array_push($monto_acumulado_maquina_y_equipo,   round($total_monto_maquina_y_equipo,2) );
+          array_push($utilidad_acumulado_maquina_y_equipo,   round($total_utilidad_maquina_y_equipo,2) );
+          array_push($monto_maquina_y_equipo,   round($cant_monto_maquina_y_equipo,2) );
+          array_push($utilidad_maquina_y_equipo,   round($val_utilidad_maquina_y_equipo,2) );
+          $tabla_maquina_y_equipo[]= array(
+            "modulo"=>'Maquinas y Equipos',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_maquina_y_equipo, "utilidad"=>$val_utilidad_maquina_y_equipo, "ver_mas"=>'servicio_maquina.php',
+          );
+          // subcontrato
+          $cant_monto_subcontrato     = suma_totales_subcontrato($id_proyecto, $fecha_iterativa, '');
+          $total_monto_subcontrato   += $cant_monto_subcontrato;
+          $val_utilidad_subcontrato   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_subcontrato)/$monto_valorizacion_gastado);
+          $total_utilidad_subcontrato+= $val_utilidad_subcontrato;
+          array_push($monto_acumulado_subcontrato,   round($total_monto_subcontrato,2) );
+          array_push($utilidad_acumulado_subcontrato,   round($total_utilidad_subcontrato,2) );
+          array_push($monto_subcontrato,   round($cant_monto_subcontrato,2) );
+          array_push($utilidad_subcontrato,   round($val_utilidad_subcontrato,2) );
+          $tabla_subcontrato[]= array(
+            "modulo"=>'Subcontrato',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_subcontrato, "utilidad"=>$val_utilidad_subcontrato, "ver_mas"=>'sub_contrato.php',
+          );
+          // planilla_seguro
+          $cant_monto_planilla_seguro     = suma_totales_planilla_seguro($id_proyecto, $fecha_iterativa, '');
+          $total_monto_planilla_seguro   += $cant_monto_planilla_seguro;
+          $val_utilidad_planilla_seguro   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_planilla_seguro)/$monto_valorizacion_gastado);
+          $total_utilidad_planilla_seguro+= $val_utilidad_planilla_seguro;
+          array_push($monto_acumulado_planilla_seguro,   round($total_monto_planilla_seguro,2) );
+          array_push($utilidad_acumulado_planilla_seguro,   round($total_utilidad_planilla_seguro,2) );
+          array_push($monto_planilla_seguro,   round($cant_monto_planilla_seguro,2) );
+          array_push($utilidad_planilla_seguro,   round($val_utilidad_planilla_seguro,2) );
+          $tabla_planilla_seguro[]= array(
+            "modulo"=>'Planilla Seguro',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_planilla_seguro, "utilidad"=>$val_utilidad_planilla_seguro, "ver_mas"=>'planillas_seguros.php',
+          );
+          // otro_gasto
+          $cant_monto_otro_gasto     = suma_totales_otro_gasto($id_proyecto, $fecha_iterativa, '');
+          $total_monto_otro_gasto   += $cant_monto_otro_gasto;
+          $val_utilidad_otro_gasto   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_otro_gasto)/$monto_valorizacion_gastado);
+          $total_utilidad_otro_gasto+= $val_utilidad_otro_gasto;
+          array_push($monto_acumulado_otro_gasto,   round($total_monto_otro_gasto,2) );
+          array_push($utilidad_acumulado_otro_gasto,   round($total_utilidad_otro_gasto,2) );
+          array_push($monto_otro_gasto,   round($cant_monto_otro_gasto,2) );
+          array_push($utilidad_otro_gasto,   round($val_utilidad_otro_gasto,2) );
+          $tabla_otro_gasto[]= array(
+            "modulo"=>'Otro Gasto',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_otro_gasto, "utilidad"=>$val_utilidad_otro_gasto, "ver_mas"=>'otro_gasto.php',
+          );
+          // transporte
+          $cant_monto_transporte     = suma_totales_transporte($id_proyecto, $fecha_iterativa, '');
+          $total_monto_transporte   += $cant_monto_transporte;
+          $val_utilidad_transporte   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_transporte)/$monto_valorizacion_gastado);
+          $total_utilidad_transporte+= $val_utilidad_transporte;
+          array_push($monto_acumulado_transporte,   round($total_monto_transporte,2) );
+          array_push($utilidad_acumulado_transporte,   round($total_utilidad_transporte,2) );
+          array_push($monto_transporte,   round($cant_monto_transporte,2) );
+          array_push($utilidad_transporte,   round($val_utilidad_transporte,2) );
+          $tabla_transporte[]= array(
+            "modulo"=>'Transporte',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_transporte, "utilidad"=>$val_utilidad_transporte, "ver_mas"=>'transporte.php',
+          );
+          // hospedaje
+          $cant_monto_hospedaje     = suma_totales_hospedaje($id_proyecto, $fecha_iterativa, '');
+          $total_monto_hospedaje   += $cant_monto_hospedaje;
+          $val_utilidad_hospedaje   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_hospedaje)/$monto_valorizacion_gastado);
+          $total_utilidad_hospedaje+= $val_utilidad_hospedaje;
+          array_push($monto_acumulado_hospedaje,   round($total_monto_hospedaje,2) );
+          array_push($utilidad_acumulado_hospedaje,   round($total_utilidad_hospedaje,2) );
+          array_push($monto_hospedaje,   round($cant_monto_hospedaje,2) );
+          array_push($utilidad_hospedaje,   round($val_utilidad_hospedaje,2) );
+          $tabla_hospedaje[]= array(
+            "modulo"=>'Hospedaje',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_hospedaje, "utilidad"=>$val_utilidad_hospedaje, "ver_mas"=>'hospedaje.php',
+          );
+          // pension
+          $cant_monto_pension     = suma_totales_pension($id_proyecto, $fecha_iterativa, '');
+          $total_monto_pension   += $cant_monto_pension;
+          $val_utilidad_pension   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pension)/$monto_valorizacion_gastado);
+          $total_utilidad_pension+= $val_utilidad_pension;
+          array_push($monto_acumulado_pension,   round($total_monto_pension,2) );
+          array_push($utilidad_acumulado_pension,   round($total_utilidad_pension,2) );
+          array_push($monto_pension,   round($cant_monto_pension,2) );
+          array_push($utilidad_pension,   round($val_utilidad_pension,2) );
+          $tabla_pension[]= array(
+            "modulo"=>'Pension',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_pension, "utilidad"=>$val_utilidad_pension, "ver_mas"=>'pension.php',
+          );
+          // breack
+          $cant_monto_breack     = suma_totales_breack($id_proyecto, $fecha_iterativa, '');
+          $total_monto_breack   += $cant_monto_breack;
+          $val_utilidad_breack   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_breack)/$monto_valorizacion_gastado);
+          $total_utilidad_breack+= $val_utilidad_breack;
+          array_push($monto_acumulado_breack,   round($total_monto_breack,2) );
+          array_push($utilidad_acumulado_breack,   round($total_utilidad_breack,2) );
+          array_push($monto_breack,   round($cant_monto_breack,2) );
+          array_push($utilidad_breack,   round($val_utilidad_breack,2) );
+          $tabla_breack[]= array(
+            "modulo"=>'Breack',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_breack, "utilidad"=>$val_utilidad_breack, "ver_mas"=>'break.php',
+          );
+          // comida_extra
+          $cant_monto_comida_extra     = suma_totales_comida_extra($id_proyecto, $fecha_iterativa, '');
+          $total_monto_comida_extra   += $cant_monto_comida_extra;
+          $val_utilidad_comida_extra   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_comida_extra)/$monto_valorizacion_gastado);
+          $total_utilidad_comida_extra+= $val_utilidad_comida_extra;
+          array_push($monto_acumulado_comida_extra,   round($total_monto_comida_extra,2) );
+          array_push($utilidad_acumulado_comida_extra,   round($total_utilidad_comida_extra,2) );
+          array_push($monto_comida_extra,   round($cant_monto_comida_extra,2) );
+          array_push($utilidad_comida_extra,   round($val_utilidad_comida_extra,2) );
+          $tabla_comida_extra[]= array(
+            "modulo"=>'Comida Extra',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_comida_extra, "utilidad"=>$val_utilidad_comida_extra, "ver_mas"=>'comidas_extras.php',
+          );
+          $cont++;
         } else {
           break;
         } 
@@ -248,35 +454,55 @@ class ChartValorizacion
     }   
     
     $tabla_resumen[]= array(
-      "modulo"=>'Compra de insumos', "gasto"=>$total_monto_compra_insumos, "utilidad"=>$total_utilidad_compra_insumos, "ver_mas"=>'compra_insumos.php',
+      "modulo"=>'Compra de insumos', "gasto"=>round($total_monto_compra_insumos,2), "utilidad"=>round($total_utilidad_compra_insumos,2), "ver_mas"=>'compra_insumos.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_compra_insumos,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_compra_insumos,2) );  
     $tabla_resumen[]= array(
       "modulo"=>'Maquinas y Equipos', "gasto"=>$total_monto_maquina_y_equipo, "utilidad"=>$total_utilidad_maquina_y_equipo, "ver_mas"=>'servicio_maquina.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_maquina_y_equipo,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_maquina_y_equipo,2) );  
     $tabla_resumen[]= array(
       "modulo"=>'Subcontrato', "gasto"=>$total_monto_subcontrato, "utilidad"=>$total_utilidad_subcontrato, "ver_mas"=>'sub_contrato.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_subcontrato,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_subcontrato,2) );  
     $tabla_resumen[]= array(
       "modulo"=>'Planilla Seguro', "gasto"=>$total_monto_planilla_seguro, "utilidad"=>$total_utilidad_planilla_seguro, "ver_mas"=>'planillas_seguros.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_planilla_seguro,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_planilla_seguro,2) ); 
     $tabla_resumen[]= array(
       "modulo"=>'Otro Gasto', "gasto"=>$total_monto_otro_gasto, "utilidad"=>$total_utilidad_otro_gasto, "ver_mas"=>'otro_gasto.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_otro_gasto,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_otro_gasto,2) );
     $tabla_resumen[]= array(
       "modulo"=>'Transporte', "gasto"=>$total_monto_transporte, "utilidad"=>$total_utilidad_transporte, "ver_mas"=>'transporte.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_transporte,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_transporte,2) );
     $tabla_resumen[]= array(
       "modulo"=>'Hospedaje', "gasto"=>$total_monto_hospedaje, "utilidad"=>$total_utilidad_hospedaje, "ver_mas"=>'hospedaje.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_hospedaje,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_hospedaje,2) );
     $tabla_resumen[]= array(
       "modulo"=>'Pension', "gasto"=>$total_monto_pension, "utilidad"=>$total_utilidad_pension, "ver_mas"=>'pension.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_pension,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_pension,2) );
     $tabla_resumen[]= array(
       "modulo"=>'Breack', "gasto"=>$total_monto_breack, "utilidad"=>$total_utilidad_breack, "ver_mas"=>'break.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_breack,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_breack,2) );
     $tabla_resumen[]= array(
       "modulo"=>'Comida Extra', "gasto"=>$total_monto_comida_extra, "utilidad"=>$total_utilidad_comida_extra, "ver_mas"=>'comidas_extras.php',
     );
+    array_push($monto_resumen_modulos,   round($total_monto_comida_extra,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_comida_extra,2) );
     
     return $retorno = [
       'status'=> true, 'message' => 'Salió todo ok,', 
@@ -296,58 +522,90 @@ class ChartValorizacion
         'total_monto_gastado'   =>$total_monto_gastado,
         'total_utilidad'        =>$total_monto_valorizado - $total_monto_gastado,
         // compra_insumos
-        'monto_acumulado_compra_insumos' => $monto_acumulado_compra_insumos,
-        'utilidad_acumulado_compra_insumos' => $utilidad_acumulado_compra_insumos,
-        'total_monto_compra_insumos'=>$total_monto_compra_insumos,
-        'total_utilidad_compra_insumos'=>$total_utilidad_compra_insumos,
+        'monto_acumulado_compra_insumos'  => $monto_acumulado_compra_insumos,
+        'utilidad_acumulado_compra_insumos'=> $utilidad_acumulado_compra_insumos,
+        'monto_compra_insumos'            => $monto_compra_insumos,
+        'utilidad_compra_insumos'         => $utilidad_compra_insumos,
+        'total_monto_compra_insumos'      =>$total_monto_compra_insumos,
+        'total_utilidad_compra_insumos'   =>$total_utilidad_compra_insumos,
+        'tabla_compra_insumos'            =>$tabla_compra_insumos,
         // maquina_y_equipo
-        'monto_acumulado_maquina_y_equipo' => $monto_acumulado_maquina_y_equipo,
+        'monto_acumulado_maquina_y_equipo'=> $monto_acumulado_maquina_y_equipo,
         'utilidad_acumulado_maquina_y_equipo' => $utilidad_acumulado_maquina_y_equipo,
-        'total_monto_maquina_y_equipo'=>$total_monto_maquina_y_equipo,
-        'total_utilidad_maquina_y_equipo'=>$total_utilidad_maquina_y_equipo,
+        'monto_maquina_y_equipo'          => $monto_maquina_y_equipo,
+        'utilidad_maquina_y_equipo'       => $utilidad_maquina_y_equipo,
+        'total_monto_maquina_y_equipo'    =>$total_monto_maquina_y_equipo,
+        'total_utilidad_maquina_y_equipo' =>$total_utilidad_maquina_y_equipo,
+        'tabla_maquina_y_equipo'          =>$tabla_maquina_y_equipo,
         // subcontrato
-        'monto_acumulado_subcontrato' => $monto_acumulado_subcontrato,
-        'utilidad_acumulado_subcontrato' => $utilidad_acumulado_subcontrato,
-        'total_monto_subcontrato'=>$total_monto_subcontrato,
-        'total_utilidad_subcontrato'=>$total_utilidad_subcontrato,
+        'monto_acumulado_subcontrato'   => $monto_acumulado_subcontrato,
+        'utilidad_acumulado_subcontrato'=> $utilidad_acumulado_subcontrato,
+        'monto_subcontrato'             => $monto_subcontrato,
+        'utilidad_subcontrato'          => $utilidad_subcontrato,
+        'total_monto_subcontrato'       =>$total_monto_subcontrato,
+        'total_utilidad_subcontrato'    =>$total_utilidad_subcontrato,
+        'tabla_subcontrato'             =>$tabla_subcontrato,
         // planilla_seguro
-        'monto_acumulado_planilla_seguro' => $monto_acumulado_planilla_seguro,
+        'monto_acumulado_planilla_seguro'=> $monto_acumulado_planilla_seguro,
         'utilidad_acumulado_planilla_seguro' => $utilidad_acumulado_planilla_seguro,
-        'total_monto_planilla_seguro'=>$total_monto_planilla_seguro,
+        'monto_planilla_seguro'         => $monto_planilla_seguro,
+        'utilidad_planilla_seguro'      => $utilidad_planilla_seguro,
+        'total_monto_planilla_seguro'   =>$total_monto_planilla_seguro,
         'total_utilidad_planilla_seguro'=>$total_utilidad_planilla_seguro,
+        'tabla_planilla_seguro'         =>$tabla_planilla_seguro,
         // otro_gasto
-        'monto_acumulado_otro_gasto' => $monto_acumulado_otro_gasto,
+        'monto_acumulado_otro_gasto'    => $monto_acumulado_otro_gasto,
         'utilidad_acumulado_otro_gasto' => $utilidad_acumulado_otro_gasto,
-        'total_monto_otro_gasto'=>$total_monto_otro_gasto,
-        'total_utilidad_otro_gasto'=>$total_utilidad_otro_gasto,
+        'monto_otro_gasto'              => $monto_otro_gasto,
+        'utilidad_otro_gasto'           => $utilidad_otro_gasto,
+        'total_monto_otro_gasto'        =>$total_monto_otro_gasto,
+        'total_utilidad_otro_gasto'     =>$total_utilidad_otro_gasto,
+        'tabla_otro_gasto'              =>$tabla_otro_gasto,
         // transporte
-        'monto_acumulado_transporte' => $monto_acumulado_transporte,
+        'monto_acumulado_transporte'    => $monto_acumulado_transporte,
         'utilidad_acumulado_transporte' => $utilidad_acumulado_transporte,
-        'total_monto_transporte'=>$total_monto_transporte,
-        'total_utilidad_transporte'=>$total_utilidad_transporte,
+        'monto_transporte'              => $monto_transporte,
+        'utilidad_transporte'           => $utilidad_transporte,
+        'total_monto_transporte'        =>$total_monto_transporte,
+        'total_utilidad_transporte'     =>$total_utilidad_transporte,
+        'tabla_transporte'              =>$tabla_transporte,
         // hospedaje
-        'monto_acumulado_hospedaje' => $monto_acumulado_hospedaje,
-        'utilidad_acumulado_hospedaje' => $utilidad_acumulado_hospedaje,
-        'total_monto_hospedaje'=>$total_monto_hospedaje,
-        'total_utilidad_hospedaje'=>$total_utilidad_hospedaje,
+        'monto_acumulado_hospedaje'   => $monto_acumulado_hospedaje,
+        'utilidad_acumulado_hospedaje'=> $utilidad_acumulado_hospedaje,
+        'monto_hospedaje'             => $monto_hospedaje,
+        'utilidad_hospedaje'          => $utilidad_hospedaje,
+        'total_monto_hospedaje'       =>$total_monto_hospedaje,
+        'total_utilidad_hospedaje'    =>$total_utilidad_hospedaje,
+        'tabla_hospedaje'             =>$tabla_hospedaje,
         // pension
-        'monto_acumulado_pension' => $monto_acumulado_pension,
-        'utilidad_acumulado_pension' => $utilidad_acumulado_pension,
-        'total_monto_pension'=>$total_monto_pension,
-        'total_utilidad_pension'=>$total_utilidad_pension,
+        'monto_acumulado_pension'   => $monto_acumulado_pension,
+        'utilidad_acumulado_pension'=> $utilidad_acumulado_pension,
+        'monto_pension'             => $monto_pension,
+        'utilidad_pension'          => $utilidad_pension,
+        'total_monto_pension'       =>$total_monto_pension,
+        'total_utilidad_pension'    =>$total_utilidad_pension,
+        'tabla_pension'            =>$tabla_pension,
         // breack
-        'monto_acumulado_breack' => $monto_acumulado_breack,
+        'monto_acumulado_breack'    => $monto_acumulado_breack,
         'utilidad_acumulado_breack' => $utilidad_acumulado_breack,
-        'total_monto_breack'=>$total_monto_breack,
-        'total_utilidad_breack'=>$total_utilidad_breack,
+        'monto_breack'              => $monto_breack,
+        'utilidad_breack'           => $utilidad_breack,
+        'total_monto_breack'        =>$total_monto_breack,
+        'total_utilidad_breack'     =>$total_utilidad_breack,
+        'tabla_breack'              =>$tabla_breack,
         // comida_extra
-        'monto_acumulado_comida_extra' => $monto_acumulado_comida_extra,
+        'monto_acumulado_comida_extra'    => $monto_acumulado_comida_extra,
         'utilidad_acumulado_comida_extra' => $utilidad_acumulado_comida_extra,
-        'total_monto_comida_extra'=>$total_monto_comida_extra,
-        'total_utilidad_comida_extra'=>$total_utilidad_comida_extra,
+        'monto_comida_extra'              => $monto_comida_extra,
+        'utilidad_comida_extra'           => $utilidad_comida_extra,
+        'total_monto_comida_extra'        =>$total_monto_comida_extra,
+        'total_utilidad_comida_extra'     =>$total_utilidad_comida_extra,
+        'tabla_comida_extra'              =>$tabla_comida_extra,
 
-        // tabla resumen
-        'tabla_resumen'=>$tabla_resumen,
+        // resumen_modulos
+        'tabla_resumen_modulos'=>$tabla_resumen,
+        'monto_resumen_modulos'=>$monto_resumen_modulos,
+        'utilidad_resumen_modulos'=>$utilidad_resumen_modulos,
       ]  
     ];
   }

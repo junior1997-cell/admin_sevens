@@ -90,7 +90,7 @@ class PagoObrero
     $sql_1 = "SELECT SUM(pqso.monto_deposito) AS total_deposito
 		FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
 		WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
-		AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$id';";
+		AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$id';";
     $monto_1 = ejecutarConsultaSimpleFila($sql_1);
     if ($monto_1['status'] == false) { return $monto_1; }
 
@@ -125,8 +125,8 @@ class PagoObrero
 
   // ::::::::::::::::::::::::::::::::::::::::::::: R E C I B O S   P O R   H O N O R A R I O ::::::::::::::::::::::::::::::::::::::::::::::
   //EDITAR - RECIBO X HONORARIO
-  public function editar_recibo_x_honorario($idresumen_q_s_asistencia_rh, $doc2) {
-    $sql = "UPDATE resumen_q_s_asistencia SET recibos_x_honorarios = '$doc2' WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia_rh'";
+  public function editar_recibo_x_honorario($idresumen_q_s_asistencia_rh, $numero_comprobante_rh, $doc2) {
+    $sql = "UPDATE resumen_q_s_asistencia SET numero_comprobante = '$numero_comprobante_rh', recibos_x_honorarios = '$doc2' WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia_rh'";
 
     return ejecutarConsulta($sql);
   }
@@ -141,17 +141,17 @@ class PagoObrero
   // ::::::::::::::::::::::::::::::::::::::::::::: P A G O S  U N   S O L O   O B R E R O S ::::::::::::::::::::::::::::::::::::::::::::::
 
   //INSERTAR - DEPOSTOS
-  public function insertar_pagos_x_q_s($idresumen_q_s_asistencia, $forma_de_pago, $cuenta_deposito, $monto, $descripcion, $doc1) {
-    $sql = "INSERT INTO  pagos_q_s_obrero( idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion) 
-		VALUES ('$idresumen_q_s_asistencia', '$cuenta_deposito', '$forma_de_pago', '$monto', '$doc1', '$descripcion');";
+  public function insertar_pagos_x_q_s($idresumen_q_s_asistencia, $forma_de_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1) {
+    $sql = "INSERT INTO  pagos_q_s_obrero( idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, baucher, descripcion) 
+		VALUES ('$idresumen_q_s_asistencia', '$cuenta_deposito', '$forma_de_pago', '$monto', '$fecha_pago', '$doc1', '$descripcion');";
 
     return ejecutarConsulta($sql);
   }
 
   //EDITAR - DEPOSTOS
-  public function editar_pagos_x_q_s($idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1) {
+  public function editar_pagos_x_q_s($idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1) {
     $sql = "UPDATE pagos_q_s_obrero SET idresumen_q_s_asistencia='$idresumen_q_s_asistencia', cuenta_deposito='$cuenta_deposito', 
-		forma_de_pago='$forma_pago', monto_deposito='$monto', baucher='$doc1', descripcion='$descripcion'
+		forma_de_pago='$forma_pago', monto_deposito='$monto', fecha_pago='$fecha_pago', baucher='$doc1', descripcion='$descripcion'
 		WHERE idpagos_q_s_obrero = '$idpagos_q_s_obrero,'";
 
     return ejecutarConsulta($sql);
@@ -171,7 +171,7 @@ class PagoObrero
     $sql_1 = "SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
 		rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, 
 		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, 
-		rqsa.estado_envio_contador, rqsa.recibos_x_honorarios
+		rqsa.estado_envio_contador, rqsa.numero_comprobante,  rqsa.recibos_x_honorarios
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
 		WHERE  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' 
 		AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' ;";
@@ -205,6 +205,7 @@ class PagoObrero
           'descripcion_descuento' => $q_s['descripcion_descuento'],
           'pago_quincenal' => ( empty($q_s['pago_quincenal']) ? 0 : $q_s['pago_quincenal']),
           'estado_envio_contador' => $q_s['estado_envio_contador'],
+          'numero_comprobante' => $q_s['numero_comprobante'],
           'recibos_x_honorarios' => $q_s['recibos_x_honorarios'],
 
           'deposito' => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : $depositos['data']['deposito'])),
@@ -217,7 +218,7 @@ class PagoObrero
 
   //TABLA DE PAGOS
   public function listar_tbla_pagos_x_q_s($idresumen_q_s_asistencia) {
-    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion, estado 
+    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, baucher, descripcion, estado 
 		FROM pagos_q_s_obrero
 		WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
 
@@ -226,7 +227,7 @@ class PagoObrero
 
   //MOSTRAR para editar
   public function mostrar_pagos_x_mes($idpagos_q_s_obrero) {
-    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, baucher, descripcion
+    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, baucher, descripcion
 		FROM pagos_q_s_obrero WHERE idpagos_q_s_obrero = '$idpagos_q_s_obrero';";
     return ejecutarConsultaSimpleFila($sql);
   }
@@ -256,7 +257,7 @@ class PagoObrero
     $data = [];
     $sql = "SELECT  rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto,  rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
     rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, 
-    rqsa.pago_quincenal, rqsa.recibos_x_honorarios, t.idtrabajador, t.nombres as trabajador, t.tipo_documento, t.numero_documento, t.imagen_perfil, 
+    rqsa.pago_quincenal, rqsa.numero_comprobante, rqsa.recibos_x_honorarios, t.idtrabajador, t.nombres as trabajador, t.tipo_documento, t.numero_documento, t.imagen_perfil, 
      ct.nombre as cargo_trabajador, tt.nombre as tipo_trabajador
     FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador as t, cargo_trabajador AS ct, tipo_trabajador as tt
     WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador  
@@ -295,6 +296,7 @@ class PagoObrero
           'adicional_descuento' => ( empty($trabajador['adicional_descuento']) ? 0 : $trabajador['adicional_descuento']),
           'descripcion_descuento' => $trabajador['descripcion_descuento'],
           'pago_quincenal' => ( empty($trabajador['pago_quincenal']) ? 0 : $trabajador['pago_quincenal']),
+          'numero_comprobante' => $trabajador['numero_comprobante'],
           'recibos_x_honorarios' => $trabajador['recibos_x_honorarios'],
           'trabajador' => $trabajador['trabajador'],
           'tipo_documento' => $trabajador['tipo_documento'],

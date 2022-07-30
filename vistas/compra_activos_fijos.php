@@ -412,7 +412,7 @@
                             </div>
 
                             <div class="modal-footer justify-content-between">
-                              <button type="button" class="btn btn-danger" onclick="regresar();" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-danger" onclick="table_show_hide(1);" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                             </div>
                           </div>

@@ -28,13 +28,15 @@
       $forma_pago	      = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
       $cuenta_deposito  = isset($_POST['cuenta_deposito'])? $_POST['cuenta_deposito']:"";
       $monto 		        = isset($_POST['monto'])? $_POST['monto']:"";
+      $fecha_pago 		  = isset($_POST['fecha_pago'])? $_POST['fecha_pago']:"";
       $descripcion 		  = isset($_POST['descripcion'])? $_POST['descripcion']:"";
       $doc_old_1 		    = isset($_POST['doc_old_1'])? $_POST['doc_old_1']:"";
       $doc1 		        = isset($_POST['doc1'])? $_POST['doc1']:"";
 
       // DATA - recibos por honorarios
-      $idresumen_q_s_asistencia_rh		= isset($_POST["idresumen_q_s_asistencia_rh"])? limpiarCadena($_POST["idresumen_q_s_asistencia_rh"]):"";
-      $doc2 	          = isset($_POST['doc2'])? $_POST['doc2']:"";
+      $numero_comprobante_rh	      = isset($_POST["numero_comprobante_rh"])? limpiarCadena($_POST["numero_comprobante_rh"]):"";
+      $idresumen_q_s_asistencia_rh	= isset($_POST["idresumen_q_s_asistencia_rh"])? limpiarCadena($_POST["idresumen_q_s_asistencia_rh"]):"";
+      $doc2 	                      = isset($_POST['doc2'])? $_POST['doc2']:"";
 
       switch ($_GET["op"]){
 
@@ -160,7 +162,7 @@
             }
 
             // editamos un recibo x honorario existente
-            $rspta=$pagoobrero->editar_recibo_x_honorario($idresumen_q_s_asistencia_rh, $doc2);            
+            $rspta=$pagoobrero->editar_recibo_x_honorario($idresumen_q_s_asistencia_rh, $numero_comprobante_rh, $doc2);            
             echo json_encode( $rspta, true);
           }
 
@@ -187,7 +189,7 @@
           // registramos un nuevo: pago x mes
           if (empty($idpagos_q_s_obrero)){
 
-            $rspta=$pagoobrero->insertar_pagos_x_q_s( $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
+            $rspta=$pagoobrero->insertar_pagos_x_q_s( $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1);
             
             echo json_encode( $rspta, true);
 
@@ -207,7 +209,7 @@
             }
 
             // editamos un pago x mes existente
-            $rspta=$pagoobrero->editar_pagos_x_q_s( $idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
+            $rspta=$pagoobrero->editar_pagos_x_q_s( $idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1);
             
             echo json_encode( $rspta, true);
           }
@@ -243,12 +245,13 @@
                   ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="far fa-trash-alt"></i></button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
-                "2"=>$reg->cuenta_deposito	,
-                "3"=>$reg->forma_de_pago	,
-                "4"=>'S/ '. number_format($reg->monto_deposito, 2, ".", ","),
-                "5"=>$baucher_deposito,
-                "6"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-                "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+                "2"=>$reg->fecha_pago	,
+                "3"=>$reg->cuenta_deposito	,
+                "4"=>$reg->forma_de_pago	,
+                "5"=>'S/ '. number_format($reg->monto_deposito, 2, ".", ","),
+                "6"=>$baucher_deposito,
+                "7"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
+                "8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
                 );
   
                 
@@ -331,10 +334,11 @@
                   ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="far fa-trash-alt"></i></button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
-                "2"=>'<p class="m-b-1px"><b>Forma:</b>'.$reg->forma_de_pago.'</p> <p class="m-b-1px"><b>Cta:</b>'.$reg->cuenta_deposito.'</p>',
-                "3"=>'S/ '. number_format($reg->monto_deposito, 2, ".", ","),
-                "4"=>$baucher_deposito,
-                "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
+                "2"=>$reg->fecha_pago,
+                "3"=>'<p class="m-b-1px"><b>Forma:</b>'.$reg->forma_de_pago.'</p> <p class="m-b-1px"><b>Cta:</b>'.$reg->cuenta_deposito.'</p>',
+                "4"=>'S/ '. number_format($reg->monto_deposito, 2, ".", ","),
+                "5"=>$baucher_deposito,
+                "6"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
                 );
   
                 

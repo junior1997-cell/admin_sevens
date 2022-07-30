@@ -217,6 +217,7 @@
                                 <tr> 
                                   <th class="text-center">#</th> 
                                   <th>Op.</th> 
+                                  <th>Fecha depósito</th> 
                                   <th>Cuenta depósito</th> 
                                   <th>Forma de pago</th>
                                   <th>Monto</th>
@@ -232,6 +233,7 @@
                                 <tr> 
                                   <th class="text-center">#</th> 
                                   <th>Op.</th> 
+                                  <th>Fecha depósito</th> 
                                   <th>Cuenta depósito</th>
                                   <th>Forma de pago</th>
                                   <th>Monto</th>
@@ -305,29 +307,37 @@
                           <div class="row" id="cargando-3-fomulario">
                             <!-- id idfechas_mes_pagos_administrador -->
                             <input type="hidden" name="idresumen_q_s_asistencia_rh" id="idresumen_q_s_asistencia_rh" />
-
-                            <!-- Mes del pago -->
-                            <div class="col-lg-3">
+                            
+                            <!--N° de Comprobante -->
+                            <div class="col-lg-6">
                               <div class="form-group">
-                                <label for="fecha_incial_modal" class="">Fecha inicial </label>
-                                <span class="fecha_incial_modal  form-control"> </span>
-                              </div>
+                                <label for="numero_comprobante_rh">N° de Comprobante  </label>                               
+                                <input type="text" name="numero_comprobante_rh" id="numero_comprobante_rh" class="form-control"  placeholder="N° de Comprobante">  
+                              </div>                                                        
                             </div>
 
-                            <div class="col-lg-3">
-                              <div class="form-group">
-                                <label for="fecha_final_modal" class="">Fecha final </label>
-                                <span class="fecha_final_modal  form-control"> </span>
-                              </div>
-                            </div>
-
-                            <!-- Monto faltante -->
+                            <!-- Numero de semana -->
                             <div class="col-lg-6">
                               <div class="form-group">
                                 <label for="numero_q_s_modal" class="nombre_tipo_pago_modal">N°  </label>
                                 <span class="numero_q_s_modal  form-control"> </span>
                               </div>
-                            </div>                           
+                            </div>
+
+                            <!-- fecha inicial -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="fecha_incial_modal" class="">Fecha inicial </label>
+                                <span class="fecha_incial_modal  form-control"> </span>
+                              </div>
+                            </div>
+                            <!-- fecha final -->
+                            <div class="col-lg-6">
+                              <div class="form-group">
+                                <label for="fecha_final_modal" class="">Fecha final </label>
+                                <span class="fecha_final_modal  form-control"> </span>
+                              </div>
+                            </div>                                                       
 
                             <!-- Pdf 2 -->
                             <div class="col-md-12 col-lg-12">
@@ -395,7 +405,7 @@
 
                 <!-- MODAL -  -->
                 <div class="modal fade" id="modal-tabla-pagos">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
                       <div class="modal-header"> 
                         <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
@@ -415,6 +425,7 @@
                                 <tr> 
                                   <th class="text-center">#</th> 
                                   <th>Op.</th> 
+                                  <th>Fecha Deposito</th> 
                                   <th>Cuenta depósito</th> 
                                   <th>Monto</th>
                                   <th>Baucher</th>
@@ -426,6 +437,7 @@
                                 <tr> 
                                   <th class="text-center">#</th> 
                                   <th>Op.</th> 
+                                  <th>Fecha Deposito</th>
                                   <th>Cuenta depósito</th>
                                   <th>Monto</th>
                                   <th>Baucher</th>
@@ -490,6 +502,14 @@
                                 <div class="form-group">
                                   <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
                                   <input type="number" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
+                                </div>                                                        
+                              </div>
+
+                              <!-- Fecha de deposito -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_pago">Fecha de deposito </label>                               
+                                  <input class="form-control" type="date" id="fecha_pago" name="fecha_pago" /> 
                                 </div>                                                        
                               </div>
                               

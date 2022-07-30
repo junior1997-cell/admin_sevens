@@ -78,12 +78,12 @@
                             <div class="col-lg-2 col-md-6 col-sm-6 col-12">
                               <label for="filtros" >Fecha inicio </label>
                               <!-- fecha inicial -->
-                              <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                              <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm h-40px m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
                             </div>
                             <div class="col-lg-2 col-md-6 col-sm-6 col-12">
                               <label for="filtros" >Fecha fin </label>
                               <!-- fecha final -->
-                              <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
+                              <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm h-40px" placeholder="Seleccionar fecha" onchange="filtros()" />
                             </div>
 
                             <!-- filtro por: proveedor -->
@@ -100,6 +100,7 @@
                                 <option value="0">Todos</option>
                                 <option value="Factura">Factura</option>
                                 <option value="Boleta">Boleta</option>
+                                <option value="Recibo por Honorario">Recibo por Honorario</option>
                               </select>
                             </div>
 
@@ -253,6 +254,8 @@
                           <li class="m-b-04rem"><i class="fas fa-drumstick-bite nav-icon"></i> COMIDA EXTRA</li>
                           <!-- <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(sin proyecto)</small></li> -->
                           <!-- <li>OTRO INGRESO</li> -->
+                          <li class="m-b-04rem"><i class="fas fa-briefcase nav-icon"></i> PAGO ADMINISTRADORES</li>
+                          <li class="m-b-04rem"><i class="fas fa-users nav-icon"></i> PAGO OBREROS</li>
                         </ol>
                       </div>
                     </div>

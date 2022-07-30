@@ -337,43 +337,81 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-compra-de-insumos" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_compra_insumos','Compras Insumos', 'compras');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_compra_insumos"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Compra de Insumo</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_compra_insumos">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                       
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_compra_insumos"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                   
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_compra_insumos"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_compra_insumos"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_compra_insumo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">                                  
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span><span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"><i class="fas fa-arrow-up"></i> 33.1%</span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div>  -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Compra de Insumo</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_compra_insumo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
-                              </div>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-compra-de-insumos" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_compra_insumo"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Compra de Insumo</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center mb-2"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_compra_insumo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center mb-2"> <strong>Compra de Insumo</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_compra_insumo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
+                                </div>                                
+                              </div>                              
                             </div>
                             
                           </div>
@@ -392,45 +430,84 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-maquina-y-equipo" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_maquina_y_equipo','Maquinas Equipos','');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_maquina_y_equipo"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Maquinas y Equipos</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_maquina_y_equipo">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_maquina_y_equipo"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_maquina_y_equipo"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_maquina_y_equipo"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_maquina_y_equipo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span><span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"> <i class="fas fa-arrow-up"></i> 33.1%</span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Maquinas y Equipos</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_maquina_y_equipo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-maquina-y-equipo" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_maquina_y_equipo"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Maquinas y Equipos</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_maquina_y_equipo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Maquinas y Equipos</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_maquina_y_equipo" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <!-- /.row -->                                
                               </div>
-                            </div>
-                            
+                              <!-- /.col -->                              
+                            </div>                            
                           </div>
                         </div>
                         <!-- /.card -->
@@ -447,45 +524,85 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-subcontrato" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_subcontrato','Subcontrato');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_subcontrato"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Subcontrato</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_subcontrato">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_subcontrato"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_subcontrato"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_subcontrato"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_subcontrato" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span> <span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"><i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Subcontrato</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_subcontrato" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
-                              </div>
-                            </div>
-                            
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-subcontrato" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_subcontrato"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Subcontrato</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_subcontrato" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>                                  
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Subcontrato</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_subcontrato" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
+                                </div>    
+                                <!-- /.row -->                      
+                              </div>     
+                              <!-- /.col -->
+                            </div>                            
                           </div>
                         </div>
                         <!-- /.card -->
@@ -502,45 +619,84 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-planilla-seguro" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_planilla_seguro', 'Panilla Seguro','planilla');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_planilla_seguro"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Planilla Seguro</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_planilla_seguro">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_planilla_seguro"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_planilla_seguro"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_planilla_seguro"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_planilla_seguro" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span><span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"> <i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Planilla Seguro</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_planilla_seguro" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-planilla-seguro" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_planilla_seguro"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Planilla Seguro</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_planilla_seguro" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Planilla Seguro</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_planilla_seguro" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <!-- /.row -->
                               </div>
-                            </div>
-                            
+                              <!-- /.col -->                              
+                            </div>                            
                           </div>
                         </div>
                         <!-- /.card -->
@@ -557,45 +713,84 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-otro-gasto" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_otro_gasto', 'Otro Gasto','gasto');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_otro_gasto"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Otro Gasto</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_otro_gasto">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center">Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_otro_gasto"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_otro_gasto"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_otro_gasto"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_otro_gasto" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span> <span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"> <i class="fas fa-arrow-up"></i> 33.1%</span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Otro Gasto</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_otro_gasto" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-otro-gasto" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_otro_gasto"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Otro Gasto</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_otro_gasto" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Otro Gasto</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_otro_gasto" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <!-- /.row -->
                               </div>
-                            </div>
-                            
+                              <!-- /.col -->                              
+                            </div>                            
                           </div>
                         </div>
                         <!-- /.card -->
@@ -612,45 +807,85 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-transporte" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_transporte','Transporte');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_transporte"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Transporte</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_transporte">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center">Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_transporte"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_transporte"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_transporte"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_transporte" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span> <span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"> <i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Transporte</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_transporte" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-transporte" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_transporte"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Transporte</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_transporte" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
+                                  <div class="colmd-6">
+                                    <p class="text-center"> <strong>Transporte</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_transporte" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <!-- /.row -->                                
                               </div>
+                              <!-- /.col -->                              
                             </div>
-                            
+                            <!-- /.row -->
                           </div>
                         </div>
                         <!-- /.card -->
@@ -667,45 +902,85 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-hospedaje" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_hospedaje', 'Hospedaje');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_hospedaje"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Hospedaje</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_hospedaje">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center">Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_hospedaje"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_hospedaje"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_hospedaje"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_hospedaje" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span><span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"> <i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Hospedaje</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_hospedaje" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-hospedaje" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_hospedaje"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Hospedaje</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_hospedaje" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Hospedaje</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_hospedaje" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <!-- /.row -->                                
                               </div>
-                            </div>
-                            
+                              <!-- /.col -->                              
+                            </div>      
+                            <!-- /.row -->                      
                           </div>
                         </div>
                         <!-- /.card -->
@@ -722,45 +997,84 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-pension" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_pension', 'Pension');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_pension"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Pension</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_pension">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center">Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_pension"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_pension"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_pension"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_pension" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column"> <span class="text-bold text-lg">$18,230.00</span> <span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"> <i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Pension</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_pension" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-pension" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_pension"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Pension</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_pension" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                   
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Pension</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_pension" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <!-- /.row -->
                               </div>
+                              <!-- /.col -->                              
                             </div>
-                            
+                            <!-- /.row -->
                           </div>
                         </div>
                         <!-- /.card -->
@@ -777,43 +1091,83 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-breack" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_breack', 'Breack');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_breack"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> breack</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_breack">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center">Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_breack"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_breack"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_breack"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_breack" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span> <span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"><i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>breack</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_breack" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-breack" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_breack"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> breack</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_breack" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>breack</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_breack" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                
                               </div>
+                              
                             </div>
                             
                           </div>
@@ -832,86 +1186,182 @@
                           </div>
                           <div class="card-body">
                             <div class="row">
-                              <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="chart-line-comida-extra" height="350"></canvas>
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_comida_extra', 'Comida Extra');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
                                 </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2"><i class="fas fa-square leyenda_utilidad_comida_extra"></i> Utilidad</span>
-                                  <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Comida Extra</span>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_comida_extra">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center">Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_comida_extra"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_comida_extra"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_comida_extra"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <p class="text-center"> <strong>Utilidad Total</strong> </p>
-                                <div class="progress-group text-center mb-4">
-                                  <h2 class="progress_total_utilidad_comida_extra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
-                                </div>
-                                <!-- /.progress-group -->
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span><span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"><i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
 
-                                <p class="text-center"> <strong>Comida Extra</strong> </p>
-                                <div class="progress-group text-center">
-                                  <h2 class="progress_total_comida_extra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-comida-extra" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_comida_extra"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Comida Extra</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_comida_extra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Comida Extra</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_comida_extra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
                                 </div>
-                                <!-- /.progress-group -->
+                                <!-- /.row -->
                               </div>
+                              <!-- /.col -->                              
                             </div>
-                            
+                            <!-- /.row -->
                           </div>
                         </div>
                         <!-- /.card -->
                       </div>
 
-                      <!-- TABLA -  ══════════════════════════════════════════ -->
-                      <div class="col-lg-6 ">
+                      <!-- TABLA -  ══════════════════════════════════════════ -->                       
+                      <div class="col-lg-12">
                         <div class="card">
                           <div class="card-header border-0">
-                            <h3 class="card-title text-center">Resumen de gastos por módulos</h3>
-                            <div class="card-tools">
-                              <button onclick="export_excel_resumen();" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
-                              <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
-                            </div> 
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Resumen de gastos por módulos</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
                           </div>
-                          <div class="card-body table-responsive p-0">
-                            <table class="table table-striped table-valign-middle" id="tabla_resumen_gastos_modulos">
-                              <thead>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="text-center" >Módulo</th>
-                                  <th class="text-center">Gasto</th>
-                                  <th class="text-center">Utilidad</th>
-                                  <th class="text-center">Mas</th>
-                                </tr>
-                              </thead>
-                              <tbody id="tbla_modulos_total_gasto"> <!-- aqui van los productos --> </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="text-center"></th>
-                                  <th class="text-center" ></th>
-                                  <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_modulo_gasto"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
-                                  <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_modulo_utilidad"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
-                                  <th class="text-center"></th>
-                                </tr>
-                              </tfoot>
-                            </table>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                <h3 class="card-title text-center">Tabla Resumen</h3>
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_resumen_modulos', 'Resumen gastos', 'Resumen');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
+                                </div>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_resumen_modulos">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>
+                                        <th class="text-center" >Módulo</th>
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_resumen_modulos"> <!-- aqui van los productos --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_resumen_modulos"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_resumen_modulos"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span><span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"><i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
+
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-barra-resumen-modulos" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_resumen_modulos"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i>Módulos</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_resumen_modulos" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Resumen Módulos</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_resumen_modulos" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
+                                </div>
+                                <!-- /.row -->
+                              </div>
+                              <!-- /.col -->                              
+                            </div>
+                            <!-- /.row -->
                           </div>
                         </div>
                         <!-- /.card -->
-                      </div>                     
+                      </div>
 
                       <div class="col-lg-6 hidden">
                         <div class="card">
@@ -1037,7 +1487,7 @@
         <!-- table export EXCEL -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
-        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script> 
         
         <script type="text/javascript" src="scripts/chart_valorizacion.js"></script>         
 

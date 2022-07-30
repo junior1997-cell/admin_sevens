@@ -26,10 +26,11 @@ function init() {
 
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
   $("#guardar_registro_recibo_x_honorario").on("click", function (e) { $("#submit-form-recibo-x-honorario").submit(); });
-  $("#form-recibos_x_honorarios").on("submit", function (e) { guardar_y_editar_recibos_x_honorarios(e); });  
 
   //Initialize Select2 unidad
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
+
+  no_select_tomorrow('#fecha_pago');
 
   // Formato para telefono
   $("[data-mask]").inputmask();   
@@ -234,6 +235,7 @@ function limpiar_form_recibos_x_honorarios() {
   $('#dias_regular_rh').val("");
   $('#sueldo_mensual_rh').val("");
   $('#monto_x_mes_rh').val("");
+  $('#numero_comprobante_rh').val("");
 
   $('#descargar_rh').attr('href', ''); 
   $('#ver_completo').attr('href', '');
@@ -248,7 +250,7 @@ function limpiar_form_recibos_x_honorarios() {
 }
 
 // mostrar recibos por honorarios
-function modal_recibos_x_honorarios(idresumen_q_s_asistencia, fecha_inicial, fecha_final, numero_q_s, recibos_x_honorarios, tipo_pago, nombre_trabajador) {
+function modal_recibos_x_honorarios(idresumen_q_s_asistencia, fecha_inicial, fecha_final, numero_q_s, numero_comprobante_rh, recibos_x_honorarios, tipo_pago, nombre_trabajador) {
   
   // borramos los campos cargados con anterioridad
   limpiar_form_recibos_x_honorarios();
@@ -258,6 +260,7 @@ function modal_recibos_x_honorarios(idresumen_q_s_asistencia, fecha_inicial, fec
   $("#doc2_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');
 
   $('#idresumen_q_s_asistencia_rh').val(idresumen_q_s_asistencia);
+  $('#numero_comprobante_rh').val(numero_comprobante_rh);
   $('.fecha_incial_modal').html(`<i class="fas fa-calendar-check text-gray-50"></i>&nbsp;&nbsp; ${format_d_m_a(fecha_inicial)}`);
   $('.fecha_final_modal').html(`<i class="fas fa-calendar-check text-gray-50"></i>&nbsp;&nbsp; ${format_d_m_a(fecha_final)}`);
   // &nbsp;&nbsp;<i class="fas fa-angle-double-right"></i>&nbsp;&nbsp; <i class="fas fa-calendar-check text-gray-50"></i> ${format_d_m_a(fecha_final)}
@@ -303,7 +306,7 @@ function modal_recibos_x_honorarios(idresumen_q_s_asistencia, fecha_inicial, fec
 //Guardar o editar - R H
 function guardar_y_editar_recibos_x_honorarios(e) {
   
-  e.preventDefault(); //No se activará la acción predeterminada del evento
+  //e.preventDefault(); //No se activará la acción predeterminada del evento
 
   $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
   var formData = new FormData($("#form-recibos_x_honorarios")[0]);
@@ -366,6 +369,7 @@ function limpiar_pago_q_s() {
   $("#idpagos_q_s_obrero").val("");
 
   $("#monto").val("");
+  $("#fecha_pago").val("");
   $("#forma_pago").val("").trigger("change"); 
   $("#descripcion").val(""); 
 
@@ -463,7 +467,7 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
             </td>
             <td class="${bg_saldo}"><div class="formato-numero-conta"><span>S/ </span>${formato_miles(saldo)}</div></td>
             <td class="text-center"> 
-              <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.recibos_x_honorarios}', '${tipo_pago}', '${nombre_trabajador}');">
+              <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.numero_comprobante}', '${key.recibos_x_honorarios}', '${tipo_pago}', '${nombre_trabajador}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
               </button> 
             </td>
@@ -553,7 +557,7 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
       // columna: opciones
       if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
-      // columna: cuenta deposito
+      // columna: fecha
       if (data[2] != '') {$("td", row).eq(2).addClass('text-nowrap');}
       // columna: deposito
       if (data[4] != '') { $("td", row).eq(4).addClass('text-right text-nowrap'); }
@@ -565,7 +569,11 @@ function listar_tbla_pagos_x_q_s(idresumen_q_s_asistencia, fecha_inicio, fecha_f
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
-    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
   }).DataTable();
 }
 
@@ -641,6 +649,7 @@ function mostrar_pagos_x_q_s(id) {
 
       $('#idpagos_q_s_obrero').val(e.data.idpagos_q_s_obrero);
       $("#monto").val(e.data.monto_deposito);
+      $("#fecha_pago").val(e.data.fecha_pago);
       $("#cuenta_deposito").val(e.data.cuenta_deposito);
       $("#forma_pago").val(e.data.forma_de_pago).trigger("change"); 
       $("#descripcion").val(e.data.descripcion); 
@@ -682,7 +691,7 @@ function desactivar_pago_x_q_s(id) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/pago_obrero.php?op=desactivar_pago_x_q_s", { 'idpagos_q_s_obrero': id }, function (e) {
-
+        e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
           sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
@@ -708,7 +717,7 @@ function activar_pago_x_q_s(id) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/pago_obrero.php?op=activar_pago_x_q_s", { 'idpagos_q_s_obrero': id }, function (e) {
-
+        e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
           sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
@@ -919,7 +928,7 @@ function trabajador_deuda_q_s(f1, f2, i, cant_dias_asistencia) {
             </td>
             <td class="pt-1 pb-1"><div class="formato-numero-conta"><span>S/</span>${formato_miles(saldo)}</div></td>
             <td class="pt-1 pb-1 text-center"> 
-              <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.recibos_x_honorarios}', '${s_q_pago}', '${key.trabajador}');">
+              <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.numero_comprobante}', '${key.recibos_x_honorarios}', '${s_q_pago}', '${key.trabajador}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
               </button> 
             </td>
@@ -981,13 +990,13 @@ function modal_pago_obrero(idresumen_q_s_asistencia, fecha_i, fecha_f, pago_quin
   } 
 
   tabla_pagos_modal=$('#tabla-ingreso-pagos-modal').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'pdf'],
-    "ajax":{
+    ajax:{
       url: '../ajax/pago_obrero.php?op=tbla_pagos_por_obrero&idresumen_q_s_asistencia='+idresumen_q_s_asistencia,
       type : "get",
       dataType : "json",						
@@ -1010,9 +1019,13 @@ function modal_pago_obrero(idresumen_q_s_asistencia, fecha_i, fecha_f, pago_quin
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
   }).DataTable();
 }
 
@@ -1026,11 +1039,13 @@ $(function () {
     rules: {
       forma_pago: { required: true},
       monto:      {required: true, minlength: 1 },
+      fecha_pago: {required: true, },
       descripcion:{ minlength: 4 },
     },
     messages: {
       forma_pago: { required: "Campo requerido." },
       monto:      { required: "Campo requerido.",   minlength: "MINIMO 1 dígito.", },
+      fecha_pago: { required: "Campo requerido.", },
       descripcion:{ minlength: "MINIMO 4 caracteres.", },
     },
     
@@ -1052,6 +1067,35 @@ $(function () {
     submitHandler: function (e) { 
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardar_y_editar_pagos_x_q_s(e); 
+    },
+  });
+
+  $("#form-recibos_x_honorarios").validate({
+    rules: {
+      numero_comprobante: {required: true, minlength: 3, maxlength:45 },
+    },
+    messages: {
+      numero_comprobante: { required: "Campo requerido.", minlength: "MINIMO 3 dígito.", maxlength: "MINIMO 45 dígito.", },
+    },
+    
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");             
+    },
+
+    submitHandler: function (e) { 
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_recibos_x_honorarios(e);
     },
   });
 

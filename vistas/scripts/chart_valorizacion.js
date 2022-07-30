@@ -13,6 +13,7 @@ var char_linea_pension;
 var char_linea_breack;
 var char_linea_comida_extra;
 
+var chart_barra_resumen_modulos;
 
 var cant_valorizacion = 0;
 var array_fechas_valorizacion = [];
@@ -166,11 +167,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_compra_insumos = "";
       if (e.data.total_utilidad_compra_insumos > 0) {
         $('.progress_total_utilidad_compra_insumo').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_compra_insumos)}`);
-        $('.leyenda_utilidad_compra_insumos').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_compra_insumo').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_compra_insumos = "#008000";
       } else {
         $('.progress_total_utilidad_compra_insumo').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_compra_insumos)}`);
-        $('.leyenda_utilidad_compra_insumos').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_compra_insumo').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_compra_insumos = "#dc3545";
       }
       $('.progress_total_compra_insumo').html(`S/. ${formato_miles(e.data.total_monto_compra_insumos)}`);
@@ -179,11 +180,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_maquina_y_equipo = "";
       if (e.data.total_utilidad_maquina_y_equipo > 0) {
         $('.progress_total_utilidad_maquina_y_equipo').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_maquina_y_equipo)}`);
-        $('.leyenda_utilidad_maquina_y_equipos').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_maquina_y_equipo').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_maquina_y_equipo = "#008000";
       } else {
         $('.progress_total_utilidad_maquina_y_equipo').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_maquina_y_equipo)}`);
-        $('.leyenda_utilidad_maquina_y_equipos').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_maquina_y_equipo').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_maquina_y_equipo = "#dc3545";
       }
       $('.progress_total_maquina_y_equipo').html(`S/. ${formato_miles(e.data.total_monto_maquina_y_equipo)}`);
@@ -192,11 +193,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_subcontrato = "";
       if (e.data.total_utilidad_subcontrato > 0) {
         $('.progress_total_utilidad_subcontrato').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_subcontrato)}`);
-        $('.leyenda_utilidad_subcontratos').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_subcontrato').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_subcontrato = "#008000";
       } else {
         $('.progress_total_utilidad_subcontrato').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_subcontrato)}`);
-        $('.leyenda_utilidad_subcontratos').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_subcontrato').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_subcontrato = "#dc3545";
       }
       $('.progress_total_subcontrato').html(`S/. ${formato_miles(e.data.total_monto_subcontrato)}`);
@@ -205,11 +206,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_planilla_seguro = "";
       if (e.data.total_utilidad_planilla_seguro > 0) {
         $('.progress_total_utilidad_planilla_seguro').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_planilla_seguro)}`);
-        $('.leyenda_utilidad_planilla_seguros').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_planilla_seguro').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_planilla_seguro = "#008000";
       } else {
         $('.progress_total_utilidad_planilla_seguro').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_planilla_seguro)}`);
-        $('.leyenda_utilidad_planilla_seguros').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_planilla_seguro').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_planilla_seguro = "#dc3545";
       }
       $('.progress_total_planilla_seguro').html(`S/. ${formato_miles(e.data.total_monto_planilla_seguro)}`);
@@ -218,11 +219,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_otro_gasto = "";
       if (e.data.total_utilidad_otro_gasto > 0) {
         $('.progress_total_utilidad_otro_gasto').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_otro_gasto)}`);
-        $('.leyenda_utilidad_otro_gastos').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_otro_gasto').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_otro_gasto = "#008000";
       } else {
         $('.progress_total_utilidad_otro_gasto').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_otro_gasto)}`);
-        $('.leyenda_utilidad_otro_gastos').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_otro_gasto').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_otro_gasto = "#dc3545";
       }
       $('.progress_total_otro_gasto').html(`S/. ${formato_miles(e.data.total_monto_otro_gasto)}`);
@@ -231,11 +232,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_transporte = "";
       if (e.data.total_utilidad_transporte > 0) {
         $('.progress_total_utilidad_transporte').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_transporte)}`);
-        $('.leyenda_utilidad_transportes').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_transporte').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_transporte = "#008000";
       } else {
         $('.progress_total_utilidad_transporte').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_transporte)}`);
-        $('.leyenda_utilidad_transportes').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_transporte').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_transporte = "#dc3545";
       }
       $('.progress_total_transporte').html(`S/. ${formato_miles(e.data.total_monto_transporte)}`);
@@ -244,11 +245,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_hospedaje = "";
       if (e.data.total_utilidad_hospedaje > 0) {
         $('.progress_total_utilidad_hospedaje').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_hospedaje)}`);
-        $('.leyenda_utilidad_hospedajes').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_hospedaje').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_hospedaje = "#008000";
       } else {
         $('.progress_total_utilidad_hospedaje').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_hospedaje)}`);
-        $('.leyenda_utilidad_hospedajes').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_hospedaje').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_hospedaje = "#dc3545";
       }
       $('.progress_total_hospedaje').html(`S/. ${formato_miles(e.data.total_monto_hospedaje)}`);
@@ -257,11 +258,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_pension = "";
       if (e.data.total_utilidad_pension > 0) {
         $('.progress_total_utilidad_pension').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_pension)}`);
-        $('.leyenda_utilidad_pensions').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_pension').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_pension = "#008000";
       } else {
         $('.progress_total_utilidad_pension').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_pension)}`);
-        $('.leyenda_utilidad_pensions').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_pension').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_pension = "#dc3545";
       }
       $('.progress_total_pension').html(`S/. ${formato_miles(e.data.total_monto_pension)}`);
@@ -270,11 +271,11 @@ function chart_linea_barra() {
       var  color_linea_utilidad_breack = "";
       if (e.data.total_utilidad_breack > 0) {
         $('.progress_total_utilidad_breack').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_breack)}`);
-        $('.leyenda_utilidad_breacks').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_breack').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_breack = "#008000";
       } else {
         $('.progress_total_utilidad_breack').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_breack)}`);
-        $('.leyenda_utilidad_breacks').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_breack').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_breack = "#dc3545";
       }
       $('.progress_total_breack').html(`S/. ${formato_miles(e.data.total_monto_breack)}`);
@@ -283,14 +284,27 @@ function chart_linea_barra() {
       var  color_linea_utilidad_comida_extra = "";
       if (e.data.total_utilidad_comida_extra > 0) {
         $('.progress_total_utilidad_comida_extra').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_comida_extra)}`);
-        $('.leyenda_utilidad_comida_extras').removeClass('text-danger').addClass('text-success');
+        $('.leyenda_utilidad_comida_extra').removeClass('text-danger').addClass('text-success');
         color_linea_utilidad_comida_extra = "#008000";
       } else {
         $('.progress_total_utilidad_comida_extra').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_comida_extra)}`);
-        $('.leyenda_utilidad_comida_extras').addClass('text-danger').removeClass('text-success');
+        $('.leyenda_utilidad_comida_extra').addClass('text-danger').removeClass('text-success');
         color_linea_utilidad_comida_extra = "#dc3545";
       }
       $('.progress_total_comida_extra').html(`S/. ${formato_miles(e.data.total_monto_comida_extra)}`);
+
+      // resumen_modulos ----------------------------------------------
+      var  color_linea_utilidad_resumen_modulos = "";
+      if (e.data.total_utilidad > 0) {
+        $('.progress_total_utilidad_resumen_modulos').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad)}`);
+        $('.leyenda_utilidad_resumen_modulos').removeClass('text-danger').addClass('text-success');
+        color_linea_utilidad_resumen_modulos = "#008000";
+      } else {
+        $('.progress_total_utilidad_resumen_modulos').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad)}`);
+        $('.leyenda_utilidad_resumen_modulos').addClass('text-danger').removeClass('text-success');
+        color_linea_utilidad_resumen_modulos = "#dc3545";
+      }
+      $('.progress_total_resumen_modulos').html(`S/. ${formato_miles(e.data.total_monto_gastado)}`);
 
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   L I N E A S  -  C U R V A  S ::::::::::::::::::::::::::::::::::::
       
@@ -485,7 +499,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_compra_insumos, 
+              type: 'line', data: e.data.utilidad_compra_insumos, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_compra_insumos,
               pointBorderColor: color_linea_utilidad_compra_insumos, pointBackgroundColor: color_linea_utilidad_compra_insumos,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -493,7 +507,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_compra_insumos
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_compra_insumos, 
+              type: 'line', data: e.data.monto_compra_insumos, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Compra de insumos',
@@ -546,7 +560,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_maquina_y_equipo, 
+              type: 'line', data: e.data.utilidad_maquina_y_equipo, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_maquina_y_equipo,
               pointBorderColor: color_linea_utilidad_maquina_y_equipo, pointBackgroundColor: color_linea_utilidad_maquina_y_equipo,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -554,7 +568,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_maquina_y_equipo
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_maquina_y_equipo, 
+              type: 'line', data: e.data.monto_maquina_y_equipo, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Maquinas y Equipos',
@@ -607,7 +621,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_subcontrato, 
+              type: 'line', data: e.data.utilidad_subcontrato, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_subcontrato,
               pointBorderColor: color_linea_utilidad_subcontrato, pointBackgroundColor: color_linea_utilidad_subcontrato,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -615,7 +629,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_subcontrato
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_subcontrato, 
+              type: 'line', data: e.data.monto_subcontrato, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Subcontrato',
@@ -668,7 +682,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_planilla_seguro, 
+              type: 'line', data: e.data.utilidad_planilla_seguro, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_planilla_seguro,
               pointBorderColor: color_linea_utilidad_planilla_seguro, pointBackgroundColor: color_linea_utilidad_planilla_seguro,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -676,7 +690,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_planilla_seguro
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_planilla_seguro, 
+              type: 'line', data: e.data.monto_planilla_seguro, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Panilla Seguro',
@@ -729,7 +743,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_otro_gasto, 
+              type: 'line', data: e.data.utilidad_otro_gasto, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_otro_gasto,
               pointBorderColor: color_linea_utilidad_otro_gasto, pointBackgroundColor: color_linea_utilidad_otro_gasto,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -737,7 +751,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_otro_gasto
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_otro_gasto, 
+              type: 'line', data: e.data.monto_otro_gasto, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Otro Gasto',
@@ -781,7 +795,7 @@ function chart_linea_barra() {
         }
       });
 
-      // :::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  -  T R A S N P O R T E  ::::::::::::::::::::::::
+      // :::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  -  T R A N S P O R T E  ::::::::::::::::::::::::
       var $char_linea_transporte = $('#chart-line-transporte');
       if (char_linea_transporte) {  char_linea_transporte.destroy();  }
       // eslint-disable-next-line no-unused-vars
@@ -790,7 +804,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_transporte, 
+              type: 'line', data: e.data.utilidad_transporte, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_transporte,
               pointBorderColor: color_linea_utilidad_transporte, pointBackgroundColor: color_linea_utilidad_transporte,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -798,7 +812,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_transporte
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_transporte, 
+              type: 'line', data: e.data.monto_transporte, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Transporte',
@@ -851,7 +865,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_hospedaje, 
+              type: 'line', data: e.data.utilidad_hospedaje, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_hospedaje,
               pointBorderColor: color_linea_utilidad_hospedaje, pointBackgroundColor: color_linea_utilidad_hospedaje,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -859,7 +873,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_hospedaje
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_hospedaje, 
+              type: 'line', data: e.data.monto_hospedaje, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Hospedaje',
@@ -912,7 +926,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_pension, 
+              type: 'line', data: e.data.utilidad_pension, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_pension,
               pointBorderColor: color_linea_utilidad_pension, pointBackgroundColor: color_linea_utilidad_pension,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -920,7 +934,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_pension
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_pension, 
+              type: 'line', data: e.data.monto_pension, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Pension',
@@ -973,7 +987,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_breack, 
+              type: 'line', data: e.data.utilidad_breack, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_breack,
               pointBorderColor: color_linea_utilidad_breack, pointBackgroundColor: color_linea_utilidad_breack,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -981,7 +995,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_breack
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_breack, 
+              type: 'line', data: e.data.monto_breack, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Breack',
@@ -1034,7 +1048,7 @@ function chart_linea_barra() {
           labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
           datasets: [
             {
-              type: 'line', data: e.data.utilidad_acumulado_comida_extra, 
+              type: 'line', data: e.data.utilidad_comida_extra, 
               backgroundColor: 'transparent', borderColor: color_linea_utilidad_comida_extra,
               pointBorderColor: color_linea_utilidad_comida_extra, pointBackgroundColor: color_linea_utilidad_comida_extra,
               fill: false, label: 'Utilidad',  hidden: true,
@@ -1042,7 +1056,7 @@ function chart_linea_barra() {
               // pointHoverBorderColor    : color_linea_utilidad_comida_extra
             },
             {              
-              type: 'line', data: e.data.monto_acumulado_comida_extra, 
+              type: 'line', data: e.data.monto_comida_extra, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Comida Extra',
@@ -1080,10 +1094,232 @@ function chart_linea_barra() {
         }
       });
 
-      // :::::::::::::::::::::::::::::::::::::::::::: T A B L A   -   T O T A L   D E   M O D U L O S ::::::::::::::::::::::::::::::::::::
+      // :::::::::::::::::::::::::::::::::::::::::::: T A B L A   -  C O M P R A S   D E   I N S U M O S ::::::::::::::::::::::::::::::::::::
+      var html_tabla_compra_insumos = "";
+      var suma_total_gasto_compra_insumos = 0; var suma_total_utilidad_compra_insumos = 0; 
+      e.data.tabla_compra_insumos.forEach((key, indice) => {
+        html_tabla_compra_insumos = html_tabla_compra_insumos.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_compra_insumos)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_compra_insumos)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_compra_insumos += key.gasto;
+        suma_total_utilidad_compra_insumos += key.utilidad;
+      });
+
+      $('#body_modulo_compra_insumos').html(html_tabla_compra_insumos);
+      $('.foot_total_gasto_compra_insumos').html(formato_miles(suma_total_gasto_compra_insumos));
+      $('.foot_total_utilidad_compra_insumos').html(formato_miles(suma_total_utilidad_compra_insumos));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  M A Q U I N A S   Y   E Q U I P O S  ::::::::::::::::::::::::
+      var html_tabla_maquina_y_equipo = "";
+      var suma_total_gasto_maquina_y_equipo = 0; var suma_total_utilidad_maquina_y_equipo = 0; 
+      e.data.tabla_maquina_y_equipo.forEach((key, indice) => {
+        html_tabla_maquina_y_equipo = html_tabla_maquina_y_equipo.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_maquina_y_equipo)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_maquina_y_equipo)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_maquina_y_equipo += key.gasto;
+        suma_total_utilidad_maquina_y_equipo += key.utilidad;
+      });
+
+      $('#body_modulo_maquina_y_equipo').html(html_tabla_maquina_y_equipo);
+      $('.foot_total_gasto_maquina_y_equipo').html(formato_miles(suma_total_gasto_maquina_y_equipo));
+      $('.foot_total_utilidad_maquina_y_equipo').html(formato_miles(suma_total_utilidad_maquina_y_equipo));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  S U B C O N T R A T O  ::::::::::::::::::::::::::::::::::::::
+      var html_tabla_subcontrato = "";
+      var suma_total_gasto_subcontrato = 0; var suma_total_utilidad_subcontrato = 0; 
+      e.data.tabla_subcontrato.forEach((key, indice) => {
+        html_tabla_subcontrato = html_tabla_subcontrato.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_subcontrato)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_subcontrato)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_subcontrato += key.gasto;
+        suma_total_utilidad_subcontrato += key.utilidad;
+      });
+
+      $('#body_modulo_subcontrato').html(html_tabla_subcontrato);
+      $('.foot_total_gasto_subcontrato').html(formato_miles(suma_total_gasto_subcontrato));
+      $('.foot_total_utilidad_subcontrato').html(formato_miles(suma_total_utilidad_subcontrato));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  P L A N I L L A   S E G U R O  ::::::::::::::::::::::::::::::
+      var html_tabla_planilla_seguro = "";
+      var suma_total_gasto_planilla_seguro = 0; var suma_total_utilidad_planilla_seguro = 0; 
+      e.data.tabla_planilla_seguro.forEach((key, indice) => {
+        html_tabla_planilla_seguro = html_tabla_planilla_seguro.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_planilla_seguro)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_planilla_seguro)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_planilla_seguro += key.gasto;
+        suma_total_utilidad_planilla_seguro += key.utilidad;
+      });
+
+      $('#body_modulo_planilla_seguro').html(html_tabla_planilla_seguro);
+      $('.foot_total_gasto_planilla_seguro').html(formato_miles(suma_total_gasto_planilla_seguro));
+      $('.foot_total_utilidad_planilla_seguro').html(formato_miles(suma_total_utilidad_planilla_seguro));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  O T R O   G A S T O  ::::::::::::::::::::::::::::::::::::::::
+      var html_tabla_otro_gasto = "";
+      var suma_total_gasto_otro_gasto = 0; var suma_total_utilidad_otro_gasto = 0; 
+      e.data.tabla_otro_gasto.forEach((key, indice) => {
+        html_tabla_otro_gasto = html_tabla_otro_gasto.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_otro_gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_otro_gasto)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_otro_gasto += key.gasto;
+        suma_total_utilidad_otro_gasto += key.utilidad;
+      });
+
+      $('#body_modulo_otro_gasto').html(html_tabla_otro_gasto);
+      $('.foot_total_gasto_otro_gasto').html(formato_miles(suma_total_gasto_otro_gasto));
+      $('.foot_total_utilidad_otro_gasto').html(formato_miles(suma_total_utilidad_otro_gasto));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  T R A N S P O R T E  ::::::::::::::::::::::::::::::::::::::::
+      var html_tabla_transporte = "";
+      var suma_total_gasto_transporte = 0; var suma_total_utilidad_transporte = 0; 
+      e.data.tabla_transporte.forEach((key, indice) => {
+        html_tabla_transporte = html_tabla_transporte.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_transporte)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_transporte)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_transporte += key.gasto;
+        suma_total_utilidad_transporte += key.utilidad;
+      });
+
+      $('#body_modulo_transporte').html(html_tabla_transporte);
+      $('.foot_total_gasto_transporte').html(formato_miles(suma_total_gasto_transporte));
+      $('.foot_total_utilidad_transporte').html(formato_miles(suma_total_utilidad_transporte));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  H O S P E D A J E  ::::::::::::::::::::::::::::::::::::::::::
+      var html_tabla_hospedaje = "";
+      var suma_total_gasto_hospedaje = 0; var suma_total_utilidad_hospedaje = 0; 
+      e.data.tabla_hospedaje.forEach((key, indice) => {
+        html_tabla_hospedaje = html_tabla_hospedaje.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_hospedaje)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_hospedaje)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_hospedaje += key.gasto;
+        suma_total_utilidad_hospedaje += key.utilidad;
+      });
+
+      $('#body_modulo_hospedaje').html(html_tabla_hospedaje);
+      $('.foot_total_gasto_hospedaje').html(formato_miles(suma_total_gasto_hospedaje));
+      $('.foot_total_utilidad_hospedaje').html(formato_miles(suma_total_utilidad_hospedaje));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  P E N S I O N  ::::::::::::::::::::::::::::::::::::::::::::::
+      var html_tabla_pension = "";
+      var suma_total_gasto_pension = 0; var suma_total_utilidad_pension = 0; 
+      e.data.tabla_pension.forEach((key, indice) => {
+        html_tabla_pension = html_tabla_pension.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_pension)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_pension)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_pension += key.gasto;
+        suma_total_utilidad_pension += key.utilidad;
+      });
+
+      $('#body_modulo_pension').html(html_tabla_pension);
+      $('.foot_total_gasto_pension').html(formato_miles(suma_total_gasto_pension));
+      $('.foot_total_utilidad_pension').html(formato_miles(suma_total_utilidad_pension));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  B R E A C K  ::::::::::::::::::::::::::::::::::::::::::::::::
+      var html_tabla_breack = "";
+      var suma_total_gasto_breack = 0; var suma_total_utilidad_breack = 0; 
+      e.data.tabla_breack.forEach((key, indice) => {
+        html_tabla_breack = html_tabla_breack.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_breack)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_breack)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_breack += key.gasto;
+        suma_total_utilidad_breack += key.utilidad;
+      });
+
+      $('#body_modulo_breack').html(html_tabla_breack);
+      $('.foot_total_gasto_breack').html(formato_miles(suma_total_gasto_breack));
+      $('.foot_total_utilidad_breack').html(formato_miles(suma_total_utilidad_breack));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  C O M I D A   E X T R A  ::::::::::::::::::::::::::::::::::::
+      var html_tabla_comida_extra = "";
+      var suma_total_gasto_comida_extra = 0; var suma_total_utilidad_comida_extra = 0; 
+      e.data.tabla_comida_extra.forEach((key, indice) => {
+        html_tabla_comida_extra = html_tabla_comida_extra.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_comida_extra)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_comida_extra)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_comida_extra += key.gasto;
+        suma_total_utilidad_comida_extra += key.utilidad;
+      });
+
+      $('#body_modulo_comida_extra').html(html_tabla_comida_extra);
+      $('.foot_total_gasto_comida_extra').html(formato_miles(suma_total_gasto_comida_extra));
+      $('.foot_total_utilidad_comida_extra').html(formato_miles(suma_total_utilidad_comida_extra));
+      
+
+
+      // :::::::::::::::::::::::::::::::::::::::::::: T A B L A   -   R E S U M E N   D E   M O D U L O S ::::::::::::::::::::::::::::::::::::
       var html_tabla_modulos = "";
       var suma_total_modulo_gasto = 0; var suma_total_modulo_utilidad = 0; 
-      e.data.tabla_resumen.forEach((key, indice) => {
+      e.data.tabla_resumen_modulos.forEach((key, indice) => {
         html_tabla_modulos = html_tabla_modulos.concat(`
           <tr>
             <td class="py-2 text-center " >${indice+1}</td>
@@ -1097,10 +1333,60 @@ function chart_linea_barra() {
         suma_total_modulo_utilidad += key.utilidad;
       });
 
-      $('#tbla_modulos_total_gasto').html(html_tabla_modulos);
-      $('.suma_total_modulo_gasto').html(formato_miles(suma_total_modulo_gasto));
-      $('.suma_total_modulo_utilidad').html(formato_miles(suma_total_modulo_utilidad));
+      $('#body_resumen_modulos').html(html_tabla_modulos);
+      $('.foot_total_gasto_resumen_modulos').html(formato_miles(suma_total_modulo_gasto));
+      $('.foot_total_utilidad_resumen_modulos').html(formato_miles(suma_total_modulo_utilidad));
       $('[data-toggle="tooltip"]').tooltip();
+
+      // ::::::::::::::::::::::::::::::::::::::::::::  C H A R T  B A R R A S  -  R E S U M E N   D E   M O D U L O S  ::::::::::::::::::::::::::::::::::::
+      var $chart_barra_resumen_modulos = $('#chart-barra-resumen-modulos');
+      if (chart_barra_resumen_modulos) {  chart_barra_resumen_modulos.destroy();  }
+      // eslint-disable-next-line no-unused-vars
+      chart_barra_resumen_modulos = new Chart($chart_barra_resumen_modulos, {
+        type: 'bar',
+        data: {
+          labels: ['Compra de insumos','Maquinas y Equipos','Subcontrato','Planilla Seguro','Otro Gasto','Transporte','Hospedaje','Pensión','Breack','Comida Extra'],
+          datasets: [
+            { backgroundColor: '#008080', borderColor: '#008080', data: e.data.monto_resumen_modulos, label: 'Módulos', },
+            { backgroundColor: color_linea_utilidad_resumen_modulos, borderColor: color_linea_utilidad_resumen_modulos, data: e.data.utilidad_resumen_modulos, label: 'Utilidad', }
+          ]
+        },
+        options: {
+          maintainAspectRatio: false,
+          tooltips: {  mode: mode, intersect: intersect,
+            callbacks: {
+              title: function (tooltipItem, data) { 
+                return "" + data.labels[tooltipItem[0].index]; 
+              },
+              label: function(tooltipItems, data) {
+                return "Total: S/ " +  Number(tooltipItems.yLabel).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') ;
+              },
+              footer: function (tooltipItem, data) { return "..."; }
+            } 
+          },
+          hover: { mode: mode, intersect: intersect },
+          legend: { display: true  },
+          scales: {
+            yAxes: [{
+              // display: false,
+              gridLines: { display: true, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
+              ticks: $.extend({
+                beginAtZero: true,
+                // Include a dollar sign in the ticks
+                callback: function (value) {
+                  if (value >= 1000) { value /= 1000; value += 'k'; }
+                  return '$' + value;
+                }
+              }, ticksStyle)
+            }],
+            xAxes: [{
+              display: true,
+              gridLines: { display: false },
+              ticks: ticksStyle
+            }]
+          }
+        }
+      });
     } else {
       ver_errores(e);
     }
@@ -1148,15 +1434,51 @@ function ver_modulos() {
   $('#modal-modulos-incluidos').modal('show');
 }
 
-function export_excel_resumen() {
-  $tabla = document.querySelector("#tabla_resumen_gastos_modulos");
+
+function export_excel(name_tabla, nombre_excel_file = $('title').text(), nombre_excel_hoja = 'Detalle') {
+   
+  $tabla = document.querySelector(name_tabla);
   let tableExport = new TableExport($tabla, {
     exportButtons: false, // No queremos botones
-    filename: "Detalle Resumen Modulos", //Nombre del archivo de Excel
-    sheetname: "Detalle", //Título de la hoja
+    filename: nombre_excel_file, //Nombre del archivo de Excel
+    sheetname: nombre_excel_hoja, //Título de la hoja
   });
   let datos = tableExport.getExportData(); console.log(datos);
-  let preferenciasDocumento = datos.tabla_resumen_gastos_modulos.xlsx;
-  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
+  if (name_tabla == '#tabla_resumen_modulos') {    
+    let preferenciasDocumento = datos.tabla_resumen_modulos.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_compra_insumos') {    
+    let preferenciasDocumento = datos.tabla_modulo_compra_insumos.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_maquina_y_equipo') {    
+    let preferenciasDocumento = datos.tabla_modulo_maquina_y_equipo.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_subcontrato') {    
+    let preferenciasDocumento = datos.tabla_modulo_subcontrato.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_planilla_seguro') {    
+    let preferenciasDocumento = datos.tabla_modulo_planilla_seguro.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_otro_gasto') {    
+    let preferenciasDocumento = datos.tabla_modulo_otro_gasto.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_transporte') {    
+    let preferenciasDocumento = datos.tabla_modulo_transporte.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  
+  } else if (name_tabla == '#tabla_modulo_hospedaje') {    
+    let preferenciasDocumento = datos.tabla_modulo_hospedaje.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_pension') {    
+    let preferenciasDocumento = datos.tabla_modulo_pension.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_breack') {    
+    let preferenciasDocumento = datos.tabla_modulo_breack.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_comida_extra') {    
+    let preferenciasDocumento = datos.tabla_modulo_comida_extra.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  }
+  
 }

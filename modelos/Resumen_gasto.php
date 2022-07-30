@@ -827,7 +827,7 @@ class ResumenGasto
     $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, 
     costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
 		FROM comida_extra
-		WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
+		WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = '$idproyecto' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comida DESC;";
     $comida_extra =  ejecutarConsultaArray($sql8);
 
@@ -1017,6 +1017,154 @@ class ResumenGasto
     //   }
     // }
 
+    // FACTURAS - PAGO ADMINSTRADOR ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND pxma.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND pxma.fecha_pago = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND pxma.fecha_pago = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND t.numero_documento = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND fmpa.tipo_comprobante = '$comprobante'"; 
+    }
+
+    $sql9 = "SELECT tpp.idproyecto, pxma.idpagos_x_mes_administrador, pxma.idfechas_mes_pagos_administrador, pxma.cuenta_deposito, pxma.forma_de_pago, pxma.monto, 
+    pxma.fecha_pago, pxma.baucher, pxma.descripcion, fmpa.recibos_x_honorarios, fmpa.tipo_comprobante, fmpa.numero_comprobante, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento,
+    pxma.id_user_vb, pxma.nombre_user_vb, pxma.imagen_user_vb, pxma.estado_user_vb
+    FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
+    AND tpp.idtrabajador = t.idtrabajador AND pxma.estado = '1' AND pxma.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' AND pxma.$estado_vb
+    $filtro_proveedor $filtro_comprobante $filtro_fecha
+    ORDER BY pxma.fecha_pago DESC;";
+    $otra_factura =  ejecutarConsultaArray($sql9);
+
+    if ($otra_factura['status'] == false) { return $otra_factura; }
+
+    if (!empty($otra_factura['data'])) {
+      foreach ($otra_factura['data'] as $key => $value) {
+        $data[] = array(
+        	"idproyecto"        => $value['idproyecto'],
+          "idtabla"           => $value['idpagos_x_mes_administrador'],
+          "bd_nombre_tabla"   => 'pagos_x_mes_administrador',
+          "bd_nombre_id_tabla"=> 'idpagos_x_mes_administrador',
+          "fecha"             => $value['fecha_pago'],
+          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
+          "serie_comprobante" => $value['numero_comprobante'],
+          "proveedor"         => $value['trabajador'],
+          "total"             => $value['monto'],
+          "igv"               => 0,
+          "subtotal"          => $value['monto'],
+          "glosa"             => '',
+          "tipo_gravada"      => 'NO GRAVADA',
+          "comprobante"       => $value['recibos_x_honorarios'],
+          "carpeta"           => 'pago_administrador',
+          "subcarpeta"        => 'recibos_x_honorarios',
+          "ruta"              => 'dist/docs/pago_administrador/recibos_x_honorarios/',
+          "modulo"            => 'PAGO ADMINISTRADOR',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
+          "detalle"           => false,
+        );
+        if (!empty($value['recibos_x_honorarios'])) {
+          if ( validar_url( $scheme_host, 'dist/docs/pago_administrador/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {
+            $data_comprobante[] = array(
+              "comprobante"       => $value['recibos_x_honorarios'],
+              "carpeta"           => 'pago_administrador',
+              "subcarpeta"        => 'recibos_x_honorarios',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/pago_administrador/recibos_x_honorarios/'.$value['recibos_x_honorarios'],
+            );
+          }          
+        }
+      }
+    }
+
+    // FACTURAS - PAGO OBRERO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND pqso.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND pqso.fecha_pago = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND pqso.fecha_pago = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND t.numero_documento = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND rqsa.tipo_comprobante = '$comprobante'"; 
+    }
+
+    $sql9 = "SELECT tpp.idproyecto, pqso.idpagos_q_s_obrero, pqso.idresumen_q_s_asistencia, pqso.cuenta_deposito, pqso.forma_de_pago, pqso.monto_deposito, 
+    pqso.fecha_pago, pqso.baucher, pqso.descripcion, rqsa.recibos_x_honorarios, rqsa.tipo_comprobante, rqsa.numero_comprobante, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento,
+    pqso.id_user_vb, pqso.nombre_user_vb, pqso.imagen_user_vb, pqso.estado_user_vb
+    FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
+    AND tpp.idtrabajador = t.idtrabajador AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' AND pqso.$estado_vb
+    $filtro_proveedor $filtro_comprobante $filtro_fecha
+    ORDER BY pqso.fecha_pago DESC;";
+    $otra_factura =  ejecutarConsultaArray($sql9);
+
+    if ($otra_factura['status'] == false) { return $otra_factura; }
+
+    if (!empty($otra_factura['data'])) {
+      foreach ($otra_factura['data'] as $key => $value) {
+        $data[] = array(
+        	"idproyecto"        => $value['idproyecto'],
+          "idtabla"           => $value['idpagos_q_s_obrero'],
+          "bd_nombre_tabla"   => 'pagos_q_s_obrero',
+          "bd_nombre_id_tabla"=> 'idpagos_q_s_obrero',
+          "fecha"             => $value['fecha_pago'],
+          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : $value['tipo_comprobante']) ,
+          "serie_comprobante" => $value['numero_comprobante'],
+          "proveedor"         => $value['trabajador'],
+          "total"             => $value['monto_deposito'],
+          "igv"               => 0,
+          "subtotal"          => $value['monto_deposito'],
+          "glosa"             => '',
+          "tipo_gravada"      => 'NO GRAVADA',
+          "comprobante"       => $value['recibos_x_honorarios'],
+          "carpeta"           => 'pago_obrero',
+          "subcarpeta"        => 'recibos_x_honorarios',
+          "ruta"              => 'dist/docs/pago_obrero/recibos_x_honorarios/',
+          "modulo"            => 'PAGO OBRERO',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
+          "detalle"           => false,
+        );
+        if (!empty($value['recibos_x_honorarios'])) {
+          if ( validar_url( $scheme_host, 'dist/docs/pago_obrero/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {
+            $data_comprobante[] = array(
+              "comprobante"       => $value['recibos_x_honorarios'],
+              "carpeta"           => 'pago_obrero',
+              "subcarpeta"        => 'recibos_x_honorarios',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/pago_obrero/recibos_x_honorarios/'.$value['recibos_x_honorarios'],
+            );
+          }          
+        }
+      }
+    }
+
     $retorno = array(
       "status"=> true,
       "message"=> 'todo oka',
@@ -1187,11 +1335,11 @@ class ResumenGasto
       $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql3 = "SELECT SUM(ps.subtotal) AS subtotal, SUM(ps.igv) AS igv, SUM(ps.costo_parcial) AS total
+    $sql4 = "SELECT SUM(ps.subtotal) AS subtotal, SUM(ps.igv) AS igv, SUM(ps.costo_parcial) AS total
     FROM planilla_seguro as ps, proyecto as p
     WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
      AND  ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
-    $otro_gasto = ejecutarConsultaSimpleFila($sql3);
+    $otro_gasto = ejecutarConsultaSimpleFila($sql4);
 
     if ($otro_gasto['status'] == false) { return $otro_gasto; } 
     
@@ -1220,10 +1368,10 @@ class ResumenGasto
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql3 = "SELECT SUM(costo_parcial) as total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
+    $sql5 = "SELECT SUM(costo_parcial) as total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
     FROM otro_gasto  
     WHERE estado = '1' AND estado_delete = '1' AND $estado_vb AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
-    $otro_gasto = ejecutarConsultaSimpleFila($sql3);
+    $otro_gasto = ejecutarConsultaSimpleFila($sql5);
 
     if ($otro_gasto['status'] == false) { return $otro_gasto; } 
     
@@ -1252,10 +1400,10 @@ class ResumenGasto
       $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql4 = "SELECT SUM(t.precio_parcial) AS total, SUM(t.subtotal) AS subtotal, SUM(t.igv) AS igv
+    $sql6 = "SELECT SUM(t.precio_parcial) AS total, SUM(t.subtotal) AS subtotal, SUM(t.igv) AS igv
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND t.$estado_vb AND t.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
-    $transporte = ejecutarConsultaSimpleFila($sql4);
+    $transporte = ejecutarConsultaSimpleFila($sql6);
 
     if ($transporte['status'] == false) { return $transporte; }
     
@@ -1283,10 +1431,10 @@ class ResumenGasto
     if ( empty($comprobante) ) { } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
-    $sql5 = "SELECT SUM(precio_parcial) as total , SUM(subtotal) AS subtotal, SUM(igv) AS igv
+    $sql7 = "SELECT SUM(precio_parcial) as total , SUM(subtotal) AS subtotal, SUM(igv) AS igv
     FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
-    $hospedaje = ejecutarConsultaSimpleFila($sql5);
+    $hospedaje = ejecutarConsultaSimpleFila($sql7);
 
     if ($hospedaje['status'] == false) { return $hospedaje; }
     
@@ -1314,11 +1462,11 @@ class ResumenGasto
     if ( empty($comprobante) ) { } else {
       $filtro_comprobante = "AND dp.tipo_comprobante = '$comprobante'"; 
     }
-    $sql6 = "SELECT SUM(dp.precio_parcial) AS total, SUM(dp.subtotal) AS subtotal, SUM(dp.igv) AS igv
+    $sql8 = "SELECT SUM(dp.precio_parcial) AS total, SUM(dp.subtotal) AS subtotal, SUM(dp.igv) AS igv
 		FROM detalle_pension as dp, pension as p, proveedor as prov
 		WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND dp.$estado_vb 
     AND  p.idproyecto = $idproyecto AND dp.estado = '1' AND dp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
-    $factura_pension = ejecutarConsultaSimpleFila($sql6);
+    $factura_pension = ejecutarConsultaSimpleFila($sql8);
 
     if ($factura_pension['status'] == false) { return $factura_pension; }
     
@@ -1346,11 +1494,11 @@ class ResumenGasto
     if ( empty($comprobante) ) { } else {
       $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; 
     }
-    $sql7 = "SELECT SUM(fb.monto) AS total, SUM(fb.subtotal) AS subtotal, SUM(fb.igv) AS igv
+    $sql9 = "SELECT SUM(fb.monto) AS total, SUM(fb.subtotal) AS subtotal, SUM(fb.igv) AS igv
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break = sb.idsemana_break AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND fb.$estado_vb AND  sb.idproyecto = $idproyecto
     AND sb.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
-    $factura_break = ejecutarConsultaSimpleFila($sql7);
+    $factura_break = ejecutarConsultaSimpleFila($sql9);
 
     if ($factura_break['status'] == false) { return $factura_break; }
     
@@ -1378,10 +1526,10 @@ class ResumenGasto
     if ( empty($comprobante) ) { } else {
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
-    $sql8 = "SELECT SUM(costo_parcial) AS total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
+    $sql10 = "SELECT SUM(costo_parcial) AS total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
 		FROM comida_extra
 		WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
-    $comida_extra = ejecutarConsultaSimpleFila($sql8);
+    $comida_extra = ejecutarConsultaSimpleFila($sql10);
 
     if ($comida_extra['status'] == false) { return $comida_extra; }
     
@@ -1452,7 +1600,70 @@ class ResumenGasto
     // $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
     // $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
     // $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
+    
+    // SUMAS TOTALES - PAGO ADMINISTRADOR --------------------------------------------------------------------------------
+    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
 
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND pxma.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND pxma.fecha_pago = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND pxma.fecha_pago = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND t.numero_documento = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND fmpa.tipo_comprobante = '$comprobante'"; 
+    }
+    $sql11 = "SELECT SUM(pxma.monto) total, SUM(pxma.monto) AS subtotal
+    FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador
+    AND pxma.estado = '1' AND pxma.estado_delete = '1' AND pxma.$estado_vb AND tpp.idproyecto = '$idproyecto' $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+    $pago_administrador = ejecutarConsultaSimpleFila($sql11);
+
+    if ($pago_administrador['status'] == false) { return $pago_administrador; }
+    
+    $total    += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['total']) ? 0 : floatval($pago_administrador['data']['total']) );
+    $subtotal += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['subtotal']) ? 0 : floatval($pago_administrador['data']['subtotal']) );
+    $igv      += 0;
+
+    // SUMAS TOTALES - PAGO OBRERO --------------------------------------------------------------------------------
+    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND pqso.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND pqso.fecha_pago = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND pqso.fecha_pago = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND t.numero_documento = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND rqsa.tipo_comprobante = '$comprobante'"; 
+    }
+    $sql12 = "SELECT SUM(pqso.monto_deposito) total, SUM(pqso.monto_deposito) AS subtotal
+    FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador
+    AND pqso.estado = '1' AND pqso.estado_delete = '1' AND pqso.$estado_vb AND tpp.idproyecto = '$idproyecto' $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+    $pago_obrero = ejecutarConsultaSimpleFila($sql12);
+
+    if ($pago_obrero['status'] == false) { return $pago_obrero; }
+    
+    $total    += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['total']) ? 0 : floatval($pago_obrero['data']['total']) );
+    $subtotal += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['subtotal']) ? 0 : floatval($pago_obrero['data']['subtotal']) );
+    $igv      += 0;
 
     $data = array( 
       "status"=> true,
@@ -1468,12 +1679,12 @@ class ResumenGasto
   }  
 
   // SELECT2
-  public function select_proveedores()  {
+  public function select_proveedores($id)  {
 
     $data = Array();
 
-    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado = '1' AND estado_delete = '1';";
-    $proveedor = ejecutarConsultaArray($sql);    
+    $sql_1 = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE estado = '1' AND estado_delete = '1';";
+    $proveedor = ejecutarConsultaArray($sql_1);    
     if ($proveedor['status'] == false) { return $proveedor; }
 
     if ( !empty($proveedor['data']) ) {
@@ -1486,8 +1697,8 @@ class ResumenGasto
       }      
     }   
     
-    $sql2 = "SELECT ruc, razon_social FROM otro_gasto WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
-    $otro_gasto = ejecutarConsultaArray($sql2);
+    $sql_2 = "SELECT ruc, razon_social FROM otro_gasto WHERE idproyecto = '$id' AND estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '' GROUP BY ruc;";
+    $otro_gasto = ejecutarConsultaArray($sql_2);
     if ($otro_gasto['status'] == false) { return $otro_gasto; }
 
     if ( !empty($otro_gasto['data']) ) {
@@ -1500,8 +1711,8 @@ class ResumenGasto
       }      
     } 
 
-    $sql2 = "SELECT ruc, razon_social  FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
-    $hospedaje = ejecutarConsultaArray($sql2);
+    $sql_3 = "SELECT ruc, razon_social  FROM hospedaje WHERE idproyecto = '$id' AND estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '' GROUP BY ruc;";
+    $hospedaje = ejecutarConsultaArray($sql_3);
     if ($hospedaje['status'] == false) { return $hospedaje; }
 
     if ( !empty($hospedaje['data']) ) {
@@ -1514,8 +1725,8 @@ class ResumenGasto
       }      
     } 
 
-    $sql2 = "SELECT ruc, razon_social  FROM comida_extra WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
-    $comida_extra = ejecutarConsultaArray($sql2);
+    $sql_4 = "SELECT ruc, razon_social  FROM comida_extra WHERE idproyecto = '$id' AND estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '' GROUP BY ruc;";
+    $comida_extra = ejecutarConsultaArray($sql_4);
     if ($comida_extra['status'] == false) { return $comida_extra; }
 
     if ( !empty($comida_extra['data']) ) {
@@ -1527,6 +1738,41 @@ class ResumenGasto
         );
       }      
     } 
+
+    $sql_5 = "SELECT t.idtrabajador, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento
+    FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
+    AND tpp.idtrabajador = t.idtrabajador AND pxma.estado = '1' AND pxma.estado_delete = '1' AND tpp.idproyecto = '$id' GROUP BY t.idtrabajador;";
+    $comida_extra = ejecutarConsultaArray($sql_5);
+    if ($comida_extra['status'] == false) { return $comida_extra; }
+
+    if ( !empty($comida_extra['data']) ) {
+      foreach ($comida_extra['data'] as $key => $value) {
+        $data[] = array(
+          "id" =>  $value['idtrabajador'],
+          "razon_social" =>  $value['trabajador'],
+          "ruc" =>  $value['numero_documento'],
+        );
+      }      
+    } 
+
+    $sql_6 = "SELECT t.idtrabajador, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento
+    FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
+    AND tpp.idtrabajador = t.idtrabajador AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$id' GROUP BY t.idtrabajador;";
+    $comida_extra = ejecutarConsultaArray($sql_6);
+    if ($comida_extra['status'] == false) { return $comida_extra; }
+
+    if ( !empty($comida_extra['data']) ) {
+      foreach ($comida_extra['data'] as $key => $value) {
+        $data[] = array(
+          "id" =>  $value['idtrabajador'],
+          "razon_social" =>  $value['trabajador'],
+          "ruc" =>  $value['numero_documento'],
+        );
+      }      
+    } 
+
     $retorno = array( 
       "status"=> true,
       "message"=> 'todo oka',
@@ -1645,6 +1891,28 @@ class ResumenGasto
     subtotal, igv, val_igv, costo_parcial as total, glosa, comprobante, tipo_gravada, descripcion
     FROM comida_extra
     WHERE  estado = '1' AND estado_delete = '1' AND idcomida_extra = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_pago_administrador
+  public function detalle_pago_administrador($id) {
+    $sql = "SELECT tpp.idproyecto, pxma.idpagos_x_mes_administrador, pxma.idfechas_mes_pagos_administrador, pxma.cuenta_deposito, pxma.forma_de_pago, pxma.monto, 
+    pxma.fecha_pago, pxma.baucher, pxma.descripcion, fmpa.recibos_x_honorarios, fmpa.tipo_comprobante, fmpa.numero_comprobante, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento, 
+    pxma.id_user_vb, pxma.nombre_user_vb, pxma.imagen_user_vb, pxma.estado_user_vb
+    FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
+    AND tpp.idtrabajador = t.idtrabajador AND pxma.idpagos_x_mes_administrador = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_pago_administrador
+  public function detalle_pago_obrero($id) {
+    $sql = "SELECT tpp.idproyecto, pqso.idpagos_q_s_obrero, pqso.idresumen_q_s_asistencia, pqso.cuenta_deposito, pqso.forma_de_pago, pqso.monto_deposito, 
+    pqso.fecha_pago, pqso.baucher, pqso.descripcion, rqsa.recibos_x_honorarios, rqsa.tipo_comprobante, rqsa.numero_comprobante, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento,
+    pqso.id_user_vb, pqso.nombre_user_vb, pqso.imagen_user_vb, pqso.estado_user_vb
+    FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
+    WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
+    AND tpp.idtrabajador = t.idtrabajador AND pqso.idpagos_q_s_obrero = '$id';";
     return ejecutarConsultaSimpleFila($sql);
   }
 

@@ -35,12 +35,13 @@
       $sueldo_mensual_pxm = isset($_POST['sueldo_mensual_pxm'])? $_POST['sueldo_mensual_pxm']:"";
       $monto_x_mes_pxm 	  = isset($_POST['monto_x_mes_pxm'])? $_POST['monto_x_mes_pxm']:"";
       
-      $forma_pago	= isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
-      $cuenta_deposito = isset($_POST['cuenta_deposito'])? $_POST['cuenta_deposito']:"";
-      $monto 		= isset($_POST['monto'])? $_POST['monto']:"";
-      $descripcion 		= isset($_POST['descripcion'])? $_POST['descripcion']:"";
-      $doc_old_1 		= isset($_POST['doc_old_1'])? $_POST['doc_old_1']:"";
-      $doc1 		= isset($_POST['doc1'])? $_POST['doc1']:"";
+      $forma_pago	        = isset($_POST["forma_pago"])? limpiarCadena($_POST["forma_pago"]):"";
+      $cuenta_deposito    = isset($_POST['cuenta_deposito'])? $_POST['cuenta_deposito']:"";
+      $monto 		          = isset($_POST['monto'])? $_POST['monto']:"";
+      $fecha_pago 		    = isset($_POST['fecha_pago'])? $_POST['fecha_pago']:"";
+      $descripcion 		    = isset($_POST['descripcion'])? $_POST['descripcion']:"";
+      $doc_old_1 		      = isset($_POST['doc_old_1'])? $_POST['doc_old_1']:"";
+      $doc1 		          = isset($_POST['doc1'])? $_POST['doc1']:"";
       
       // DATA - recibos por honorarios
       $idfechas_mes_pagos_administrador_rh  = isset($_POST["idfechas_mes_pagos_administrador_rh"])? limpiarCadena($_POST["idfechas_mes_pagos_administrador_rh"]):"";
@@ -52,6 +53,7 @@
       $dias_regular_rh  = isset($_POST['dias_regular_rh'])? $_POST['dias_regular_rh']:"";
       $sueldo_mensual_rh= isset($_POST['sueldo_mensual_rh'])? $_POST['sueldo_mensual_rh']:"";
       $monto_x_mes_rh 	= isset($_POST['monto_x_mes_rh'])? $_POST['monto_x_mes_rh']:"";
+      $numero_comprobante_rh	  = isset($_POST["numero_comprobante"])? limpiarCadena($_POST["numero_comprobante"]):"";
       $doc_old_2        = isset($_POST['doc_old_2'])? $_POST['doc_old_2']:"";
       $doc2 	          = isset($_POST['doc2'])? $_POST['doc2']:"";
 
@@ -78,7 +80,7 @@
           if (empty($idpagos_x_mes_administrador)){
 
             $rspta=$pago_administrador->insertar_pagos_x_mes( $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, 
-            $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
+            $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1);
             
             echo $rspta ;
 
@@ -99,7 +101,7 @@
 
             // editamos un pago x mes existente
             $rspta=$pago_administrador->editar_pagos_x_mes($idpagos_x_mes_administrador, $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, 
-            $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $descripcion, $doc1);
+            $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1);
             
             echo $rspta;
           }
@@ -130,7 +132,7 @@
           // registramos un nuevo: recibo x honorario
           if (empty($idfechas_mes_pagos_administrador_rh)){
 
-            $rspta=$pago_administrador->insertar_recibo_x_honorario($id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $doc2);
+            $rspta=$pago_administrador->insertar_recibo_x_honorario($id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $numero_comprobante_rh, $doc2);
             
             echo $rspta ? "ok" : "No se pudieron registrar el Recibo por Honorario";
 
@@ -149,7 +151,7 @@
             }
 
             // editamos un recibo x honorario existente
-            $rspta=$pago_administrador->editar_recibo_x_honorario($idfechas_mes_pagos_administrador_rh, $id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $doc2);
+            $rspta=$pago_administrador->editar_recibo_x_honorario($idfechas_mes_pagos_administrador_rh, $id_tabajador_x_proyecto_rh, $fecha_inicial_rh, $fecha_final_rh, $mes_nombre_rh, $dias_mes_rh, $dias_regular_rh, $sueldo_mensual_rh, $monto_x_mes_rh, $numero_comprobante_rh, $doc2);
             
             echo $rspta ? "ok" : "Recibo por Honorario no se pudo actualizar";
           }
@@ -230,7 +232,7 @@
             $data[]=array(
               "0"=>$cont++,               
               "1"=>'<div class="user-block">
-                <img class="img-circle" src="../dist/img/usuarios/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $value['nombres'] .'</p></span>
                 <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 <span class="description">'. $value['tipo'].' / '.$value['cargo'] .' </span>
@@ -301,12 +303,13 @@
                 ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="far fa-trash-alt"></i></button>':
                 '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-pencil-alt"></i></button>'.
                 ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpagos_x_mes_administrador .')"><i class="fa fa-check"></i></button>',           
-              "2"=>$reg->cuenta_deposito	,
-              "3"=>$reg->forma_de_pago	,
-              "4"=>'S/ '. number_format($reg->monto, 2, ".", ","),
-              "5"=>$baucher_deposito,
-              "6"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-              "7"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              "2"=>$reg->fecha_pago,
+              "3"=>$reg->cuenta_deposito,
+              "4"=>$reg->forma_de_pago,
+              "5"=>'S/ '. number_format($reg->monto, 2, ".", ","),
+              "6"=>$baucher_deposito,
+              "7"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
+              "8"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
               );
           }
           $results = array(

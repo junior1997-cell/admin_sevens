@@ -317,7 +317,7 @@ function verdatos(idtrabajador){
     
       if (e.data.trabajador.imagen_perfil != '') {
 
-        imagen_perfil=`<img src="../dist/docs/all_trabajador/perfil/${e.data.trabajador.imagen_perfil}" alt="" class="img-thumbnail">`
+        imagen_perfil=`<img src="../dist/docs/all_trabajador/perfil/${e.data.trabajador.imagen_perfil}" alt="" class="img-thumbnail w-130px">`
         
         btn_imagen_perfil=`
         <div class="row">
@@ -363,7 +363,7 @@ function verdatos(idtrabajador){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/dni_reverso/${e.data.trabajador.imagen_dni_reverso}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_reverso/${e.data.trabajador.imagen_dni_reverso}" download="DNI ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/dni_reverso/${e.data.trabajador.imagen_dni_reverso}" download="DNI - ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -382,7 +382,7 @@ function verdatos(idtrabajador){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_documentado/${e.data.trabajador.cv_documentado}"> <i class="fas fa-expand"></i></a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_documentado/${e.data.trabajador.cv_documentado}" download="CV DOCUMENTADO ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_documentado/${e.data.trabajador.cv_documentado}" download="CV DOCUMENTADO - ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -401,7 +401,7 @@ function verdatos(idtrabajador){
             <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.trabajador.cv_no_documentado}"> <i class="fas fa-expand"></i> </a>
           </div>
           <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.trabajador.cv_no_documentado}" download="CV NO DOCUMENTADO ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/all_trabajador/cv_no_documentado/${e.data.trabajador.cv_no_documentado}" download="CV NO DOCUMENTADO - ${e.data.trabajador.nombres}"> <i class="fas fa-download"></i></a>
           </div>
         </div>`;
       
@@ -433,7 +433,7 @@ function verdatos(idtrabajador){
             <table class="table table-hover table-bordered">        
               <tbody>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil} </th>
+                  <th rowspan="2" class="text-center">${imagen_perfil}<br>${btn_imagen_perfil} </th>
                   <td> <b>Nombre: </b>${e.data.trabajador.nombres}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">

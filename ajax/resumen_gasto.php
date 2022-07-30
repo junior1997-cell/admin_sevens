@@ -296,6 +296,18 @@
           echo json_encode($rspta, true);
         break;
 
+        case 'detalle_pago_administrador':
+          $rspta = $resumen_gasto->detalle_pago_administrador($_POST['id_tabla']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break;
+
+        case 'detalle_pago_obrero':
+          $rspta = $resumen_gasto->detalle_pago_obrero($_POST['id_tabla']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break;
+
         case 'eliminar_comprobante':
           $rspta = $resumen_gasto->eliminar_permanente($_GET['nombre_tabla'], $_GET['nombre_id_tabla'], $_GET['id_tabla']);
           //Codificar el resultado utilizando json
@@ -305,7 +317,7 @@
         // Select2 - Proveedores
         case 'select2Proveedor':
 
-          $rspta = $resumen_gasto->select_proveedores();
+          $rspta = $resumen_gasto->select_proveedores($_GET['idproyecto']);
 
           $estado = true;
 
