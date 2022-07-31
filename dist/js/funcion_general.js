@@ -589,6 +589,8 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
             $(`#${id}_ver`).html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
           } else if ( extrae_extencion(file.name) == "xlsm" ) {             
             $(`#${id}_ver`).html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
+          } else if ( extrae_extencion(file.name) == "xlsb" ) {             
+            $(`#${id}_ver`).html('<img src="../dist/svg/xlsb.svg" alt="" width="50%" >');
           } else if (
             extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
             extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
@@ -745,6 +747,10 @@ function re_visualizacion(id, carpeta, sub_carpeta, width='100%', height='310') 
                 
       $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
       toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
+    } else if ( extrae_extencion(pdffile.name) == "xlsb" ) {
+                
+      $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsb.svg" alt="" width="50%" >');
+      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
     } else if (
       extrae_extencion(pdffile.name) == "jpeg" || extrae_extencion(pdffile.name) == "jpg" || extrae_extencion(pdffile.name) == "jpe" ||
       extrae_extencion(pdffile.name) == "jfif" || extrae_extencion(pdffile.name) == "gif" || extrae_extencion(pdffile.name) == "png" ||
@@ -796,6 +802,10 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
   }else if ( extrae_extencion(filename) == "xlsm" ) {
 
     html = `<img src="../dist/svg/xlsm.svg" alt="" width="50%" height="50%" >`;
+    extencion = extrae_extencion(filename);
+  }else if ( extrae_extencion(filename) == "xlsb" ) {
+
+    html = `<img src="../dist/svg/xlsb.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "docx" ||  extrae_extencion(filename) == "docm"  || extrae_extencion(filename) == "dot" ||  extrae_extencion(filename) == "dotx" ||  extrae_extencion(filename) == "dotm") {
@@ -857,6 +867,10 @@ function doc_view_icon(filename, color_class='', font_size_class='' ) {
     html = `<i class="fas fa-file-csv ${(color_class==''? 'text-success': color_class)} ${font_size_class}"></i>`;
 
   }else if ( extrae_extencion(filename) == "xlsm" ) {
+
+    html = `<i class="far fa-file-excel ${(color_class==''? 'text-success': color_class)} ${font_size_class}"></i>`;
+    
+  }else if ( extrae_extencion(filename) == "xlsb" ) {
 
     html = `<i class="far fa-file-excel ${(color_class==''? 'text-success': color_class)} ${font_size_class}"></i>`;
 

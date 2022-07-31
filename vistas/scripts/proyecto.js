@@ -14,22 +14,19 @@ function init(){
   // mostramos las fechas feriadas
   $.post("../ajax/proyecto.php?op=listar_feriados",  function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data);
+    data = JSON.parse(data);  console.log(data);
     var fecha_feriada = [];
 
-    if (data.status) {
-      $.each(data.data, function (index, value) { fecha_feriada.push(value.fecha_invertida); });
+    if (data.status == true) {
+      $.each(data.data, function (index, value) { fecha_feriada.push(format_d_m_a(value.fecha_feriado)); });
 
       $('#fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' });
   
       // Inicializar - Date picker  
-      $('#fecha_inicio').datetimepicker({ 
-        locale: 'es', 
-        format: 'DD-MM-YYYY',
+      $('#fecha_inicio').datepicker({ 
+        format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto",
         daysOfWeekDisabled: [6], 
-        disabledDates: fecha_feriada,   
-        //forceParse: false,
-        /*defaultDate: "",*/ /*format: 'L',*/ 
+        datesDisabled: fecha_feriada,
       });
     } else {
       ver_errores(data);
@@ -47,6 +44,7 @@ function init(){
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+$('.click-btn-fecha-inicio').on('click', function (e) {$('#fecha_inicio').focus().select(); });
 
 init();
 
@@ -67,8 +65,8 @@ function validar_permanent() { if ($("#fecha_pago_obrero").select2('val') == nul
 function permanente_pago_obrero() {
 
   if ($("#fecha_pago_obrero").select2('val') == null) {
-
-    toastr.error(`Selecione un pago obrero: <ul> <li>Quincenal</li> <li>Semanal</li> </ul>`);
+    toastr_error('Selecione un pago obrero:','<ul> <li>Quincenal</li> <li>Semanal</li> </ul>', 700);
+    //toastr.error(`Selecione un pago obrero: <ul> <li>Quincenal</li> <li>Semanal</li> </ul>`);
 
     if($('#definiendo').is(':checked')){ 
       $("#definiendo").prop('checked', false); 
@@ -764,7 +762,7 @@ function mostrar(idproyecto) {
       $("#fecha_valorizacion").val(data.data.fecha_valorizacion).trigger("change");
       
       // console.log(format_d_m_a(data.fecha_inicio));
-      $("#fecha_inicio").val(format_d_m_a(data.data.fecha_inicio));
+      $("#fecha_inicio").datepicker("setDate" ,format_d_m_a(data.data.fecha_inicio));
       $("#fecha_fin").val(format_d_m_a(data.data.fecha_fin));
 
       $("#fecha_inicio_actividad").val(format_d_m_a(data.data.fecha_inicio_actividad));  

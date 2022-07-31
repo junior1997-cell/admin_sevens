@@ -227,8 +227,7 @@ if (!isset($_SESSION["nombre"])) {
       break;
     
       case 'tbla_principal':
-        $nube_idproyecto = $_GET["nube_idproyecto"];
-        $rspta = $compra_insumos->tbla_principal($nube_idproyecto);
+        $rspta = $compra_insumos->tbla_principal($_GET["nube_idproyecto"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
         
         //Vamos a declarar un array
         $data = []; $cont = 1;
@@ -287,7 +286,7 @@ if (!isset($_SESSION["nombre"])) {
                 $deposito_Actual = $reg['total_pago_compras'];
               }
       
-              $list_segun_estado_detracc = '<div class="text-center"> <button class="btn btn-' .  $c . ' btn-xs" onclick="listar_pagos_detraccion(' . $reg['idcompra_proyecto'] . ',' . $reg['idproyecto'] . ',' . $reg['total'] . ',' . $deposito_Actual .')">'.
+              $list_segun_estado_detracc = '<div class="text-center formato-numero-conta"> <button class="btn btn-' .  $c . ' btn-xs" onclick="listar_pagos_detraccion(' . $reg['idcompra_proyecto'] . ',' . $reg['idproyecto'] . ',' . $reg['total'] . ',' . $deposito_Actual .')">'.
                   '<i class="fas fa-' . $icon .' nav-icon"></i> ' .$nombre .
                 '</button>' .
                 ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($reg['total_pago_compras'], 2, '.', ',') . '</button>'.
@@ -303,7 +302,7 @@ if (!isset($_SESSION["nombre"])) {
                 $deposito_Actual = $reg['total_pago_compras'];
               }
       
-              $list_segun_estado_detracc = '<div class="text-center text-nowrap">'. 
+              $list_segun_estado_detracc = '<div class="text-center text-nowrap formato-numero-conta">'. 
                 '<button class="btn btn-' . $c . ' btn-xs m-t-2px" onclick="listar_pagos(' . $reg['idcompra_proyecto'] . ',' .  $reg['idproyecto'] .  ',' .    $reg['total'] . ', ' .  $deposito_Actual . ')">'.
                   '<i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . 
                 '</button>' .

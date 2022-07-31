@@ -142,14 +142,31 @@ class Compra_insumos
   }
 
   //Implementar un método para listar los registros
-  public function tbla_principal($nube_idproyecto) {
+  public function tbla_principal($nube_idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
+
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND cpp.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND cpp.fecha_compra = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND cpp.fecha_compra = '$fecha_2'";
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND cpp.idproveedor = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; 
+    } 
+
     $data = Array();
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
     $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.idproveedor, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante,	
     cpp.descripcion, cpp.total, cpp.comprobante, cpp.estado_detraccion, p.razon_social, p.telefono,	cpp.estado 
 		FROM compra_por_proyecto as cpp, proveedor as p 
-		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1'
+		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
 		ORDER BY cpp.fecha_compra DESC ";
     $compra = ejecutarConsultaArray($sql);
     if ($compra['status'] == false) { return $compra; }

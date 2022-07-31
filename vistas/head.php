@@ -29,8 +29,11 @@
 <!-- Toastr -->
 <link rel="stylesheet" href="../plugins/toastr/toastr.min.css">
 
+<!-- bootstrap-datepicker -->
+<link rel="stylesheet" href="../plugins/bootstrap-datepicker-master/dist/css/bootstrap-datepicker.css" />
+
 <!-- daterange picker -->
-<link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
+<!-- <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css"> -->
 
 <!-- Tempusdominus Bootstrap 4 -->
 <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css">

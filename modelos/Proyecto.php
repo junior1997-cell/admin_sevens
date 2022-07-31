@@ -168,7 +168,7 @@ Class Proyecto
 	// optenemos el los feriados
 	public function listar_feriados() {
 
-        $sql = "SELECT c.fecha_invertida FROM calendario AS c WHERE c.estado = 1;";
+        $sql = "SELECT c.fecha_feriado, c.fecha_invertida FROM calendario AS c WHERE c.estado = 1;";
 		
         return ejecutarConsultaArray($sql);
     }

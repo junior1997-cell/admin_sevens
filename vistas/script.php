@@ -19,8 +19,13 @@
 <!-- InputMask -->
 <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
 
+<!-- bootstrap-datepicker -->
+<script src="../plugins/bootstrap-datepicker-master/js/bootstrap-datepicker.js"></script>
+<script src="../plugins/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.js"></script>
+<script src="../plugins/bootstrap-datepicker-master/dist/locales/bootstrap-datepicker.es.min.js"></script>
+
 <!-- date-range-picker -->
-<script src="../plugins/daterangepicker/daterangepicker.js"></script>
+<!-- <script src="../plugins/daterangepicker/daterangepicker.js"></script> -->
 
 <!-- bootstrap color picker -->
 <script src="../plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>

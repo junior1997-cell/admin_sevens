@@ -35,17 +35,21 @@ function init() {
 
   // ══════════════════════════════════════ TIMEPIKER  ══════════════════════════════════════
   //Timepicker
-  $('#timepicker').datetimepicker({ /*format: 'LT',*/ format:'HH:mm ', lang:'ru' })
+  // $('#timepicker').datetimepicker({ /*format: 'LT',*/ format:'HH:mm ', lang:'ru' })
 
   $('#fecha_inicio_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
-  $('#fecha_inicio_actividad').datetimepicker({ locale: 'es', format: 'DD-MM-YYYY', daysOfWeekDisabled: [6] });
+  $('#fecha_inicio_actividad').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true, daysOfWeekDisabled: [6], weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
   $('#fecha_fin_actividad').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
-  $('#fecha_fin_actividad').datetimepicker({ locale: 'es', format: 'DD-MM-YYYY', daysOfWeekDisabled: [6], });
+  $('#fecha_fin_actividad').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true, daysOfWeekDisabled: [6], weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+// click input group para habilitar: datepiker
+$('.click-btn-fecha-inicio-actividad').on('click', function (e) {$('#fecha_inicio_actividad').focus().select(); });
+$('.click-btn-fecha-fin-actividad').on('click', function (e) {$('#fecha_fin_actividad').focus().select(); });
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
@@ -2437,8 +2441,8 @@ function limpiar_form_fechas_actividades(params) {
     
     e = JSON.parse(e);  //console.log(e);
 
-    $('#fecha_inicio_actividad').val(format_d_m_a(e.data.fecha_inicio_actividad));
-    $('#fecha_fin_actividad').val(format_d_m_a(e.data.fecha_fin_actividad));
+    $('#fecha_inicio_actividad').datepicker("setDate" , format_d_m_a(e.data.fecha_inicio_actividad));
+    $('#fecha_fin_actividad').datepicker("setDate" ,format_d_m_a(e.data.fecha_fin_actividad));
     $('#plazo_actividad').val(e.data.plazo_actividad);
     $('.plazo_actividad').html(e.data.plazo_actividad);
 

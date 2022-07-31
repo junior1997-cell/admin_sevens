@@ -391,8 +391,8 @@
                                   <div class="form-group">
                                     <label>Fecha Inicio: <sup class="text-danger">*</sup></label>
                                     <div class="input-group date"  data-target-input="nearest">
-                                      <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_fechafin()" />
-                                      <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
+                                      <input type="text" class="form-control " id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_fechafin()" autocomplete="off" />
+                                      <div class="input-group-append cursor-pointer click-btn-fecha-inicio">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                       </div>
                                     </div>                                 
@@ -1023,7 +1023,7 @@
         <?php require 'script.php'; ?>
 
         <!-- <script src="../plugins/moment/moment.min.js"></script> -->
-        <script src="../plugins/moment/locales.js"></script>
+        <!-- <script src="../plugins/moment/locales.js"></script> -->
         <!-- <script src="../plugins/moment/locale/es.js"></script> -->
         <script type="text/javascript" src="scripts/proyecto.js"></script>
 

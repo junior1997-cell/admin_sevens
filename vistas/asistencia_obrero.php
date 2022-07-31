@@ -627,10 +627,10 @@
                             <!-- FECHA INICIO DE ACTIVIDADES -->
                             <div class="col-lg-12">
                               <div class="form-group">
-                                <label>Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
-                                <div class="input-group date"  data-target-input="nearest">
-                                  <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio_actividad" id="fecha_inicio_actividad" name="fecha_inicio_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();"  />
-                                  <div class="input-group-append" data-target="#fecha_inicio_actividad" data-toggle="datetimepicker">
+                                <label for="">Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
+                                <div class="input-group date "  data-target-input="nearest">
+                                  <input type="text" class="form-control" id="fecha_inicio_actividad" name="fecha_inicio_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();"  />
+                                  <div class="input-group-append click-btn-fecha-inicio-actividad cursor-pointer" for="fecha_inicio_actividad" >
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                   </div>
                                 </div>                                 
@@ -642,8 +642,8 @@
                               <div class="form-group">
                                 <label>Fecha Fin de actividades: <sup class="text-danger">*</sup></label>
                                 <div class="input-group date"  data-target-input="nearest">
-                                  <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin_actividad" id="fecha_fin_actividad" name="fecha_fin_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();" />
-                                  <div class="input-group-append" data-target="#fecha_fin_actividad" data-toggle="datetimepicker">
+                                  <input type="text" class="form-control" id="fecha_fin_actividad" name="fecha_fin_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();" />
+                                  <div class="input-group-append click-btn-fecha-fin-actividad cursor-pointer">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                   </div>
                                 </div>                                 
