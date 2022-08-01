@@ -651,7 +651,50 @@ function suma_totales($idproyecto, $fecha_1, $fecha_2) {
   // $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
   // $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
   // $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
+  
+  // SUMAS TOTALES - PAGO ADMINISTRADOR --------------------------------------------------------------------------------
+  $filtro_fecha = "";
 
+  if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    $filtro_fecha = "AND pxma.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+  } else if (!empty($fecha_1)) {    
+    $filtro_fecha = "AND pxma.fecha_pago = '$fecha_1'";
+  }else if (!empty($fecha_2)) {      
+    $filtro_fecha = "AND pxma.fecha_pago = '$fecha_2'";
+  }   
+  $sql11 = "SELECT SUM(pxma.monto) total, SUM(pxma.monto) AS subtotal
+  FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
+  WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador
+  AND pxma.estado = '1' AND pxma.estado_delete = '1'  AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
+  $pago_administrador = ejecutarConsultaSimpleFila($sql11);
+
+  if ($pago_administrador['status'] == false) { return $pago_administrador; }
+  
+  $total    += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['total']) ? 0 : floatval($pago_administrador['data']['total']) );
+  $subtotal += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['subtotal']) ? 0 : floatval($pago_administrador['data']['subtotal']) );
+  $igv      += 0;
+
+  // SUMAS TOTALES - PAGO OBRERO --------------------------------------------------------------------------------
+  $filtro_fecha = "";
+
+  if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    $filtro_fecha = "AND pqso.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+  } else if (!empty($fecha_1)) {    
+    $filtro_fecha = "AND pqso.fecha_pago = '$fecha_1'";
+  }else if (!empty($fecha_2)) {      
+    $filtro_fecha = "AND pqso.fecha_pago = '$fecha_2'";        
+  }
+  $sql12 = "SELECT SUM(pqso.monto_deposito) total, SUM(pqso.monto_deposito) AS subtotal
+  FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
+  WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador
+  AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
+  $pago_obrero = ejecutarConsultaSimpleFila($sql12);
+
+  if ($pago_obrero['status'] == false) { return $pago_obrero; }
+  
+  $total    += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['total']) ? 0 : floatval($pago_obrero['data']['total']) );
+  $subtotal += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['subtotal']) ? 0 : floatval($pago_obrero['data']['subtotal']) );
+  $igv      += 0;
 
   $data = array( 
     "status"=> true,

@@ -177,9 +177,7 @@
           <li class="nav-item ver-otros-modulos-1">
             <a href="otra_factura.php" class="nav-link pl-2" id="lOtraFactura">
               <i class="nav-icon fas fa-receipt"></i>
-              <p>
-                Otras Facturas               
-              </p>
+              <p>Otras Facturas</p>
             </a>
           </li>
         <?php  }  ?>
@@ -188,9 +186,7 @@
           <li class="nav-item ver-otros-modulos-1">
             <a href="resumen_factura.php" class="nav-link pl-2" id="lResumenFacura">            
               <i class="nav-icon fas fa-poll"></i>
-              <p>
-                Resumen de Facturas               
-              </p>
+              <p>Resumen de Facturas</p>
             </a>
           </li>
         <?php  }  ?>
@@ -199,9 +195,7 @@
           <li class="nav-item ver-otros-modulos-1">
             <a href="resumen_rh.php" class="nav-link pl-2" id="lResumenRH">            
               <i class="nav-icon fas fa-poll"></i>
-              <p>
-                Resumen de RH            
-              </p>
+              <p>Resumen de RH</p>
             </a>
           </li>
         <?php  }  ?>
@@ -210,9 +204,7 @@
           <li class="nav-item ver-otros-modulos-1">
             <a href="papelera.php" class="nav-link pl-2" id="mPapelera">
               <i class="nav-icon fas fa-trash-alt"></i>
-              <p>
-                Papelera               
-              </p>
+              <p>Papelera</p>
             </a>
           </li>
         <?php  }  ?>
@@ -223,9 +215,7 @@
         <li class="nav-item ver-otros-modulos-2" style="display: none !important;">
           <a href="#" class="nav-link" >
           <i class="fas fa-spinner fa-pulse "></i>
-            <p>
-              Cargando...
-            </p>
+            <p>Cargando...</p>
           </a>
         </li>
 
@@ -242,9 +232,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="valorizacion.php" class="nav-link pl-2" id="lValorizacion">
                   <i class="nav-icon far fa-file-alt"></i>
-                  <p>
-                    Valorizaciones
-                  </p>
+                  <p>Valorizaciones </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -261,9 +249,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="asistencia_obrero.php" class="nav-link pl-2" id="lAsistencia">
                   <i class="fas fa-clipboard-list nav-icon"></i>
-                  <p>
-                    Asistencia del obrero
-                  </p>
+                  <p>Asistencia del obrero </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -273,9 +259,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="calendario.php" class="nav-link pl-2" id="lCalendario">
                   <i class="nav-icon far fa-calendar-alt"></i>
-                  <p>
-                    Calendario                 
-                  </p>
+                  <p>Calendario </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -285,9 +269,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="plano_otro.php" class="nav-link pl-2" id="lPlanoOtro">
                   <i class="nav-icon fas fa-map-marked-alt"></i>
-                  <p>
-                    Planos y otros                 
-                  </p>
+                  <p>Planos y otros </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -310,23 +292,17 @@
                 <a href="trabajador.php" class="nav-link pl-2" id="lTrabajador">
                   <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
                   <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                  <p>
-                    Trabajadores
-                  </p>
+                  <p>Trabajadores</p>
                 </a>
               </li>
             <?php  }  ?>
 
             <?php if ($_SESSION['compra_insumos']==1) {  ?>   
               <!-- COMPRAS -->      
-              <li class="nav-item ver-otros-modulos-1  b-radio-3px" id="bloc_Compras">
+              <li class="nav-item ver-otros-modulos-1 b-radio-3px" id="bloc_Compras">
                 <a href="#" class="nav-link pl-2" id="mCompra">
                   <i class="fas fa-shopping-cart nav-icon"></i>
-                  <p>
-                    Compras
-                    <i class="fas fa-angle-left right"></i>
-                    <span class="badge badge-info right">3</span>
-                  </p>
+                  <p>Compras <i class="fas fa-angle-left right"></i> <span class="badge badge-info right">3</span></p>
                 </a>
                 <ul class="nav nav-treeview">
                   <!-- Compras del proyecto -->
@@ -344,7 +320,7 @@
                   <!-- Resumend de Insumos -->
                   <li class="nav-item ">
                     <a href="resumen_activos_fijos.php" class="nav-link" id="lResumenActivosFijos">
-                      <i class=" fas fa-tasks"></i> <p>Resumen de Activos Fijos</p>
+                      <i class="nav-icon fas fa-tasks"></i> <p>Resumen de Activos Fijos</p>
                     </a>
                   </li> 
                   <!-- graficos insumos -->
@@ -363,10 +339,7 @@
                 <a href="servicio_maquina.php" class="nav-link pl-2" id="lMaquina">
                   <!-- <i class="nav-icon fas fa-tractor"></i> -->
                   <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                  <p>
-                    Servicio - Maquina
-                    <!-- <span class="badge badge-info right">2</span> -->
-                  </p>
+                  <p>Servicio - Máquina </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -377,10 +350,7 @@
                 <a href="servicio_equipos.php" class="nav-link pl-2" id="lEquipo">
                   <!-- <i class="nav-icon fas fa-tractor"></i> -->
                   <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                  <p>
-                    Servicio - Equipos
-                    <!-- <span class="badge badge-info right">2</span> -->
-                  </p>
+                  <p>Servicio - Equipos </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -388,9 +358,7 @@
             <li class="nav-item ver-otros-modulos-1">
               <a href="sub_contrato.php" class="nav-link pl-2" id="lSubContrato">
                 <i class="nav-icon fas fa-hands-helping"></i>
-                <p>
-                  Sub Contrato              
-                </p>
+                <p>Sub Contrato </p>
               </a>
             </li>
             <?php  }  ?>
@@ -400,9 +368,7 @@
                 <a href="planillas_seguros.php" class="nav-link pl-2" id="lPlanillaSeguro">
                   <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
                   <img src="../dist/svg/planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                  <p>
-                    Planillas y seguros                 
-                  </p>
+                  <p>Planillas y seguros</p>
                 </a>
               </li>
             <?php  }  ?>
@@ -412,9 +378,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="otro_gasto.php" class="nav-link pl-2" id="lOtroGasto">
                   <i class="nav-icon fas fa-network-wired"></i>
-                  <p>
-                    Otros Gastos                
-                  </p>
+                  <p>Otros Gastos </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -424,9 +388,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="resumen_general.php" class="nav-link pl-2" id="lresumen_general">                  
                   <i class="nav-icon fas fa-list-ul"></i>
-                  <p>
-                  Resumen general               
-                  </p>
+                  <p>Resumen general </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -436,11 +398,7 @@
               <li class="nav-item ver-otros-modulos-1"  id="bloc_Viaticos">
                 <a href="#" class="nav-link pl-2" id="mViatico">
                   <i class="nav-icon fas fa-plane"></i>
-                  <p>
-                    Viáticos
-                    <i class="right fas fa-angle-left"></i>
-                    <span class="badge badge-info right">3</span>
-                  </p>
+                  <p>Viáticos <i class="right fas fa-angle-left"></i> <span class="badge badge-info right">3</span> </p>
                 </a>
                 <ul class="nav nav-treeview">
                   <!-- TRANSPORTE -->
@@ -461,11 +419,7 @@
                   <li class="nav-item  b-radio-3px" id="sub_bloc_comidas">
                     <a href="#" class="nav-link"  id="sub_mComidas">
                       <i class="fas fa-fish nav-icon"></i>
-                      <p>
-                        Comida
-                        <i class="right fas fa-angle-left"></i> 
-                        <span class="badge badge-info right">3</span>
-                      </p>
+                      <p>Comida <i class="right fas fa-angle-left"></i> <span class="badge badge-info right">3</span></p>
                     </a>
                     <ul class="nav nav-treeview">
                       <li class="nav-item">
@@ -506,9 +460,7 @@
             <li class="nav-item ver-otros-modulos-1">
               <a href="resumen_gasto.php" class="nav-link pl-2" id="lResumenGastos">
                 <i class="nav-icon fas fa-comments-dollar"></i>
-                <p>
-                  Resumen de Gastos               
-                </p>
+                <p>Resumen de Gastos</p>
               </a>
             </li>
 
@@ -517,24 +469,21 @@
               <li class="nav-item ver-otros-modulos-1  b-radio-3px" id="bloc_PagosTrabajador">
                 <a href="#" class="nav-link pl-2" id="mPagosTrabajador">
                   <i class="fas fa-dollar-sign nav-icon"></i>
-                  <p>
-                    Pago Trabajador
-                    <i class="fas fa-angle-left right"></i>
-                    <span class="badge badge-info right">2</span>
+                  <p>Pago Trabajador <i class="fas fa-angle-left right"></i> <span class="badge badge-info right">2</span>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
                   <!-- Obreros  -->
                   <li class="nav-item ">
                     <a href="pago_obrero.php" class="nav-link" id="lPagosObrero">
-                      <i class="  fas fa-users"></i>
+                      <i class="fas fa-users"></i>
                       <p>Obreros</p>
                     </a>
                   </li>
                   <!-- Administradores -->
                   <li class="nav-item ">
                     <a href="pago_administrador.php" class="nav-link" id="lPagosAdministrador">
-                      <i class="  fas fa-briefcase"></i>
+                      <i class="fas fa-briefcase"></i>
                       <p>Administradores</p>
                     </a>
                   </li> 
@@ -546,18 +495,14 @@
             <li class="nav-item ver-otros-modulos-1">
               <a href="prestamo.php" class="nav-link pl-2" id="lPrestamo">
                 <i class="nav-icon fas fa-university"></i>
-                <p>
-                  Prestamos               
-                </p>
+                <p>Prestamos</p>
               </a>
             </li>
 
             <li class="nav-item ver-otros-modulos-1">
               <a href="estado_financiero.php" class="nav-link pl-2" id="lEstadoFinanciero">             
                 <i class="nav-icon fas fa-balance-scale-left"></i>
-                <p>
-                  Estado Financiero               
-                </p>
+                <p>Estado Financiero</p>
               </a>
             </li>
 
@@ -565,9 +510,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="otro_ingreso.php" class="nav-link pl-2" id="lOtroIngreso">             
                   <i class="nav-icon fas fa-hand-holding-usd"></i>
-                  <p>
-                    Otro ingreso             
-                  </p>
+                  <p>Otro ingreso </p>
                 </a>
               </li>
             <?php  }  ?>
@@ -575,9 +518,7 @@
             <li class="nav-item ver-otros-modulos-1">
               <a href="pago_valorizacion.php" class="nav-link pl-2" id="lPagoValorizacion">             
                 <i class="fas fa-dollar-sign nav-icon"></i>
-                <p>
-                  Pago Valorización               
-                </p>
+                <p>Pago Valorización </p>
               </a>
             </li>
           </ul>

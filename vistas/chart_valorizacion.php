@@ -1641,6 +1641,8 @@
                             <li class="m-b-04rem"><i class="fas fa-drumstick-bite nav-icon"></i> COMIDA EXTRA</li>
                             <!-- <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(sin proyecto)</small></li> -->
                             <!-- <li>OTRO INGRESO</li> -->
+                            <li class="m-b-04rem"><i class="fas fa-briefcase nav-icon"></i> PAGO ADMINSTRADOR</li>
+                            <li class="m-b-04rem"><i class="fas fa-users nav-icon"></i> PAGO OBRERO</li>
                           </ol>
                         </div>
                       </div>
