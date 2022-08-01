@@ -87,6 +87,12 @@ class ChartValorizacion
     // comida_extra
     $total_monto_comida_extra = 0;    $total_utilidad_comida_extra = 0;     $monto_acumulado_comida_extra = Array();    $utilidad_acumulado_comida_extra = Array();     $monto_comida_extra = Array();    $utilidad_comida_extra = Array(); 
     $tabla_comida_extra = Array();
+    // pago_administrador
+    $total_monto_pago_administrador = 0;    $total_utilidad_pago_administrador = 0;     $monto_acumulado_pago_administrador = Array();    $utilidad_acumulado_pago_administrador = Array();     $monto_pago_administrador = Array();    $utilidad_pago_administrador = Array(); 
+    $tabla_pago_administrador = Array();
+    // pago_obrero
+    $total_monto_pago_obrero = 0;    $total_utilidad_pago_obrero = 0;     $monto_acumulado_pago_obrero = Array();    $utilidad_acumulado_pago_obrero = Array();     $monto_pago_obrero = Array();    $utilidad_pago_obrero = Array(); 
+    $tabla_pago_obrero = Array();
 
     // TODAS LAS VALORIZACIONES :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     if ($valorizacion_filtro == null || $valorizacion_filtro == '' || $valorizacion_filtro == '0' ) {
@@ -258,6 +264,30 @@ class ChartValorizacion
         array_push($utilidad_comida_extra,   round($val_utilidad_comida_extra,2) );
         $tabla_comida_extra[]= array(
           "modulo"=>'Comida Extra',"val"=>'Val'.$cont, "gasto"=>$cant_monto_comida_extra, "utilidad"=>$val_utilidad_comida_extra, "ver_mas"=>'comidas_extras.php',
+        );
+        // pago_administrador
+        $cant_monto_pago_administrador     = suma_totales_pago_administrador($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $total_monto_pago_administrador   += $cant_monto_pago_administrador;
+        $val_utilidad_pago_administrador   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pago_administrador)/$monto_valorizacion_gastado);
+        $total_utilidad_pago_administrador+= $val_utilidad_pago_administrador;
+        array_push($monto_acumulado_pago_administrador,   round($total_monto_pago_administrador,2) );
+        array_push($utilidad_acumulado_pago_administrador,   round($total_utilidad_pago_administrador,2) );
+        array_push($monto_pago_administrador,   round($cant_monto_pago_administrador,2) );
+        array_push($utilidad_pago_administrador,   round($val_utilidad_pago_administrador,2) );
+        $tabla_pago_administrador[]= array(
+          "modulo"=>'Pago Administrador',"val"=>'Val'.$cont, "gasto"=>$cant_monto_pago_administrador, "utilidad"=>$val_utilidad_pago_administrador, "ver_mas"=>'pago_administrador.php',
+        );
+        // pago_obrero
+        $cant_monto_pago_obrero     = suma_totales_pago_obrero($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $total_monto_pago_obrero   += $cant_monto_pago_obrero;
+        $val_utilidad_pago_obrero   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pago_obrero)/$monto_valorizacion_gastado);
+        $total_utilidad_pago_obrero+= $val_utilidad_pago_obrero;
+        array_push($monto_acumulado_pago_obrero,   round($total_monto_pago_obrero,2) );
+        array_push($utilidad_acumulado_pago_obrero,   round($total_utilidad_pago_obrero,2) );
+        array_push($monto_pago_obrero,   round($cant_monto_pago_obrero,2) );
+        array_push($utilidad_pago_obrero,   round($val_utilidad_pago_obrero,2) );
+        $tabla_pago_obrero[]= array(
+          "modulo"=>'Pago Obrero',"val"=>'Val'.$cont, "gasto"=>$cant_monto_pago_obrero, "utilidad"=>$val_utilidad_pago_obrero, "ver_mas"=>'pago_obrero.php',
         );
         $cont++;
       }  
@@ -445,6 +475,30 @@ class ChartValorizacion
           $tabla_comida_extra[]= array(
             "modulo"=>'Comida Extra',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_comida_extra, "utilidad"=>$val_utilidad_comida_extra, "ver_mas"=>'comidas_extras.php',
           );
+          // pago_administrador
+          $cant_monto_pago_administrador     = suma_totales_pago_administrador($id_proyecto, $fecha_iterativa, '');
+          $total_monto_pago_administrador   += $cant_monto_pago_administrador;
+          $val_utilidad_pago_administrador   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pago_administrador)/$monto_valorizacion_gastado);
+          $total_utilidad_pago_administrador+= $val_utilidad_pago_administrador;
+          array_push($monto_acumulado_pago_administrador,   round($total_monto_pago_administrador,2) );
+          array_push($utilidad_acumulado_pago_administrador,   round($total_utilidad_pago_administrador,2) );
+          array_push($monto_pago_administrador,   round($cant_monto_pago_administrador,2) );
+          array_push($utilidad_pago_administrador,   round($val_utilidad_pago_administrador,2) );
+          $tabla_pago_administrador[]= array(
+            "modulo"=>'Pago Administrador',"val"=>'Val'.$cont, "gasto"=>$cant_monto_pago_administrador, "utilidad"=>$val_utilidad_pago_administrador, "ver_mas"=>'pago_administrador.php',
+          );
+          // pago_obrero
+          $cant_monto_pago_obrero     = suma_totales_pago_obrero($id_proyecto, $fecha_iterativa, '');
+          $total_monto_pago_obrero   += $cant_monto_pago_obrero;
+          $val_utilidad_pago_obrero   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pago_obrero)/$monto_valorizacion_gastado);
+          $total_utilidad_pago_obrero+= $val_utilidad_pago_obrero;
+          array_push($monto_acumulado_pago_obrero,   round($total_monto_pago_obrero,2) );
+          array_push($utilidad_acumulado_pago_obrero,   round($total_utilidad_pago_obrero,2) );
+          array_push($monto_pago_obrero,   round($cant_monto_pago_obrero,2) );
+          array_push($utilidad_pago_obrero,   round($val_utilidad_pago_obrero,2) );
+          $tabla_pago_obrero[]= array(
+            "modulo"=>'Pago Obrero',"val"=>'Val'.$cont, "gasto"=>$cant_monto_pago_obrero, "utilidad"=>$val_utilidad_pago_obrero, "ver_mas"=>'pago_obrero.php',
+          );
           $cont++;
         } else {
           break;
@@ -453,56 +507,78 @@ class ChartValorizacion
       }
     }   
     
+    // compra_insumos
     $tabla_resumen[]= array(
       "modulo"=>'Compra de insumos', "gasto"=>round($total_monto_compra_insumos,2), "utilidad"=>round($total_utilidad_compra_insumos,2), "ver_mas"=>'compra_insumos.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_compra_insumos,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_compra_insumos,2) );  
+    // maquina_y_equipo
     $tabla_resumen[]= array(
       "modulo"=>'Maquinas y Equipos', "gasto"=>$total_monto_maquina_y_equipo, "utilidad"=>$total_utilidad_maquina_y_equipo, "ver_mas"=>'servicio_maquina.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_maquina_y_equipo,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_maquina_y_equipo,2) );  
+    // subcontrato
     $tabla_resumen[]= array(
       "modulo"=>'Subcontrato', "gasto"=>$total_monto_subcontrato, "utilidad"=>$total_utilidad_subcontrato, "ver_mas"=>'sub_contrato.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_subcontrato,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_subcontrato,2) );  
+    // planilla_seguro
     $tabla_resumen[]= array(
       "modulo"=>'Planilla Seguro', "gasto"=>$total_monto_planilla_seguro, "utilidad"=>$total_utilidad_planilla_seguro, "ver_mas"=>'planillas_seguros.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_planilla_seguro,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_planilla_seguro,2) ); 
+    // otro_gasto
     $tabla_resumen[]= array(
       "modulo"=>'Otro Gasto', "gasto"=>$total_monto_otro_gasto, "utilidad"=>$total_utilidad_otro_gasto, "ver_mas"=>'otro_gasto.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_otro_gasto,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_otro_gasto,2) );
+    // transporte
     $tabla_resumen[]= array(
       "modulo"=>'Transporte', "gasto"=>$total_monto_transporte, "utilidad"=>$total_utilidad_transporte, "ver_mas"=>'transporte.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_transporte,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_transporte,2) );
+    // hospedaje
     $tabla_resumen[]= array(
       "modulo"=>'Hospedaje', "gasto"=>$total_monto_hospedaje, "utilidad"=>$total_utilidad_hospedaje, "ver_mas"=>'hospedaje.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_hospedaje,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_hospedaje,2) );
+    // pension
     $tabla_resumen[]= array(
       "modulo"=>'Pension', "gasto"=>$total_monto_pension, "utilidad"=>$total_utilidad_pension, "ver_mas"=>'pension.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_pension,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_pension,2) );
+    // breack
     $tabla_resumen[]= array(
       "modulo"=>'Breack', "gasto"=>$total_monto_breack, "utilidad"=>$total_utilidad_breack, "ver_mas"=>'break.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_breack,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_breack,2) );
+    // comida_extra
     $tabla_resumen[]= array(
       "modulo"=>'Comida Extra', "gasto"=>$total_monto_comida_extra, "utilidad"=>$total_utilidad_comida_extra, "ver_mas"=>'comidas_extras.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_comida_extra,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_comida_extra,2) );
+    // pago_administrador
+    $tabla_resumen[]= array(
+      "modulo"=>'Pago Administrador', "gasto"=>$total_monto_pago_administrador, "utilidad"=>$total_utilidad_pago_administrador, "ver_mas"=>'comidas_extras.php',
+    );
+    array_push($monto_resumen_modulos,   round($total_monto_pago_administrador,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_pago_administrador,2) );
+    // pago_obrero
+    $tabla_resumen[]= array(
+      "modulo"=>'Pago Obrero', "gasto"=>$total_monto_pago_obrero, "utilidad"=>$total_utilidad_pago_obrero, "ver_mas"=>'comidas_extras.php',
+    );
+    array_push($monto_resumen_modulos,   round($total_monto_pago_obrero,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_pago_obrero,2) );
     
     return $retorno = [
       'status'=> true, 'message' => 'Salió todo ok,', 
@@ -601,7 +677,22 @@ class ChartValorizacion
         'total_monto_comida_extra'        =>$total_monto_comida_extra,
         'total_utilidad_comida_extra'     =>$total_utilidad_comida_extra,
         'tabla_comida_extra'              =>$tabla_comida_extra,
-
+        // pago_administrador
+        'monto_acumulado_pago_administrador'    => $monto_acumulado_pago_administrador,
+        'utilidad_acumulado_pago_administrador' => $utilidad_acumulado_pago_administrador,
+        'monto_pago_administrador'              => $monto_pago_administrador,
+        'utilidad_pago_administrador'           => $utilidad_pago_administrador,
+        'total_monto_pago_administrador'        =>$total_monto_pago_administrador,
+        'total_utilidad_pago_administrador'     =>$total_utilidad_pago_administrador,
+        'tabla_pago_administrador'              =>$tabla_pago_administrador,
+        // pago_obrero
+        'monto_acumulado_pago_obrero'    => $monto_acumulado_pago_obrero,
+        'utilidad_acumulado_pago_obrero' => $utilidad_acumulado_pago_obrero,
+        'monto_pago_obrero'              => $monto_pago_obrero,
+        'utilidad_pago_obrero'           => $utilidad_pago_obrero,
+        'total_monto_pago_obrero'        =>$total_monto_pago_obrero,
+        'total_utilidad_pago_obrero'     =>$total_utilidad_pago_obrero,
+        'tabla_pago_obrero'              =>$tabla_pago_obrero,
         // resumen_modulos
         'tabla_resumen_modulos'=>$tabla_resumen,
         'monto_resumen_modulos'=>$monto_resumen_modulos,
@@ -919,6 +1010,50 @@ function suma_totales($idproyecto, $fecha_1, $fecha_2) {
   // $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
   // $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
   // $igv      += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['igv']) ? 0 : floatval($otra_factura['data']['igv']) );
+  
+  // SUMAS TOTALES - PAGO ADMINISTRADOR --------------------------------------------------------------------------------
+  $filtro_fecha = "";
+
+  if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    $filtro_fecha = "AND pxma.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+  } else if (!empty($fecha_1)) {    
+    $filtro_fecha = "AND pxma.fecha_pago = '$fecha_1'";
+  }else if (!empty($fecha_2)) {      
+    $filtro_fecha = "AND pxma.fecha_pago = '$fecha_2'";
+  }   
+  $sql11 = "SELECT SUM(pxma.monto) total, SUM(pxma.monto) AS subtotal
+  FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
+  WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador
+  AND pxma.estado = '1' AND pxma.estado_delete = '1'  AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
+  $pago_administrador = ejecutarConsultaSimpleFila($sql11);
+
+  if ($pago_administrador['status'] == false) { return $pago_administrador; }
+  
+  $total    += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['total']) ? 0 : floatval($pago_administrador['data']['total']) );
+  $subtotal += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['subtotal']) ? 0 : floatval($pago_administrador['data']['subtotal']) );
+  $igv      += 0;
+
+  // SUMAS TOTALES - PAGO OBRERO --------------------------------------------------------------------------------
+  $filtro_fecha = "";
+
+  if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    $filtro_fecha = "AND pqso.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+  } else if (!empty($fecha_1)) {    
+    $filtro_fecha = "AND pqso.fecha_pago = '$fecha_1'";
+  }else if (!empty($fecha_2)) {      
+    $filtro_fecha = "AND pqso.fecha_pago = '$fecha_2'";        
+  }
+  $sql12 = "SELECT SUM(pqso.monto_deposito) total, SUM(pqso.monto_deposito) AS subtotal
+  FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
+  WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador
+  AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
+  $pago_obrero = ejecutarConsultaSimpleFila($sql12);
+
+  if ($pago_obrero['status'] == false) { return $pago_obrero; }
+  
+  $total    += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['total']) ? 0 : floatval($pago_obrero['data']['total']) );
+  $subtotal += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['subtotal']) ? 0 : floatval($pago_obrero['data']['subtotal']) );
+  $igv      += 0;
 
 
   $data = array( 
@@ -1214,6 +1349,58 @@ function suma_totales_otro_ingreso($idproyecto, $fecha_1, $fecha_2) {
 
 function suma_totales_otro_factura($idproyecto, $fecha_1, $fecha_2) {
   # code...
+}
+
+function suma_totales_pago_administrador($idproyecto, $fecha_1, $fecha_2) {
+  $filtro_fecha = "";
+
+  if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    $filtro_fecha = "AND pxma.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+  } else if (!empty($fecha_1)) {    
+    $filtro_fecha = "AND pxma.fecha_pago = '$fecha_1'";
+  }else if (!empty($fecha_2)) {      
+    $filtro_fecha = "AND pxma.fecha_pago = '$fecha_2'";
+  }   
+  $sql11 = "SELECT SUM(pxma.monto) total, SUM(pxma.monto) AS subtotal
+  FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
+  WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador
+  AND pxma.estado = '1' AND pxma.estado_delete = '1'  AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
+  $pago_administrador = ejecutarConsultaSimpleFila($sql11);
+
+  if ($pago_administrador['status'] == false) { return $pago_administrador; }
+  
+  $total    = (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['total']) ? 0 : floatval($pago_administrador['data']['total']) );
+  $subtotal = (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['subtotal']) ? 0 : floatval($pago_administrador['data']['subtotal']) );
+  $igv      = 0;
+
+  $data = array( "status"=> true, "message"=> 'todo oka', "data"=> [ "total" => $total, "subtotal" => $subtotal, "igv" => $igv, ] );
+  return $total ;
+}
+
+function suma_totales_pago_obrero($idproyecto, $fecha_1, $fecha_2) {
+  $filtro_fecha = "";
+
+  if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    $filtro_fecha = "AND pqso.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+  } else if (!empty($fecha_1)) {    
+    $filtro_fecha = "AND pqso.fecha_pago = '$fecha_1'";
+  }else if (!empty($fecha_2)) {      
+    $filtro_fecha = "AND pqso.fecha_pago = '$fecha_2'";        
+  }
+  $sql12 = "SELECT SUM(pqso.monto_deposito) total, SUM(pqso.monto_deposito) AS subtotal
+  FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
+  WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador
+  AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
+  $pago_obrero = ejecutarConsultaSimpleFila($sql12);
+
+  if ($pago_obrero['status'] == false) { return $pago_obrero; }
+  
+  $total    = (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['total']) ? 0 : floatval($pago_obrero['data']['total']) );
+  $subtotal = (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['subtotal']) ? 0 : floatval($pago_obrero['data']['subtotal']) );
+  $igv      = 0;
+
+  $data = array( "status"=> true, "message"=> 'todo oka', "data"=> [ "total" => $total, "subtotal" => $subtotal, "igv" => $igv, ] );
+  return $total ;
 }
     
 ?>

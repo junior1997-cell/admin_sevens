@@ -1,5 +1,7 @@
-var visitorsChart ;
-var salesChart;
+var chart_linea ;
+var chart_barras;
+var chart_pie_productos_mas_vendidos;
+var color_char_pie = ['text-danger','text-success','text-warning','text-info','text-primary','text-indigo',]
 //Función que se ejecuta al inicio
 function init() {
 
@@ -107,10 +109,10 @@ function chart_linea_barra(idnubeproyecto) {
 
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   L I N E A ::::::::::::::::::::::::::::::::::::
       
-      var $visitorsChart = $('#visitors-chart');
-      if (visitorsChart) {  visitorsChart.destroy();  } 
+      var $chart_linea = $('#visitors-chart');
+      if (chart_linea) {  chart_linea.destroy();  } 
       // eslint-disable-next-line no-unused-vars
-      visitorsChart = new Chart($visitorsChart, {
+      chart_linea = new Chart($chart_linea, {
         data: {
           labels: mes_o_dia(year_filtro, month_filtro),
           datasets: [
@@ -154,10 +156,10 @@ function chart_linea_barra(idnubeproyecto) {
       });
 
       // ::::::::::::::::::::::::::::::::::::::::::::  C H A R T  B A R R A S   ::::::::::::::::::::::::::::::::::::
-      var $salesChart = $('#sales-chart');
-      if (salesChart) {  salesChart.destroy();  }
+      var $chart_barras = $('#sales-chart');
+      if (chart_barras) {  chart_barras.destroy();  }
       // eslint-disable-next-line no-unused-vars
-      salesChart = new Chart($salesChart, {
+      chart_barras = new Chart($chart_barras, {
         type: 'bar',
         data: {
           labels: mes_o_dia(year_filtro, month_filtro),
@@ -194,13 +196,17 @@ function chart_linea_barra(idnubeproyecto) {
       });
 
       // :::::::::::::::::::::::::::::::::::::::::::: P R O D U C T O S   M A S   V E N D I D O S ::::::::::::::::::::::::::::::::::::
-      var productos_mas_vendidos = "";
+      var productos_mas_vendidos = ""; var colores_leyenda = "";
       e.data.productos_mas_vendidos.forEach((key, indice) => {
+        colores_leyenda = colores_leyenda.concat(`<li><i class="fas fa-circle ${color_char_pie[indice]}"></i> ${key.producto}</li>`);
         productos_mas_vendidos = productos_mas_vendidos.concat(`
           <tr>
-            <td>
-              <img src="../dist/docs/material/img_perfil/${key.imagen}" alt="Product 1" onerror="this.src='../dist/svg/404-v2.svg';" class="img-thumbnail img-circle img-size-32 mr-2">
-              ${key.producto}
+            <td>              
+              <div class="user-block">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${key.imagen}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_perfil('../dist/docs/material/img_perfil/${key.imagen}', '${encodeHtml(key.producto)}');" data-toggle="tooltip" data-original-title="Ver imagen">
+                <span class="username"><p class="mb-0" >${key.producto}</p></span>
+                <span class="description">${key.descripcion}</span>
+              </div>
             </td>
             <td class="text-right">S/ ${formato_miles(key.precio_referencial)}</td>
             <td>              
@@ -213,7 +219,83 @@ function chart_linea_barra(idnubeproyecto) {
         `);
       });
 
-      $('#tbla_productos_mas_vendidos').html(productos_mas_vendidos);
+      $('.leyenda-pai-productos-mas-usados').html(colores_leyenda);
+      $('#body_productos_mas_vendidos').html(productos_mas_vendidos);
+      $('[data-toggle="tooltip"]').tooltip();
+       
+      // :::::::::::::::::::::::::::::::::::::::::::: PIE CHART - P R O D U C T O S   M A S   V E N D I D O S ::::::::::::::::::::::::::::::::::::
+
+      // Get context with jQuery - using jQuery's .get() method.
+      chart_pie_productos_mas_vendidos = $('#chart_pie_productos_mas_usados').get(0).getContext('2d');     
+      
+      // Create pie or douhnut chart
+      // You can switch between pie and douhnut using the method below.
+      // eslint-disable-next-line no-unused-vars
+      var pieChart = new Chart(chart_pie_productos_mas_vendidos, {
+        type: 'doughnut',
+        data: {
+          labels:  e.data.producto_mas_vendido_nombre,
+          datasets: [
+            {
+              data: e.data.producto_mas_vendido_cantidad,
+              backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#2d1582']
+            }
+          ]
+        },
+        options: {
+          legend: {  display: false, position:'right'   },
+          events: false,
+          animation: {
+            duration: 500,
+            easing: "easeOutQuart",
+            onComplete: function () {
+              var ctx = this.chart.ctx;
+              ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';        
+              this.data.datasets.forEach(function (dataset) {        
+                for (var i = 0; i < dataset.data.length; i++) {
+                  var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                      total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+                      mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+                      start_angle = model.startAngle,
+                      end_angle = model.endAngle,
+                      mid_angle = start_angle + (end_angle - start_angle)/2;
+        
+                  var x = mid_radius * Math.cos(mid_angle);
+                  var y = mid_radius * Math.sin(mid_angle);
+        
+                  ctx.fillStyle = '#fff';
+                  if (i == 3){ // Darker text color for lighter background
+                    ctx.fillStyle = '#444';
+                  }
+                  var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
+                  ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+                  // Display percent in another line, line break doesn't work for fillText
+                  ctx.fillText(percent, model.x + x, model.y + y + 15);
+                }
+              });               
+            }
+          }
+        }
+      });
+
+      // dowload - imagen chart PIE
+      //var image = pieChart.toBase64Image(); // console.log(image);
+
+      // dowload - imagen chart PIE
+      //var image = pieChart.toBase64Image();  console.log(image);
+      var element = $("#div-download-chart-pie-productos-mas-usados"); // global variable
+      var getCanvas; //global variable
+      html2canvas(element, { onrendered: function (canvas) { getCanvas = canvas; } });
+
+      $("#btn-download-chart-pie-productos-mas-usados").on('click', function () {
+        var imgageData = getCanvas.toDataURL("image/jpg");
+        //Now browser starts downloading it instead of just showing it
+        var newData = imgageData.replace(/^data:image\/jpg/, "data:application/octet-stream");
+        $("#btn-download-chart-pie-productos-mas-usados").attr("download", "productos-mas-usados.jpg").attr("href", newData);
+      });
+
     } else {
       ver_errores(e);
     }
@@ -236,4 +318,28 @@ function mes_o_dia(data_anio, data_mes) {
     }
     return array_cant_dias;
   } 
+}
+
+function ver_perfil(file, nombre) {
+  $('.foto-insumo').html(nombre);
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#modal-ver-perfil-insumo").modal("show");
+  $('#perfil-insumo').html(`<center><img class="img-thumbnail" src="${file}" onerror="this.src='../dist/svg/404-v2.svg';" alt="Perfil" width="100%"></center>`);
+}
+
+function export_excel(name_tabla, nombre_excel_file = $('title').text(), nombre_excel_hoja = 'Detalle') {
+   
+  $tabla = document.querySelector(name_tabla);
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: nombre_excel_file, //Nombre del archivo de Excel
+    sheetname: nombre_excel_hoja, //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+
+  if (name_tabla == '#tbla_productos_mas_vendidos') {    
+    let preferenciasDocumento = datos.tbla_productos_mas_vendidos.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  }
+  
 }

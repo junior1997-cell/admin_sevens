@@ -310,16 +310,14 @@
                           <div class="card-header border-0">
                             <h3 class="card-title text-center">Productos mas usados</h3>
                             <div class="card-tools">
-                              <a href="#" class="btn btn-tool btn-sm">
+                              <button class="btn btn-tool btn-sm" onclick="export_excel('#tbla_productos_mas_vendidos','Productos mas usados');">
                                 <i class="fas fa-download"></i>
-                              </a>
-                              <a href="#" class="btn btn-tool btn-sm">
-                                <i class="fas fa-bars"></i>
-                              </a>
+                              </button>
+                              <!-- <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a> -->
                             </div> 
                           </div>
                           <div class="card-body table-responsive p-0">
-                            <table class="table table-striped table-valign-middle">
+                            <table class="table table-striped table-valign-middle" id="tbla_productos_mas_vendidos">
                               <thead>
                               <tr>
                                 <th>Producto</th>
@@ -328,14 +326,42 @@
                                 <th>Mas</th>
                               </tr>
                               </thead>
-                              <tbody id="tbla_productos_mas_vendidos">
+                              <tbody id="body_productos_mas_vendidos">
                                 <!-- aqui van los productos -->
                               </tbody>
                             </table>
                           </div>
                         </div>
                         <!-- /.card -->
-                      </div>                     
+                      </div>
+                      
+                      <div class="col-lg-6">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <h3 class="card-title text-center">Productos mas usados</h3>
+                            <div class="card-tools">                              
+                              <a class="btn btn-tool btn-sm" id="btn-download-chart-pie-productos-mas-usados">
+                                <i class="fas fa-download"></i>
+                              </a>
+                              <!-- <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i>  </a> -->
+                            </div> 
+                          </div>
+                          <div class="card-body bg-white" id="div-download-chart-pie-productos-mas-usados">
+                            <div class="row">
+                              <div class="col-md-8">
+                                <div class="chart-responsive">
+                                  <canvas id="chart_pie_productos_mas_usados" height="250"></canvas>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <ul class="chart-legend clearfix leyenda-pai-productos-mas-usados" >
+                                </ul>
+                              </div>
+                            </div>                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
 
                       <div class="col-lg-6 hidden">
                         <div class="card">
@@ -398,6 +424,26 @@
                     <!-- /.row -->
                   </div>
                   <!-- /.container-fluid -->
+
+                  <!-- MODAL - VER PERFIL INSUMO-->
+                  <div class="modal fade" id="modal-ver-perfil-insumo">
+                    <div class="modal-dialog modal-dialog-centered modal-md">
+                      <div class="modal-content bg-color-0202022e shadow-none border-0">
+                        <div class="modal-header">
+                          <h4 class="modal-title text-white foto-insumo">Foto Insumo</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body"> 
+                          <div id="perfil-insumo" class="class-style">
+                            <!-- vemos los datos del trabajador -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
                 <!-- /.content -->
               </div>
@@ -426,8 +472,14 @@
         <script src="../plugins/chart.js/Chart.min.js"></script>
         <!-- AdminLTE for demo purposes -->
         <script src="../dist/js/demo.js"></script>
-        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <!-- <script src="../dist/js/pages/dashboard3.js"></script> -->
+        
+        <!-- html2canvas -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script> 
         
         <script type="text/javascript" src="scripts/chart_compra_insumo.js"></script>         
 

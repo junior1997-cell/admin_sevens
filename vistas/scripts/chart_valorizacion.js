@@ -12,6 +12,8 @@ var char_linea_hospedaje;
 var char_linea_pension;
 var char_linea_breack;
 var char_linea_comida_extra;
+var char_linea_pago_administrador;
+var char_linea_pago_obrero;
 
 var chart_barra_resumen_modulos;
 
@@ -293,6 +295,32 @@ function chart_linea_barra() {
       }
       $('.progress_total_comida_extra').html(`S/. ${formato_miles(e.data.total_monto_comida_extra)}`);
 
+      // pago_administrador
+      var  color_linea_utilidad_pago_administrador = "";
+      if (e.data.total_utilidad_pago_administrador > 0) {
+        $('.progress_total_utilidad_pago_administrador').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_pago_administrador)}`);
+        $('.leyenda_utilidad_pago_administrador').removeClass('text-danger').addClass('text-success');
+        color_linea_utilidad_pago_administrador = "#008000";
+      } else {
+        $('.progress_total_utilidad_pago_administrador').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_pago_administrador)}`);
+        $('.leyenda_utilidad_pago_administrador').addClass('text-danger').removeClass('text-success');
+        color_linea_utilidad_pago_administrador = "#dc3545";
+      }
+      $('.progress_total_pago_administrador').html(`S/. ${formato_miles(e.data.total_monto_pago_administrador)}`);
+
+      // pago_obrero
+      var  color_linea_utilidad_pago_obrero = "";
+      if (e.data.total_utilidad_pago_obrero > 0) {
+        $('.progress_total_utilidad_pago_obrero').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_pago_obrero)}`);
+        $('.leyenda_utilidad_pago_obrero').removeClass('text-danger').addClass('text-success');
+        color_linea_utilidad_pago_obrero = "#008000";
+      } else {
+        $('.progress_total_utilidad_pago_obrero').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_pago_obrero)}`);
+        $('.leyenda_utilidad_pago_obrero').addClass('text-danger').removeClass('text-success');
+        color_linea_utilidad_pago_obrero = "#dc3545";
+      }
+      $('.progress_total_pago_obrero').html(`S/. ${formato_miles(e.data.total_monto_pago_obrero)}`);
+
       // resumen_modulos ----------------------------------------------
       var  color_linea_utilidad_resumen_modulos = "";
       if (e.data.total_utilidad > 0) {
@@ -305,6 +333,7 @@ function chart_linea_barra() {
         color_linea_utilidad_resumen_modulos = "#dc3545";
       }
       $('.progress_total_resumen_modulos').html(`S/. ${formato_miles(e.data.total_monto_gastado)}`);
+      
 
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   L I N E A S  -  C U R V A  S ::::::::::::::::::::::::::::::::::::
       
@@ -1094,6 +1123,116 @@ function chart_linea_barra() {
         }
       });
 
+      // :::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  -  P A G O   A D M I N I S T R A D O R  ::::::::::::::::::::::::
+      var $char_linea_pago_administrador = $('#chart-line-pago-administrador');
+      if (char_linea_pago_administrador) {  char_linea_pago_administrador.destroy();  }
+      // eslint-disable-next-line no-unused-vars
+      char_linea_pago_administrador = new Chart($char_linea_pago_administrador, {
+        data: {
+          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          datasets: [
+            {
+              type: 'line', data: e.data.utilidad_pago_administrador, 
+              backgroundColor: 'transparent', borderColor: color_linea_utilidad_pago_administrador,
+              pointBorderColor: color_linea_utilidad_pago_administrador, pointBackgroundColor: color_linea_utilidad_pago_administrador,
+              fill: false, label: 'Utilidad',  hidden: true,
+              // pointHoverBackgroundColor: color_linea_utilidad_pago_administrador,
+              // pointHoverBorderColor    : color_linea_utilidad_pago_administrador
+            },
+            {              
+              type: 'line', data: e.data.monto_pago_administrador, 
+              backgroundColor: 'transparent', borderColor: '#008080',
+              pointBorderColor: '#008080', pointBackgroundColor: '#008080',
+              fill: false, label: 'Comida Extra',
+              // pointHoverBackgroundColor: color_linea_utilidad,
+              // pointHoverBorderColor    : color_linea_utilidad
+            }
+          ]
+        },
+        options: {
+          maintainAspectRatio: false,
+          tooltips: { mode: mode,  intersect: intersect,
+            callbacks: {
+              title: function (tooltipItem, data) { return "" + data.labels[tooltipItem[0].index]; },
+              label: function(tooltipItems, data) { return "Total: S/ " +  Number(tooltipItems.yLabel).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') ; },
+              footer: function (tooltipItem, data) { return "..."; }
+            }
+          },
+          hover: { mode: mode, intersect: intersect },
+          legend: { display: true,  },
+          scales: {
+            yAxes: [{
+              display: true,
+              gridLines: { display: false, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
+              ticks: $.extend({ 
+                beginAtZero: true, suggestedMax: 200,
+                callback: function (value, index, values) { return 'S/ '+ Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); },
+              }, ticksStyle)
+            }],
+            xAxes: [{ 
+              display: true, 
+              gridLines: { display: false, },
+              ticks: ticksStyle
+            }]
+          }
+        }
+      });
+
+      // :::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  -  P A G O   O B R E R O  ::::::::::::::::::::::::
+      var $char_linea_pago_obrero = $('#chart-line-pago-obrero');
+      if (char_linea_pago_obrero) {  char_linea_pago_obrero.destroy();  }
+      // eslint-disable-next-line no-unused-vars
+      char_linea_pago_obrero = new Chart($char_linea_pago_obrero, {
+        data: {
+          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          datasets: [
+            {
+              type: 'line', data: e.data.utilidad_pago_obrero, 
+              backgroundColor: 'transparent', borderColor: color_linea_utilidad_pago_obrero,
+              pointBorderColor: color_linea_utilidad_pago_obrero, pointBackgroundColor: color_linea_utilidad_pago_obrero,
+              fill: false, label: 'Utilidad',  hidden: true,
+              // pointHoverBackgroundColor: color_linea_utilidad_pago_obrero,
+              // pointHoverBorderColor    : color_linea_utilidad_pago_obrero
+            },
+            {              
+              type: 'line', data: e.data.monto_pago_obrero, 
+              backgroundColor: 'transparent', borderColor: '#008080',
+              pointBorderColor: '#008080', pointBackgroundColor: '#008080',
+              fill: false, label: 'Comida Extra',
+              // pointHoverBackgroundColor: color_linea_utilidad,
+              // pointHoverBorderColor    : color_linea_utilidad
+            }
+          ]
+        },
+        options: {
+          maintainAspectRatio: false,
+          tooltips: { mode: mode,  intersect: intersect,
+            callbacks: {
+              title: function (tooltipItem, data) { return "" + data.labels[tooltipItem[0].index]; },
+              label: function(tooltipItems, data) { return "Total: S/ " +  Number(tooltipItems.yLabel).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') ; },
+              footer: function (tooltipItem, data) { return "..."; }
+            }
+          },
+          hover: { mode: mode, intersect: intersect },
+          legend: { display: true,  },
+          scales: {
+            yAxes: [{
+              display: true,
+              gridLines: { display: false, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
+              ticks: $.extend({ 
+                beginAtZero: true, suggestedMax: 200,
+                callback: function (value, index, values) { return 'S/ '+ Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); },
+              }, ticksStyle)
+            }],
+            xAxes: [{ 
+              display: true, 
+              gridLines: { display: false, },
+              ticks: ticksStyle
+            }]
+          }
+        }
+      });
+
       // :::::::::::::::::::::::::::::::::::::::::::: T A B L A   -  C O M P R A S   D E   I N S U M O S ::::::::::::::::::::::::::::::::::::
       var html_tabla_compra_insumos = "";
       var suma_total_gasto_compra_insumos = 0; var suma_total_utilidad_compra_insumos = 0; 
@@ -1314,7 +1453,49 @@ function chart_linea_barra() {
       $('.foot_total_gasto_comida_extra').html(formato_miles(suma_total_gasto_comida_extra));
       $('.foot_total_utilidad_comida_extra').html(formato_miles(suma_total_utilidad_comida_extra));
       
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  P A G O   A D M I N I S T R A D O R  ::::::::::::::::::::::::::::::::::::
+      var html_tabla_pago_administrador = "";
+      var suma_total_gasto_pago_administrador = 0; var suma_total_utilidad_pago_administrador = 0; 
+      e.data.tabla_pago_administrador.forEach((key, indice) => {
+        html_tabla_pago_administrador = html_tabla_pago_administrador.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_pago_administrador)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_pago_administrador)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_pago_administrador += key.gasto;
+        suma_total_utilidad_pago_administrador += key.utilidad;
+      });
 
+      $('#body_modulo_pago_administrador').html(html_tabla_pago_administrador);
+      $('.foot_total_gasto_pago_administrador').html(formato_miles(suma_total_gasto_pago_administrador));
+      $('.foot_total_utilidad_pago_administrador').html(formato_miles(suma_total_utilidad_pago_administrador));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  P A G O   O B R E R O  ::::::::::::::::::::::::::::::::::::
+      var html_tabla_pago_obrero = "";
+      var suma_total_gasto_pago_obrero = 0; var suma_total_utilidad_pago_obrero = 0; 
+      e.data.tabla_pago_obrero.forEach((key, indice) => {
+        html_tabla_pago_obrero = html_tabla_pago_obrero.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_pago_obrero)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_pago_obrero)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_pago_obrero += key.gasto;
+        suma_total_utilidad_pago_obrero += key.utilidad;
+      });
+
+      $('#body_modulo_pago_obrero').html(html_tabla_pago_obrero);
+      $('.foot_total_gasto_pago_obrero').html(formato_miles(suma_total_gasto_pago_obrero));
+      $('.foot_total_utilidad_pago_obrero').html(formato_miles(suma_total_utilidad_pago_obrero));
 
       // :::::::::::::::::::::::::::::::::::::::::::: T A B L A   -   R E S U M E N   D E   M O D U L O S ::::::::::::::::::::::::::::::::::::
       var html_tabla_modulos = "";
@@ -1345,7 +1526,7 @@ function chart_linea_barra() {
       chart_barra_resumen_modulos = new Chart($chart_barra_resumen_modulos, {
         type: 'bar',
         data: {
-          labels: ['Compra de insumos','Maquinas y Equipos','Subcontrato','Planilla Seguro','Otro Gasto','Transporte','Hospedaje','Pensión','Breack','Comida Extra'],
+          labels: ['Compra de insumos','Maquinas y Equipos','Subcontrato','Planilla Seguro','Otro Gasto','Transporte','Hospedaje','Pensión','Breack','Comida Extra', 'Pago Adm.', 'Pago Obrero'],
           datasets: [
             { backgroundColor: '#008080', borderColor: '#008080', data: e.data.monto_resumen_modulos, label: 'Módulos', },
             { backgroundColor: color_linea_utilidad_resumen_modulos, borderColor: color_linea_utilidad_resumen_modulos, data: e.data.utilidad_resumen_modulos, label: 'Utilidad', }

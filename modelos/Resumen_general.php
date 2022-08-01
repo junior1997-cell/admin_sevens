@@ -433,7 +433,7 @@ class Resumen_general
     $sql = "SELECT ra.idresumen_q_s_asistencia,ra.idtrabajador_por_proyecto, t.nombres, SUM(ra.pago_quincenal) as pago_quincenal 
 		FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
 		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' 
-		AND tpp.idtrabajador=t.idtrabajador AND ra.estado = '1' AND ra.estado_delete='1' $consulta_filtro  ";
+		AND tpp.idtrabajador=t.idtrabajador AND ra.estado_envio_contador = '1'  AND ra.estado = '1' AND ra.estado_delete='1' $consulta_filtro  ";
     $trabaj_obrero = ejecutarConsultaArray($sql);
     if ($trabaj_obrero['status'] == false) {  return $trabaj_obrero;}
 

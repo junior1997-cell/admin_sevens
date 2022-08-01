@@ -43,6 +43,8 @@ class ChartCompraInsumo
   public function chart_linea($id_proyecto, $year_filtro, $mes_filtro, $dias_filtro) {
     $data_gasto = Array(); $data_pagos = Array();
 
+    $producto_mas_vendido_nombre = Array(); $producto_mas_vendido_cantidad = Array();
+
     $factura_total = 0; $factura_aceptadas = 0; $factura_rechazadas = 0; $factura_eliminadas = 0; $factura_rechazadas_eliminadas = 0;
 
     $factura_total_gasto = 0; $factura_total_pago = 0;
@@ -100,14 +102,21 @@ class ChartCompraInsumo
       if ($factura_total_pago['status'] == false) { return $factura_total_pago; }
 
       // -----------------------
-      $sql_10 = "SELECT dt.idproducto,p.nombre as producto, p.imagen, p.precio_total as precio_referencial, SUM(dt.cantidad) AS cantidad_vendida
+      $sql_10 = "SELECT dt.idproducto,p.nombre as producto, p.imagen, p.precio_total as precio_referencial, SUM(dt.cantidad) AS cantidad_vendida, p.descripcion
       FROM compra_por_proyecto as cpp, detalle_compra as dt, producto as p
       WHERE cpp.idcompra_proyecto = dt.idcompra_proyecto AND dt.idproducto = p.idproducto AND cpp.idproyecto = '$id_proyecto' AND  YEAR(cpp.fecha_compra) = '$year_filtro'
       GROUP BY dt.idproducto
       ORDER BY SUM(dt.cantidad) DESC
-      LIMIT 0 , 5;";
+      LIMIT 0 , 6;";
       $productos_mas_vendidos = ejecutarConsultaArray($sql_10);
       if ($productos_mas_vendidos['status'] == false) { return $productos_mas_vendidos; }
+
+      if ( !empty($productos_mas_vendidos['data']) ) {
+        foreach ($productos_mas_vendidos['data'] as $key => $value) {
+          array_push($producto_mas_vendido_nombre, $value['producto']);
+          array_push($producto_mas_vendido_cantidad, $value['cantidad_vendida']);
+        }        
+      }
 
     }else{
       for ($i=1; $i <= $dias_filtro ; $i++) {
@@ -160,14 +169,21 @@ class ChartCompraInsumo
       if ($factura_total_pago['status'] == false) { return $factura_total_pago; }
 
       // -----------------------
-      $sql_10 = "SELECT dt.idproducto,p.nombre as producto, p.imagen, p.precio_total as precio_referencial, SUM(dt.cantidad) AS cantidad_vendida
+      $sql_10 = "SELECT dt.idproducto,p.nombre as producto, p.imagen, p.precio_total as precio_referencial, SUM(dt.cantidad) AS cantidad_vendida, p.descripcion
       FROM compra_por_proyecto as cpp, detalle_compra as dt, producto as p
       WHERE cpp.idcompra_proyecto = dt.idcompra_proyecto AND dt.idproducto = p.idproducto AND cpp.idproyecto = '$id_proyecto' AND MONTH(cpp.fecha_compra)='$mes_filtro' AND  YEAR(cpp.fecha_compra) = '$year_filtro'
       GROUP BY dt.idproducto
       ORDER BY SUM(dt.cantidad) DESC
-      LIMIT 0 , 5;";
+      LIMIT 0 , 6;";
       $productos_mas_vendidos = ejecutarConsultaArray($sql_10);
       if ($productos_mas_vendidos['status'] == false) { return $productos_mas_vendidos; }
+
+      if ( !empty($productos_mas_vendidos['data']) ) {
+        foreach ($productos_mas_vendidos['data'] as $key => $value) {
+          array_push($producto_mas_vendido_nombre, $value['producto']);
+          array_push($producto_mas_vendido_cantidad, $value['cantidad_vendida']);
+        }        
+      }
     }
     
     
@@ -187,6 +203,8 @@ class ChartCompraInsumo
         'factura_total_pago'=>(empty($factura_total_pago['data']) ? 0 : (empty($factura_total_pago['data']['factura_total_pago']) ? 0 : floatval($factura_total_pago['data']['factura_total_pago']) ) ),
 
         'productos_mas_vendidos'=>$productos_mas_vendidos['data'], 
+        'producto_mas_vendido_nombre'=>$producto_mas_vendido_nombre, 
+        'producto_mas_vendido_cantidad'=>$producto_mas_vendido_cantidad, 
       ]  
     ];
   }
