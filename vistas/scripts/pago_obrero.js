@@ -65,7 +65,7 @@ function doc2_eliminar() {
 
 function table_show_hide(flag) {
   if (flag == 1) {
-    location.reload();
+    //location.reload();
     $("#btn-regresar").hide();
     $("#btn-regresar-todo").hide();
     $("#btn-regresar-bloque").hide();
@@ -130,6 +130,12 @@ function table_show_hide(flag) {
 }
 
 function sumas_totales_tabla_orincipal(id_proyecto) {
+  if (tabla_principal) {
+    tabla_principal.destroy(); // Destruye las tablas de datos en el contexto actual.
+    $('#tbody-tabla-principal').empty(); // Vacía en caso de que las columnas cambien
+  }
+  
+
   // suma totales x proyecto
   $.post("../ajax/pago_obrero.php?op=mostrar_sumas_totales_tbla_principal", { 'id_proyecto': id_proyecto }, function (e, status) {
 

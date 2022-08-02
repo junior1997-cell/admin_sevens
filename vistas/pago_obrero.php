@@ -135,7 +135,7 @@
                                   <th>Pago Acumulado</th>
                                 </tr>
                               </thead>
-                              <tbody>   </tbody>
+                              <tbody id="tbody-tabla-principal">   </tbody>
                               <tfoot>
                                 <tr> 
                                   <th class="text-center text-gray"><small>#</small></th>                                 

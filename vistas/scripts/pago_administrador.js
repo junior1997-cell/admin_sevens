@@ -150,6 +150,10 @@ function limpiar_form_recibos_x_honorarios() {
   $(".is-invalid").removeClass("error is-invalid");
 }
 
+function sumas_totales_tabla_orincipal(id_proyecto) {
+  
+}
+
 //Función Listar - tabla principal
 function listar_tbla_principal(nube_idproyecto) {
 

@@ -108,7 +108,7 @@
                                   <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
                                 </tr>
                               </thead>
-                              <tbody>                         
+                              <tbody id="tbody-tabla-principal">                         
                                 
                               </tbody>
                               <tfoot>

@@ -22,7 +22,7 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
   tbla_principal(localStorage.getItem('nube_idproyecto'));
-  listar_botones_q_s(localStorage.getItem('nube_idproyecto')) 
+  listar_botones_q_s(localStorage.getItem('nube_idproyecto')); 
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_adicional_descuento").on("click", function (e) { $("#submit-form-adicional-descuento").submit(); });
@@ -2487,7 +2487,7 @@ function guardar_y_editar_fechas_actividades(e) {
           Swal.fire("Correcto!", "Fechas registrada correctamente", "success");
 
           $("#modal-agregar-fechas-actividades").modal("hide");
-
+          listar_botones_q_s(localStorage.getItem('nube_idproyecto')); 
           tbla_principal(localStorage.getItem('nube_idproyecto'));
 
           mostrar_form_table(1);
