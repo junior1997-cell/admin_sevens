@@ -32,7 +32,7 @@
           <?php
             require 'nav.php';
             require 'aside.php';
-            if ($_SESSION['compra_insumos']==1){
+            if ($_SESSION['grafico_valorizacion']==1){
               //require 'enmantenimiento.php';
               ?>
 

@@ -27,7 +27,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['pago_trabajador']==1){
+          if ($_SESSION['pago_valorizacion']==1){
             require 'endesarrollo.php';
             ?>           
             <!--Contenido-->

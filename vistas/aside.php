@@ -236,13 +236,15 @@
                 </a>
               </li>
             <?php  }  ?>
-
+            
+            <?php if ($_SESSION['grafico_valorizacion']==1) {  ?>
             <!-- graficos insumos -->
             <li class="nav-item ">
-              <a href="chart_valorizacion.php" class="nav-link" id="lChartValorizacion">
+              <a href="chart_valorizacion.php" class="nav-link pl-2" id="lChartValorizacion">
                 <i class="nav-icon fas fa-chart-line"></i> <p>Gráficos</p>
               </a>
             </li> 
+            <?php  }  ?>
 
             <?php if ($_SESSION['asistencia_obrero']==1) {  ?>
               <!-- REGISTRO DE ASISTENCIA -->
@@ -354,6 +356,7 @@
                 </a>
               </li>
             <?php  }  ?>
+
             <?php if ($_SESSION['subcontrato']==1) {  ?>  
             <li class="nav-item ver-otros-modulos-1">
               <a href="sub_contrato.php" class="nav-link pl-2" id="lSubContrato">
@@ -362,6 +365,7 @@
               </a>
             </li>
             <?php  }  ?>
+            
             <?php if ($_SESSION['planilla_seguro']==1) {  ?>
               <!-- PLANILLAS Y SEGUROS -->       
               <li class="nav-item ver-otros-modulos-1">
@@ -456,13 +460,16 @@
             <p class="font-size-14px">CONTABLE Y FINANCIERO<i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
-            <!-- RESUMEN DE GASTOS -->
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="resumen_gasto.php" class="nav-link pl-2" id="lResumenGastos">
-                <i class="nav-icon fas fa-comments-dollar"></i>
-                <p>Resumen de Gastos</p>
-              </a>
-            </li>
+
+            <?php if ($_SESSION['resumen_gasto']==1) {  ?>
+              <!-- RESUMEN DE GASTOS -->
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="resumen_gasto.php" class="nav-link pl-2" id="lResumenGastos">
+                  <i class="nav-icon fas fa-comments-dollar"></i>
+                  <p>Resumen de Gastos</p>
+                </a>
+              </li>
+            <?php  }  ?>
 
             <?php if ($_SESSION['pago_trabajador']==1) {  ?>          
               <!-- PAGOS DE TRABAJADORES -->
@@ -491,20 +498,24 @@
               </li>
             <?php  }  ?>
             
-            <!-- PRESTAMOS -->
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="prestamo.php" class="nav-link pl-2" id="lPrestamo">
-                <i class="nav-icon fas fa-university"></i>
-                <p>Prestamos</p>
-              </a>
-            </li>
-
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="estado_financiero.php" class="nav-link pl-2" id="lEstadoFinanciero">             
-                <i class="nav-icon fas fa-balance-scale-left"></i>
-                <p>Estado Financiero</p>
-              </a>
-            </li>
+            <?php if ($_SESSION['prestamo']==1) {  ?>
+              <!-- PRESTAMOS -->
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="prestamo.php" class="nav-link pl-2" id="lPrestamo">
+                  <i class="nav-icon fas fa-university"></i>
+                  <p>Prestamos</p>
+                </a>
+              </li>
+            <?php  }  ?>
+            
+            <?php if ($_SESSION['estado_financiero']==1) {  ?>
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="estado_financiero.php" class="nav-link pl-2" id="lEstadoFinanciero">             
+                  <i class="nav-icon fas fa-balance-scale-left"></i>
+                  <p>Estado Financiero</p>
+                </a>
+              </li>
+            <?php  }  ?>
 
             <?php if ($_SESSION['otro_ingreso']==1) {  ?>
               <li class="nav-item ver-otros-modulos-1">
@@ -514,13 +525,16 @@
                 </a>
               </li>
             <?php  }  ?>
+            
+            <?php if ($_SESSION['pago_valorizacion']==1) {  ?>
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="pago_valorizacion.php" class="nav-link pl-2" id="lPagoValorizacion">             
+                  <i class="fas fa-dollar-sign nav-icon"></i>
+                  <p>Pago Valorización </p>
+                </a>
+              </li>
+            <?php  }  ?>
 
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="pago_valorizacion.php" class="nav-link pl-2" id="lPagoValorizacion">             
-                <i class="fas fa-dollar-sign nav-icon"></i>
-                <p>Pago Valorización </p>
-              </a>
-            </li>
           </ul>
         </li>
 
