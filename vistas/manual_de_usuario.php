@@ -85,7 +85,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-users-cog"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/usuarios.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-users-cog"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Usuarios</span>
@@ -99,7 +99,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-lock"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/acceso.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-lock"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Permisos</span>
@@ -113,7 +113,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-users"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/trabajador.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-users"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">All-Trabajador</span>
@@ -127,7 +127,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-truck"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/proveedor.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-truck"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">All-Proveedor</span>
@@ -141,7 +141,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-tractor"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/maquinaria_equipos.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-tractor"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Maquinas y Equipos</span>
@@ -155,7 +155,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><img src="../dist/svg/negro-palana-ico.svg" class="nav-icon" alt="" style="width: 31px !important;" ></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/insumos.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><img src="../dist/svg/negro-palana-ico.svg" class="nav-icon" alt="" style="width: 31px !important;" ></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Insumos</span>
@@ -169,7 +169,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-truck-pickup"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/activos_fijos.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-truck-pickup"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Activos Fijos</span>
@@ -183,7 +183,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="far fa-calendar-alt"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/all_calendario.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="far fa-calendar-alt"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">All-Calendario</span>
@@ -197,7 +197,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-coins"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/otros.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-coins"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Otros</span>
@@ -211,7 +211,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-hand-holding-usd"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/compras_activos_fijos.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-hand-holding-usd"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Compras de Activos Fijos</span>
@@ -225,7 +225,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-tasks"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/resumen_activos_fijos.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-tasks"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Resumen de activos Fijos</span>
