@@ -19,7 +19,7 @@ function init() {
   $("#lPagosObrero").addClass("active");
 
   listar_botones_q_s(localStorage.getItem('nube_idproyecto')) ; 
-  sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
+  sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
 
   // efectuamos SUBMIT  registro de: PAGOS POR MES
   $("#guardar_registro_pagos_x_mes").on("click", function (e) { $("#submit-form-pagos-x-mes").submit(); });
@@ -129,12 +129,11 @@ function table_show_hide(flag) {
   }
 }
 
-function sumas_totales_tabla_orincipal(id_proyecto) {
+function sumas_totales_tabla_principal(id_proyecto) {
   if (tabla_principal) {
     tabla_principal.destroy(); // Destruye las tablas de datos en el contexto actual.
     $('#tbody-tabla-principal').empty(); // Vacía en caso de que las columnas cambien
-  }
-  
+  }  
 
   // suma totales x proyecto
   $.post("../ajax/pago_obrero.php?op=mostrar_sumas_totales_tbla_principal", { 'id_proyecto': id_proyecto }, function (e, status) {
@@ -330,7 +329,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
 
           detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r, cuenta_bancaria_r);
           trabajador_deuda_q_s(f1_load, f2_load, i_load, cant_dias_asistencia_load);
-          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
+          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("Correcto!", "Recibo por honorario guardado correctamente", "success");         
           limpiar_form_recibos_x_honorarios();
           $("#modal-recibos-x-honorarios").modal("hide");        
@@ -455,24 +454,24 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
           }
   
           data_s_q = data_s_q.concat(`<tr>
-            <td class="text-center">${indice + 1}</td>
-            <td class="text-center"> ${key.numero_q_s}</td>
-            <td class="text-center">${format_d_m_a(key.fecha_q_s_inicio)}</td>
-            <td class="text-center">${format_d_m_a(key.fecha_q_s_fin)}</td>
-            <td><div class="formato-numero-conta"><span>S/ </span>${key.sueldo_hora}</div></td>
-            <td class="text-center">${formato_miles(key.total_hn)}<b> / </b>${formato_miles(key.total_he)}</td>
-            <td class="text-center">${key.sabatical}</td>          
-            <td class="text-center"><div class="formato-numero-conta"> <span>S/ </span>${formato_miles(key.pago_parcial_hn)}<b> / </b><span>S/ </span>${formato_miles(key.pago_parcial_he)}</div></td>
-            <td ><div class="formato-numero-conta"><span>S/ </span>${formato_miles(key.adicional_descuento)}</div></td>
-            <td ><div class="formato-numero-conta"><span>S/ </span>${formato_miles(key.pago_quincenal)}</div></td>
-            <td>
+            <td class="text-center py-1">${indice + 1}</td>
+            <td class="text-center py-1"> ${key.numero_q_s}</td>
+            <td class="text-center py-1">${format_d_m_a(key.fecha_q_s_inicio)}</td>
+            <td class="text-center py-1">${format_d_m_a(key.fecha_q_s_fin)}</td>
+            <td class="py-1"><div class="formato-numero-conta"><span>S/ </span>${key.sueldo_hora}</div></td>
+            <td class="text-center py-1">${formato_miles(key.total_hn)}<b> / </b>${formato_miles(key.total_he)}</td>
+            <td class="text-center py-1">${key.sabatical}</td>          
+            <td class="text-center py-1"><div class="formato-numero-conta"> <span>S/ </span>${formato_miles(key.pago_parcial_hn)}<b> / </b><span>S/ </span>${formato_miles(key.pago_parcial_he)}</div></td>
+            <td class="py-1"><div class="formato-numero-conta"><span>S/ </span>${formato_miles(key.adicional_descuento)}</div></td>
+            <td class="py-1"><div class="formato-numero-conta"><span>S/ </span>${formato_miles(key.pago_quincenal)}</div></td>
+            <td class="py-1">
               <div class="formato-numero-conta">
                 <button class="btn ${btn_tipo_deposito} btn-sm mr-1" onclick="listar_tbla_pagos_x_q_s('${key.idresumen_q_s_asistencia}', '${format_d_m_a(key.fecha_q_s_inicio)}', '${format_d_m_a(key.fecha_q_s_fin)}', '${key.pago_quincenal}', '${key.numero_q_s}', '${tipo_pago}', '${nombre_trabajador}','${cuenta_bancaria}', '${saldo}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
                 <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">${formato_miles(key.deposito)}</button></div>
               </div>
             </td>
-            <td class="${bg_saldo}"><div class="formato-numero-conta"><span>S/ </span>${formato_miles(saldo)}</div></td>
-            <td class="text-center"> 
+            <td class="py-1 ${bg_saldo}"><div class="formato-numero-conta"><span>S/ </span>${formato_miles(saldo)}</div></td>
+            <td class="text-center py-1"> 
               <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.numero_comprobante}', '${key.recibos_x_honorarios}', '${tipo_pago}', '${nombre_trabajador}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
               </button> 
@@ -601,7 +600,7 @@ function guardar_y_editar_pagos_x_q_s(e) {
           if (tabla_ingreso_pagos) {  tabla_ingreso_pagos.ajax.reload(null, false);  }
           if (tabla_pagos_modal) {  tabla_pagos_modal.ajax.reload(null, false); trabajador_deuda_q_s(f1_load, f2_load, i_load, cant_dias_asistencia_load);  }
 
-          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
+          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("Correcto!", "Pago guardado correctamente", "success");         
           limpiar_pago_q_s();
           $("#modal-agregar-pago-trabajdor").modal("hide");        
@@ -700,7 +699,7 @@ function desactivar_pago_x_q_s(id) {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
-          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
+          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
         } else {
           ver_errores(e);
@@ -726,7 +725,7 @@ function activar_pago_x_q_s(id) {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
-          sumas_totales_tabla_orincipal(localStorage.getItem('nube_idproyecto'));
+          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
           Swal.fire("ReActivado!", "Tu registro ha sido ReActivado.", "success");
         } else {
           ver_errores(e);
