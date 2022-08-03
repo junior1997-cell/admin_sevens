@@ -239,7 +239,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-receipt"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/otras_facturas.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-receipt"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Otras Facturas</span>
@@ -253,7 +253,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-poll"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/resumen_facturas.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-poll"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Resumen de Facturas</span>
