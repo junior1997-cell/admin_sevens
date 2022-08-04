@@ -130,36 +130,30 @@ class PagoObrero
 
     return ejecutarConsulta($sql);
   }
-
-  // obtebnemos los "RECIBO X HONORARIO" para eliminar
-  public function obtenerDocs2($id) {
-    $sql = "SELECT recibos_x_honorarios FROM resumen_q_s_asistencia WHERE idresumen_q_s_asistencia = '$id'";
-
-    return ejecutarConsulta($sql);
-  }
+  
 
   // ::::::::::::::::::::::::::::::::::::::::::::: P A G O S  U N   S O L O   O B R E R O S ::::::::::::::::::::::::::::::::::::::::::::::
 
   //INSERTAR - DEPOSTOS
-  public function insertar_pagos_x_q_s($idresumen_q_s_asistencia, $forma_de_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1) {
-    $sql = "INSERT INTO  pagos_q_s_obrero( idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, baucher, descripcion) 
-		VALUES ('$idresumen_q_s_asistencia', '$cuenta_deposito', '$forma_de_pago', '$monto', '$fecha_pago', '$doc1', '$descripcion');";
+  public function insertar_pagos_x_q_s($idresumen_q_s_asistencia, $forma_de_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $numero_comprobante, $doc1, $doc2) {
+    $sql = "INSERT INTO  pagos_q_s_obrero( idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, numero_comprobante, baucher, recibos_x_honorarios, descripcion) 
+		VALUES ('$idresumen_q_s_asistencia', '$cuenta_deposito', '$forma_de_pago', '$monto', '$fecha_pago', '$numero_comprobante', '$doc1', '$doc2', '$descripcion');";
 
     return ejecutarConsulta($sql);
   }
 
   //EDITAR - DEPOSTOS
-  public function editar_pagos_x_q_s($idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $doc1) {
+  public function editar_pagos_x_q_s($idpagos_q_s_obrero, $idresumen_q_s_asistencia, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $numero_comprobante, $doc1, $doc2) {
     $sql = "UPDATE pagos_q_s_obrero SET idresumen_q_s_asistencia='$idresumen_q_s_asistencia', cuenta_deposito='$cuenta_deposito', 
-		forma_de_pago='$forma_pago', monto_deposito='$monto', fecha_pago='$fecha_pago', baucher='$doc1', descripcion='$descripcion'
+		forma_de_pago='$forma_pago', monto_deposito='$monto', fecha_pago='$fecha_pago', numero_comprobante='$numero_comprobante', baucher='$doc1', recibos_x_honorarios='$doc2', descripcion='$descripcion'
 		WHERE idpagos_q_s_obrero = '$idpagos_q_s_obrero,'";
 
     return ejecutarConsulta($sql);
   }
 
-  // obtebnemos los "BAUCHER DE DEPOSITOS" para eliminar
+  // obtebnemos los "BAUCHER DE DEPOSITOS - RECIBO X HONORARIO" para eliminar
   public function obtenerDocs($id) {
-    $sql = "SELECT baucher FROM pagos_q_s_obrero WHERE idpagos_q_s_obrero = '$id'";
+    $sql = "SELECT baucher, recibos_x_honorarios FROM pagos_q_s_obrero WHERE idpagos_q_s_obrero = '$id'";
 
     return ejecutarConsulta($sql);
   }
@@ -171,7 +165,7 @@ class PagoObrero
     $sql_1 = "SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
 		rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, 
 		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, 
-		rqsa.estado_envio_contador, rqsa.numero_comprobante,  rqsa.recibos_x_honorarios
+		rqsa.estado_envio_contador
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
 		WHERE  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' 
 		AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' ;";
@@ -182,9 +176,13 @@ class PagoObrero
       foreach ($q_s['data'] as $key => $q_s) {
         $id = $q_s['idresumen_q_s_asistencia'];
 
-        $sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1' AND idresumen_q_s_asistencia = '$id';";
+        $sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1' AND estado_delete = '1' AND idresumen_q_s_asistencia = '$id';";
         $depositos = ejecutarConsultaSimpleFila($sql_2);
         if ($depositos['status'] == false) { return $depositos; }
+
+        $sql_3 = "SELECT COUNT(recibos_x_honorarios) as cant_rh  FROM pagos_q_s_obrero WHERE estado = '1' AND estado_delete = '1' AND idresumen_q_s_asistencia = '$id' AND recibos_x_honorarios IS NOT NULL AND recibos_x_honorarios != '';";
+        $cant_rh = ejecutarConsultaSimpleFila($sql_3);
+        if ($cant_rh['status'] == false) { return $cant_rh; }
 
         $data[] = [
           'sueldo_hora' => ( empty($q_s['sueldo_hora']) ? 0 : $q_s['sueldo_hora']),
@@ -205,10 +203,9 @@ class PagoObrero
           'descripcion_descuento' => $q_s['descripcion_descuento'],
           'pago_quincenal' => ( empty($q_s['pago_quincenal']) ? 0 : $q_s['pago_quincenal']),
           'estado_envio_contador' => $q_s['estado_envio_contador'],
-          'numero_comprobante' => $q_s['numero_comprobante'],
-          'recibos_x_honorarios' => $q_s['recibos_x_honorarios'],
+          'cant_rh' => (empty($cant_rh['data']) ? 0 : ( empty($cant_rh['data']['cant_rh']) ? 0 : floatval($cant_rh['data']['cant_rh']))),
 
-          'deposito' => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : $depositos['data']['deposito'])),
+          'deposito' => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : floatval($depositos['data']['deposito']))),
         ];
       }
     }
@@ -218,16 +215,16 @@ class PagoObrero
 
   //TABLA DE PAGOS
   public function listar_tbla_pagos_x_q_s($idresumen_q_s_asistencia) {
-    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, baucher, descripcion, estado 
+    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, numero_comprobante, recibos_x_honorarios, baucher, descripcion, estado 
 		FROM pagos_q_s_obrero
-		WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
+		WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia' AND estado = '1' AND estado_delete = '1';";
 
     return ejecutarConsulta($sql);
   }
 
   //MOSTRAR para editar
   public function mostrar_pagos_x_mes($idpagos_q_s_obrero) {
-    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, baucher, descripcion
+    $sql = "SELECT idpagos_q_s_obrero, idresumen_q_s_asistencia, cuenta_deposito, forma_de_pago, monto_deposito, fecha_pago, numero_comprobante, recibos_x_honorarios, baucher, descripcion
 		FROM pagos_q_s_obrero WHERE idpagos_q_s_obrero = '$idpagos_q_s_obrero';";
     return ejecutarConsultaSimpleFila($sql);
   }
@@ -241,6 +238,13 @@ class PagoObrero
   //Activar DEPOSITO
   public function activar_pago_q_s($idtrabajador) {
     $sql = "UPDATE pagos_q_s_obrero SET estado='1' WHERE idpagos_q_s_obrero='$idtrabajador'";
+    return ejecutarConsulta($sql);
+  }
+
+  //Activar DEPOSITO
+  public function tabla_recibo_por_honorario($id_q_s) {
+    $sql = "SELECT monto_deposito, fecha_pago, tipo_comprobante, numero_comprobante, recibos_x_honorarios, baucher, descripcion
+    FROM pagos_q_s_obrero WHERE idresumen_q_s_asistencia = '$id_q_s' AND estado = '1' AND estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
 
@@ -271,15 +275,19 @@ class PagoObrero
       foreach ($trabajador['data'] as $key => $trabajador) {
         $id = $trabajador['idresumen_q_s_asistencia'];
 
-        $sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1' AND idresumen_q_s_asistencia = '$id';";
+        $sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1'  AND estado_delete = '1' AND idresumen_q_s_asistencia = '$id';";
         $depositos = ejecutarConsultaSimpleFila($sql_2);
         if ($depositos['status'] == false) { return $depositos; }
 
+        $sql_3 = "SELECT COUNT(recibos_x_honorarios) as cant_rh  FROM pagos_q_s_obrero WHERE estado = '1' AND estado_delete = '1' AND idresumen_q_s_asistencia = '$id' AND recibos_x_honorarios IS NOT NULL AND recibos_x_honorarios != '';";
+        $cant_rh = ejecutarConsultaSimpleFila($sql_3);
+        if ($cant_rh['status'] == false) { return $cant_rh; }
+
         $idtrabajador = $trabajador['idtrabajador'];
-        $sql_3 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
+        $sql_4 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
         FROM cuenta_banco_trabajador as cbt, bancos as b
         WHERE cbt.idbancos = b.idbancos AND cbt.banco_seleccionado ='1' AND cbt.idtrabajador='$idtrabajador' ;";
-        $bancos = ejecutarConsultaSimpleFila($sql_3);
+        $bancos = ejecutarConsultaSimpleFila($sql_4);
         if ($bancos['status'] == false) { return  $bancos;}
 
         $data[] = [
@@ -296,8 +304,7 @@ class PagoObrero
           'adicional_descuento' => ( empty($trabajador['adicional_descuento']) ? 0 : $trabajador['adicional_descuento']),
           'descripcion_descuento' => $trabajador['descripcion_descuento'],
           'pago_quincenal' => ( empty($trabajador['pago_quincenal']) ? 0 : $trabajador['pago_quincenal']),
-          'numero_comprobante' => $trabajador['numero_comprobante'],
-          'recibos_x_honorarios' => $trabajador['recibos_x_honorarios'],
+          'cant_rh' => (empty($cant_rh['data']) ? 0 : ( empty($cant_rh['data']['cant_rh']) ? 0 : floatval($cant_rh['data']['cant_rh']))),
           'trabajador' => $trabajador['trabajador'],
           'tipo_documento' => $trabajador['tipo_documento'],
           'numero_documento' => $trabajador['numero_documento'],

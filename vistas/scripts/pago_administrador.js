@@ -425,7 +425,7 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
               suma_monto_depositado_e = value.suma_monto_depositado
 
               // Validamos el tipo de boton para los "recibos por honorarios"
-              if (value.recibos_x_honorarios == '' || value.recibos_x_honorarios == null) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += 1; }
+              if (value.cant_rh == '' || value.cant_rh == null || value.cant_rh == 0) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += value.cant_rh; }
             } 
             // console.log(`${nombre_mes_e} - fecha encontrada: ${fecha_inicial_e} == ${format_a_m_d(element.fecha_i)} ---- ${fecha_final_e} == ${format_a_m_d(element.fecha_f)}`);
           });
@@ -985,14 +985,14 @@ $(function () {
       forma_pago: { required: true},
       monto:      {required: true, min: 0.01 },
       fecha_pago: {required: true, },
-      numero_comprobante: {required: true, minlength: 3, maxlength:45 },
+      numero_comprobante: { minlength: 3, maxlength:45 },
       descripcion:{ minlength: 4 },
     },
     messages: {
       forma_pago: {required: "Campo requerido." },
       monto:      { required: "Campo requerido.", min: "MINIMO 0.01 dígito.", },
       fecha_pago: { required: "Campo requerido.", },
-      numero_comprobante: { required: "Campo requerido.", minlength: "MINIMO 3 dígito.", maxlength: "MINIMO 45 dígito.", },
+      numero_comprobante: {  minlength: "MINIMO 3 dígito.", maxlength: "MINIMO 45 dígito.", },
       descripcion:{ minlength: "MINIMO 4 caracteres.",  },
     },
     
