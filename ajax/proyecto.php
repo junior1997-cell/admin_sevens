@@ -30,6 +30,7 @@
       $actividad_trabajo		= isset($_POST["actividad_trabajo"])? limpiarCadena($_POST["actividad_trabajo"]):"";
       $empresa_acargo 		  = isset($_POST['empresa_acargo'])? limpiarCadena($_POST['empresa_acargo']):"";
       $costo					      = isset($_POST["costo"])? limpiarCadena($_POST["costo"]):"";
+      $garantia					    = isset($_POST["garantia"])? limpiarCadena($_POST["garantia"]):"";
       $fecha_inicio			    = isset($_POST["fecha_inicio"])? limpiarCadena($_POST["fecha_inicio"]):"";
       $fecha_fin				    = isset($_POST["fecha_fin"])? limpiarCadena($_POST["fecha_fin"]):"";
       $fecha_inicio_actividad= isset($_POST["fecha_inicio_actividad"])? limpiarCadena($_POST["fecha_inicio_actividad"]):"";
@@ -169,7 +170,7 @@
 
           if (empty($idproyecto)){
             // insertamos en la bd
-            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
+            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
             // echo $rspta ;
             echo json_encode($rspta, true);
 
@@ -247,7 +248,7 @@
               }
             }
 
-            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
+            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
             
             echo json_encode( $rspta, true);
           }

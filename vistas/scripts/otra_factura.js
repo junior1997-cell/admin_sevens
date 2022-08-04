@@ -526,18 +526,9 @@ function comprob_factura() {
     }
   } 
 }
+
 function validando_igv() {
-
-  if ($("#tipo_comprobante").select2("val") == "Factura") {
-
-    $("#val_igv").val(0.18); 
-
-  }else {
-
-    $("#val_igv").val(0); 
-
-  }
-  
+  if ($("#tipo_comprobante").select2("val") == "Factura") { $("#val_igv").val(0.18); }else { $("#val_igv").val(0); }  
 }
 
 function calculandototales_fact() {

@@ -473,14 +473,12 @@
                                 <div class="col-md-12 p-t-15px p-b-5px" >
                                   <label for="doc1_i" class="control-label" > Baucher de deposito </label>
                                 </div>
-                                <div class="col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
-                                    <i class="fas fa-upload"></i> Subir.
-                                  </button>
+                                <div class="col-6 col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-upload"></i> Subir. </button>
                                   <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                   <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                                 </div>
-                                <div class="col-md-6 text-center">
+                                <div class="col-6 col-md-6 text-center">
                                   <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1,'pago_obrero', 'baucher_deposito');">
                                   <i class="fas fa-redo"></i> Recargar.
                                   </button>
@@ -500,9 +498,7 @@
                                 </div>                         
                                 <!-- Subir documento -->
                                 <div class="col-6 col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
-                                    <i class="fas fa-upload"></i> Subir.
-                                  </button>
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i"><i class="fas fa-upload"></i> Subir. </button>
                                   <input type="hidden" id="doc_old_2" name="doc_old_2" />
                                   <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                 </div>

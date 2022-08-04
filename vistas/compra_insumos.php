@@ -964,7 +964,7 @@
                                 <label for="doc3_i" >Comprobante <b class="text-danger">(Imagen o PDF)</b> </label>  
                                 <div class="row text-center">                               
                                   <!-- Subir documento -->
-                                  <div class="col-md-6 text-center">
+                                  <div class="col-6 col-md-6 text-center">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc3_i">
                                       <i class="fas fa-upload"></i> Subir.
                                     </button>
@@ -972,7 +972,7 @@
                                     <input style="display: none;" id="doc3" type="file" name="doc3" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <!-- Recargar -->
-                                  <div class="col-md-6 text-center comprobante">
+                                  <div class="col-6 col-md-6 text-center comprobante">
                                     <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(3, 'compra' ,'comprobante_pago');">
                                     <i class="fas fa-redo"></i> Recargar.
                                   </button>
@@ -1107,12 +1107,12 @@
                               <!-- Doc  -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                                 <div class="row">
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 pl-0 mb-3 text-center">
+                                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pl-0 mb-3 text-center">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
                                     <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                     <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" accept="application/pdf, image/*" />
                                   </div>
-                                  <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 pr-0 mb-3 text-center">
+                                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pr-0 mb-3 text-center">
                                     <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_insumo', 'comprobante_compra', '100%', '320');"><i class="fa fa-eye"></i> Recargar.</button>
                                   </div>                                                                     
                                   <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mt-1" id="doc1_ver"> 
@@ -1347,7 +1347,7 @@
                                   <label for="doc2_i" >Comprobante <small><b class="text-danger">(Imagen o PDF)</b></small>  </label>  
                                   <div class="row text-center">                               
                                     <!-- Subir documento -->
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
                                         <i class="fas fa-upload"></i> Subir.
                                       </button>
@@ -1355,7 +1355,7 @@
                                       <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                     </div>
                                     <!-- Recargar -->
-                                    <div class="col-md-6 text-center comprobante">
+                                    <div class="col-6 col-md-6 text-center comprobante">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'material', 'ficha_tecnica');">
                                       <i class="fas fa-redo"></i> Recargar.
                                     </button>
