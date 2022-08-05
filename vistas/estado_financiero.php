@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Estado Financiero</title>
+        <title>Estado Financiero | Admin Sevens </title>
 
         <?php $title = "Estado Financiero"; require 'head.php'; ?>
 
@@ -28,10 +28,10 @@
             require 'nav.php';
             require 'aside.php';
             if ($_SESSION['estado_financiero']==1){
-              require 'endesarrollo.php';
+              //require 'endesarrollo.php';
               ?>           
               <!--Contenido-->
-              <div class="d-none content-wrapper">
+              <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <div class="content-header">
                   <div class="container-fluid">
@@ -62,6 +62,78 @@
                         <div class="card card-primary card-outline">
                           <div class="card-header"> 
 
+                            <!-- Editar -->
+                            <h3 class="card-title mr-3 p-l-2px" id="btn-editar-ef" >
+                              <button type="button" class="btn bg-gradient-orange btn-sm " onclick="show_hide_span_input_ef(2);"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
+                            </h3>
+                            <!-- Guardar -->
+                            <h3 class="card-title mr-3 p-l-2px" id="btn-guardar-ef" style="display: none;">
+                              <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm " onclick="guardar_y_editar_estado_financiero();" ><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
+                            </h3>
+
+                          </div>
+                          <!-- /.card-header -->
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-6">
+                                <!-- tabla principal -->                            
+                                <table  class="table table-bordered /*table-striped*/ table-hover text-nowrap" >
+                                  <thead class="bg-info">
+                                    <tr> 
+                                      <th class="py-1 text-center" colspan="3">ESTADO FINANCIERO ACTUAL</th>                                                 
+                                    </tr>
+                                    <tr> 
+                                      <th class="py-1 text-center">#</th> 
+                                      <th class="py-1">DESCRIPCIÓN</th>
+                                      <th class="py-1 text-center">MONTO</th>                                                          
+                                    </tr>
+                                  </thead>
+                                  <tbody>                         
+                                    <tr><td class="py-1 text-center">1</td><td class="py-1">CAJA</td>                             <td class="py-1"><div class="formato-numero-conta span_ef"><span>S/</span>100</div> <input type="text" id="caja_ef" class="hidden input_ef"></td> </tr>
+                                    <tr><td class="py-1 text-center">2</td><td class="py-1">PRESTAMOS Y CRÉDITOS (por pagar)</td> <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                    <tr><td class="py-1 text-center">3</td><td class="py-1">GASTOS ACTUALIZADOS</td>              <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                    <tr><td class="py-1 text-center">4</td><td class="py-1">VALORIZACIONES COBRADAS (9)</td>      <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                    <tr><td class="py-1 text-center">5</td><td class="py-1">VALORIZACIONES POR COBRAR (3)</td>    <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                    <tr><td class="py-1 text-center">6</td><td class="py-1">GARANTÍA</td>                         <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td > </tr>
+                                    <tr><td class="py-1 text-center">7</td><td class="py-1">MONTO DE OBRA</td>                    <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td > </tr>
+
+                                  </tbody>
+                                  <tfoot>
+                                    <tr>                                       
+                                      <th class="py-1" colspan="2">INTERÉS PAGADO</th>
+                                      <th class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div> </th>      
+                                    </tr>
+                                    <tr>                                       
+                                      <th class="py-1" colspan="2" rowspan="2">GANANCIA ACTUAL (SIN DESCONTAR INTERÉS POR PAGAR)</th>
+                                      <th class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></th>      
+                                    </tr>
+                                    <tr>                                       
+                                      <th class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></th>      
+                                    </tr>
+                                  </tfoot>
+                                </table> 
+                                <!-- /.table -->
+                              </div>
+                              <!-- /.col -->
+                            </div>
+                            <!-- /.row -->                            
+                          </div>
+                          <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->                      
+
+                      </div>
+
+                      <!-- /.col -->
+                      <div class="col-12">
+                        <h2>Proyecciones</h2>
+                      </div>
+                      <!-- /.col -->
+
+                      <div class="col-12">
+                        <div class="card card-primary card-outline">
+                          <div class="card-header"> 
+
                             <!-- agregar pago  -->
                             <h3 class="card-title " id="btn-agregar" >
                               <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_x_mes();">
@@ -72,50 +144,46 @@
                           </div>
                           <!-- /.card-header -->
                           <div class="card-body">
-
-                            <!-- tabla principal -->
-                            <div class=" pb-3" id="tbl-principal">
-                              <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                                <thead>
-                                  <tr> 
-                                    <th>Trabajdor</th> 
-                                    <th>Fecha inicio</th>
-                                    <th>Hoy</th>
-                                    <th class="text-center">Fecha <br> culminacion</th>
-                                    <th class="text-center">Tiempo <br> trabajado (dias)</th>                                
-                                    <th>Sueldo Mensual</th>
-                                    <th class="text-center" data-toggle="tooltip" data-original-title="Pago total desde el dia inicial a final">Pago total</th>
-                                    <th class="text-center" data-toggle="tooltip" data-original-title="Pago acumulado hasta hoy" >Pago <br> acumulado</th>
-                                    <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>                                
-                                    <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
-                                    <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
-                                    <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
-                                    <th>Cel:</th>                         
-                                  </tr>
-                                </thead>
-                                <tbody>                         
-                                  
-                                </tbody>
-                                <tfoot>
-                                  <tr> 
-                                    <th class="text-gray">Trabajdor</th> 
-                                    <th class="text-gray">Fecha inicio</th>
-                                    <th class="text-center text-gray">Hoy</th>
-                                    <th class="text-center text-gray">Fecha <br> culminacion</th>
-                                    <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
-                                    <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                    <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                    <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                    <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                    <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
-                                    <th class="text-center text-gray">Último <br> pago</th>
-                                    <th class="text-center text-gray">Siguiente <br> pago</th>
-                                    <th>Cel:</th>                            
-                                  </tr>
-                                </tfoot>
-                              </table>
-                            </div>                        
-
+                            <!-- tabla principal -->                            
+                            <table id="tabla-principal" class="table table-bordered  table-striped display" >
+                              <thead>
+                                <tr> 
+                                  <th>Trabajdor</th> 
+                                  <th>Fecha inicio</th>
+                                  <th>Hoy</th>
+                                  <th class="text-center">Fecha <br> culminacion</th>
+                                  <th class="text-center">Tiempo <br> trabajado (dias)</th>                                
+                                  <th>Sueldo Mensual</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Pago total desde el dia inicial a final">Pago total</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Pago acumulado hasta hoy" >Pago <br> acumulado</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>                                
+                                  <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
+                                  <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
+                                  <th>Cel:</th>                         
+                                </tr>
+                              </thead>
+                              <tbody>                         
+                                
+                              </tbody>
+                              <tfoot>
+                                <tr> 
+                                  <th class="text-gray">Trabajdor</th> 
+                                  <th class="text-gray">Fecha inicio</th>
+                                  <th class="text-center text-gray">Hoy</th>
+                                  <th class="text-center text-gray">Fecha <br> culminacion</th>
+                                  <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
+                                  <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
+                                  <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
+                                  <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
+                                  <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
+                                  <th class="text-center text-gray">Último <br> pago</th>
+                                  <th class="text-center text-gray">Siguiente <br> pago</th>
+                                  <th>Cel:</th>                            
+                                </tr>
+                              </tfoot>
+                            </table> 
                           </div>
                           <!-- /.card-body -->
                         </div>
@@ -286,17 +354,12 @@
           ?>
 
         </div>
-        <?php          
-          require 'script.php';
-        ?>         
+
+        <?php require 'script.php'; ?>         
 
         <script type="text/javascript" src="scripts/estado_financiero.js"></script>
          
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          })
-        </script>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
         <?php require 'extra_script.php'; ?>
         

@@ -503,7 +503,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="prestamo.php" class="nav-link pl-2" id="lPrestamo">
                   <i class="nav-icon fas fa-university"></i>
-                  <p>Prestamos</p>
+                  <p>Prestamos y Créditos</p>
                 </a>
               </li>
             <?php  }  ?>
@@ -512,7 +512,7 @@
               <li class="nav-item ver-otros-modulos-1">
                 <a href="estado_financiero.php" class="nav-link pl-2" id="lEstadoFinanciero">             
                   <i class="nav-icon fas fa-balance-scale-left"></i>
-                  <p>Estado Financiero</p>
+                  <p>Estd. Financiero y Proyecciones</p>
                 </a>
               </li>
             <?php  }  ?>

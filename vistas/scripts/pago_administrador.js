@@ -671,7 +671,7 @@ function guardar_y_editar_pagos_x_mes(e) {
           Swal.fire("Error!", datos, "error");				 
         }
       } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
-    
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
 
@@ -694,6 +694,9 @@ function guardar_y_editar_pagos_x_mes(e) {
         }
       }, false);
       return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });

@@ -14,20 +14,43 @@ function init() {
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
   $("#guardar_registro_color").on("click", function (e) { $("#submit-form-color").submit();  });
 
-
   //Initialize Select2 unidad
-  $("#forma_pago").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar una forma de pago",
-    allowClear: true,
-  });
+  $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
    
   // Formato para telefono
   $("[data-mask]").inputmask();   
 } 
 
+// ══════════════════════════════════════ ESTADO FINANCIERO ══════════════════════════════════════ 
+
+function show_hide_span_input_ef(flag){
+
+  if (flag == 1) {
+    // ocultamos los span
+    $(".span_ef").show();
+    // mostramos los inputs
+    $(".input_ef").hide();
+
+    // ocultamos el boton editar
+    $("#btn-editar-ef").show();
+    // mostramos el boton guardar
+    $("#btn-guardar-ef").hide();
+  } else if (flag == 2) {
+    
+    // ocultamos los span
+    $(".span_ef").hide();
+    // mostramos los inputs
+    $(".input_ef").show();
+
+    // ocultamos el boton editar
+    $("#btn-editar-ef").hide();
+    // mostramos el boton guardar
+    $("#btn-guardar-ef").show();
+  }  
+}
+
 //Función limpiar
-function limpiar_pago_x_mes() {  
+function limpiar_form_estado_financiero() {  
 
   $("#monto").val("");
   $("#forma_pago").val("").trigger("change"); 
@@ -43,92 +66,51 @@ function limpiar_pago_x_mes() {
 function listar_tbla_principal(nube_idproyecto) {
 
   $('.sueldo_total_tbla_principal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.deposito_total_tbla_principal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   var total_pago_acumulado_hoy = 0, pago_total_x_proyecto = 0, saldo_total = 0;
 
-  tabla_principal=$('#tabla-principal').dataTable({
-    "responsive": true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
-    
-    createdRow: function (row, data, ixdex) {
-      // columna: sueldo mensual
-      if (data[4] != '') { $("td", row).eq(4).addClass('text-center'); }
-      // columna: sueldo mensual
-      if (data[5] != '') { $("td", row).eq(5).addClass('text-center'); }      
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-  }).DataTable();
-
   $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
     data = JSON.parse(data);  console.log(data); 
-    // $('.sueldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`);
-    // $('.pago_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(pago_total_x_proyecto)}</b>`);
-    // $('.pago_hoy_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(total_pago_acumulado_hoy)}</b>`);
-    // $('.deposito_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);  
-    // $('.saldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(saldo_total)}</b>`);   
-  }); 
-
-  
+    // $('.sueldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`); 
+  });   
 }
 
 //Función para guardar o editar
-function guardar_y_editar_pagos_x_mes(e) {
+function guardar_y_editar_estado_financiero(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-pagos-x-mes")[0]);
 
   $.ajax({
-    url: "../ajax/pago_administrador.php?op=guardar_y_editar_pagos_x_mes",
+    url: "../ajax/estado_financiero.php?op=guardar_y_editar_estado_financiero",
     type: "POST",
     data: formData,
     contentType: false,
     processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e); console.log(e);
 
-    success: function (datos) {
-      datos = JSON.parse(datos); console.log(datos);
+        if (e.estado == true) {    
 
-      if (datos.estado) {    
+          Swal.fire("Correcto!", "Pago guardado correctamente", "success");	      
+          
+          show_hide_span_input_ef(flag);
 
-        Swal.fire("Correcto!", "Pago guardado correctamente", "success");	      
-         
-				limpiar_pago_x_mes();
+        }else{
+          ver_errores(e);			 
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
 
-        $("#modal").modal("hide");        
-
-			}else{
-
-        Swal.fire("Error!", datos, "error");				 
-			}
+      
     },
     xhr: function () {
-
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener("progress", function (evt) {
-
         if (evt.lengthComputable) {
-
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
           $("#barra_progress").css({"width": percentComplete+'%'});
-
-          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
-
-          if (percentComplete === 100) {
-
-            setTimeout(l_m, 600);
-          }
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");          
         }
       }, false);
       return xhr;
@@ -194,6 +176,7 @@ function mostrar_pagos_x_mes(id) {
   });
 }
 
+// ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
 function desactivar_pago_x_mes(id) {
 
   var id_fechas_mes = $('#idfechas_mes_pagos_administrador_pxm').val();
@@ -250,15 +233,9 @@ function activar_pago_x_mes(id) {
   });
 }
 
-
-function l_m(){
-  
-  // limpiar();
-  $("#barra_progress").css({"width":'0%'});
-  $("#barra_progress").text("0%"); 
-}
-
 init();
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {
 
@@ -305,47 +282,6 @@ $(function () {
   });
 });
 
-
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
-
-
-
-// quitamos las comas de miles de un numero
-function quitar_formato_miles(numero) {
-  let inVal = numero.replace(/,/g, '');
-  return inVal;
-}
-
-// damos formato de miles a un numero
-function formato_miles(num) {
-  if (!num || num == "NaN") return "0.00";
-  if (num == "Infinity") return "&#x221e;";
-  num = num.toString().replace(/\$|\,/g, "");
-  if (isNaN(num)) num = "0";
-  sign = num == (num = Math.abs(num));
-  num = Math.floor(num * 100 + 0.50000000001);
-  cents = num % 100;
-  num = Math.floor(num / 100).toString();
-  if (cents < 10) cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-  return (sign ? "" : "-") + num + "." + cents;
-}
-
-
-// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a(fecha) {
-
-  let splits = fecha.split("-"); //console.log(splits);
-
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
-}
-
-// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
-function format_a_m_d(fecha) {
-
-  let splits = fecha.split("-"); //console.log(splits);
-
-  return splits[2]+'-'+splits[1]+'-'+splits[0];
-}
 
 

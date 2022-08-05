@@ -75,7 +75,7 @@
                                 <th>Monto Total</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                <th>Estado</th>
+                                <th>Glosa</th>
                                 <th>Comprobante</th>
                                 <th>Numero</th>
                               </tr>
@@ -93,7 +93,7 @@
                                 <th class="text-nowrap" id="total_monto"></th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                <th>Estado</th>
+                                <th>Glosa</th>
                                 <th>Comprobante</th>
                                 <th>Numero</th>
                               </tr>

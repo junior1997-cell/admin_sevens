@@ -81,7 +81,7 @@ function tbla_principal() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,11,12,4,5,6,7,8], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,11,12,4,5,6,7,8], } }, { extend: 'pdfHtml5', footer: false,  exportOptions: { columns: [0,2,11,12,4,5,6,7,8], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,11,12,4,5,6,7,8,10], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,11,12,4,5,6,7,8], } }, { extend: 'pdfHtml5', footer: false,  exportOptions: { columns: [0,2,11,12,4,5,6,7,8], } }, {extend: "colvis"} ,
     ],
     ajax: {
       url: "../ajax/otra_factura.php?op=tbla_principal",

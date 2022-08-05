@@ -139,7 +139,8 @@ class PagoAdministrador
       foreach ($fechas_mes as $key => $value) {
         $id = $value['idfechas_mes_pagos_administrador'];
 
-        $sql_2 = "SELECT SUM(monto) AS suma_monto_depositado FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador ='$id' AND estado = '1' AND estado_delete = '1';";
+        $sql_2 = "SELECT SUM(monto) AS suma_monto_depositado FROM pagos_x_mes_administrador 
+        WHERE idfechas_mes_pagos_administrador ='$id' AND estado = '1' AND estado_delete = '1';";
         $pagos_x_mes = ejecutarConsultaSimpleFila($sql_2);
 
         $sql_3 = "SELECT COUNT(recibos_x_honorarios) as cant_rh FROM pagos_x_mes_administrador 
