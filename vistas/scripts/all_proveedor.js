@@ -107,20 +107,21 @@ function guardaryeditar(e) {
     contentType: false,
     processData: false,
     success: function (e) {
-      e = JSON.parse(e); console.log(e);
-      if (e.status == true) {
-        Swal.fire("Correcto!", "Proveedor guardado correctamente", "success");
+      try {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
 
-        tabla.ajax.reload(null, false);
+          Swal.fire("Correcto!", "Proveedor guardado correctamente", "success");
+          tabla.ajax.reload(null, false);
+          limpiar();
+          $("#modal-agregar-proveedor").modal("hide");
+          
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
 
-        limpiar();
-
-        $("#modal-agregar-proveedor").modal("hide");
-
-        $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-      } else {
-        ver_errores(e);
-      }
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     beforeSend: function () {
       $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
@@ -314,7 +315,7 @@ $(function () {
     rules: {
       tipo_documento: { required: true },
       num_documento:  { required: true, minlength: 6, maxlength: 20 },
-      nombre:         { required: true, minlength: 6, maxlength: 100 },
+      nombre:         { required: true, minlength: 3, maxlength: 100 },
       direccion:      { minlength: 5, maxlength: 150 },
       telefono:       { minlength: 8 },
       c_detracciones: { minlength: 6,  },
@@ -326,7 +327,7 @@ $(function () {
     messages: {
       tipo_documento: { required: "Campo requerido.",  },
       num_documento:  { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
-      nombre:         {required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "como MÁXIMO 100 caracteres.", },
+      nombre:         {required: "Campo requerido.", minlength: "MÍNIMO 3 caracteres.", maxlength: "como MÁXIMO 100 caracteres.", },
       direccion:      { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 150 caracteres.", },
       telefono:       { minlength: "MÍNIMO 9 caracteres.", },
       c_detracciones: { minlength: "MÍNIMO 6 caracteres", },

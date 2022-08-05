@@ -12,7 +12,7 @@ class AllProveedor
   //Implementamos un método para insertar registros
   public function insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $c_bancaria, $cci, $c_detracciones, $banco, $titular_cuenta) {
     $sw = Array();
-    $sql_0 = "SELECT * FROM proveedor WHERE ruc = '$num_documento' AND razon_social = '$nombre'";
+    $sql_0 = "SELECT * FROM proveedor WHERE ruc = '$num_documento' ";
     $existe = ejecutarConsultaArray($sql_0);
 
     if (empty($existe['data'])) {
