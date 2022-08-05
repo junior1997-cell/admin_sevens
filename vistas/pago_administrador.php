@@ -360,7 +360,7 @@
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                     <label for="">Tipo Comprobante  </label>    
-                                    <span class="form-control">Recibo por Honorario</span>
+                                    <span class="form-control input-valido">Recibo por Honorario</span>
                                   </div>                                                        
                                 </div>  
 
@@ -368,7 +368,7 @@
                                 <div class="col-lg-12">
                                   <div class="form-group">
                                     <label for="">Glosa </label>    
-                                    <span class="form-control">PERSONAL TÉCNICO</span>
+                                    <span class="form-control input-valido">PERSONAL TÉCNICO</span>
                                   </div>                                                        
                                 </div>  
                                 
@@ -465,12 +465,12 @@
                   </div>
                 </div>
 
-                <!-- MODAL -  -->
+                <!-- MODAL - LISTA DE RH -->
                 <div class="modal fade" id="modal-tabla-recibo-por-honorario">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
                       <div class="modal-header"> 
-                        <h4 class="modal-title titulo-comprobante-compra">Lista de RH</h4>
+                        <h4 class="modal-title titulo-tabla-rh">Lista de RH</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>

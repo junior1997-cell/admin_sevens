@@ -400,8 +400,34 @@
                                   </tbody>
                                   <tfoot>
                                     <tr> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal" ></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center total_porcent_programado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal celda-b-r-2px"></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_valorizado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center total_porcent_valorizado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_gastado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center total_porcent_gastado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal"></th>                               
+                                    </tr>
+                                    <tr> 
+                                      <th class="pt-1 pb-1 font-weight-normal" ></th> 
+                                      <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
+                                      <th class="pt-1 pb-1 font-weight-normal text-center total_porcent_programado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th>
+                                      <th class="pt-1 pb-1 font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_valorizado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 font-weight-normal text-center total_porcent_valorizado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_gastado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 font-weight-normal text-center total_porcent_gastado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 font-weight-normal"></th>                               
+                                    </tr> 
+                                    <tr> 
                                       <th class="pt-1 pb-1 celda-b-t-2px" ></th> 
-                                      <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px">Total</th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px text-center celda-b-r-2px">Total</th> 
                                       <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
                                       <th class="pt-1 pb-1 celda-b-t-2px text-center total_porcent_programado"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                       <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px"></th>
@@ -464,12 +490,12 @@
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                   <label for="cip" class="control-label">Documento </label>
                                 </div>
-                                <div class="col-md-6 text-center">
+                                <div class="col-6 col-md-6 text-center">
                                   <button type="button" class="btn btn-success btn-block btn-xs" id="doc7_i"><i class="fas fa-file-upload"></i> Subir.</button>
                                   <input type="hidden" id="doc_old_7" name="doc_old_7" />
                                   <input style="display: none;" id="doc7" type="file" name="doc7" accept=".xlsx, .xlsm, .xls, .csv, .pdf, .doc, .docx" class="docpdf" />
                                 </div>
-                                <div class="col-md-6 text-center">
+                                <div class="col-6 col-md-6 text-center">
                                   <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(7, 'valorizacion', 'documento');"><i class="fa fa-eye"></i> Doc.</button>
                                 </div>
                               </div>

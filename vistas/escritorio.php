@@ -429,9 +429,9 @@
                                 </div>
 
                                 <!-- Costo total del proyecto -->
-                                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-3 pr-lg-0">
                                   <div class="form-group">
-                                    <label for="costo">Costo <small class="text-orange">("costo total del proyecto")</small></label>
+                                    <label for="costo">Costo <small class="text-orange d-none d-lg-inline-block">("costo total del proyecto")</small></label>
                                     <div class="input-group mb-3">
                                       <div class="input-group-prepend">
                                         <span class="input-group-text">S/. </span>
@@ -440,11 +440,19 @@
                                     </div>
                                   </div>
                                 </div> 
+
+                                <!-- Costo total del proyecto -->
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-1 pl-lg-0">
+                                  <div class="form-group">
+                                    <label for="garantia"><small class="text-orange">(Garantia)</small></label>
+                                    <input type="text"  name="garantia" id="garantia" class="form-control"  placeholder="%"  >                                    
+                                  </div>
+                                </div>
                                 
                                 <!-- Empresa a cargo -->
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
-                                    <label for="empresa_acargo">Empresa a cargo <small class="text-orange">("Seven's Ingenieros")</small></label>
+                                    <label for="empresa_acargo">Empresa a cargo <small class="text-orange d-none d-lg-inline-block">("Seven's Ingenieros")</small></label>
                                     <select class="form-control select2 select2-purple" name="empresa_acargo" id="empresa_acargo" data-dropdown-css-class="select2-purple" style="width: 100%;">
                                       <option selected value="Seven's Ingenieros SAC" title="logo-icono.svg">Seven's Ingenieros SAC</option>
                                       <option value="Consorcio Seven's Ingenieros SAC" title="logo-icono-plomo.svg">Consorcio Seven's Ingenieros SAC</option>

@@ -63,7 +63,7 @@
           <div class="widget-user-image">
             <img class="img-circle elevation-2" src="../dist/docs/all_trabajador/perfil/<?php echo $_SESSION['imagen']; ?>" alt="User Avatar" onerror="this.src='../dist/svg/user_default.svg';" />
           </div>
-          <div class="card-footer">
+          <div class="card-body pt-5">
             <span class="dropdown-item dropdown-header">Info personal</span>
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item">
@@ -82,6 +82,9 @@
             <a href="#" class="dropdown-item dropdown-footer"> <small>Más informacion cominicarse con el administrador </small>  </a>
             <!-- /.row -->
             <a href="../ajax/usuario.php?op=salir&file=<?php echo basename($_SERVER['PHP_SELF']); ?> " class="btn btn-danger btn-block">Cerrar sesion</a>
+          </div>
+          <div class="card-footer py-1 text-center ">
+            <a class="hove-negrita" href="javascript:void(0)" onclick="abrir_calculadora()"><i class="fas fa-calculator"></i> Abrir calculadora</a>
           </div>
         </div>
         <!-- /.widget-user -->

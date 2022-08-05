@@ -125,6 +125,7 @@ class PagoAdministrador
 
     return $data;
   }
+
   // ══════════════════════════════════════ TABLA MES ══════════════════════════════════════
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar_fechas_mes($idtrabajador_x_proyecto) {
@@ -138,11 +139,11 @@ class PagoAdministrador
       foreach ($fechas_mes as $key => $value) {
         $id = $value['idfechas_mes_pagos_administrador'];
 
-        $sql_2 = "SELECT SUM(monto) AS suma_monto_depositado FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador ='$id' AND estado = '1';";
+        $sql_2 = "SELECT SUM(monto) AS suma_monto_depositado FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador ='$id' AND estado = '1' AND estado_delete = '1';";
         $pagos_x_mes = ejecutarConsultaSimpleFila($sql_2);
 
-        $sql_3 = "SELECT SUM(recibos_x_honorarios) as cant_rh FROM pagos_x_mes_administrador 
-        WHERE idfechas_mes_pagos_administrador = '$id' AND recibos_x_honorarios IS NOT NULL AND recibos_x_honorarios != '';";
+        $sql_3 = "SELECT COUNT(recibos_x_honorarios) as cant_rh FROM pagos_x_mes_administrador 
+        WHERE idfechas_mes_pagos_administrador = '$id' AND estado = '1' AND estado_delete = '1' AND recibos_x_honorarios IS NOT NULL AND recibos_x_honorarios != '';";
         $cant_rh = ejecutarConsultaSimpleFila($sql_3);
 
         $data_array[] = [
@@ -157,7 +158,7 @@ class PagoAdministrador
           "monto_x_mes" => $value['monto_x_mes'],
           "estado" => $value['estado'],
           "suma_monto_depositado" => ($retVal = !empty($pagos_x_mes['suma_monto_depositado']) ? $pagos_x_mes['suma_monto_depositado'] : 0),
-          "cant_rh"=> (!empty($cant_rh['cant_rh']) ? $cant_rh['cant_rh'] : 0)
+          "cant_rh"=> (!empty($cant_rh['cant_rh']) ? floatval( $cant_rh['cant_rh']) : 0)
         ];
       }
     }
@@ -166,7 +167,6 @@ class PagoAdministrador
   }
 
   // ══════════════════════════════════════ PAGOS MES ══════════════════════════════════════
-
   //Implementamos un método para insertar registros
   public function insertar_pagos_x_mes( $idfechas_mes_pagos_administrador_pxm, $id_tabajador_x_proyecto_pxm, $fecha_inicial_pxm, $fecha_final_pxm, $mes_nombre_pxm, $dias_mes_pxm, $dias_regular_pxm, $sueldo_mensual_pxm, $monto_x_mes_pxm, $forma_pago, $cuenta_deposito, $monto, $fecha_pago, $descripcion, $numero_comprobante, $doc1, $doc2  ) {
     $id_fecha_mes = "";
@@ -216,7 +216,7 @@ class PagoAdministrador
   //Implementar un método para mostrar los datos de un registro a modificar
   public function listar_pagos_x_mes($idfechas_mes_pagos) {
     $sql = "SELECT idpagos_x_mes_administrador, idfechas_mes_pagos_administrador, cuenta_deposito, forma_de_pago, monto, fecha_pago, baucher, recibos_x_honorarios, descripcion, estado
-		FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador = '$idfechas_mes_pagos' ";
+		FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador = '$idfechas_mes_pagos' AND estado = '1' AND estado_delete = '1'";
 
     return ejecutarConsulta($sql);
   }
@@ -257,7 +257,7 @@ class PagoAdministrador
   public function tabla_recibo_por_honorario($id) {
     $sql = "SELECT idpagos_x_mes_administrador, idfechas_mes_pagos_administrador,  monto, fecha_pago, tipo_comprobante, numero_comprobante, 
     recibos_x_honorarios, baucher, descripcion 
-    FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador = '$id'";
+    FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador = '$id' AND estado = '1' AND estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
 

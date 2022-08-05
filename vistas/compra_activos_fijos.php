@@ -1100,9 +1100,7 @@
                                   <div class="row text-center">                               
                                     <!-- Subir documento -->
                                     <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
-                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i">
-                                        <i class="fas fa-upload"></i> Subir.
-                                      </button>
+                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc2_i"><i class="fas fa-upload"></i> Subir. </button>
                                       <input type="hidden" id="doc_old_2" name="doc_old_2" />
                                       <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                     </div>

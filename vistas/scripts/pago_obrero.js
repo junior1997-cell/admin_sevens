@@ -377,11 +377,17 @@ function limpiar_pago_q_s() {
   $("#fecha_pago").val("");
   $("#forma_pago").val("").trigger("change"); 
   $("#descripcion").val(""); 
+  $("#numero_comprobante").val(""); 
 
   $("#doc_old_1").val("");
   $("#doc1").val("");  
   $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc1_nombre').html("");
+
+  $("#doc_old_2").val("");
+  $("#doc2").val("");  
+  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc2_nombre').html("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -408,13 +414,9 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
 
   $(".nombre-trabajador").html(`Pagos - <b> ${nombre_trabajador} </b>`);
 
-  if (tipo_pago == "quincenal") {
-    $(".nombre-bloque-asistencia").html(`<b> Quincena </b>`);
-  } else {
-    if (tipo_pago == "semanal") {
-      $(".nombre-bloque-asistencia").html(`<b> Semana </b>`);
-    }
-  } 
+  var tipopagar = '';
+  if (tipo_pago == "quincenal") {  tipopagar = 'Quincena'; } else if (tipo_pago == "semanal") { tipopagar = 'Semana'; } 
+  $(".nombre-bloque-asistencia").html(`<b> ${tipopagar} </b>`);
 
   $.post("../ajax/pago_obrero.php?op=listar_tbla_q_s", { 'id_trabajdor_x_proyecto': id_trabajdor_x_proyecto }, function (e, status) {
 
@@ -433,7 +435,7 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
           var saldo = 0; var btn_tipo = "", bg_saldo = "", btn_tipo_deposito = "";
   
           // Validamos el tipo de boton para los "recibos por honorarios"
-          if (key.recibos_x_honorarios == '' || key.recibos_x_honorarios == null) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += 1; }
+          if (key.cant_rh == '' || key.cant_rh == null || key.cant_rh == 0) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += key.cant_rh; }
           
           saldo = parseFloat(key.pago_quincenal) - parseFloat(key.deposito);
   
@@ -472,7 +474,7 @@ function detalle_q_s_trabajador(id_trabajdor_x_proyecto, tipo_pago, nombre_traba
             </td>
             <td class="py-1 ${bg_saldo}"><div class="formato-numero-conta"><span>S/ </span>${formato_miles(saldo)}</div></td>
             <td class="text-center py-1"> 
-              <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.numero_comprobante}', '${key.recibos_x_honorarios}', '${tipo_pago}', '${nombre_trabajador}');">
+              <button class="btn ${btn_tipo} btn-sm"  onclick="tabla_recibos_por_honorarios('${key.idresumen_q_s_asistencia}', '${tipopagar} ${key.numero_q_s}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
               </button> 
             </td>
@@ -739,6 +741,46 @@ function reload_table_detalle_x_q_s() {
   detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r, cuenta_bancaria_r);
 }
 
+function tabla_recibos_por_honorarios(id_q_s, modal_title) {
+  $('.titulo-tabla-rh').html(`Lista de RH - <b>${modal_title}</b>` );
+  $('#modal-tabla-recibo-por-honorario').modal('show');
+
+  tabla_recibo_por_honorario=$('#tabla-recibo-por-honorario').dataTable({
+    //"responsive": true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: [ ],
+    ajax:{
+      url: '../ajax/pago_obrero.php?op=listar_tbla_recibo_por_honorario&id_q_s='+id_q_s,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') {  $("td", row).eq(0).css('text-center'); }  
+      // columna: monto
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-right');  } 
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      //{ targets: [13,14,15,16,17,18], visible: false, searchable: false, },    
+    ],
+  }).DataTable();
+}
+
 // :::::::::::::::::::::::::: P A G O S  M U L T P L E S   O B R E R O S ::::::::::::::::::::::::::::::::::::::::::::::
 
 function listar_botones_q_s(nube_idproyecto) {
@@ -894,7 +936,7 @@ function trabajador_deuda_q_s(f1, f2, i, cant_dias_asistencia) {
           var saldo = 0; var btn_tipo = "", bg_saldo = "", btn_tipo_deposito = "";
   
           // Validamos el tipo de boton para los "recibos por honorarios"
-          if (key.recibos_x_honorarios == '' || key.recibos_x_honorarios == null) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += 1; }
+          if (key.cant_rh == '' || key.cant_rh == null || key.cant_rh == 0) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += key.cant_rh; }
           saldo = parseFloat(key.pago_quincenal) - parseFloat(key.deposito);
           // background-color al saldo
           if (saldo < 0) { bg_saldo = 'bg-danger'; }
@@ -933,7 +975,7 @@ function trabajador_deuda_q_s(f1, f2, i, cant_dias_asistencia) {
             </td>
             <td class="pt-1 pb-1"><div class="formato-numero-conta"><span>S/</span>${formato_miles(saldo)}</div></td>
             <td class="pt-1 pb-1 text-center"> 
-              <button class="btn ${btn_tipo} btn-sm"  onclick="modal_recibos_x_honorarios('${key.idresumen_q_s_asistencia}', '${key.fecha_q_s_inicio}', '${key.fecha_q_s_fin}', '${key.numero_q_s}', '${key.numero_comprobante}', '${key.recibos_x_honorarios}', '${s_q_pago}', '${key.trabajador}');">
+              <button class="btn ${btn_tipo} btn-sm"  onclick="tabla_recibos_por_honorarios('${key.idresumen_q_s_asistencia}', '${capitalizeWords(s_q_pago.slice(0, -1))} ${key.numero_q_s}');">
                 <i class="fas fa-file-invoice fa-lg"></i>
               </button> 
             </td>
@@ -1045,12 +1087,14 @@ $(function () {
       forma_pago: { required: true},
       monto:      {required: true, minlength: 1 },
       fecha_pago: {required: true, },
+      numero_comprobante: { minlength: 3, maxlength:45 },
       descripcion:{ minlength: 4 },
     },
     messages: {
       forma_pago: { required: "Campo requerido." },
       monto:      { required: "Campo requerido.",   minlength: "MINIMO 1 dígito.", },
       fecha_pago: { required: "Campo requerido.", },
+      numero_comprobante: { minlength: "MINIMO 3 dígito.", maxlength: "MINIMO 45 dígito.", },
       descripcion:{ minlength: "MINIMO 4 caracteres.", },
     },
     
@@ -1077,10 +1121,10 @@ $(function () {
 
   $("#form-recibos_x_honorarios").validate({
     rules: {
-      numero_comprobante: {required: true, minlength: 3, maxlength:45 },
+      
     },
     messages: {
-      numero_comprobante: { required: "Campo requerido.", minlength: "MINIMO 3 dígito.", maxlength: "MINIMO 45 dígito.", },
+      
     },
     
     errorElement: "span",

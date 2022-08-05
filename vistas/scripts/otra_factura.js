@@ -527,18 +527,9 @@ function comprob_factura() {
     }
   } 
 }
+
 function validando_igv() {
-
-  if ($("#tipo_comprobante").select2("val") == "Factura") {
-
-    $("#val_igv").val(0.18); 
-
-  }else {
-
-    $("#val_igv").val(0); 
-
-  }
-  
+  if ($("#tipo_comprobante").select2("val") == "Factura") { $("#val_igv").val(0.18); }else { $("#val_igv").val(0); }  
 }
 
 function calculandototales_fact() {
@@ -572,10 +563,9 @@ function calculandototales_fact() {
       $("#igv").val("");
 
       subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
-       //precio_parcial /(parseFloat(val_igv)+1);
       igv = precio_parcial - subtotal;
 
-      $("#subtotal").val(subtotal.toFixed(2));
+      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
       $("#igv").val(igv.toFixed(2));
 
       $("#tipo_gravada").val('GRAVADA');

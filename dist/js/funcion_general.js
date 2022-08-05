@@ -1278,3 +1278,7 @@ function fechas_valorizacion_mensual(fecha_inicial, fecha_final) {
   return fechas_array;
 }
 
+
+function abrir_calculadora() {
+  var newWindow = window.open("https://www.desmos.com/scientific?lang=es", "_blank", "top=100, left=100, width=350, height=500, menubar=yes,toolbar=yes, scrollbars=yes, resizable=yes");
+}

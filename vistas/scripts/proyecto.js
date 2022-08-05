@@ -118,6 +118,7 @@ function limpiar() {
   $("#dias_habiles").val(""); $("#plazo").val(""); 
 
   $("#costo").val(""); 
+  $("#garantia").val("0"); 
   $("#empresa_acargo").val("Seven's Ingenieros SAC").trigger("change"); 
 
   $("#fecha_pago_obrero").prop("disabled", false);
@@ -757,6 +758,7 @@ function mostrar(idproyecto) {
       $("#dias_habiles").val(parseInt( data.data.dias_habiles));     
       $("#plazo").val(data.data.plazo); 
       $("#costo").val(formato_miles(data.data.costo)); 
+      $("#garantia").val(data.data.garantia); 
       $("#empresa_acargo").val(data.data.empresa_acargo).trigger("change");
       $("#fecha_pago_obrero").val(data.data.fecha_pago_obrero).trigger("change");
       $("#fecha_valorizacion").val(data.data.fecha_valorizacion).trigger("change");
@@ -985,6 +987,10 @@ function mostrar_detalle(idproyecto) {
                   <tr data-widget="expandable-table" aria-expanded="false">
                     <th>Costo total</th>
                     <td>${formato_miles(data.data.costo)}</td>
+                  </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Garantía</th>
+                    <td>${formato_miles(parseFloat(data.data.garantia) * 100)}%</td>
                   </tr>
                   <tr data-widget="expandable-table" aria-expanded="false">
                     <th>Empresa a cargo</th>
@@ -1435,6 +1441,7 @@ $(function () {
       dias_habiles:     {required: true,minlength: 1, maxlength: 11, digits: true, number: true},
       plazo:            {required: true,minlength: 1, maxlength: 11, number: true},
       costo:            { minlength: 1, maxlength: 20,  },
+      garantia:         {required: true,  number: true, min: 0, max: 1, },
       fecha_pago_obrero:{required: true},
       fecha_valorizacion:{required: true}
     },
@@ -1450,6 +1457,7 @@ $(function () {
       dias_habiles:     { required: "Campo requerido.", minlength: "MÍNIMO 1 dígito.", maxlength: "MÁXIMO 11 dígitos.", digits: "Solo números positivos" },
       plazo:            { required: "Campo requerido.", minlength: "1 dígitos como minimo.", maxlength: "11 dígitos como máximo.", },
       costo:            { minlength: "1 dígitos como minimo.", maxlength: "20 dígitos como máximo.", },
+      garantia:         {  required: "Requerido.", number: 'No número.', min: 'MÍNIMO 0', max: "MÁXIMO 1", },
       fecha_pago_obrero:{ required: "Campo requerido" },
       fecha_valorizacion:{ required: "Campo requerido" }
     },

@@ -150,7 +150,7 @@
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
                                   <label for="tipo_comprobante">Tipo Comprobante</label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="validando_igv(); comprob_factura(); " placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
                                     <option value="Factura">Factura</option>
@@ -239,16 +239,16 @@
                               <div class="col-md-6" >                               
                                 <div class="row text-center">
                                   <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="cip" class="control-label" > Baucher de deposito </label>
+                                    <label for="doc1_i" class="control-label" > Baucher de deposito </label>
                                   </div>
-                                  <div class="col-md-6 text-center">
+                                  <div class="col-6 col-md-6 text-center">
                                     <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
                                       <i class="fas fa-upload"></i> Subir.
                                     </button>
                                     <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
-                                  <div class="col-md-6 text-center">
+                                  <div class="col-6 col-md-6 text-center">
                                     <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');">
                                     <i class="fas fa-redo"></i> Recargar.
                                     </button>

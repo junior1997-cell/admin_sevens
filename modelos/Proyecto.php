@@ -11,64 +11,57 @@ Class Proyecto
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin,$plazo , $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero)
+	public function insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin,$plazo , $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero)
 	{
 		$doc7 = ""; $doc8 = ""; $calendario_error = "No hay feriados, agregue alguno";		
 		
 		// prepoaramos la consulta del proyecto
-		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero) 
-		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo',  '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero');";
+		$sql="INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero) 
+		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero');";
 		
 		// ejecutamos la consulta, Insertamos el registro de proyecto
 		$id_proyect = ejecutarConsulta_retornarID($sql) ;
-
+		if ($id_proyect['status'] == false) { return $id_proyect; }
 		// creamos la pensión: desayuno almuerzo y cena
 		// $sql_pension = "INSERT INTO pension(idproyecto, tipo_pension, precio_variable) 
 		// VALUES ('$id_proyect','Desayuno','0'), ('$id_proyect','Almuerzo','0'), ('$id_proyect','Cena','0')";
 		// ejecutarConsulta($sql_pension);
+		
+		// extraemos todas fechas
+		$sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
+		$proyecto =  ejecutarConsultaArray($sql2) ;
+		if ($proyecto['status'] == false) { return $proyecto;	}
 
-		if ($id_proyect['status']) {
-			// extraemos todas fechas
-			$sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
-			$proyecto =  ejecutarConsultaArray($sql2) ;
+		if (!empty($proyecto['id_tabla']) ) {	
 
-			if ($proyecto['status']) {
-				if (!empty($proyecto['id_tabla']) ) {	
+			$id_proyect = 	$id_proyect['id_tabla'];
 
-					$id_proyect = 	$id_proyect['id_tabla'];
-	
-					// insertamos las fechas al nuevo proyecto
-					foreach ($proyecto['data'] as $indice => $key) {
-	
-						$titulo = $key['titulo']; $descripcion = $key['descripcion']; $fecha_feriado = $key['fecha_feriado']; $background_color = $key['background_color']; $text_color = $key['text_color'];
-						
-						$sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
-						VALUES ('$id_proyect', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
-						$calendario_proyect = ejecutarConsulta($sql3);
+			// insertamos las fechas al nuevo proyecto
+			foreach ($proyecto['data'] as $indice => $key) {
 
-						if ($calendario_proyect['status'] == false) { return $calendario_proyect; } 						
-					}
-					return $calendario_proyect;
-				} else {
-					return $proyecto;		 
-				}
-			} else {
-				return $proyecto;	
-			}			
+				$titulo = $key['titulo']; $descripcion = $key['descripcion']; $fecha_feriado = $key['fecha_feriado']; $background_color = $key['background_color']; $text_color = $key['text_color'];
+				
+				$sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
+				VALUES ('$id_proyect', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
+				$calendario_proyect = ejecutarConsulta($sql3);
+
+				if ($calendario_proyect['status'] == false) { return $calendario_proyect; } 						
+			}
+			return $calendario_proyect;
 		} else {
-			return $id_proyect;	
-		}		
+			return $proyecto;		 
+		}					
+				
 		// $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero)
+	public function editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero)
 	{
 		 
 		$sql="UPDATE proyecto SET tipo_documento = '$tipo_documento', numero_documento = '$numero_documento', 
 			empresa = '$empresa', nombre_proyecto = '$nombre_proyecto', nombre_codigo = '$nombre_codigo',  ubicacion = '$ubicacion',
-			actividad_trabajo = '$actividad_trabajo', empresa_acargo = '$empresa_acargo', 
-			costo = '$costo',  
+			actividad_trabajo = '$actividad_trabajo', empresa_acargo = '$empresa_acargo', costo = '$costo',  garantia = '$garantia',  
 			fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', dias_habiles='$dias_habiles',
 			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3',
 			doc4_presupuesto = '$doc4', doc5_analisis_costos_unitarios = '$doc5', doc6_insumos = '$doc6', 
