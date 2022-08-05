@@ -364,6 +364,7 @@ function verdatos(idotra_factura){
 
 //Función para desactivar registros
 function eliminar(idotra_factura, nombre ) {
+  console.log(idotra_factura, nombre);
   crud_eliminar_papelera(
     "../ajax/otra_factura.php?op=desactivar",
     "../ajax/otra_factura.php?op=eliminar", 
