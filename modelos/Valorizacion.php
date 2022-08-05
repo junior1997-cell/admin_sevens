@@ -268,12 +268,19 @@ class Valorizacion
       ];
     }
 
-    $sql_2 = "SELECT idproyecto,  nombre_codigo,  costo, fecha_inicio, fecha_fin, feriado_domingo,  fecha_valorizacion, permanente_pago_obrero
+    $sql_2 = "SELECT idproyecto,  nombre_codigo,  costo, garantia, fecha_inicio, fecha_fin, feriado_domingo,  fecha_valorizacion, permanente_pago_obrero
     FROM proyecto WHERE idproyecto='$idproyecto';";
     $proyecto =  ejecutarConsultaSimpleFila($sql_2);
     if ($proyecto['status'] == false) { return $proyecto; }
     
-    return $retorno = [ 'status' => true, 'message' => 'todo oka', 'data' =>['montos' =>$data, 'proyecto' => (empty($proyecto['data']) ? 0 : (empty($proyecto['data']['costo']) ? 0 : floatval($proyecto['data']['costo']) ) )] ] ;  
+    return $retorno = [ 'status' => true, 
+      'message' => 'todo oka', 
+      'data' =>[
+        'montos' =>$data, 
+        'proyecto_costo' => (empty($proyecto['data']) ? 0 : (empty($proyecto['data']['costo']) ? 0 : floatval($proyecto['data']['costo']) ) ),
+        'proyecto_garantia' => (empty($proyecto['data']) ? 0 : (empty($proyecto['data']['garantia']) ? 0 : floatval($proyecto['data']['garantia']) ) )
+      ],      
+    ];  
   }
 
   public function list_total_montos_resumen_q_s($idproyecto_q_s) {

@@ -400,8 +400,34 @@
                                   </tbody>
                                   <tfoot>
                                     <tr> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal" ></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center total_porcent_programado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal celda-b-r-2px"></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_valorizado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center total_porcent_valorizado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_gastado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal text-center total_porcent_gastado_95"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px font-weight-normal"></th>                               
+                                    </tr>
+                                    <tr> 
+                                      <th class="pt-1 pb-1 font-weight-normal" ></th> 
+                                      <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
+                                      <th class="pt-1 pb-1 font-weight-normal text-center total_porcent_programado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th>
+                                      <th class="pt-1 pb-1 font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_valorizado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 font-weight-normal text-center total_porcent_valorizado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_gastado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 font-weight-normal text-center total_porcent_gastado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="pt-1 pb-1 font-weight-normal"></th>                               
+                                    </tr> 
+                                    <tr> 
                                       <th class="pt-1 pb-1 celda-b-t-2px" ></th> 
-                                      <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px">Total</th> 
+                                      <th class="pt-1 pb-1 celda-b-t-2px text-center celda-b-r-2px">Total</th> 
                                       <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
                                       <th class="pt-1 pb-1 celda-b-t-2px text-center total_porcent_programado"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                       <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px"></th>

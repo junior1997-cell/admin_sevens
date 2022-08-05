@@ -294,8 +294,7 @@ function validando_igv() {
 
     $("#val_igv").val(0); 
 
-  }
-  
+  }  
 }
 
 function calculandototales_fact() {

@@ -451,13 +451,13 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
 
         e.data.montos.forEach((key, indice) => {
           var bg_hoy_q_s = ''; 
-          var porcent_programado  = (key.monto_programado / e.data.proyecto) * 100;
-          var porcent_valorizado  = (key.monto_valorizado / e.data.proyecto) * 100;
-          var porcent_gastado     = (key.monto_gastado / e.data.proyecto) * 100;
+          var porcent_programado  = (key.monto_programado / e.data.proyecto_costo) * 100;
+          var porcent_valorizado  = (key.monto_valorizado / e.data.proyecto_costo) * 100;
+          var porcent_gastado     = (key.monto_gastado / e.data.proyecto_costo) * 100;
 
-          acum_porcent_programado += (key.monto_programado / e.data.proyecto) * 100;
-          acum_porcent_valorizado += (key.monto_valorizado / e.data.proyecto) * 100;
-          acum_porcent_gastado    += (key.monto_gastado / e.data.proyecto) * 100;
+          acum_porcent_programado += (key.monto_programado / e.data.proyecto_costo) * 100;
+          acum_porcent_valorizado += (key.monto_valorizado / e.data.proyecto_costo) * 100;
+          acum_porcent_gastado    += (key.monto_gastado / e.data.proyecto_costo) * 100;
 
           total_porcent_programado += porcent_programado, 
           total_porcent_valorizado += porcent_valorizado, 
@@ -481,13 +481,13 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
             <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" >${format_d_m_a(key.fecha_inicio)} - ${format_d_m_a(key.fecha_fin)}</td>
             <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
               <div class="formato-numero-conta span_val"><span>S/</span><span>${formato_miles(key.monto_programado)}</span></div>
-              <input class="hidden w-100 input_val" type="text" id="programado_${indice+1}" value="${key.monto_programado==0?'':formato_miles(key.monto_programado)}" onkeyup="formato_miles_input('#programado_${indice+1}'); delay(function(){ calcular_procentajes_programado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto}) }, 200 );">
+              <input class="hidden w-100 input_val" type="text" id="programado_${indice+1}" value="${key.monto_programado==0?'':formato_miles(key.monto_programado)}" onkeyup="formato_miles_input('#programado_${indice+1}'); delay(function(){ calcular_procentajes_programado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto_costo}, ${e.data.proyecto_garantia}) }, 200 );">
             </td>
             <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_programado_${indice+1}">${redondearExp(porcent_programado)}</span>%</td>            
             <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" ><span class="acum_porcent_programado_${indice+1}">${redondearExp(acum_porcent_programado)}</span>%</td>
             <td class="pt-1 pb-1 ${bg_hoy_q_s} text-right"  >
               <div class="formato-numero-conta span_val"><span>S/</span><span>${formato_miles(key.monto_valorizado)}</span></div>
-              <input class="hidden w-100 input_val" type="text" id="valorizado_${indice+1}" value="${key.monto_valorizado==0?'':formato_miles(key.monto_valorizado)}" onkeyup="formato_miles_input('#valorizado_${indice+1}'); delay(function(){ calcular_procentajes_valorizado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto}) }, 200 );">
+              <input class="hidden w-100 input_val" type="text" id="valorizado_${indice+1}" value="${key.monto_valorizado==0?'':formato_miles(key.monto_valorizado)}" onkeyup="formato_miles_input('#valorizado_${indice+1}'); delay(function(){ calcular_procentajes_valorizado(${indice+1}, ${cant_valorizaciones}, ${e.data.proyecto_costo}, ${e.data.proyecto_garantia}) }, 200 );">
             </td>
             <td class="pt-1 pb-1 ${bg_hoy_q_s} text-center" ><span class="porcent_valorizado_${indice+1}">${redondearExp(porcent_valorizado)}</span>%</td>            
             <td class="pt-1 pb-1 celda-b-r-2px ${bg_hoy_q_s} text-center" ><span class="acum_porcent_valorizado_${indice+1}">${redondearExp(acum_porcent_valorizado)}</span>%</td>
@@ -501,9 +501,25 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
 
         $('#tabla-principal').html(html_tabla);
 
+        $('.suma_total_monto_programado_95').html(`${formato_miles(total_programado * (1 - e.data.proyecto_garantia))}`);        
+        $('.suma_total_monto_valorizado_95').html(`${formato_miles(total_valorizado * (1 - e.data.proyecto_garantia))}`);        
+        $('.suma_total_monto_gastado_95').html(`${formato_miles(total_gastado * (1 - e.data.proyecto_garantia))}`); 
+
+        $('.suma_total_monto_programado_5').html(`${formato_miles(total_programado * e.data.proyecto_garantia)}`);        
+        $('.suma_total_monto_valorizado_5').html(`${formato_miles(total_valorizado * e.data.proyecto_garantia)}`);        
+        $('.suma_total_monto_gastado_5').html(`${formato_miles(total_gastado * e.data.proyecto_garantia)}`);
+
         $('.suma_total_monto_programado').html(`<b>${formato_miles(total_programado)}</b>`);        
         $('.suma_total_monto_valorizado').html(`<b>${formato_miles(total_valorizado)}</b>`);        
         $('.suma_total_monto_gastado').html(`<b>${formato_miles(total_gastado)}</b>`); 
+
+        $('.total_porcent_valorizado_95').html(`${redondearExp(((1 - e.data.proyecto_garantia) * 100), 2)}%`);
+        $('.total_porcent_programado_95').html(`${redondearExp(((1 - e.data.proyecto_garantia) * 100), 2)}%`);
+        $('.total_porcent_gastado_95').html(`${redondearExp(((1 - e.data.proyecto_garantia) * 100), 2)}%`);
+
+        $('.total_porcent_valorizado_5').html(`${redondearExp((e.data.proyecto_garantia * 100), 2)}%`);
+        $('.total_porcent_programado_5').html(`${redondearExp((e.data.proyecto_garantia * 100), 2)}%`);
+        $('.total_porcent_gastado_5').html(`${redondearExp((e.data.proyecto_garantia * 100), 2)}%`);
 
         $('.total_porcent_valorizado').html(`<b>${redondearExp(total_porcent_valorizado, 2)}%</b>`);
         $('.total_porcent_programado').html(`<b>${redondearExp(total_porcent_programado, 2)}%</b>`);
@@ -515,35 +531,36 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     
   }
 
-  function calcular_procentajes_programado(num_val, cant_valorizaciones, costo_proyecto) {
+  function calcular_procentajes_programado(num_val, cant_valorizaciones, costo_proyecto, proyecto_garantia) {
     var porcentaje_calculado = 0;
     if ($(`#programado_${num_val}`).val() == '-' || $(`#programado_${num_val}`).val() == null || $(`#programado_${num_val}`).val() == '' ) {  } else {
       var monto_val = $(`#programado_${num_val}`).val();
       porcentaje_calculado = (parseFloat(quitar_formato_miles(monto_val))/costo_proyecto)*100;
     }
     $(`.porcent_programado_${num_val}`).html(redondearExp(porcentaje_calculado));
-    calcular_totales('.suma_total_monto_programado','#programado_', cant_valorizaciones, '');
-    calcular_totales('.total_porcent_programado','.porcent_programado_', cant_valorizaciones, 'porcentaje');
+    calcular_totales('.suma_total_monto_programado','#programado_', cant_valorizaciones, proyecto_garantia, '');
+    calcular_totales('.total_porcent_programado','.porcent_programado_', cant_valorizaciones, proyecto_garantia, 'porcentaje');
     calcular_porcentaje_acumulado('.porcent_programado_', '.acum_porcent_programado_', cant_valorizaciones, costo_proyecto);
   }
 
-  function calcular_procentajes_valorizado(num_val, cant_valorizaciones, costo_proyecto) {
+  function calcular_procentajes_valorizado(num_val, cant_valorizaciones, costo_proyecto, proyecto_garantia) {
     var porcentaje_calculado = 0;
     if ($(`#valorizado_${num_val}`).val() == '-' || $(`#valorizado_${num_val}`).val() == null || $(`#valorizado_${num_val}`).val() == '' ) {  } else {
       var monto_val = $(`#valorizado_${num_val}`).val();
       porcentaje_calculado = (parseFloat(quitar_formato_miles(monto_val))/costo_proyecto)*100;
     }
     $(`.porcent_valorizado_${num_val}`).html(redondearExp(porcentaje_calculado));
-    calcular_totales('.suma_total_monto_valorizado', '#valorizado_', cant_valorizaciones, '');
-    calcular_totales('.total_porcent_valorizado','.porcent_valorizado_', cant_valorizaciones, 'porcentaje');
+    calcular_totales('.suma_total_monto_valorizado', '#valorizado_', cant_valorizaciones, proyecto_garantia, '');
+    calcular_totales('.total_porcent_valorizado','.porcent_valorizado_', cant_valorizaciones, proyecto_garantia, 'porcentaje');
     calcular_porcentaje_acumulado('.porcent_valorizado_', '.acum_porcent_valorizado_', cant_valorizaciones, costo_proyecto);
   }
 
-  function calcular_procentajes_gastado(cant_valorizaciones, costo_proyecto) {
-    calcular_totales('.total_porcent_gastado', '#gastado_', cant_valorizaciones);    
+  // no se usa por ahora -----------
+  function calcular_procentajes_gastado(cant_valorizaciones, costo_proyecto, proyecto_garantia) {
+    calcular_totales('.total_porcent_gastado', '#gastado_', cant_valorizaciones, proyecto_garantia, '');    
   }
 
-  function calcular_totales(name_div, name_input_span, cant_valorizaciones, tipo) {
+  function calcular_totales(name_div, name_input_span, cant_valorizaciones, proyecto_garantia, tipo) {
     //console.log('hola estamos calculado totales');
     var sum_total_programado = 0, cant_por_fecha = 0;
     for (let index = 1; index <= cant_valorizaciones; index++) {
@@ -563,6 +580,8 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     if (tipo == 'porcentaje') {
       $(name_div).html(`${formato_miles(sum_total_programado)}%`);
     } else {
+      $(`${name_div}_95`).html(`${formato_miles(sum_total_programado * (1 - proyecto_garantia))}`);
+      $(`${name_div}_5`).html(`${formato_miles(sum_total_programado * proyecto_garantia)}`);
       $(name_div).html(`<b>${formato_miles(sum_total_programado)}</b>`);
     }    
   }
@@ -1591,6 +1610,7 @@ function recoger_fecha_q_s() {
   }  
  
 }
+
 function export_excel_valorizacion() {
   $tabla = document.querySelector("#tbla_export_excel_valorizacion");
   let tableExport = new TableExport($tabla, {
