@@ -1828,7 +1828,7 @@ $(function () {
     rules: {
       tipo_documento_prov:{ required: true },
       num_documento_prov: { required: true, minlength: 6, maxlength: 20 },
-      nombre_prov:        { required: true, minlength: 6, maxlength: 100 },
+      nombre_prov:        { required: true, minlength: 3, maxlength: 100 },
       direccion_prov:     { minlength: 5, maxlength: 150 },
       telefono_prov:      { minlength: 8 },
       c_bancaria_prov:    { minlength: 6, },
@@ -1840,7 +1840,7 @@ $(function () {
     messages: {
       tipo_documento_prov:{ required: "Campo requerido.", },
       num_documento_prov: { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
-      nombre_prov:        { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
+      nombre_prov:        { required: "Campo requerido.", minlength: "MÍNIMO 3 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
       direccion_prov:     { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 150 caracteres.", },
       telefono_prov:      { minlength: "MÍNIMO 9 caracteres.", },
       c_bancaria_prov:    { minlength: "MÍNIMO 6 caracteres.", },

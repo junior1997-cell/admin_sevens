@@ -536,7 +536,7 @@
                               <!-- Tipo de documento -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="tipo_documento_prov">Tipo de documento</label>
+                                  <label for="tipo_documento_prov">Tipo de documento <sup class="text-danger">*</sup></label>
                                   <select name="tipo_documento_prov" id="tipo_documento_prov" class="form-control" placeholder="Tipo de documento">
                                     <option value="RUC">RUC</option>
                                     <option selected value="DNI">DNI</option>
@@ -547,7 +547,7 @@
                               <!-- N° de documento -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="num_documento_prov">N° RUC / DNI</label>
+                                  <label for="num_documento_prov">N° RUC / DNI <sup class="text-danger">(unico*)</sup></label>
                                   <div class="input-group">
                                     <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
                                     <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
@@ -563,7 +563,7 @@
                               <!-- Nombre -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="nombre_prov">Razón Social / Nombre y Apellidos</label>
+                                  <label for="nombre_prov">Razón Social / Nombre y Apellidos <sup class="text-danger">*</sup></label>
                                   <input type="text" name="nombre_prov" class="form-control" id="nombre_prov" placeholder="Razón Social o  Nombre" />
                                 </div>
                               </div>
@@ -595,7 +595,7 @@
                               <!-- banco -->
                               <div class="col-lg-3">
                                 <div class="form-group">
-                                  <label for="banco_prov">Banco</label>
+                                  <label for="banco_prov">Banco <sup class="text-danger">*</sup></label>
                                   <select name="banco_prov" id="banco_prov" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
                                     <!-- Aqui listamos los bancos -->
                                   </select>
