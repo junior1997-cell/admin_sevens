@@ -296,15 +296,14 @@ function listar_pagos_prestamos(idprestamo,entidad,monto,deuda) {
       var deuda_actual = monto-e.data.pago_total;
     
       if (deuda_actual>0 ) {
-        $('.estado_saldo').css({'color': 'red'}); $('.total_deuda').css({'color': 'red'});
-        $(".estado_saldo").html("Tiene una deuda de : ");
-        $(".total_deuda").html(formato_miles(deuda_actual));
+
+        $('.estado_saldo').html("Tiene una deuda de : ").removeClass('text-primary').addClass('text-red'); 
+        $(".total_deuda").html(formato_miles(deuda_actual)).removeClass('text-primary').addClass('text-red');
       }else{
-        $(".estado_saldo").removeAttr("style"); $('.total_deuda').css({'font-weight': 'bold'});
-    
+
         var mont_positivo =deuda_actual*-1;
-        $(".estado_saldo").html("A favor : ");
-        $(".total_deuda").html(formato_miles(mont_positivo));
+        $(".estado_saldo").html("Tiene a favor : ").removeClass('text-red').addClass('text-primary font-weight-bold');
+        $(".total_deuda").html(formato_miles(mont_positivo)).removeClass('text-red').addClass('text-primary font-weight-bold');
     
       }
       
@@ -434,34 +433,16 @@ console.log(`../ajax/prestamo.php?op=desactivar${fun_ajax}`);
 }
 
 function modal_comprobante(comprobante,fecha_emision){
-  var comprobante = comprobante;
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
 
-  $('#ver_fact_pdf').html(''); $('#img-factura').attr("src", "");
+  $('#ver_fact_pdf').html(''); 
 
   $('#modal-ver-comprobante').modal("show");
 
-  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
-
-    $('#ver_fact_pdf').hide();
-    $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/docs/pago_prestamo/" +comprobante);
-    $("#iddescargar").html(`<a class="btn btn-warning btn-block btn-xs" href="../dist/docs/pago_prestamo/${comprobante}"  download="${comprobante}"  type="button"><i class="fas fa-download"></i></a>`);
-    $(".view_comprobante_pago").html('<a class="btn btn-info btn-block btn-xs" href="../dist/docs/pago_prestamo/'+comprobante+'" target="_blank" rel="noopener noreferrer" >  Ver completo. </a>');
-  
-  }else{
-
-    $('#img-factura').hide();
-    $('#ver_fact_pdf').show();
-    $('#ver_fact_pdf').html('<iframe src="../dist/docs/pago_prestamo/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href","../dist/docs/pago_prestamo/" +comprobante);
-  
-  } 
-
- $(".tooltip").removeClass("show").addClass("hidde");
+  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'pago_prestamo', '','100%','300'));
+  $("#iddescargar").html(`<a class="btn btn-warning btn-block btn-xs" href="../dist/docs/pago_prestamo/${comprobante}"  download="${comprobante}"  type="button"><i class="fas fa-download"></i></a>`);
+  $(".view_comprobante_pago").html(`<a class="btn btn-info btn-block btn-xs" href="../dist/docs/pago_prestamo/${comprobante}" target="_blank" rel="noopener noreferrer" >  Ver completo. </a>`);
 
 }
-
 
 function l_m(){
   

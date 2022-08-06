@@ -103,7 +103,7 @@
       
       
         case 'tbla_principal':
-          $rspta = $otra_factura->tbla_principal();
+          $rspta = $otra_factura->tbla_principal($_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = []; $cont = 1;
 
@@ -122,20 +122,21 @@
                     ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idotra_factura.')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
                     '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotra_factura. ')"><i class="fa fa-pencil-alt"></i></button>' .
                     ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotra_factura. ')"><i class="fa fa-check"></i></button>',
-                "2" => $reg->forma_de_pago,
-                "3" =>'<div class="user-block">
+                "2" => $reg->fecha_emision,
+                "3" => $reg->razon_social,
+                "4" => $reg->forma_de_pago,
+                "5" =>'<div class="user-block">
                     <span class="username ml-0" > <p class="text-primary m-b-02rem" >' . $reg->tipo_comprobante . '</p> </span>
                     <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
                   </div>',
-                "4" => $reg->fecha_emision,
-                "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
-                "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
-                "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
-                "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "9" => $comprobante . $toltip,
-                "10" => $reg->glosa  ,
-                "11" => $reg->tipo_comprobante,
-                "12" => $reg->numero_comprobante,
+                "6" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
+                "7" =>'S/ '. number_format($reg->igv, 2, '.', ','),
+                "8" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
+                "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "10" => $comprobante . $toltip,
+                "11" => $reg->glosa,
+                "12" => $reg->tipo_comprobante,
+                "13" => $reg->numero_comprobante,
               ];
             }
             $results = [

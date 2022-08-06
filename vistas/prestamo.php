@@ -122,7 +122,7 @@
                             <div id="div-tabla-pagos-prestamos" style="display: none;">
                               <div class="row m-1 bg-color-0202022e p-5px">
                                 <div class="col-4"> <h5 > <spam>Entidad: </spam> <b class="entidad"></b></h5></div>
-                                <div class="col-4"> <h5 ><spam>total Emprestamo: </spam> <b class="total_empres"></b>  </h5></div>
+                                <div class="col-4"> <h5 ><spam>total Préstamo: </spam> <b class="total_empres"></b>  </h5></div>
                                 <div class="col-4"> <h5 > <span class="estado_saldo">Deuda: </span> <b class="total_deuda"></b> </h5></div>
                               </div>
                               
@@ -367,15 +367,14 @@
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                       <label for="cip" class="control-label"> Baucher</label>
                                     </div>
-                                    <div class="col-md-6 text-center">
-                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-upload"></i> Subir.</button>
-                                    <div class="col-6 col-md-6 text-center">
+                                    <div class="col-6  col-md-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-upload"></i> Subir. </button>
                                       <input type="hidden" id="doc_old_1" name="doc_old_1" />
                                       <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
                                     </div>
-                                    <div class="col-md-6 text-center">
+                                    <div class="col-6 col-md-6 text-center">
                                       <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'pago_prestamo');"><i class="fas fa-redo"></i> Recargar.</button>
+                                    </div>
                                   </div>
                                   <div id="doc1_ver" class="text-center mt-4">
                                     <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
@@ -426,14 +425,13 @@
                         </div>
                         <div class="modal-body">
                           <div class="class-style" style="text-align: center;">
-                          <div class="row">
-                            <div class="col-6" id="iddescargar"> </div>
-                            <div class="col-6 view_comprobante_pago"> </div>
-                          </div>
-
-                            <br />
-                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                            <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                            <div class="row">
+                              <div class="col-6 mb-2" id="iddescargar"> </div>
+                              <div class="col-6 mb-2 view_comprobante_pago"> </div>
+                              <div class="col-12">
+                                <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -62,10 +62,26 @@ class Otra_factura
   }
 
   //Implementar un método para listar los registros
-  public function tbla_principal()
+  public function tbla_principal( $fecha_1,$fecha_2,$id_proveedor,$comprobante)
   {
-    $sql = "SELECT*FROM otra_factura WHERE  estado_delete='1' AND estado='1' ORDER BY idotra_factura DESC";
+  
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND of.fecha_emision = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
+    }   
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND of.idproveedor = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }  
+
+    $sql = "SELECT of.idotra_factura,of.idproveedor,of.tipo_comprobante,of.numero_comprobante,of.forma_de_pago,of.fecha_emision,of.subtotal,of.igv,of.costo_parcial,of.descripcion,of.glosa,of.comprobante,of.estado,p.razon_social  
+    FROM otra_factura as of, proveedor as p WHERE of.estado=1 AND of.estado_delete=1 AND of.idproveedor=p.idproveedor  $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY idotra_factura DESC";
     return ejecutarConsulta($sql);
+
   }
 
   //Seleccionar un comprobante
