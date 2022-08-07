@@ -89,7 +89,7 @@
                                     </tr>
                                   </thead>
                                   <tbody>                         
-                                    <tr><td class="py-1 text-center">1</td><td class="py-1">CAJA</td>                             <td class="py-1"><div class="formato-numero-conta span_ef"><span>S/</span>100</div> <input type="text" id="caja_ef" class="hidden input_ef"></td> </tr>
+                                    <tr><td class="py-1 text-center">1</td><td class="py-1">CAJA</td>                             <td class="py-1"><div class="formato-numero-conta span_ef"><span>S/</span>100</div> <input type="text" id="caja_ef" class="hidden input_ef w-100"></td> </tr>
                                     <tr><td class="py-1 text-center">2</td><td class="py-1">PRESTAMOS Y CRÉDITOS (por pagar)</td> <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
                                     <tr><td class="py-1 text-center">3</td><td class="py-1">GASTOS ACTUALIZADOS</td>              <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
                                     <tr><td class="py-1 text-center">4</td><td class="py-1">VALORIZACIONES COBRADAS (9)</td>      <td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
@@ -100,15 +100,15 @@
                                   </tbody>
                                   <tfoot>
                                     <tr>                                       
-                                      <th class="py-1" colspan="2">INTERÉS PAGADO</th>
-                                      <th class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div> </th>      
+                                      <th class="py-1 celda-b-t-2px" colspan="2">INTERÉS PAGADO</th>
+                                      <th class="py-1 celda-b-t-2px"><div class="formato-numero-conta"><span>S/</span>100</div> </th>      
                                     </tr>
                                     <tr>                                       
                                       <th class="py-1" colspan="2" rowspan="2">GANANCIA ACTUAL (SIN DESCONTAR INTERÉS POR PAGAR)</th>
                                       <th class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></th>      
                                     </tr>
                                     <tr>                                       
-                                      <th class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></th>      
+                                      <th class="py-1 text-right">7%</th>      
                                     </tr>
                                   </tfoot>
                                 </table> 
@@ -136,8 +136,8 @@
 
                             <!-- agregar pago  -->
                             <h3 class="card-title " id="btn-agregar" >
-                              <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-pago-trabajdor" onclick="limpiar_pago_x_mes();">
-                              <i class="fas fa-plus-circle"></i> Agregar Estado Financiero
+                              <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-proyecciones" onclick="limpiar_form_proyecciones();">
+                              <i class="fas fa-plus-circle"></i> Agregar Proyecciones
                               </button>                     
                             </h3> 
 
@@ -145,42 +145,191 @@
                           <!-- /.card-header -->
                           <div class="card-body">
                             <!-- tabla principal -->                            
-                            <table id="tabla-principal" class="table table-bordered  table-striped display" >
-                              <thead>
+                            <table  class="table table-bordered /*table-striped*/ table-hover text-nowrap" >
+                              <thead class="bg-info">
                                 <tr> 
-                                  <th>Trabajdor</th> 
-                                  <th>Fecha inicio</th>
-                                  <th>Hoy</th>
-                                  <th class="text-center">Fecha <br> culminacion</th>
-                                  <th class="text-center">Tiempo <br> trabajado (dias)</th>                                
-                                  <th>Sueldo Mensual</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Pago total desde el dia inicial a final">Pago total</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Pago acumulado hasta hoy" >Pago <br> acumulado</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Depositos realizados" >Pago <br> realizado</th>                                
-                                  <th data-toggle="tooltip" data-original-title="Saldo hasta hoy">Saldo</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Fecha pagada con anterioridad">Último <br> pago</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Fecha siguiente de pago">Pago <br> Siguiente</th>
-                                  <th>Cel:</th>                         
+                                  <th class="py-1 text-center" colspan="3">ESTADO FINANCIERO - PROYECCIÓN AL</th> 
+                                  <th class="py-1 text-center" >01/12/2022</th>                                                
+                                </tr>
+                                <tr> 
+                                  <th class="py-1 text-center" colspan="4">PRESENTANDO LA VALORIZACIÓN 10, SIN RECIBIR EL PAGO</th>               
+                                </tr>
+                                <tr> 
+                                  <th class="py-1 text-center">#</th> 
+                                  <th class="py-1">DESCRIPCIÓN</th>
+                                  <th class="py-1">DETALLE</th>
+                                  <th class="py-1 text-center">MONTO</th>                                                          
                                 </tr>
                               </thead>
                               <tbody>                         
-                                
+                                <tr>
+                                  <td class="py-1 text-center">1</td>
+                                  <td class="py-1">SEGUROS DE VIDA</td>
+                                  <td class="py-1">
+                                  </td>                           
+                                  <td class="py-1">
+                                      <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>100
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                </tr>
+                                <!-- /.tr -->
+
+                                <tr>
+                                  <td class="py-1 text-center">2</td>
+                                  <td class="py-1">DEVOLUCIÓN DE PRESTAMOS</td>
+                                  <td class="py-1"> </td>                           
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>130,000.00
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                </tr>
+                                <!-- /.tr -->
+
+                                <tr>
+                                  <td class="py-1 text-center"></td>
+                                  <td class="py-1 text-right">DAVID REQUEJO </td>                                                            
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>10,000.00
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                  <td class="py-1"> </td> 
+                                </tr>
+                                <!-- /.tr -->
+                                <tr>
+                                  <td class="py-1 text-center"></td>
+                                  <td class="py-1 text-right">DAVID REQUEJO</td>                                                            
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>20,000.00
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                  <td class="py-1"> </td> 
+                                </tr>
+                                <!-- /.tr -->
+                                <tr>
+                                  <td class="py-1 text-center"></td>
+                                  <td class="py-1 text-right">DAVID REQUEJO</td>                                                            
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>100,000.00
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                  <td class="py-1"> </td> 
+                                </tr>
+                                <!-- /.tr -->
+
+                                <tr>
+                                  <td class="py-1 text-center">3</td>
+                                  <td class="py-1">COMPRAS</td>
+                                  <td class="py-1"> </td>                           
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>100
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                </tr>
+                                <!-- /.tr -->
+
+                                <tr>
+                                  <td class="py-1 text-center"></td>
+                                  <td class="py-1 text-right">VIGA CERO</td>
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef_p">
+                                      <span>S/</span>100
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td>                           
+                                  <td class="py-1"> </td> 
+                                </tr>
+                                <!-- /.tr -->
+
+                                <tr>
+                                  <td class="py-1 text-center"></td>
+                                  <td class="py-1 text-right">MADERA</td>
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef_p">
+                                      <span>S/</span>100
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td>                           
+                                  <td class="py-1"> </td> 
+                                </tr>
+                                <!-- /.tr -->
+
+                                <tr>
+                                  <td class="py-1 text-center">4</td>
+                                  <td class="py-1">MANO DE OBRA</td>
+                                  <td class="py-1">
+                                      <div class="formato-numero-conta span_ef_p">
+                                      <span>S/</span>100
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td>                           
+                                  <td class="py-1">
+                                      <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>100
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                </tr>
+                                <!-- /.tr -->
+
+                                <tr>
+                                  <td class="py-1 text-center">5</td>
+                                  <td class="py-1">DONACIONES</td>
+                                  <td class="py-1"> </td>                           
+                                  <td class="py-1">
+                                    <div class="formato-numero-conta span_ef">
+                                      <span>S/</span>100
+                                    </div> 
+                                    <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                  </td> 
+                                </tr>
+                                <!-- /.tr -->
+                              </tbody>
+                              <tr>
+                                <td class="py-1 celda-b-y-2px "></td>
+                                <td class="py-1 celda-b-y-2px">GASTOS PROYECTADOS</td>
+                                <td class="py-1 celda-b-y-2px"> 01/12/2022</td>                           
+                                <td class="py-1 celda-b-y-2px">
+                                  <div class="formato-numero-conta span_ef">
+                                    <span>S/</span>50,000.0
+                                  </div> 
+                                  <input type="text" id="caja_ef" class="hidden input_ef_p w-100">
+                                </td> 
+                              </tr>
+                              <tbody>
+                                <tr><td class="py-1 text-center">1</td><td class="py-1">CAJA</td>                             <td class="py-1">01/12/2022</td><td class="py-1"><div class="formato-numero-conta span_ef"><span>S/</span>100</div> <input type="text" id="caja_ef" class="hidden input_ef w-100"></td> </tr>
+                                <tr><td class="py-1 text-center">2</td><td class="py-1">PRESTAMOS Y CRÉDITOS (por pagar)</td> <td class="py-1">01/12/2022</td><td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                <tr><td class="py-1 text-center">3</td><td class="py-1">GASTOS ACTUALIZADOS</td>              <td class="py-1">01/12/2022</td><td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                <tr><td class="py-1 text-center">4</td><td class="py-1">VALORIZACIONES COBRADAS (9)</td>      <td class="py-1">01/12/2022</td><td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                <tr><td class="py-1 text-center">5</td><td class="py-1">VALORIZACIONES POR COBRAR (3)</td>    <td class="py-1">01/12/2022</td><td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td> </tr>
+                                <tr><td class="py-1 text-center">6</td><td class="py-1">GARANTÍA</td>                         <td class="py-1">01/12/2022</td><td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td > </tr>
+                                <tr><td class="py-1 text-center">7</td><td class="py-1">MONTO DE OBRA</td>                    <td class="py-1">01/12/2022</td><td class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></td > </tr>
+
                               </tbody>
                               <tfoot>
-                                <tr> 
-                                  <th class="text-gray">Trabajdor</th> 
-                                  <th class="text-gray">Fecha inicio</th>
-                                  <th class="text-center text-gray">Hoy</th>
-                                  <th class="text-center text-gray">Fecha <br> culminacion</th>
-                                  <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
-                                  <th class="text-right text-dark-0 "> <h5 class="sueldo_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right text-dark-0"><h5 class="pago_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                  <th class="text-right text-dark-0"><h5 class="pago_hoy_total_tbla_principal"> S/. <i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>
-                                  <th class="text-right text-dark-0 "><h5 class="deposito_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>                                
-                                  <th class="text-right text-dark-0 "><h5 class="saldo_total_tbla_principal"> S/.<i class="fas fa-spinner fa-pulse fa-sm"></i> </h5></th>  
-                                  <th class="text-center text-gray">Último <br> pago</th>
-                                  <th class="text-center text-gray">Siguiente <br> pago</th>
-                                  <th>Cel:</th>                            
+                                <tr>                                       
+                                  <th class="py-1 celda-b-t-2px" colspan="2">INTERÉS PAGADO</th>
+                                  <th class="py-1 celda-b-t-2px" >01/12/2022</th>
+                                  <th class="py-1 celda-b-t-2px"><div class="formato-numero-conta"><span>S/</span>100</div> </th>      
+                                </tr>
+                                <tr>                                       
+                                  <th class="py-1" colspan="2" rowspan="2">GANANCIA ACTUAL (SIN DESCONTAR INTERÉS POR PAGAR)</th>
+                                  <th class="py-1" rowspan="2">01/12/2022</th>
+                                  <th class="py-1"><div class="formato-numero-conta"><span>S/</span>100</div></th>      
+                                </tr>
+                                <tr>                                       
+                                  <th class="py-1 text-right">6%</th>      
                                 </tr>
                               </tfoot>
                             </table> 
@@ -197,11 +346,11 @@
                   <!-- /.container-fluid -->             
 
                   <!-- Modal agregar PAGOS POR MES -->
-                  <div class="modal fade" id="modal-agregar-pago-trabajdor">
-                    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal fade" id="modal-agregar-proyecciones">
+                    <div class="modal-dialog modal-dialog-scrollable modal-md">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h4 class="modal-title">Agregar pago: <b class="nombre_de_trabajador_modal"> <!-- NOMBRE DEL TRABAJDOR--> </b></h4>
+                          <h4 class="modal-title">Agregar Proyecciones</h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
                           </button>
@@ -209,72 +358,25 @@
                         
                         <div class="modal-body">
                           <!-- form start -->
-                          <form id="form-pagos-x-mes" name="form-pagos-x-mes"  method="POST" >                      
+                          <form id="form-proyecciones" name="form-proyecciones"  method="POST" >                      
                             <div class="card-body">
                               <div class="row" id="cargando-1-fomulario">
 
                                 <!-- id idpagos_x_mes_administrador -->
                                 <input type="hidden" name="idpagos_x_mes_administrador" id="idpagos_x_mes_administrador" />
-
                                 <!-- id idfechas_mes_pagos_administrador -->
-                                <input type="hidden" name="idfechas_mes_pagos_administrador_pxm" id="idfechas_mes_pagos_administrador_pxm" />
-                                <!-- id_tabajador_x_proyecto -->
-                                <input type="hidden" name="id_tabajador_x_proyecto_pxm" id="id_tabajador_x_proyecto_pxm" />
-                                <!-- fecha inicial -->
-                                <input type="hidden" name="fecha_inicial_pxm" id="fecha_inicial_pxm" />
-                                <!-- fecha final -->
-                                <input type="hidden" name="fecha_final_pxm" id="fecha_final_pxm" />
-                                <!-- nombre del mes -->
-                                <input type="hidden" name="mes_nombre_pxm" id="mes_nombre_pxm" />
-                                <!-- dias del mes -->
-                                <input type="hidden" name="dias_mes_pxm" id="dias_mes_pxm" />
-                                <!-- dias_regular -->
-                                <input type="hidden" name="dias_regular_pxm" id="dias_regular_pxm" />
-                                <!-- sueldo_mensual -->
-                                <input type="hidden" name="sueldo_mensual_pxm" id="sueldo_mensual_pxm" />
-                                <!-- monto_x_mes -->
-                                <input type="hidden" name="monto_x_mes_pxm" id="monto_x_mes_pxm" />                            
+                                <input type="hidden" name="idfechas_mes_pagos_administrador_pxm" id="idfechas_mes_pagos_administrador_pxm" />                   
 
-                                <!-- Forma de pago hacia el trabajdor -->
-                                <div class="col-lg-6">
+                                <!-- fecha de proyeccion-->
+                                <div class="col-lg-12">
                                   <div class="form-group">
-                                  <label for="forma_pago">Forma Pago</label>
-                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                    <option value="Transferencia">Transferencia</option>
-                                    <option value="Efectivo">Efectivo</option>
-                                  </select>
-                                  </div>
-                                </div>
-
-                                <!-- Cuenta deposito enviada -->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="cuenta_deposito">Cuenta deposito <small>(del trabajdor)</small> </label>                               
-                                    <input type="text" name="cuenta_deposito" id="cuenta_deposito" class="form-control"  placeholder="Cuenta deposito">  
-                                  </div>                                                        
-                                </div>
-
-                                <!-- Monto (de cantidad a depositado) -->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="monto">Monto <small> (Monto a pagar) </small> </label>                               
-                                    <input type="text" name="monto" id="monto" class="form-control"  placeholder="Monto a pagar"> 
-                                  </div>                                                        
-                                </div>
-                                
-                                <!-- Mes del pago -->
-                                <div class="col-lg-3">
-                                  <div class="form-group">
-                                    <label for="nombre_mes" class="text-gray">Mes </label>
-                                    <span class="nombre_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
-                                  </div>
-                                </div>
-
-                                <!-- Monto faltante -->
-                                <div class="col-lg-3">
-                                  <div class="form-group">
-                                    <label for="nombre_mes" class="text-gray">Faltante </label>
-                                    <span class="faltante_mes_modal text-gray form-control"> <sup>S/.</sup> 0.00</span>
+                                    <label for="">Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
+                                    <div class="input-group date "  data-target-input="nearest">
+                                      <input type="text" class="form-control" id="fecha_proyeccion" name="fecha_proyeccion" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask   />
+                                      <div class="input-group-append click-btn-fecha-proyeccion cursor-pointer" for="fecha_proyeccion" >
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                      </div>
+                                    </div>                                 
                                   </div>
                                 </div>
                                 
@@ -285,35 +387,10 @@
                                     <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                   </div>                                                        
                                 </div>
-                                
-                                <!-- Pdf 1 -->
-                                <div class="col-md-12" >                               
-                                  <div class="row text-center">
-                                    <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                      <label for="cip" class="control-label" > Baucher de deposito </label>
-                                    </div>
-                                    <div class="col-md-6 text-center">
-                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
-                                        <i class="fas fa-upload"></i> Subir.
-                                      </button>
-                                      <input type="hidden" id="doc_old_1" name="doc_old_1" />
-                                      <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
-                                    </div>
-                                    <div class="col-md-6 text-center">
-                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'baucher_deposito');">
-                                      <i class="fas fa-redo"></i> Recargar.
-                                      </button>
-                                    </div>
-                                  </div>                              
-                                  <div id="doc1_ver" class="text-center mt-4">
-                                    <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
-                                  </div>
-                                  <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
-                                </div>
 
                                 <!-- barprogress -->
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                  <div class="progress" id="div_barra_progress">
+                                  <div class="progress" id="barra_progress_div">
                                     <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                       0%
                                     </div>
@@ -331,12 +408,12 @@
                               
                             </div>
                             <!-- /.card-body -->                      
-                            <button type="submit" style="display: none;" id="submit-form-pagos-x-mes">Submit</button>                      
+                            <button type="submit" style="display: none;" id="submit-form-proyecciones">Submit</button>                      
                           </form>
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                          <button type="submit" class="btn btn-success" id="guardar_registro_proyecciones">Guardar Cambios</button>
                         </div>                  
                       </div>
                     </div>

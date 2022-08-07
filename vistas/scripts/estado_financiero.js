@@ -16,10 +16,17 @@ function init() {
 
   //Initialize Select2 unidad
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
-   
+
+  $('#fecha_proyeccion').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true,  weekStart: 0, orientation: "bottom auto", todayBtn: true });
+
+  formato_miles_input('.input_ef');
+
   // Formato para telefono
-  $("[data-mask]").inputmask();   
+  $("[data-mask]").inputmask();    
 } 
+
+// click input group para habilitar: datepiker
+$('.click-btn-fecha-proyeccion').on('click', function (e) {$('#fecha_proyeccion').focus().select(); });
 
 // ══════════════════════════════════════ ESTADO FINANCIERO ══════════════════════════════════════ 
 
@@ -177,6 +184,20 @@ function mostrar_pagos_x_mes(id) {
 }
 
 // ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
+
+//Función limpiar
+function limpiar_form_proyecciones() {  
+
+  $("#monto").val("");
+  $("#forma_pago").val("").trigger("change"); 
+  $("#descripcion").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
 function desactivar_pago_x_mes(id) {
 
   var id_fechas_mes = $('#idfechas_mes_pagos_administrador_pxm').val();
