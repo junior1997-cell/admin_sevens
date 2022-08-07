@@ -159,6 +159,19 @@
           echo json_encode($rspta, true);
       
         break;
+
+        // :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::
+        case 'guardar_proveedor':
+      
+          if (empty($idproveedor_prov)){
+      
+            $rspta=$proveedor->insertar($nombre_prov, $tipo_documento_prov, $num_documento_prov, $direccion_prov, $telefono_prov,
+            $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
+            
+            echo json_encode($rspta, true);
+          }
+      
+        break;
       
         case 'salir':
           //Limpiamos las variables de sesión

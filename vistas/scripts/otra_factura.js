@@ -13,8 +13,12 @@ function init() {
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
 
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
+
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) { $("#submit-form-otras_facturas").submit(); });
+
+  $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccinar proveedor", allowClear: true, });
@@ -22,9 +26,11 @@ function init() {
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar forma de pago", allowClear: true, });
   $("#glosa").select2({ theme: "bootstrap4", placeholder: "Seleccinar glosa", allowClear: true, });
 
-    // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
-    $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
-    $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+  $("#banco_prov").select2({templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
+
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
+  $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
+  $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
 
   // Inicializar - Date picker  
   $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
@@ -34,6 +40,15 @@ function init() {
   $("[data-mask]").inputmask();
 
 }
+
+function templateBanco (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/docs/banco/logo/${state.title}`: '../dist/docs/banco/logo/logo-sin-banco.svg'; 
+  var onerror = `onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
@@ -394,6 +409,146 @@ function eliminar(idotra_factura, nombre ) {
 
 }
 
+// :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::
+//Función limpiar
+function limpiar_form_proveedor() {
+  $("#idproveedor_prov").val("");
+  $("#tipo_documento_prov option[value='RUC']").attr("selected", true);
+  $("#nombre_prov").val("");
+  $("#num_documento_prov").val("");
+  $("#direccion_prov").val("");
+  $("#telefono_prov").val("");
+  $("#c_bancaria_prov").val("");
+  $("#cci_prov").val("");
+  $("#c_detracciones_prov").val("");
+  $("#banco_prov").val("").trigger("change");
+  $("#titular_cuenta_prov").val("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+
+  $(".tooltip").removeClass("show").addClass("hidde");
+}
+
+// damos formato a: Cta, CCI
+function formato_banco() {
+
+  if ($("#banco_prov").select2("val") == null || $("#banco_prov").select2("val") == "" || $("#banco_prov").select2("val") == "1" ) {
+
+    $("#c_bancaria_prov").prop("readonly", true);
+    $("#cci_prov").prop("readonly", true);
+    $("#c_detracciones_prov").prop("readonly", true);
+
+  } else {
+    
+    $(".chargue-format-1").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+    $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+    $(".chargue-format-3").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');    
+
+    $.post("../ajax/ajax_general.php?op=formato_banco", { 'idbanco': $("#banco_prov").select2("val") }, function (e, status) {
+      
+      e = JSON.parse(e);  // console.log(e);
+
+      if (e.status == true) {
+        $(".chargue-format-1").html("Cuenta Bancaria");
+        $(".chargue-format-2").html("CCI");
+        $(".chargue-format-3").html("Cuenta Detracciones");
+
+        $("#c_bancaria_prov").prop("readonly", false);
+        $("#cci_prov").prop("readonly", false);
+        $("#c_detracciones_prov").prop("readonly", false);
+
+        var format_cta = decifrar_format_banco(e.data.formato_cta);
+        var format_cci = decifrar_format_banco(e.data.formato_cci);
+        var formato_detracciones = decifrar_format_banco(e.data.formato_detracciones);
+        // console.log(format_cta, formato_detracciones);
+
+        $("#c_bancaria_prov").inputmask(`${format_cta}`);
+        $("#cci_prov").inputmask(`${format_cci}`);
+        $("#c_detracciones_prov").inputmask(`${formato_detracciones}`);
+      } else {
+        ver_errores(e);
+      }      
+    }).fail( function(e) { ver_errores(e); } );
+  }
+}
+
+function decifrar_format_banco(format) {
+
+  var array_format =  format.split("-"); var format_final = "";
+
+  array_format.forEach((item, index)=>{
+
+    for (let index = 0; index < parseInt(item); index++) { format_final = format_final.concat("9"); }   
+
+    if (parseInt(item) != 0) { format_final = format_final.concat("-"); }
+  });
+
+  var ultima_letra = format_final.slice(-1);
+   
+  if (ultima_letra == "-") { format_final = format_final.slice(0, (format_final.length-1)); }
+
+  return format_final;
+}
+
+//guardar proveedor
+function guardar_proveedor(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-proveedor")[0]);
+
+  $.ajax({
+    url: "../ajax/compra_insumos.php?op=guardar_proveedor",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      e = JSON.parse(e);
+      try {
+        if (e.status == true) {
+          // toastr.success("proveedor registrado correctamente");
+          Swal.fire("Correcto!", "Proveedor guardado correctamente.", "success");          
+          limpiar_form_proveedor();
+          $("#modal-agregar-proveedor").modal("hide");
+          //Cargamos los items al select cliente
+          lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', e.data);
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }       
+      
+      $("#guardar_registro_proveedor").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_proveedor").css({"width": percentComplete+'%'});
+          $("#barra_progress_proveedor").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_proveedor").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_proveedor").css({ width: "0%",  });
+      $("#barra_progress_proveedor").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_proveedor").css({ width: "0%", });
+      $("#barra_progress_proveedor").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+
+
+
 init();
 
 $(function () {  
@@ -402,6 +557,7 @@ $(function () {
   $("#idproveedor").on("change", function () { $(this).trigger("blur"); });
   $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
   $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+  $("#banco_prov").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-otras_facturas").validate({
     rules: {
@@ -442,11 +598,58 @@ $(function () {
     },
   });
 
+  $("#form-proveedor").validate({
+    rules: {
+      tipo_documento_prov:  { required: true },
+      num_documento_prov:   { required: true, minlength: 6, maxlength: 20 },
+      nombre_prov:          { required: true, minlength: 3, maxlength: 100 },
+      direccion_prov:       { minlength: 5, maxlength: 150 },
+      telefono_prov:        { minlength: 8 },
+      c_bancaria_prov:      { minlength: 6,  },
+      cci_prov:             { minlength: 6,  },
+      c_detracciones_prov:  { minlength: 6,  },      
+      banco_prov:           { required: true },
+      titular_cuenta_prov:  { minlength: 4 },
+    },
+    messages: {
+      tipo_documento_prov:  { required: "Campo requerido.", },
+      num_documento_prov:   { required: "Campo requerido.",  minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
+      nombre_prov:          { required: "Campo requerido.", minlength: "MÍNIMO 3 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
+      direccion_prov:       { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 150 caracteres.", },
+      telefono_prov:        { minlength: "MÍNIMO 9 caracteres.", },
+      c_bancaria_prov:      { minlength: "MÍNIMO 6 caracteres.", },
+      cci_prov:             { minlength: "MÍNIMO 6 caracteres.",  },
+      c_detracciones_prov:  { minlength: "MÍNIMO 6 caracteres.", },      
+      banco_prov:           { required: "Campo requerido.",  },
+      titular_cuenta_prov:  { minlength: 'MÍNIMO 4 caracteres.' },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      guardar_proveedor(e);
+    },
+  });
+
   //agregando la validacion del select  ya que no tiene un atributo name el plugin 
   $("#idproveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
   $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
   $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
-
+  $("#banco_prov").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

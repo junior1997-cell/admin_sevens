@@ -723,8 +723,8 @@
                                     <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
                                     <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                       <span class="input-group-text" style="cursor: pointer;">
-                                        <i class="fas fa-search text-primary" id="search"></i>
-                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                        <i class="fas fa-search text-primary" id="search_prov"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge_prov" style="display: none;"></i>
                                       </span>
                                     </div>
                                   </div>
