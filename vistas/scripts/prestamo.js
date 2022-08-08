@@ -246,7 +246,7 @@ function limpiar_form_pago_prestamos() {
 
 function listar_pagos_prestamos(idprestamo,entidad,monto,deuda) {  
 
-  localStorage.setItem('idprestamo', idprestamo); localStorage.setItem('entidad', entidad); localStorage.setItem('monto', monto);
+  localStorage.setItem('idprestamo', idprestamo); localStorage.setItem('entidad_prestamo', entidad); localStorage.setItem('monto_prestamo', monto);
 
   table_show_hide_prestamos(2);
 
@@ -289,13 +289,9 @@ function listar_pagos_prestamos(idprestamo,entidad,monto,deuda) {
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
 
-     // localStorage.setItem('pago_total', e.data.pago_total)
+      $(".suma_total_pago_prestamo").html('S/ '+formato_miles(e.data.pago_total_prestamo));  
 
-      $(".suma_total_pago_prestamo").html('S/ '+formato_miles(e.data.pago_total));  
-
-      //var pago_total_actual = localStorage.getItem('pago_total');
-
-      var deuda_actual = monto-e.data.pago_total;
+      var deuda_actual = monto-e.data.pago_total_prestamo;
     
       if (deuda_actual>0 ) {
 
@@ -339,7 +335,7 @@ function guardar_y_editar_pago_prestamo(e) {
 
           tabla_pago_prestamos.ajax.reload(null, false); 
 
-          listar_pagos_prestamos(localStorage.getItem('idprestamo'),localStorage.getItem('entidad'),localStorage.getItem('monto'));
+          listar_pagos_prestamos(localStorage.getItem('idprestamo'),localStorage.getItem('entidad_prestamo'),localStorage.getItem('monto_prestamo'));
 
           tbla_resumen_prest_credit(localStorage.getItem('nube_idproyecto'));
 
@@ -651,7 +647,7 @@ function limpiar_form_pago_creditos() {
 
 function listar_pagos_creditos(idcredito,entidad,monto,deuda) {  
 
-  localStorage.setItem('idcredito', idcredito); localStorage.setItem('entidad', entidad); localStorage.setItem('monto', monto);
+  localStorage.setItem('idcredito', idcredito); localStorage.setItem('entidad_credito', entidad); localStorage.setItem('monto_credito', monto);
 
   table_show_hide_creditos(2);
 
@@ -694,13 +690,9 @@ function listar_pagos_creditos(idcredito,entidad,monto,deuda) {
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
 
-     // localStorage.setItem('pago_total', e.data.pago_total)
+      $(".suma_total_pago_credito").html('S/ '+formato_miles(e.data.pago_total_credito));  
 
-      $(".suma_total_pago_credito").html('S/ '+formato_miles(e.data.pago_total));  
-
-      //var pago_total_actual = localStorage.getItem('pago_total');
-
-      var deuda_actual = monto-e.data.pago_total;
+      var deuda_actual = monto-e.data.pago_total_credito;
     
       if (deuda_actual>0 ) {
 
@@ -740,7 +732,7 @@ function guardar_y_editar_pago_credito(e) {
           Swal.fire("Correcto!", "Pago guardado correctamente", "success");
 
           tabla_creditos.ajax.reload(null, false); listar_tbla_principal_creditos(localStorage.getItem('nube_idproyecto'));
-          tabla_pago_creditos.ajax.reload(null, false); listar_pagos_creditos(localStorage.getItem('idcredito'),localStorage.getItem('entidad'),localStorage.getItem('monto'));
+          tabla_pago_creditos.ajax.reload(null, false); listar_pagos_creditos(localStorage.getItem('idcredito'),localStorage.getItem('entidad_credito'),localStorage.getItem('monto_credito'));
           tbla_resumen_prest_credit(localStorage.getItem('nube_idproyecto'));
           limpiar_form_pago_creditos();
 
@@ -829,7 +821,7 @@ function eliminar_pago_creditos(idpago,monto,fun_ajax) {
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
     function(){ tabla_creditos.ajax.reload(null, false); listar_tbla_principal_creditos(localStorage.getItem('nube_idproyecto')); },
-    function(){ if (tabla_pago_creditos) { tabla_pago_creditos.ajax.reload(null, false);}; listar_pagos_creditos(localStorage.getItem('idcredito'),localStorage.getItem('entidad'),localStorage.getItem('monto')); },
+    function(){ if (tabla_pago_creditos) { tabla_pago_creditos.ajax.reload(null, false);}; listar_pagos_creditos(localStorage.getItem('idcredito'),localStorage.getItem('entidad_credito'),localStorage.getItem('monto_credito')); },
     function(){ tbla_resumen_prest_credit(localStorage.getItem('nube_idproyecto'));},
     false,
     false,

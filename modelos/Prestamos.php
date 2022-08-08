@@ -159,8 +159,8 @@ class Prestamos
 
   public function mostrar_total_tbla_pago_prestamo($idprestamo)
   {
-    $sql="SELECT SUM(pp.monto) as pago_total FROM pago_prestamo as pp, prestamo as p  
-    WHERE pp.idprestamo='$idprestamo' AND pp.estado='1' AND pp.estado_delete='1' AND p.estado ='1' AND p.estado_delete='1';";
+    $sql="SELECT SUM(pp.monto) as pago_total_prestamo FROM pago_prestamo as pp, prestamo as p  
+    WHERE pp.idprestamo = p.idprestamo AND pp.idprestamo='$idprestamo' AND pp.estado='1' AND pp.estado_delete='1' AND p.estado ='1' AND p.estado_delete='1';";
     return ejecutarConsultaSimpleFila($sql);
   }
 
@@ -315,8 +315,8 @@ class Prestamos
 
   public function mostrar_total_tbla_pago_credito($idcredito)
   {
-    $sql="SELECT SUM(pc.monto) as pago_total FROM pago_credito as pc, credito as c 
-    WHERE pc.idcredito='$idcredito' AND pc.estado='1' AND pc.estado_delete='1' AND c.estado ='1' AND c.estado_delete='1';";
+    $sql="SELECT SUM(pc.monto) as pago_total_credito FROM pago_credito as pc, credito as c 
+    WHERE pc.idcredito = c.idcredito AND pc.idcredito='$idcredito' AND pc.estado='1' AND pc.estado_delete='1' AND c.estado ='1' AND c.estado_delete='1';";
     return ejecutarConsultaSimpleFila($sql);
   }
 
