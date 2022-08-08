@@ -36,6 +36,8 @@ function init() {
 // ========= ============= ================== ============
  //:::: S E C C I Ó N   D E   P R É S T A M O S ::::::
 // ========= ============= ================== ============
+no_select_tomorrow("#fecha_inicio_prestamo");
+function restrigir_fecha_input() { restrigir_fecha_ant("#fecha_fin_prestamo",$("#fecha_inicio_prestamo").val());}
 
 function table_show_hide_prestamos(estado) { 
   if (estado == 1) {
@@ -144,7 +146,11 @@ function guardar_y_editar_prestamo(e) {
           Swal.fire("Correcto!", "Prestamo guardado correctamente", "success");
 
           tabla_prestamos.ajax.reload(null, false);
+
+          listar_tbla_principal_prestamo(localStorage.getItem('nube_idproyecto'));
+
           tbla_resumen_prest_credit(localStorage.getItem('nube_idproyecto'));
+
           limpiar_prestamos();
 
           $("#modal-agregar-prestamo").modal("hide");
@@ -216,6 +222,7 @@ function editar_prestamo(id) {
 // ========= ============= ================== ============
  //:::: S E C C I Ó N   P A G O   P R É S T A M O S ::::::
 // ========= ============= ================== ============
+no_select_tomorrow("#fecha_pago_p");
 // comprobante
 $("#doc1_i").click(function () { $("#doc1").trigger("click"); });
 $("#doc1").change(function (e) { addImageApplication(e, $("#doc1").attr("id"), ".../dist/svg/doc_uploads.svg"); });
@@ -327,8 +334,13 @@ function guardar_y_editar_pago_prestamo(e) {
         if (e.status == true) {
           Swal.fire("Correcto!", "Pago guardado correctamente", "success");
 
-          tabla_prestamos.ajax.reload(null, false); listar_tbla_principal_prestamo(localStorage.getItem('nube_idproyecto'));
-          tabla_pago_prestamos.ajax.reload(null, false); listar_pagos_prestamos(localStorage.getItem('idprestamo'),localStorage.getItem('entidad'),localStorage.getItem('monto'));
+          tabla_prestamos.ajax.reload(null, false); 
+          listar_tbla_principal_prestamo(localStorage.getItem('nube_idproyecto'));
+
+          tabla_pago_prestamos.ajax.reload(null, false); 
+
+          listar_pagos_prestamos(localStorage.getItem('idprestamo'),localStorage.getItem('entidad'),localStorage.getItem('monto'));
+
           tbla_resumen_prest_credit(localStorage.getItem('nube_idproyecto'));
 
           limpiar_form_pago_prestamos();
@@ -433,6 +445,8 @@ function eliminar_pago_prestamos(idpago,monto,fun_ajax) {
 // ========= ============= ================== ============
  //:::: S E C C I Ó N    C R É D I  T O S ::::::
 // ========= ============= ================== ============ 
+no_select_tomorrow("#fecha_inicio_credito");
+function fecha_input_credito() { restrigir_fecha_ant("#fecha_fin_credito",$("#fecha_inicio_credito").val()); }
 
 function table_show_hide_creditos(estado) { 
   if (estado == 1) {
@@ -614,7 +628,7 @@ function editar_credito(id) {
 // ========= ============= ================== ============
  //:::: S E C C I Ó N   P A G O   C R É D I  T O S ::::::
 // ========= ============= ================== ============ 
-
+no_select_tomorrow("#fecha_pago_c");
 $("#doc2_i").click(function () { $("#doc2").trigger("click"); });
 $("#doc2").change(function (e) { addImageApplication(e, $("#doc2").attr("id"), ".../dist/svg/doc_uploads.svg"); });
 
@@ -843,15 +857,15 @@ function eliminar_prestamo_credito(id,entidad,ajax_pres_cred) {
 
 //funciones compartidas
 
-function modal_comprobante(comprobante,fecha_emision){
+function modal_comprobante(comprobante,carpeta){
 
   $('#ver_fact_pdf').html(''); 
 
   $('#modal-ver-comprobante').modal("show");
 
-  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'pago_prestamo', '','100%','300'));
-  $("#iddescargar").html(`<a class="btn btn-warning btn-block btn-xs" href="../dist/docs/pago_prestamo/${comprobante}"  download="${comprobante}"  type="button"><i class="fas fa-download"></i></a>`);
-  $(".view_comprobante_pago").html(`<a class="btn btn-info btn-block btn-xs" href="../dist/docs/pago_prestamo/${comprobante}" target="_blank" rel="noopener noreferrer" >  Ver completo. </a>`);
+  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, carpeta, '','100%','300'));
+  $("#iddescargar").html(`<a class="btn btn-warning btn-block btn-xs" href="../dist/docs/${carpeta}/${comprobante}"  download="${comprobante}"  type="button"><i class="fas fa-download"></i></a>`);
+  $(".view_comprobante_pago").html(`<a class="btn btn-info btn-block btn-xs" href="../dist/docs/${carpeta}/${comprobante}" target="_blank" rel="noopener noreferrer" >  Ver completo. </a>`);
 
 }
 
@@ -1040,9 +1054,7 @@ $(function () {
 
 });
 
-
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
-
 
 
 // quitamos las comas de miles de un numero

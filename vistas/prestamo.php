@@ -339,7 +339,7 @@
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                   <label for="fecha_inicio">Fecha Inicio</label>
-                                  <input type="date" name="fecha_inicio_prestamo" id="fecha_inicio_prestamo" class="form-control"  placeholder="Fecha Inicio">  
+                                  <input type="date" name="fecha_inicio_prestamo" id="fecha_inicio_prestamo" class="form-control"  placeholder="Fecha Inicio" onchange="restrigir_fecha_input();">  
                                   </div>
                                 </div>
                                 <!-- Fecha fin -->
@@ -529,13 +529,15 @@
                                   <input type="text" name="entidad_credito" id="entidad_credito" class="form-control"  placeholder="Entidad">  
                                   </div>
                                 </div>
+
                                 <!-- Fecha Inicio -->
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                   <label for="fecha_inicio">Fecha Inicio</label>
-                                  <input type="date" name="fecha_inicio_credito" id="fecha_inicio_credito" class="form-control"  placeholder="Fecha Inicio">  
+                                  <input type="date" name="fecha_inicio_credito" id="fecha_inicio_credito" class="form-control" placeholder="Fecha Inicio" onchange="fecha_input_credito();" >  
                                   </div>
                                 </div>
+
                                 <!-- Fecha fin -->
                                 <div class="col-lg-6">
                                   <div class="form-group">

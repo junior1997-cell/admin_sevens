@@ -274,6 +274,7 @@
           //Vamos a declarar un array
           $data = [];
           $cont=1;
+          $carpeta="pago_prestamo";
 
           $descrip_toltip="Clic en botón para entrar el detalle de pagos";
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
@@ -282,7 +283,7 @@
 
             foreach ($rspta['data'] as $key => $reg) {
 
-              $comprobante = empty($reg['comprobante']) ? ( '<center> <i class="fas fa-file-invoice-dollar fa-2x text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i></center>') : ( '<center><i class="fas fa-file-invoice-dollar fa-2x cursor-pointer text-blue" onclick="modal_comprobante('."'".$reg['comprobante']."'".', \''.$reg['fecha'].'\''. ')" data-toggle="tooltip" data-original-title="Ver Baucher"></i></center>');
+              $comprobante = empty($reg['comprobante']) ? ( '<center> <i class="fas fa-file-invoice-dollar fa-2x text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i></center>') : ( '<center><i class="fas fa-file-invoice-dollar fa-2x cursor-pointer text-blue" onclick="modal_comprobante('."'".$reg['comprobante']."'".', \''.$carpeta.'\''. ')" data-toggle="tooltip" data-original-title="Ver Baucher"></i></center>');
               $datos_edit = '\''.$reg['idpago_prestamo'].'\', \''.$reg['idprestamo'].'\', \''.$reg['fecha'].'\', \''.$reg['monto'].'\', \''.$reg['descripcion'].'\', \''.$reg['comprobante'].'\'';
               $data[] = [
                 "0"=>$cont++,
@@ -548,6 +549,7 @@
           //Vamos a declarar un array
           $data = [];
           $cont=1;
+          $carpeta="pago_credito";
       
           $descrip_toltip="Clic en botón para entrar el detalle de pagos";
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
@@ -556,7 +558,7 @@
       
             foreach ($rspta['data'] as $key => $reg) {
       
-              $comprobante = empty($reg['comprobante']) ? ( '<center> <i class="fas fa-file-invoice-dollar fa-2x text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i></center>') : ( '<center><i class="fas fa-file-invoice-dollar fa-2x cursor-pointer text-blue" onclick="modal_comprobante('."'".$reg['comprobante']."'".', \''.$reg['fecha'].'\''. ')" data-toggle="tooltip" data-original-title="Ver Baucher"></i></center>');
+              $comprobante = empty($reg['comprobante']) ? ( '<center> <i class="fas fa-file-invoice-dollar fa-2x text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i></center>') : ( '<center><i class="fas fa-file-invoice-dollar fa-2x cursor-pointer text-blue" onclick="modal_comprobante('."'".$reg['comprobante']."'".', \''.$carpeta.'\''. ')" data-toggle="tooltip" data-original-title="Ver Baucher"></i></center>');
               $datos_edit = '\''.$reg['idpago_credito'].'\', \''.$reg['idcredito'].'\', \''.$reg['fecha'].'\', \''.$reg['monto'].'\', \''.$reg['descripcion'].'\', \''.$reg['comprobante'].'\'';
               $data[] = [
                 "0"=>$cont++,
