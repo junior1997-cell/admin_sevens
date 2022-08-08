@@ -426,6 +426,7 @@ function eliminar_pago_prestamos(idpago,monto,fun_ajax) {
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
     function(){ tabla_prestamos.ajax.reload(null, false); listar_tbla_principal_prestamo(localStorage.getItem('nube_idproyecto')); },
+    function(){ if (tabla_pago_prestamos) { tabla_pago_prestamos.ajax.reload(null, false);}; listar_pagos_prestamos(localStorage.getItem('idcredito'),localStorage.getItem('entidad_prestamo'),localStorage.getItem('monto_prestamo')); },
     function(){ tbla_resumen_prest_credit(localStorage.getItem('nube_idproyecto'));},
     false,
     false
