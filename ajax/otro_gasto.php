@@ -29,7 +29,7 @@
       $precio_parcial = isset($_POST["precio_parcial"]) ? limpiarCadena($_POST["precio_parcial"]) : "";
       $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 
-      $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
+      $ruc = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
       $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
       $direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
       $glosa = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";

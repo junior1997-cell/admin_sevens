@@ -59,7 +59,7 @@ function limpiar() {
   $("#idotro_gasto").val("");
   $("#fecha_g").val("");  
   $("#nro_comprobante").val("");
-  $("#ruc").val("");
+  $("#num_documento").val("");
   $("#razon_social").val("");
   $("#direccion").val("");
   $("#subtotal").val("");
@@ -97,7 +97,7 @@ function comprob_factura() {
 
     $(".div_ruc").hide(); $(".div_razon_social").hide();
 
-    $("#ruc").val(""); $("#razon_social").val("");
+    $("#num_documento").val(""); $("#razon_social").val("");
 
     $("#val_igv").val(""); $("#tipo_gravada").val(""); 
 
@@ -117,7 +117,7 @@ function comprob_factura() {
 
       $(".div_ruc").hide(); $(".div_razon_social").hide();
 
-      $("#ruc").val(""); $("#razon_social").val("");
+      $("#num_documento").val(""); $("#razon_social").val("");
 
       $("#val_igv").prop("readonly",true);
 
@@ -179,7 +179,7 @@ function comprob_factura() {
 
           $(".div_ruc").hide(); $(".div_razon_social").hide();
 
-          $("#ruc").val(""); $("#razon_social").val("");
+          $("#num_documento").val(""); $("#razon_social").val("");
 
           if (precio_parcial == null || precio_parcial == "") {
             
@@ -474,7 +474,7 @@ function mostrar(idotro_gasto) {
     $("#idotro_gasto").val(data.idotro_gasto);
     $("#fecha_g").val(data.fecha_g);
     $("#nro_comprobante").val(data.numero_comprobante);  
-    $("#ruc").val(data.ruc);
+    $("#num_documento").val(data.ruc);
     $("#razon_social").val(data.razon_social);
     $("#direccion").val(data.direccion);
 
@@ -758,39 +758,6 @@ $(function () {
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 
-function extrae_extencion(filename) {
-  return filename.split(".").pop();
-}
-
-// convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a(fecha) {
-
-  var format = "";
-
-  if (fecha == '' || fecha == null || fecha == '0000-00-00') {
-    format = "-";
-  } else {
-    let splits = fecha.split("-"); //console.log(splits);
-    format = splits[2]+'-'+splits[1]+'-'+splits[0];
-  } 
-
-  return format;
-}
-
-// convierte de una fecha(aa-mm-dd): 23-12-2021 a una fecha(dd-mm-aa): 2021-12-23
-function format_a_m_d(fecha) {
-
-  var format = "";
-
-  if (fecha == '' || fecha == null || fecha == '00-00-0000') {
-    format = "-";
-  } else {
-    let splits = fecha.split("-"); //console.log(splits);
-    format = splits[2]+'-'+splits[1]+'-'+splits[0];
-  } 
-
-  return format;
-}
 
 // restringimos la fecha para no elegir mañana
 var today = new Date();
@@ -803,19 +770,7 @@ if (mm < 10) { mm = "0" + mm; }
 today = yyyy + "-" + mm + "-" + dd;
 document.getElementById("fecha_g").setAttribute("max", today);
 
-function formato_miles(num) {
-  if (!num || num == "NaN") return "-";
-  if (num == "Infinity") return "&#x221e;";
-  num = num.toString().replace(/\$|\,/g, "");
-  if (isNaN(num)) num = "0";
-  sign = num == (num = Math.abs(num));
-  num = Math.floor(num * 100 + 0.50000000001);
-  cents = num % 100;
-  num = Math.floor(num / 100).toString();
-  if (cents < 10) cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-  return (sign ? "" : "-") + num + "." + cents;
-}
+
 
 /* PREVISUALIZAR LOS DOCUMENTOS */
 function addDocs(e,id) {
@@ -1076,97 +1031,4 @@ function re_visualizacion(id, carpeta) {
     }     	
     console.log(pdffile);
   }
-}
-
-// Buscar  SUNAT
-function buscar_sunat() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_comprobante").val();
-
-  let ruc = $("#ruc").val(); 
-   
-  if (tipo_doc == "Factura" || tipo_doc == "Boleta" ) {
-
-    if (ruc.length == "11") {
-      $.post("../ajax/persona.php?op=sunat", { ruc: ruc }, function (data, status) {
-
-        data = JSON.parse(data);    console.log(data);
-
-        if (data == null) {
-          $("#search").show();
-  
-          $("#charge").hide();
-  
-          toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
-          
-        } else {
-
-          if (data.success == false) {
-
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
-            
-          } else {
-
-            if (data.estado == "ACTIVO") {
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
-
-              data.razonSocial == null ? $("#razon_social").val(data.nombreComercial) : $("#razon_social").val(data.razonSocial);
-
-              var departamento = (data.departamento == null ? "" : data.departamento); 
-              var provincia = (data.provincia == null ? "" : data.provincia);
-              var distrito = (data.distrito == null ? "" : data.distrito);                
-
-              data.direccion == null ? $("#direccion").val(`${departamento} - ${provincia} - ${distrito}`) : $("#direccion").val(data.direccion);
-
-              toastr.success("Razón social encontrado!!");
-
-            } else {
-
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.razonSocial == null ? $("#nombre").val(data.nombreComercial) : $("#nombre").val(data.razonSocial);
-
-              data.razonSocial == null ? $("#razon_social").val(data.nombreComercial) : $("#razon_social").val(data.razonSocial);
-              
-              data.direccion == null ? $("#direccion").val(`${data.departamento} - ${data.provincia} - ${data.distrito}`) : $("#direccion").val(data.direccion);
-
-            }
-          }
-        }          
-      });
-    } else {
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-    }
-  } else {
-
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.error("Asegúrese que el tipo de comprobante sea Factura!!");
-
-  }
-  
 }

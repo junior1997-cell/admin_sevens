@@ -9,24 +9,27 @@ function init() {
 
   $("#lEstadoFinanciero").addClass("active bg-primary");
   
-  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+  tbla_estado_financiero(localStorage.getItem('nube_idproyecto'));
 
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
-  $("#guardar_registro_color").on("click", function (e) { $("#submit-form-color").submit();  });
+  $("#guardar_registro_proyecciones").on("click", function (e) { $("#submit-form-proyecciones").submit();  });
 
   //Initialize Select2 unidad
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
 
-  $('#fecha_proyeccion').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true,  weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  $('#fecha_p').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true,  weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
   formato_miles_input('.input_ef');
+
+  // Insertamos el ID del proyecto actual
+  $("#idproyecto_p").val(localStorage.getItem('nube_idproyecto'));
 
   // Formato para telefono
   $("[data-mask]").inputmask();    
 } 
 
 // click input group para habilitar: datepiker
-$('.click-btn-fecha-proyeccion').on('click', function (e) {$('#fecha_proyeccion').focus().select(); });
+$('.click-btn-fecha-p').on('click', function (e) {$('#fecha_p').focus().select(); });
 
 // ══════════════════════════════════════ ESTADO FINANCIERO ══════════════════════════════════════ 
 
@@ -70,45 +73,159 @@ function limpiar_form_estado_financiero() {
 }
 
 //Función Listar - tabla principal
-function listar_tbla_principal(nube_idproyecto) {
+function tbla_estado_financiero(nube_idproyecto) {
 
   $('.sueldo_total_tbla_principal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   var total_pago_acumulado_hoy = 0, pago_total_x_proyecto = 0, saldo_total = 0;
 
-  $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    // $('.sueldo_total_tbla_principal').html(`<sup>S/</sup> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`); 
-  });   
+  $.post("../ajax/estado_financiero.php?op=estado_financiero", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
+    e = JSON.parse(e);  console.log(e); 
+    if (e.status == true) {
+      $('#idestado_financiero').val(e.data.idestado_financiero);
+      $('#caja_ef').val(formato_miles(e.data.caja));
+      $('.caja_ef').html(formato_miles(e.data.caja));
+      $('.prestamo_y_credito_ef').html(formato_miles(e.data.prestamo_y_credito));
+      $('.gastos_actuales_ef').html(formato_miles(e.data.gasto_de_modulos));
+      $('.valorizacion_cobrada_ef').html(formato_miles(e.data.valorizacion_cobrada.val_cobrada));     
+      $('.cant_cobradas').html(e.data.valorizacion_cobrada.cant_val_cobrada);
+      $('.valorizacion_por_cobrar_ef').html(formato_miles(e.data.valorizacion_por_cobrada.val_por_cobrar));  
+      $('.cant_por_cobrar').html(e.data.valorizacion_por_cobrada.cant_val_por_cobrar);
+      $('.garantia_ef').html(formato_miles(e.data.garantia));
+      $('.monto_de_obra_ef').html(formato_miles(e.data.monto_de_obra));
+
+      var interes_pagado =  e.data.prestamo_y_credito + e.data.valorizacion_cobrada.val_cobrada - e.data.gasto_de_modulos - e.data.caja;
+      var ganacia_actual =  e.data.valorizacion_cobrada.val_cobrada - e.data.gasto_de_modulos - interes_pagado;
+      var ganacia_actual_porcentaje = ( ganacia_actual / e.data.monto_de_obra) * 100;
+
+      $('.interes_pagado').html(formato_miles(interes_pagado));
+      $('.ganacia_actual').html(formato_miles(ganacia_actual));
+      $('.ganacia_actual_porcentaje').html(formato_miles(ganacia_actual_porcentaje) + '%');
+    } else {
+      ver_errores(e);
+    }
+    
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para guardar o editar
 function guardar_y_editar_estado_financiero(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-pagos-x-mes")[0]);
+  var caja_ef = quitar_formato_miles($('#caja_ef').val());
+  var idestado_financiero = $('#idestado_financiero').val();
+
+  Swal.fire({
+    title: "¿Está seguro que deseas guardar?",
+    html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Guardar!",
+    preConfirm: (input) => {
+      return fetch(`../ajax/estado_financiero.php?op=guardar_y_editar_estado_financiero&idestado_financiero=${idestado_financiero}&nube_idproyecto=${localStorage.getItem('nube_idproyecto')}&caja=${caja_ef}`).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+    },
+    showLoaderOnConfirm: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if (result.value.status == true){        
+        Swal.fire("Correcto!", "Estado Financiero guardada correctamente", "success");
+
+        tbla_estado_financiero(localStorage.getItem('nube_idproyecto'));
+        show_hide_span_input_ef(1);
+      } else {
+        ver_errores(result);
+      }      
+    }
+  });
+
+}
+
+// mostramos loa datos para editar: "pagos por mes"
+function update_interes_y_ganancia_ef() { 
+  var caja                = quitar_formato_miles($('#caja_ef').val()); console.log(caja);
+  var prestamo_y_credito  = quitar_formato_miles($('.prestamo_y_credito_ef').text());
+  var gasto_de_modulos    = quitar_formato_miles($('.gastos_actuales_ef').text());
+  var val_cobrada         = quitar_formato_miles($('.valorizacion_cobrada_ef').text());  
+  var monto_de_obra       = quitar_formato_miles($('.monto_de_obra_ef').text());
+
+  var interes_pagado      =  prestamo_y_credito + val_cobrada - gasto_de_modulos - caja;
+  var ganacia_actual      =  val_cobrada - gasto_de_modulos - interes_pagado;
+  var ganacia_actual_porcentaje = ( ganacia_actual / monto_de_obra) * 100;
+
+  $('.interes_pagado').html(formato_miles(interes_pagado));
+  $('.ganacia_actual').html(formato_miles(ganacia_actual));
+  $('.ganacia_actual_porcentaje').html(formato_miles(ganacia_actual_porcentaje) + '%');
+}
+
+// ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
+function show_hide_span_input_p(flag, id_span) {
+  if (flag == 1) {
+    // ocultamos los span
+    $(`.span_p_${id_span}`).show();
+    // mostramos los inputs
+    $(`.input_p_${id_span}`).hide();
+
+    // ocultamos el boton editar
+    $(`.btn-editar-p-${id_span}`).show();
+    // mostramos el boton guardar
+    $(`.btn-guardar-p-${id_span}`).hide();
+  } else if (flag == 2) {
+    
+    // ocultamos los span
+    $(`.span_p_${id_span}`).hide();
+    // mostramos los inputs
+    $(`.input_p_${id_span}`).show();
+
+    // ocultamos el boton editar
+    $(`.btn-editar-p-${id_span}`).hide();
+    // mostramos el boton guardar
+    $(`.btn-guardar-p-${id_span}`).show();
+  } 
+}
+//Función limpiar
+function limpiar_form_proyecciones() {  
+
+  $("#idproyeccion").val("");
+  $("#fecha_proyeccion").val(""); 
+  $("#caja_proyeccion").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
+function guardar_y_editar_proyecciones(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-proyecciones")[0]);
 
   $.ajax({
-    url: "../ajax/estado_financiero.php?op=guardar_y_editar_estado_financiero",
+    url: "../ajax/estado_financiero.php?op=guardar_y_editar_proyecciones",
     type: "POST",
     data: formData,
     contentType: false,
     processData: false,
     success: function (e) {
       try {
-        e = JSON.parse(e); console.log(e);
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
 
-        if (e.estado == true) {    
+          limpiar_form_proyecciones();
 
-          Swal.fire("Correcto!", "Pago guardado correctamente", "success");	      
+          $("#modal-agregar-proyecciones").modal("hide");
           
-          show_hide_span_input_ef(flag);
-
-        }else{
-          ver_errores(e);			 
+        } else {
+          ver_errores(e);
         }
       } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
 
-      
+      $("#guardar_registro_proyecciones").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -116,86 +233,23 @@ function guardar_y_editar_estado_financiero(e) {
         if (evt.lengthComputable) {
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
-          $("#barra_progress").css({"width": percentComplete+'%'});
-          $("#barra_progress").text(percentComplete.toFixed(2)+" %");          
+          $("#barra_progress_proyeccion").css({"width": percentComplete+'%'});
+          $("#barra_progress_proyeccion").text(percentComplete.toFixed(2)+" %");
         }
       }, false);
       return xhr;
-    }
+    },
+    beforeSend: function () {
+      $("#guardar_registro_proyecciones").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_proyeccion").css({ width: "0%",  });
+      $("#barra_progress_proyeccion").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_proyeccion").css({ width: "0%", });
+      $("#barra_progress_proyeccion").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
-}
-
-// mostramos loa datos para editar: "pagos por mes"
-function mostrar_pagos_x_mes(id) {
-
-  limpiar_pago_x_mes();
-
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-  $("#modal-agregar-pago-trabajdor").modal('show');
-
-  $.post("../ajax/pago_administrador.php?op=mostrar_pagos_x_mes", { 'idpagos_x_mes_administrador': id }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data); 
-    
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
-    $('#idpagos_x_mes_administrador').val(data.idpagos_x_mes_administrador);
-    $("#monto").val(data.monto);
-    $("#forma_pago").val(data.forma_de_pago).trigger("change"); 
-    $("#descripcion").val(data.descripcion); 
-
-    //validamoos BAUCHER - DOC 1
-    if (data.baucher == "" || data.baucher == null  ) {
-
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-      $("#doc1_nombre").html('');
-
-      $("#doc_old_1").val(""); $("#doc1").val("");
-
-    } else {
-
-      $("#doc_old_1").val(data.baucher); 
-
-      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.baucher)}</i></div></div>`);
-      
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.baucher) == "pdf" ) {
-
-        $("#doc1_ver").html('<iframe src="../dist/pago_administrador/baucher_deposito/'+data.baucher+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-      }else{
-        if (
-          extrae_extencion(data.baucher) == "jpeg" || extrae_extencion(data.baucher) == "jpg" || extrae_extencion(data.baucher) == "jpe" ||
-          extrae_extencion(data.baucher) == "jfif" || extrae_extencion(data.baucher) == "gif" || extrae_extencion(data.baucher) == "png" ||
-          extrae_extencion(data.baucher) == "tiff" || extrae_extencion(data.baucher) == "tif" || extrae_extencion(data.baucher) == "webp" ||
-          extrae_extencion(data.baucher) == "bmp" || extrae_extencion(data.baucher) == "svg" ) {
-
-          $("#doc1_ver").html(`<img src="../dist/pago_administrador/baucher_deposito/${data.baucher}" alt="" width="50%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-          
-        } else {
-          $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-        }        
-      }      
-    }     
-  });
-}
-
-// ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
-
-//Función limpiar
-function limpiar_form_proyecciones() {  
-
-  $("#monto").val("");
-  $("#forma_pago").val("").trigger("change"); 
-  $("#descripcion").val(""); 
-
-  // Limpiamos las validaciones
-  $(".form-control").removeClass('is-valid');
-  $(".form-control").removeClass('is-invalid');
-  $(".error.invalid-feedback").remove();
 }
 
 function desactivar_pago_x_mes(id) {
@@ -260,49 +314,56 @@ init();
 
 $(function () {
 
-  $.validator.setDefaults({ submitHandler: function (e) { guardar_y_editar_pagos_x_mes(e); }, });
-
-  $("#form").validate({
+  $("#form-proyecciones").validate({
     rules: {
-      forma_pago: { required: true},
-      monto: {required: true, minlength: 1 },
-      descripcion: { minlength: 4 },
+      fecha_p:      { required: true},
+      descripcion_p:{required: true, minlength: 3 },
     },
     messages: {
-      forma_pago: {
-        required: "Campo requerido."
-      },
-      monto: {
-        required: "Campo requerido.",
-        minlength: "MINIMO 1 dígito.",
-      },
-      descripcion: {
-        minlength: "MINIMO 4 caracteres.",
-      },
+      fecha_p:      { required: "Campo requerido."  },
+      descripcion_p:{ required: "Campo requerido.", minlength: "MINIMO 3 caracteres.",   },
     },
     
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");             
+    },
 
-      $(element).removeClass("is-invalid").addClass("is-valid");
-             
+    submitHandler: function (e) { 
+      guardar_y_editar_proyecciones(e); 
     },
   });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
+function html_table_to_excel(name_id_tabla, type = 'xlsx', name_file = 'detalle excel', name_hoja = 'hoja 1')  {
+  var data = document.getElementById(name_id_tabla);
+
+  var file = XLSX.utils.table_to_book(data, {sheet: name_hoja});
+
+  XLSX.write(file, { bookType: type, bookSST: true, type: 'base64' });
+
+  XLSX.writeFile(file, name_file + '.' + type);
+}
+
+function show_hide_tr(tr, sub_tr) {
+  console.log($(tr).attr("aria-expanded"));
+  if ($(tr).attr("aria-expanded") == 'true') {
+    $(sub_tr).show();
+  }else{
+    $(sub_tr).hide();
+  }
+  
+}
 

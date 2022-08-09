@@ -152,10 +152,11 @@
                               <!-- RUC style="display: none;"-->
                               <div class="col-lg-4 div_ruc" style="display: none;"  >
                                 <div class="form-group">
-                                  <label for="ruc">R.U.C</label>
+                                  <label for="num_documento">R.U.C</label>
                                   <div class="input-group">
-                                    <input type="number" name="ruc" class="form-control" id="ruc" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat();">
+                                    <input type="hidden" id="tipo_documento" value="RUC">
+                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec('');">
                                       <span class="input-group-text" style="cursor: pointer;">
                                         <i class="fas fa-search text-primary" id="search"></i>
                                         <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>

@@ -18,112 +18,41 @@
       date_default_timezone_set('America/Lima');
       $date_now = date("d-m-Y h.i.s A");
 
-      $idproducto = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "";
-      $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadena($_POST["idcategoria_insumos_af"]) : "";
+      //  ESTADO FINANCIERO
+      $idproyecto           = isset($_GET["nube_idproyecto"]) ? limpiarCadena($_GET["nube_idproyecto"]) : "";
+      $idestado_financiero  = isset($_GET["idestado_financiero"]) ? limpiarCadena($_GET["idestado_financiero"]) : "";
+      $caja                 = isset($_GET["caja"]) ? limpiarCadena($_GET["caja"] ) : "";
+      $garantia             = isset($_GET["garantia"]) ? limpiarCadena($_GET["garantia"] ) : "";
 
-      $nombre = isset($_POST["nombre_material"]) ? encodeCadenaHtml($_POST["nombre_material"] ) : "";
-      $modelo = isset($_POST["modelo"]) ? encodeCadenaHtml($_POST["modelo"] ) : "";
-      $serie = isset($_POST["serie"]) ? encodeCadenaHtml($_POST["serie"] ) : "";
-      $marca = isset($_POST["marca"]) ? encodeCadenaHtml($_POST["marca"]) : "";
-      $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
-      $descripcion = isset($_POST["descripcion_material"]) ? encodeCadenaHtml($_POST["descripcion_material"]) : "";      
-
-      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
-      $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadena($_POST["monto_igv"]) : "";
-      $precio_real = isset($_POST["precio_real"]) ? limpiarCadena($_POST["precio_real"]) : "";
-      
-      $unidad_medida = isset($_POST["unidad_medida"]) ? limpiarCadena($_POST["unidad_medida"]) : "";
-      $color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
-      $total_precio = isset($_POST["total_precio"]) ? limpiarCadena($_POST["total_precio"]) : "";
-
-      $imagen1 = isset($_POST["imagen1"]) ? limpiarCadena($_POST["imagen1"]) : "";
-      $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : ""; 
+      //  PROYECCIONES
+      $idproyeccion_p = isset($_POST["idproyeccion_p"]) ? limpiarCadena($_POST["idproyeccion_p"]) : "";
+      $idproyecto_p   = isset($_POST["idproyecto_p"]) ? limpiarCadena($_POST["idproyecto_p"]) : "";
+      $fecha_p        = isset($_POST["fecha_p"]) ? limpiarCadena($_POST["fecha_p"] ) : "";
+      $caja_p         = isset($_POST["caja_p"]) ? limpiarCadena($_POST["caja_p"] ) : "";
+      $descripcion_p  = isset($_POST["descripcion_p"]) ? limpiarCadena($_POST["descripcion_p"] ) : "";
 
       switch ($_GET["op"]) {
 
-        case 'guardaryeditar':
-          // imgen
-          if (!file_exists($_FILES['imagen1']['tmp_name']) || !is_uploaded_file($_FILES['imagen1']['tmp_name'])) {
-
-            $imagen1 = $_POST["imagen1_actual"];
-
-            $flat_img1 = false;
-
-          } else {
-
-            $ext1 = explode(".", $_FILES["imagen1"]["name"]);
-
-            $flat_img1 = true;
-
-            $imagen1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
-
-            move_uploaded_file($_FILES["imagen1"]["tmp_name"], "../dist/docs/material/img_perfil/" . $imagen1);
-          }
-
-          // ficha técnica
-          if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
-
-            $ficha_tecnica = $_POST["doc_old_2"];
-
-            $flat_ficha1 = false;
-
-          } else {
-
-            $ext1 = explode(".", $_FILES["doc2"]["name"]);
-
-            $flat_ficha1 = true;
-
-            $ficha_tecnica = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
-
-            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica);
-          }
-
-          if (empty($idproducto)) {
+        // ══════════════════════════════════════ ESTADO FINANCIERO ══════════════════════════════════════
+        case 'guardar_y_editar_estado_financiero':
+          
+          if (empty($idestado_financiero)) {
             
-            $rspta = $estadofinanciero->insertar($idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
+            $rspta = $estadofinanciero->insertar_estado_financiero( $idproyecto, $caja, $garantia);
             
             echo json_encode( $rspta, true);
 
-          } else {
-
-            // validamos si existe LA IMG para eliminarlo
-            if ($flat_img1 == true) {
-
-              $datos_f1 = $estadofinanciero->obtenerImg($idproducto);
-
-              $img1_ant = $datos_f1['data']['imagen'];
-
-              if ($img1_ant != "") {
-
-                unlink("../dist/docs/material/img_perfil/" . $img1_ant);
-              }
-            }
+          } else {            
              
-            $rspta = $estadofinanciero->editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
+            $rspta = $estadofinanciero->editar_estado_financiero($idestado_financiero, $idproyecto, $caja, $garantia);
             
             echo json_encode( $rspta, true) ;
           }
-        break;
+        break;        
     
-        case 'desactivar':
+        case 'estado_financiero':
 
-          $rspta = $estadofinanciero->desactivar( $_GET["id_tabla"] );
-
-          echo json_encode( $rspta, true) ;
-
-        break;      
-
-        case 'eliminar':
-
-          $rspta = $estadofinanciero->eliminar( $_GET["id_tabla"] );
-
-          echo json_encode( $rspta, true) ;
-
-        break;
-    
-        case 'mostrar':
-
-          $rspta = $estadofinanciero->mostrar($idproducto);
+          $rspta = $estadofinanciero->estado_financiero($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true) ;
 
@@ -185,7 +114,41 @@
           }
           
         break;
-    
+
+        // ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
+
+        case 'guardar_y_editar_proyecciones':
+          
+          if (empty($idproyeccion_p)) {
+            
+            $rspta = $estadofinanciero->insertar_proyecciones( $idproyecto_p,format_a_m_d( $fecha_p), $caja_p, $descripcion_p);
+            
+            echo json_encode( $rspta, true);
+
+          } else {            
+             
+            $rspta = $estadofinanciero->editar_proyecciones($idproyeccion_p, $idproyecto_p, format_a_m_d($fecha_p), $caja_p, $descripcion_p);
+            
+            echo json_encode( $rspta, true) ;
+          }
+        break;  
+
+        case 'desactivar':
+
+          $rspta = $estadofinanciero->desactivar( $_GET["id_tabla"] );
+
+          echo json_encode( $rspta, true) ;
+
+        break;      
+
+        case 'eliminar':
+
+          $rspta = $estadofinanciero->eliminar( $_GET["id_tabla"] );
+
+          echo json_encode( $rspta, true) ;
+
+        break;
+
         case 'salir':
           //Limpiamos las variables de sesión
           session_unset();
