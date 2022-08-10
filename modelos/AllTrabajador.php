@@ -12,7 +12,9 @@
     //Implementamos un método para insertar registros
     public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci,  $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
       $sw = Array();
-      $sql_0 = "SELECT * FROM trabajador WHERE numero_documento = '$num_documento' AND nombres = '$nombre'";
+      $sql_0 = "SELECT t.nombres, t.tipo_documento, t.numero_documento, tip.nombre as tipo, o.nombre_ocupacion as ocupacion, t.estado, t.estado_delete
+      FROM trabajador as t, tipo_trabajador as tip, ocupacion o
+      WHERE t.idtipo_trabajador = tip.idtipo_trabajador and t.idocupacion = o.idocupacion and numero_documento = '$num_documento';";
       $existe = ejecutarConsultaArray($sql_0);
       if ($existe['status'] == false) { return $existe;}
       
@@ -45,9 +47,11 @@
 
         foreach ($existe['data'] as $key => $value) {
           $info_repetida .= '<li class="text-left font-size-13px">
-            <bNombre: </b>'.$value['nombres'].'<br>
+          <span class="font-size-15px text-danger"><b>Nombre: </b>'.$value['nombres'].'</span><br>
             <b>'.$value['tipo_documento'].': </b>'.$value['numero_documento'].'<br>
-            <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
+            <b>Tipo: </b>'.$value['tipo'].'<br>
+            <b>Ocupación: </b>'.$value['ocupacion'].'<br>
+            <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
             <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
             <hr class="m-t-2px m-b-2px">
           </li>'; 

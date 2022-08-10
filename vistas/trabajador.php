@@ -104,9 +104,9 @@
                                   <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />
 
                                   <!-- Trabajador -->
-                                  <div class="col-lg-4">
+                                  <div class="col-lg-4"> 
                                     <div class="form-group">
-                                      <label for="trabajador" id="trabajador_c">Trabajador</label>                               
+                                      <label for="trabajador" id="trabajador_c">Trabajador <sup class="text-danger">(unico*)</sup></label>                               
                                       <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_idtrabajador();"   >                                    
                                       </select>
                                       <input type="hidden" name="trabajador_old" id="trabajador_old" />

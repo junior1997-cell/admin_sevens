@@ -12,10 +12,36 @@ class Trabajador
   //Implementamos un método para insertar registros
   public function insertar($idproyecto, $trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin, $cantidad_dias)
   {
-    $sql = "INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin, cantidad_dias)
-		VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin', '$cantidad_dias')";
+    $sql_1 = "SELECT t.nombres as trabajador, t.tipo_documento,t.numero_documento, ct.nombre as cargo, tip.nombre as tipo, tpp.desempenio, 
+    tpp.sueldo_mensual, tpp.estado, tpp.estado_delete
+    FROM trabajador_por_proyecto as tpp, trabajador as t, cargo_trabajador as ct, tipo_trabajador as tip
+    WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idcargo_trabajador = ct.idcargo_trabajador and ct.idtipo_trabjador = tip.idtipo_trabajador
+    AND  tpp.idproyecto ='$idproyecto' AND tpp.idtrabajador ='$trabajador';";
+    $buscando = ejecutarConsultaArray($sql_1);
 
-    return ejecutarConsulta($sql);
+    if (empty($buscando['data'])) {
+      $sql_2 = "INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin, cantidad_dias)
+      VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin', '$cantidad_dias')";
+
+      return ejecutarConsulta($sql_2);
+    } else {
+      $info_repetida = ''; 
+
+      foreach ($buscando['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+          <b>Nombre: </b>'.$value['trabajador'].'<br>
+          <b>'.$value['tipo_documento'].': </b>'.$value['numero_documento'].'<br>
+          <b>'.$value['tipo'].': </b>'.$value['cargo'].'<br>
+          <b>Desempeño: </b>'.$value['desempenio'].'<br>
+          <b>Sueldo Mes: </b>'.$value['sueldo_mensual'].'<br>
+          <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+          <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+          <hr class="m-t-2px m-b-2px">
+        </li>'; 
+      }
+      $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+      return $sw;
+    }
   }
 
   //Implementamos un método para editar registros

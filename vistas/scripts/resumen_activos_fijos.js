@@ -1079,7 +1079,7 @@ function guardar_y_editar_compras(e) {
     showLoaderOnConfirm: true,
   }).then((result) => {
     if (result.isConfirmed) {
-      if (result.value.status){        
+      if (result.value.status == true){        
         // toastr.success("Usuario registrado correctamente");
         Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
@@ -1094,7 +1094,7 @@ function guardar_y_editar_compras(e) {
 
         table_show_hide(2);  cont = 0;
       } else {
-        ver_errores(result);
+        ver_errores(result.value);
       }
     }
   });

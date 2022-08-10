@@ -203,7 +203,7 @@
                               <!-- N° de documento -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="num_documento">N° de documento</label>
+                                  <label for="num_documento">N° de documento <sup class="text-danger">(unico*)</sup></label>
                                   <div class="input-group">
                                     <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
                                     <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec();">

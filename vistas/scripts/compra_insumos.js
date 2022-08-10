@@ -404,7 +404,7 @@ function guardar_y_editar_compras(e) {
     showLoaderOnConfirm: true,
   }).then((result) => {
     if (result.isConfirmed) {
-      if (result.value.status){        
+      if (result.value.status == true){        
         Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
         tabla_compra_insumo.ajax.reload(null, false);
@@ -414,7 +414,7 @@ function guardar_y_editar_compras(e) {
         
         $("#modal-agregar-usuario").modal("hide");        
       } else {
-        ver_errores(result);
+        ver_errores(result.value);
       }      
     }
   });  

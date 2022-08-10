@@ -15,31 +15,65 @@ class Compra_insumos
   public function insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante,  $serie_comprobante, $val_igv,  $descripcion, $glosa,
     $total_compra, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida,  $nombre_color,
     $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
-    
-    $sql = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion)
-		VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion')";
-     
-    $idventanew = ejecutarConsulta_retornarID($sql);
-    if ($idventanew['status'] == false) { return  $idventanew;}
 
-    $num_elementos = 0;
-    $compra_new = "";
+    $sql_1 = "SELECT ruc FROM proveedor WHERE idproveedor ='$idproveedor';";
+    $proveedor = ejecutarConsultaSimpleFila($sql_1);
+    if ($proveedor['status'] == false) { return  $proveedor;}
 
-    if ( !empty($idventanew['data']) ) {
-    
-      while ($num_elementos < count($idproducto)) {
-        $id = $idventanew['data'];
-        $subtotal_producto = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];
+    $ruc = $proveedor['data']['ruc'];
 
-        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto) 
-        VALUES ('$id','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
-        $compra_new =  ejecutarConsulta($sql_detalle);
-        if ($compra_new['status'] == false) { return  $compra_new;}
+    $sql_2 = "SELECT p.razon_social, p.tipo_documento, p.ruc, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.glosa, cpp.estado, cpp.estado_delete 
+    FROM compra_por_proyecto as cpp, proveedor as p 
+    WHERE cpp.idproveedor = p.idproveedor AND p.ruc ='$ruc' AND cpp.tipo_comprobante ='$tipo_comprobante' AND cpp.serie_comprobante = '$serie_comprobante'";
+    $compra_existe = ejecutarConsultaArray($sql_2);
+    if ($compra_existe['status'] == false) { return  $compra_existe;}
 
-        $num_elementos = $num_elementos + 1;
+    if (empty($compra_existe['data'])) {
+      $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion)
+      VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion')";
+      
+      $idventanew = ejecutarConsulta_retornarID($sql_3);
+      if ($idventanew['status'] == false) { return  $idventanew;}
+
+      $num_elementos = 0;
+      $compra_new = "";
+
+      if ( !empty($idventanew['data']) ) {
+      
+        while ($num_elementos < count($idproducto)) {
+          $id = $idventanew['data'];
+          $subtotal_producto = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];
+
+          $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto) 
+          VALUES ('$id','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]')";
+          $compra_new =  ejecutarConsulta($sql_detalle);
+          if ($compra_new['status'] == false) { return  $compra_new;}
+
+          $num_elementos = $num_elementos + 1;
+        }
       }
-    }
-    return $compra_new;
+      return $compra_new;
+
+    } else {
+
+      $info_repetida = ''; 
+
+      foreach ($compra_existe['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+          <b class="font-size-18px text-danger">'.$value['tipo_comprobante'].': </b> <span class="font-size-18px text-danger">'.$value['serie_comprobante'].'</span><br>
+          <b>Razón Social: </b>'.$value['razon_social'].'<br>
+          <b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>          
+          <b>Fecha: </b>'.format_d_m_a($value['fecha_compra']).'<br>
+          <b>Glosa: </b>'.$value['glosa'].'<br>
+          <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b> 
+          <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+          <hr class="m-t-2px m-b-2px">
+        </li>'; 
+      }
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+      
+    }  
+    
   }
 
   //Implementamos un método para editar registros

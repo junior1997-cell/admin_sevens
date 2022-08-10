@@ -940,7 +940,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
           'sueldo_hora':value.sueldo_hora
         });
         
-        var tabla_bloc_HN_trabaj_2 =  `<td rowspan="2" class="center-vertical">${value.nombres}</td> <td rowspan="2" class="center-vertical">${value.cargo}</td>`;       
+        var tabla_bloc_HN_trabaj_2 =  `<td rowspan="2" class="center-vertical">${value.nombres}</td> <td rowspan="2" class="center-vertical">${value.cargo} <br> ${(value.estado_trabajador==1?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>')} </td>`;       
 
         var tabla_bloc_HN_total_hora_4 =  `<td class="text-center center-vertical"> 
           <span  class="total_HN_${value.idtrabajador_por_proyecto}">${horas_nomr_total}</span> 

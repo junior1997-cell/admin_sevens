@@ -363,7 +363,93 @@ function show_hide_tr(tr, sub_tr) {
     $(sub_tr).show();
   }else{
     $(sub_tr).hide();
-  }
-  
+  }  
 }
 
+function add_tr_detalle(id_all, count) {
+  $(`.detalle_tbody_${id_all}`).append(`
+  <tr class="data_${id_all} data_bloque_${count + 1} detalle_tr_${count + 1} sub_${count + 1}_0 ultimo_${count + 1}">
+    <td class="py-1 text-center detalle_td_num_${count + 1}" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_${count + 1}','.sub_detalle_tr_${count + 1}')}, 200 );">${count + 1}</td>
+    <td class="py-1">
+      <span class="span_p_1"></span> 
+      <input type="text" id="" class="hidden input_p_1 w-100" value="">
+    </td>
+    <td class="py-1">
+    </td>                           
+    <td class="py-1">
+      <div class="formato-numero-conta span_p_${id_all}">
+        <span>S/</span> <span >100</span> 
+      </div> 
+      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="100">
+    </td> 
+    <td class="py-1">
+      <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_${count + 1} " onclick="add_tr_sub_detalle(${id_all}, ${count + 1}, 0)" ><i class="fas fa-plus"></i> </button>
+      <button type="button" class="btn btn-xs bg-gradient-danger "onclick="remove_tr_detalle(${id_all}, ${count + 1},0)" ><i class="far fa-trash-alt"></i> </button>
+    </td>
+  </tr>
+  <!-- /.tr -->
+  `);
+  $(`.btn_th_${id_all}`).attr('onclick', `add_tr_detalle(${id_all}, ${count + 1})`);
+  show_hide_span_input_p(2, id_all);
+}
+
+function add_tr_sub_detalle(id_all, id, count) {  
+
+  $(`.sub_${id}_${count}`).after( `
+  <tr class="data_bloque_${id} sub_detalle_tr_${id} sub_${id}_${count + 1} ultimo_${id}">
+    <td class="py-1 text-center"></td>
+    <td class="py-1 text-right">
+      <span class="span_p_${id_all}"></span> 
+      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="">
+    </td>                                                            
+    <td class="py-1">
+      <div class="formato-numero-conta span_p_${id_all}">
+        <span>S/</span>0.00
+      </div> 
+      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="0.00">
+    </td> 
+    <td class="py-1"> </td> 
+    <td class="py-1">
+      <button type="button" class="btn btn-xs bg-gradient-danger " onclick="remove_tr_sub_detalle(${id_all},${id}, ${count + 1})" ><i class="far fa-trash-alt"></i> </button>
+    </td>
+  </tr>
+  ` );
+
+  $(`.detalle_tr_${id}`).removeClass(`ultimo_${id}`);
+  $(`.sub_${id}_${count}`).removeClass(`ultimo_${id}`);
+  var cant = $(`.sub_detalle_tr_${id}`).toArray().length; console.log(cant);
+  if (cant > 0) {
+    $(`.detalle_td_num_${id}`).html(`<i class="expandable-table-caret fas fa-caret-right fa-fw"></i> ${id}`).attr('aria-expanded','true');
+  }
+
+  $(`.detalle_btn_${id}`).attr('onclick', `add_tr_sub_detalle(${id_all},${id}, ${count + 1})`);
+  show_hide_span_input_p(2, id);
+}
+
+function remove_tr_detalle(id_all, id, count) {
+  // borramos el tr
+  $(`.data_bloque_${id}`).remove();
+  // extraemos la cantidad de SUB-DETALLES
+  var cant = $(`.data_${id_all}`).toArray().length; console.log(cant);
+  // si es 0 reiniciamos el ultimo
+  if (cant == 0) {  
+    $(`.btn_th_${id_all}`).attr('onclick', `add_tr_detalle(${id_all}, 0)`);
+  }
+}
+
+function remove_tr_sub_detalle( id_all, id, count) {
+  // validamos si exite el ultimo tr
+  if ($(`.sub_${id}_${count}`).hasClass(`ultimo_${id}`)) { $(`.detalle_btn_${id}`).attr('onclick', `add_tr_sub_detalle(${id_all},${id}, ${count-1})`); } 
+
+  // borramos el tr
+  $(`.sub_${id}_${count}`).remove();
+
+  // extraemos la cantidad de SUB-DETALLES
+  var cant = $(`.sub_detalle_tr_${id}`).toArray().length; console.log(cant);
+  // si es 0 reiniciamos el ultimo
+  if (cant == 0) {  
+    $(`.detalle_btn_${id}`).attr('onclick', `add_tr_sub_detalle(${id_all}, ${id}, 0)`);
+    $(`.detalle_tr_${id}`).addClass(`ultimo_${id}`);
+    $(`.detalle_td_num_${id}`).html(`${id}`);
+  }
+}

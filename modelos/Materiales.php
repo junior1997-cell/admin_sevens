@@ -17,31 +17,29 @@ class Materiales
 		FROM producto p, unidad_medida as um, color as c 
     WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor AND idcategoria_insumos_af = '1' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unid_medida';";
     $buscando = ejecutarConsultaArray($sql);
+    if ($buscando['status'] == false) { return $buscando; }
 
-    if ($buscando['status']) {
-      if ( empty($buscando['data']) ) {
-        $sql = "INSERT INTO producto (idcategoria_insumos_af, nombre, modelo, serie, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total) 
-        VALUES ('$idcategoria','$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$color','$total_precio')";
-        return ejecutarConsulta($sql);
-      } else {
-        $info_repetida = ''; 
-
-        foreach ($buscando['data'] as $key => $value) {
-          $info_repetida .= '<li class="text-left font-size-13px">
-            <b>Nombre: </b>'.$value['nombre'].'<br>
-            <b>Color: </b>'.$value['nombre_color'].'<br>
-            <b>UM: </b>'.$value['nombre_medida'].'<br>
-            <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
-            <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
-            <hr class="m-t-2px m-b-2px">
-          </li>'; 
-        }
-        $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
-        return $sw;
-      }      
+    if ( empty($buscando['data']) ) {
+      $sql = "INSERT INTO producto (idcategoria_insumos_af, nombre, modelo, serie, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total) 
+      VALUES ('$idcategoria','$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$color','$total_precio')";
+      return ejecutarConsulta($sql);
     } else {
-      return $buscando;
-    }
+      $info_repetida = ''; 
+
+      foreach ($buscando['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+          <b>Nombre: </b>'.$value['nombre'].'<br>
+          <b>Color: </b>'.$value['nombre_color'].'<br>
+          <b>UM: </b>'.$value['nombre_medida'].'<br>
+          <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
+          <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+          <hr class="m-t-2px m-b-2px">
+        </li>'; 
+      }
+      $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+      return $sw;
+    }      
+    
   }
 
   //Implementamos un método para editar registros

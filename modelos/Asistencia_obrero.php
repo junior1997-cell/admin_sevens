@@ -161,7 +161,8 @@ class Asistencia_obrero
     // GROUP BY atr.idtrabajador_por_proyecto;";
 
     // extraemos todos lo trabajadores del proyecto
-    $sql2 = "SELECT tpp.idtrabajador_por_proyecto, ct.nombre as cargo, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora
+    $sql2 = "SELECT tpp.idtrabajador_por_proyecto, ct.nombre as cargo, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
+    t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado
 		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, cargo_trabajador AS ct
 		WHERE tpp.idtrabajador = t.idtrabajador  AND ct.idcargo_trabajador = tpp.idcargo_trabajador AND ct.idtipo_trabjador = tp.idtipo_trabajador 
 		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY t.nombres ASC ;";
@@ -242,6 +243,7 @@ class Asistencia_obrero
         "sueldo_mensual" => $key['sueldo_mensual'],
         "sueldo_diario" => $key['sueldo_diario'],
         "sueldo_hora" => $key['sueldo_hora'],
+        "estado_trabajador" => $key['estado'],
         "asistencia" => $asistencia['data'],
 
         'idresumen_q_s_asistencia' => $idresumen_q_s_asistencia,
