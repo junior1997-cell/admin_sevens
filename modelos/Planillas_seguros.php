@@ -1,6 +1,6 @@
 <?php 
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion_v1.php";
+require "../config/Conexion_v2.php";
 
 Class Planillas_seguros
 {
@@ -9,22 +9,45 @@ Class Planillas_seguros
 	{
 
 	}
-	//$idplanilla_seguro,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
+	
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
+	public function insertar($idproyecto, $idproveedor, $ruc_proveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante)
 	{
-		//var_dump($idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante);die();
-		$sql="INSERT INTO planilla_seguro (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_p_s, costo_parcial, subtotal, igv, val_igv, tipo_gravada, descripcion, comprobante) 
-		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_p_s','$precio_parcial','$subtotal','$igv','$val_igv','$tipo_gravada','$descripcion','$comprobante')";
-		return ejecutarConsulta($sql);
-			
+		$sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, ps.fecha_p_s, ps.forma_de_pago, ps.tipo_comprobante, ps.numero_comprobante,  ps.estado, ps.estado_delete
+		FROM planilla_seguro as ps, proveedor as p 
+		WHERE ps.idproveedor = p.idproveedor and ps.idproyecto ='$idproyecto' and p.ruc ='$ruc_proveedor' and ps.tipo_comprobante ='$tipo_comprobante' and ps.numero_comprobante ='$nro_comprobante';";
+		$prov = ejecutarConsultaArray($sql_1);
+		if ($prov['status'] == false) { return  $prov;}
+
+		if (empty($prov['data'])) {
+			$sql="INSERT INTO planilla_seguro (idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_p_s, costo_parcial, subtotal, igv, val_igv, tipo_gravada, descripcion, comprobante) 
+			VALUES ('$idproyecto', '$idproveedor','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_p_s','$precio_parcial','$subtotal','$igv','$val_igv','$tipo_gravada','$descripcion','$comprobante')";
+			return ejecutarConsulta($sql);
+		} else {
+			$info_repetida = ''; 
+
+			foreach ($prov['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+				<span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
+				<b>Razón Social: </b>'.$value['razon_social'].'<br>
+				<b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>          
+				<b>Fecha: </b>'.format_d_m_a($value['fecha_p_s']).'<br>
+				<b>Forma de pago: </b>'.$value['forma_de_pago'].'<br>
+				<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b> 
+				<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+				<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+		}			
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idplanilla_seguro,$idproyecto,$fecha_p_s,$precio_parcial,$subtotal,$igv,$val_igv,$tipo_gravada,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$comprobante)
+	public function editar($idplanilla_seguro, $idproyecto, $idproveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante)
 	{
 		$sql="UPDATE planilla_seguro SET 
 		idproyecto='$idproyecto',
+		idproveedor='$idproveedor',
 		fecha_p_s='$fecha_p_s',
 		costo_parcial='$precio_parcial',
 		subtotal='$subtotal',
@@ -73,7 +96,10 @@ Class Planillas_seguros
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM planilla_seguro WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' ORDER BY idplanilla_seguro DESC";
+		$sql="SELECT ps.idplanilla_seguro, ps.idproyecto, ps.idproveedor, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.glosa, ps.comprobante,
+		p.razon_social, p.tipo_documento, p.ruc, ps.estado
+		FROM planilla_seguro as ps, proveedor as p 
+		WHERE ps.idproveedor = p.idproveedor and ps.idproyecto='$idproyecto' AND ps.estado_delete='1' AND ps.estado='1' ORDER BY ps.idplanilla_seguro DESC";
 		return ejecutarConsulta($sql);		
 	}
 

@@ -185,7 +185,7 @@ function modal_comprobante(comprobante, fecha_emision) {
         <a type="button" class="btn btn-warning btn-block btn-xs" href="${url}" download="${nombre_download}"> <i class="fas fa-download"></i> Descargar. </a>
       </div>
       <div class="col-md-6 text-center">
-        <a type="button" class="btn btn-info btn-block btn-xs" href="${url}" target="_blank" <i class="fas fa-expand"></i> Ver completo. </a>
+        <a type="button" class="btn btn-info btn-block btn-xs" href="${url}" target="_blank"> <i class="fas fa-expand"></i> Ver completo. </a>
       </div>
       <div class="col-md-12 text-center mt-3 "><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div>
       <div class="col-md-12 mt-2">     
@@ -654,6 +654,10 @@ $(function () {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
+
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+}
 
 function filtros() {  
 

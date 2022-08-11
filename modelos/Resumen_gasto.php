@@ -395,10 +395,10 @@ class ResumenGasto
     }
 
     $sql3 = "SELECT ps.idplanilla_seguro, ps.idproyecto, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
-    ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante,
-    ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb
-    FROM planilla_seguro as ps, proyecto as p
-    WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
+    ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante, ps.glosa,
+    ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc
+    FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
+    WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
     AND ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY ps.fecha_p_s DESC;";
     $planilla_seguro =  ejecutarConsultaArray($sql3);
 
@@ -414,11 +414,11 @@ class ResumenGasto
           "fecha"             => $value['fecha_p_s'],
           "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' :$value['tipo_comprobante'] ),
           "serie_comprobante" => $value['numero_comprobante'],
-          "proveedor"         => '',
+          "proveedor"         => $value['razon_social'],
           "total"             => $value['costo_parcial'],
           "igv"               => $value['igv'],
           "subtotal"          => $value['subtotal'],
-          "glosa"             => '',
+          "glosa"             => $value['glosa'],
           "tipo_gravada"      => $value['tipo_gravada'],
           "comprobante"       => $value['comprobante'],
           "carpeta"           => 'planilla_seguro',

@@ -16,7 +16,7 @@ function init() {
 //Función Listar
 function listar() {
 
-  $(".total_monto").html( `<i class="fas fa-spinner fa-pulse fa-sm"></i>`);
+  $("#total_monto").html( `<i class="fas fa-spinner fa-pulse fa-sm"></i>`);
  
   tabla = $("#tabla_resumen_rh").dataTable({
     responsive: true,
@@ -25,7 +25,7 @@ function listar() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, { extend: 'pdfHtml5', footer: true,  exportOptions: { columns: [0,1,2,3], } }, "colvis"
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5], } }, { extend: 'pdfHtml5', footer: true,  exportOptions: { columns: [0,1,2,3,4,5], } }, "colvis"
     ],
     ajax: {
       url: "../ajax/resumen_rh.php?op=listar_resumen_rh",
@@ -38,8 +38,8 @@ function listar() {
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
-      // columna: sub total
-      if (data[3] != "") { $("td", row).eq(3).addClass("text-nowrap text-right"); }
+      // columna:  total
+      if (data[5] != "") { $("td", row).eq(5).addClass("text-nowrap text-right"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -49,12 +49,21 @@ function listar() {
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [ 
+      { targets: [1], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      //{ targets: [12], visible: false, searchable: false },
+    ],
   }).DataTable();
 
   $.post("../ajax/resumen_rh.php?op=monto_total_rh", {}, function (e, status) {
 
     e = JSON.parse(e); // console.log(e);
-    $(".total_monto").html('S/ '+ formato_miles(e.data.monto_total_rh));
+    if (e.status == true) {
+      $("#total_monto").html(formato_miles(e.data.monto_total_rh));
+    } else {
+      ver_errores(e);
+    }
+    
   }).fail( function(e) { ver_errores(e); } ); 
 
 }

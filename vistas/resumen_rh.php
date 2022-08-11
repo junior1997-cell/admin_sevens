@@ -66,6 +66,8 @@
                             <thead>
                               <tr>
                                 <th class="text-center">#</th>
+                                <th class="">Fecha</th>
+                                <th class="">Proyecto</th>
                                 <th class="">Módulo</th>
                                 <th>Trabajador y/ proveedor</th>
                                 <th>Monto</th>
@@ -76,9 +78,11 @@
                             <tfoot>
                               <tr>
                                 <th class="text-center">#</th>
+                                <th class="">Fecha</th>
+                                <th class="">Proyecto</th>
                                 <th class="">Módulo</th>
                                 <th>Trabajador y/ proveedor</th>
-                                <th class="total_monto text-nowrap text-right"></th>
+                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span id="total_monto">0.00</span> </div></th>
                                 <th>Documento</th>
                               </tr>
                             </tfoot>

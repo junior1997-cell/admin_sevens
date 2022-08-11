@@ -47,7 +47,7 @@
 
         foreach ($existe['data'] as $key => $value) {
           $info_repetida .= '<li class="text-left font-size-13px">
-          <span class="font-size-15px text-danger"><b>Nombre: </b>'.$value['nombres'].'</span><br>
+            <span class="font-size-15px text-danger"><b>Nombre: </b>'.$value['nombres'].'</span><br>
             <b>'.$value['tipo_documento'].': </b>'.$value['numero_documento'].'<br>
             <b>Tipo: </b>'.$value['tipo'].'<br>
             <b>Ocupación: </b>'.$value['ocupacion'].'<br>

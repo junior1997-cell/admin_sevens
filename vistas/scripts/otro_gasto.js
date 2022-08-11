@@ -335,8 +335,11 @@ function listar() {
       bDestroy: true,
       iDisplayLength: 10, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
-    })
-    .DataTable();
+      columnDefs: [
+        { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [8,11],  visible: false,  searchable: false,  },
+      ],
+    }).DataTable();
   total();
 }
 

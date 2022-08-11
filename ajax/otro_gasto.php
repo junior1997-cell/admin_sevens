@@ -157,7 +157,7 @@
                 (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) .
                 '</span>         
                 </div>',
-              "4" => date("d/m/Y", strtotime($reg->fecha_g)),
+              "4" => $reg->fecha_g,
               "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
               "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
               "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),

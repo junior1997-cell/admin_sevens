@@ -33,10 +33,12 @@
               
               $data[] = [  
                 "0" => $cont++,
-                "1" => $value['modulo'],
-                "2" => '<span class="text-primary font-weight-bold">' . $value['trabajador_razon_social'] . '</span>',
-                "3" =>'S/ '.number_format($value['total'], 2, ".", ",") ,
-                "4" => $documento.$toltip,
+                "1" => $value['fecha'],
+                "2" => $value['codigo_proyecto'],
+                "3" => $value['modulo'],
+                "4" => '<span class="text-primary font-weight-bold">' . $value['trabajador_razon_social'] . '</span>',
+                "5" =>'<div class="formato-numero-conta"> <span>S/</span> '.number_format($value['total'], 2, ".", ","). '</div>' ,
+                "6" => $documento.$toltip,
               ];
             }
   

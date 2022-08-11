@@ -13,9 +13,9 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Planillas y seguros</title>
+        <title>Planillas y Seguros | Admin Sevens</title>
         
-        <?php $title = "Planillas y seguros";  require 'head.php'; ?>
+        <?php $title = "Planillas y Seguros";  require 'head.php'; ?>
           
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
@@ -67,15 +67,15 @@
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
-                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
                                 <th>Fecha</th>
+                                <th>Proveedor</th>
+                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob.</th>                                
                                 <th>Subtotal</th>
                                 <th>IGV</th>
                                 <th>Monto Total</th>
                                 <th>Descripción</th>
-                                <th>Comprobante</th>
-                                <th>Estado</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -83,15 +83,15 @@
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
+                                <th>Fecha</th>
+                                <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
-                                <th>Fecha</th>
                                 <th>Subtotal</th>
                                 <th>IGV</th>
-                                <th class="text-nowrap text-right" id="total_monto"></th>
+                                <th class="text-nowrap text-right px-2"><div class="formato-numero-conta"> <span>S/</span><span id="total_monto">0.00</span> </div></th>
                                 <th>Descripción</th>
-                                <th>Comprobante</th>
-                                <th>Estado</th>
+                                <th>CFDI.</th>                                
                               </tr>
                             </tfoot>
                           </table>
@@ -106,7 +106,7 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- Modal agregar Planillas y seguros -->
+                <!-- MODAL - AGREGAR PLANILLA -->
                 <div class="modal fade" id="modal-agregar-otro_servicio">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -127,6 +127,18 @@
                               <!-- id hospedaje -->
                               <input type="hidden" name="idplanilla_seguro" id="idplanilla_seguro" />
                               <!-- Tipo de comprobante -->
+
+                              <input type="hidden" name="ruc_proveedor" id="ruc_proveedor">
+                              
+
+                              <!-- Tipo de Empresa -->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="idproveedor">Proveedor <sup class="text-danger">(unico*)</sup></label>
+                                  <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione proveedor" onchange="extrae_ruc();"> </select>
+                                </div>
+                              </div>
+
                               <!--forma pago-->
                               <div class="col-lg-6">
                                 <div class="form-group">
@@ -138,9 +150,18 @@
                                   </select>
                                 </div>
                               </div>
+
+                              <!-- Fecha 1 -->
+                              <div class="col-lg-6 class_pading">
+                                <div class="form-group">
+                                  <label for="fecha">Fecha Emisión</label>
+                                  <input type="date" name="fecha_p_s" class="form-control" id="fecha_p_s" />
+                                </div>
+                              </div>
+
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
-                                  <label for="tipo_comprobante">Tipo Comprobante</label>
+                                  <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(unico*)</sup></label>
                                   <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" onkeyup="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
@@ -152,18 +173,12 @@
                               <!-- Código-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="codigo" class="nro_comprobante">Núm. comprobante </label>
+                                  <label for="codigo" class="nro_comprobante">Núm. comprobante <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
 
-                              <!-- Fecha 1 -->
-                              <div class="col-lg-6 class_pading">
-                                <div class="form-group">
-                                  <label for="fecha">Fecha Emisión</label>
-                                  <input type="date" name="fecha_p_s" class="form-control" id="fecha_p_s" />
-                                </div>
-                              </div>
+                              
                               <!-- Sub total -->
                               <div class="col-lg-4">
                                 <div class="form-group">
@@ -214,13 +229,22 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
                                   </div>
                                   <div class="col-6 col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'planilla_seguro', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
                                   </div>
                                 </div>
                                 <div id="doc1_ver" class="text-center mt-4">
                                   <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
                                 </div>
                                 <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="barra_progress_div">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
                               </div>
                             </div>
 
@@ -244,7 +268,7 @@
                   </div>
                 </div>
 
-                <!--===============Modal-ver-comprobante =========-->
+                <!-- MODAL - VER COMPROBANTE -->
                 <div class="modal fade" id="modal-ver-comprobante">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
@@ -255,17 +279,23 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="iddescargar" download=" Comprobante otro_servicio" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                        <div class="row" >
+                          <div class="col-6 col-lg-6 col-xl-6">
+                            <a class="btn btn-xs btn-warning btn-block" href="#" id="descargar" download="Comprobante planilla seguro" type="button"><i class="fas fa-download"></i> Descargar</a>
+                          </div>
+                          <div class="col-6 col-lg-6 col-xl-6">
+                            <a class="btn btn-xs btn-info btn-block" href="#"  target="_blank" id="ver_grande" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                          </div>
+                          <div class="col-12 col-lg-12 col-xl-12 mt-2">
+                            <div id="ver_documento" ></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!--Modal ver datos-->
+
+                <!-- MODAL - VER DATOS-->
                 <div class="modal fade" id="modal-ver-otro_servicio">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
@@ -277,7 +307,7 @@
                       </div>
 
                       <div class="modal-body">
-                        <div id="datosotro_servicio" class="class-style">
+                        <div id="datosotro_servicio" class="">
                           <!-- vemos los datos del trabajador -->
                         </div>
                       </div>
@@ -302,11 +332,7 @@
         <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
         <script type="text/javascript" src="scripts/planillas_seguros.js"></script>
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
         <?php require 'extra_script.php'; ?>
           

@@ -16,7 +16,7 @@ class Resumen_rh
 
     $data = Array();  $data_recibos_honorarios = Array(); $monto_total= 0;
 
-    $sql_1="SELECT sc.idsubcontrato, sc.idproyecto, sc.idproveedor,sc.costo_parcial, sc.comprobante, p.nombre_codigo, prv.razon_social
+    $sql_1="SELECT sc.idsubcontrato, sc.idproyecto, sc.idproveedor, sc.fecha_subcontrato, sc.costo_parcial, sc.comprobante, p.nombre_codigo, prv.razon_social
     FROM subcontrato as sc, proyecto as p, proveedor as prv 
     WHERE  sc.estado=1 AND sc.estado_delete=1   AND sc.tipo_comprobante='Recibo por honorario' AND sc.idproyecto=p.idproyecto AND sc.idproveedor=prv.idproveedor;";
     $subcontrato = ejecutarConsultaArray($sql_1);
@@ -32,6 +32,7 @@ class Resumen_rh
           "idtabla"                => $value['idsubcontrato'],
           "codigo_proyecto"        => $value['nombre_codigo'],
           "trabajador_razon_social"=> $value['razon_social'],
+          "fecha"                  => $value['fecha_subcontrato'],
           "total"                  => $value['costo_parcial'],
           "comprobante"            => $value['comprobante'],
           "carpeta"                => 'sub_contrato',
@@ -58,10 +59,12 @@ class Resumen_rh
       } 
     }
 
-    $sql_2="SELECT pagos_adm.idfechas_mes_pagos_administrador,pagos_adm.idtrabajador_por_proyecto, pagos_adm.monto_x_mes, pagos_adm.recibos_x_honorarios, t.nombres, t_proy.idproyecto, p.nombre_codigo
-    FROM fechas_mes_pagos_administrador as pagos_adm, trabajador_por_proyecto as t_proy, trabajador as t, proyecto as p
-    WHERE pagos_adm.estado=1 AND pagos_adm.estado_delete=1 AND pagos_adm.recibos_x_honorarios!='' AND pagos_adm.idtrabajador_por_proyecto=t_proy.idtrabajador_por_proyecto 
-    AND t_proy.idtrabajador=t.idtrabajador AND t_proy.idproyecto=p.idproyecto;";    
+    $sql_2="SELECT pxma.idpagos_x_mes_administrador, tpp.idproyecto, p.nombre_codigo, t.nombres as trabajador, t.tipo_documento, 
+    t.numero_documento, pxma.monto, pxma.tipo_comprobante, pxma.recibos_x_honorarios, pxma.fecha_pago
+    FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador as t, proyecto as p
+    WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto 
+    AND tpp.idtrabajador=t.idtrabajador AND tpp.idproyecto=p.idproyecto AND pxma.estado=1 AND pxma.estado_delete=1  
+    ORDER BY t.nombres ASC";    
     $pagos_adm = ejecutarConsultaArray($sql_2);
 
     if ($pagos_adm['status'] == false) { return $pagos_adm; }
@@ -72,10 +75,11 @@ class Resumen_rh
 
         $data[] = array(
           "idproyecto"             => $value['idproyecto'],
-          "idtabla"                => $value['idfechas_mes_pagos_administrador'],
+          "idtabla"                => $value['idpagos_x_mes_administrador'],
           "codigo_proyecto"        => $value['nombre_codigo'],
-          "trabajador_razon_social"=> $value['nombres'],
-          "total"                  => $value['monto_x_mes'],
+          "trabajador_razon_social"=> $value['trabajador'],
+          "fecha"                  => $value['fecha_pago'],
+          "total"                  => $value['monto'],
           "comprobante"            => $value['recibos_x_honorarios'],
           "carpeta"                => 'pago_administrador',
           "subcarpeta"             => 'recibos_x_honorarios',
@@ -95,17 +99,18 @@ class Resumen_rh
           }          
         } 
 
-        if (!empty($value['monto_x_mes'])) {          
-          $monto_total+= $value['monto_x_mes'];
+        if (!empty($value['monto'])) {          
+          $monto_total+= $value['monto'];
         } 
 
       }  
     }
 
-    $sql_3="SELECT r_q_asist.idresumen_q_s_asistencia,r_q_asist.idtrabajador_por_proyecto, r_q_asist.pago_quincenal, r_q_asist.recibos_x_honorarios, t.nombres, t_proy.idproyecto, p.nombre_codigo
-    FROM resumen_q_s_asistencia as r_q_asist, trabajador_por_proyecto as t_proy, trabajador as t,  proyecto as p
-    WHERE r_q_asist.estado=1 AND r_q_asist.estado_delete=1 AND r_q_asist.recibos_x_honorarios!='' AND r_q_asist.idtrabajador_por_proyecto= t_proy.idtrabajador_por_proyecto 
-    AND t_proy.idtrabajador=t.idtrabajador AND t_proy.idproyecto=p.idproyecto;";
+    $sql_3="SELECT pqso.idpagos_q_s_obrero, tpp.idproyecto, p.nombre_codigo, t.nombres as  trabajador, t.tipo_documento, t.numero_documento, 
+    pqso.fecha_pago, pqso.monto_deposito, pqso.tipo_comprobante, pqso.recibos_x_honorarios
+    FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador as t,  proyecto as p
+    WHERE  pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia  AND rqsa.idtrabajador_por_proyecto= tpp.idtrabajador_por_proyecto 
+    AND tpp.idtrabajador=t.idtrabajador AND tpp.idproyecto=p.idproyecto AND pqso.estado=1 AND pqso.estado_delete=1;";
     $pagos_obrero = ejecutarConsultaArray($sql_3);
 
     if ($pagos_obrero['status'] == false) { return $pagos_obrero; }
@@ -116,10 +121,11 @@ class Resumen_rh
 
         $data[] = array(  
           "idproyecto"             => $value['idproyecto'],
-          "idtabla"                => $value['idresumen_q_s_asistencia'],
+          "idtabla"                => $value['idpagos_q_s_obrero'],
           "codigo_proyecto"        => $value['nombre_codigo'],
-          "trabajador_razon_social"=> $value['nombres'],
-          "total"                  => $value['pago_quincenal'],
+          "trabajador_razon_social"=> $value['trabajador'],
+          "fecha"                  => $value['fecha_pago'],
+          "total"                  => $value['monto_deposito'],
           "comprobante"            => $value['recibos_x_honorarios'],
           "carpeta"                => 'pago_obrero',
           "subcarpeta"             => 'recibos_x_honorarios',
@@ -139,8 +145,8 @@ class Resumen_rh
           }          
         } 
         
-        if (!empty($value['pago_quincenal'])) {
-          $monto_total+= $value['pago_quincenal'];
+        if (!empty($value['monto_deposito'])) {
+          $monto_total+= $value['monto_deposito'];
         } 
       }  
     }

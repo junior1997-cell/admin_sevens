@@ -70,10 +70,8 @@ class Compra_insumos
           <hr class="m-t-2px m-b-2px">
         </li>'; 
       }
-      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
-      
-    }  
-    
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );      
+    }      
   }
 
   //Implementamos un método para editar registros

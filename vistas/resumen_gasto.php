@@ -78,25 +78,25 @@
                             <div class="col-lg-2 col-md-6 col-sm-6 col-12">
                               <label for="filtros" >Fecha inicio </label>
                               <!-- fecha inicial -->
-                              <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm h-40px m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                              <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm h-40px m-b-1px" placeholder="Seleccionar fecha" onchange="cargando_search(); delay(function(){filtros()}, 50 );" />
                             </div>
                             <div class="col-lg-2 col-md-6 col-sm-6 col-12">
                               <label for="filtros" >Fecha fin </label>
                               <!-- fecha final -->
-                              <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm h-40px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                              <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm h-40px" placeholder="Seleccionar fecha" onchange="cargando_search(); delay(function(){filtros()}, 50 );" />
                             </div>
 
                             <!-- filtro por: proveedor -->
                             <div class="col-lg-4 col-md-6 col-sm-6 col-12">
                               <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
-                              <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                              <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
                               </select>
                             </div>
 
                             <!-- filtro por: proveedor -->
                             <div class="col-lg-2 col-md-6 col-sm-6 col-12">
                               <label for="filtros" >Tipo comprobante </label>
-                              <select name="tipo_comprobante_filtro" id="tipo_comprobante_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                              <select name="tipo_comprobante_filtro" id="tipo_comprobante_filtro" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
                                 <option value="0">Todos</option>
                                 <option value="Factura">Factura</option>
                                 <option value="Boleta">Boleta</option>

@@ -2450,6 +2450,10 @@ function l_m() {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+}
+
 function filtros() {  
 
   var fecha_1       = $("#filtro_fecha_inicio").val();

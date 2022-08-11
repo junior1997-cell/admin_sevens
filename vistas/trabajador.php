@@ -34,7 +34,7 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1>Trabajador</h1>
+                      <h1><img src="../dist/svg/negro-constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > Trabajador por Proyecto</h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
@@ -63,7 +63,7 @@
                         <div class="card-body">
                           <!-- Lista de trabajdores -->
                           <div id="mostrar-tabla">
-                            <table id="tabla-trabajadors" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <table id="tabla-trabajador" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
                                   <th class="">#</th>
@@ -90,6 +90,37 @@
                                 </tr>
                               </tfoot>
                             </table>
+
+                            <div class="mt-4 card-danger card-outline">
+                              <h1 style="text-align: center;background-color: aliceblue;">Trabajador Suspendido</h1>
+                              <table id="tabla-trabajador-suspendido" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                <thead>
+                                  <tr>
+                                    <th class="">#</th>
+                                    <th class="">Aciones</th>
+                                    <th>Nombres</th>
+                                    <th>Fechas-Trabajo</th>
+                                    <th>Cuenta bancaria</th>
+                                    <th>Sueldo mensual</th>
+                                    <th>Tipo / cargo</th>
+                                    <th>Estado</th>
+                                  </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                  <tr>
+                                  <th class="">#</th>
+                                    <th>Aciones</th>
+                                    <th>Nombres</th>
+                                    <th>Fechas-Trabajo</th>
+                                    <th>Cuenta bancaria</th>
+                                    <th>Sueldo mensual</th>
+                                    <th>Tipo / cargo</th>
+                                    <th>Estado</th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
 
                           <!-- agregar trabajador al sistema -->

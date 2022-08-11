@@ -91,7 +91,7 @@
         case 'tbla_principal':
           $nube_idproyecto = $_GET["nube_idproyecto"];
 
-          $rspta=$trabajadorproyecto->tbla_principal($nube_idproyecto);
+          $rspta=$trabajadorproyecto->tbla_principal($nube_idproyecto, $_GET["estado"]);
           //Vamos a declarar un array
           $data= Array(); $cont = 1;
           // '<b>'.$reg->banco .': </b>'. $reg->cuenta_bancaria

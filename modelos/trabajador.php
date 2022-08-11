@@ -29,7 +29,7 @@ class Trabajador
 
       foreach ($buscando['data'] as $key => $value) {
         $info_repetida .= '<li class="text-left font-size-13px">
-          <b>Nombre: </b>'.$value['trabajador'].'<br>
+          <span class="font-size-15px text-danger"><b>Nombre: </b>'.$value['trabajador'].'</span><br>
           <b>'.$value['tipo_documento'].': </b>'.$value['numero_documento'].'<br>
           <b>'.$value['tipo'].': </b>'.$value['cargo'].'<br>
           <b>Desempeño: </b>'.$value['desempenio'].'<br>
@@ -96,13 +96,13 @@ class Trabajador
   }
 
   //Implementar un método para listar los registros
-  public function tbla_principal($nube_idproyecto) {
+  public function tbla_principal($nube_idproyecto, $estado) {
     $sql = "SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento,  t.imagen_perfil as imagen, tp.idcargo_trabajador , 
     tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.fecha_inicio, tp.fecha_fin, tp.estado, tp.idtrabajador_por_proyecto, 
 		ct.nombre as cargo, ct.idtipo_trabjador, tt.nombre as nombre_tipo
 		FROM trabajador_por_proyecto as tp, trabajador as t, proyecto AS p, cargo_trabajador as ct, tipo_trabajador as tt
 		WHERE tp.idproyecto = p.idproyecto AND tp.idproyecto = '$nube_idproyecto'   AND tp.idtrabajador = t.idtrabajador AND 
-		ct.idcargo_trabajador=tp.idcargo_trabajador AND tt.idtipo_trabajador=ct.idtipo_trabjador AND tp.estado='1' AND tp.estado_delete='1' ORDER BY t.nombres ASC";
+		ct.idcargo_trabajador=tp.idcargo_trabajador AND tt.idtipo_trabajador=ct.idtipo_trabjador AND tp.estado='$estado' AND tp.estado_delete='1' ORDER BY t.nombres ASC";
     $trabajdor = ejecutarConsultaArray($sql);
     if ($trabajdor['status'] == false) { return  $trabajdor;}
 

@@ -217,6 +217,10 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
   $(".tooltip").removeClass("show").addClass("hidde");
 }
 
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+}
+
 function filtros() {  
 
   var fecha_1       = $("#fecha_filtro_1").val();
@@ -238,6 +242,7 @@ function filtros() {
   if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
 
   $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+
   //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
   tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante);

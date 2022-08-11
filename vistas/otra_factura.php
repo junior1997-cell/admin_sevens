@@ -74,7 +74,7 @@
                               <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                               </div>
-                              <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="filtros()" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                              <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
                             </div>
                           </div>                                
                         </div>
@@ -87,7 +87,7 @@
                               <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                               </div>
-                              <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="filtros()" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                              <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
                             </div>
                           </div> 
                         </div>
@@ -96,7 +96,7 @@
                         <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                           <div class="form-group">
                             <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
-                            <select id="filtro_proveedor" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                            <select id="filtro_proveedor" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
                             </select>
                           </div>
                           
@@ -106,7 +106,7 @@
                         <div class="col-12 col-sm-6 col-md-6 col-lg-2">
                           <div class="form-group">
                             <!-- <label for="filtros" >Tipo comprobante </label> -->
-                            <select id="filtro_tipo_comprobante" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                            <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
                               <option value="0">Todos</option>
                               <option value="Ninguno">Ninguno</option>
                               <option value="Boleta">Boleta</option>

@@ -1,4 +1,4 @@
-var tabla;
+var tabla, tabla_secundaria;
 var editando=false;
 var editando2=false;
 
@@ -14,6 +14,7 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
   tbla_principal( localStorage.getItem('nube_idproyecto') ); 
+  tbla_secundaria( localStorage.getItem('nube_idproyecto') ); 
   
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Trabajador", '#trabajador', null);
@@ -197,15 +198,15 @@ function limpiar() {
 //Función Listar
 function tbla_principal( nube_idproyecto ) {
 
-  tabla=$('#tabla-trabajadors').dataTable({
+  tabla=$('#tabla-trabajador').dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf', "colvis"],
     ajax:{
-      url: '../ajax/trabajador.php?op=tbla_principal&nube_idproyecto='+nube_idproyecto,
+      url: `../ajax/trabajador.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=1`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -228,6 +229,42 @@ function tbla_principal( nube_idproyecto ) {
     order: [[ 0, "asc" ]]//Ordenar (columna,orden)
   }).DataTable();
 }
+
+//Función Listar
+function tbla_secundaria( nube_idproyecto ) {
+
+  tabla_secundaria=$('#tabla-trabajador-suspendido').dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf', "colvis"],
+    ajax:{
+      url: `../ajax/trabajador.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=0`,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: 
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap" ); }
+      // columna: sueldo mensual
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-right" ); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]]//Ordenar (columna,orden)
+  }).DataTable();
+}
+
 //Función para guardar o editar
 
 function guardaryeditar(e) {
@@ -245,7 +282,9 @@ function guardaryeditar(e) {
       try {
         if (e.status == true) {
           Swal.fire("Correcto!", "Trabajador registrado correctamente", "success");
-          tabla.ajax.reload(null, false);         
+          if (tabla) { tabla.ajax.reload(null, false); } 
+          if (tabla) { tabla_secundaria.ajax.reload(null, false); }
+                   
           show_hide_form(1);
         }else{
           ver_errores(e);
@@ -456,7 +495,8 @@ function desactivar(idtrabajador) {
 
         Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
     
-        tabla.ajax.reload(null, false);
+        if (tabla) { tabla.ajax.reload(null, false); } 
+        if (tabla) { tabla_secundaria.ajax.reload(null, false); }
       }).fail( function(e) { ver_errores(e); } );   
     }
   });   
@@ -478,7 +518,8 @@ function activar(idtrabajador) {
 
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
 
-        tabla.ajax.reload(null, false);
+        if (tabla) { tabla.ajax.reload(null, false); } 
+        if (tabla) { tabla_secundaria.ajax.reload(null, false); }
       }).fail( function(e) { ver_errores(e); } );
       
     }
