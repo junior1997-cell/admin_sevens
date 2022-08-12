@@ -36,14 +36,15 @@
                 "1" => $value['fecha'],
                 "2" => '<center>'.$value['tipo_comprobante'].'</center>',
                 "3" => $value['serie_comprobante'],
-                "4" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',
-                "5" => number_format($value['total'], 2, ".", ",") ,
+                "4" => $value['ruc'],
+                "5" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',                
                 "6" => number_format($value['subtotal'], 2, ".", ","),
                 "7" => number_format($value['igv'], 2, ".", ","),
-                "8" => $value['glosa'],
-                "9" => $value['tipo_gravada'],
-                "10" => $documento.$toltip,
-                "11" => $value['modulo'],
+                "8" => number_format($value['total'], 2, ".", ",") ,
+                "9" => $value['glosa'],
+                "10" => $value['tipo_gravada'],
+                "11" => $documento.$toltip,
+                "12" => $value['modulo'],
               ];
             }
   

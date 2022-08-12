@@ -28,13 +28,35 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
   $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-total').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
+  var name_export = `Resumen de facturas Sevens ${moment().format('DD-MM-YYYY')}`;
+
   tabla_principal = $('#tabla-principal').dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9], } }, "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } }, 
+      { extend: 'excelHtml5', title: name_export, footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } ,
+        action: function(e, dt, node, config) {
+          var that = this; 
+          Swal.fire('Descargando EXCEL<span class="texto-parpadeante"> ...</span> ');
+          setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.excelHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); });  }, 1000);
+        }
+      }, 
+      { extend: 'pdfHtml5', title: name_export, footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } ,
+        action: function(e, dt, node, config) {
+          var that = this;          
+          Swal.fire('Descargando PDF<span class="texto-parpadeante"> ...</span> ');
+          setTimeout(function() {   
+            var descargando = $.fn.DataTable.ext.buttons.pdfHtml5.action.call(that, e, dt, node, config);
+            $(descargando).ready(function () { Swal.close(); });
+          }, 1000);
+        }
+      }, 
+      "colvis"
+    ],
     ajax:	{
       url: `../ajax/resumen_facturas.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type : "get",
@@ -47,11 +69,11 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       // columna: #
       if (data[1] != '') { $("td", row).eq(1).addClass('text-center text-nowrap'); }   
       // columna: sub total
-      if (data[5] != '') { $("td", row).eq(5).addClass('text-right'); }
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
       // columna: igv
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }  
+      if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); }  
       // columna: total
-      if (data[7] != '') { $("td", row).eq(7).addClass('text-right');  }      
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right');  }      
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -64,7 +86,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     columnDefs: [ 
       { targets: [1], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
       //{ targets: [11], visible: false, searchable: false, }, 
-    ],
+    ]
   }).DataTable();
   
   $( tabla_principal ).ready(function() {
@@ -134,6 +156,10 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
   }
 
   $(".tooltip").removeClass("show").addClass("hidde");
+}
+
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
 }
 
 function filtros() {  

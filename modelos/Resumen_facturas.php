@@ -37,7 +37,7 @@ class Resumenfacturas
     // var_dump($filtro_proveedor , $filtro_fecha ,$filtro_comprobante); die();
 
     $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante,	cpp.serie_comprobante, cpp.descripcion, 
-    cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante
+    cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, p.tipo_documento, p.ruc, cpp.glosa, cpp.tipo_gravada, cpp.comprobante
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' 
     $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
@@ -54,6 +54,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal1 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal2 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['serie_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => $value['tipo_documento'],
+          "ruc"               => $value['ruc'],
           "total"             => $value['total'],          
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
@@ -100,7 +102,7 @@ class Resumenfacturas
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
     $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
-    f.nota, mq.nombre, prov.razon_social, f.descripcion, f.imagen
+    f.nota, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -118,6 +120,8 @@ class Resumenfacturas
           "tipo_comprobante"  => 'FT',
           "serie_comprobante" => $value['codigo'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => $value['tipo_documento'],
+          "ruc"               => $value['ruc'],
           "total"             => $value['monto'],          
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
@@ -165,7 +169,7 @@ class Resumenfacturas
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, tipo_comprobante, numero_comprobante, fecha_g, 
+    $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, ruc, tipo_comprobante, numero_comprobante, fecha_g, 
     costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada
     FROM otro_gasto 
     WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
@@ -182,6 +186,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal3 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal4 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['numero_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => 'RUC',
+          "ruc"               => $value['ruc'],
           "total"             => $value['costo_parcial'],
           "igv"               => $value['igv'],
           "subtotal"          => $value['subtotal'],
@@ -228,8 +234,8 @@ class Resumenfacturas
       $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, t.tipo_comprobante, t.numero_comprobante, t.fecha_viaje, 
-    t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada
+    $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, p.tipo_documento, p.ruc, t.tipo_comprobante, t.numero_comprobante, 
+    t.fecha_viaje, t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY t.fecha_viaje DESC;";
@@ -246,6 +252,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['numero_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => $value['tipo_documento'],
+          "ruc"               => $value['ruc'],
           "total"             => $value['precio_parcial'],          
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
@@ -292,7 +300,7 @@ class Resumenfacturas
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
+    $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, ruc, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
     precio_parcial, glosa, comprobante , tipo_gravada
     FROM hospedaje 
     WHERE estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -310,6 +318,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['numero_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => 'RUC',
+          "ruc"               => $value['ruc'],
           "total"             => $value['precio_parcial'],
           "igv"               => $value['igv'],
           "subtotal"          => $value['subtotal'],
@@ -358,7 +368,7 @@ class Resumenfacturas
 
     $sql6 = "SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_inicial, dp.fecha_final, dp.cantidad_persona, dp.subtotal, dp.igv, 
     dp.val_igv, dp.precio_parcial, dp.forma_pago, dp.tipo_comprobante, dp.fecha_emision, dp.tipo_gravada, dp.glosa, dp.numero_comprobante, dp.descripcion, 
-    dp.comprobante, dp.id_user_vb, dp.nombre_user_vb, dp.imagen_user_vb, dp.estado_user_vb, prov.razon_social, p.idproyecto
+    dp.comprobante, dp.id_user_vb, dp.nombre_user_vb, dp.imagen_user_vb, dp.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc, p.idproyecto
     FROM detalle_pension as dp, pension as p, proveedor as prov
 		WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND dp.estado = '1' AND dp.estado_delete = '1'
      $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -376,6 +386,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['numero_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => $value['tipo_documento'],
+          "ruc"               => $value['ruc'],
           "total"             => $value['precio_parcial'],          
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
@@ -422,7 +434,7 @@ class Resumenfacturas
       $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social,  
+    $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social, fb.ruc, 
     fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante, fb.tipo_gravada
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break = sb.idsemana_break  
@@ -441,6 +453,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['nro_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => 'RUC',
+          "ruc"               => $value['ruc'],
           "total"             => $value['monto'],          
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
@@ -487,7 +501,7 @@ class Resumenfacturas
       $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, 
+    $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, ruc,
     costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada
 		FROM comida_extra
 		WHERE  estado = '1' AND estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -505,6 +519,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['numero_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => 'RUC',
+          "ruc"               => $value['ruc'],
           "total"             => $value['costo_parcial'],          
           "subtotal"          => $value['subtotal'],
           "igv"               => $value['igv'],
@@ -551,8 +567,8 @@ class Resumenfacturas
       $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; 
     }
 
-    $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, of.costo_parcial, 
-    of.subtotal, of.igv, of.glosa, of.comprobante , of.tipo_gravada
+    $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, p.tipo_documento, p.ruc,
+    of.costo_parcial, of.subtotal, of.igv, of.glosa, of.comprobante , of.tipo_gravada
     FROM otra_factura AS of, proveedor p
     WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY of.fecha_emision DESC;";
@@ -569,6 +585,8 @@ class Resumenfacturas
           "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
           "serie_comprobante" => $value['numero_comprobante'],
           "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => $value['tipo_documento'],
+          "ruc"               => $value['ruc'],
           "total"             => $value['costo_parcial'],
           "igv"               => $value['igv'],
           "subtotal"          => $value['subtotal'],

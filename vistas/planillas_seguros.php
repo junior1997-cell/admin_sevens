@@ -202,15 +202,28 @@
                                 </div>
                               </div>
                               <!--Precio Parcial-->
-                              <div class="col-lg-4 class_pading">
+                              <div class="col-lg-4 ">
                                 <div class="form-group">
                                   <label for="monto">Monto total </label>
                                   <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
                                 </div>
                               </div>
 
+                              <!-- Tipo de Empresa -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
+                                  <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Campo requerido" >
+                                    <option value="SCTR" selected>SCTR</option>
+                                    <option value="AFP">AFP</option>
+                                    <option value="ONP">ONP</option>
+                                    <option value="ESSALUD">ESSALUD</option>
+                                  </select>
+                                </div>
+                              </div>
+
                               <!--Descripcion-->
-                              <div class="col-lg-12 class_pading">
+                              <div class="col-lg-12 ">
                                 <div class="form-group">
                                   <label for="descripcion_pago">Descripción</label> <br />
                                   <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
@@ -296,7 +309,7 @@
                 </div>
 
                 <!-- MODAL - VER DATOS-->
-                <div class="modal fade" id="modal-ver-otro_servicio">
+                <div class="modal fade" id="modal-ver-detalle"> 
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -307,8 +320,8 @@
                       </div>
 
                       <div class="modal-body">
-                        <div id="datosotro_servicio" class="">
-                          <!-- vemos los datos del trabajador -->
+                        <div id="detalle_html" class="">
+                          <!-- vemos los detalle del registro -->
                         </div>
                       </div>
                     </div>

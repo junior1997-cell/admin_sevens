@@ -146,7 +146,7 @@
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
                                   <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total();}, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
                                     <option value="Factura">Factura</option>
@@ -159,7 +159,7 @@
                                 <div class="form-group">
                                   <label for="num_documento">R.U.C</label>
                                   <div class="input-group">
-                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
+                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 150 );" />
                                     <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec();">
                                       <span class="input-group-text" style="cursor: pointer;">
                                         <i class="fas fa-search text-primary" id="search"></i>
@@ -194,7 +194,7 @@
                               <!-- Sub total -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                 </div>
                               </div>
@@ -209,7 +209,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
                                   <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
                                 </div>
                               </div>
@@ -217,7 +217,7 @@
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="marca">Monto total </label>
-                                  <input type="number" class="form-control" name="precio_parcial" id="precio_parcial" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
+                                  <input type="number" class="form-control" name="precio_parcial" id="precio_parcial" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Parcial" />
                                 </div>
                               </div>
                               <!--Descripcion-->

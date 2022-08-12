@@ -11,7 +11,7 @@ Class Planillas_seguros
 	}
 	
 	//Implementamos un método para insertar registros
-	public function insertar($idproyecto, $idproveedor, $ruc_proveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante)
+	public function insertar($idproyecto, $idproveedor, $ruc_proveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada,$glosa, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante)
 	{
 		$sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, ps.fecha_p_s, ps.forma_de_pago, ps.tipo_comprobante, ps.numero_comprobante,  ps.estado, ps.estado_delete
 		FROM planilla_seguro as ps, proveedor as p 
@@ -20,8 +20,8 @@ Class Planillas_seguros
 		if ($prov['status'] == false) { return  $prov;}
 
 		if (empty($prov['data'])) {
-			$sql="INSERT INTO planilla_seguro (idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_p_s, costo_parcial, subtotal, igv, val_igv, tipo_gravada, descripcion, comprobante) 
-			VALUES ('$idproyecto', '$idproveedor','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_p_s','$precio_parcial','$subtotal','$igv','$val_igv','$tipo_gravada','$descripcion','$comprobante')";
+			$sql="INSERT INTO planilla_seguro (idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_p_s, costo_parcial, subtotal, igv, val_igv, tipo_gravada, glosa, descripcion, comprobante) 
+			VALUES ('$idproyecto', '$idproveedor','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_p_s','$precio_parcial','$subtotal','$igv', '$val_igv', '$tipo_gravada', '$glosa', '$descripcion','$comprobante')";
 			return ejecutarConsulta($sql);
 		} else {
 			$info_repetida = ''; 
@@ -43,7 +43,7 @@ Class Planillas_seguros
 	}
 
 	//Implementamos un método para editar registros
-	public function editar($idplanilla_seguro, $idproyecto, $idproveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante)
+	public function editar($idplanilla_seguro, $idproyecto, $idproveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $glosa, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante)
 	{
 		$sql="UPDATE planilla_seguro SET 
 		idproyecto='$idproyecto',
@@ -54,6 +54,7 @@ Class Planillas_seguros
 		igv='$igv',
 		val_igv='$val_igv',
 		tipo_gravada='$tipo_gravada',
+		glosa='$glosa',
 		descripcion='$descripcion',
 		forma_de_pago='$forma_pago',
 		tipo_comprobante='$tipo_comprobante',
@@ -86,10 +87,22 @@ Class Planillas_seguros
 		$sql="UPDATE planilla_seguro SET estado_delete='0' WHERE idplanilla_seguro ='$idplanilla_seguro'";
 		return ejecutarConsulta($sql);
 	}
+
 	//Implementar un método para mostrar los datos de un registro a modificar
 	public function mostrar($idplanilla_seguro )
 	{
 		$sql="SELECT*FROM planilla_seguro WHERE idplanilla_seguro ='$idplanilla_seguro'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	//Implementar un método para mostrar los datos de un registro a modificar
+	public function ver_detalle($idplanilla_seguro )
+	{
+		$sql="SELECT ps.idplanilla_seguro, ps.idproyecto, ps.idproveedor, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
+		ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.glosa, ps.comprobante, 
+		p.razon_social, p.tipo_documento, p.ruc
+		FROM planilla_seguro as ps, proveedor as p
+		WHERE ps.idproveedor = p.idproveedor and ps.idplanilla_seguro  ='$idplanilla_seguro'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

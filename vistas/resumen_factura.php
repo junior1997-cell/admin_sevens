@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Resumen de Factura</title>
+        <title> Resumen de Factura | Admin Sevens</title>
 
         <?php $title = "Resumen de Activos Fijos"; require 'head.php'; ?>
         
@@ -68,30 +68,37 @@
                         <div class="card card-primary card-outline">
                           <div class="card-header">                         
                             <div class="row">
+                              <!-- modulos incluidos -->
+                              <div class="col-lg-2 col-md-2 col-sm-2 col-12">
+                                <label class="text-info" >Ver modulos</label><br>
+                                <button type="button" class="btn btn-block bg-gradient-info btn-sm" data-toggle="modal" data-target="#modal-modulos-incluidos">
+                                  <i class="fas fa-eye"></i> Módulos Incluidos
+                                </button>
+                              </div>
 
                               <!-- filtro por: fecha -->
                               <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                 <label for="filtros" >Fecha inicio </label>
                                 <!-- fecha inicial -->
-                                <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="filtros()" />
+                                <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="cargando_search(); delay(function(){filtros()}, 50 );" />
                               </div>
                               <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                 <label for="filtros" >Fecha fin </label>
                                 <!-- fecha final -->
-                                <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="filtros()" />
+                                <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="cargando_search(); delay(function(){filtros()}, 50 );" />
                               </div>
 
                               <!-- filtro por: proveedor -->
                               <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                 <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label>
-                                <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                                <select name="proveedor_filtro" id="proveedor_filtro" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
                                 </select>
                               </div>
 
                               <!-- filtro por: proveedor -->
                               <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                 <label for="filtros" >Tipo comprobante </label>
-                                <select name="tipo_comprobante_filtro" id="tipo_comprobante_filtro" class="form-control select2" onchange="filtros()" style="width: 100%;"> 
+                                <select name="tipo_comprobante_filtro" id="tipo_comprobante_filtro" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
                                   <option value="0">Todos</option>
                                   <option value="Factura">Factura</option>
                                   <option value="Boleta">Boleta</option>
@@ -116,10 +123,11 @@
                                     <th class="text-center">Fecha</th>
                                     <th>Comprobante</th>
                                     <th>Documento</th>
-                                    <th>Razón social</th>
-                                    <th class="text-center">Total</th> 
+                                    <th>RUC</th>
+                                    <th>Razón social</th>                                     
                                     <th class="text-center">Subtotal</th>                                
                                     <th class="text-center">IGV</th>
+                                    <th class="text-center">Total</th>
                                     <th class="text-center">Glosa</th> 
                                     <th class="text-center">Operación</th> 
                                     <th class="text-center">CFDI.</th>
@@ -133,10 +141,11 @@
                                     <th class="text-center text-black-50">Fecha</th>
                                     <th class="text-black-50">Comprobante</th>
                                     <th class="text-black-50">Documento</th>
-                                    <th class="text-black-50">Razón social</th>
-                                    <th class="text-right text-nowrap total-total">Total</th>  
+                                    <th>RUC</th>
+                                    <th class="text-black-50">Razón social</th>                                      
                                     <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
                                     <th class="text-right text-nowrap total-igv">IGV</th>
+                                    <th class="text-right text-nowrap total-total">Total</th>
                                     <th class="text-center text-black-50">Glosa</th> 
                                     <th class="text-center text-black-50">Operación</th> 
                                     <th class="text-center text-black-50">CFDI.</th>
@@ -169,6 +178,40 @@
                         </div>
                         <div class="modal-body ver-comprobante">
                           <!-- detalle de la factura -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- MODAL - MODULOS INCLUIDOS  -->
+                  <div class="modal fade" id="modal-modulos-incluidos">
+                    <div class="modal-dialog modal-dialog-scrollable modal-md">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Módulos Incluidos</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body"> 
+                          <ol>
+                            <li class="m-b-04rem"><i class="fas fa-shopping-cart nav-icon"></i> COMPRAS INSUMOS</li>
+                            <!-- <li>COMPRAS ACTIVOS FIJOS <small class="text-red">(sin proyecto)</small></li> -->
+                            <li class="m-b-04rem"><img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO MAQUINA </li>
+                            <li class="m-b-04rem"><img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO EQUIPO</li>
+                            <!-- <li class="m-b-04rem"><i class="nav-icon fas fa-hands-helping"></i> SUB CONTRATO</li> -->
+                            <!-- <li class="m-b-04rem"><img src="../dist/svg/negro-planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > PLANILLA SEGURO</li> -->
+                            <li class="m-b-04rem"><i class="nav-icon fas fa-network-wired"></i> OTRO GASTO</li>
+                            <li class="m-b-04rem"><i class="fas fa-shuttle-van nav-icon"></i> TRANSPORTE</li>
+                            <li class="m-b-04rem"><i class="fas fa-hotel nav-icon"></i> HOSPEDAJE</li>
+                            <li class="m-b-04rem"><i class="fas fa-utensils nav-icon"></i> PENSION</li>
+                            <li class="m-b-04rem"><i class="fas fa-hamburger nav-icon"></i> BREAK</li>
+                            <li class="m-b-04rem"><i class="fas fa-drumstick-bite nav-icon"></i> COMIDA EXTRA</li>
+                            <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(sin proyecto)</small></li>
+                            <!-- <li>OTRO INGRESO</li> -->
+                            <!-- <li class="m-b-04rem"><i class="fas fa-briefcase nav-icon"></i> PAGO ADMINISTRADORES</li> -->
+                            <!-- <li class="m-b-04rem"><i class="fas fa-users nav-icon"></i> PAGO OBREROS</li> -->
+                          </ol>
                         </div>
                       </div>
                     </div>

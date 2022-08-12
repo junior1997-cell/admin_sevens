@@ -266,7 +266,7 @@
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                   <label for="tipo_comprobante">Tipo Comprobante</label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" style="width: 100%;">
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" style="width: 100%;">
                                     <option value="Factura">Factura</option>
                                     <option value="Recibo por Honorario">Recibo por Honorario</option>
                                     <option value="Ninguno">Ninguno</option>
@@ -294,7 +294,7 @@
                                 <!-- Sub total -->
                                 <div class="col-lg-3">
                                   <div class="form-group">
-                                    <label for="subtotal" class="text-gray">Sub total </label>
+                                    <label for="subtotal" class="text-gray">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                     <input type="text" name="subtotal" id="subtotal" class="form-control"  placeholder="Sub total" readonly> 
                                   </div>
                                 </div>
@@ -304,6 +304,8 @@
                                   <div class="form-group">
                                     <label for="igv" class="text-gray">IGV </label>
                                     <input type="text" name="igv" id="igv" class="form-control"  placeholder="IGV" readonly> 
+                                    <!-- tipo_gravada -->
+                                    <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
                                   </div>
                                 </div>
 
@@ -311,7 +313,7 @@
                                 <div class="col-lg-2">
                                   <div class="form-group">
                                     <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
-                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calculandototales_fact();"> 
+                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"> 
                                   </div>
                                 </div>
                                 
@@ -319,7 +321,7 @@
                                 <div class="col-lg-4">
                                   <div class="form-group">
                                     <label for="costo_parcial" class="text-gray">Total </label>
-                                    <input type="text" name="costo_parcial" id="costo_parcial" class="form-control"  onchange="comprob_factura();" onkeyup="comprob_factura();"  placeholder="Total"> 
+                                    <input type="text" name="costo_parcial" id="costo_parcial" class="form-control"  onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"  placeholder="Total"> 
                                   </div>
                                 </div>
                                 

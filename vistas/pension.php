@@ -62,7 +62,7 @@
                           </h3>
                           <!-- regresar -->
                           <h3 class="card-title mr-3" id="btn_regresar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="mostrar_form_table(1); limpiar_comprobante();" >
+                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="mostrar_form_table(1); limpiar_form_detalle_pension();" >
                               <i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span>
                             </button>
                           </h3>
@@ -282,9 +282,7 @@
                             <!-- iddetalle_pension  -->
                             <input type="hidden" name="iddetalle_pension" id="iddetalle_pension" />
                             <!-- id_pension -->
-                            <input type="hidden" name="id_pension" id="id_pension" />
-                            <!-- tipo_gravada -->
-                            <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
+                            <input type="hidden" name="id_pension" id="id_pension" />                            
 
                             <!-- Descripcion Pensión-->
                             <div class="col-12 pl-0">
@@ -340,7 +338,7 @@
                                 <div class="col-lg-6" id="content-t-comprob">
                                   <div class="form-group">
                                     <label for="tipo_comprobante">Tipo Comprobante</label>
-                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
+                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                       <option value="Ninguno">Ninguno</option>
                                       <option value="Boleta">Boleta</option>
                                       <option value="Factura">Factura</option>
@@ -352,7 +350,7 @@
                                 <!-- Código-->
                                 <div class="col-lg-6">
                                   <div class="form-group">
-                                    <label for="codigo">Núm. comprobante </label>
+                                    <label for="codigo" class="nro_comprobante">Núm. comprobante </label>
                                     <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                   </div>
                                 </div>
@@ -367,8 +365,8 @@
 
                                 <!-- Sub total -->
                                 <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="subtotal">Sub total</label>
+                                  <div class="form-group"> 
+                                    <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                     <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                   </div>
                                 </div>
@@ -376,7 +374,7 @@
                                 <!-- Fecha IGV -->
                                 <div class="col-lg-2">
                                   <div class="form-group">
-                                    <label for="igv">IGV</label>
+                                    <label for="igv">IGV </label>
                                     <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
                                   </div>
                                 </div>
@@ -385,8 +383,9 @@
                                 <div class="col-lg-2">
                                   <div class="form-group">
                                     <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
-                                    
+                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control"  onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" readonly />
+                                    <!-- tipo_gravada -->
+                                    <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
                                   </div>
                                 </div>
 
@@ -394,7 +393,7 @@
                                 <div class="col-lg-4">
                                   <div class="form-group">
                                     <label for="monto">Total</label>
-                                    <input type="number" class="form-control" name="monto" id="monto" onkeyup="comprob_factura();" placeholder="Monto" />
+                                    <input type="number" class="form-control" name="monto" id="monto" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Monto" />
                                   </div>
                                 </div>
 
@@ -452,7 +451,7 @@
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_comprobante();">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_detalle_pension();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_detalle_pension">Guardar Cambios</button>
                       </div>
                     </div>

@@ -119,23 +119,23 @@ Class Breaks
 	}
 	//----------------------comprobantes------------------------------
 	public function insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion){
-		//var_dump($idsemana_break,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$imagen2);die();
+		
+		if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else {
+			$ruc =''; $razon_social =''; $direccion ='';
+		}
+		
 		$sql="INSERT INTO factura_break (idsemana_break,nro_comprobante, fecha_emision, monto, igv, val_igv, tipo_gravada, subtotal,forma_de_pago, tipo_comprobante, descripcion, comprobante,ruc, razon_social, direccion) 
 		VALUES ('$idsemana_break','$nro_comprobante','$fecha_emision','$monto','$igv','$val_igv','$tipo_gravada','$subtotal','$forma_pago','$tipo_comprobante','$descripcion','$imagen2','$ruc','$razon_social','$direccion')";
 		return ejecutarConsulta($sql);
 	}
-	// obtebnemos los DOCS para eliminar
-	public function obtenerDoc($idfactura_break) {
-
-		$sql = "SELECT comprobante FROM factura_break WHERE idfactura_break  ='$idfactura_break'";
 	
-		return ejecutarConsulta($sql);
-	}
 	//Implementamos un método para editar registros
 	public function editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion){
-		//$vaa="$idfactura,$idproyectof,$idmaquina,$codigo,$monto,$fecha_emision,$descripcion_f,$imagen2";
-		$sql="UPDATE `factura_break` SET 
-		
+		if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else {
+			$ruc =''; $razon_social =''; $direccion ='';
+		}
+
+		$sql="UPDATE `factura_break` SET 		
 		idsemana_break='$idsemana_break',
 		forma_de_pago='$forma_pago',
 		nro_comprobante='$nro_comprobante',
@@ -156,35 +156,47 @@ Class Breaks
 		//return $vaa;
 	}
 
+	// obtebnemos los DOCS para eliminar
+	public function obtenerDoc($idfactura_break) {
+
+		$sql = "SELECT comprobante FROM factura_break WHERE idfactura_break  ='$idfactura_break'";	
+		return ejecutarConsulta($sql);
+	}
+
 	public function listar_comprobantes($idsemana_break){
 
 		$sql="SELECT * FROM factura_break WHERE idsemana_break  ='$idsemana_break' AND estado_delete='1' AND estado='1' ORDER BY fecha_emision DESC";
 		return ejecutarConsulta($sql);
 	}
+
 	//mostrar_comprobante
 	public function mostrar_comprobante($idfactura_break){
 		
 		$sql="SELECT * FROM factura_break WHERE idfactura_break ='$idfactura_break '";
 		return ejecutarConsultaSimpleFila($sql);
 	}
+
 	//Implementamos un método para activar 
 	public function desactivar_comprobante($idfactura_break){
 		
 		$sql="UPDATE factura_break SET estado='0' WHERE idfactura_break ='$idfactura_break '";
 		return ejecutarConsulta($sql);
 	}
+
 	//Implementamos un método para desactivar 
 	public function activar_comprobante($idfactura_break){
 		
 		$sql="UPDATE factura_break SET estado='1' WHERE idfactura_break ='$idfactura_break '";
 		return ejecutarConsulta($sql);
 	}
+
 	//Implementamos un método para eliminar 
 	public function eliminar_comprobante($idfactura_break){
 	
 		$sql="UPDATE factura_break SET estado_delete='0' WHERE idfactura_break ='$idfactura_break '";
 		return ejecutarConsulta($sql);
 	}
+
 	public function total_monto_comp($idsemana_break){
 		
 		$sql="SELECT SUM(monto) as total FROM factura_break WHERE idsemana_break='$idsemana_break' AND estado_delete='1' AND estado='1'";

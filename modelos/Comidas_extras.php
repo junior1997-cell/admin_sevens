@@ -13,6 +13,9 @@ Class Comidas_extras
 	//Implementamos un método para insertar registros
 	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion)
 	{
+		if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else {
+			$ruc =''; $razon_social =''; $direccion ='';
+		}		
 	
 		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,val_igv,tipo_gravada,comprobante,ruc,razon_social,direccion) 
 		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$val_igv','$tipo_gravada','$comprobante','$ruc','$razon_social','$direccion')";
@@ -23,6 +26,10 @@ Class Comidas_extras
 	//Implementamos un método para editar registros
 	public function editar($idcomida_extra,$idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion)
 	{
+		if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else {
+			$ruc =''; $razon_social =''; $direccion ='';
+		}
+		
 		$sql="UPDATE comida_extra SET 
 		idproyecto='$idproyecto',
 		fecha_comida='$fecha',

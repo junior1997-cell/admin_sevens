@@ -24,6 +24,7 @@ function init() {
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccinar proveedor", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccinar tipo comprobante", allowClear: true, });
   $("#forma_pago").select2({theme: "bootstrap4", placeholder: "Seleccinar forma de pago", allowClear: true, }); 
+  $("#glosa").select2({theme: "bootstrap4", placeholder: "Seleccinar glosa", allowClear: true, }); 
 
   no_select_tomorrow('#fecha_p_s');
 
@@ -56,7 +57,8 @@ function limpiar() {
   $("#subtotal").val("");
   $("#igv").val("");
   $("#val_igv").val(""); 
-  $("#tipo_gravada").val(""); 
+  $("#tipo_gravada").val("");
+  $("#glosa").val('SCTR').trigger("change"); 
   $("#descripcion").val("");
 
   $("#doc_old_1").val("");
@@ -249,7 +251,7 @@ function modal_comprobante(comprobante){
 
   $("#descargar").attr("href","../dist/docs/planilla_seguro/comprobante/"+comprobante);
   $('#ver_grande').attr("href", "../dist/docs/planilla_seguro/comprobante/"+comprobante);
-  $('#ver_documento').html(doc_view_extencion(comprobante, 'planilla_seguro', 'comprobante', '100%', '350'));
+  $('#ver_documento').html(doc_view_extencion(comprobante, 'planilla_seguro', 'comprobante', '100%', '550'));
 
 }
 
@@ -342,6 +344,8 @@ function mostrar(idplanilla_seguro) {
       $("#val_igv").val(e.data.val_igv);
       $("#tipo_gravada").val(e.data.tipo_gravada);
 
+      $("#glosa").val(e.data.glosa).trigger("change"); 
+
       $("#descripcion").val(e.data.descripcion);
 
       if (e.data.comprobante == "" || e.data.comprobante == null  ) {
@@ -366,76 +370,95 @@ function mostrar(idplanilla_seguro) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function ver_datos(idplanilla_seguro) {
+function ver_detalle(idplanilla_seguro) {
+  $('#detalle_html').html(`<div class="row"><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div></div>`);
 
-  $("#modal-ver-transporte").modal("show")
+  $("#modal-ver-detalle").modal("show")
 
-  $.post("../ajax/planillas_seguros.php?op=verdatos", { idplanilla_seguro: idplanilla_seguro }, function (data, status) {
+  var comprobante=''; var btn_comprobante = '';
 
-    data = JSON.parse(data);  console.log(data); 
+  $.post("../ajax/planillas_seguros.php?op=ver_detalle", { idplanilla_seguro: idplanilla_seguro }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+
+    if (e.data.comprobante != '') {
+        
+      comprobante =  doc_view_extencion(e.data.comprobante, 'planilla_seguro', 'comprobante', '100%');
+      
+      btn_comprobante=`
+      <div class="row">
+        <div class="col-6"">
+          <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/planilla_seguro/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+        </div>
+        <div class="col-6"">
+          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/planilla_seguro/comprobante/${e.data.comprobante}" download="${removeCaracterEspecial(e.data.tipo_comprobante+' '+e.data.numero_comprobante)} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+        </div>
+      </div>`;
     
-    verdatos=`                                                                            
+    } else {
+
+      comprobante='Sin Ficha Técnica';
+      btn_comprobante='';
+
+    }
+    
+    data_html=`                                                                            
     <div class="col-12">
       <div class="card">
         <div class="card-body">
           <table class="table table-hover table-bordered">        
             <tbody>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Descripción</th>
-                <td>${data.descripcion}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo clasificación</th>
-                <td>${data.tipo_viajero}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Ruta</th>
-                <td>${data.ruta}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo ruta</th>
-                  <td>${data.tipo_ruta}</td>
+                <th>Proveedor</th>
+                <td><span class="text-primary" >${e.data.razon_social}</span> <br> ${e.data.tipo_documento}: ${e.data.ruc}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Fecha</th>
-                <td>${data.fecha_p_s}</td>
+                <td>${format_d_m_a(e.data.fecha_p_s)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo pago </th>
-                <td>${data.forma_de_pago}</td>
+                <th>${e.data.tipo_comprobante}</th>
+                <td>${e.data.numero_comprobante}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo comprobante </th>
-                <td>${data.tipo_comprobante}</td>
+                <th>Forma de pago</th>
+                  <td>${e.data.forma_de_pago}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Cantidad</th>
-                <td>${data.cantidad}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Precio unitario</th>
-                <td>${parseFloat(data.precio_unitario).toFixed(2)}</td>
-              </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Subtotal</th>
-                <td>${parseFloat(data.subtotal).toFixed(2)}</td>
-              </tr>
+                <td>${formato_miles(e.data.subtotal)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>IGV</th>
-                <td>${parseFloat(data.igv).toFixed(2)}</td>
+                <td>${formato_miles(e.data.igv)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Total</th>
-                <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
+                <td>${formato_miles(e.data.costo_parcial)}</td>
               </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Val IGV</th>
+                <td>${e.data.val_igv}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo Gravada</th>
+                <td>${e.data.tipo_gravada}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Glosa</th>
+                <td>${e.data.glosa}</td>
+              </tr>
+              <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprob.</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>`;
   
-    $("#datostransporte").html(verdatos);
+    $("#detalle_html").html(data_html);
 
   });
 }
@@ -491,6 +514,7 @@ $(function () {
   $("#idproveedor").on("change", function () { $(this).trigger("blur"); });
   $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
   $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+  $("#glosa").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-otro_servicio").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -539,6 +563,7 @@ $(function () {
   $("#idproveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
   $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
   $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#glosa").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
 });
 

@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Break</title>
+        <title>Break | Admin Sevens</title>
 
         <?php $title = "Break"; require 'head.php'; ?>
 
@@ -216,6 +216,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal agregar Comprobantes =========-->
                 <div class="modal fade" id="modal-agregar-comprobante">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -236,6 +237,7 @@
                               <input type="hidden" name="idsemana_break" id="idsemana_break" />
                               <!-- id factura_break -->
                               <input type="hidden" name="idfactura_break" id="idfactura_break" />
+                              <input type="hidden" name="tipo_documento" id="tipo_documento" value="RUC"/>
                               <!--Forma de pago -->
                               <div class="col-lg-6">
                                 <div class="form-group">
@@ -251,7 +253,7 @@
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
                                   <label for="tipo_comprobante">Tipo Comprobante</label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total();}, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
                                     <option value="Factura">Factura</option>
@@ -264,8 +266,8 @@
                                 <div class="form-group">
                                   <label for="ruc">R.U.C</label>
                                   <div class="input-group">
-                                    <input type="number" name="ruc" class="form-control" id="ruc" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat();">
+                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento"  onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 150 );" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec('');">
                                       <span class="input-group-text" style="cursor: pointer;">
                                         <i class="fas fa-search text-primary" id="search"></i>
                                         <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
@@ -299,7 +301,7 @@
                               <!-- Sub total -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                 </div>
                               </div>
@@ -314,7 +316,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
                                   <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
                                 </div>
                               </div>
@@ -322,7 +324,7 @@
                               <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="monto">Monto total</label>
-                                  <input type="number" name="monto" id="monto" class="form-control" placeholder="Monto" onkeyup="comprob_factura();" />
+                                  <input type="number" name="monto" id="monto" class="form-control" placeholder="Monto" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
                                 </div>
                               </div>
                               <!-- Descripcion-->
@@ -344,7 +346,7 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
                                   </div>
                                   <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'break', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
                                   </div>
                                 </div>
                                 <div id="doc1_ver" class="text-center mt-4">
@@ -373,6 +375,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!--===============Modal-ver-vaucher =========-->
                 <div class="modal fade" id="modal-ver-comprobante">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">

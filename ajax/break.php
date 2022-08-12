@@ -33,7 +33,7 @@
       $val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
       $tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";
       
-      $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
+      $ruc = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
       $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
       $direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
 

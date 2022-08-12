@@ -24,6 +24,7 @@
       $idplanilla_seguro  = isset($_POST["idplanilla_seguro"]) ? limpiarCadena($_POST["idplanilla_seguro"]) : "";
       $fecha_p_s          = isset($_POST["fecha_p_s"]) ? limpiarCadena($_POST["fecha_p_s"]) : "";
       $precio_parcial     = isset($_POST["precio_parcial"]) ? limpiarCadena($_POST["precio_parcial"]) : "";
+      $glosa              = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
       $descripcion        = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
       $forma_pago         = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
       $tipo_comprobante   = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
@@ -51,7 +52,7 @@
 
           if (empty($idplanilla_seguro)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $planillas_seguros->insertar($idproyecto, $idproveedor,$ruc_proveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante);
+            $rspta = $planillas_seguros->insertar($idproyecto, $idproveedor,$ruc_proveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $glosa, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante);
             echo json_encode($rspta, true);
           } else {
             //validamos si existe comprobante para eliminarlo
@@ -61,7 +62,7 @@
               if ($ficha1_ant != "") {  unlink("../dist/docs/planilla_seguro/comprobante/" . $ficha1_ant); }
             }
 
-            $rspta = $planillas_seguros->editar($idplanilla_seguro, $idproyecto,$idproveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante);
+            $rspta = $planillas_seguros->editar($idplanilla_seguro, $idproyecto,$idproveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada,$glosa, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante);
             //var_dump($idplanilla_seguro,$idproveedor);
             echo json_encode($rspta, true);
           }
@@ -89,8 +90,8 @@
             echo json_encode($rspta, true);
         break;
 
-        case 'verdatos':
-          $rspta = $planillas_seguros->mostrar($idplanilla_seguro);
+        case 'ver_detalle':
+          $rspta = $planillas_seguros->ver_detalle($idplanilla_seguro);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;
@@ -112,14 +113,15 @@
           if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {                
 
-              $comprobante = (empty($reg->comprobante) ? '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>' : '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+              $comprobante = (empty($reg->comprobante) ? '<div><center><a type="btn btn-danger" class="" data-toggle="tooltip" data-original-title="Vacio"><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>' : '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ')" data-toggle="tooltip" data-original-title="Ver doc."><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
               
               $data[] = [
                 "0" => $cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idplanilla_seguro .')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idplanilla_seguro .', \''.encodeCadenaHtml($reg->tipo_comprobante . (empty($reg->numero_comprobante) ? "" : " - ". $reg->numero_comprobante)).'\')"><i class="fas fa-skull-crossbones"></i></button>'
-                  : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idplanilla_seguro .')"><i class="fa fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idplanilla_seguro . ')"><i class="fa fa-check"></i></button>',
+                "1" => ($reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idplanilla_seguro .')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idplanilla_seguro .', \''.encodeCadenaHtml($reg->tipo_comprobante . (empty($reg->numero_comprobante) ? "" : " - ". $reg->numero_comprobante)).'\')" data-toggle="tooltip" data-original-title="Papelera o Eliminar"><i class="fas fa-skull-crossbones"></i></button>'
+                  : '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idplanilla_seguro .')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idplanilla_seguro . ')"data-toggle="tooltip" data-original-title="Activar"><i class="fa fa-check"></i></button>').
+                    ' <button class="btn btn-info btn-sm" onclick="ver_detalle(' . $reg->idplanilla_seguro . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
                 "2" => $reg->fecha_p_s,
                 "3" => '<div class="user-block">'.
                   '<span class="username ml-0" > <p class="text-primary m-b-02rem" >' .$reg->razon_social . '</p> </span>'.
