@@ -42,7 +42,7 @@ function init() {
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addDocs(e,$("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
@@ -84,186 +84,6 @@ function limpiar() {
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 }
-
-//segun tipo de comprobante
-// function comprob_factura() {
-
-//   var precio_parcial = $("#precio_parcial").val(); 
-
-  
-//   if ($("#tipo_comprobante").select2("val") == "" || $("#tipo_comprobante").select2("val") == null) {
-
-//     $(".nro_comprobante").html("Núm. Comprobante");
-
-//     $(".div_ruc").hide(); $(".div_razon_social").hide();
-
-//     $("#num_documento").val(""); $("#razon_social").val("");
-
-//     $("#val_igv").val(""); $("#tipo_gravada").val(""); 
-
-//     if (precio_parcial == null || precio_parcial == "") {
-//       $("#subtotal").val(0);
-//       $("#igv").val(0);    
-//     } else {
-//       $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-//       $("#igv").val(0);    
-//     }   
-
-//   } else {
-
-//     if ($("#tipo_comprobante").select2("val") == "Ninguno") { 
-
-//       $(".nro_comprobante").html("Núm. de Operación");
-
-//       $(".div_ruc").hide(); $(".div_razon_social").hide();
-
-//       $("#num_documento").val(""); $("#razon_social").val("");
-
-//       $("#val_igv").prop("readonly",true);
-
-//       if (precio_parcial == null || precio_parcial == "") {
-//         $("#subtotal").val(0);
-//         $("#igv").val(0);
-        
-//         $("#val_igv").val("0"); 
-//         $("#tipo_gravada").val("NO GRAVADA");  
-
-//       } else {
-//         $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-//         $("#igv").val(0); 
-
-//         $("#val_igv").val("0"); 
-//         $("#tipo_gravada").val("NO GRAVADA"); 
-
-//       }   
-
-//     } else {
-      
-//       if ($("#tipo_comprobante").select2("val") == "Factura") {
-
-//         $(".nro_comprobante").html("Núm. Comprobante");
-
-//         $(".div_ruc").show(); $(".div_razon_social").show();
-      
-//           calculandototales_fact();     
-    
-//       } else { 
-
-//         $("#val_igv").prop("readonly",true);
-
-//         if ($("#tipo_comprobante").select2("val") == "Boleta") {
-
-//           $(".nro_comprobante").html("Núm. Comprobante");
-  
-//           $(".div_ruc").show(); $(".div_razon_social").show();
-          
-//           if (precio_parcial == null || precio_parcial == "") {
-//             $("#subtotal").val(0);
-//             $("#igv").val(0); 
-//             $("#val_igv").val("0");   
-//           } else {
-                    
-//             $("#subtotal").val("");
-//             $("#igv").val("");
-
-//             $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-//             $("#igv").val(0); 
-            
-//             $("#val_igv").val("0"); 
-//             $("#tipo_gravada").val("NO GRAVADA"); 
-//           } 
-            
-//         } else {
-                 
-//           $(".nro_comprobante").html("Núm. Comprobante");
-
-//           $(".div_ruc").hide(); $(".div_razon_social").hide();
-
-//           $("#num_documento").val(""); $("#razon_social").val("");
-
-//           if (precio_parcial == null || precio_parcial == "") {
-            
-//             $("#subtotal").val(0);
-//             $("#igv").val(0);
-
-//             $("#val_igv").val("0"); 
-//             $("#tipo_gravada").val("NO GRAVADA");  
-
-//           } else {
-
-//             $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-//             $("#igv").val(0); 
-
-//             $("#val_igv").val("0"); 
-//             $("#tipo_gravada").val("NO GRAVADA");  
-
-//           } 
-          
-//         }
-
-//       }
-//     }
-//   } 
-// }
-
-
-// function validando_igv() {
-
-//   if ($("#tipo_comprobante").select2("val") == "Factura") {
-
-//     $("#val_igv").prop("readonly",false);
-//     $("#val_igv").val(0.18); 
-
-//   }else {
-
-//     $("#val_igv").val(0); 
-
-//   }
-  
-// }
-
-// function calculandototales_fact() {
-//   //----------------
-//   $("#tipo_gravada").val("GRAVADA"); 
-         
-//   $(".nro_comprobante").html("Núm. Comprobante");
-
-//   var precio_parcial = $("#precio_parcial").val();
-
-//   var val_igv = $('#val_igv').val();
-
-//   if (precio_parcial == null || precio_parcial == "") {
-
-//     $("#subtotal").val(0);
-//     $("#igv").val(0); 
-
-//   } else {
- 
-//     var subtotal = 0;
-//     var igv = 0;
-
-//     if (val_igv == null || val_igv == "") {
-
-//       $("#subtotal").val(parseFloat(precio_parcial));
-//       $("#igv").val(0);
-
-//     }else{
-
-//       $("subtotal").val("");
-//       $("#igv").val("");
-
-//       subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
-//       igv = precio_parcial - subtotal;
-
-//       $("#subtotal").val(parseFloat(subtotal).toFixed(2));
-//       $("#igv").val(parseFloat(igv).toFixed(2));
-
-//     }
-
-//   }  
-
-// }
-
 
 function calc_total() {
 
@@ -350,7 +170,6 @@ function select_comprobante() {
     $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
   }  
 }
-
 
 function quitar_igv_del_precio(precio , igv, tipo ) {
   console.log(precio , igv, tipo);
@@ -526,22 +345,28 @@ function guardaryeditar(e) {
     contentType: false,
     processData: false,
 
-    success: function (datos) {
-      if (datos == "ok") {
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e); 
+        if (e.status == true) {
 
-        Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
+          Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
 
-        tabla.ajax.reload(null, false);
+          tabla.ajax.reload(null, false);
+  
+          limpiar();
+  
+          $("#modal-agregar-otro_gasto").modal("hide");
+  
+          total();
 
-        limpiar();
+        }else{  
+          ver_errores(e);
+        } 
+      } catch (err) {
+        console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+      } 
 
-        $("#modal-agregar-otro_gasto").modal("hide");
-
-        total();
-
-      } else {
-        toastr.error(datos);
-      }
     },
   });
 }
@@ -555,136 +380,131 @@ function mostrar(idotro_gasto) {
 
   $("#modal-agregar-otro_gasto").modal("show");
 
-  $.post("../ajax/otro_gasto.php?op=mostrar", { idotro_gasto: idotro_gasto }, function (data, status) {
+  $.post("../ajax/otro_gasto.php?op=mostrar", { idotro_gasto: idotro_gasto }, function (e, status) {
     
-    data = JSON.parse(data); console.log(data);    
+    e = JSON.parse(e); console.log(e);   
+    if (e.status == true) {
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+      $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
+      $("#glosa").val(e.data.glosa).trigger("change");
+      $("#idotro_gasto").val(e.data.idotro_gasto);
+      $("#fecha_g").val(e.data.fecha_g);
+      $("#nro_comprobante").val(e.data.numero_comprobante);  
+      $("#num_documento").val(e.data.ruc);
+      $("#razon_social").val(e.data.razon_social);
+      $("#direccion").val(e.data.direccion);
 
-    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
-    $("#forma_pago").val(data.forma_de_pago).trigger("change");
-    $("#glosa").val(data.glosa).trigger("change");
-    $("#idotro_gasto").val(data.idotro_gasto);
-    $("#fecha_g").val(data.fecha_g);
-    $("#nro_comprobante").val(data.numero_comprobante);  
-    $("#num_documento").val(data.ruc);
-    $("#razon_social").val(data.razon_social);
-    $("#direccion").val(data.direccion);
+      $("#subtotal").val(e.data.subtotal);
+      $("#igv").val(e.data.igv);
+      $("#val_igv").val(e.data.val_igv).trigger("change");
+      $("#tipo_gravada").val(e.data.tipo_gravada);
+      $("#precio_parcial").val(e.data.costo_parcial);
+      $("#descripcion").val(e.data.descripcion);   
 
-    $("#subtotal").val(data.subtotal);
-    $("#igv").val(data.igv);
-    $("#val_igv").val(data.val_igv).trigger("change");
-    $("#tipo_gravada").val(data.tipo_gravada);
-    $("#precio_parcial").val(data.costo_parcial);
-    $("#descripcion").val(data.descripcion);    
+      if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 
-    if (data.comprobante == "" || data.comprobante == null  ) {
+        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+        $("#doc1_nombre").html('');
 
-      $("#doc1_nombre").html('');
+        $("#doc_old_1").val(""); $("#doc1").val("");
 
-      $("#doc_old_1").val(""); $("#doc1").val("");
+      } else {
+
+        $("#doc_old_1").val(e.data.comprobante); 
+
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
+        // cargamos la imagen adecuada par el archivo
+        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante,'otro_gasto', 'comprobante', '100%', '210' ));       
+            
+      }
+      
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
 
     } else {
-
-      $("#doc_old_1").val(data.comprobante); 
-
-      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.comprobante)}</i></div></div>`);
-      
-      // cargamos la imagen adecuada par el archivo
-      if ( extrae_extencion(data.comprobante) == "pdf" ) {
-
-        $("#doc1_ver").html('<iframe src="../dist/docs/otro_gasto/comprobante/'+data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
-
-      }else{
-        if (
-          extrae_extencion(data.comprobante) == "jpeg" || extrae_extencion(data.comprobante) == "jpg" || extrae_extencion(data.comprobante) == "jpe" ||
-          extrae_extencion(data.comprobante) == "jfif" || extrae_extencion(data.comprobante) == "gif" || extrae_extencion(data.comprobante) == "png" ||
-          extrae_extencion(data.comprobante) == "tiff" || extrae_extencion(data.comprobante) == "tif" || extrae_extencion(data.comprobante) == "webp" ||
-          extrae_extencion(data.comprobante) == "bmp" || extrae_extencion(data.comprobante) == "svg" ) {
-
-          $("#doc1_ver").html(`<img src="../dist/docs/otro_gasto/comprobante/${data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-          
-        } else {
-          $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-        }        
-      }      
+      ver_errores(e);
     }
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-  });
+  }).fail( function(e) { ver_errores(e); } );
+
 }
 
 function ver_datos(idotro_gasto) {
+
   $("#modal-ver-transporte").modal("show");
 
-  $.post("../ajax/otro_gasto.php?op=verdatos", { idotro_gasto: idotro_gasto }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+  $.post("../ajax/otro_gasto.php?op=verdatos", { idotro_gasto: idotro_gasto }, function (e, status) {
+    e = JSON.parse(e); console.log(e); 
+    if (e.status == true) {
 
-    verdatos = `                                                                            
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <table class="table table-hover table-bordered">        
-            <tbody>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Descripción</th>
-                <td>${data.descripcion}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo clasificación</th>
-                <td>${data.tipo_viajero}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Ruta</th>
-                <td>${data.ruta}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo ruta</th>
-                  <td>${data.tipo_ruta}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Fecha</th>
-                <td>${data.fecha_g}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo pago </th>
-                <td>${data.forma_de_pago}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo comprobante </th>
-                <td>${data.tipo_comprobante}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Cantidad</th>
-                <td>${data.cantidad}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Precio unitario</th>
-                <td>${parseFloat(data.precio_unitario).toFixed(2)}</td>
-              </tr>
+      verdatos = `                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Subtotal</th>
-                <td>${parseFloat(data.subtotal).toFixed(2)}</td>
-              </tr>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>IGV</th>
-                <td>${parseFloat(data.igv).toFixed(2)}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Total</th>
-                <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
-              </tr>
-            </tbody>
-          </table>
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo clasificación</th>
+                  <td>${e.data.tipo_viajero}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Ruta</th>
+                  <td>${e.data.ruta}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo ruta</th>
+                    <td>${e.data.tipo_ruta}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha</th>
+                  <td>${e.data.fecha_g}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo pago </th>
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante </th>
+                  <td>${e.data.tipo_comprobante}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Cantidad</th>
+                  <td>${e.data.cantidad}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Precio unitario</th>
+                  <td>${parseFloat(e.data.precio_unitario).toFixed(2)}</td>
+                </tr>
+                  <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${parseFloat(e.data.subtotal).toFixed(2)}</td>
+                </tr>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${parseFloat(e.data.igv).toFixed(2)}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${parseFloat(e.data.precio_parcial).toFixed(2)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>`;
+      </div>`;
 
-    $("#datostransporte").html(verdatos);
-  });
+      $("#datostransporte").html(verdatos);
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function total() {
@@ -692,100 +512,37 @@ function total() {
 
   $("#total_monto").html("");
 
-  $.post("../ajax/otro_gasto.php?op=total", { idproyecto: idproyecto }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+  $.post("../ajax/otro_gasto.php?op=total", { idproyecto: idproyecto }, function (e, status) {
+    e = JSON.parse(e); console.log(e); 
+    if (e.status == true) {
 
-    $("#total_monto").html("S/ " + formato_miles(data.precio_parcial));
-  });
-}
+      $("#total_monto").html("S/ " + formato_miles(e.data.precio_parcial));
 
-//Función para desactivar registros
-function desactivar(idotro_gasto) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el registro?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/otro_gasto.php?op=desactivar", { idotro_gasto: idotro_gasto }, function (e) {
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-
-        tabla.ajax.reload(null, false);
-        total();
-      });
+    } else {
+      ver_errores(e);
     }
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
-//Función para activar registros
-function activar(idotro_gasto) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar el registro?",
-    text: "Este proveedor tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/otro_gasto.php?op=activar", { idotro_gasto: idotro_gasto }, function (e) {
-        Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
+function eliminar(idotro_gasto, tipo, numero) {
 
-        tabla.ajax.reload(null, false);
-        total();
-      });
-    }
-  });
+  crud_eliminar_papelera(
+    "../ajax/otro_gasto.php?op=desactivar",
+    "../ajax/otro_gasto.php?op=eliminar", 
+    idotro_gasto, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del> ${tipo} N° ${numero} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla.ajax.reload(null, false);total(); },
+    false, 
+    false, 
+    false,
+    false
+  );
+
 }
 
-//Función para desactivar registros
-function eliminar(idotro_gasto) {
-  
-  Swal.fire({
-
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      //Desactivar
-      $.post("../ajax/otro_gasto.php?op=desactivar", { idotro_gasto: idotro_gasto }, function (e) {
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-
-        tabla.ajax.reload(null, false);
-        total();
-      });
-
-    }else if (result.isDenied) {
-
-      // Eliminar
-      $.post("../ajax/otro_gasto.php?op=eliminar", { idotro_gasto: idotro_gasto }, function (e) {
-        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-
-        tabla.ajax.reload(null, false);
-        total();
-      });
-
-    }
-
-  });
-}
 
 init();
 
@@ -848,278 +605,4 @@ $(function () {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-
-
-// restringimos la fecha para no elegir mañana
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth() + 1; //January is 0!
-var yyyy = today.getFullYear();
-if (dd < 10) { dd = "0" + dd; }
-if (mm < 10) { mm = "0" + mm; }
-
-today = yyyy + "-" + mm + "-" + dd;
-document.getElementById("fecha_g").setAttribute("max", today);
-
-
-
-/* PREVISUALIZAR LOS DOCUMENTOS */
-function addDocs(e,id) {
-
-  $("#"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>');	console.log(id);
-
-	var file = e.target.files[0], archivoType = /image.*|application.*/;
-	
-	if (e.target.files[0]) {
-    
-		var sizeByte = file.size; console.log(file.type);
-
-		var sizekiloBytes = parseInt(sizeByte / 1024);
-
-		var sizemegaBytes = (sizeByte / 1000000);
-		// alert("KILO: "+sizekiloBytes+" MEGA: "+sizemegaBytes)
-
-		if (!file.type.match(archivoType) ){
-			// return;
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Este tipo de ARCHIVO no esta permitido elija formato: .pdf, .png. .jpeg, .jpg, .jpe, .webp, .svg',
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >'); 
-
-		}else{
-
-			if (sizekiloBytes <= 40960) {
-
-				var reader = new FileReader();
-
-				reader.onload = fileOnload;
-
-				function fileOnload(e) {
-
-					var result = e.target.result;
-
-          // cargamos la imagen adecuada par el archivo
-				  if ( extrae_extencion(file.name) == "doc") {
-            $("#"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-          } else {
-            if ( extrae_extencion(file.name) == "docx" ) {
-              $("#"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-            }else{
-              if ( extrae_extencion(file.name) == "pdf" ) {
-                $("#"+id+"_ver").html(`<iframe src="${result}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-              }else{
-                if ( extrae_extencion(file.name) == "csv" ) {
-                  $("#"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-                } else {
-                  if ( extrae_extencion(file.name) == "xls" ) {
-                    $("#"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                  } else {
-                    if ( extrae_extencion(file.name) == "xlsx" ) {
-                      $("#"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                    } else {
-                      if ( extrae_extencion(file.name) == "xlsm" ) {
-                        $("#"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                      } else {
-                        if (
-                          extrae_extencion(file.name) == "jpeg" || extrae_extencion(file.name) == "jpg" || extrae_extencion(file.name) == "jpe" ||
-                          extrae_extencion(file.name) == "jfif" || extrae_extencion(file.name) == "gif" || extrae_extencion(file.name) == "png" ||
-                          extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
-                          extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
-
-                          $("#"+id+"_ver").html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-                          
-                        } else {
-                          $("#"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                        }
-                        
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } 
-					$("#"+id+"_nombre").html(`<div class="row">
-            <div class="col-md-12">
-              <i> ${file.name} </i>
-            </div>
-            <div class="col-md-12">
-              <button class="btn btn-danger btn-block btn-xs" onclick="${id}_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button>
-            </div>
-          </div>`);
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: `El documento: ${file.name.toUpperCase()} es aceptado.`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-				}
-
-				reader.readAsDataURL(file);
-
-			} else {
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: `El documento: ${file.name.toUpperCase()} es muy pesado.`,
-          showConfirmButton: false,
-          timer: 1500
-        })
-
-        $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-        $("#"+id+"_nombre").html("");
-				$("#"+id).val("");
-			}
-		}
-	}else{
-    Swal.fire({
-      position: 'top-end',
-      icon: 'error',
-      title: 'Seleccione un documento',
-      showConfirmButton: false,
-      timer: 1500
-    })
-		 
-    $("#"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-		$("#"+id+"_nombre").html("");
-    $("#"+id).val("");
-	}	
-}
-
-// recargar un doc para ver
-function re_visualizacion(id, carpeta) {
-
-  $("#doc"+id+"_ver").html('<i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>'); console.log(id);
-
-  pdffile     = document.getElementById("doc"+id+"").files[0];
-
-  var antiguopdf  = $("#doc_old_"+id+"").val();
-
-  if(pdffile === undefined){
-
-    if (antiguopdf == "") {
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: 'Seleccione un documento',
-        showConfirmButton: false,
-        timer: 1500
-      })
-
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-		  $("#doc"+id+"_nombre").html("");
-
-    } else {
-      if ( extrae_extencion(antiguopdf) == "doc") {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      } else {
-        if ( extrae_extencion(antiguopdf) == "docx" ) {
-          $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-          toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-        } else {
-          if ( extrae_extencion(antiguopdf) == "pdf" ) { 
-            $("#doc"+id+"_ver").html(`<iframe src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" frameborder="0" scrolling="no" width="100%" height="310"></iframe>`);
-            toastr.success('Documento vizualizado correctamente!!!')
-          } else {
-            if ( extrae_extencion(antiguopdf) == "csv" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-            } else {
-              if ( extrae_extencion(antiguopdf) == "xls" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-              } else {
-                if ( extrae_extencion(antiguopdf) == "xlsx" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                } else {
-                  if ( extrae_extencion(antiguopdf) == "xlsm" ) {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                  } else {
-                    if (
-                      extrae_extencion(antiguopdf) == "jpeg" || extrae_extencion(antiguopdf) == "jpg" || extrae_extencion(antiguopdf) == "jpe" ||
-                      extrae_extencion(antiguopdf) == "jfif" || extrae_extencion(antiguopdf) == "gif" || extrae_extencion(antiguopdf) == "png" ||
-                      extrae_extencion(antiguopdf) == "tiff" || extrae_extencion(antiguopdf) == "tif" || extrae_extencion(antiguopdf) == "webp" ||
-                      extrae_extencion(antiguopdf) == "bmp" || extrae_extencion(antiguopdf) == "svg" ) {
-  
-                      $("#doc"+id+"_ver").html(`<img src="../dist/docs/otro_gasto/${carpeta}/${antiguopdf}" alt="" onerror="this.src='../dist/svg/error-404-x.svg';" width="100%" >`);
-                      toastr.success('Documento vizualizado correctamente!!!');
-                    } else {
-                      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-                    }                    
-                  }
-                }
-              }
-            }
-          }
-        }
-      }      
-    }
-    // console.log('hola'+dr);
-  }else{
-
-    pdffile_url=URL.createObjectURL(pdffile);
-
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(pdffile.name) == "doc") {
-      $("#doc"+id+"_ver").html('<img src="../dist/svg/doc.svg" alt="" width="50%" >');
-      toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-    } else {
-      if ( extrae_extencion(pdffile.name) == "docx" ) {
-        $("#doc"+id+"_ver").html('<img src="../dist/svg/docx.svg" alt="" width="50%" >');
-        toastr.error('Documento NO TIENE PREVIZUALIZACION!!!')
-      }else{
-        if ( extrae_extencion(pdffile.name) == "pdf" ) {
-          $("#doc"+id+"_ver").html('<iframe src="'+pdffile_url+'" frameborder="0" scrolling="no" width="100%" height="310"> </iframe>');
-          toastr.success('Documento vizualizado correctamente!!!');
-        }else{
-          if ( extrae_extencion(pdffile.name) == "csv" ) {
-            $("#doc"+id+"_ver").html('<img src="../dist/svg/csv.svg" alt="" width="50%" >');
-            toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-          } else {
-            if ( extrae_extencion(pdffile.name) == "xls" ) {
-              $("#doc"+id+"_ver").html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-              toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-            } else {
-              if ( extrae_extencion(pdffile.name) == "xlsx" ) {
-                $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-                toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-              } else {
-                if ( extrae_extencion(pdffile.name) == "xlsm" ) {
-                  $("#doc"+id+"_ver").html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-                  toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                } else {
-                  if (
-                    extrae_extencion(pdffile.name) == "jpeg" || extrae_extencion(pdffile.name) == "jpg" || extrae_extencion(pdffile.name) == "jpe" ||
-                    extrae_extencion(pdffile.name) == "jfif" || extrae_extencion(pdffile.name) == "gif" || extrae_extencion(pdffile.name) == "png" ||
-                    extrae_extencion(pdffile.name) == "tiff" || extrae_extencion(pdffile.name) == "tif" || extrae_extencion(pdffile.name) == "webp" ||
-                    extrae_extencion(pdffile.name) == "bmp" || extrae_extencion(pdffile.name) == "svg" ) {
-
-                    $("#doc"+id+"_ver").html(`<img src="${pdffile_url}" alt="" width="100%" >`);
-                    toastr.success('Documento vizualizado correctamente!!!');
-                  } else {
-                    $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-                    toastr.error('Documento NO TIENE PREVIZUALIZACION!!!');
-                  }                  
-                }
-              }
-            }
-          }
-        }
-      }
-    }     	
-    console.log(pdffile);
-  }
-}
+no_select_tomorrow("#fecha_g");

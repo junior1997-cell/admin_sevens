@@ -60,7 +60,7 @@
             //var_dump($idproyecto,$idproveedor);
             $rspta = $otro_gasto->insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+            echo json_encode($rspta,true);
       
           } else {
             //validamos si existe comprobante para eliminarlo
@@ -68,7 +68,7 @@
       
               $datos_ficha1 = $otro_gasto->ficha_tec($idotro_gasto);
       
-              $ficha1_ant = $datos_ficha1->fetch_object()->comprobante;
+              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
       
               if ($ficha1_ant != "") {
       
@@ -78,31 +78,23 @@
       
             $rspta = $otro_gasto->editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
             //var_dump($idotro_gasto,$idproveedor);
-            echo $rspta ? "ok" : "No se pudo actualizar";
+            echo json_encode($rspta,true);
           }
         break;
       
         case 'desactivar':
       
-          $rspta = $otro_gasto->desactivar($idotro_gasto);
+          $rspta = $otro_gasto->desactivar($_GET['id_tabla']);
       
-          echo $rspta ? " Desactivado" : "No se puede desactivar";
-      
-        break;
-      
-        case 'activar':
-      
-          $rspta = $otro_gasto->activar($idotro_gasto);
-      
-          echo $rspta ? "Activado" : "No se puede activar";
+          echo json_encode($rspta,true);
       
         break;
 
         case 'eliminar':
       
-          $rspta = $otro_gasto->eliminar($idotro_gasto);
+          $rspta = $otro_gasto->eliminar($_GET['id_tabla']);
       
-          echo $rspta ? "Elinado" : "No se puede Eliminar";
+          echo json_encode($rspta,true);
       
         break;
       
@@ -110,7 +102,7 @@
       
           $rspta = $otro_gasto->mostrar($idotro_gasto);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta,true);
       
         break;
       
@@ -118,7 +110,7 @@
       
           $rspta = $otro_gasto->mostrar($idotro_gasto);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta,true);
       
         break;
       
@@ -129,57 +121,60 @@
           $data = [];
           $comprobante = '';
           $cont = 1;
-          while ($reg = $rspta->fetch_object()) {
-            // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_otro_gasto/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
-      
-            empty($reg->comprobante)
-              ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
-              : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-            if (strlen($reg->descripcion) >= 20) {
-              $descripcion = substr($reg->descripcion, 0, 20) . '...';
-            } else {
-              $descripcion = $reg->descripcion;
+          if ($rspta['status']) {
+            while ($reg = $rspta['data']->fetch_object()) {
+              // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_otro_gasto/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
+        
+              empty($reg->comprobante)
+                ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
+                : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+              if (strlen($reg->descripcion) >= 20) {
+                $descripcion = substr($reg->descripcion, 0, 20) . '...';
+              } else {
+                $descripcion = $reg->descripcion;
+              }
+              $tool = '"tooltip"';
+              $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+              $data[] = [
+                "0" => $cont++,
+                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante). "'". ')"><i class="fas fa-skull-crossbones"></i> </button>':'',
+                "2" => $reg->forma_de_pago,
+                "3" =>'<div class="user-block">
+                    <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .
+                  $reg->tipo_comprobante .
+                  '</p> </span>
+                    <span class="description" style="margin-left: 0px !important;">N° ' .
+                  (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) .
+                  '</span>         
+                  </div>',
+                "4" => $reg->fecha_g,
+                "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
+                "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
+                "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
+                "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "9" => $comprobante,
+                "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+              ];
             }
-            $tool = '"tooltip"';
-            $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
-            $data[] = [
-              "0" => $cont++,
-              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ')"><i class="fas fa-skull-crossbones"></i> </button>':
-                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotro_gasto . ')"><i class="fa fa-check"></i></button>',
-              "2" => $reg->forma_de_pago,
-              "3" =>'<div class="user-block">
-                  <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .
-                $reg->tipo_comprobante .
-                '</p> </span>
-                  <span class="description" style="margin-left: 0px !important;">N° ' .
-                (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) .
-                '</span>         
-                </div>',
-              "4" => $reg->fecha_g,
-              "5" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
-              "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
-              "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
-              "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-              "9" => $comprobante,
-              "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
             ];
+            echo json_encode($results);
+          } else {
+
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-            "data" => $data,
-          ];
-          echo json_encode($results);
         break;
       
         case 'total':
       
           $rspta = $otro_gasto->total($idproyecto);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta);
+          echo json_encode($rspta,true);
       
         break;
       

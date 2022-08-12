@@ -1,6 +1,6 @@
 <?php
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion_v1.php";
+require "../config/Conexion_v2.php";
 
 class Otro_gasto
 {
@@ -49,13 +49,6 @@ class Otro_gasto
     return ejecutarConsulta($sql);
   }
 
-  //Implementamos un método para activar categorías
-  public function activar($idotro_gasto)
-  {
-    $sql = "UPDATE otro_gasto SET estado='1' WHERE idotro_gasto ='$idotro_gasto'";
-    return ejecutarConsulta($sql);
-  }
-
   //Implementamos un método para desactivar categorías
   public function eliminar($idotro_gasto)
   {
@@ -84,12 +77,14 @@ class Otro_gasto
     $sql = "SELECT comprobante FROM otro_gasto WHERE idotro_gasto='$idotro_gasto'";
     return ejecutarConsulta($sql);
   }
+
   //total
   public function total($idproyecto)
   {
     $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otro_gasto WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete='1'";
     return ejecutarConsultaSimpleFila($sql);
   }
+
 }
 
 ?>
