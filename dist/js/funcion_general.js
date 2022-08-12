@@ -954,6 +954,8 @@ function buscar_sunat_reniec(input='') {
           $(`#search${input}`).show();
   
           $(`#charge${input}`).hide();
+
+          $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');
   
           toastr.error("Verifique su conexion a internet o el sistema de BUSQUEDA esta en mantenimiento.");
           
@@ -988,6 +990,8 @@ function buscar_sunat_reniec(input='') {
 
       $(`#charge${input}`).hide();
 
+      $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');
+
       toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
     }
   } else {
@@ -1012,6 +1016,8 @@ function buscar_sunat_reniec(input='') {
               $(`#search${input}`).show();
 
               $(`#charge${input}`).hide();
+
+              $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');  $(`#empresa${input}`).val('');  $(`#razon_social${input}`).val(''); $(`#direccion${input}`).val('');
 
               toastr.error("Datos no encontrados en la SUNAT!!!");
               
@@ -1068,6 +1074,8 @@ function buscar_sunat_reniec(input='') {
         $(`#search${input}`).show();
 
         $(`#charge${input}`).hide();
+
+        $(`#nombre${input}`).val(''); $(`#titular_cuenta${input}`).val('');  $(`#empresa${input}`).val('');  $(`#razon_social${input}`).val(''); $(`#direccion${input}`).val('');
 
         toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
       }

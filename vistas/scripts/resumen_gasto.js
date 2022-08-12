@@ -236,7 +236,7 @@ function filtros() {
   if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; }  
 
   // filtro de proveedor
-  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+  if (id_proveedor == '' || id_proveedor == '0' || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
 
   // filtro de trabajdor
   if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }

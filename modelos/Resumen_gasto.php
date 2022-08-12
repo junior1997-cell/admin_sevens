@@ -373,6 +373,7 @@ class ResumenGasto
         }
       }
     }
+    
     // FACTURAS - PLANILLA SEGURO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
@@ -388,7 +389,7 @@ class ResumenGasto
       }      
     }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ps.idplanilla_seguro = '0'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
     if ( empty($comprobante) ) { } else {
       $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; 
@@ -1329,15 +1330,15 @@ class ResumenGasto
       }      
     }    
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND  ps.idplanilla_seguro = '0'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
     if ( empty($comprobante) ) { } else {
       $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; 
     }
 
     $sql4 = "SELECT SUM(ps.subtotal) AS subtotal, SUM(ps.igv) AS igv, SUM(ps.costo_parcial) AS total
-    FROM planilla_seguro as ps, proyecto as p
-    WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
+    FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
+    WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
      AND  ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
     $otro_gasto = ejecutarConsultaSimpleFila($sql4);
 

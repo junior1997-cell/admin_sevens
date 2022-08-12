@@ -261,20 +261,20 @@ function mostrar(idotra_factura) {
       $("#glosa").val(e.data.glosa).trigger("change");
       $("#idotra_factura").val(e.data.idotra_factura);
       $("#fecha_emision").val(e.data.fecha_emision);
-      $("#nro_comprobante").val(e.data.numero_comprobante);  
+      $("#nro_comprobante").val(e.data.numero_comprobante);        
+      $("#descripcion").val(e.data.descripcion);
 
+      $("#precio_parcial").val(e.data.costo_parcial);
       $("#subtotal").val(e.data.subtotal);
       $("#igv").val(e.data.igv);
-      $("#val_igv").val(e.data.val_igv);
-      $("#tipo_gravada").val(e.data.tipo_gravada);
-      $("#precio_parcial").val(e.data.costo_parcial);
-      $("#descripcion").val(e.data.descripcion);
+      $("#val_igv").val(e.data.val_igv).trigger("change");
+      
+      
+
       if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 
-        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-  
-        $("#doc1_nombre").html('');
-  
+        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');  
+        $("#doc1_nombre").html('');  
         $("#doc_old_1").val(""); $("#doc1").val("");
   
       } else {
@@ -685,141 +685,80 @@ function filtros() {
   tbla_principal(fecha_1, fecha_2, id_proveedor, comprobante);
 }
 
-//segun tipo de comprobante
-function comprob_factura() {
+function calc_total() {
 
-  var precio_parcial = $("#precio_parcial").val();  
-
-  if ($("#tipo_comprobante").select2("val") == "" || $("#tipo_comprobante").select2("val") == null) {
-
-    $(".nro_comprobante").html("Núm. Comprobante");
-
-    $("#val_igv").val(0);
-    $("#val_igv").prop("readonly",true);
-
-    if (precio_parcial == null || precio_parcial == "") {
-      $("#subtotal").val(0);
-      $("#igv").val(0); 
-      $("#tipo_gravada").val('NO GRAVADA');   
-    } else {
-      $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-      $("#igv").val(0);    
-      $("#tipo_gravada").val('NO GRAVADA');
-    }   
-
-  } else {
-
-    if ($("#tipo_comprobante").select2("val") == "Ninguno") { 
-
-      $("#val_igv").val(0);
-      $("#val_igv").prop("readonly",true);
-
-      if (precio_parcial == null || precio_parcial == "") {
-        $("#subtotal").val(0);
-        $("#igv").val(0);  
-        $("#tipo_gravada").val('NO GRAVADA');  
-      } else {
-        $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-        $("#igv").val(0);  
-        $("#tipo_gravada").val('NO GRAVADA');  
-      }   
-
-    } else {
-
-      if ($("#tipo_comprobante").select2("val") == "Factura") {
-
-        calculandototales_fact();   
-    
-      } else { 
-        
-        if ($("#tipo_comprobante").select2("val") == "Boleta") {
-
-          $(".nro_comprobante").html("Núm. Comprobante");
-
-          $("#val_igv").val(0);
-          $("#val_igv").prop("readonly",true);
-
-          if (precio_parcial == null || precio_parcial == "") {
-            $("#subtotal").val(0);
-            $("#igv").val(0); 
-            $("#tipo_gravada").val('NO GRAVADA');   
-          } else {
-            var subtotal = 0;
-            var igv = 0;
-        
-            $("#subtotal").val("");
-            $("#igv").val("");
-
-            $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-            $("#igv").val(0);   
-            $("#tipo_gravada").val('NO GRAVADA');  
-          } 
-            
-        } else {
-                 
-        $(".nro_comprobante").html("Núm. Comprobante");
-
-        if (precio_parcial == null || precio_parcial == "") {
-          $("#subtotal").val(0);
-          $("#igv").val(0);    
-        } else {
-          $("#subtotal").val(parseFloat(precio_parcial).toFixed(2));
-          $("#igv").val(0);    
-        } 
-          
-        }
-
-      }
-    }
-  } 
-}
-
-function validando_igv() {
-  if ($("#tipo_comprobante").select2("val") == "Factura") { $("#val_igv").val(0.18); }else { $("#val_igv").val(0); }  
-}
-
-function calculandototales_fact() {
-          
   $(".nro_comprobante").html("Núm. Comprobante");
 
-  precio_parcial=$("#precio_parcial").val();
+  var total         = es_numero($('#precio_parcial').val()) == true? parseFloat($('#precio_parcial').val()) : 0;
+  var val_igv       = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0;
+  var subtotal      = 0; 
+  var igv           = 0;
 
-  var val_igv = $('#val_igv').val();
+  console.log(total, val_igv); console.log($('#precio_parcial').val(), $('#val_igv').val()); console.log('----------');
 
-  $("#val_igv").prop("readonly",false);
+  if ($("#tipo_comprobante").select2("val")=="" || $("#tipo_comprobante").select2("val")==null) {
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+  }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+    $(".nro_comprobante").html("Núm. de Operación");
+  }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
-  if (precio_parcial == null || precio_parcial == "") {
+    $("#val_igv").prop("readonly",false);    
 
-    $("#subtotal").val(0);
-    $("#igv").val(0); 
+    if (total == null || total == "") {
+      $("#subtotal").val(0.00);
+      $("#igv").val(0.00); 
+      $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+    } else if (val_igv == null || val_igv == "") {  
+      $("#subtotal").val(redondearExp(total));
+      $("#igv").val(0.00);
+      $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+    }else{     
 
-  } else {
+      subtotal = quitar_igv_del_precio(total, val_igv, 'decimal');
+      igv = total - subtotal;
 
-    var subtotal = 0;
-    var igv = 0;
+      $("#subtotal").val(redondearExp(subtotal));
+      $("#igv").val(redondearExp(igv));
 
-    if (val_igv == null || val_igv == "") {
-      
-      $("#subtotal").val(precio_parcial);
-      $("#igv").val(0);
-      $("#tipo_gravada").val('NO GRAVADA');
-    }else{
-
-      $("#subtotal").val("");
-      $("#igv").val("");
-
-      subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
-      igv = precio_parcial - subtotal;
-
-      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
-      $("#igv").val(igv.toFixed(2));
-
-      $("#tipo_gravada").val('GRAVADA');
-
+      if (val_igv > 0 && val_igv <= 1) {
+        $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+      } else {
+        $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+      }    
     }
+  } else {
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00");
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
+    $("#val_igv").prop("readonly",true);
+  }
 
+  if (val_igv > 0 && val_igv <= 1) {
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+  } else {
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+  }
+}
+
+function select_comprobante() {
+  if ($("#tipo_comprobante").select2("val") == "Factura") {
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(0.18); 
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)");
+  }else {
+    $("#val_igv").val(0.00); 
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
   }  
-
 }
 
 function quitar_igv_del_precio(precio , igv, tipo ) {

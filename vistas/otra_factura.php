@@ -223,7 +223,7 @@
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
                                   <label for="tipo_comprobante">Tipo Comprobante</label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="validando_igv(); comprob_factura(); " placeholder="Seleccinar un tipo de comprobante">
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
                                     <option value="Factura">Factura</option>
@@ -258,7 +258,7 @@
                               <!-- Código-->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label class="nro_comprobante" for="nro_comprobante">Núm. comprobante </label>
+                                  <label  for="nro_comprobante"> <span class="nro_comprobante">Núm. comprobante</span>  </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
@@ -273,7 +273,7 @@
                               <!-- Sub total -->
                               <div class="col-lg-3">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />                                   
                                 </div>
                               </div>
@@ -288,7 +288,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calculandototales_fact();"> 
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"> 
                                   <input type="hidden" name="tipo_gravada" id="tipo_gravada"> 
                                 </div>
                               </div>
@@ -296,7 +296,7 @@
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="precio_parcial">Monto total </label>
-                                  <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />                                  
+                                  <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Parcial" />                                  
                                 </div>
                               </div>
 
@@ -390,7 +390,7 @@
                               <div class="form-group">
                                 <label for="num_documento_prov">N° RUC / DNI <sup class="text-danger">(unico*)</sup></label>
                                 <div class="input-group">
-                                  <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
+                                  <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('_prov')}, 300 );" onkeyup="delay(function(){buscar_sunat_reniec('_prov')}, 300 );" />
                                   <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                     <span class="input-group-text" style="cursor: pointer;">
                                       <i class="fas fa-search text-primary" id="search_prov"></i>

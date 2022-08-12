@@ -148,6 +148,140 @@ class Resumenfacturas
       }
     }
 
+    // FACTURAS - SUB CONTRATO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND s.tipo_comprobante IN ('Factura','Boleta')"; } else {
+      $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; 
+    }
+    
+    $sql3 = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
+    s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.tipo_gravada, s.comprobante, p.razon_social, p.tipo_documento, 
+    p.ruc, s.id_user_vb, s.nombre_user_vb, s.imagen_user_vb, s.estado_user_vb    
+    FROM subcontrato AS s, proveedor as p
+    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
+    $sub_contrato =  ejecutarConsultaArray($sql3);
+
+    if ($sub_contrato['status'] == false) { return $sub_contrato; }
+
+    if (!empty($sub_contrato['data'])) {
+      foreach ($sub_contrato['data'] as $key => $value) {
+        $data[] = array(
+        	"idproyecto"        => $value['idproyecto'],
+          "idtabla"           => $value['idsubcontrato'],
+          "fecha"             => $value['fecha_subcontrato'],
+          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta'? 'BV' : ''))) ,
+          "serie_comprobante" => $value['numero_comprobante'],
+          "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => $value['tipo_documento'],
+          "ruc"               => $value['ruc'],
+          "total"             => $value['costo_parcial'],          
+          "subtotal"          => $value['subtotal'],
+          "igv"               => $value['igv'],
+          "glosa"             => $value['glosa'],
+          "tipo_gravada"      => $value['tipo_gravada'],
+          "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'sub_contrato',
+          "subcarpeta"        => 'comprobante_subcontrato',
+          "ruta"              => 'dist/docs/sub_contrato/comprobante_subcontrato/',
+          "modulo"            => 'SUB CONTRATO',
+        );
+
+        if (!empty($value['comprobante'])) {
+          if ( validar_url( $scheme_host, 'dist/docs/sub_contrato/comprobante_subcontrato/', $value['comprobante']) ) {
+            $data_comprobante[] = array(
+              "comprobante"    => $value['comprobante'],
+              "carpeta"        => 'sub_contrato',
+              "subcarpeta"     => 'comprobante_subcontrato',
+              "host"           => $host,
+              "ruta_file"      => $scheme_host.'dist/docs/sub_contrato/comprobante_subcontrato/'.$value['comprobante'],
+            );
+          }          
+        }        
+      }
+    }
+
+    // FACTURAS - PLANILLA SEGURO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND ps.fecha_p_s BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND ps.fecha_p_s = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND ps.fecha_p_s = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND ps.tipo_comprobante IN ('Factura','Boleta')"; } else {
+      $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; 
+    }
+
+    $sql3 = "SELECT ps.idplanilla_seguro, ps.idproyecto, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
+    ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante, ps.glosa,
+    ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc
+    FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
+    WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1' 
+    AND ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY ps.fecha_p_s DESC;";
+    $planilla_seguro =  ejecutarConsultaArray($sql3);
+
+    if ($planilla_seguro['status'] == false) { return $planilla_seguro; }
+
+    if (!empty($planilla_seguro['data'])) {
+      foreach ($planilla_seguro['data'] as $key => $value) {
+        $data[] = array(
+        	"idproyecto"        => $value['idproyecto'],
+          "idtabla"           => $value['idplanilla_seguro'],
+          "fecha"             => $value['fecha_p_s'],
+          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta'? 'BV' : ''))) ,
+          "serie_comprobante" => $value['numero_comprobante'],
+          "proveedor"         => $value['razon_social'],
+          "tipo_documento"    => $value['tipo_documento'],
+          "ruc"               => $value['ruc'],
+          "total"             => $value['costo_parcial'],
+          "igv"               => $value['igv'],
+          "subtotal"          => $value['subtotal'],
+          "glosa"             => $value['glosa'],
+          "tipo_gravada"      => $value['tipo_gravada'],
+          "comprobante"       => $value['comprobante'],
+          "carpeta"           => 'planilla_seguro',
+          "subcarpeta"        => 'comprobante',
+          "ruta"              => 'dist/docs/planilla_seguro/comprobante/',
+          "modulo"              => 'PLANILLA SEGURO',
+        );
+        if (!empty($value['comprobante'])) {
+          if ( validar_url( $scheme_host, 'dist/docs/planilla_seguro/comprobante/', $value['comprobante']) ) {
+            $data_comprobante[] = array(
+              "comprobante"       => $value['comprobante'],
+              "carpeta"           => 'planilla_seguro',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/planilla_seguro/comprobante/'.$value['comprobante'],
+            );
+          }          
+        }
+      }
+    }
+
     // FACTURAS - OTRO GASTO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
@@ -693,6 +827,73 @@ class Resumenfacturas
     $total    += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['total']) ? 0 : floatval($maquinaria['data']['total']) );
     $subtotal += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['subtotal']) ? 0 : floatval($maquinaria['data']['subtotal']) );
     $igv      += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['igv']) ? 0 : floatval($maquinaria['data']['igv']) );
+
+    // SUMAS TOTALES - SUB CONTRATO --------------------------------------------------------------------------------
+    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND s.tipo_comprobante IN ('Factura','Boleta')"; } else {
+      $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; 
+    }
+
+    $sql3 = "SELECT SUM(s.subtotal) as subtotal, SUM(s.igv) as igv, SUM(s.costo_parcial) as total
+    FROM subcontrato AS s, proveedor as p
+    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND  idproyecto = $idproyecto 
+    $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+    $otro_gasto = ejecutarConsultaSimpleFila($sql3);
+
+    if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+    
+    $total    += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
+    $subtotal += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
+    $igv      += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['igv']) ? 0 : floatval($otro_gasto['data']['igv']) );
+
+    // SUMAS TOTALES - PLANILLA SEGURO --------------------------------------------------------------------------------
+
+    $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND ps.fecha_p_s BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else {
+      if (!empty($fecha_1)) {
+        $filtro_fecha = "AND ps.fecha_p_s = '$fecha_1'";
+      }else{
+        if (!empty($fecha_2)) {
+          $filtro_fecha = "AND ps.fecha_p_s = '$fecha_2'";
+        }     
+      }      
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { $filtro_comprobante = "AND ps.tipo_comprobante IN ('Factura','Boleta')"; } else {
+      $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; 
+    }
+
+    $sql4 = "SELECT SUM(ps.subtotal) AS subtotal, SUM(ps.igv) AS igv, SUM(ps.costo_parcial) AS total
+    FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
+    WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1'
+     AND  ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha;";
+    $otro_gasto = ejecutarConsultaSimpleFila($sql4);
+
+    if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+    
+    $total    += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
+    $subtotal += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
+    $igv      += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['igv']) ? 0 : floatval($otro_gasto['data']['igv']) );
 
     // SUMAS TOTALES - OTRO SERVICIO --------------------------------------------------------------------------------
     $filtro_proveedor = ""; $filtro_comprobante = ""; $filtro_fecha = "";

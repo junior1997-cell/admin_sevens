@@ -538,6 +538,8 @@ function ver_modal_comprobante(comprobante){
 
 function calc_total() {
 
+  $(".nro_comprobante").html("Núm. Comprobante");
+
   var total         = es_numero($('#monto').val()) == true? parseFloat($('#monto').val()) : 0;
   var val_igv       = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0;
   var subtotal      = 0; 
@@ -551,6 +553,13 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
+  }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+    $(".nro_comprobante").html("Núm. de Operación");
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    
@@ -583,6 +592,12 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
     $("#val_igv").prop("readonly",true);
+  }
+
+  if (val_igv > 0 && val_igv <= 1) {
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+  } else {
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
   }
 }
 
