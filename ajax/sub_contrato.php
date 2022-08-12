@@ -17,6 +17,7 @@
 
 			$idproyecto          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";	
 			$idproveedor         = isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";	
+			$ruc_proveedor         = isset($_POST["ruc_proveedor"])? limpiarCadena($_POST["ruc_proveedor"]):"";	
 			$idsubcontrato       = isset($_POST["idsubcontrato"])? limpiarCadena($_POST["idsubcontrato"]):"";	
 			$fecha_subcontrato   = isset($_POST["fecha_subcontrato"])? limpiarCadena($_POST["fecha_subcontrato"]):"";
 
@@ -29,6 +30,7 @@
 			$igv                 = isset($_POST["igv"])? limpiarCadena($_POST["igv"]):"";
 			$costo_parcial       = isset($_POST["costo_parcial"])? limpiarCadena($_POST["costo_parcial"]):"";
 			$val_igv             = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
+      $tipo_gravada        = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";
 
 			$foto2               = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
 
@@ -74,7 +76,7 @@
 
           if (empty($idsubcontrato)){
             //var_dump($idproyecto,$idproveedor);
-            $rspta=$sub_contrato->insertar($idproyecto, $idproveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante);
+            $rspta=$sub_contrato->insertar($idproyecto, $idproveedor,$ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);
             echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
           }
           else {
@@ -91,7 +93,7 @@
               }
             }
 
-            $rspta=$sub_contrato->editar($idsubcontrato, $idproyecto, $idproveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante);
+            $rspta=$sub_contrato->editar($idsubcontrato, $idproyecto, $idproveedor,$tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);
             
             echo $rspta ? "ok" : "No se pudo actualizar";
           }

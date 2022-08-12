@@ -242,7 +242,7 @@
                                 <!-- id sub contratro  -->
                                 <input type="hidden" name="idproyecto" id="idproyecto" />     
                                 <input type="hidden" name="idsubcontrato" id="idsubcontrato" />     
-
+                                <input type="hidden" name="ruc_proveedor" id="ruc_proveedor">
                                 <!-- proveedor -->
                                 <div class="col-lg-12">
                                   <div class="form-group">
@@ -296,6 +296,7 @@
                                   <div class="form-group">
                                     <label for="subtotal" class="text-gray">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                     <input type="text" name="subtotal" id="subtotal" class="form-control"  placeholder="Sub total" readonly> 
+                                    <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
                                   </div>
                                 </div>
 
@@ -305,7 +306,7 @@
                                     <label for="igv" class="text-gray">IGV </label>
                                     <input type="text" name="igv" id="igv" class="form-control"  placeholder="IGV" readonly> 
                                     <!-- tipo_gravada -->
-                                    <input type="hidden" name="tipo_gravada" id="tipo_gravada" />
+                                    <!-- <input type="hidden" name="tipo_gravada" id="tipo_gravada" /> -->
                                   </div>
                                 </div>
 

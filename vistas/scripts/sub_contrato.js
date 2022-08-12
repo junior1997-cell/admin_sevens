@@ -443,7 +443,7 @@ function mostrar(idsubcontrato) {
     $("#subtotal").val(parseFloat(data.subtotal));
     $("#igv").val(data.igv);
     $("#val_igv").val(data.val_igv).trigger("change");
-    
+    $("#tipo_gravada").val(data.tipo_gravada);
     /**-------------------------*/
     if (data.comprobante == "" || data.comprobante == null  ) {
 
@@ -1675,6 +1675,15 @@ function re_visualizacion(id, carpeta) {
   }
 }
 
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function extrae_ruc() {
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { }  else{
+    
+    var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+    $('#ruc_proveedor').val(ruc);
+  }
+}
 
 
 
