@@ -140,7 +140,7 @@
                               </div>
 
                               <!--forma pago-->
-                              <div class="col-lg-6">
+                              <div class="col-lg-4">
                                 <div class="form-group">
                                   <label for="forma_pago">Forma Pago</label>
                                   <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
@@ -152,17 +152,30 @@
                               </div>
 
                               <!-- Fecha 1 -->
-                              <div class="col-lg-6 class_pading">
+                              <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="fecha">Fecha Emisión</label>
                                   <input type="date" name="fecha_p_s" class="form-control" id="fecha_p_s" />
                                 </div>
                               </div>
 
+                              <!-- glosa -->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
+                                  <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Campo requerido" >
+                                    <option value="SCTR" selected>SCTR</option>
+                                    <option value="AFP">AFP</option>
+                                    <option value="ONP">ONP</option>
+                                    <option value="ESSALUD">ESSALUD</option>
+                                  </select>
+                                </div>
+                              </div>
+
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
                                   <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" onkeyup="comprob_factura();" placeholder="Seleccinar un tipo de comprobante">
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
                                     <option value="Factura">Factura</option>
@@ -173,7 +186,7 @@
                               <!-- Código-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="codigo" class="nro_comprobante">Núm. comprobante <sup class="text-danger">(unico*)</sup></label>
+                                  <label for="codigo">  <span class="nro_comprobante">Núm. comprobante</span>  <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
@@ -182,7 +195,7 @@
                               <!-- Sub total -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                 </div>
                               </div>
@@ -197,7 +210,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
                                   <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
                                 </div>
                               </div>
@@ -205,20 +218,7 @@
                               <div class="col-lg-4 ">
                                 <div class="form-group">
                                   <label for="monto">Monto total </label>
-                                  <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onchange="comprob_factura();" onkeyup="comprob_factura();" placeholder="Precio Parcial" />
-                                </div>
-                              </div>
-
-                              <!-- Tipo de Empresa -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
-                                  <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Campo requerido" >
-                                    <option value="SCTR" selected>SCTR</option>
-                                    <option value="AFP">AFP</option>
-                                    <option value="ONP">ONP</option>
-                                    <option value="ESSALUD">ESSALUD</option>
-                                  </select>
+                                  <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"  placeholder="Total" />
                                 </div>
                               </div>
 

@@ -71,7 +71,7 @@
                           <div class="row">
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-th"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/proyecto.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-th"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Escritorio</span>
@@ -281,7 +281,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mx-auto">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-trash-alt"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/papelera.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-trash-alt"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Papelera</span>
@@ -292,6 +292,36 @@
                               <!-- /.info-box -->
                             </div>
                             <!-- /.col -->
+
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mx-auto">
+                              <div class="info-box shadow">
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/especificaciones_generales.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-cogs"></i></a>
+
+                                <div class="info-box-content">
+                                  <span class="info-box-number">Especificaciones generales</span>
+                                  <span class="info-box-text">Manual de usuario</span> 
+                                </div>
+                                <!-- /.info-box-content -->
+                              </div>
+                              <!-- /.info-box -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mx-auto">
+                              <div class="info-box shadow">
+                                <a href="../dist/docs/manual_de_usuario/pdf/recursos/papelera.pdf" class="info-box-icon bg-warning"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-book-open"></i></a>
+
+                                <div class="info-box-content">
+                                  <span class="info-box-number">Plantilla manual usuario</span>
+                                  <span class="info-box-text">Manual de usuario</span> 
+                                </div> -->
+                                <!-- /.info-box-content -->
+                              <!-- </div> -->
+                              <!-- /.info-box -->
+                            </div>
+                            <!-- /.col -->
+
+
                           </div>
                           <!-- /.row -->
                         </div>
@@ -318,7 +348,7 @@
                           <div class="row ">
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="far fa-file-alt"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/tecnico/valorizaciones.pdf" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="far fa-file-alt"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Valorizaciones</span>
@@ -332,7 +362,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-chart-line"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/tecnico/graficos.pdf" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-chart-line"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Grafico Valorizaciones</span>
@@ -346,7 +376,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-clipboard-list"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/tecnico/" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-clipboard-list"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Asistencia del Obrero</span>
@@ -360,7 +390,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="far fa-calendar-alt"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/tecnico/calendario.pdf" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="far fa-calendar-alt"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Calendario</span>
@@ -374,7 +404,7 @@
 
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mx-auto">
                               <div class="info-box shadow">
-                                <a href="#" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-map-marked-alt"></i></a>
+                                <a href="../dist/docs/manual_de_usuario/pdf/tecnico/planos_otros.pdf" class="info-box-icon bg-danger"  target="_blank" rel="noopener noreferrer" data-toggle="tooltip" data-original-title="Ver manual"><i class="fas fa-map-marked-alt"></i></a>
 
                                 <div class="info-box-content">
                                   <span class="info-box-number">Planos y otros</span>
