@@ -155,7 +155,7 @@
                                   <label for="num_documento">R.U.C</label>
                                   <div class="input-group">
                                     <input type="hidden" id="tipo_documento" value="RUC">
-                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 700 );" />
+                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 300 );" />
                                     <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec('');">
                                       <span class="input-group-text" style="cursor: pointer;">
                                         <i class="fas fa-search text-primary" id="search"></i>
@@ -232,7 +232,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                     <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"> 
+                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="delay(function(){calc_total();}, 1300 );" onchange="delay(function(){calc_total();}, 100 );"> 
                                     <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>

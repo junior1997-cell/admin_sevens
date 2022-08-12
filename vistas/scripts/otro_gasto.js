@@ -331,8 +331,7 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
     $("#val_igv").prop("readonly",true);
-    $(".div_ruc").hide(); $(".div_razon_social").hide();
-    $("#num_documento").val(""); $("#razon_social").val("");
+    $(".div_ruc").show(); $(".div_razon_social").show();
   }
   if (val_igv > 0 && val_igv <= 1) {
     $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
