@@ -190,11 +190,12 @@
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id hospedaje -->
                               <input type="hidden" name="idotra_factura" id="idotra_factura" />
+                              <input type="hidden" name="ruc_proveedor" id="ruc_proveedor" />
                               <!-- Proceedor -->
                               <div class="col-lg-10">
                                 <div class="form-group">
-                                  <label for="idproveedor">Proveedor</label>
-                                  <select name="idproveedor" id="idproveedor" class="form-control select2" placeholder="Seleccinar un proveedor"> </select>
+                                  <label for="idproveedor">Proveedor <sup class="text-danger">(unico*)</sup></label>
+                                  <select name="idproveedor" id="idproveedor" class="form-control select2" placeholder="Seleccinar un proveedor" onchange="extrae_ruc();"> </select>
                                 </div>
                               </div>
                               <!-- adduser -->
@@ -211,7 +212,7 @@
                               <!--forma pago-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="forma_pago">Forma Pago</label>
+                                  <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
                                   <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
                                     <option value="Transferencia">Transferencia</option>
                                     <option value="Efectivo">Efectivo</option>
@@ -222,7 +223,7 @@
                               <!--Tipo de comprobante-->
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
-                                  <label for="tipo_comprobante">Tipo Comprobante</label>
+                                  <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(unico*)</sup></label>
                                   <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
@@ -258,7 +259,7 @@
                               <!-- Código-->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label  for="nro_comprobante"> <span class="nro_comprobante">Núm. comprobante</span>  </label>
+                                  <label  for="nro_comprobante"> <span class="nro_comprobante">Núm. comprobante</span> <sup class="text-danger">(unico*)</sup> </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
@@ -266,7 +267,7 @@
                               <!-- Fecha 1  -->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="fecha_emision">Fecha Emisión</label>
+                                  <label for="fecha_emision">Fecha Emisión <sup class="text-danger">*</sup></label>
                                   <input type="date" name="fecha_emision" class="form-control" id="fecha_emision" />
                                 </div>
                               </div>
@@ -295,7 +296,7 @@
                               <!--Precio Parcial-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="precio_parcial">Monto total </label>
+                                  <label for="precio_parcial">Monto total <sup class="text-danger">*</sup></label>
                                   <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Parcial" />                                  
                                 </div>
                               </div>
@@ -331,6 +332,15 @@
                                   <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
                                 </div>
                                 <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="barra_progress_div">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
                               </div>
 
                             </div>
@@ -507,7 +517,7 @@
                   </div>
                 </div>
 
-                <!-- MODAL - VER DETALLE INSUMO-->
+                <!-- MODAL - VER DETALLE-->
                 <div class="modal fade" id="modal-ver-otra-factura">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">

@@ -10,11 +10,36 @@ class Otra_factura
   }
   //$idotra_factura,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
-  public function insertar($idproveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
+  public function insertar($idproveedor, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
   {
-    $sql = "INSERT INTO otra_factura (idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada) 
-		VALUES ('$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada')";
-    return ejecutarConsulta($sql);
+    $sql_1 = "SELECT  p.razon_social, p.tipo_documento, p.ruc, of.tipo_comprobante, of.numero_comprobante, of.fecha_emision, 
+    of.costo_parcial, of.forma_de_pago, of.estado, of.estado_delete
+    FROM otra_factura as of, proveedor as p
+    WHERE p.idproveedor = of.idproveedor and p.ruc ='$ruc_proveedor' AND of.tipo_comprobante ='$tipo_comprobante' and of.numero_comprobante ='$nro_comprobante';";
+		$prov = ejecutarConsultaArray($sql_1);
+		if ($prov['status'] == false) { return  $prov;}
+
+    if (empty($prov['data'])) {
+      $sql = "INSERT INTO otra_factura (idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada) 
+		  VALUES ('$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada')";
+      return ejecutarConsulta($sql);
+    } else {
+      $info_repetida = ''; 
+
+			foreach ($prov['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+				<span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
+				<b>Razón Social: </b>'.$value['razon_social'].'<br>
+				<b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>          
+				<b>Fecha: </b>'.format_d_m_a($value['fecha_emision']).'<br>
+				<b>Costo: </b>'.$value['costo_parcial'].'<br>
+				<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b> 
+				<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+				<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }    
   }
 
   //Implementamos un método para editar registros

@@ -89,6 +89,11 @@
       return ejecutarConsulta($sql);
     }
 
+    public function select2_proveedor_filtro() {
+      $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE idproveedor > 1 ORDER BY razon_social ASC;";
+      return ejecutarConsulta($sql);
+    }
+
     /* ══════════════════════════════════════ B A N C O ══════════════════════════════════════ */
 
     public function select2_banco() {

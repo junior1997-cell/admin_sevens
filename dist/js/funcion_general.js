@@ -491,6 +491,8 @@ function addImage(e, id, img_default='') {
 
 					$("#"+id+"_i").attr("src", result);
 
+          $(`.jq_image_zoom`).zoom({ on:'grab' });
+
 					$("#"+id+"_nombre").html(''+
 						'<div class="row">'+
               '<div class="col-md-12">'+
@@ -597,8 +599,8 @@ function addImageApplication(e, id, img_default='', width='100%', height='310', 
             extrae_extencion(file.name) == "tiff" || extrae_extencion(file.name) == "tif" || extrae_extencion(file.name) == "webp" ||
             extrae_extencion(file.name) == "bmp" || extrae_extencion(file.name) == "svg" ) {
 
-            $(`#${id}_ver`).html(`<img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-              
+            $(`#${id}_ver`).html(`<span class="jq_image_zoom"><img src="${result}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" ></span>`); 
+            $(`.jq_image_zoom`).zoom({ on:'grab' });
           } else {
             $(`#${id}_ver`).html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
           }
@@ -757,7 +759,8 @@ function re_visualizacion(id, carpeta, sub_carpeta, width='100%', height='310') 
       extrae_extencion(pdffile.name) == "tiff" || extrae_extencion(pdffile.name) == "tif" || extrae_extencion(pdffile.name) == "webp" ||
       extrae_extencion(pdffile.name) == "bmp" || extrae_extencion(pdffile.name) == "svg" ) {
 
-      $("#doc"+id+"_ver").html(`<img src="${pdffile_url}" alt="" width="100%" >`);
+      $("#doc"+id+"_ver").html(`<span class="jq_image_zoom"><img src="${pdffile_url}" alt="" width="100%" ></span>`);
+      $(`.jq_image_zoom`).zoom({ on:'grab' });
       toastr.success('Documento vizualizado correctamente!!!');
     } else {
       $("#doc"+id+"_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
@@ -771,9 +774,14 @@ function re_visualizacion(id, carpeta, sub_carpeta, width='100%', height='310') 
 function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', height='auto') {
 
   var html = ''; var extencion = '';
-  var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${sub_carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
-  var ruta = sub_carpeta==''?  `../dist/docs/${carpeta}/${sub_carpeta}/${filename}`: `../dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
+  var host = '';
+  var ruta = sub_carpeta=='' || sub_carpeta == null ?  `../dist/docs/${carpeta}/${filename}`: `../dist/docs/${carpeta}/${sub_carpeta}/${filename}`;
   
+  if (sub_carpeta == '' || sub_carpeta == null) {
+    host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${filename}` ;
+  } else {
+    host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${sub_carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
+  }
 
   // cargamos la imagen adecuada par el archivo
   if ( UrlExists(host) != 200 ) {
@@ -791,7 +799,7 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
 
   } else if ( extrae_extencion(filename) == "xlsx" ) {    
 
-    html = `<img src="../dist/svg/xlsx.svg" alt="" width="50%" height="50%"  >`;
+    html = `<img src="../dist/svg/xlsx.svg" alt="" width="50%" height="50%" >`;
     extencion = extrae_extencion(filename);
 
   }else if ( extrae_extencion(filename) == "csv" ) {
@@ -839,16 +847,30 @@ function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', heig
     extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
     extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
 
-    html = `<img src="${ruta}" alt="" width="${width}"  onerror="this.src='../dist/svg/404-v2.svg';" >`;
+    html = `<center><span class="jq_image_zoom"><img id="_cargando_img_" src="${ruta}" alt="" width="${width}" onerror="this.src='../dist/svg/404-v2.svg';"  ></span></center>`;
     extencion = extrae_extencion(filename);
+    //loading_img('_cargando_img_', ruta, width);
     
   }else{
-    html = `<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" height="50%" >`;
+    html = `<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" height="50%"  >`;
     extencion = extrae_extencion(filename);
     
   }
 
   return html;
+}
+
+function loading_img(attr_img, file_img, width_img) {
+  $('#_cargando_img_').attr('onload', '');
+  //attr_img.removeAttribute("onload");
+  console.log(attr_img.src);
+  const img_temp= document.createElement('img');
+  img_temp.addEventListener('load', ()=>{
+    console.log('imgagen cargadaaaa');    
+    $('#_cargando_img_').attr('width', width_img);
+    attr_img.src = img_temp.src;
+  });
+  img_temp.src = file_img;  
 }
 
 function doc_view_icon(filename, color_class='', font_size_class='' ) {
@@ -930,10 +952,16 @@ function pdf_o_img(filename) {
   return data;
 }
 
+// cuando hace click en revizualizar
+function reload_zoom() {
+  $(`.jq_image_zoom`).zoom({ on:'grab' });
+}
+
+
 /*  ══════════════════════════════════════════ - A P I S - ══════════════════════════════════════════ */
 // Buscar Reniec SUNAT
 function buscar_sunat_reniec(input='') {
-  console.log(input);
+  //console.log(input);
 
   $(`#search${input}`).hide(); $(`#charge${input}`).show();
 
@@ -1227,6 +1255,16 @@ function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad='') {
 function UrlExists(url) {  
   var http = new XMLHttpRequest();
   http.open("HEAD", url, false);
+  http.send(); //console.log(http.status);
+  return http.status;
+}
+
+function DocExist(url) {  
+  
+  var host = window.location.host == 'localhost'? `http://localhost/admin_sevens/${url}` : `${window.location.origin}/${url}`;
+  
+  var http = new XMLHttpRequest();
+  http.open("HEAD", host, false);
   http.send(); //console.log(http.status);
   return http.status;
 }

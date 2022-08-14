@@ -171,6 +171,31 @@
           echo json_encode($rspta, true); 
         }
       break;
+
+      case 'select2ProveedorFiltro': 
+    
+        $rspta=$ajax_general->select2_proveedor_filtro();  $cont = 1; $data = "";
+
+        if ($rspta['status']) {
+
+          foreach ($rspta['data'] as $key => $value) {  
+
+            $data .= '<option value="' .  $value['idproveedor'] . '" ruc="'.$value['ruc'].'">' .$cont++.'. '.  $value['razon_social'] .' - '.  $value['ruc'] . '</option>';      
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => '<option value="1" ruc="">Anónimo - 00000000000</option>' . $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
       
       /* ══════════════════════════════════════ B A N C O  ══════════════════════════════════════ */
       case 'select2Banco': 

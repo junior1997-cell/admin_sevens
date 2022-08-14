@@ -19,7 +19,8 @@
       $date_now = date("d-m-Y h.i.s A");
 
       $idotra_factura   = isset($_POST["idotra_factura"]) ? limpiarCadena($_POST["idotra_factura"]) : "";      
-      $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";      
+      $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
+      $ruc_proveedor    = isset($_POST["ruc_proveedor"]) ? limpiarCadena($_POST["ruc_proveedor"]) : "";      
       $fecha_emision    = isset($_POST["fecha_emision"]) ? limpiarCadena($_POST["fecha_emision"]) : "";
       $forma_pago       = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
       $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
@@ -56,7 +57,7 @@
       
           if (empty($idotra_factura)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $otra_factura->insertar($idproveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
+            $rspta = $otra_factura->insertar($idproveedor, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
             
             echo json_encode($rspta, true) ;
       

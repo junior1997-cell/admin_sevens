@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Sub Contrato</title>
+        <title>Sub Contrato | Admin Sevens</title>
 
         <?php $title = "Sub Contrato"; require 'head.php'; ?>
 
@@ -73,41 +73,62 @@
                             <!-- tabla principal -->
                             <div class="pb-3" id="tbl-principal">
                               <table id="tabla-sub-contratos" class="table table-bordered table-striped display" style="width: 100% !important;">
-                                  <thead>
-                                      <tr>
-                                          <th class="text-center">#</th>                                                    
-                                          <th class="">Acciones</th>                                                    
-                                          <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                          <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
-                                          <th>Fecha</th>
-                                          <th>Descripción </th>
-                                          <th>Sub total</th>
-                                          <th>Igv</th>
-                                          <th>Total </th>
-                                          <th>Añadir Pago </th>
-                                          <th>Saldo </th>
-                                          <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                      </tr>
+                                <thead>
+                                    <tr>
+                                      <th class="text-center">#</th>                                                    
+                                      <th class="">Acciones</th>                                                    
+                                      <th>Fecha</th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>                                      
+                                      <th>Descripción </th>
+                                      <th>Sub total</th>
+                                      <th>Igv</th>
+                                      <th>Total </th>
+                                      <th>Añadir Pago </th>
+                                      <th>Saldo </th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
+
+                                      <th>Proveedor</th>
+                                      <th>Tipo Doc.</th>
+                                      <th>Num. Doc.</th>
+                                      <th>Comprobante</th>
+                                      <th>Num. Comprobante</th>
+                                      <th>Forma de Pago</th>
+                                      <th>Val IGV</th>
+                                      <th>Pagos</th>
+                                      <th>Tipo Gravada</th>
+                                      <th>Glosa</th>
+                                    </tr>
                                   </thead>
                                   <tbody></tbody>
                                   <tfoot>
-                                      <tr>
-                                          <th class="text-center">#</th>
-                                          <th class="">Acciones</th>
-                                          <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                          <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
-                                          <th>Fecha</th>
-                                          <th>Descripción </th>
-                                          <th>Sub total</th>
-                                          <th>Igv</th>
-                                          <th class="text-nowrap total_monto"></th>
-                                          <th>Añadir Pago </th>
-                                          <th>Saldo </th>
-                                          <th>Comprob</th>                                          
-                                      </tr>
+                                    <tr>
+                                      <th class="text-center">#</th>
+                                      <th class="">Acciones</th>
+                                      <th>Fecha</th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>                                      
+                                      <th>Descripción </th>
+                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_subtotal">0.00</span></div></th>
+                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_igv">0.00</span></div></th>
+                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_gasto">0.00</span></div></th>
+                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_deposito">0.00</span></div></th>
+                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_saldo">0.00</span></div></th>
+                                      <th>CFDI.</th>    
+                                      
+                                      <th>Proveedor</th>
+                                      <th>Tipo Doc.</th>
+                                      <th>Num. Doc.</th>
+                                      <th>Comprobante</th>
+                                      <th>Num. Comprobante</th>
+                                      <th>Forma de Pago</th>
+                                      <th>Val IGV</th>
+                                      <th>Pagos</th>
+                                      <th>Tipo Gravada</th>
+                                      <th>Glosa</th>
+                                    </tr>
                                   </tfoot>
                               </table>
                             </div>
+
                             <!-- tabla pagos -->
                             <div class="pb-3" id="tbl-pagos" style="display: none;">
                               <div style="text-align: center;"><h4>Total a pagar: <b id="total_apagar"></b></h4></div>
@@ -222,7 +243,7 @@
                   </div>
                   <!-- /.container-fluid -->             
 
-                  <!-- Modal agregar sub contrato -->
+                  <!-- MODAL - agregar sub contrato -->
                   <div class="modal fade" id="modal-agregar-sub-contrato">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -346,7 +367,7 @@
                                       <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                                     </div>
                                     <div class="col-6 col-md-6 text-center">
-                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante_subcontrato');">
+                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'sub_contrato', 'comprobante_subcontrato'); reload_zoom();" >
                                       <i class="fas fa-redo"></i> Recargar.
                                       </button>
                                     </div>
@@ -359,8 +380,8 @@
 
                                 <!-- barprogress -->
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                  <div class="progress" id="div_barra_progress">
-                                    <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  <div class="progress" id="barra_progress_subcontrato_div">
+                                    <div id="barra_progress_subcontrato" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                       0%
                                     </div>
                                   </div>
@@ -383,55 +404,59 @@
 
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                          <button type="submit" class="btn btn-success" id="guardar_registro_subcontrato">Guardar Cambios</button>
                         </div>    
 
                       </div>
                     </div>
                   </div>
-                  <!--Modal-ver-comprobante-->
+
+                  <!-- MDOAL - ver-comprobante-->
                   <div class="modal fade" id="modal-ver-comprobante">
-                    <div class="modal-dialog modal-dialog-scrollable modal-xl ">
-                        <div class="modal-content">
-                            <div class="modal-header" style=" background-color: #73777b2e;">
-                                <h4 class="modal-title">Comprobante </h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span class="text-danger" aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div  class="class-style" style="text-align: center;"> 
-                                <a class="btn btn-warning  btn-block" href="#" id="iddescargar" download=" _Comprobante sub contrato" style="padding:0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                                  <br>
-                                  <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                                    <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
-                                </div>
-                            </div>
+                    <div class="modal-dialog modal-dialog-scrollable modal-lg ">
+                      <div class="modal-content">
+                        <div class="modal-header" >
+                          <h4 class="modal-title">Comprobante: <b class="tile-modal-comprobante"></b></h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
                         </div>
+                        <div class="modal-body">
+                          <div class="row">
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                            </div>
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                            </div>
+                            <div class="col-12 col-md-12 mt-2">
+                              <div id="ver_fact_pdf" width="auto"></div>
+                            </div>
+                          </div>                          
+                        </div>
+                      </div>
                     </div>
                   </div> 
-                  <!--Modal ver datos-->
-                  <div class="modal fade" id="modal-ver-datos-sub-contrato">
-                      <div class="modal-dialog modal-dialog-scrollable modal-md">
-                          <div class="modal-content">
-                          <div class="modal-header">
-                              <h4 class="modal-title">Datos comprobante</h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span class="text-danger" aria-hidden="true">&times;</span>
-                              </button>
-                          </div>
 
-                          <div class="modal-body">
-                              <div id="datos-sub-contrato" class="class-style">
-                              <!-- vemos los datos del trabajador -->
-                              </div>
+                  <!-- MODAL - ver datos-->
+                  <div class="modal fade" id="modal-ver-datos-sub-contrato">
+                    <div class="modal-dialog modal-dialog-scrollable modal-md">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Datos comprobante</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
+                        </div>
+
+                        <div class="modal-body">
+                          <div id="datos-sub-contrato" class="">
+                            <!-- vemos los datos del trabajador -->
                           </div>
-                          </div>
+                        </div>
                       </div>
+                    </div>
                   </div> 
 
-                  <!--:...::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
-                  <!--Modal agregar Pagos-->
+                  <!-- :::::::::::::::::::::::::::::::::  P A G O S   D E   S U B C O N T R A T O  ::::::::::::::::::::::::::::::: -->
+
+                  <!-- MODAL - agregar Pagos-->
                   <div class="modal fade" id="modal-agregar-pago">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -545,7 +570,7 @@
                                       <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                     </div>
                                     <div class="col-6 col-md-6 text-center">
-                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobante_pago');">
+                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'sub_contrato', 'comprobante_pago');">
                                       <i class="fas fa-redo"></i> Recargar.
                                       </button>
                                     </div>
@@ -578,9 +603,7 @@
 
                       </div>
                     </div>
-                  </div>     
-
-      
+                  </div>      
 
                 </section>
                 <!-- /.content -->
@@ -598,13 +621,12 @@
 
         <?php require 'script.php'; ?>         
 
-        <script type="text/javascript" src="scripts/sub_contrato.js"></script>
+        <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> -->
+        <script type="text/javascript" src="../plugins/jquery-zoom/jquery.zoom.js"></script>
+
+        <script type="text/javascript" src="scripts/sub_contrato.js"></script>        
          
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          })
-        </script>
+        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); });  </script>
                 
         <style>
           .class_ver_provee{
@@ -623,7 +645,7 @@
             box-shadow: inset 0 0 0 transparent;
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
           }
-        </style>
+        </style>        
 
         <?php require 'extra_script.php'; ?>
       </body>
