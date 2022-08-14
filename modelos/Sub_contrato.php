@@ -12,35 +12,36 @@ class Sub_contrato
   //Implementamos un método para insertar registros
   public function insertar($idproyecto, $idproveedor, $ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante, $tipo_gravada)
   {
-    // $sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, sc.fecha_subcontrato, sc.forma_de_pago, sc.tipo_comprobante, sc.numero_comprobante,  sc.estado, sc.estado_delete
-    // FROM subcontrato as sc, proveedor as p
-    // WHERE sc.idproveedor = p.idproveedor and sc.idproyecto ='$idproyecto' and p.ruc ='$ruc_proveedor' and sc.tipo_comprobante ='$tipo_comprobante' and sc.numero_comprobante ='$numero_comprobante';";
-    // $prov = ejecutarConsultaArray($sql_1);
-    // if ($prov['status'] == false) { return  $prov;}
+    $sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, sc.fecha_subcontrato, sc.forma_de_pago, sc.tipo_comprobante, 
+    sc.numero_comprobante,  sc.estado, sc.estado_delete
+    FROM subcontrato as sc, proveedor as p
+    WHERE sc.idproveedor = p.idproveedor and sc.idproyecto ='$idproyecto' and p.ruc ='$ruc_proveedor' and sc.tipo_comprobante ='$tipo_comprobante' and sc.numero_comprobante ='$numero_comprobante';";
+    $prov = ejecutarConsultaArray($sql_1);
+    if ($prov['status'] == false) { return  $prov;}
 
-    // if (empty($prov['data'])) {
+    if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
 
-    $sql = "INSERT INTO subcontrato(idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_subcontrato, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante,tipo_gravada) 
-		VALUES ('$idproyecto', '$idproveedor', '$tipo_comprobante', '$numero_comprobante', '$forma_de_pago', '$fecha_subcontrato', '$val_igv', '$subtotal', '$igv', '$costo_parcial', '$descripcion','SUB CONTRATO','$comprobante','$tipo_gravada')";
-    return ejecutarConsulta($sql);
+      $sql = "INSERT INTO subcontrato(idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_subcontrato, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante,tipo_gravada) 
+      VALUES ('$idproyecto', '$idproveedor', '$tipo_comprobante', '$numero_comprobante', '$forma_de_pago', '$fecha_subcontrato', '$val_igv', '$subtotal', '$igv', '$costo_parcial', '$descripcion','SUB CONTRATO','$comprobante','$tipo_gravada')";
+      return ejecutarConsulta($sql);
 
-    // } else {
-    // 	$info_repetida = '';
+    } else {
+    	$info_repetida = '';
 
-    // 	foreach ($prov['data'] as $key => $value) {
-    // 		$info_repetida .= '<li class="text-left font-size-13px">
-    // 		<span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
-    // 		<b>Razón Social: </b>'.$value['razon_social'].'<br>
-    // 		<b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>
-    // 		<b>Fecha: </b>'.format_d_m_a($value['fecha_subcontrato']).'<br>
-    // 		<b>Forma de pago: </b>'.$value['forma_de_pago'].'<br>
-    // 		<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
-    // 		<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
-    // 		<hr class="m-t-2px m-b-2px">
-    // 		</li>';
-    // 	}
-    // 	return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
-    // }
+    	foreach ($prov['data'] as $key => $value) {
+    		$info_repetida .= '<li class="text-left font-size-13px">
+    		<span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
+    		<b>Razón Social: </b>'.$value['razon_social'].'<br>
+    		<b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>
+    		<b>Fecha: </b>'.format_d_m_a($value['fecha_subcontrato']).'<br>
+    		<b>Forma de pago: </b>'.$value['forma_de_pago'].'<br>
+    		<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+    		<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+    		<hr class="m-t-2px m-b-2px">
+    		</li>';
+    	}
+    	return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }
   }
 
   //Implementamos un método para editar registros

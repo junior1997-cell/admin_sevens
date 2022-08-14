@@ -77,6 +77,9 @@
 <!-- Consola alerta -->
 <script src="../dist/js/consola_alerta.js"></script>
 
+<!-- JQuery ZOOM imagen -->
+<script type="text/javascript" src="../plugins/jquery-zoom/jquery.zoom.js"></script>
+
 <!-- hora sesion-->
 <script src="../dist/js/sesion.js"></script> 
 

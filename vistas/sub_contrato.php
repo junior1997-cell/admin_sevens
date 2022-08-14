@@ -60,10 +60,10 @@
 
                             <!-- agregar pago  -->
                             <h3 class="card-title " id="btn-agregar" >
-                              <button type="button" class="btn bg-gradient-success" id="add_sub_contrato" data-toggle="modal" data-target="#modal-agregar-sub-contrato" onclick="limpiar(); regresar(1);"><i class="fas fa-plus-circle"></i> Agregar</button>
-                              <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
-                              <button type="button" class="btn bg-gradient-success" id="add_agregar_pago" style="display: none;" data-toggle="modal" data-target="#modal-agregar-pago" onclick="limpiar_pagos(); regresar(2);"><i class="fas fa-plus-circle"></i> Agregar Pago</button>
-                                Administra tus sub contratos.
+                              <button type="button" class="btn bg-gradient-success" id="add_sub_contrato" data-toggle="modal" data-target="#modal-agregar-sub-contrato" onclick="limpiar(); table_show_hide(1);"><i class="fas fa-plus-circle"></i> Agregar</button>
+                              <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="table_show_hide(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
+                              <button type="button" class="btn bg-gradient-success" id="add_agregar_pago" style="display: none;" data-toggle="modal" data-target="#modal-agregar-pago" onclick="limpiar_pagos(); table_show_hide(2);"><i class="fas fa-plus-circle"></i> Agregar Pago</button>
+                              Administra tus sub contratos.
                             </h3> 
 
                           </div>
@@ -130,8 +130,8 @@
                             </div>
 
                             <!-- tabla pagos -->
-                            <div class="pb-3" id="tbl-pagos" style="display: none;">
-                              <div style="text-align: center;"><h4>Total a pagar: <b id="total_apagar"></b></h4></div>
+                            <div class="table-responsive pb-3" id="tbl-pagos" style="display: none;">
+                              <div class="text-center" ><h4>Total a pagar: S/ <b id="total_apagar"></b></h4></div>
                               <br>
                               <div class="text-center" style="background-color: aliceblue;">
                                 <h5>Proveedor S/ <b id="t_proveedor"></b> <i class="fas fa-arrow-right fa-xs"></i> <b id="t_provee_porc"></b> <b>%</b></h5>
@@ -155,28 +155,28 @@
                                 <tbody></tbody>
                                 <tfoot>
                                   <tr>
-                                    <th>#</th>
-                                    <th>Aciones</th>
-                                    <th>Forma pago</th>
-                                    <th>Beneficiario</th>
-                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                    <th>Descripción</th>
-                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                    <th class="text-nowrap" style="color: #ff0000; background-color: #45c920;"> 
-                                      <b class="monto_total_deposito_prov"></b> <br>
-                                      <b class="porcnt_deposito_prov" style="color: black;"></b>
+                                    <th class="py-1">#</th>
+                                    <th class="py-1">Aciones</th>
+                                    <th class="py-1">Forma pago</th>
+                                    <th class="py-1">Beneficiario</th>
+                                    <th class="py-1" data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                    <th class="py-1">Descripción</th>
+                                    <th class="py-1" data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                    <th class="py-1 text-nowrap bg-color-45c920"> 
+                                      <span class="text-danger">S/ <b class="monto_total_deposito_prov"></b></span><br>
+                                      <b class="porcnt_deposito_prov" ></b>%
                                     </th>
-                                    <th>Vaucher</th>
-                                    <th>Estado</th>
+                                    <th class="py-1">Vaucher</th>
+                                    <th class="py-1">Estado</th>
                                   </tr>
                                   <tr>
-                                    <td colspan="6"></td>
-                                    <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                    <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
-                                      <b id="saldo_prov"></b><br /> 
-                                      <b id="porcnt_sald_prov" style="color: black;"></b>
+                                    <td class="py-1" colspan="6"></td>
+                                    <td class="py-1 text-nowrap text-center text-bold font-size-20px ">Saldo</td>
+                                    <th class="py-1 text-nowrap bg-color-f3e700" >
+                                      <span class="text-danger">S/ <b id="saldo_prov"></b></span> <br> 
+                                      <b id="porcnt_sald_prov"></b>%
                                     </th>
-                                    <td colspan="2"></td>
+                                    <td class="py-1" colspan="2"></td>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -205,28 +205,28 @@
                                 <tbody></tbody>
                                 <tfoot>
                                   <tr>
-                                    <th>#</th>
-                                    <th>Aciones</th>
-                                    <th>Forma pago</th>
-                                    <th>Beneficiario</th>
-                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
-                                    <th>Descripción</th>
-                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
-                                    <th class="text-nowrap"  style="color: #ff0000; background-color: #45c920;"> 
-                                      <b class="monto_total_deposito_detracc"></b>  <br />
-                                      <b class="porcent_detracc" style="color: black;"></b>
+                                    <th class="py-1">#</th>
+                                    <th class="py-1">Aciones</th>
+                                    <th class="py-1">Forma pago</th>
+                                    <th class="py-1">Beneficiario</th>
+                                    <th class="py-1" data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                    <th class="py-1">Descripción</th>
+                                    <th class="py-1" data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                    <th class="py-1 text-nowrap bg-color-45c920"> 
+                                      <span class="text-danger">S/ <b class="monto_total_deposito_detracc"></b></span><br>
+                                      <b class="porcent_detracc"></b>%
                                     </th>
-                                    <th>Vaucher</th>
-                                    <th>Estado</th>
+                                    <th class="py-1">Vaucher</th>
+                                    <th class="py-1">Estado</th>
                                   </tr>
                                   <tr>
-                                    <td colspan="6"></td>
-                                    <td class="text-nowrap" style="font-weight: bold; font-size: 20px; text-align: center;">Saldo</td>
-                                    <th class="text-nowrap" style="color: #ff0000; background-color: #f3e700;">
-                                      <b id="saldo_detracc"></b> <br />
-                                      <b id="porcnt_saldo_detracc" style="color: black;"></b>
+                                    <td class="py-1" colspan="6"></td>
+                                    <td class="py-1 text-nowrap text-center text-bold font-size-20px">Saldo</td>
+                                    <th class="py-1 text-nowrap bg-color-f3e700">
+                                    <span class="text-danger">S/ <b id="saldo_detracc"></b></span><br>
+                                      <b id="porcnt_saldo_detracc"></b>%
                                     </th>
-                                    <td colspan="2"></td>
+                                    <td class="py-1" colspan="2"></td>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -267,15 +267,15 @@
                                 <!-- proveedor -->
                                 <div class="col-lg-12">
                                   <div class="form-group">
-                                  <label for="idproveedor">proveedor</label>
-                                  <select name="idproveedor" id="idproveedor" class="form-control select2" style="width: 100%;"> </select>
+                                  <label for="idproveedor">Proveedor <sup class="text-danger">(único*)</sup></label>
+                                  <select name="idproveedor" id="idproveedor" class="form-control select2" style="width: 100%;" onchange="extrae_ruc();"> </select>
                                   </div>
                                 </div>               
 
                                 <!-- Forma de pago hacia el trabajdor -->
                                 <div class="col-lg-6">
                                   <div class="form-group">
-                                  <label for="forma_pago">Forma Pago</label>
+                                  <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
                                   <select name="forma_de_pago" id="forma_de_pago" class="form-control select2" style="width: 100%;">
                                     <option value="Transferencia">Transferencia</option>
                                     <option value="Efectivo">Efectivo</option>
@@ -283,15 +283,22 @@
                                   </div>
                                 </div>
 
+                                <!-- Fecha -->
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label for="Fecha" class="text-gray">Fecha <sup class="text-danger">*</sup></label>
+                                    <input type="date" name="fecha_subcontrato" id="fecha_subcontrato" class="form-control"  placeholder="Fecha"> 
+                                  </div>
+                                </div>
+
                                 <!-- tipo de comprobante -->
                                 <div class="col-lg-6">
                                   <div class="form-group">
-                                  <label for="tipo_comprobante">Tipo Comprobante</label>
+                                  <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(único*)</sup></label>
                                   <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" style="width: 100%;">
+                                    <option value="Ninguno">Ninguno</option>
                                     <option value="Factura">Factura</option>
                                     <option value="Recibo por Honorario">Recibo por Honorario</option>
-                                    <option value="Ninguno">Ninguno</option>
-                                    <!--<option value="Comprobante">Comprobante</option>-->
                                   </select>
                                   </div>
                                 </div>
@@ -299,17 +306,9 @@
                                 <!-- Número comprobante -->
                                 <div class="col-lg-6">
                                   <div class="form-group">
-                                    <label for="numero_comprobante" class="nro_comprobante" >Núm. comprobante </label>                               
+                                    <label for="numero_comprobante"><span class="nro_comprobante">Núm. comprobante</span> <sup class="text-danger">(único*)</sup></label>                               
                                     <input type="text" name="numero_comprobante" id="numero_comprobante" class="form-control"  placeholder="Código"> 
                                   </div>                                                        
-                                </div>
-                                
-                                <!-- Fecha -->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="Fecha" class="text-gray">Fecha </label>
-                                    <input type="date" name="fecha_subcontrato" id="fecha_subcontrato" class="form-control"  placeholder="Fecha"> 
-                                  </div>
                                 </div>
 
                                 <!-- Sub total -->
@@ -335,15 +334,15 @@
                                 <div class="col-lg-2">
                                   <div class="form-group">
                                     <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
-                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"> 
+                                    <input type="number" name="val_igv" id="val_igv" value="0.18" step="0.01" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"> 
                                   </div>
                                 </div>
                                 
                                 <!-- Total -->
                                 <div class="col-lg-4">
                                   <div class="form-group">
-                                    <label for="costo_parcial" class="text-gray">Total </label>
-                                    <input type="text" name="costo_parcial" id="costo_parcial" class="form-control"  onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"  placeholder="Total"> 
+                                    <label for="costo_parcial" class="text-gray">Total <sup class="text-danger">*</sup></label>
+                                    <input type="number" name="costo_parcial" id="costo_parcial" class="form-control"  onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );"  placeholder="Total"> 
                                   </div>
                                 </div>
                                 
@@ -472,7 +471,7 @@
                           <!-- form start -->
                           <form id="form-add-pago-subcontrato" name="form-add-pago-subcontrato" method="POST">
                             <div class="card-body">
-                              <div class="row" id="cargando-1-fomulario">
+                              <div class="row" id="cargando-3-fomulario">
                                 <!-- id pago_subcontrato -->
                                 <input type="hidden" name="idpago_subcontrato" id="idpago_subcontrato" />
                                 <!-- id subcontrato -->
@@ -482,16 +481,15 @@
                                 <div class="col-lg-12">
                                   <div class="form-group">
                                     <label for="beneficiario_pago">Beneficiario</label>
-                                    <input type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
-                                    <br />
-                                    <b id="h4_mostrar_beneficiario" class="class_ver_provee"></b>
+                                    <span class="form-control" id="h4_mostrar_beneficiario" ></span>
+                                    <input type="hidden" id="beneficiario_pago" name="beneficiario_pago" /> 
                                   </div>
                                 </div>
                                 <!--Forma de pago -->
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                     <label for="forma_pago">Forma Pago</label>
-                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;" onchange="delay(function(){select_forma_pago();}, 100 );">
                                       <option value="Transferencia">Transferencia</option>
                                       <option value="Efectivo">Efectivo</option>
                                       <option value="Crédito">Crédito</option>
@@ -540,7 +538,7 @@
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                     <label for="monto_pago">Monto </label>
-                                    <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="validando_excedentes();" onchange="validando_excedentes();" />
+                                    <input type="number" step="0.01" name="monto_pago" id="monto_pago" class="form-control" placeholder="Ingrese monto" onkeyup="delay(function(){validando_excedentes();}, 200 );" onchange="delay(function(){validando_excedentes();}, 200 );" />
                                   </div>
                                 </div>
                                 <!-- Número de Operación-->
@@ -581,26 +579,36 @@
                                   <div class="text-center" id="doc2_nombre"><!-- aqui va el nombre del pdf --></div>
                                 </div>
 
-                                <div class="row" id="cargando-2-fomulario" style="display: none;">
-                                  <div class="col-lg-12 text-center">
-                                    <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                    <br />
-                                    <h4>Cargando...</h4>
+                                <!-- barprogress -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                  <div class="progress" id="barra_progress_pago_subcontrato_div">
+                                    <div id="barra_progress_pago_subcontrato" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                      0%
+                                    </div>
                                   </div>
                                 </div>
-
                               </div>
+                              <!-- /.row -->
+
+                              <div class="row" id="cargando-4-fomulario" style="display: none;">
+                                <div class="col-lg-12 text-center">
+                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                  <br />
+                                  <h4>Cargando...</h4>
+                                </div>
+                              </div>
+                              <!-- /.row -->
                             </div>
                             <!-- /.card-body -->
-                            <button type="submit" style="display: none;" id="submit-form-pago">Submit</button>
+                            <button type="submit" style="display: none;" id="submit-form-pago-subcontrato">Submit</button>
                           </form>
                         </div>
-
+                        <!-- /.modal-body -->
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_pagos();">Close</button>
-                          <button type="submit" class="btn btn-success" id="guardar_registro_pago">Guardar Cambios</button>
+                          <button type="submit" class="btn btn-success" id="guardar_registro_pago_subcontrato">Guardar Cambios</button>
                         </div>
-
+                        <!-- /.modal-footer -->
                       </div>
                     </div>
                   </div>      
@@ -619,33 +627,11 @@
 
         </div>
 
-        <?php require 'script.php'; ?>         
-
-        <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> -->
-        <script type="text/javascript" src="../plugins/jquery-zoom/jquery.zoom.js"></script>
+        <?php require 'script.php'; ?> 
 
         <script type="text/javascript" src="scripts/sub_contrato.js"></script>        
          
-        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); });  </script>
-                
-        <style>
-          .class_ver_provee{
-            display: block;
-            width: 100%;
-            height: calc(2.25rem + 2px);
-            padding: 0.375rem 0.75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #ced4da;
-            border-radius: 0.25rem;
-            box-shadow: inset 0 0 0 transparent;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-          }
-        </style>        
+        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); });  </script>                     
 
         <?php require 'extra_script.php'; ?>
       </body>

@@ -17,18 +17,17 @@ class Compra_insumos
     $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
 
     $sql_1 = "SELECT ruc FROM proveedor WHERE idproveedor ='$idproveedor';";
-    $proveedor = ejecutarConsultaSimpleFila($sql_1);
-    if ($proveedor['status'] == false) { return  $proveedor;}
+    $proveedor = ejecutarConsultaSimpleFila($sql_1);  if ($proveedor['status'] == false) { return  $proveedor;}
 
     $ruc = $proveedor['data']['ruc'];
 
-    $sql_2 = "SELECT p.razon_social, p.tipo_documento, p.ruc, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.glosa, cpp.estado, cpp.estado_delete 
+    $sql_2 = "SELECT p.razon_social, p.tipo_documento, p.ruc, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.glosa, cpp.total, cpp.estado, cpp.estado_delete 
     FROM compra_por_proyecto as cpp, proveedor as p 
     WHERE cpp.idproveedor = p.idproveedor AND p.ruc ='$ruc' AND cpp.tipo_comprobante ='$tipo_comprobante' AND cpp.serie_comprobante = '$serie_comprobante'";
     $compra_existe = ejecutarConsultaArray($sql_2);
     if ($compra_existe['status'] == false) { return  $compra_existe;}
 
-    if (empty($compra_existe['data'])) {
+    if (empty($compra_existe['data']) || $tipo_comprobante == 'Ninguno') {
       $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion)
       VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion')";
       
@@ -64,6 +63,7 @@ class Compra_insumos
           <b>Razón Social: </b>'.$value['razon_social'].'<br>
           <b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>          
           <b>Fecha: </b>'.format_d_m_a($value['fecha_compra']).'<br>
+          <b>Total: </b>'.number_format($value['total'], 2, '.', ',').'<br>
           <b>Glosa: </b>'.$value['glosa'].'<br>
           <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b> 
           <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>

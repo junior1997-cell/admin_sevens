@@ -18,6 +18,8 @@
       date_default_timezone_set('America/Lima');
       $date_now = date("d-m-Y h.i.s A");
 
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
 			$idproyecto          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";	
 			$idproveedor         = isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";	
 			$ruc_proveedor         = isset($_POST["ruc_proveedor"])? limpiarCadena($_POST["ruc_proveedor"]):"";	
@@ -135,9 +137,7 @@
           $data= Array();
            
           $cont=1;
-          $saldo=0; $estado=''; $c=''; $nombre=''; $icon=''; $info=''; 
-
-          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';   
+          $saldo=0; $estado=''; $c=''; $nombre=''; $icon=''; $info='';              
 
           if ($rspta['status'] == true) {
 
@@ -247,11 +247,9 @@
           } else {
             // validamos si existe LA IMG para eliminarlo
             if ($flat_img1 == true) {
-
               $datos_f1 = $sub_contrato->obtenerImg($idpago_subcontrato);      
               $img1_ant = $datos_f1['data']->fetch_object()->comprobante;      
-              if ($img1_ant != "") { unlink("../dist/docs/sub_contrato/comprobante_pago/" . $img1_ant);  }
-              
+              if ($img1_ant != "") { unlink("../dist/docs/sub_contrato/comprobante_pago/" . $img1_ant);  }              
             }
       
             $rspta = $sub_contrato->editar_pago($idpago_subcontrato, $idsubcontrato_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );      
@@ -276,9 +274,9 @@
               $data[] = [
                 "0" => $cont++,
                 "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                          ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pagos(' . $reg->idpago_subcontrato .', \''. encodeCadenaHtml(date("d/m/Y", strtotime('2022-12-24')). ' - '.$reg->beneficiario) . '\')"><i class="fas fa-skull-crossbones"></i> </button>':
-                          '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                          ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-check"></i></button>', 
+                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pagos(' . $reg->idpago_subcontrato .', \''. encodeCadenaHtml(date("d/m/Y", strtotime('2022-12-24')). ' - '.$reg->beneficiario) . '\')"><i class="fas fa-skull-crossbones"></i> </button>':
+                  '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_subcontrato . ')"><i class="fa fa-check"></i></button>', 
                 "2" => $reg->forma_pago,
                 "3" => '<div class="user-block">
                   <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
@@ -289,7 +287,7 @@
                 "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
                 "6" => $reg->numero_operacion,
                 "7" => number_format($reg->monto, 2, '.', ','),
-                "8" => $comprobante,
+                "8" => $comprobante . $toltip,
                 "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
               ];
             }
@@ -334,7 +332,7 @@
                 "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
                 "6" => $reg->numero_operacion,
                 "7" => number_format($reg->monto, 2, '.', ','),
-                "8" => $comprobante,
+                "8" => $comprobante . $toltip,
                 "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>',
               ];
             }

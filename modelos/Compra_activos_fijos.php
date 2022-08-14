@@ -16,31 +16,57 @@ class Compra_activos_fijos
     $total_compra, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida,  $nombre_color,
     $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
 
-    $sql = "INSERT INTO compra_af_general(idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, subtotal, igv, total, tipo_gravada)
-		VALUES ('$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$subtotal_compra', '$igv_compra', '$total_compra', '$tipo_gravada')";
-    //return ejecutarConsulta($sql);
-    $idcompra_af_generalnew = ejecutarConsulta_retornarID($sql);
+    $sql_1 = "SELECT ruc FROM proveedor WHERE idproveedor ='$idproveedor';";
+    $proveedor = ejecutarConsultaSimpleFila($sql_1);  if ($proveedor['status'] == false) { return  $proveedor;}
 
-    $num_elementos = 0;
-    $sw = true;
+    $ruc = $proveedor['data']['ruc'];
 
-    if ($idcompra_af_generalnew['status']) {
+    $sql_2 = "SELECT p.razon_social, p.tipo_documento, p.ruc, 
+    cafg.fecha_compra, cafg.tipo_comprobante, cafg.serie_comprobante, cafg.glosa, cafg.total, cafg.estado, cafg.estado_delete 
+    FROM compra_af_general as cafg, proveedor as p 
+    WHERE cafg.idproveedor = p.idproveedor AND p.ruc ='$ruc' AND cafg.tipo_comprobante ='$tipo_comprobante' AND cafg.serie_comprobante = '$serie_comprobante'";
+    $compra_existe = ejecutarConsultaArray($sql_2);
+    if ($compra_existe['status'] == false) { return  $compra_existe;}
+
+    if (empty($compra_existe['data']) || $tipo_comprobante == 'Ninguno') {
+      $sql_3 = "INSERT INTO compra_af_general(idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, subtotal, igv, total, tipo_gravada)
+      VALUES ('$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$subtotal_compra', '$igv_compra', '$total_compra', '$tipo_gravada')";      
+      $idcompra_af_generalnew = ejecutarConsulta_retornarID($sql_3);
+      if ($idcompra_af_generalnew['status'] == false) { return  $idcompra_af_generalnew;}
+
+      $num_elementos = 0;
+      $sw = true;     
 
       while ($num_elementos < count($idproducto)) {
 
         $subtotal_activo_g = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];
-  
+
         $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general, idproducto, unidad_medida, color, ficha_tecnica_producto, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal) 
         VALUES ('".$idcompra_af_generalnew['data']."','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$ficha_tecnica_producto[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_activo_g')";
         $sw = ejecutarConsulta($sql_detalle);
         if ($sw['status'] == false) {    return $sw ; }
-  
+
         $num_elementos = $num_elementos + 1;
       }  
       return $sw;
     } else {
-      return $idcompra_af_generalnew;
-    }
+      $info_repetida = ''; 
+
+      foreach ($compra_existe['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+          <b class="font-size-18px text-danger">'.$value['tipo_comprobante'].': </b> <span class="font-size-18px text-danger">'.$value['serie_comprobante'].'</span><br>
+          <b>Razón Social: </b>'.$value['razon_social'].'<br>
+          <b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>          
+          <b>Fecha: </b>'.format_d_m_a($value['fecha_compra']).'<br>
+          <b>Total: </b>'.number_format($value['total'], 2, '.', ',').'<br>
+          <b>Glosa: </b>'.$value['glosa'].'<br>
+          <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b> 
+          <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+          <hr class="m-t-2px m-b-2px">
+        </li>'; 
+      }
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }     
   }
 
   //Implementamos un método para editar registros

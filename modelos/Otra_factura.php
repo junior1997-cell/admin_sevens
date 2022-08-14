@@ -19,7 +19,7 @@ class Otra_factura
 		$prov = ejecutarConsultaArray($sql_1);
 		if ($prov['status'] == false) { return  $prov;}
 
-    if (empty($prov['data'])) {
+    if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
       $sql = "INSERT INTO otra_factura (idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada) 
 		  VALUES ('$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada')";
       return ejecutarConsulta($sql);

@@ -259,7 +259,7 @@
                               <!-- Código-->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label  for="nro_comprobante"> <span class="nro_comprobante">Núm. comprobante</span> <sup class="text-danger">(unico*)</sup> </label>
+                                  <label  for="nro_comprobante"> <span class="nro_comprobante">Núm. comprobante</span> <sup class="text-danger">(único*)</sup> </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
