@@ -14,6 +14,9 @@
       require_once "../modelos/Transporte.php";
 
       $transporte = new Transporte();
+      
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h.i.s A");   
 
       $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
@@ -50,7 +53,7 @@
             $ext1 = explode(".", $_FILES["doc1"]["name"]);
             $flat_ficha1 = true;
 
-            $comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/transporte/comprobante/" . $comprobante);
           }
