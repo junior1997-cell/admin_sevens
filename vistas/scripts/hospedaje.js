@@ -260,9 +260,11 @@ function tabla_principal() {
       // columna: igv
       if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
       // columna: total
-      if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
+      if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap'); }
     },
     language: {
+      decimal: '.',
+      thousands: ',',
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
@@ -271,6 +273,7 @@ function tabla_principal() {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
+      { targets: [5,6,7], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
       { targets: [10,11,12,13,14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
     ],
