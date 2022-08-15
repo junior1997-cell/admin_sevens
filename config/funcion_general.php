@@ -103,6 +103,23 @@ if (!function_exists('ejecutarConsulta')) {
     return $diferencia;
   }
 
+  function extr_fecha_creacion($reg_fecha) {
+    
+    $fecha = "";
+    if ($reg_fecha == '' || $reg_fecha == null || $reg_fecha == '0000-00-00') { $fecha = "-"; } else {
+  
+      $fechaEntera = strtotime($reg_fecha);
+  
+      $anio = date("Y", $fechaEntera);
+      $mes = date("m", $fechaEntera);
+      $dia = date("d", $fechaEntera);
+      
+      $fecha = "$dia-$mes-$anio";
+    } 
+  
+    return $fecha;
+  }
+
   /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
 
   function multiplo_number($numero, $multiplo) {  if($numero%$multiplo == 0){ return true; }else{ return false; } }

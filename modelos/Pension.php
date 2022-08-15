@@ -8,6 +8,7 @@ class Pension
   public function __construct()
   {
   }
+
   // :::::::::::::::::::::::::: S E C C I O N   P E N S I O N  ::::::::::::::::::::::::::::::::::::::::::
   public function tabla_principal($nube_idproyecto)  {
     $data = [];
@@ -39,9 +40,36 @@ class Pension
   }
 
   public function insertar_pension($idproyecto_p, $proveedor, $descripcion_pension)  {
-   
-    $sql = "INSERT INTO pension(idproyecto, idproveedor,descripcion) VALUES ('$idproyecto_p','$proveedor','$descripcion_pension')";
-    return  ejecutarConsulta($sql);
+
+    $sql_1 = "SELECT p.idproyecto, p.idproveedor, p.estado,p.created_at, p.estado_delete, pr.razon_social, pr.tipo_documento, pr.ruc
+    FROM pension as p, proveedor as pr
+    WHERE  p.idproveedor = pr.idproveedor AND  p.idproyecto = '$idproyecto_p' AND p.idproveedor = '$proveedor';";
+
+    $val_compr = ejecutarConsultaArray($sql_1);
+
+    if ($val_compr['status'] == false) { return  $val_compr;}
+
+    if (empty($val_compr['data'])) {
+    
+      $sql = "INSERT INTO pension(idproyecto,idproveedor,descripcion) VALUES ('$idproyecto_p','$proveedor','$descripcion_pension')";
+      return  ejecutarConsulta($sql);
+
+    } else {
+
+      $info_repetida = '';
+
+      foreach ($val_compr['data'] as $key => $value) {
+        //$fecha = strtotime($value['created_at']);
+        $info_repetida .= '<li class="text-left font-size-13px">
+        <b>Pensión - Razón social: </b>'.$value['razon_social'].'<br>
+        <b>Ruc: </b>'.$value['ruc'].'<br>
+        <b>Fecha de cración: </b>'.extr_fecha_creacion($value['created_at']).'<br>
+        <hr class="m-t-2px m-b-2px">
+        </li>';
+      }
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }
+
   }
 
   public function editar_pension($idproyecto_p,$idpension,$proveedor,$descripcion_pension) {
@@ -64,6 +92,7 @@ class Pension
   }
 
   // :::::::::::::::::::::::::: S E C C I O N   D E T A L L E   P E N S I O N  ::::::::::::::::::::::::::
+
   public function tbla_detalle_pension($idpension)
   {
     $sql = "SELECT * FROM detalle_pension WHERE  idpension ='$idpension' AND estado='1' AND  estado_delete='1' ORDER BY fecha_inicial DESC";
@@ -71,10 +100,37 @@ class Pension
   }
 
   public function insertar_detalles_pension($id_pension,$fecha_inicial,$fecha_final,$cantidad_persona,$subtotal,$igv,$val_igv,$monto,$forma_pago,$tipo_comprobante,$fecha_emision,$tipo_gravada,$nro_comprobante,$descripcion_detalle,$imagen2)  {
-   
-    $sql = "INSERT INTO detalle_pension(idpension, fecha_inicial, fecha_final, cantidad_persona, subtotal, igv, val_igv, precio_parcial, forma_pago, tipo_comprobante, fecha_emision, tipo_gravada, glosa, numero_comprobante, descripcion, comprobante) 
-    VALUES ('$id_pension','$fecha_inicial','$fecha_final','$cantidad_persona','$subtotal','$igv','$val_igv','$monto','$forma_pago','$tipo_comprobante','$fecha_emision','$tipo_gravada','ALIMENTACION','$nro_comprobante','$descripcion_detalle','$imagen2')";
-    return  ejecutarConsulta($sql);
+    
+    $sql_1="SELECT idpension, forma_pago, tipo_comprobante, numero_comprobante,created_at, estado, estado_delete 
+    FROM detalle_pension WHERE idpension = '$id_pension' AND tipo_comprobante='$tipo_comprobante' AND numero_comprobante='$nro_comprobante';";
+
+    $val_compr = ejecutarConsultaArray($sql_1);
+
+    if ($val_compr['status'] == false) { return  $val_compr;}
+
+    if (empty($val_compr['data']) || $tipo_comprobante=='Ninguno') {
+
+      $sql = "INSERT INTO detalle_pension(idpension, fecha_inicial, fecha_final, cantidad_persona, subtotal, igv, val_igv, precio_parcial, forma_pago, tipo_comprobante, fecha_emision, tipo_gravada, glosa, numero_comprobante, descripcion, comprobante) 
+      VALUES ('$id_pension','$fecha_inicial','$fecha_final','$cantidad_persona','$subtotal','$igv','$val_igv','$monto','$forma_pago','$tipo_comprobante','$fecha_emision','$tipo_gravada','ALIMENTACION','$nro_comprobante','$descripcion_detalle','$imagen2')";
+      return  ejecutarConsulta($sql);
+
+    } else {
+
+      $info_repetida = '';
+
+      foreach ($val_compr['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+        <span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
+        <b>Fecha creación: </b>'.extr_fecha_creacion($value['created_at']).'<br>
+        <b>Forma de pago: </b>'.$value['forma_pago'].'<br>
+        <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+        <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+        <hr class="m-t-2px m-b-2px">
+        </li>';
+      }
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }
+
   }
 
   public function editar_detalles_pension($iddetalle_pension,$id_pension,$fecha_inicial,$fecha_final,$cantidad_persona,$subtotal, $igv,$val_igv,$monto,$forma_pago,$tipo_comprobante,$fecha_emision,$tipo_gravada,$nro_comprobante,$descripcion_detalle,$imagen2) {

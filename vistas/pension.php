@@ -223,9 +223,11 @@
                               <div class="col-lg-12">
                                 <div class="form-group">
                                   <label>Proveedor <sup class="text-danger">*</sup> </label>
-                                  <select name="proveedor" id="proveedor" class="form-control select2" style="width: 100%;"> </select>
+                                  <select name="proveedor" id="proveedor" class="form-control select2" onchange="extrae_ruc();" style="width: 100%;"> </select>
                                 </div>
+                                <input type="hidden" name="ruc_proveedor" id="ruc_proveedor" />
                               </div>
+
                               <!-- Descripcion-->
                               <div class="col-lg-12">
                                 <div class="form-group">
@@ -337,7 +339,7 @@
                                 <!-- Tipo de comprobante -->
                                 <div class="col-lg-6" id="content-t-comprob">
                                   <div class="form-group">
-                                    <label for="tipo_comprobante">Tipo Comprobante</label>
+                                    <label for="tipo_comprobante">Tipo Comprobante <small class="text-danger text-lowercase"> (Único)</small></label>
                                     <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                       <option value="Ninguno">Ninguno</option>
                                       <option value="Boleta">Boleta</option>
@@ -350,7 +352,7 @@
                                 <!-- Código-->
                                 <div class="col-lg-6">
                                   <div class="form-group">
-                                    <label for="codigo" class="nro_comprobante">Núm. comprobante </label>
+                                    <label for="codigo"><span class="nro_comprobante">Núm. comprobante</span> <small class="text-danger text-lowercase"> (Único)</small></label>
                                     <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                   </div>
                                 </div>
@@ -469,11 +471,16 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block btn-xs" href="#" id="iddescargar" download="factura"  type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                        <div class="row">
+                          <div class="col-6 col-md-6">
+                            <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                          </div>
+                          <div class="col-6 col-md-6">
+                            <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                          </div>
+                          <div class="col-12 col-md-12 mt-2">
+                            <div id="ver_fact_pdf" width="auto"></div>
+                          </div>
                         </div>
                       </div>
                     </div>

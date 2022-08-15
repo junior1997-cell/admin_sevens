@@ -152,17 +152,26 @@ function guardaryeditar_pension(e) {
     processData: false,
     success: function (e) {
       try {
-        e = JSON.parse(e);
-        console.log(e); 
+
+        e = JSON.parse(e);        console.log(e); 
+
         if (e.status == true) {
+
           toastr.success('servicio registrado correctamente');  
           tabla_pension.ajax.reload(null, false);  
           $("#modal-agregar-pension").modal("hide");  
           limpiar_pension();
+
         }else{  
+
           ver_errores(e);
+          $("#modal-agregar-pension").modal("hide");  
+          limpiar_pension();
+
         } 
+
       } catch (err) {
+
         console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
       }     
       $("#guardar_registro_pension").html('Guardar Cambios').removeClass('disabled');         
@@ -520,26 +529,23 @@ function eliminar_detalle_pension(iddetalle_pension, fecha_inicial,fecha_final) 
 
 }
 
-function ver_modal_comprobante(comprobante){
-  var comprobante = comprobante;
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-  //console.log(extencion);
-  $('#ver_fact_pdf').html('');
-  $('#img-factura').attr("src", "");
-  $('#modal-ver-comprobante').modal("show");
+function ver_modal_comprobante(comprobante,tipo,numero_comprobante){
 
-  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
-    $('#ver_fact_pdf').hide();
-    $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/docs/pension/comprobante/" +comprobante);
-    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
-  }else{
-    $('#img-factura').hide();
-    $('#ver_fact_pdf').show();
-    $('#ver_fact_pdf').html('<iframe src="../dist/docs/pension/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/" +comprobante);
-  } 
- $(".tooltip").removeClass("show").addClass("hidde");
+  var dia_actual = moment().format('DD-MM-YYYY');
+  $(".nombre_comprobante").html(`${tipo}-${numero_comprobante}`);
+  $('#modal-ver-comprobante').modal("show");
+  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'pension', 'comprobante', '100%', '550'));
+
+  if (DocExist(`dist/docs/pension/comprobante/${comprobante}`) == 200) {
+    $("#iddescargar").attr("href","../dist/docs/pension/comprobante/"+comprobante).attr("download", `${tipo}-${numero_comprobante}  - ${dia_actual}`).removeClass("disabled");
+    $("#ver_completo").attr("href","../dist/docs/pension/comprobante/"+comprobante).removeClass("disabled");
+  } else {
+    $("#iddescargar").addClass("disabled");
+    $("#ver_completo").addClass("disabled");
+  }
+
+  $('.jq_image_zoom').zoom({ on:'grab' }); 
+
 }
 
 function calc_total() {
@@ -785,8 +791,18 @@ function despintar_btn_select() {
 }
 //:::::::::::::. FECHAS ::::::::::::::::::::::::::::::.
 // restringimos la fecha para no elegir mañana
+
 no_select_tomorrow("#fecha_inicial");
 
 function restrigir_fecha_input() {  restrigir_fecha_ant("#fecha_final",$("#fecha_inicial").val());}
+
+
+function extrae_ruc() {
+  if ($('#proveedor').select2("val") == null || $('#proveedor').select2("val") == '') { }  else{
+    
+    var ruc = $('#proveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+    $('#ruc_proveedor').val(ruc);
+  }
+}
 
 

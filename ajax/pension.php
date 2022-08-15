@@ -58,13 +58,13 @@
           if (empty($idpension)){
             
             $rspta=$pension->insertar_pension($idproyecto_p,$proveedor,$descripcion_pension);
-            echo json_encode($rspta);
+            echo json_encode($rspta,true);
           }
           else {
             
             $rspta=$pension->editar_pension($idproyecto_p,$idpension,$proveedor,$descripcion_pension);
             
-            echo json_encode($rspta);
+            echo json_encode($rspta,true);
           }
 
         break;
@@ -180,7 +180,7 @@
           if ($rspta['status']) {
 
             while ($reg=$rspta['data']->fetch_object()){ 
-              $comprobante= empty($reg->comprobante)?'<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':'<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
+              $comprobante= empty($reg->comprobante)?'<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':'<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".','."'".$reg->tipo_comprobante."'".','."'".$reg->numero_comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
 
               $data[]=array(
                 "0"=>$cont++,
