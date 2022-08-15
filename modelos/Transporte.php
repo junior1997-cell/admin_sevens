@@ -1,6 +1,6 @@
 <?php 
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion_v1.php";
+require "../config/Conexion_v2.php";
 
 Class Transporte
 {
@@ -9,14 +9,41 @@ Class Transporte
 	{
 
 	}
-	//$idtransporte,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
-	//Implementamos un método para insertar registros
-	public function insertar($idproyecto,$idproveedor,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$glosa)
-	{
 	
-		$sql="INSERT INTO transporte (idproyecto,idproveedor,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,val_igv,tipo_gravada,comprobante,glosa) 
-		VALUES ('$idproyecto','$idproveedor','$fecha_viaje','$tipo_viajero','$tipo_ruta','$cantidad','$precio_unitario','$precio_parcial','$ruta','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$val_igv','$tipo_gravada','$comprobante','$glosa')";
-		return ejecutarConsulta($sql);
+	//Implementamos un método para insertar registros
+	public function insertar($idproyecto,$idproveedor,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$glosa,$ruc_proveedor)
+	{
+		$sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, t.fecha_viaje, t.forma_de_pago, t.tipo_comprobante, 
+		t.numero_comprobante,  t.estado, t.estado_delete
+		FROM transporte as t, proveedor as p
+		WHERE t.idproveedor = p.idproveedor and t.idproyecto ='$idproyecto' and p.ruc ='$ruc_proveedor' and t.tipo_comprobante ='$tipo_comprobante' and t.numero_comprobante ='$nro_comprobante';";
+		$prov = ejecutarConsultaArray($sql_1);
+		if ($prov['status'] == false) { return  $prov;}
+
+		if (empty($prov['data']) || $tipo_comprobante=='Ninguno') {
+				
+			$sql="INSERT INTO transporte (idproyecto,idproveedor,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,val_igv,tipo_gravada,comprobante,glosa) 
+			VALUES ('$idproyecto','$idproveedor','$fecha_viaje','$tipo_viajero','$tipo_ruta','$cantidad','$precio_unitario','$precio_parcial','$ruta','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$val_igv','$tipo_gravada','$comprobante','$glosa')";
+			return ejecutarConsulta($sql);
+
+		} else {
+
+			$info_repetida = ''; 
+
+			foreach ($prov['data'] as $key => $value) {
+				$info_repetida .= '<li class="text-left font-size-13px">
+				<span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
+				<b>Razón Social: </b>'.$value['razon_social'].'<br>
+				<b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>          
+				<b>Fecha: </b>'.format_d_m_a($value['fecha_viaje']).'<br>
+				<b>Forma de pago: </b>'.$value['forma_de_pago'].'<br>
+				<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b> 
+				<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+				<hr class="m-t-2px m-b-2px">
+				</li>'; 
+			}
+			return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+		}	
 			
 	}
 

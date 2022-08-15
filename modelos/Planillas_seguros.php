@@ -19,11 +19,14 @@ Class Planillas_seguros
 		$prov = ejecutarConsultaArray($sql_1);
 		if ($prov['status'] == false) { return  $prov;}
 
-		if (empty($prov['data'])) {
+		if (empty($prov['data']) || $tipo_comprobante=='Ninguno') {
+			
 			$sql="INSERT INTO planilla_seguro (idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_p_s, costo_parcial, subtotal, igv, val_igv, tipo_gravada, glosa, descripcion, comprobante) 
 			VALUES ('$idproyecto', '$idproveedor','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_p_s','$precio_parcial','$subtotal','$igv', '$val_igv', '$tipo_gravada', '$glosa', '$descripcion','$comprobante')";
 			return ejecutarConsulta($sql);
+
 		} else {
+
 			$info_repetida = ''; 
 
 			foreach ($prov['data'] as $key => $value) {
@@ -45,6 +48,8 @@ Class Planillas_seguros
 	//Implementamos un método para editar registros
 	public function editar($idplanilla_seguro, $idproyecto, $idproveedor, $fecha_p_s, $precio_parcial, $subtotal, $igv, $val_igv, $tipo_gravada, $glosa, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante)
 	{
+		//if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else { $ruc =''; $razon_social =''; $direccion =''; }
+
 		$sql="UPDATE planilla_seguro SET 
 		idproyecto='$idproyecto',
 		idproveedor='$idproveedor',

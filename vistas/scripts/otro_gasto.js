@@ -222,8 +222,8 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 
 //Función Listar
 function listar() {
-  var idproyecto = localStorage.getItem("nube_idproyecto");
-  tabla = $("#tabla-otro_gasto")
+    var idproyecto = localStorage.getItem("nube_idproyecto");
+    tabla = $("#tabla-otro_gasto")
     .dataTable({
       responsive: true,
       lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
@@ -593,52 +593,3 @@ $(function () {
 
 no_select_tomorrow("#fecha_g");
 
-// function probando() {
-//   console.log($("#tipo_comprobante").select2("val"));
-//   if ($("#tipo_comprobante").select2("val") == "Ninguno") {
-//       console.log('bien');
-      
-//   } else {
-
-//     $("#form-otro_gasto").validate({
-//       ignore: '.select2-input, .select2-focusser',
-//       rules: {
-//         forma_pago: { required: true },
-//         tipo_comprobante: { required: true },
-//         fecha_g: { required: true },
-//         precio_parcial: { required: true },
-//         descripcion: { required: true },
-//         val_igv: { required: true, number: true, min:0, max:1 },
-//         razon_social: { required: true },
-//         // terms: { required: true },
-//       },
-//       messages: {
-//         forma_pago: { required: "Por favor una forma de pago", },
-//         tipo_comprobante: { required: "Por favor seleccionar tipo comprobante", },
-//         fecha_g: { required: "Por favor ingrese una fecha", },
-//         precio_parcial: { required: "Ingresar monto",},
-//         descripcion: { required: "Es necesario rellenar el campo descripción", },
-//         val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
-//         razon_social: { required: "Campo requerido",},
-//       },
-  
-//       errorElement: "span",
-  
-//       errorPlacement: function (error, element) {
-//         error.addClass("invalid-feedback");
-  
-//         element.closest(".form-group").append(error);
-//       },
-  
-//       highlight: function (element, errorClass, validClass) {
-//         $(element).addClass("is-invalid").removeClass("is-valid");
-//       },
-  
-//       unhighlight: function (element, errorClass, validClass) {
-//         $(element).removeClass("is-invalid").addClass("is-valid");
-//       },
-//     });
-
-//   }
-
-//   }

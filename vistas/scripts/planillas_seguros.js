@@ -250,6 +250,9 @@ function modal_comprobante(comprobante){
   $('#ver_grande').attr("href", "../dist/docs/planilla_seguro/comprobante/"+comprobante);
   $('#ver_documento').html(doc_view_extencion(comprobante, 'planilla_seguro', 'comprobante', '100%', '550'));
 
+  $('.jq_image_zoom').zoom({ on:'grab' }); 
+  $(".tooltip").removeClass("show").addClass("hidde");
+
 }
 
 //Función para guardar o editar
@@ -362,6 +365,11 @@ function mostrar(idplanilla_seguro) {
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide(); 
+
+      $('.jq_image_zoom').zoom({ on:'grab' }); 
+      $(".tooltip").removeClass("show").addClass("hidde");
+
+
     } else {
       ver_errores(2);
     }
@@ -457,6 +465,10 @@ function ver_detalle(idplanilla_seguro) {
     </div>`;
   
     $("#detalle_html").html(data_html);
+
+
+    $('.jq_image_zoom').zoom({ on:'grab' }); 
+    $(".tooltip").removeClass("show").addClass("hidde");
 
   });
 }

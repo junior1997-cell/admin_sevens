@@ -16,9 +16,6 @@
         <title>Admin Sevens | Transporte</title>
         <?php $title = "Transporte"; require 'head.php'; ?>
             
-        <!--CSS  switch_MATERIALES-->
-        <link rel="stylesheet" href="../dist/css/switch_materiales.css">
-
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
           <!-- Content Wrapper. Contains page content -->
@@ -77,7 +74,6 @@
                                   <th>Total</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                  <th>Estado</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -93,7 +89,6 @@
                                   <th class="text-nowrap total_monto"></th>
                                   <th>Descripción</th>
                                   <th>Comprob</th>
-                                  <th>Estado</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -128,136 +123,165 @@
                                 <input type="hidden" name="idproyecto" id="idproyecto" />
                                 <!-- id hospedaje -->
                                 <input type="hidden" name="idtransporte" id="idtransporte" />
-                                <!-- Tipo de comprobante -->
-                                <!--Proveedor-->
-                                <div class="col-lg-12">
-                                  <div class="form-group">
-                                    <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
-                                    <select name="idproveedor" id="idproveedor" class="form-control select2" placeholder="Seleccinar un proveedor"> </select>
-                                  </div>
+                                <input type="hidden" name="ruc_proveedor" id="ruc_proveedor" />
+
+                                <!-- Descripcion -->
+                                <div class="col-12 pl-0">
+                                  <div class="text-primary"><label for="">DETALLE TRANSPORTE </label></div>
                                 </div>
-                                <!--forma pago-->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
-                                    <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                      <option value="Transferencia">Transferencia</option>
-                                      <option value="Efectivo">Efectivo</option>
-                                      <option value="Crédito">Crédito</option>
-                                    </select>
+                                <div class="card col-12 px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                                  <div class="row">
+
+                                    <!--Proveedor-->
+                                    <div class="col-lg-12">
+                                      <div class="form-group">
+                                        <label for="idproveedor">Proveedor <sup class="text-danger">*</sup> <small class="text-danger text-lowercase"> (Único)</small></label>
+                                        <select name="idproveedor" id="idproveedor" class="form-control select2" onchange="extrae_ruc();" placeholder="Seleccinar un proveedor"> </select>
+                                      </div>
+                                    </div>
+                                    <!-- tipo_viajero-->
+                                    <div class="col-lg-6">
+                                      <div class="form-group">
+                                        <label for="tipo_viajero">Tipo clasificación</label>
+                                        <select name="tipo_viajero" id="tipo_viajero" class="form-control select2" style="width: 100%;" onclick="selecct_glosa();" onchange="selecct_glosa();">
+                                          <option value="Personal">Personal</option>
+                                          <option value="Material">Material</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <!-- tipo_ruta idtransporte,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion-->
+                                    <div class="col-lg-6">
+                                      <div class="form-group">
+                                        <label for="unidad">Tipo ruta</label>
+                                        <select name="tipo_ruta" id="tipo_ruta" class="form-control select2" style="width: 100%;">
+                                          <option value="Nacional">Nacional</option>
+                                          <option value="Provincial">Provincial</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <!-- ruta 2 -->
+                                    <div class="col-lg-6 class_pading">
+                                      <div class="form-group">
+                                        <label for="ruta">Ruta<sup class="text-danger">*</sup> <span style="font-size: 12px; font-weight: normal;">ej. Juliaca-Lima</span></label>
+                                        <textarea name="ruta" id="ruta" class="form-control" rows="2"></textarea>
+                                      </div>
+                                    </div>
+                                    <!--Descripcion-->
+                                    <div class="col-lg-6 class_pading">
+                                      <div class="form-group">
+                                        <label for="descripcion_pago">Descripción <sup class="text-danger">*</sup> <span style="font-size: 12px; font-weight: normal;">ej. nombre,Lima,1 día</span> </label> <br />
+                                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                      </div>
+                                    </div>
+
+                                    <!-- Cantidad  -->
+                                    <div class="col-lg-6 class_pading">
+                                      <div class="form-group">
+                                        <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
+                                        <input type="number" class="form-control" name="cantidad" id="cantidad" onkeyup="delay(function(){calc_total();}, 1300 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Cantidad."/>
+                                      </div>
+                                    </div>
+                                    <!--Precio Unitario-->
+                                    <div class="col-lg-6 class_pading">
+                                      <div class="form-group">
+                                        <label for="precio_unitario">Precio Unitario <sup class="text-danger">*</sup></label>
+                                        <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" onkeyup="delay(function(){calc_total();}, 1300 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Unitario"/>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
 
-                                <div class="col-lg-6" id="content-t-comprob">
-                                  <div class="form-group">
-                                    <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
-                                    <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="comprob_factura(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
-                                      <option value="Ninguno">Ninguno</option>
-                                      <option value="Boleta">Boleta</option>
-                                      <option value="Factura">Factura</option>
-                                      <option value="Nota de venta">Nota de venta</option>
-                                    </select>
-                                  </div>
+                                <div class="col-12 pl-0">
+                                  <div class="text-primary"><label for="">DETALLE COMPROBANTE </label></div>
                                 </div>
-                                <!-- Código-->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label class="nro_comprobante" for="codigo">Núm. comprobante </label>
-                                    <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
+                                <div class="card col-12 px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                                  <div class="row">
+
+                                    <!--forma pago-->
+                                    <div class="col-lg-6">
+                                      <div class="form-group">
+                                        <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
+                                        <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                          <option value="Transferencia">Transferencia</option>
+                                          <option value="Efectivo">Efectivo</option>
+                                          <option value="Crédito">Crédito</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                      <!-- tipo comprobante -->
+                                    <div class="col-lg-6" id="content-t-comprob">
+                                      <div class="form-group">
+                                        <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup> <small class="text-danger text-lowercase"> (Único)</small></label>
+                                        <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total();}, 100 );" placeholder="Seleccinar un tipo de comprobante">
+                                          <option value="Ninguno">Ninguno</option>
+                                          <option value="Boleta">Boleta</option>
+                                          <option value="Factura">Factura</option>
+                                          <option value="Nota de venta">Nota de venta</option>
+                                        </select>
+                                      </div>
+                                    </div> 
+
+                                    <!-- Código-->
+                                    <div class="col-lg-6">
+                                      <div class="form-group">
+                                        <label for="codigo"><span class="nro_comprobante">Núm. comprobante</span> <small class="text-danger text-lowercase"> (Único)</small>  </label>
+                                        <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
+                                      </div>
+                                    </div>
+
+                                    <!-- Fecha emisión -->
+                                    <div class="col-lg-6 class_pading">
+                                      <div class="form-group">
+                                        <label for="fecha">Fecha Emisión <sup class="text-danger">*</sup></label>
+                                        <input type="date" name="fecha_viaje" class="form-control" id="fecha_viaje" />
+                                      </div>
+                                    </div>
+
+                                    <!-- Sub total -->
+                                    <div class="col-lg-4">
+                                      <div class="form-group">
+                                        <label for="subtotal">Sub total  <small class="text-danger tipo_gravada text-lowercase"></small></label>
+                                        <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
+                                      </div>
+                                    </div>
+
+                                    <!-- IGV -->
+                                    <div class="col-lg-2">
+                                      <div class="form-group">
+                                        <label for="igv">IGV</label>
+                                        <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
+                                      </div>
+                                    </div>
+
+                                    <!-- valor IGV -->
+                                    <div class="col-lg-2">
+                                      <div class="form-group">
+                                        <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
+                                        <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control"  onkeyup="delay(function(){calc_total();}, 1300 );" onchange="delay(function(){calc_total();}, 100 );" readonly />
+                                        <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
+                                      </div>
+                                    </div>
+
+                                    <!--Precio Parcial-->
+                                    <div class="col-lg-4 class_pading">
+                                      <div class="form-group">
+                                        <label for="marca">Monto total </label>
+                                        <input type="number" class="form-control" name="precio_parcial" id="precio_parcial" readonly placeholder="Precio Parcial" />
+                                      </div>
+                                    </div>
+
+                                    <!--Glosa-->
+                                    <div class="col-lg-12 class_pading">
+                                      <div class="form-group">
+                                        <label for="glosa">Glosa</label> <br />
+                                        <textarea name="glosa" id="glosa" class="form-control" rows="1" readonly></textarea>
+                                      </div>
+                                    </div>
+
                                   </div>
                                 </div>
 
-                                <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
-                                <div class="col-lg-6 class_pading">
-                                  <div class="form-group">
-                                    <label for="fecha">Fecha Emisión <sup class="text-danger">*</sup></label>
-                                    <input type="date" name="fecha_viaje" class="form-control" id="fecha_viaje" />
-                                  </div>
-                                </div>
-                                <!-- Cantidad  -->
-                                <div class="col-lg-6 class_pading">
-                                  <div class="form-group">
-                                    <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
-                                    <input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="Cantidad." onchange="comprob_factura();" onkeyup="comprob_factura();" />
-                                  </div>
-                                </div>
-                                <!--Precio Unitario-->
-                                <div class="col-lg-6 class_pading">
-                                  <div class="form-group">
-                                    <label for="precio_unitario">Precio Unitario <sup class="text-danger">*</sup></label>
-                                    <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="comprob_factura();" onkeyup="comprob_factura();" />
-                                  </div>
-                                </div>
-                                <!-- Sub total -->
-                                <div class="col-lg-4">
-                                  <div class="form-group">
-                                    <label for="subtotal">Sub total</label>
-                                    <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
-                                  </div>
-                                </div>
-                                <!-- IGV -->
-                                <div class="col-lg-2">
-                                  <div class="form-group">
-                                    <label for="igv">IGV</label>
-                                    <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
-                                  </div>
-                                </div>
-                                <!-- valor IGV -->
-                                <div class="col-lg-2">
-                                  <div class="form-group">
-                                    <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                    <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
-                                    <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
-                                  </div>
-                                </div>
-                                <!--Precio Parcial-->
-                                <div class="col-lg-4 class_pading">
-                                  <div class="form-group">
-                                    <label for="marca">Monto total </label>
-                                    <input type="number" class="form-control" name="precio_parcial" id="precio_parcial" readonly placeholder="Precio Parcial" />
-                                  </div>
-                                </div>
-                                <!-- tipo_viajero-->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="tipo_viajero">Tipo clasificación</label>
-                                    <select name="tipo_viajero" id="tipo_viajero" class="form-control select2" style="width: 100%;" onclick="selecct_glosa();" onchange="selecct_glosa();">
-                                      <option value="Personal">Personal</option>
-                                      <option value="Material">Material</option>
-                                    </select>
-                                  </div>
-                                </div>
-                                <!-- tipo_ruta idtransporte,fecha_viaje,tipo_viajero,tipo_ruta,cantidad,precio_unitario,precio_parcial,ruta,descripcion-->
-                                <div class="col-lg-6">
-                                  <div class="form-group">
-                                    <label for="unidad">Tipo ruta</label>
-                                    <select name="tipo_ruta" id="tipo_ruta" class="form-control select2" style="width: 100%;">
-                                      <option value="Nacional">Nacional</option>
-                                      <option value="Provincial">Provincial</option>
-                                    </select>
-                                  </div>
-                                </div>
-                                <!-- ruta 2 -->
-                                <div class="col-lg-6 class_pading">
-                                  <div class="form-group">
-                                    <label for="ruta">Ruta<sup class="text-danger">*</sup> <span style="font-size: 12px; font-weight: normal;">ej. Juliaca-Lima</span></label>
-                                    <textarea name="ruta" id="ruta" class="form-control" rows="2"></textarea>
-                                  </div>
-                                </div>
-                                <!--Descripcion-->
-                                <div class="col-lg-6 class_pading">
-                                  <div class="form-group">
-                                    <label for="descripcion_pago">Descripción <sup class="text-danger">*</sup> <span style="font-size: 12px; font-weight: normal;">ej. nombre,Lima,1 día</span> </label> <br />
-                                    <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                                  </div>
-                                </div>
-                                <!--Descripcion-->
-                                <div class="col-lg-12 class_pading">
-                                  <div class="form-group">
-                                    <label for="glosa">Glosa</label> <br />
-                                    <textarea name="glosa" id="glosa" class="form-control" rows="1" readonly></textarea>
-                                  </div>
-                                </div>
+                                
                                 <!-- Factura -->
                                 <div class="col-md-6">
                                   <div class="row text-center">
@@ -305,18 +329,23 @@
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h4 class="modal-title">Comprobante Transporte</h4>
+                          <h4 class="modal-title">Comprobante Transporte :  <span class="nombre_comprobante text-bold"></span></h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
                           </button>
                         </div>
                         <div class="modal-body">
-                          <div class="class-style" style="text-align: center;">
-                            <a class="btn btn-warning btn-block" href="#" id="iddescargar" download=" Comprobante transporte" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                            <br />
-                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                            <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
-                          </div>
+                          <div class="row">
+                              <div class="col-6 col-md-6">
+                                <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                              </div>
+                              <div class="col-6 col-md-6">
+                                <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                              </div>
+                              <div class="col-12 col-md-12 mt-2">
+                                <div id="ver_fact_pdf" width="auto"></div>
+                              </div>
+                            </div> 
                         </div>
                       </div>
                     </div>
