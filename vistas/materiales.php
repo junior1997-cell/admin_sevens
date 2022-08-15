@@ -247,7 +247,7 @@
                               <!--img-material-->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                 <label for="imagen1">Imagen</label>
-                                <div style="text-align: center;">
+                                <div style="text-align: center;">                                   
                                   <img
                                     onerror="this.src='../dist/img/default/img_defecto_materiales.png';"
                                     src="../dist/img/default/img_defecto_materiales.png"
@@ -255,7 +255,7 @@
                                     id="imagen1_i"
                                     style="cursor: pointer !important; height: 100% !important;"
                                     width="auto"
-                                  />
+                                  />                                  
                                   <input style="display: none;" type="file" name="imagen1" id="imagen1" accept="image/*" />
                                   <input type="hidden" name="imagen1_actual" id="imagen1_actual" />
                                   <div class="text-center" id="imagen1_nombre"><!-- aqui va el nombre de la FOTO --></div>
@@ -333,7 +333,9 @@
                         <div class="class-style" style="text-align: center;">
                           <a class="btn btn-warning btn-block" href="#" id="iddescargar" download="Ficha Técnica" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
                           <br />
+                          
                           <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
+                          
                           <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
                         </div>
                       </div>
@@ -372,7 +374,7 @@
                         </button>
                       </div>
                       <div class="modal-body"> 
-                        <div id="perfil-insumo" class="class-style">
+                        <div id="perfil-insumo" class="text-center">
                           <!-- vemos los datos del trabajador -->
                         </div>
                       </div>

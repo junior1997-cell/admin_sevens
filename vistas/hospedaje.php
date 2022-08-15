@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Hospedaje</title>
+        <title>Hospedaje | Admin Sevens</title>
 
         <?php $title = "Hospedaje"; require 'head.php';  ?>
 
@@ -69,15 +69,15 @@
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
-                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>
                                 <th>Fecha</th>
+                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>                                
                                 <th>Sub total</th>
                                 <th>Igv</th>
                                 <th>Total</th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                <th>Estado</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
+                                 
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -85,15 +85,15 @@
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
+                                <th>Fecha</th>
                                 <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>
-                                <th>Fecha</th>
-                                <th>Sub total</th>
-                                <th>Igv</th>
-                                <th id="total_monto" class="text-nowrap"></th>
+                                <th class="px-2 text-nowrap"><div class="formato-numero-conta"> <span>S/</span><span id="total_subtotal"></span> </div></th>
+                                <th class="px-2 text-nowrap"><div class="formato-numero-conta"> <span>S/</span><span id="total_igv"></span> </div></th>
+                                <th class="px-2 text-nowrap"><div class="formato-numero-conta"> <span>S/</span><span id="total_monto"></span> </div></th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                <th>Estado</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
+                                 
                               </tr>
                             </tfoot>
                           </table>
@@ -108,7 +108,7 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- Modal agregar proveedores -->
+                <!-- MODAL - agregar proveedores -->
                 <div class="modal fade" id="modal-agregar-hospedaje">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -129,142 +129,163 @@
                               <!-- id hospedaje -->
                               <input type="hidden" name="idhospedaje" id="idhospedaje" />
                               <input type="hidden" name="tipo_documento" id="tipo_documento" value="RUC"/>
-                              <!--forma pago-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
-                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
-                                    <option value="Transferencia">Transferencia</option>
-                                    <option value="Efectivo">Efectivo</option>
-                                    <option value="Crédito">Crédito</option>
-                                  </select>
-                                </div>
+
+                              <!-- Descripcion hospedaje-->
+                              <div class="col-12 pl-0">
+                                <div class="text-primary"><label for="">DETALLE HOSPEDAJE</label></div>
                               </div>
-                              <!-- Tipo de comprobante -->
-                              <div class="col-lg-6" id="content-t-comprob">
-                                <div class="form-group">
-                                  <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="calculando_totales(); habilitar_r_social(); validando_igv();" placeholder="Seleccinar un tipo de comprobante">
-                                    <option value="Ninguno">Ninguno</option>
-                                    <option value="Boleta">Boleta</option>
-                                    <option value="Factura">Factura</option>
-                                    <option value="Nota de venta">Nota de venta</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <!-- RUC style="display: none;"-->
-                              <div class="col-lg-4 div_ruc" style="display: none;">
-                                <div class="form-group">
-                                  <label for="num_documento">R.U.C</label>
-                                  <div class="input-group">
-                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" />
-                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec();">
-                                      <span class="input-group-text" style="cursor: pointer;">
-                                        <i class="fas fa-search text-primary" id="search"></i>
-                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
-                                      </span>
+                              <div class="card col-12 px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%); ">
+                                <div class="row">
+                                  <!-- Unidad-->
+                                  <div class="col-lg-4">
+                                    <div class="form-group">
+                                      <label for="unidad">Unidad <sup class="text-danger">*</sup></label>
+                                      <select name="unidad" id="unidad" class="form-control select2" onchange="calc_cantidad(); calc_total();" style="width: 100%;">
+                                        <option value="Día">Día</option>
+                                        <option value="Mes">Mes</option>
+                                      </select>
+                                      <!--<input type="hidden" name="unid_medida_old" id="unid_medida_old" />-->
+                                    </div>
+                                  </div>
+                                  <!-- Fecha 1 -->
+                                  <div class="col-lg-4 class_pading">
+                                    <div class="form-group">
+                                      <label for="fecha">Fecha del <sup class="text-danger">*</sup></label>
+                                      <input type="date" name="fecha_inicio" class="form-control" id="fecha_inicio" onchange="calc_cantidad(); restrigir_fecha_input();" onkeyup="calc_cantidad(); calc_total();" />
+                                    </div>
+                                  </div>
+
+                                  <!-- Fecha 2 -->
+                                  <div class="col-lg-4 class_pading">
+                                    <div class="form-group">
+                                      <label for="fecha">Fecha al</label>
+                                      <input type="date" name="fecha_fin" class="form-control" id="fecha_fin" onchange="calc_cantidad(); " onkeyup="calc_cantidad(); calc_total();" />
+                                    </div>
+                                  </div>
+                                  <!-- Cantidad  -->
+                                  <div class="col-lg-6 class_pading">
+                                    <div class="form-group">
+                                      <label for="cantidad">Cantidad</label>
+                                      <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
+                                    </div>
+                                  </div>
+                                  <!--Precio Unitario-->
+                                  <div class="col-lg-6 class_pading">
+                                    <div class="form-group">
+                                      <label for="marca">Precio Unitario <sup class="text-danger">*</sup></label>
+                                      <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                              <!-- Razón social-->
-                              <div class="col-lg-8 div_razon_social" style="display: none;">
-                                <div class="form-group">
-                                  <label class="razon_social" for="razon_social">Razón social </label>
-                                  <input type="text" name="razon_social" id="razon_social" class="form-control" placeholder="Razón social" readonly />
-                                  <input type="hidden" name="direccion" id="direccion" />
-                                </div>
+
+                              <!-- Descripcion COMPROBANTE-->
+                              <div class="col-12 pl-0">
+                                <div class="text-primary"><label for="">DETALLE COMPROBANTE</label></div>
                               </div>
-                              <!-- Código-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="codigo" class="nro_comprobante">Núm. comprobante </label>
-                                  <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
-                                </div>
-                              </div>
-                              <!-- Fecha 1 onchange="calculando_cantidad(); restrigir_fecha_ant();" onkeyup="calculando_cantidad(); -->
-                              <div class="col-lg-6 class_pading">
-                                <div class="form-group">
-                                  <label for="fecha">Fecha Comprobante <sup class="text-danger">*</sup></label>
-                                  <input type="date" name="fecha_comprobante" class="form-control" id="fecha_comprobante" />
-                                </div>
-                              </div>
-                              <!-- Unidad-->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="unidad">Unidad <sup class="text-danger">*</sup></label>
-                                  <select name="unidad" id="unidad" class="form-control select2" onchange="calculando_cantidad(); calculando_totales();" style="width: 100%;">
-                                    <option value="Día">Día</option>
-                                    <option value="Mes">Mes</option>
-                                  </select>
-                                  <!--<input type="hidden" name="unid_medida_old" id="unid_medida_old" />-->
-                                </div>
-                              </div>
-                              <!-- Fecha 1 -->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="fecha">Fecha del <sup class="text-danger">*</sup></label>
-                                  <input type="date" name="fecha_inicio" class="form-control" id="fecha_inicio" onchange="calculando_cantidad(); restrigir_fecha_input();" onkeyup="calculando_cantidad(); calculando_totales();" />
+                              <div class="card col-12 px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%); ">
+                                <div class="row">
+                                  <!--forma pago-->
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup></label>
+                                      <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                        <option value="Transferencia">Transferencia</option>
+                                        <option value="Efectivo">Efectivo</option>
+                                        <option value="Crédito">Crédito</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <!-- Tipo de comprobante -->
+                                  <div class="col-lg-6" id="content-t-comprob">
+                                    <div class="form-group">
+                                      <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
+                                      <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
+                                        <option value="Ninguno">Ninguno</option>
+                                        <option value="Boleta">Boleta</option>
+                                        <option value="Factura">Factura</option>
+                                        <option value="Nota de venta">Nota de venta</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <!-- RUC style="display: none;"-->
+                                  <div class="col-lg-4 div_ruc" style="display: none;">
+                                    <div class="form-group">
+                                      <label for="num_documento">R.U.C</label>
+                                      <div class="input-group">
+                                        <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 300 );" />
+                                        <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec('');">
+                                          <span class="input-group-text" style="cursor: pointer;">
+                                            <i class="fas fa-search text-primary" id="search"></i>
+                                            <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- Razón social-->
+                                  <div class="col-lg-8 div_razon_social" style="display: none;">
+                                    <div class="form-group">
+                                      <label class="razon_social" for="razon_social">Razón social </label>
+                                      <input type="text" name="razon_social" id="razon_social" class="form-control" placeholder="Razón social" readonly />
+                                      <input type="hidden" name="direccion" id="direccion" />
+                                    </div>
+                                  </div>
+                                  <!-- Código-->
+                                  <div class="col-lg-6">
+                                    <div class="form-group">
+                                      <label for="codigo" ><span class="nro_comprobante">Núm. comprobante</span> </label>
+                                      <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
+                                    </div>
+                                  </div>
+                                  <!-- Fecha 1 -->
+                                  <div class="col-lg-6 class_pading">
+                                    <div class="form-group">
+                                      <label for="fecha">Fecha Comprobante <sup class="text-danger">*</sup></label>
+                                      <input type="date" name="fecha_comprobante" class="form-control" id="fecha_comprobante" />
+                                    </div>
+                                  </div>
+                                  
+                                  <!-- Sub total -->
+                                  <div class="col-lg-4">
+                                    <div class="form-group">
+                                      <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
+                                      <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
+                                    </div>
+                                  </div>
+                                  <!-- Fecha IGV -->
+                                  <div class="col-lg-2">
+                                    <div class="form-group">
+                                      <label for="igv">IGV</label>
+                                      <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
+                                    </div>
+                                  </div>
+                                  <!-- valor IGV -->
+                                  <div class="col-lg-2">
+                                    <div class="form-group">
+                                      <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
+                                      <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
+                                      <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
+                                    </div>
+                                  </div>
+                                  <!--Precio Parcial-->
+                                  <div class="col-lg-4 class_pading">
+                                    <div class="form-group">
+                                      <label for="marca">Monto total </label>
+                                      <input type="number" class="form-control" name="precio_parcial" id="precio_parcial" readonly placeholder="Precio Parcial" />
+                                    </div>
+                                  </div>
+                                  <!--Descripcion-->
+                                  <div class="col-lg-12 class_pading">
+                                    <div class="form-group">
+                                      <label for="descripcion_pago">Descripción <sup class="text-danger">*</sup> <span style="font-size: 12px; font-weight: normal;">ej. nombre,Lima,1 día</span> </label> <br />
+                                      <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
 
-                              <!-- Fecha 2 -->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="fecha">Fecha al</label>
-                                  <input type="date" name="fecha_fin" class="form-control" id="fecha_fin" onchange="calculando_cantidad(); " onkeyup="calculando_cantidad(); calculando_totales();" />
-                                </div>
-                              </div>
-                              <!-- Cantidad  -->
-                              <div class="col-lg-6 class_pading">
-                                <div class="form-group">
-                                  <label for="cantidad">Cantidad</label>
-                                  <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calculando_totales() ;" onkeyup="calculando_totales() ;" />
-                                </div>
-                              </div>
-                              <!--Precio Unitario-->
-                              <div class="col-lg-6 class_pading">
-                                <div class="form-group">
-                                  <label for="marca">Precio Unitario <sup class="text-danger">*</sup></label>
-                                  <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onchange="calculando_totales() ;" onkeyup="calculando_totales();" />
-                                </div>
-                              </div>
-                              <!-- Sub total -->
-                              <div class="col-lg-4">
-                                <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
-                                  <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
-                                </div>
-                              </div>
-                              <!-- Fecha IGV -->
-                              <div class="col-lg-2">
-                                <div class="form-group">
-                                  <label for="igv">IGV</label>
-                                  <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
-                                </div>
-                              </div>
-                              <!-- valor IGV -->
-                              <div class="col-lg-2">
-                                <div class="form-group">
-                                  <label for="val_igv" class="text-gray" style="font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" readonly onkeyup="calculandototales_fact();" />
-                                  <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
-                                </div>
-                              </div>
-                              <!--Precio Parcial-->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="marca">Monto total </label>
-                                  <input type="number" class="form-control" name="precio_parcial" id="precio_parcial" readonly placeholder="Precio Parcial" />
-                                </div>
-                              </div>
-                              <!--Descripcion-->
-                              <div class="col-lg-12 class_pading">
-                                <div class="form-group">
-                                  <label for="descripcion_pago">Descripción <sup class="text-danger">*</sup> <span style="font-size: 12px; font-weight: normal;">ej. nombre,Lima,1 día</span> </label> <br />
-                                  <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
-                                </div>
-                              </div>
+                              
 
                               <!-- Factura -->
                               <div class="col-md-6">
@@ -278,7 +299,7 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" />
                                   </div>
                                   <div class="col-6 col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'hospedaje', 'comprobante');"><i class="fas fa-redo"></i> Recargar.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'hospedaje', 'comprobante'); reload_zoom();"><i class="fas fa-redo"></i> Recargar.</button>
                                   </div>
                                 </div>
                                 <div id="doc1_ver" class="text-center mt-4">
@@ -317,28 +338,34 @@
                   </div>
                 </div>
 
-                <!--===============Comprobante hospedaje =========-->
+                <!-- MODAL - Comprobante hospedaje -->
                 <div class="modal fade" id="modal-ver-comprobante">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header" style="background-color: #0811190a;">
-                        <h4 class="modal-title">Comprobante hospedaje</h4>
+                        <h4 class="modal-title">Comprobante: <span class="text-bold tile-modal-comprobante"></span> </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="iddescargar" download="Comprobante" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                        <div class="row">
+                          <div class="col-6 col-md-6">
+                            <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                          </div>
+                          <div class="col-6 col-md-6">
+                            <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                          </div>
+                          <div class="col-12 col-md-12 mt-2">
+                            <div id="ver_fact_pdf" width="auto"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!--Modal ver datos-->
+
+                <!-- MODAL - ver datos-->
                 <div class="modal fade" id="modal-ver-hospedaje">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">

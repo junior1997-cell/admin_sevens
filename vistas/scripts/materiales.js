@@ -22,6 +22,7 @@ function init() {
   $("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unidad_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
+  $('.jq_image_zoom').zoom({ on:'grab' });
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
@@ -146,39 +147,27 @@ function tbla_principal() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },
-      { targets: [13], visible: false, searchable: false, },      
+      { targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();
 }
 
 //ver ficha tecnica
 function modal_ficha_tec(ficha_tecnica) {
-  var ficha_tec = ficha_tecnica;
-  console.log(ficha_tec);
-  var extencion = ficha_tec.substr(ficha_tec.length - 3); // => "1"
-  //console.log(extencion);
-  $("#ver_fact_pdf").html("");
-  $("#img-factura").attr("src", "");
+
+  // ------------------------
+  //$('.tile-modal-comprobante').html(nombre); 
   $("#modal-ver-ficha_tec").modal("show");
+  $('#ver_fact_pdf').html(doc_view_extencion(ficha_tecnica, 'material', 'ficha_tecnica', '100%', '550'));
 
-  if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-    $("#ver_fact_pdf").hide();
-    $("#img-factura").show();
-    $("#img-factura").attr("src", "../dist/ficha_tecnica_materiales/" + ficha_tec);
-
-    $("#iddescargar").attr("href", "../dist/ficha_tecnica_materiales/" + ficha_tec);
+  if (DocExist(`dist/docs/material/ficha_tecnica/${ficha_tecnica}`) == 200) {
+    $("#iddescargar").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).attr("download", 'ficha tecncia').removeClass("disabled");
+    $("#ver_completo").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).removeClass("disabled");
   } else {
-    $("#img-factura").hide();
-
-    $("#ver_fact_pdf").show();
-
-    $("#ver_fact_pdf").html('<iframe src="../dist/ficha_tecnica_materiales/' + ficha_tec + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-
-    $("#iddescargar").attr("href", "../dist/ficha_tecnica_materiales/" + ficha_tec);
+    $("#iddescargar").addClass("disabled");
+    $("#ver_completo").addClass("disabled");
   }
-
+  $('.jq_image_zoom').zoom({ on:'grab' });
   $(".tooltip").removeClass("show").addClass("hidde");
 }
 
@@ -297,7 +286,7 @@ function mostrar(idproducto) {
         $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%'));
               
       }
-  
+      $('.jq_image_zoom').zoom({ on:'grab' });
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
     } else {
@@ -418,7 +407,7 @@ function verdatos(idproducto){
                 </tr>               
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Descripción</th>
-                  <td>${e.data.descripcion}</td>
+                  <td><textarea cols="30" rows="2" class="textarea_datatable" readonly="">${e.data.descripcion}</textarea></td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Ficha Técnica</th>
@@ -431,7 +420,7 @@ function verdatos(idproducto){
       </div>`;
     
       $("#datosinsumo").html(retorno_html);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -443,7 +432,8 @@ function ver_perfil(file, nombre) {
   $('.foto-insumo').html(nombre);
   $(".tooltip").removeClass("show").addClass("hidde");
   $("#modal-ver-perfil-insumo").modal("show");
-  $('#perfil-insumo').html(`<center><img class="img-thumbnail" src="${file}" onerror="this.src='../dist/svg/404-v2.svg';" alt="Perfil" width="100%"></center>`);
+  $('#perfil-insumo').html(`<span class="jq_image_zoom"><img class="img-thumbnail" src="${file}" onerror="this.src='../dist/svg/404-v2.svg';" alt="Perfil" width="100%"></span>`);
+  $('.jq_image_zoom').zoom({ on:'grab' });
 }
 
 //Función para desactivar registros

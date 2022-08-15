@@ -1,6 +1,6 @@
 <?php 
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion_v1.php";
+require "../config/Conexion_v2.php";
 
 Class Hospedaje
 {
@@ -78,7 +78,7 @@ Class Hospedaje
 	}
 
 	//Implementar un método para listar los registros
-	public function listar($idproyecto)
+	public function tabla_principal($idproyecto)
 	{
 		$sql="SELECT*FROM hospedaje WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' ORDER BY fecha_comprobante DESC";
 		return ejecutarConsulta($sql);		
@@ -92,7 +92,9 @@ Class Hospedaje
 	}
 	//total
 	public function total($idproyecto){
-		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM hospedaje WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1' ";
+		$sql="SELECT SUM(precio_parcial) as precio_parcial, SUM(subtotal) as subtotal, SUM(igv) as igv
+		FROM hospedaje 
+		WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1' ";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

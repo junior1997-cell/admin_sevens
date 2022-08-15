@@ -16,20 +16,20 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar();    
+  tabla_principal();    
 
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
+
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) {$("#submit-form-hospedaje").submit();});
 
-  //Initialize Select2 unidad
-  $("#unidad").select2({ theme: "bootstrap4", placeholder: "Seleccinar unidad", allowClear: true, });
-  //Initialize Select2 unidad
-  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccinar tipo comprobante", allowClear: true, });
-  //Initialize Select2 unidad
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  $("#unidad").select2({ theme: "bootstrap4", placeholder: "Seleccinar unidad", allowClear: true, });  
+  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccinar tipo comprobante", allowClear: true, });  
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
-
 }
 
 // abrimos el navegador de archivos
@@ -46,174 +46,115 @@ function doc1_eliminar() {
 	$("#doc1_nombre").html("");
 }
 
-function calculando_cantidad() {
+function calc_cantidad() {
 
-  var fecha_inicio;
-  var fecha_fin;
-  var diferencia;
+  if ($("#unidad").select2("val")=='Día') {
+        
+    var fecha_inicio    = $("#fecha_inicio").val();  
+    var fecha_fin       = $("#fecha_fin").val();  
+    var precio_unitario = es_numero($('#precio_unitario').val()) == true? parseFloat($('#precio_unitario').val()) : 0;
 
-  if ($("#unidad").select2("val")!=null) {
+    if (fecha_inicio!='' && fecha_fin!='' ) {
 
-    if ($("#unidad").select2("val")=='Día') {
-         
-      fecha_inicio = $("#fecha_inicio").val();  
-      fecha_fin = $("#fecha_fin").val();  
-      console.log('fecha_inicio '+fecha_inicio);
-      console.log('fecha_fin '+fecha_fin);
-
-      if (fecha_inicio!='' && fecha_fin!='' ) {
-
-        fecha_inicio=fecha_inicio.replace("/","-");
-        var fecha1 = moment(fecha_inicio);
-
-        fecha_fin=fecha_fin.replace("/","-");
-        var fecha2 = moment(fecha_fin);
-
-        diferencia=fecha2.diff(fecha1, 'days');
-        $("#cantidad").val(diferencia);
-        $("#precio_parcial").val(diferencia*$("#precio_unitario").val());
-      }
-
-        //toastr.warning('Seleccionar una fecha.'); 
-    }else{
-      $("#cantidad").val("");
-      $("#precio_parcial").val("");
+      var diferencia= diferencia_de_dias(fecha_inicio, fecha_fin);
+      $("#cantidad").val(diferencia);
+      $("#precio_parcial").val(diferencia * precio_unitario);
     }
-
   }else{
-    $("#cantidad").val("");
-    $("#precio_parcial").val("");
+    $("#cantidad").val("0.00");
+    $("#precio_parcial").val("0.00");
   }
 }
 
-function habilitar_r_social(){
+function calc_total() {  
 
-  if ($("#tipo_comprobante").select2("val") =="Factura" || $("#tipo_comprobante").select2("val") =="Boleta"){
+  $(".nro_comprobante").html("Núm. Comprobante");
 
-    $(".nro_comprobante").html("Núm. Comprobante");
+  var cantidad      =  es_numero($('#cantidad').val()) == true? parseFloat($('#cantidad').val()) : 0;
+  var precio_unit   =  es_numero($('#precio_unitario').val()) == true? parseFloat($('#precio_unitario').val()) : 0;
 
+  var total         = cantidad * precio_unit;
+  var val_igv       = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0;
+  var subtotal      = 0; 
+  var igv           = 0;
+
+  $('#precio_parcial').val(total);
+
+  if ($("#tipo_comprobante").select2("val")=="" || $("#tipo_comprobante").select2("val")==null) {
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+    $(".div_ruc").hide(); $(".div_razon_social").hide();    
+  }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+    $(".nro_comprobante").html("Núm. de Operación");
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+  }else if ($("#tipo_comprobante").select2("val") =="Boleta") {  
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+    $(".nro_comprobante").html("Núm. de Operación");
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+  }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
+
+    $("#val_igv").prop("readonly",false);    
+
+    if (total == null || total == "") {
+      $("#subtotal").val(0.00);
+      $("#igv").val(0.00); 
+      $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+    } else if (val_igv == null || val_igv == "") {  
+      $("#subtotal").val(redondearExp(total));
+      $("#igv").val(0.00);
+      $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+    }else{     
+
+      subtotal = quitar_igv_del_precio(total, val_igv, 'decimal');
+      igv = total - subtotal;
+
+      $("#subtotal").val(redondearExp(subtotal));
+      $("#igv").val(redondearExp(igv));
+
+      if (val_igv > 0 && val_igv <= 1) {
+        $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+      } else {
+        $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+      }    
+    }
     $(".div_ruc").show(); $(".div_razon_social").show();
 
-  }else{
-
-    $(".nro_comprobante").html("Núm. de Operación");
-
-    $(".div_ruc").hide(); $(".div_razon_social").hide();
-  }
-
-}
-
-function calculando_totales() {
-
-  var cantidad = $("#cantidad").val();
-
-  var precio_unitario = $("#precio_unitario").val();
-
-  $("#tipo_gravada").val("");
-
-  var monto = cantidad*precio_unitario;
-
-  $('#precio_parcial').val(monto);
-
-  if ($("#tipo_comprobante").select2("val") =="" || $("#tipo_comprobante").select2("val") ==null) {
-
-    $("#subtotal").val('0.0');
-
-    $("#igv").val("0.00");
-
-    $('#precio_parcial').val('0.00');
-    $("#val_igv").val("0"); 
-    $("#tipo_gravada").val("NO GRAVADA");  
-    $("#val_igv").prop("readonly",true);
-
   } else {
-    
-    if ($("#tipo_comprobante").select2("val") =="Factura") {
-
-      $("#tipo_gravada").val("GRAVADA"); 
-
-      calculandototales_fact()
-
-    }else{
-
-      if ($("#tipo_comprobante").select2("val")!="Factura" && $("#precio_unitario").val()!='' && $("#unidad").select2("val") !="") {
-
-        $("#subtotal").val(monto.toFixed(2));
-
-        $("#igv").val("0.00");
-    
-        $('#precio_parcial').val(monto.toFixed(2));
-        $("#val_igv").val("0"); 
-        $("#tipo_gravada").val("NO GRAVADA");  
-        $("#val_igv").prop("readonly",true);
-
-      } else {
-
-        $("#subtotal").val('0.0');
-
-        $("#igv").val("0.00");
-    
-        $('#precio_parcial').val('0.00');
-        $("#val_igv").val("0"); 
-        $("#tipo_gravada").val("NO GRAVADA");  
-        $("#val_igv").prop("readonly",true);
-      }
-    } 
-  } 
-  
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00");
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
+    $("#val_igv").prop("readonly",true);
+    $(".div_ruc").show(); $(".div_razon_social").show();
+  }
+  if (val_igv > 0 && val_igv <= 1) {
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+  } else {
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+  }  
 }
 
-function validando_igv() {
-
+function select_comprobante() {
   if ($("#tipo_comprobante").select2("val") == "Factura") {
-
     $("#val_igv").prop("readonly",false);
     $("#val_igv").val(0.18); 
-
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)");
   }else {
-
-    $("#val_igv").val(0); 
-
-  }
-  
-}
-
-function calculandototales_fact() {
-
-  var precio_parcial =  $("#precio_parcial").val();
-
-  var val_igv = $('#val_igv').val();
-
-  if (precio_parcial == null || precio_parcial == "") {
-
-    $("#subtotal").val(0);
-    $("#igv").val(0); 
-
-  } else {
- 
-    var subtotal = 0;
-    var igv = 0;
-
-    if (val_igv == null || val_igv == "") {
-
-      $("#subtotal").val(parseFloat(precio_parcial));
-      $("#igv").val(0);
-
-    }else{
-
-      $("subtotal").val("");
-      $("#igv").val("");
-
-      subtotal = quitar_igv_del_precio(precio_parcial, val_igv, 'decimal');
-      igv = precio_parcial - subtotal;
-
-      $("#subtotal").val(parseFloat(subtotal).toFixed(2));
-      $("#igv").val(parseFloat(igv).toFixed(2));
-
-    }
-
+    $("#val_igv").val(0.00); 
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
   }  
-
 }
 
 function quitar_igv_del_precio(precio , igv, tipo ) {
@@ -248,43 +189,34 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
   return precio_sin_igv; 
 }
 
-
 //Función limpiar
 function limpiar() {
-
- // idhospedaje,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion
   $("#idhospedaje").val("");
   $("#fecha_inicio").val(""); 
   $("#fecha_fin").val(""); 
   $("#cantidad").val(""); 
- // $("#unidad").val(""); 
   $("#precio_unitario").val(""); 
   $("#descripcion").val("");
-
   $("#num_documento").val("");
   $("#razon_social").val("");
   $("#direccion").val("");
-
   $("#fecha_comprobante").val("");
   $("#nro_comprobante").val("");
 
   $("#precio_parcial").val("");
-
   $("#subtotal").val("");
-
-  $("#igv").val("");
-  
+  $("#igv").val("");  
   $("#val_igv").val(""); 
   $("#tipo_gravada").val("");
-
-  $("#doc_old_1").val("");
-  $("#doc1").val("");  
-  $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc1_nombre').html("");
 
   $("#unidad").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
+
+  $("#doc_old_1").val("");
+  $("#doc1").val("");  
+  $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc1_nombre').html(""); 
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -293,17 +225,17 @@ function limpiar() {
 }
 
 //Función Listar
-function listar() {
+function tabla_principal() {
   var idproyecto=localStorage.getItem('nube_idproyecto');
   tabla=$('#tabla-hospedaje').dataTable({
-    "responsive": true,
+    responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    "aProcessing": true,//Activamos el procesamiento del datatables
-    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-    "ajax":{
-      url: '../ajax/hospedaje.php?op=listar&idproyecto='+idproyecto,
+    ajax:{
+      url: '../ajax/hospedaje.php?op=tabla_principal&idproyecto='+idproyecto,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -327,39 +259,50 @@ function listar() {
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
-    "bDestroy": true,
-    "iDisplayLength": 5,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      //{ targets: [12,13], visible: false, searchable: false, },    
+    ],
   }).DataTable();
   total();
 }
-//ver ficha tecnica
-function modal_comprobante(comprobante){
-  var comprobante = comprobante;
-  console.log(comprobante);
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-  //console.log(extencion);
-  $('#ver_fact_pdf').html('');
-  $('#img-factura').attr("src", "");
+
+function total() {
+  var idproyecto=localStorage.getItem('nube_idproyecto');
+  $("#total_monto").html("");
+  $.post("../ajax/hospedaje.php?op=total", { idproyecto: idproyecto }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);  
+    if (e.status ==true) {      
+      $("#total_subtotal").html(formato_miles(e.data.subtotal));
+      $("#total_igv").html(formato_miles(e.data.igv));
+      $("#total_monto").html(formato_miles(e.data.precio_parcial));
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+//ver comprobante
+function modal_comprobante(comprobante, nombre){  
+
+  $('.tile-modal-comprobante').html(nombre); 
   $('#modal-ver-comprobante').modal("show");
+  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'hospedaje', 'comprobante', '100%', '550'));
 
-  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
-    $('#ver_fact_pdf').hide();
-    $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/docs/hospedaje/comprobante/"+comprobante);
-
-    $("#iddescargar").attr("href","../dist/docs/hospedaje/comprobante/"+comprobante);
-
-  }else{
-    $('#img-factura').hide();
-    
-    $('#ver_fact_pdf').show();
-
-    $('#ver_fact_pdf').html('<iframe src="../dist/docs/hospedaje/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-
-    $("#iddescargar").attr("href","../dist/docs/hospedaje/comprobante/"+comprobante);
+  if (DocExist(`dist/docs/hospedaje/comprobante/${comprobante}`) == 200) {
+    $("#iddescargar").attr("href","../dist/docs/hospedaje/comprobante/"+comprobante).attr("download", nombre).removeClass("disabled");
+    $("#ver_completo").attr("href","../dist/docs/hospedaje/comprobante/"+comprobante).removeClass("disabled");
+  } else {
+    $("#iddescargar").addClass("disabled");
+    $("#ver_completo").addClass("disabled");
   }
- $(".tooltip").removeClass("show").addClass("hidde");
+
+  $('.jq_image_zoom').zoom({ on:'grab' });  
+  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 //Función para guardar o editar
@@ -373,16 +316,20 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {             
-      if (datos == 'ok') {
-				toastr.success('Registrado correctamente')
-	      tabla.ajax.reload(null, false);         
-				limpiar();
-        $("#modal-agregar-hospedaje").modal("hide");
-        total();
-			}else{
-				toastr.error(datos)
-			}
+    success: function (e) {      
+      try {
+        e = JSON.parse(e);  console.log(e); 
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Hospedaje guardado correctamente", "success");
+          tabla.ajax.reload(null, false); total();    
+          limpiar();        
+          
+          $("#modal-agregar-hospedaje").modal("hide");
+        }else{
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+     
       $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
@@ -412,84 +359,62 @@ function guardaryeditar(e) {
 
 function mostrar(idhospedaje) {
   limpiar();
-  //$("#proveedor").val("").trigger("change"); 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-hospedaje").modal("show")
     
-  $("#unidad").val("").trigger("change"); 
-  $("#tipo_comprobante").val("").trigger("change"); 
-  $("#forma_pago").val("null").trigger("change");
+  $.post("../ajax/hospedaje.php?op=mostrar", { idhospedaje: idhospedaje }, function (e, status) {
 
-  $.post("../ajax/hospedaje.php?op=mostrar", { idhospedaje: idhospedaje }, function (data, status) {
+    e = JSON.parse(e);  console.log(e);  
 
-    data = JSON.parse(data);  console.log(data);  
+    if (e.status == true) {
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+      $("#unidad").val(e.data.unidad).trigger("change"); 
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change"); 
+      $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
+      $("#idhospedaje").val(e.data.idhospedaje);
+      $("#fecha_inicio").val(e.data.fecha_inicio); 
+      $("#fecha_fin").val(e.data.fecha_fin); 
+      $("#cantidad").val(e.data.cantidad); 
+      $("#precio_unitario").val(redondearExp(e.data.precio_unitario)); 
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-    $("#unidad").val(data.unidad).trigger("change"); 
-    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change"); 
-    $("#forma_pago").val(data.forma_de_pago).trigger("change");
-    $("#idhospedaje").val(data.idhospedaje);
-    $("#fecha_inicio").val(data.fecha_inicio); 
-    $("#fecha_fin").val(data.fecha_fin); 
-    $("#cantidad").val(data.cantidad); 
-    $("#precio_unitario").val(parseFloat(data.precio_unitario).toFixed(2)); 
+      $("#fecha_comprobante").val(e.data.fecha_comprobante);
+      $("#nro_comprobante").val(e.data.numero_comprobante);
 
-    $("#fecha_comprobante").val(data.fecha_comprobante);
-    $("#nro_comprobante").val(data.numero_comprobante);
+      $("#num_documento").val(e.data.ruc);
+      $("#razon_social").val(e.data.razon_social);
+      $("#direccion").val(e.data.direccion);
+      $("#descripcion").val(e.data.descripcion);
 
-    $("#num_documento").val(data.ruc);
-    $("#razon_social").val(data.razon_social);
-    $("#direccion").val(data.direccion);
-
-    $("#precio_parcial").val(parseFloat(data.precio_parcial).toFixed(2)); 
-  
-    $("#subtotal").val(parseFloat(data.subtotal).toFixed(2));
- 
-    $("#igv").val(parseFloat(data.igv).toFixed(2));
-
-    $("#val_igv").val(data.val_igv);
-    $("#tipo_gravada").val(data.tipo_gravada);
-
-    $("#descripcion").val(data.descripcion);
-  
-  if (data.comprobante == "" || data.comprobante == null  ) {
-
-    $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-    $("#doc1_nombre").html('');
-
-    $("#doc_old_1").val(""); $("#doc1").val("");
-
-  } else {
-
-    $("#doc_old_1").val(data.comprobante); 
-
-    $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.comprobante)}</i></div></div>`);
+      $("#precio_parcial").val(redondearExp(e.data.precio_parcial));   
+      $("#subtotal").val(redondearExp(e.data.subtotal)); 
+      $("#igv").val(redondearExp(e.data.igv));
+      $("#val_igv").val(e.data.val_igv).trigger("change");
     
-    // cargamos la imagen adecuada par el archivo
-    if ( extrae_extencion(data.comprobante) == "pdf" ) {
+      if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 
-      $("#doc1_ver").html('<iframe src="../dist/docs/hospedaje/comprobante/'+data.comprobante+'" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>');
+        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+        $("#doc1_nombre").html('');
+        $("#doc_old_1").val(""); $("#doc1").val("");
 
-    }else{
-      if (
-        extrae_extencion(data.comprobante) == "jpeg" || extrae_extencion(data.comprobante) == "jpg" || extrae_extencion(data.comprobante) == "jpe" ||
-        extrae_extencion(data.comprobante) == "jfif" || extrae_extencion(data.comprobante) == "gif" || extrae_extencion(data.comprobante) == "png" ||
-        extrae_extencion(data.comprobante) == "tiff" || extrae_extencion(data.comprobante) == "tif" || extrae_extencion(data.comprobante) == "webp" ||
-        extrae_extencion(data.comprobante) == "bmp" || extrae_extencion(data.comprobante) == "svg" ) {
-
-        $("#doc1_ver").html(`<img src="../dist/docs/hospedaje/comprobante/${data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`); 
-        
       } else {
-        $("#doc1_ver").html('<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >');
-      }        
-    }      
-  }
 
-  });
+        $("#doc_old_1").val(e.data.comprobante); 
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);        
+        // cargamos la imagen adecuada par el archivo
+        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'hospedaje', 'comprobante', '100%'));
+        
+      }
+      
+      $('.jq_image_zoom').zoom({ on:'grab' });
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+    } else {
+      ver_errores(e);
+    } 
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function ver_datos(idhospedaje) {
@@ -497,54 +422,32 @@ function ver_datos(idhospedaje) {
   $("#modal-ver-hospedaje").modal("show")
   var comprobante=''; var btn_comprobante='';
 
-  $.post("../ajax/hospedaje.php?op=verdatos", { idhospedaje: idhospedaje }, function (data, status) {
+  $.post("../ajax/hospedaje.php?op=verdatos", { idhospedaje: idhospedaje }, function (e, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    e = JSON.parse(e);  console.log(e); 
 
-    
-    if (data.comprobante != '') {
-
-      if ( extrae_extencion(data.comprobante) == "pdf" ) {
-
-        comprobante= `<iframe src="../dist/docs/hospedaje/comprobante/${data.comprobante}" frameborder="0" scrolling="no" width="100%" height="210"> </iframe>`;
-
-      }else{
-
-        if (
-          extrae_extencion(data.comprobante) == "jpeg" || extrae_extencion(data.comprobante) == "jpg" || extrae_extencion(data.comprobante) == "jpe" ||
-          extrae_extencion(data.comprobante) == "jfif" || extrae_extencion(data.comprobante) == "gif" || extrae_extencion(data.comprobante) == "png" ||
-          extrae_extencion(data.comprobante) == "tiff" || extrae_extencion(data.comprobante) == "tif" || extrae_extencion(data.comprobante) == "webp" ||
-          extrae_extencion(data.comprobante) == "bmp" || extrae_extencion(data.comprobante) == "svg" ) {
-
-            comprobante=`<img src="../dist/docs/hospedaje/comprobante/${data.comprobante}" alt="" width="100%" onerror="this.src='../dist/svg/error-404-x.svg';" >`; 
-          
-        } else {
-          comprobante=`<img src="../dist/svg/doc_si_extencion.svg" alt="" width="50%" >`;
-        }  
-
-      }
-
-      btn_comprobante=``;
-    
+    if (e.data.comprobante != '') {
+        
+      comprobante =  doc_view_extencion(e.data.comprobante, 'hospedaje', 'comprobante', '100%');
+      
       btn_comprobante=`
       <div class="row">
         <div class="col-6"">
-           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/hospedaje/comprobante/${data.comprobante}"> <i class="fas fa-expand"></i></a>
+          <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/hospedaje/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
         </div>
         <div class="col-6"">
-           <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/hospedaje/comprobante/${data.comprobante}" download="comprobante_hospedaje"> <i class="fas fa-download"></i></a>
+          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/hospedaje/comprobante/${e.data.comprobante}" download="Ficha Tecnica - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
         </div>
       </div>`;
-
-
+    
     } else {
 
-      comprobante='Sin comprobante';
+      comprobante='Sin Ficha Técnica';
       btn_comprobante='';
 
-    }
+    } 
         
-    verdatos=`                                                                            
+    html_data=`                                                                            
     <div class="col-12">
       <div class="card">
         <div class="card-body">
@@ -552,64 +455,60 @@ function ver_datos(idhospedaje) {
             <tbody>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Proveedor</th>
-                <td>${data.razon_social} <br>${data.ruc} </td>
+                <td>${e.data.razon_social} <br>${e.data.ruc} </td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Descripción</th>
-                <td>${data.descripcion}</td>
+                <td><textarea cols="30" rows="2" class="textarea_datatable" readonly="">${e.data.descripcion}</textarea></td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Glosa</th>
-                <td>${data.glosa}</td>
+                <td>${e.data.glosa}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Unidad</th>
-                <td>${data.unidad}</td>
+                <td>${e.data.unidad}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Fecha inicial</th>
-                <td>${data.fecha_inicio}</td>
-              </tr>
-              <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Fecha final</th>
-                  <td>${data.fecha_fin}</td>
-              </tr>
+                <th>Fecha Inicio y Fin</th>
+                <td>${format_d_m_a(e.data.fecha_inicio)} | ${format_d_m_a(e.data.fecha_fin)}</td>
+              </tr>              
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Cantidad</th>
-                <td>${data.cantidad}</td>
+                <td>${formato_miles(e.data.cantidad)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Precio unitario</th>
-                <td>${parseFloat(data.precio_unitario).toFixed(2)}</td>
+                <td>${formato_miles(e.data.precio_unitario)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Tipo pago </th>
-                <td>${data.forma_de_pago!="" || data.forma_de_pago==null ?data.forma_de_pago:''}</td>
+                <td>${e.data.forma_de_pago!="" || e.data.forma_de_pago==null ?e.data.forma_de_pago:''}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>Tipo comprobante </th>
-                <td>${data.tipo_comprobante}</td>
+                <th>${e.data.tipo_comprobante}</th>
+                <td>${e.data.numero_comprobante}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Fecha comprobante</th>
-                <td>${data.fecha_comprobante}</td>
+                <td>${format_d_m_a(e.data.fecha_comprobante)}</td>
               </tr>
-
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Subtotal</th>
-                <td>${parseFloat(data.subtotal).toFixed(2)}</td>
+                <td>${formato_miles(e.data.subtotal)}</td>
               </tr>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>IGV</th>
-                <td>${parseFloat(data.igv).toFixed(2)}</td>
+                <td>${formato_miles(e.data.igv)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Total</th>
-                <td>${parseFloat(data.precio_parcial).toFixed(2)}</td>
+                <td>${formato_miles(e.data.precio_parcial)}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <td colspan="2" > ${comprobante} <br> ${btn_comprobante} </td>
+                <th>Comprobante</th>
+                <td> ${comprobante} <br>${btn_comprobante}</td>
               </tr>
             </tbody>
           </table>
@@ -617,44 +516,9 @@ function ver_datos(idhospedaje) {
       </div>
     </div>`;
   
-    $("#datoshospedaje").html(verdatos);
-
-  });
-}
-
-function total() {
-  var idproyecto=localStorage.getItem('nube_idproyecto');
-  $("#total_monto").html("");
-  $.post("../ajax/hospedaje.php?op=total", { idproyecto: idproyecto }, function (data, status) {
-
-    data = JSON.parse(data);  console.log(data);  
-
-    $("#total_monto").html('S/ '+ formato_miles(data.precio_parcial));
-  });
-}
-
-
-//Función para desactivar registros
-function desactivar(idhospedaje) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el registro?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/hospedaje.php?op=desactivar", { idhospedaje: idhospedaje }, function (e) {
-
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-    
-        tabla.ajax.reload(null, false);
-        total();
-      });      
-    }
-  });   
+    $("#datoshospedaje").html(html_data);
+    $('.jq_image_zoom').zoom({ on:'grab' });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para activar registros
@@ -670,60 +534,35 @@ function activar(idhospedaje) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/hospedaje.php?op=activar", { idhospedaje: idhospedaje }, function (e) {
-
-        Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
-
-        tabla.ajax.reload(null, false);
-        total();
-      });
-      
+        e = JSON.parse(e);  console.log(e); 
+        if (e.status == true) {
+          Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
+          tabla.ajax.reload(null, false);
+          total();
+        } else {
+          ver_errores(e);
+        }        
+      }).fail( function(e) { ver_errores(e); } );      
     }
   });      
 }
+
 //Función para Eliminar registros
-function eliminar(idhospedaje) {
-
-  Swal.fire({
-
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-    //Desactivar
-    $.post("../ajax/hospedaje.php?op=desactivar", { idhospedaje: idhospedaje }, function (e) {
-
-      Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-  
-      tabla.ajax.reload(null, false);
-      total();
-    });
-
-    }else if (result.isDenied) {
-
-      // Eliminar
-      $.post("../ajax/hospedaje.php?op=eliminar", { idhospedaje: idhospedaje }, function (e) {
-
-        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-    
-        tabla.ajax.reload(null, false);
-        total();
-      }); 
-
-    }
-
-  });
-  
+function eliminar(idhospedaje, nombre) {
+  crud_eliminar_papelera(
+    "../ajax/hospedaje.php?op=desactivar",
+    "../ajax/hospedaje.php?op=eliminar", 
+    idhospedaje, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla.ajax.reload(null, false);  total(); },
+    false, 
+    false, 
+    false,
+    false
+  );  
 }
 
 init();

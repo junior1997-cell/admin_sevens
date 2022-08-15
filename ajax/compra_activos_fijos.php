@@ -276,15 +276,15 @@
               $data[] = [
                 "0" => $cont++,
                 "1" => empty($reg['idproyecto']) ? ($reg['estado'] == '1'  ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_activo_fijo(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                      ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_general(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
-                      ' <button class="btn btn-danger  btn-sm" onclick="eliminar_compra(' . $reg['idtabla'] .', \''.encodeCadenaHtml($reg['razon_social']).' - '.date("d/m/Y", strtotime($reg['fecha_compra'])).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'
-                    : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras_activo_fijo(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
-                      ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>')
+                      ' <button class="btn btn-sm btn-warning" onclick="mostrar_compra_general(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
+                      ' <button class="btn btn-sm btn-danger" onclick="eliminar_compra(' . $reg['idtabla'] .', \''.encodeCadenaHtml($reg['razon_social']).' - '.date("d/m/Y", strtotime($reg['fecha_compra'])).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'
+                    : ' <button class="btn btn-sm btn-info" onclick="ver_detalle_compras_activo_fijo(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
+                      ' <button class="btn btn-sm btn-success" onclick="des_anular(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>')
                   : ($reg['estado'] == '1' ? '<button class="btn btn-info btn-sm " onclick="ver_detalle_compras_insumo(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                      ' <button class="btn btn-warning btn-sm" disabled onclick="mostrar_compra_proyecto(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
-                      ' <button class="btn btn-danger  btn-sm" disabled onclick="eliminar_compra(' . $reg['idtabla'] . ')"><i class="fas fa-skull-crossbones"></i> </button>'
-                    : '<button class="btn btn-info btn-sm" disabled onclick="ver_detalle_compras_insumo(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
-                      ' <button class="btn btn-success btn-sm" disabled onclick="des_anular_af_p(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
+                      ' <button class="btn btn-sm btn-warning" disabled onclick="mostrar_compra_proyecto(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .
+                      ' <button class="btn btn-sm btn-danger" disabled onclick="eliminar_compra(' . $reg['idtabla'] . ')"><i class="fas fa-skull-crossbones"></i> </button>'
+                    : ' <button class="btn btn-sm btn-info" disabled onclick="ver_detalle_compras_insumo(' . $reg['idtabla'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
+                      ' <button class="btn btn-sm btn-success " disabled onclick="des_anular_af_p(' . $reg['idtabla'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
                 "2" => '<textarea class="form-control textarea_datatable" readonly cols="30" rows="1">' . $reg['descripcion'] . '</textarea>',      
                 "3" => $reg['fecha_compra'],
                 "4" => '<div class="user-block">'. 

@@ -194,7 +194,7 @@
                               <!-- Proceedor -->
                               <div class="col-lg-10">
                                 <div class="form-group">
-                                  <label for="idproveedor">Proveedor <sup class="text-danger">(unico*)</sup></label>
+                                  <label for="idproveedor">Proveedor <sup class="text-danger">(único*)</sup></label>
                                   <select name="idproveedor" id="idproveedor" class="form-control select2" placeholder="Seleccinar un proveedor" onchange="extrae_ruc();"> </select>
                                 </div>
                               </div>
@@ -223,7 +223,7 @@
                               <!--Tipo de comprobante-->
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
-                                  <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(unico*)</sup></label>
+                                  <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(único*)</sup></label>
                                   <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
@@ -398,7 +398,7 @@
                             <!-- N° de documento -->
                             <div class="col-lg-4">
                               <div class="form-group">
-                                <label for="num_documento_prov">N° RUC / DNI <sup class="text-danger">(unico*)</sup></label>
+                                <label for="num_documento_prov">N° RUC / DNI <sup class="text-danger">(único*)</sup></label>
                                 <div class="input-group">
                                   <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('_prov')}, 300 );" onkeyup="delay(function(){buscar_sunat_reniec('_prov')}, 300 );" />
                                   <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">

@@ -302,7 +302,7 @@
                                   <!-- Tipo de Empresa -->
                                   <div class="col-lg-5">
                                     <div class="form-group">
-                                      <label for="idproveedor">Proveedor <sup class="text-danger">(unico*)</sup></label>
+                                      <label for="idproveedor">Proveedor <sup class="text-danger">(único*)</sup></label>
                                       <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
                                     </div>
                                   </div>
@@ -342,7 +342,7 @@
                                   <!-- Tipo de comprobante -->
                                   <div class="col-lg-4" id="content-tipo-comprobante">
                                     <div class="form-group">
-                                      <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(unico*)</sup></label>
+                                      <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(único*)</sup></label>
                                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2"  onchange="default_val_igv(); modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
                                         <option value="Ninguno">Ninguno</option>
                                         <option value="Boleta">Boleta</option>
@@ -355,7 +355,7 @@
                                   <!-- serie_comprobante-->
                                   <div class="col-lg-2" id="content-serie-comprobante">
                                     <div class="form-group">
-                                      <label for="serie_comprobante">N° de Comprobante <sup class="text-danger">(unico)</sup></label>
+                                      <label for="serie_comprobante">N° de Comprobante <sup class="text-danger">(único*)</sup></label>
                                       <input type="text" name="serie_comprobante" id="serie_comprobante" class="form-control" placeholder="N° de Comprobante" />
                                     </div>
                                   </div>

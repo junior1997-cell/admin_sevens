@@ -195,6 +195,8 @@ function modal_comprobante(comprobante, fecha_emision) {
     </div>`);
   } 
 
+  $('.jq_image_zoom').zoom({ on:'grab' });
+
   $(".tooltip").removeClass("show").addClass("hidde");
 }
 
@@ -284,8 +286,6 @@ function mostrar(idotra_factura) {
       $("#subtotal").val(e.data.subtotal);
       $("#igv").val(e.data.igv);
       $("#val_igv").val(e.data.val_igv).trigger("change");
-      
-      
 
       if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 
@@ -301,7 +301,7 @@ function mostrar(idotra_factura) {
         $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'otra_factura', 'comprobante', '100%'));      
             
       }
-  
+      $('.jq_image_zoom').zoom({ on:'grab' });
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
     } else {
@@ -384,7 +384,7 @@ function verdatos(idotra_factura){
                 </tr>                                               
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Descripción</th>
-                  <td>${e.data.descripcion}</td>
+                  <td><textarea cols="30" rows="2" class="textarea_datatable" readonly="">${e.data.descripcion}</textarea></td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Comprobante</th>
@@ -397,7 +397,7 @@ function verdatos(idotra_factura){
       </div>`;
     
       $("#datos-otra-factura").html(retorno_html);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }

@@ -284,7 +284,7 @@
                                 </div>
 
                                 <!-- Fecha -->
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 ">
                                   <div class="form-group">
                                     <label for="Fecha" class="text-gray">Fecha <sup class="text-danger">*</sup></label>
                                     <input type="date" name="fecha_subcontrato" id="fecha_subcontrato" class="form-control"  placeholder="Fecha"> 

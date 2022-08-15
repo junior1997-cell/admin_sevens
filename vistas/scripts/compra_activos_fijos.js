@@ -409,14 +409,14 @@ function guardaryeditar_compras(e) {
   }).then((result) => {
     console.log(result);
     if (result.isConfirmed) {
-      if (result.value.status){        
+      if (result.value.status == true){        
         Swal.fire("Correcto!", "Compra guardada correctamente", "success");
         if (tabla) { tabla.ajax.reload(null, false); } 
         if (tabla_comp_prov) { tabla_comp_prov.ajax.reload(null, false); }
         limpiar_form_compra(); table_show_hide(1);
         cont = 0;        
       } else {
-        ver_errores(result);
+        ver_errores(result.value);
       }      
     }
   });
@@ -2092,4 +2092,11 @@ function export_excel_detalle_factura() {
   let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
+}
+
+function extrae_ruc() {
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { }  else{    
+    var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+    $('#ruc_proveedor').val(ruc);
+  }
 }
