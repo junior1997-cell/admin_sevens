@@ -12,14 +12,45 @@ class Otro_gasto
   //Implementamos un método para insertar registros
   public function insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
   {
-    $sql = "INSERT INTO otro_gasto (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_g, costo_parcial,subtotal,igv,val_igv,tipo_gravada,descripcion, comprobante,ruc,razon_social,direccion,glosa) 
-		VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_g','$precio_parcial','$subtotal','$igv','$val_igv','$tipo_gravada','$descripcion','$comprobante','$ruc', '$razon_social', '$direccion','$glosa')";
-    return ejecutarConsulta($sql);
+
+    $sql_1 = "SELECT ruc, razon_social, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_g, subtotal, costo_parcial,estado, estado_delete 
+            FROM otro_gasto 
+            WHERE idproyecto ='$idproyecto' AND ruc='$ruc' AND tipo_comprobante ='$tipo_comprobante' AND numero_comprobante ='$nro_comprobante';";
+    $val_compr = ejecutarConsultaArray($sql_1);
+    if ($val_compr['status'] == false) { return  $val_compr;}
+
+    if (empty($val_compr['data']) || $tipo_comprobante=='Ninguno') {
+
+      $sql = "INSERT INTO otro_gasto (idproyecto, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_g, costo_parcial,subtotal,igv,val_igv,tipo_gravada,descripcion, comprobante,ruc,razon_social,direccion,glosa) 
+      VALUES ('$idproyecto','$tipo_comprobante','$nro_comprobante','$forma_pago','$fecha_g','$precio_parcial','$subtotal','$igv','$val_igv','$tipo_gravada','$descripcion','$comprobante','$ruc', '$razon_social', '$direccion','$glosa')";
+      return ejecutarConsulta($sql);
+
+    } else {
+      $info_repetida = '';
+
+      foreach ($val_compr['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+        <span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
+        <b>Razón Social: </b>'.$value['razon_social'].'<br>
+        <b>Ruc: </b>'.$value['ruc'].'<br>
+        <b>Fecha: </b>'.format_d_m_a($value['fecha_g']).'<br>
+        <b>Forma de pago: </b>'.$value['forma_de_pago'].'<br>
+        <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+        <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+        <hr class="m-t-2px m-b-2px">
+        </li>';
+      }
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }
+
   }
 
   //Implementamos un método para editar registros
   public function editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa)
   {
+
+    if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else { $ruc =''; $razon_social =''; $direccion =''; }
+    
     $sql = "UPDATE otro_gasto SET 
 		idproyecto='$idproyecto',
 		fecha_g='$fecha_g',

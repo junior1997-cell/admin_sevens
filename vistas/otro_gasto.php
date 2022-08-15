@@ -130,7 +130,7 @@
                               <!--forma pago-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="forma_pago">Forma Pago</label>
+                                  <label for="forma_pago">Forma Pago <sup class="text-danger">*</sup> </label>
                                   <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
                                     <option value="Transferencia">Transferencia</option>
                                     <option value="Efectivo">Efectivo</option>
@@ -140,8 +140,8 @@
                               </div>
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
-                                  <label for="tipo_comprobante">Tipo Comprobante</label>
-                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total(); }, 100 );" placeholder="Seleccinar un tipo de comprobante">
+                                  <label for="tipo_comprobante">Tipo Comprobante  <sup class="text-danger">*</sup></label>
+                                  <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total();}, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
                                     <option value="Factura">Factura</option>
@@ -152,7 +152,7 @@
                               <!-- RUC style="display: none;"-->
                               <div class="col-lg-4 div_ruc" style="display: none;"  >
                                 <div class="form-group">
-                                  <label for="num_documento">R.U.C</label>
+                                  <label for="num_documento">R.U.C <sup class="text-danger">*</sup> <small class="text-danger text-lowercase"> (Único)</small></label>
                                   <div class="input-group">
                                     <input type="hidden" id="tipo_documento" value="RUC">
                                     <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 300 );" />
@@ -168,15 +168,15 @@
                               <!-- Razón social--> 
                               <div class="col-lg-8 div_razon_social" style="display: none;">
                                 <div class="form-group">
-                                  <label class="razon_social" for="razon_social">Razón social </label>
-                                  <input type="text" name="razon_social" id="razon_social" class="form-control" placeholder="Razón social" readonly />
+                                  <label class="razon_social" for="razon_social">Razón social</label>
+                                  <input type="text" name="razon_social" id="razon_social" class="form-control" placeholder="Razón social" readonly/>
                                   <input type="hidden" name="direccion" id="direccion"   />
                                 </div>
                               </div>
                               <!-- Glosa-->
                               <div class="col-lg-4" id="content-t-comprob">
                                 <div class="form-group">
-                                  <label for="glosa">Selecc. Glosa</label>
+                                  <label for="glosa">Selecc. Glosa  <sup class="text-danger">*</sup></label>
                                   <select name="glosa" id="glosa" class="form-control select2" placeholder="Seleccinar">
                                   
                                     <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
@@ -202,7 +202,7 @@
                               <!-- Código-->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="nro_comprobante"><span class="nro_comprobante">Núm. comprobante</span> </label>
+                                  <label for="nro_comprobante"><span class="nro_comprobante">Núm. comprobante</span> <small class="text-danger text-lowercase"> (Único)</small> </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
@@ -210,14 +210,14 @@
                               <!-- Fecha 1  -->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="fecha_g">Fecha Emisión</label>
+                                  <label for="fecha_g">Fecha Emisión  <sup class="text-danger">*</sup></label>
                                   <input type="date" name="fecha_g" class="form-control" id="fecha_g" />
                                 </div>
                               </div>
                               <!-- Sub total -->
                               <div class="col-lg-4">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />                               
                                 </div>
                               </div>
@@ -239,7 +239,7 @@
                               <!--Precio Parcial-->
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
-                                  <label for="marca">Monto total </label>
+                                  <label for="marca">Monto total  <sup class="text-danger">*</sup></label>
                                   <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Parcial" />                                  
                                 </div>
                               </div>
@@ -247,7 +247,7 @@
                               <!--Descripcion-->
                               <div class="col-lg-12 class_pading">
                                 <div class="form-group">
-                                  <label for="descripcion_pago">Descripción</label> <br />
+                                  <label for="descripcion_pago">Descripción <sup class="text-danger">*</sup></label> <br />
                                   <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
@@ -302,16 +302,24 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Comprobante otros gastos</h4>
+                        <h4 class="modal-title">Otros gastos: <span class="nombre_comprobante text-bold"></span> </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body ver-comprobante">
-                                                 
-                        
-                         
-                      </div>
+                      <div class="modal-body">
+                          <div class="row">
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                            </div>
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                            </div>
+                            <div class="col-12 col-md-12 mt-2">
+                              <div id="ver_fact_pdf" width="auto"></div>
+                            </div>
+                          </div>                          
+                        </div>
                     </div>
                   </div>
                 </div>
