@@ -449,7 +449,7 @@ function ver_detalle(idplanilla_seguro) {
               <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Comprob.</th>
                   <td> ${comprobante} <br>${btn_comprobante}</td>
-                </tr>
+              </tr>
             </tbody>
           </table>
         </div>

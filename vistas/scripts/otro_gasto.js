@@ -388,11 +388,32 @@ function mostrar(idotro_gasto) {
 
 function ver_datos(idotro_gasto) {
 
-  $("#modal-ver-transporte").modal("show");
+  $("#modal-ver-otro_gasto").modal("show");
 
   $.post("../ajax/otro_gasto.php?op=verdatos", { idotro_gasto: idotro_gasto }, function (e, status) {
     e = JSON.parse(e); console.log(e); 
     if (e.status == true) {
+
+      if (e.data.comprobante != '') {
+        
+        comprobante =  doc_view_extencion(e.data.comprobante, 'otro_gasto', 'comprobante', '100%');
+        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_gasto/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_gasto/comprobante/${e.data.comprobante}" download="${removeCaracterEspecial(e.data.tipo_comprobante+' '+e.data.numero_comprobante)} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      
+      } else {
+
+        comprobante='Sin comprobante';
+        btn_comprobante='';
+
+      }
 
       verdatos = `                                                                            
       <div class="col-12">
@@ -405,49 +426,53 @@ function ver_datos(idotro_gasto) {
                   <td>${e.data.descripcion}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Tipo clasificación</th>
-                  <td>${e.data.tipo_viajero}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Ruta</th>
-                  <td>${e.data.ruta}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Tipo ruta</th>
-                    <td>${e.data.tipo_ruta}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Fecha</th>
-                  <td>${e.data.fecha_g}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Tipo pago </th>
-                  <td>${e.data.forma_de_pago}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Tipo comprobante </th>
+                  <th>Tipo comprobante</th>
                   <td>${e.data.tipo_comprobante}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Cantidad</th>
-                  <td>${e.data.cantidad}</td>
+                  <th>Número comprobante</th>
+                  <td>${(e.data.numero_comprobante ? e.data.numero_comprobante : "-")}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Precio unitario</th>
-                  <td>${parseFloat(e.data.precio_unitario).toFixed(2)}</td>
+                  <th>Tipo gravada</th>
+                    <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                    <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>R.U.C</th>
+                  <td>${(e.data.ruc ? e.data.ruc : "-")}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Razón social </th>
+                  <td>${(e.data.razon_social ? e.data.razon_social : "-")}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión</th>
+                  <td>${ format_d_m_a(e.data.fecha_g)}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago </th>
+                  <td>${e.data.forma_de_pago}</td>
                 </tr>
                   <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Subtotal</th>
-                  <td>${parseFloat(e.data.subtotal).toFixed(2)}</td>
+                  <td>S/ ${formato_miles(parseFloat(e.data.subtotal).toFixed(2))}</td>
                 </tr>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>IGV</th>
-                  <td>${parseFloat(e.data.igv).toFixed(2)}</td>
+                  <td>S/ ${ formato_miles( parseFloat(e.data.igv).toFixed(2))}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Total</th>
-                  <td>${parseFloat(e.data.precio_parcial).toFixed(2)}</td>
+                  <td>S/ ${formato_miles(parseFloat(e.data.costo_parcial).toFixed(2))}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                    <th>Comprob.</th>
+                    <td> ${comprobante} <br>${btn_comprobante}</td>
                 </tr>
               </tbody>
             </table>
@@ -455,7 +480,12 @@ function ver_datos(idotro_gasto) {
         </div>
       </div>`;
 
-      $("#datostransporte").html(verdatos);
+      $("#datosotro_gasto").html(verdatos);
+
+      $('.jq_image_zoom').zoom({ on:'grab' }); 
+
+      $(".tooltip").removeClass("show").addClass("hidde");
+
     } else {
       ver_errores(e);
     }

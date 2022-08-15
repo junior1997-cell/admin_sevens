@@ -137,8 +137,9 @@
               $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
               $data[] = [
                 "0" => $cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante). "'". ')"><i class="fas fa-skull-crossbones"></i> </button>':'',
+                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante). "'". ')"><i class="fas fa-skull-crossbones"></i> </button>'.
+                    ' <button class="btn btn-info btn-sm" onclick="ver_datos(' . $reg->idotro_gasto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
                 "2" => $reg->forma_de_pago,
                 "3" =>'<div class="user-block">
                     <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .
