@@ -88,6 +88,7 @@ function limpiar() {
 function calc_total() {
 
   $(".nro_comprobante").html("Núm. Comprobante");
+  $( "#num_documento" ).rules( "remove","required" );
 
   var total         = es_numero($('#precio_parcial').val()) == true? parseFloat($('#precio_parcial').val()) : 0;
   var val_igv       = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0;
@@ -117,6 +118,19 @@ function calc_total() {
     $(".div_ruc").hide(); $(".div_razon_social").hide();
     $("#num_documento").val(""); $("#razon_social").val("");
 
+  }else if ($("#tipo_comprobante").select2("val") =="Boleta") {  
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+    $(".nro_comprobante").html("Núm. de Operación");
+
+    $(".div_ruc").show(); $(".div_razon_social").show();
+    $("#num_documento").val(""); $("#razon_social").val("");
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
+
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    
@@ -145,19 +159,22 @@ function calc_total() {
     }
     $(".div_ruc").show(); $(".div_razon_social").show();
 
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
   } else {
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00");
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
     $("#val_igv").prop("readonly",true);
-    $(".div_ruc").show(); $(".div_razon_social").show();
+    $(".div_ruc").hide(); $(".div_razon_social").hide();   
   }
   if (val_igv > 0 && val_igv <= 1) {
     $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
   } else {
     $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
   }
+
 }
 
 function select_comprobante() {
@@ -251,86 +268,23 @@ function listar() {
 }
 
 //ver ficha tecnica
-function modal_comprobante(comprobante) {
+function modal_comprobante(comprobante,tipo,numero_comprobante) {
 
-  var comprobante = comprobante;
-   
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-  //console.log(extencion);
-  $("#ver_fact_pdf").html("");
-  $("#img-factura").attr("src", "");
-  $("#modal-ver-comprobante").modal("show");
+  var dia_actual = moment().format('DD-MM-YYYY');
+  $(".nombre_comprobante").html(`${tipo}-${numero_comprobante}`);
+  $('#modal-ver-comprobante').modal("show");
+  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'otro_gasto', 'comprobante', '100%', '550'));
 
-  if (comprobante == '' || comprobante == null) {
-    $(".ver-comprobante").html(`<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
-      <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
-      No hay un documento para mostrar
-    </div>`);
-  }else{
+  if (DocExist(`dist/docs/otro_gasto/comprobante/${comprobante}`) == 200) {
+    $("#iddescargar").attr("href","../dist/docs/otro_gasto/comprobante/"+comprobante).attr("download", `${tipo}-${numero_comprobante}  - ${dia_actual}`).removeClass("disabled");
+    $("#ver_completo").attr("href","../dist/docs/otro_gasto/comprobante/"+comprobante).removeClass("disabled");
+  } else {
+    $("#iddescargar").addClass("disabled");
+    $("#ver_completo").addClass("disabled");
+  }
 
-    if ( extrae_extencion(comprobante) == "jpeg" || extrae_extencion(comprobante) == "jpg" || extrae_extencion(comprobante) == "jpe" ||
-      extrae_extencion(comprobante) == "jfif" || extrae_extencion(comprobante) == "gif" || extrae_extencion(comprobante) == "png" ||
-      extrae_extencion(comprobante) == "tiff" || extrae_extencion(comprobante) == "tif" || extrae_extencion(comprobante) == "webp" ||
-      extrae_extencion(comprobante) == "bmp" || extrae_extencion(comprobante) == "svg" ) {
+  $('.jq_image_zoom').zoom({ on:'grab' }); 
 
-      $(".ver-comprobante").html(`<div class="row text-center">                          
-        <!-- Dowload -->
-        <div class="col-md-6 text-center descargar" >
-          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_gasto/comprobante/${comprobante}" download="Comprobante"> <i class="fas fa-download"></i> Descargar. </a>
-        </div>
-        <!-- Ver grande -->
-        <div class="col-md-6 text-center ver_completo" >
-          <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_gasto/comprobante/${comprobante}" > <i class="fas fa-expand"></i> Ver completo. </a>
-        </div>
-      </div>
-
-      <div class="text-center mt-4">
-        <img src="../dist/docs/otro_gasto/comprobante/${comprobante}" alt="" width="100%" >
-      </div>
-      <div class="text-center">Comprobante.${extrae_extencion(comprobante)}</div>`);
-      
-    } else { 
-
-      if (extrae_extencion(comprobante) == "pdf") {
-
-        $(".ver-comprobante").html(`<div class="row text-center">                          
-        <!-- Dowload -->
-        <div class="col-md-6 text-center descargar" >
-          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_gasto/comprobante/${comprobante}" download="Comprobante"> <i class="fas fa-download"></i> Descargar. </a>
-        </div>
-        <!-- Ver grande -->
-        <div class="col-md-6 text-center ver_completo" >
-          <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_gasto/comprobante/${comprobante}" > <i class="fas fa-expand"></i> Ver completo. </a>
-        </div>
-      </div>
-
-      <div class="text-center mt-4">
-        <iframe src="../dist/docs/otro_gasto/comprobante/${comprobante}" frameborder="0" scrolling="no" width="100%" height="510"></iframe>        
-      </div>
-      <div class="text-center">Comprobante.${extrae_extencion(comprobante)}</div>`);
-
-      } else {
-        $(".ver-comprobante").html(`<div class="row text-center">                          
-          <!-- Dowload -->
-          <div class="col-md-6 text-center descargar">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otro_gasto/comprobante/${comprobante}" download="Comprobante"> <i class="fas fa-download"></i> Descargar. </a>
-          </div>
-          <!-- Ver grande -->
-          <div class="col-md-6 text-center ver_completo">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otro_gasto/comprobante/${comprobante}" > <i class="fas fa-expand"></i> Ver completo. </a>
-          </div>
-        </div>
-
-        <div class="text-center mt-4">
-          <iframe src="../dist/svg/doc_si_extencion.svg" frameborder="0" scrolling="no" width="100%" height="510"></iframe>        
-        </div>
-        <div class="text-center">Comprobante.${extrae_extencion(comprobante)}</div>`);
-      }      
-    }
-  } 
-
-  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 //Función para guardar o editar
@@ -418,9 +372,11 @@ function mostrar(idotro_gasto) {
         $("#doc1_ver").html(doc_view_extencion(e.data.comprobante,'otro_gasto', 'comprobante', '100%', '210' ));       
             
       }
+      $('.jq_image_zoom').zoom({ on:'grab' });
       
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
+
 
     } else {
       ver_errores(e);
@@ -606,3 +562,53 @@ $(function () {
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 no_select_tomorrow("#fecha_g");
+
+// function probando() {
+//   console.log($("#tipo_comprobante").select2("val"));
+//   if ($("#tipo_comprobante").select2("val") == "Ninguno") {
+//       console.log('bien');
+      
+//   } else {
+
+//     $("#form-otro_gasto").validate({
+//       ignore: '.select2-input, .select2-focusser',
+//       rules: {
+//         forma_pago: { required: true },
+//         tipo_comprobante: { required: true },
+//         fecha_g: { required: true },
+//         precio_parcial: { required: true },
+//         descripcion: { required: true },
+//         val_igv: { required: true, number: true, min:0, max:1 },
+//         razon_social: { required: true },
+//         // terms: { required: true },
+//       },
+//       messages: {
+//         forma_pago: { required: "Por favor una forma de pago", },
+//         tipo_comprobante: { required: "Por favor seleccionar tipo comprobante", },
+//         fecha_g: { required: "Por favor ingrese una fecha", },
+//         precio_parcial: { required: "Ingresar monto",},
+//         descripcion: { required: "Es necesario rellenar el campo descripción", },
+//         val_igv: { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
+//         razon_social: { required: "Campo requerido",},
+//       },
+  
+//       errorElement: "span",
+  
+//       errorPlacement: function (error, element) {
+//         error.addClass("invalid-feedback");
+  
+//         element.closest(".form-group").append(error);
+//       },
+  
+//       highlight: function (element, errorClass, validClass) {
+//         $(element).addClass("is-invalid").removeClass("is-valid");
+//       },
+  
+//       unhighlight: function (element, errorClass, validClass) {
+//         $(element).removeClass("is-invalid").addClass("is-valid");
+//       },
+//     });
+
+//   }
+
+//   }
