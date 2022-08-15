@@ -159,15 +159,15 @@ function restrigir_fecha_ant(nombre_input,fecha_minima) {
   var dd2 = today2.getDate()+1;
   var mm2 = today2.getMonth()+1; //January is 0!
   var yyyy2 = today2.getFullYear();
-  console.log(dd2);
+  
   if(dd2<10){ dd2='0'+dd2  }
   if(mm2<10){ mm2='0'+mm2 }
   
   today2 = yyyy2+'-'+mm2+'-'+dd2;
   console.log(today2);
 
-//document.getElementById("fecha_fin").setAttribute("min", today2);
   $(nombre_input).attr('min',today2);
+  $(nombre_input).rules("add", { min: today2, messages: { min: `Ingresa una fecha mayor a: ${format_d_m_a(today2)}` } });
 }
 
 function cant_dias_mes(date_anio, date_mes) {

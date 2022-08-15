@@ -28,6 +28,10 @@ function init() {
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccinar tipo comprobante", allowClear: true, });  
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
 
+  // restringimos la fecha para no elegir mañana
+  no_select_tomorrow("#fecha_inicio");
+  no_select_tomorrow("#fecha_comprobante");
+
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
@@ -101,8 +105,7 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
-    $(".nro_comprobante").html("Núm. de Operación");
-    $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $(".div_ruc").show(); $(".div_razon_social").show();
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    
@@ -137,7 +140,7 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
     $("#val_igv").prop("readonly",true);
-    $(".div_ruc").show(); $(".div_razon_social").show();
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
   }
   if (val_igv > 0 && val_igv <= 1) {
     $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
@@ -229,11 +232,16 @@ function tabla_principal() {
   var idproyecto=localStorage.getItem('nube_idproyecto');
   tabla=$('#tabla-hospedaje').dataTable({
     responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 6, 10, 25, 75, 100, 200,], ["Todos", 6, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,10,11,2,12,13,3,5,14,6,7,15,16,17,18,19,20,21,8], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,10,11,2,12,13,3,5,14,6,7,15,16,17,18,19,20,21,8], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,10,11,2,12,13,3,5,14,6,7,15,16,17,18,19,20,21,8], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+      {extend: "colvis"} ,
+    ],
     ajax:{
       url: '../ajax/hospedaje.php?op=tabla_principal&idproyecto='+idproyecto,
       type : "get",
@@ -264,7 +272,7 @@ function tabla_principal() {
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      //{ targets: [12,13], visible: false, searchable: false, },    
+      { targets: [10,11,12,13,14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
     ],
   }).DataTable();
   total();
@@ -375,7 +383,7 @@ function mostrar(idhospedaje) {
       $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change"); 
       $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
       $("#idhospedaje").val(e.data.idhospedaje);
-      $("#fecha_inicio").val(e.data.fecha_inicio); 
+      $("#fecha_inicio").val(e.data.fecha_inicio).trigger("change"); 
       $("#fecha_fin").val(e.data.fecha_fin); 
       $("#cantidad").val(e.data.cantidad); 
       $("#precio_unitario").val(redondearExp(e.data.precio_unitario)); 
@@ -436,7 +444,7 @@ function ver_datos(idhospedaje) {
           <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/hospedaje/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
         </div>
         <div class="col-6"">
-          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/hospedaje/comprobante/${e.data.comprobante}" download="Ficha Tecnica - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
+          <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/hospedaje/comprobante/${e.data.comprobante}" download="${encodeHtml(e.data.tipo_comprobante + ' - ' + e.data.numero_comprobante)} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
         </div>
       </div>`;
     
@@ -455,7 +463,7 @@ function ver_datos(idhospedaje) {
             <tbody>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Proveedor</th>
-                <td>${e.data.razon_social} <br>${e.data.ruc} </td>
+                <td>${e.data.razon_social} <br> <b>Ruc:</b> ${e.data.ruc} </td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
                 <th>Descripción</th>
@@ -486,7 +494,7 @@ function ver_datos(idhospedaje) {
                 <td>${e.data.forma_de_pago!="" || e.data.forma_de_pago==null ?e.data.forma_de_pago:''}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
-                <th>${e.data.tipo_comprobante}</th>
+                <th>${e.data.tipo_comprobante}</th> 
                 <td>${e.data.numero_comprobante}</td>
               </tr>
               <tr data-widget="expandable-table" aria-expanded="false">
@@ -572,29 +580,30 @@ $(function () {
   // Aplicando la validacion del select cada vez que cambie
   $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
   $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
+  $("#unidad").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-hospedaje").validate({
-    ignore: '.select2-input, .select2-focusser',
+    //ignore: '.select2-input, .select2-focusser',
     rules: {
       forma_pago:       { required: true },
       tipo_comprobante: { required: true },
       fecha_comprobante:{ required: true },
       fecha_inicio:     { required: true },
       cantidad:         {minlength: 1},
-      precio_unitario:  {required: true},
+      precio_unitario:  {required: true, min:'0.01',},
       descripcion:      {required: true},
       unidad:           {required: true},
       val_igv:          { required: true, number: true, min:0, max:1 },
     },
     messages: {
-      forma_pago:       { required: "Por favor seleccionar una forma de pago", },
-      tipo_comprobante: { required: "Por favor seleccionar tipo comprobante", },
-      fecha_comprobante:{ required: "Por favor ingrese una fecha", },
-      fecha_inicio:     { required: "Por favor ingrese una fecha", },
-      cantidad:         { minlength: "Cantidad.", },
-      precio_unitario:  { required: "Ingresar precio unitario", },
+      forma_pago:       { required: "Campo requerido.", },
+      tipo_comprobante: { required: "Campo requerido.", },
+      fecha_comprobante:{ required: "Campo requerido.", },
+      fecha_inicio:     { required: "Campo requerido.", },
+      cantidad:         { minlength: "Cantidad.", min:"MINIMO 1" },
+      precio_unitario:  { required: "Campo requerido.", min:"MINIMO 0.01"  },
       descripcion:      { required: "Es necesario rellenar el campo descripción", },
-      unidad:           { required: "Seleccionar unidad", },
+      unidad:           { required: "Campo requerido.", },
       val_igv:          { required: "Campo requerido", number: 'Ingrese un número', min:'Mínimo 0', max:'Maximo 1' },
     },
         
@@ -621,11 +630,8 @@ $(function () {
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
   $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
   $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
-
+  $("#unidad").rules("add", { required: true, messages: { required: "Campo requerido" } });
 });
-
-// restringimos la fecha para no elegir mañana
-no_select_tomorrow("#fecha_inicio");
 
 function restrigir_fecha_input() {  restrigir_fecha_ant("#fecha_fin",$("#fecha_inicio").val());}
 

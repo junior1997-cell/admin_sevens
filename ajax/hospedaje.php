@@ -134,7 +134,19 @@
                 "6" => '<div class="formato-numero-conta"> <span>S/</span>'. number_format($reg->igv, 2, '.', ',').'</div>',
                 "7" => '<div class="formato-numero-conta"> <span>S/</span>'. number_format($reg->precio_parcial, 2, '.', ',').'</div>',
                 "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "9" => $comprobante . $toltip,            
+                "9" => $comprobante . $toltip,
+                "10" => $reg->razon_social,   
+                "11" => $reg->ruc, 
+                "12" => $reg->tipo_comprobante,
+                "13" => $reg->numero_comprobante,
+                "14" => $reg->val_igv,   
+                "15" => $reg->unidad,        
+                "16" => $reg->fecha_inicio,
+                "17" => $reg->fecha_fin,
+                "18" => $reg->cantidad,
+                "19" => number_format($reg->precio_unitario, 2, '.', ','),                
+                "20" => $reg->glosa,
+                "21" => $reg->tipo_gravada,
               ];
             }
             $results = [
@@ -167,12 +179,8 @@
       $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
       echo json_encode($retorno);
     }
-    
-    
-
-    
-  }  
-
+       
+  }
   
   ob_end_flush();
 ?>

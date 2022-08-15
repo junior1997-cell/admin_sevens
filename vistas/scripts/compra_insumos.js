@@ -1092,6 +1092,7 @@ function mostrar_editar_comprobante(idcomprobante, id_compra, comprobante, nombr
   $("#doc_old_1").val(comprobante);   
   $("#doc1_ver").html(doc_view_extencion(comprobante, 'compra_insumo', 'comprobante_compra','100%', '320' ));
   $(`#doc1_ver`).append(`<div class="col-md-12 mt-2"><i> ${nombre_comprobante} </i></div><div class="col-md-12"><button class="btn btn-danger btn-block btn-xs" onclick="doc1_eliminar();" type="button" ><i class="far fa-trash-alt"></i></button></div>`);
+  $('.jq_image_zoom').zoom({ on:'grab' });
 }
 
 function eliminar_comprobante_insumo(id_compra, nombre) {
@@ -1113,7 +1114,7 @@ function eliminar_comprobante_insumo(id_compra, nombre) {
 
 // :::::::::::::::::::::::::: - S E C C I O N   D E S C A R G A S -  ::::::::::::::::::::::::::
 
-function download_no_multimple(id_compra, nombre_doc) {
+function download_no_multimple(id_compra, cont, nombre_doc) {
   $(`.descarga_compra_${id_compra}`).html('<i class="fas fa-spinner fa-pulse"></i>');
   //console.log(id_compra, nombre_doc);
   var cant_download_ok = 0; var cant_download_error = 0;
@@ -1122,7 +1123,7 @@ function download_no_multimple(id_compra, nombre_doc) {
     if (e.status == true) {
       e.data.forEach((val, index) => {
         if ( UrlExists(`${host}${val.comprobante}`) == 200 ) {
-          download_file(host,val.comprobante,nombre_doc);
+          download_file(host, val.comprobante, `${cont}·${index+1} ${nombre_doc}`);
           cant_download_ok++;
         } else {
           cant_download_error++;
@@ -1784,6 +1785,7 @@ function mostrar_pagos(idpago_compras) {
         // cargamos la imagen adecuada par el archivo
         $("#doc3_ver").html( doc_view_extencion(e.data.imagen, 'compra_insumo', 'comprobante_pago', '100%', '210') ); 
       }
+      $('.jq_image_zoom').zoom({ on:'grab' });
       $("#cargando-3-fomulario").show();
       $("#cargando-4-fomulario").hide();
     } else {
@@ -2025,7 +2027,7 @@ function mostrar_material(idproducto, cont) {
         $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%', '210'));
         
       } 
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
       $("#cargando-9-fomulario").show();
       $("#cargando-10-fomulario").hide();
     } else {

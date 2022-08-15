@@ -78,6 +78,18 @@
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
                                  
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Proveedor</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">RUC</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Comprob.</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Num. Comprob.</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Val IGV</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Unidad</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Inicio</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Fin</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Cantidad</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Precio Unit.</th>                                
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Glosa</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Grabada</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -94,6 +106,18 @@
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
                                  
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Proveedor</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">RUC</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Comprob.</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Num. Comprob.</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Val IGV</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Unidad</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Inicio</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Fin</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Cantidad</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Precio Unit.</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Glosa</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Grabada</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -166,14 +190,14 @@
                                   <div class="col-lg-6 class_pading">
                                     <div class="form-group">
                                       <label for="cantidad">Cantidad</label>
-                                      <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
+                                      <input type="number" name="cantidad" class="form-control" id="cantidad" min="1" placeholder="Cantidad." onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
                                     </div>
                                   </div>
                                   <!--Precio Unitario-->
                                   <div class="col-lg-6 class_pading">
                                     <div class="form-group">
                                       <label for="marca">Precio Unitario <sup class="text-danger">*</sup></label>
-                                      <input type="numbre" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
+                                      <input type="number" name="precio_unitario" class="form-control" min="0.01" id="precio_unitario" placeholder="Precio Unitario" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" />
                                     </div>
                                   </div>
                                 </div>
@@ -356,8 +380,8 @@
                           <div class="col-6 col-md-6">
                             <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
                           </div>
-                          <div class="col-12 col-md-12 mt-2">
-                            <div id="ver_fact_pdf" width="auto"></div>
+                          <div class="col-12 col-md-12 mt-2" id="ver_fact_pdf" width="auto">
+                            
                           </div>
                         </div>
                       </div>

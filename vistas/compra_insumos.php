@@ -973,7 +973,7 @@
                                   </div>
                                   <!-- Recargar -->
                                   <div class="col-6 col-md-6 text-center comprobante">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(3, 'compra' ,'comprobante_pago');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(3, 'compra' ,'comprobante_pago'); reload_zoom();">
                                     <i class="fas fa-redo"></i> Recargar.
                                   </button>
                                   </div>                                  
@@ -1113,7 +1113,7 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" class="docpdf" accept="application/pdf, image/*" />
                                   </div>
                                   <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pr-0 mb-3 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_insumo', 'comprobante_compra', '100%', '320');"><i class="fa fa-eye"></i> Recargar.</button>
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'compra_insumo', 'comprobante_compra', '100%', '320'); reload_zoom();"><i class="fa fa-eye"></i> Recargar.</button>
                                   </div>                                                                     
                                   <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mt-1" id="doc1_ver"> 
                                     <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />                           
@@ -1356,7 +1356,7 @@
                                     </div>
                                     <!-- Recargar -->
                                     <div class="col-6 col-md-6 text-center comprobante">
-                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'material', 'ficha_tecnica');">
+                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'material', 'ficha_tecnica'); reload_zoom();">
                                       <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                     </div>                                  
