@@ -175,6 +175,9 @@
 
               $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
+  
+		// t.descripcion, t.val_igv, t.tipo_gravada, t.glosa, t.estado, t.estado_delete, p.razon_social,p.tipo_documento,p.ruc,p.direccion 
+
               $data[] = [
                 "0" => $cont++,
                 "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idtransporte . ')"><i class="fas fa-pencil-alt"></i></button>' .
@@ -190,7 +193,20 @@
                 "6" => 'S/ ' . number_format($reg->igv, 2, '.', ','),
                 "7" => 'S/ ' . number_format($reg->precio_parcial, 2, '.', ','),
                 "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "9" => $comprobante. $toltip,
+                "9" => $comprobante.''. $toltip,
+                "10" => $reg->tipo_viajero,
+                "11" => $reg->tipo_ruta,
+                "12" => $reg->ruta,
+                "13" => $reg->cantidad,
+                "14" => $reg->precio_unitario,
+                "15" => $reg->val_igv,
+                "16" => $reg->tipo_gravada,
+                "17" => $reg->glosa,
+                "18" => $reg->razon_social,
+                "19" => $reg->tipo_comprobante,
+                "20" => $reg->ruc,
+                "21" => $reg->direccion,
+                "22" => $reg->numero_comprobante,
               ];
             }
 

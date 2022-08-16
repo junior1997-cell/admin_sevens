@@ -267,14 +267,20 @@ function mostrar_pension(idpension) {
 
     e = JSON.parse(e); console.log(e);   
 
-    $("#proveedor").val(e.data.idproveedor).trigger("change"); 
-    $("#idproyecto_p").val(e.data.idproyecto);
-    $("#idpension").val(e.data.idpension);
-    $("#descripcion_pension").val(e.data.descripcion);
+    if (e.status == true) {
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+      $("#proveedor").val(e.data.idproveedor).trigger("change"); 
+      $("#idproyecto_p").val(e.data.idproyecto);
+      $("#idpension").val(e.data.idpension);
+      $("#descripcion_pension").val(e.data.descripcion);
 
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+    } else {
+      ver_errores(e);
+    }
+    
   }).fail( function(e) { ver_errores(e); } );
 }
 

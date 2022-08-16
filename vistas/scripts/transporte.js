@@ -274,14 +274,22 @@ function selecct_glosa() {
 
 //Función Listar
 function listar() {
+
   var idproyecto=localStorage.getItem('nube_idproyecto');
+
   tabla=$('#tabla-hospedaje').dataTable({
+
     "responsive": true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,18,20,21,10,11,12,2,19,22,13,5,14,6,15,7,16,17,8], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,18,20,21,10,11,12,2,19,22,13,5,14,6,15 ,7,16,17,8], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,18,20,12,19,22,13,5,14,6,15,7,8], }, orientation: 'landscape', pageSize: 'A3',  }, 
+      {extend: "colvis"} ,
+    ],
     "ajax":{
         url: '../ajax/transporte.php?op=listar&idproyecto='+idproyecto,
         type : "get",
@@ -319,7 +327,10 @@ function listar() {
       },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [10,11,12,13,14,15,16,17,18,19,20,21,22], visible: false, searchable: false, },    
+    ],
   }).DataTable();
   total();
 }

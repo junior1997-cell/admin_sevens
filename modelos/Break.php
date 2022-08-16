@@ -1,6 +1,6 @@
 <?php 
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion_v1.php";
+require "../config/Conexion_v2.php";
 
 Class Breaks
 {
@@ -13,7 +13,8 @@ Class Breaks
 	//Implementamos un método para insertar registros
 	public function insertar_editar($array_break,$fechas_semanas_btn,$idproyecto){
 		$total  = 0;
-		$desglese_break = json_decode($array_break,true); $sw = true;
+		$desglese_break = json_decode($array_break,true); 
+		$sw = true;
 		$fechas_semanas_btn = json_decode($fechas_semanas_btn, true);
 		// registramos o editamos los "Break por semana"
 		foreach ($desglese_break as $indice => $key) {
@@ -27,6 +28,7 @@ Class Breaks
 				ejecutarConsulta($sql_2) or $sw = false;
 
 			} else {
+				
 				# editamos el registro existente
 				$sql_3="UPDATE breaks SET idproyecto='$idproyecto', 
 				fecha_compra='".$key['fecha_compra']."', 
@@ -38,10 +40,10 @@ Class Breaks
 				
 				ejecutarConsulta($sql_3) or $sw = false;
 			}
+
 			$total = $total+ floatval($key['precio_compra']); 
-
-
 		}
+
 		foreach ($fechas_semanas_btn as $key => $value) {
 
 			$sql_4 = "SELECT idsemana_break FROM semana_break WHERE idproyecto='$idproyecto' AND fecha_inicial = '".$value['fecha_in_btn']."' AND  fecha_final = '".$value['fecha_fi_btn']."' ";
@@ -66,8 +68,6 @@ Class Breaks
 		return $sw;	
 	}
 
-	///////////////////////CONSULTAS BREAK///////////////////////
-	//listar_semana_botones
 	public function listarsemana_botones($nube_idproyecto){
 		$sql="SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
 		return ejecutarConsultaSimpleFila($sql);
@@ -78,45 +78,13 @@ Class Breaks
 		$sql="SELECT * FROM breaks WHERE idproyecto='$nube_idproyect' AND fecha_compra BETWEEN '$f1' AND '$f2' ";
 		return ejecutarConsultaArray($sql);
 	}	
-	///////////////////////CONSULTAS BREAK///////////////////////
 
-	//Implementar un método para listar los registros
-	/*public function listar_totales_semana($nube_idproyecto,$array_fi_ff)
-	{
-		$fecha_in =""; $fecha_fi=""; $num_semana=""; $semana=""; $total_por_semana=[]; $val_total="";
-		$desglese_fechas_semanas = json_decode($array_fi_ff,true);
-
-		foreach ($desglese_fechas_semanas as $key => $value) {
-
-			$data_array=[];
-			$fecha_in =  $value['fecha_in']; 
-			$fecha_fi = $value['fecha_fi']; 
-			$num_semana = $value['num_semana']; 
-
-			$sql="SELECT SUM(costo_parcial) AS total FROM breaks WHERE idproyecto='$nube_idproyecto' AND fecha_compra BETWEEN '$fecha_in' AND '$fecha_fi'";
-			$semana=ejecutarConsultaSimpleFila($sql);
-			if (empty($semana['total'])) {
-				$val_total="0.00";
-			} else {
-				$val_total=$semana['total'];
-			}
-			
-			$data_array=array(
-				'total'=>$val_total,
-				'fecha_in'=>$fecha_in,
-				'fecha_fi'=>$fecha_fi,
-				'num_semana'=>$num_semana
-			);
-			
-			array_push($total_por_semana, $data_array);
-		}
-		return json_encode($total_por_semana, true);		
-	}*/
 	public function listar($nube_idproyecto)
 	{
 		$sql="SELECT * FROM semana_break WHERE idproyecto ='$nube_idproyecto' ORDER BY numero_semana DESC";
 		return ejecutarConsulta($sql);
 	}
+
 	//----------------------comprobantes------------------------------
 	public function insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion){
 		

@@ -116,7 +116,11 @@ Class Transporte
 	//Implementar un método para listar los registros
 	public function listar($idproyecto)
 	{
-		$sql="SELECT*FROM transporte WHERE idproyecto='$idproyecto' AND estado='1' AND  estado_delete='1' ORDER BY fecha_viaje DESC";
+		$sql="SELECT t.idtransporte, t.idproyecto, t.idproveedor, t.tipo_comprobante, t.numero_comprobante, t.forma_de_pago, 
+		t.fecha_viaje, t.tipo_viajero, t.tipo_ruta, t.ruta, t.cantidad, t.precio_unitario, t.subtotal, t.igv, t.precio_parcial, 
+		t.descripcion, t.val_igv, t.tipo_gravada, t.glosa, t.estado, t.estado_delete, p.razon_social,p.tipo_documento,p.ruc,p.direccion 
+		FROM transporte as t, proveedor as p
+		WHERE t.idproveedor = p.idproveedor AND t.idproyecto='$idproyecto' AND t.estado='1' AND  t.estado_delete='1' ORDER BY t.fecha_viaje DESC;";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -127,18 +131,20 @@ Class Transporte
 	return ejecutarConsulta($sql);
 	}
 	
-
 	//Seleccionar un comprobante
 	public function ficha_tec($idtransporte)
 	{
 		$sql="SELECT comprobante FROM transporte WHERE idtransporte='$idtransporte'";
 		return ejecutarConsulta($sql);		
 	}
+
 	//total
 	public function total($idproyecto){
 		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM transporte WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete=1";
 		return ejecutarConsultaSimpleFila($sql);
 	}
+
+
 
 }
 

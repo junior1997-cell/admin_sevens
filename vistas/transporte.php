@@ -74,6 +74,21 @@
                                   <th>Total</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+
+                                  <th data-toggle="tooltip" data-original-title="Tipo viajero">T. viajero</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo ruta">T. ruta</th>
+                                  <th data-toggle="tooltip" data-original-title="Ruta">Ruta</th>
+                                  <th data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
+                                  <th data-toggle="tooltip" data-original-title="Precio unitario">P. unitario</th>
+                                  <th data-toggle="tooltip" data-original-title="val_igv">val_igv</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Gravada">T. Gravada</th>
+                                  <th data-toggle="tooltip" data-original-title="Glosa">Glosa</th>
+                                  <th data-toggle="tooltip" data-original-title="Razón social">Razón social</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo comprobante">T. comprob</th>                                
+                                  <th data-toggle="tooltip" data-original-title="Ruc">Ruc</th>
+                                  <th data-toggle="tooltip" data-original-title="Dirección">Dirección</th>
+                                  <th data-toggle="tooltip" data-original-title="Número comprobante">N° comprob</th>
+
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -89,6 +104,22 @@
                                   <th class="text-nowrap total_monto"></th>
                                   <th>Descripción</th>
                                   <th>Comprob</th>
+
+                                  <th data-toggle="tooltip" data-original-title="Tipo viajero">T. viajero</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo ruta">T. ruta</th>
+                                  <th data-toggle="tooltip" data-original-title="Ruta">Ruta</th>
+                                  <th data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
+                                  <th data-toggle="tooltip" data-original-title="Precio unitario">P. unitario</th>
+                                  <th data-toggle="tooltip" data-original-title="val_igv">val_igv</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo Gravada">T. Gravada</th>
+                                  <th data-toggle="tooltip" data-original-title="Glosa">Glosa</th>
+                                  <th data-toggle="tooltip" data-original-title="Razón social">Razón social</th>
+                                  <th data-toggle="tooltip" data-original-title="Tipo comprobante">T. comprob</th>                                
+                                  <th data-toggle="tooltip" data-original-title="Ruc">Ruc</th>
+                                  <th data-toggle="tooltip" data-original-title="Dirección">Dirección</th>
+                                  <th data-toggle="tooltip" data-original-title="Número comprobante">N° comprob</th>
+
+
                                 </tr>
                               </tfoot>
                             </table>

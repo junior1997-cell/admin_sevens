@@ -52,6 +52,7 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();
+  
 }
 
 // abrimos el navegador de archivos
@@ -113,6 +114,7 @@ function editarbreak() {
 
 //Función Listar
 function listar(nube_idproyecto) {
+
   tabla = $("#tabla-resumen-break-semanal") .dataTable({
     responsive: true,
     lengthMenu: [ [5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"], ], //mostramos el menú de registros a revisar
@@ -153,131 +155,104 @@ function listar(nube_idproyecto) {
 function listar_botoness(nube_idproyecto) {
   //array_fi_ff=[];
   //Listar semanas(botones)
-  $.post("../ajax/break.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
+  $.post("../ajax/break.php?op=listar_semana_botones", { nube_idproyecto: nube_idproyecto }, function (e, status) {
+    e = JSON.parse(e); console.log(e);
 
-    // validamos la existencia de DATOS
-    if (data) {
-      var dia_regular = 0;
-      var weekday_regular = extraer_dia_semana(data.fecha_inicio);
-      var estado_regular = false;
+    if (e.status == true) {
+      // validamos la existencia de DATOS
+      if (e) {
+        var dia_regular = 0;
+        var weekday_regular = extraer_dia_semana(e.data.fecha_inicio);
+        var estado_regular = false;
 
-      if (weekday_regular == "Domingo") {
-        dia_regular = -1;
-      } else {
-        if (weekday_regular == "Lunes") {
-          dia_regular = -2;
+        if (weekday_regular == "Domingo") {
+          dia_regular = -1;
         } else {
-          if (weekday_regular == "Martes") {
-            dia_regular = -3;
+          if (weekday_regular == "Lunes") {
+            dia_regular = -2;
           } else {
-            if (weekday_regular == "Miercoles") {
-              dia_regular = -4;
+            if (weekday_regular == "Martes") {
+              dia_regular = -3;
             } else {
-              if (weekday_regular == "Jueves") {
-                dia_regular = -5;
+              if (weekday_regular == "Miercoles") {
+                dia_regular = -4;
               } else {
-                if (weekday_regular == "Viernes") {
-                  dia_regular = -6;
+                if (weekday_regular == "Jueves") {
+                  dia_regular = -5;
                 } else {
-                  if (weekday_regular == "Sábado") {
-                    dia_regular = -7;
+                  if (weekday_regular == "Viernes") {
+                    dia_regular = -6;
+                  } else {
+                    if (weekday_regular == "Sábado") {
+                      dia_regular = -7;
+                    }
                   }
                 }
               }
             }
           }
         }
-      }
-      // console.log(data.fecha_inicio, dia_regular, weekday_regular);
+        // console.log(e.data.fecha_inicio, dia_regular, weekday_regular);
 
-      $("#Lista_breaks").html("");
+        $("#Lista_breaks").html("");
 
-      var fecha = format_d_m_a(data.fecha_inicio);
-      var fecha_f = "";
-      var fecha_i = ""; //data.fecha_inicio
+        var fecha = format_d_m_a(e.data.fecha_inicio);
+        var fecha_f = "";
+        var fecha_i = ""; //e.data.fecha_inicio
 
-      var cal_mes = false;
-      var i = 0;
-      var cont = 0;
+        var cal_mes = false;
+        var i = 0;
+        var cont = 0;
 
-      while (cal_mes == false) {
-        cont = cont + 1;
-        fecha_i = fecha;
+        while (cal_mes == false) {
+          cont = cont + 1;
+          fecha_i = fecha;
 
-        if (estado_regular) {
-          fecha_f = sumaFecha(6, fecha_i);
-        } else {
-          fecha_f = sumaFecha(7 + dia_regular, fecha_i);
-          estado_regular = true;
+          if (estado_regular) {
+            fecha_f = sumaFecha(6, fecha_i);
+          } else {
+            fecha_f = sumaFecha(7 + dia_regular, fecha_i);
+            estado_regular = true;
+          }
+
+          let val_fecha_f = new Date(format_a_m_d(fecha_f));
+          let val_fecha_proyecto = new Date(e.data.fecha_fin);
+
+          // console.log(fecha_f + ' - '+e.data.fecha_fin);
+          array_fi_ff.push({ fecha_in: format_a_m_d(fecha_i), fecha_fi: format_a_m_d(fecha_f), num_semana: cont });
+          //array_data_fi_ff.push()
+
+          $("#Lista_breaks").append(
+            ` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', '${cont}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`
+          );
+
+          if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) {
+            cal_mes = true;
+          } else {
+            cal_mes = false;
+          }
+
+          fecha = sumaFecha(1, fecha_f);
+
+          i++;
         }
-
-        let val_fecha_f = new Date(format_a_m_d(fecha_f));
-        let val_fecha_proyecto = new Date(data.fecha_fin);
-
-        // console.log(fecha_f + ' - '+data.fecha_fin);
-        array_fi_ff.push({ fecha_in: format_a_m_d(fecha_i), fecha_fi: format_a_m_d(fecha_f), num_semana: cont });
-        //array_data_fi_ff.push()
-
-        $("#Lista_breaks").append(
-          ` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info text-center" onclick="datos_semana('${fecha_i}', '${fecha_f}', '${i}', '${cont}');"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`
-        );
-
-        if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) {
-          cal_mes = true;
-        } else {
-          cal_mes = false;
-        }
-
-        fecha = sumaFecha(1, fecha_f);
-
-        i++;
+      } else {
+        $("#Lista_breaks").html(`<div class="info-box shadow-lg w-600px"> 
+          <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
+          <div class="info-box-content"> 
+            <span class="info-box-text">Alerta</span> 
+            <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
+          </div> 
+        </div>`);
       }
+      console.log(array_fi_ff);
+
     } else {
-      $("#Lista_breaks").html(`<div class="info-box shadow-lg w-600px"> 
-        <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
-        <div class="info-box-content"> 
-          <span class="info-box-text">Alerta</span> 
-          <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
-        </div> 
-      </div>`);
+      ver_errores(e);
     }
-    console.log(array_fi_ff);
-    //Listamos la tabla principal agrupos por semana
-    //------------------------------------------------
-    /*$.ajax({
-      url: "../ajax/break.php?op=listar_totales_semana",
-      type: "POST",
-      data: {
-        'array_fi_ff': JSON.stringify(array_fi_ff),
-        'idproyecto': localStorage.getItem('nube_idproyecto'),
-      },
-      success: function (datos) {
-        //Swal.fire("Desactivado!",datos, "success");
-        console.log(datos);
-        datos=JSON.parse(datos);
-        // console.log(datos);
-        tabla=$('#tabla-resumen-break-semanal').dataTable({
-          "responsive": true,
-          lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-          "aProcessing": true,//Activamos el procesamiento del datatables
-          "aServerSide": true,//Paginación y filtrado realizados por el servidor
-          dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-          buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
-          data: datos,
-          language: {
-            lengthMenu: "Mostrar: _MENU_ registros",
-            buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-            sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-          },
-          "bDestroy": true,
-          "iDisplayLength": 5,//Paginación
-          "order": [[ 0, "desc" ]]//Ordenar (columna,orden)
-        }).DataTable();
-      },
-    });*/
-    //console.log(fecha);
-  });
+
+
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para guardar o editar
