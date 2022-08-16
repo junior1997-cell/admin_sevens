@@ -341,9 +341,9 @@ function mostrar(idplanilla_seguro) {
 
       $("#igv").val(parseFloat(e.data.igv).toFixed(2));
 
-     // $("#val_igv").val(e.data.val_igv);
-      $("#val_igv").val(e.data.val_igv).trigger("change");
       $("#tipo_gravada").val(e.data.tipo_gravada);
+
+      $("#val_igv").val(e.data.val_igv).trigger("change");
 
       $("#glosa").val(e.data.glosa).trigger("change"); 
 

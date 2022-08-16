@@ -350,10 +350,13 @@ function mostrar(idotro_gasto) {
 
       $("#subtotal").val(e.data.subtotal);
       $("#igv").val(e.data.igv);
-      $("#val_igv").val(e.data.val_igv).trigger("change");
       $("#tipo_gravada").val(e.data.tipo_gravada);
       $("#precio_parcial").val(e.data.costo_parcial);
-      $("#descripcion").val(e.data.descripcion);   
+      $("#descripcion").val(e.data.descripcion); 
+
+      
+      $("#val_igv").val(e.data.val_igv).trigger("change");
+  
 
       if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 

@@ -52,7 +52,7 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();
-  
+
 }
 
 // abrimos el navegador de archivos
@@ -268,29 +268,58 @@ function guardaryeditar_semana_break() {
     },
     // contentType: false,
     // processData: false,
-    success: function (datos) {
-      if (datos == "ok") {
-        datos_semana(f1_reload, f2_reload, i_reload);
-        listar(localStorage.getItem("nube_idproyecto"));
+    success: function (e) {
 
-        $("#icono-respuesta").html(
-          `<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>`
-        );
+      // if (datos == "ok") {
+      //   datos_semana(f1_reload, f2_reload, i_reload);
+      //   listar(localStorage.getItem("nube_idproyecto"));
 
-        // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
+      //   $("#icono-respuesta").html(
+      //     `<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>`
+      //   );
 
-        $(".progress-bar").addClass("bg-success");
-        $("#barra_progress").text("100% Completado!");
-      } else {
-        $("#icono-respuesta").html(
-          `<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`
-        );
+      //   // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
 
-        $(".progress-bar").addClass("bg-danger");
-        $("#barra_progress").text("100% Error!");
+      //   $(".progress-bar").addClass("bg-success");
+      //   $("#barra_progress").text("100% Completado!");
+      // } else {
+      //   $("#icono-respuesta").html(
+      //     `<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`
+      //   );
 
-        // Swal.fire("Error!", datos, "error");
-      }
+      //   $(".progress-bar").addClass("bg-danger");
+      //   $("#barra_progress").text("100% Error!");
+
+      //   // Swal.fire("Error!", datos, "error");
+      // }
+
+            
+      try {
+
+        e = JSON.parse(e);        console.log(e); 
+
+        if (e.status == true) {
+
+          datos_semana(f1_reload, f2_reload, i_reload);
+          listar(localStorage.getItem("nube_idproyecto"));
+  
+          $("#icono-respuesta").html(
+            `<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>`
+          );
+  
+          $(".progress-bar").addClass("bg-success");
+          $("#barra_progress").text("100% Completado!");
+
+        }else{  
+
+          ver_errores(e);
+        } 
+
+      } catch (err) {
+
+        console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+      } 
+
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -394,7 +423,9 @@ function datos_semana(f1, f2, i, cont) {
 
   var fecha_inicial_semana_regular = sumaFecha(dia_regular, fecha_inicial_semana);
   //Regulamos los días hasta el inicio del dia del inicio del proyecto
+
   for (var j = 1; j <= dia_regular * -1; j++) {
+
     var weekday = extraer_dia_semana(format_a_m_d(fecha_inicial_semana_regular));
 
     tabla_bloc_dia_1 = `<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${fecha_inicial_semana_regular}</td>`;
@@ -416,90 +447,141 @@ function datos_semana(f1, f2, i, cont) {
   // ocultamos las tablas
   mostrar_form_table(2);
 
-  $.post("../ajax/break.php?op=ver_datos_semana", { f1: format_a_m_d(f1), f2: format_a_m_d(f2), nube_idproyect: nube_idproyect }, function (data, status) {
-    data = JSON.parse(data);
-    console.log(data);
+  $.post("../ajax/break.php?op=ver_datos_semana", { f1: format_a_m_d(f1), f2: format_a_m_d(f2), nube_idproyect: nube_idproyect }, function (e, status) {
+    e = JSON.parse(e);    console.log(e);
 
-    // existe alguna asistencia -------
-    if (data.length != 0) {
-      var i;
-      var fecha = f1; //console.log("tiene data");
+    if (e.status == true) {
 
-      for (i = 1; i <= 7 + dia_regular; i++) {
-        var estado_fecha = false;
-        var fecha_compra_encontrado = "";
-        var costo_parcial_encontrado = 0;
-        var descripcion_encontrado = "";
-        var cantidad_encontrado = 0;
-        var idbreak = "";
+      // existe alguna asistencia -------
+      if (e.data.length != 0) {
 
-        // buscamos las fechas
-        for (let i = 0; i < data.length; i++) {
-          let split_f = data[i]["fecha_compra"];
+        var i;
+        var fecha = f1; //console.log("tiene data");
 
-          let fecha_semana = new Date(format_a_m_d(fecha));
-          let fecha_asistencia = new Date(split_f);
+        for (i = 1; i <= 7 + dia_regular; i++) {
 
-          if (fecha_semana.getTime() == fecha_asistencia.getTime()) {
-            total_pago = total_pago + parseFloat(data[i]["costo_parcial"]);
+          var estado_fecha = false;
+          var fecha_compra_encontrado = "";
+          var costo_parcial_encontrado = 0;
+          var descripcion_encontrado = "";
+          var cantidad_encontrado = 0;
+          var idbreak = "";
 
-            fecha_compra_encontrado = data[i]["fecha_compra"];
-            costo_parcial_encontrado = data[i]["costo_parcial"];
-            descripcion_encontrado = data[i]["descripcion"];
-            cantidad_encontrado = data[i]["cantidad"];
-            idbreak = data[i]["idbreak"];
-            estado_fecha = true;
+          // buscamos las fechas
+          for (let i = 0; i < e.data.length; i++) {
+
+            let split_f = e.data[i]["fecha_compra"];
+
+            let fecha_semana = new Date(format_a_m_d(fecha));
+            let fecha_asistencia = new Date(split_f);
+
+            if (fecha_semana.getTime() == fecha_asistencia.getTime()) {
+              total_pago = total_pago + parseFloat(e.data[i]["costo_parcial"]);
+
+              fecha_compra_encontrado = e.data[i]["fecha_compra"];
+              costo_parcial_encontrado = e.data[i]["costo_parcial"];
+              descripcion_encontrado = e.data[i]["descripcion"];
+              cantidad_encontrado = e.data[i]["cantidad"];
+              idbreak = e.data[i]["idbreak"];
+              estado_fecha = true;
+            }
+          } //end for
+
+          // imprimimos la fecha compra encontrada
+          if (estado_fecha) {
+            var weekday = extraer_dia_semana(fecha_compra_encontrado); //console.log(weekday);
+
+            if (weekday != "Sábado") {
+              //-------------------------------------------------------------
+              tabla_bloc_dia_1 = `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${format_d_m_a(
+                fecha_compra_encontrado
+              )} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${fecha_compra_encontrado}"><input type="hidden" class="idbreak_${count_numero_dia}" value="${idbreak}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
+
+              tabla_bloc_cantidad_2 = `<td><span class="span-visible">${cantidad_encontrado}</span><input type="number" value="${cantidad_encontrado}" class="cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
+
+              tabla_bloc_precio_3 = `<td><span class="span-visible">${costo_parcial_encontrado}</span><input type="number" value="${costo_parcial_encontrado}" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
+
+              tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="${descripcion_encontrado}" style="width: 100%;;">${descripcion_encontrado}</textarea></td>`;
+
+              tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
+              //
+            } else {
+              tabla_bloc_dia_1 = `<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${format_d_m_a(fecha_compra_encontrado)}</td>`;
+
+              tabla_bloc_cantidad_2 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+
+              tabla_bloc_precio_3 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+
+              tabla_bloc_descripcion_4 = `<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
+
+              //fila
+              tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
+                      ${tabla_bloc_dia_1}
+                      ${tabla_bloc_cantidad_2}
+                      ${tabla_bloc_precio_3}
+                      ${tabla_bloc_descripcion_4}
+                  </tr>`);
+            }
+          } else {
+            var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
+
+            if (weekday != "Sábado") {
+              tabla_bloc_dia_1 = `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(
+                fecha
+              )}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
+
+              tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class=" cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
+
+              tabla_bloc_precio_3 = `<td><span class="span-visible">-</span><input type="number" value="" class=" precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
+
+              tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style=" width: 100%;"></textarea></td>`;
+
+              tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
+              //
+            } else {
+              tabla_bloc_dia_1 = `<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${fecha}</td>`;
+
+              tabla_bloc_cantidad_2 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+
+              tabla_bloc_precio_3 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
+
+              tabla_bloc_descripcion_4 = `<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
+
+              //fila
+              tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
+                      ${tabla_bloc_dia_1}
+                      ${tabla_bloc_cantidad_2}
+                      ${tabla_bloc_precio_3}
+                      ${tabla_bloc_descripcion_4}
+                  </tr>`);
+            }
           }
+          //aumentamos el número de días
+          count_numero_dia++;
+          // aumentamos mas un dia hasta llegar al dia 15
+          fecha = sumaFecha(1, fecha);
         } //end for
 
-        // imprimimos la fecha compra encontrada
-        if (estado_fecha) {
-          var weekday = extraer_dia_semana(fecha_compra_encontrado); //console.log(weekday);
+        // no existe ninguna asistencia -------
+      } else {
+
+        var fecha = f1; //console.log("no ninguna fecha asistida");
+
+        for (i = 1; i <= 7 + dia_regular; i++) {
+
+          var weekday = extraer_dia_semana(format_a_m_d(fecha));
 
           if (weekday != "Sábado") {
-            //-------------------------------------------------------------
-            tabla_bloc_dia_1 = `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${format_d_m_a(
-              fecha_compra_encontrado
-            )} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${fecha_compra_encontrado}"><input type="hidden" class="idbreak_${count_numero_dia}" value="${idbreak}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
 
-            tabla_bloc_cantidad_2 = `<td><span class="span-visible">${cantidad_encontrado}</span><input type="number" value="${cantidad_encontrado}" class="cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
-
-            tabla_bloc_precio_3 = `<td><span class="span-visible">${costo_parcial_encontrado}</span><input type="number" value="${costo_parcial_encontrado}" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
-
-            tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="${descripcion_encontrado}" style="width: 100%;;">${descripcion_encontrado}</textarea></td>`;
-
-            tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
-            //
-          } else {
-            tabla_bloc_dia_1 = `<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${format_d_m_a(fecha_compra_encontrado)}</td>`;
-
-            tabla_bloc_cantidad_2 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
-
-            tabla_bloc_precio_3 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
-
-            tabla_bloc_descripcion_4 = `<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
-
-            //fila
-            tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
-                    ${tabla_bloc_dia_1}
-                    ${tabla_bloc_cantidad_2}
-                    ${tabla_bloc_precio_3}
-                    ${tabla_bloc_descripcion_4}
-                </tr>`);
-          }
-        } else {
-          var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
-
-          if (weekday != "Sábado") {
             tabla_bloc_dia_1 = `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(
               fecha
             )}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
 
-            tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class=" cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
+            tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class="cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
 
-            tabla_bloc_precio_3 = `<td><span class="span-visible">-</span><input type="number" value="" class=" precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
+            tabla_bloc_precio_3 = `<td><span class="span-visible">-</span><input type="number" value="" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
 
-            tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style=" width: 100%;"></textarea></td>`;
+            tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width:100%;"></textarea></td>`;
 
             tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
             //
@@ -520,59 +602,21 @@ function datos_semana(f1, f2, i, cont) {
                     ${tabla_bloc_descripcion_4}
                 </tr>`);
           }
-        }
-        //aumentamos el número de días
-        count_numero_dia++;
-        // aumentamos mas un dia hasta llegar al dia 15
-        fecha = sumaFecha(1, fecha);
-      } //end for
-
-      // no existe ninguna asistencia -------
+          //contamos el número del día
+          count_numero_dia++;
+          // aumentamos mas un dia hasta llegar al dia 15
+          fecha = sumaFecha(1, fecha);
+        } //end for
+      }
     } else {
-      var fecha = f1; //console.log("no ninguna fecha asistida");
 
-      for (i = 1; i <= 7 + dia_regular; i++) {
-        var weekday = extraer_dia_semana(format_a_m_d(fecha));
-
-        if (weekday != "Sábado") {
-          tabla_bloc_dia_1 = `<td> <b>${count_numero_dia}. ${weekday}:</b>  ${fecha} <input type="hidden" class="fecha_compra_${count_numero_dia}" value="${format_a_m_d(
-            fecha
-          )}"> <input type="hidden" class="dia_semana_${count_numero_dia}" value="${weekday}"> </td>`;
-
-          tabla_bloc_cantidad_2 = `<td><span class="span-visible">-</span><input type="number" value="" class="cantidad_compra_${count_numero_dia} hidden input-visible" onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();"></td>`;
-
-          tabla_bloc_precio_3 = `<td><span class="span-visible">-</span><input type="number" value="" class="precio_compra_${count_numero_dia} hidden input-visible"  onkeyup="obtener_datos_semana();" onchange="obtener_datos_semana();" ></td>`;
-
-          tabla_bloc_descripcion_4 = `<td><textarea cols="30" rows="1" readonly class="textarea-visible descripcion_compra_${count_numero_dia}" onkeyup="obtener_datos_semana();" value="" style="width:100%;"></textarea></td>`;
-
-          tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>${tabla_bloc_dia_1}${tabla_bloc_cantidad_2}${tabla_bloc_precio_3}${tabla_bloc_descripcion_4}</tr>`);
-          //
-        } else {
-          tabla_bloc_dia_1 = `<td class="bg-color-b4bdbe47"> <b>${count_numero_dia}. ${weekday} : </b> ${fecha}</td>`;
-
-          tabla_bloc_cantidad_2 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
-
-          tabla_bloc_precio_3 = `<td class="bg-color-b4bdbe47"><span> - </span></td>`;
-
-          tabla_bloc_descripcion_4 = `<td class="bg-color-b4bdbe47"><textarea class="bg-color-b4bdbe47" cols="30" rows="1" readonly style="width: 100%;"></textarea></td>`;
-
-          //fila
-          tabla_bloc_semana = tabla_bloc_semana.concat(`<tr>
-                  ${tabla_bloc_dia_1}
-                  ${tabla_bloc_cantidad_2}
-                  ${tabla_bloc_precio_3}
-                  ${tabla_bloc_descripcion_4}
-              </tr>`);
-        }
-        //contamos el número del día
-        count_numero_dia++;
-        // aumentamos mas un dia hasta llegar al dia 15
-        fecha = sumaFecha(1, fecha);
-      } //end for
+      ver_errores(e);
     }
+
     $("#monto_total").html(formato_miles(total_pago.toFixed(2)));
     $("#data_table_body").html(tabla_bloc_semana);
-  }); //end post - ver_datos_semana
+
+  }).fail( function(e) { ver_errores(e); } ); //end post - ver_datos_semana
 
   $("#cargando-1-fomulario").show();
   $("#cargando-2-fomulario").hide();
@@ -581,9 +625,11 @@ function datos_semana(f1, f2, i, cont) {
   count_dias_asistidos = 0;
   horas_nomr_total = 0;
   horas_extr_total = 0;
+
 }
 
 function obtener_datos_semana() {
+
   var fecha_compra = "";
   var dia_semana = "";
   var cantidad_compra = 0;
@@ -628,8 +674,14 @@ function obtener_datos_semana() {
   //$("#monto_total").html('100.00');
 }
 
-//--------------------Comprobantes----------------------------------
+// ------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------   
+// ------------------C O M P R O B A N T E S   B R E A K ------------------------------
+// ------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------
+
 function ocultar() {
+
   $("#regresar_aprincipal").show();
   $("#Lista_breaks").hide();
   $("#mostrar-tabla").hide();
@@ -687,20 +739,30 @@ function guardaryeditar_factura(e) {
     data: formData,
     contentType: false,
     processData: false,
+    success: function (e) {
+      try {
 
-    success: function (datos) {
-      if (datos == "ok") {
-        toastr.success("servicio registrado correctamente");
+        e = JSON.parse(e); console.log(e); 
 
-        tabla.ajax.reload(null, false);
+        if (e.status == true) {
 
-        $("#modal-agregar-comprobante").modal("hide");
-        listar_comprobantes(localStorage.getItem("idsemana_break_nube"));
-        total_monto(localStorage.getItem("idsemana_break_nube"));
-        limpiar_comprobante();
-      } else {
-        toastr.error(datos);
-      }
+          toastr.success("servicio registrado correctamente");
+
+          tabla.ajax.reload(null, false);
+  
+          $("#modal-agregar-comprobante").modal("hide");
+          listar_comprobantes(localStorage.getItem("idsemana_break_nube"));
+          total_monto(localStorage.getItem("idsemana_break_nube"));
+          limpiar_comprobante();
+        }else{  
+          ver_errores(e);
+        } 
+
+      } catch (err) {
+
+        console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+      } 
+
     },
   });
 }
@@ -766,12 +828,10 @@ function listar_comprobantes(idsemana_break) {
   total_monto(localStorage.getItem("idsemana_break_nube"));
 }
 
-//segun tipo de comprobante
 function calc_total() {
 
-  $('.div_ruc').hide();
-  $('.div_razon_social').hide();
   $(".nro_comprobante").html("Núm. Comprobante");
+  $( "#num_documento" ).rules( "remove","required" );
 
   var total         = es_numero($('#monto').val()) == true? parseFloat($('#monto').val()) : 0;
   var val_igv       = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0;
@@ -786,6 +846,10 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
+
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $("#num_documento").val(""); $("#razon_social").val("");
+    
   }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00"); 
@@ -793,17 +857,26 @@ function calc_total() {
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
     $(".nro_comprobante").html("Núm. de Operación");
+
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $("#num_documento").val(""); $("#razon_social").val("");
+
   }else if ($("#tipo_comprobante").select2("val") =="Boleta") {  
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00"); 
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
-    $('.div_ruc').show();  $('.div_razon_social').show();
+    $(".nro_comprobante").html("Núm. de Operación");
+
+    $(".div_ruc").show(); $(".div_razon_social").show();
+    $("#num_documento").val(""); $("#razon_social").val("");
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
+
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
-    $("#val_igv").prop("readonly",false);   
-    $('.div_ruc').show();  $('.div_razon_social').show();
+    $("#val_igv").prop("readonly",false);    
 
     if (total == null || total == "") {
       $("#subtotal").val(0.00);
@@ -827,13 +900,24 @@ function calc_total() {
         $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
       }    
     }
+    $(".div_ruc").show(); $(".div_razon_social").show();
+
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
   } else {
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00");
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
-    $("#val_igv").prop("readonly",true);    
+    $("#val_igv").prop("readonly",true);
+    $(".div_ruc").hide(); $(".div_razon_social").hide();   
   }
+  if (val_igv > 0 && val_igv <= 1) {
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+  } else {
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+  }
+
 }
 
 function select_comprobante() {
@@ -887,161 +971,123 @@ function mostrar_comprobante(idfactura_break) {
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
-  $.post("../ajax/break.php?op=mostrar_comprobante", { idfactura_break: idfactura_break }, function (data, status) {
-    data = JSON.parse(data); //console.log(data);
+  $.post("../ajax/break.php?op=mostrar_comprobante", { idfactura_break: idfactura_break }, function (e, status) {
 
-    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
-    $("#forma_pago").val(data.forma_de_pago).trigger("change");
+    e = JSON.parse(e); console.log(e);   
 
-    $("#idfactura_break ").val(data.idfactura_break);
-    $("#nro_comprobante").val(data.nro_comprobante);    
-    $("#fecha_emision").val(data.fecha_emision);
-    $("#descripcion").val(data.descripcion);    
-    $("#num_documento").val(data.ruc);
-    $("#razon_social").val(data.razon_social);
-    $("#direccion").val(data.direccion);
+    if (e.status == true) {
 
-    $("#monto").val(redondearExp(data.monto));
-    $("#subtotal").val(redondearExp(data.subtotal));
-    $("#igv").val(redondearExp(data.igv));
-    $("#val_igv").val(data.val_igv).trigger("change");  
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+      $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
 
-    if (data.comprobante == "" || data.comprobante == null) {
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+      $("#idfactura_break ").val(e.data.idfactura_break);
+      $("#nro_comprobante").val(e.data.nro_comprobante);    
+      $("#fecha_emision").val(e.data.fecha_emision);
+      $("#descripcion").val(e.data.descripcion);    
+      $("#num_documento").val(e.data.ruc);
+      $("#razon_social").val(e.data.razon_social);
+      $("#direccion").val(e.data.direccion);
 
-      $("#doc1_nombre").html("");
+      $("#monto").val(redondearExp(e.data.monto));
+      $("#subtotal").val(redondearExp(e.data.subtotal));
+      $("#igv").val(redondearExp(e.data.igv));
+      $("#val_igv").val(e.data.val_igv).trigger("change");  
 
-      $("#doc_old_1").val("");
-      $("#doc1").val("");
+      if (e.data.comprobante == "" || e.data.comprobante == null) {
+        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+        $("#doc1_nombre").html("");
+
+        $("#doc_old_1").val("");
+        $("#doc1").val("");
+      } else {
+        $("#doc_old_1").val(e.data.comprobante);
+
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
+
+        // cargamos la imagen adecuada par el archivo
+        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante,'break', 'comprobante', '100%', '210' ));
+        
+      }
+
     } else {
-      $("#doc_old_1").val(data.comprobante);
-
-      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.comprobante)}</i></div></div>`);
-
-      // cargamos la imagen adecuada par el archivo
-      $("#doc1_ver").html(doc_view_extencion(data.comprobante,'break', 'comprobante', '100%', '210' ));
-      
+      ver_errores(e);
     }
-  });
+
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //Función para desactivar registros
-function desactivar_comprobante(idfactura_break) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar  el comprobante?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/break.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
-        Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
-        total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload(null, false);
-      });
-    }
-  });
+function eliminar_comprobante(idfactura_break, tipo,numero) {
+
+  crud_eliminar_papelera(
+    "../ajax/break.php?op=desactivar_comprobante",
+    "../ajax/break.php?op=eliminar_comprobante", 
+    idfactura_break, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del> ${tipo} - ${numero}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ total_monto(localStorage.getItem("idsemana_break_nube")); },
+    function(){ tabla.ajax.reload(null, false);; },   
+    false, 
+    false,
+    false
+  );
+
 }
 
-function activar_comprobante(idfactura_break) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar  comprobante?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/break.php?op=activar_comprobante", { idfactura_break: idfactura_break }, function (e) {
-        Swal.fire("Activado!", "Comprobante ha sido activado.", "success");
-        total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload(null, false);
-      });
-    }
-  });
-}
+function ver_modal_comprobante(comprobante,tipo,numero_comprobante) {
 
-//Función para desactivar registros
-function eliminar_comprobante(idfactura_break) {
-  Swal.fire({
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      //Desactivar
-      $.post("../ajax/break.php?op=desactivar_comprobante", { idfactura_break: idfactura_break }, function (e) {
-        Swal.fire("Desactivado!", "Comprobante a ha sido desactivado.", "success");
-        total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload(null, false);
-      });
-    } else if (result.isDenied) {
-      // Eliminar
-      $.post("../ajax/break.php?op=eliminar_comprobante", { idfactura_break: idfactura_break }, function (e) {
-        Swal.fire("Eliminado!", "Comprobante a ha sido Eliminado.", "success");
-        total_monto(localStorage.getItem("idsemana_break_nube"));
-        tabla.ajax.reload(null, false);
-      });
-    }
-  });
-}
+  var dia_actual = moment().format('DD-MM-YYYY');
+  $(".nombre_comprobante").html(`${tipo} ${numero_comprobante}`);
+  $('#modal-ver-comprobante').modal("show");
+  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'break', 'comprobante', '100%', '550'));
 
-function ver_modal_comprobante(comprobante) {
-  var comprobante = comprobante;
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-  //console.log(extencion);
-  $("#ver_fact_pdf").html("");
-  $("#img-factura").attr("src", "");
-  $("#modal-ver-comprobante").modal("show");
-
-  if (extencion == "jpeg" || extencion == "jpg" || extencion == "png" || extencion == "webp") {
-    $("#ver_fact_pdf").hide();
-    $("#img-factura").show();
-    $("#img-factura").attr("src", "../dist/docs/break/comprobante/" + comprobante);
-
-    $("#iddescargar").attr("href", "../dist/docs/break/comprobante/" + comprobante);
+  if (DocExist(`dist/docs/break/comprobante/${comprobante}`) == 200) {
+    $("#iddescargar").attr("href","../dist/docs/break/comprobante/"+comprobante).attr("download", `${tipo}-${numero_comprobante}  - ${dia_actual}`).removeClass("disabled");
+    $("#ver_completo").attr("href","../dist/docs/break/comprobante/"+comprobante).removeClass("disabled");
   } else {
-    $("#img-factura").hide();
-    $("#ver_fact_pdf").show();
-    $("#ver_fact_pdf").html('<iframe src="../dist/docs/break/comprobante/' + comprobante + '" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-    $("#iddescargar").attr("href", "../dist/docs/break/comprobante/" + comprobante);
+    $("#iddescargar").addClass("disabled");
+    $("#ver_completo").addClass("disabled");
   }
+
+  $('.jq_image_zoom').zoom({ on:'grab' }); 
   $(".tooltip").removeClass("show").addClass("hidde");
+
 }
 
 //-total Pagos
 function total_monto(idsemana_break) {
-  $.post("../ajax/break.php?op=total_monto", { idsemana_break: idsemana_break }, function (data, status) {
-    $("#monto_total_f").html("00.0");
-    data = JSON.parse(data);
-    console.log(data);
-    num = data.total;
-    if (!num || num == "NaN") return "0.00";
-    if (num == "Infinity") return "&#x221e;";
-    num = num.toString().replace(/\$|\,/g, "");
-    if (isNaN(num)) num = "0";
-    sign = num == (num = Math.abs(num));
-    num = Math.floor(num * 100 + 0.50000000001);
-    cents = num % 100;
-    num = Math.floor(num / 100).toString();
-    if (cents < 10) cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-    total_mont_f = (sign ? "" : "-") + num + "." + cents;
 
-    $("#monto_total_f").html('S/ '+total_mont_f);
-  });
+  $("#monto_total_f").html("00.0");
+
+  $.post("../ajax/break.php?op=total_monto", { idsemana_break: idsemana_break }, function (e, status) {
+
+    e = JSON.parse(e); console.log(e);   
+
+    if (e.status == true) {
+
+      num = e.data.total;
+      if (!num || num == "NaN") return "0.00";
+      if (num == "Infinity") return "&#x221e;";
+      num = num.toString().replace(/\$|\,/g, "");
+      if (isNaN(num)) num = "0";
+      sign = num == (num = Math.abs(num));
+      num = Math.floor(num * 100 + 0.50000000001);
+      cents = num % 100;
+      num = Math.floor(num / 100).toString();
+      if (cents < 10) cents = "0" + cents;
+      for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
+      total_mont_f = (sign ? "" : "-") + num + "." + cents;
+
+      $("#monto_total_f").html('S/ '+total_mont_f);
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 init();
@@ -1096,10 +1142,6 @@ $(function () {
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
-
-
-
-
 
 //extraer_dia_semana
 function extraer_dia_semana(fecha) {

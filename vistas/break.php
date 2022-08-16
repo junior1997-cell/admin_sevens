@@ -156,7 +156,6 @@
                                   <th>Monto</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
-                                  <th>Estado</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -172,7 +171,6 @@
                                   <th class="text-nowrap text-right" id="monto_total_f"></th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
-                                  <th>Estado</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -252,7 +250,7 @@
                               <!-- Tipo de comprobante -->
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
-                                  <label for="tipo_comprobante">Tipo Comprobante</label>
+                                  <label for="tipo_comprobante">Tipo Comprobante <small class="text-danger text-lowercase"> (Único)</small></label>
                                   <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2" onchange="delay(function(){select_comprobante();calc_total();}, 100 );" placeholder="Seleccinar un tipo de comprobante">
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
@@ -264,7 +262,7 @@
                               <!-- RUC style="display: none;"-->
                               <div class="col-lg-4 div_ruc" style="display: none;">
                                 <div class="form-group">
-                                  <label for="ruc">R.U.C</label>
+                                  <label for="ruc">R.U.C <small class="text-danger text-lowercase"> (Único)</small></label>
                                   <div class="input-group">
                                     <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento"  onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 150 );" />
                                     <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec('');">
@@ -287,7 +285,7 @@
                               <!-- Código-->
                               <div class="col-lg-6">
                                 <div class="form-group">
-                                  <label for="codigo" class="nro_comprobante">Núm. comprobante </label>
+                                  <label ><span class="nro_comprobante">Núm. comprobante</span> <small class="text-danger text-lowercase"> (Único)</small>  </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
@@ -381,17 +379,22 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title">Factura</h4>
+                        <h4 class="modal-title">Comprobante : <span class="text-bold nombre_comprobante"></span></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="iddescargar" download="factura" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
+                        <div class="row">
+                          <div class="col-6 col-md-6">
+                            <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                          </div>
+                          <div class="col-6 col-md-6">
+                            <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                          </div>
+                          <div class="col-12 col-md-12 mt-2">
+                            <div id="ver_fact_pdf" width="auto"></div>
+                          </div>
                         </div>
                       </div>
                     </div>

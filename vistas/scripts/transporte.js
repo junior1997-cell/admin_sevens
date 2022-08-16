@@ -440,8 +440,9 @@ function mostrar(idtransporte) {
 
       $(".igv").val(parseFloat(e.data.igv).toFixed(2));
       $("#igv").val(e.data.igv);
-      $("#val_igv").val(e.data.val_igv).trigger("change"); 
       $("#tipo_gravada").val(e.data.tipo_gravada); 
+      $("#val_igv").val(e.data.val_igv).trigger("change"); 
+ 
 
       $("#ruta").val(e.data.ruta); 
       $("#descripcion").val(e.data.descripcion);

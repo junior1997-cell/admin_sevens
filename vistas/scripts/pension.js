@@ -151,6 +151,7 @@ function guardaryeditar_pension(e) {
     contentType: false,
     processData: false,
     success: function (e) {
+      
       try {
 
         e = JSON.parse(e);        console.log(e); 
@@ -280,7 +281,7 @@ function mostrar_pension(idpension) {
     } else {
       ver_errores(e);
     }
-    
+
   }).fail( function(e) { ver_errores(e); } );
 }
 

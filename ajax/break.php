@@ -18,6 +18,9 @@
 
       $breaks=new Breaks();
 
+      date_default_timezone_set('America/Lima');
+      $date_now = date("d-m-Y h.i.s A");
+
       //============C o m p r o b a n t e s========================
       $idsemana_break   = isset($_POST["idsemana_break"])? limpiarCadena($_POST["idsemana_break"]):"";
       $idfactura_break  = isset($_POST["idfactura_break"])? limpiarCadena($_POST["idfactura_break"]):"";
@@ -102,7 +105,7 @@
         // ------------------C O M P R O B A N T E S   B R E A K -----------------------------
         // ------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------
-        
+
         case 'guardaryeditar_Comprobante':
 
             // imgen de perfil
@@ -114,7 +117,7 @@
   
               $ext1 = explode(".", $_FILES["doc1"]["name"]); $flat_img1 = true;						
   
-              $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+              $imagen2 = $date_now .' '.rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
   
               move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/break/comprobante/" . $imagen2);
             
@@ -123,14 +126,16 @@
           if (empty($idfactura_break)){
             
             $rspta=$breaks->insertar_comprobante($idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion);
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos de Comprobante";
+            echo json_encode($rspta,true);
+
           } else {
+
             // validamos si existe LA IMG para eliminarlo
             if ($flat_img1 == true) {
   
               $datos_f1 = $breaks->obtenerDoc($idfactura_break);
         
-              $img1_ant = $datos_f1->fetch_object()->comprobante;
+              $img1_ant = $datos_f1['data']->fetch_object()->comprobante;
         
               if ($img1_ant != "") {
         
@@ -140,7 +145,8 @@
             
             $rspta=$breaks->editar_comprobante($idfactura_break,$idsemana_break,$forma_pago,$tipo_comprobante,$nro_comprobante,$monto,$fecha_emision,$descripcion,$subtotal,$igv,$val_igv,$tipo_gravada,$imagen2,$ruc,$razon_social,$direccion);
             
-            echo $rspta ? "ok" : "Comprobante no se pudo actualizar";
+            echo json_encode($rspta,true);
+
           }
 
         break;
@@ -167,7 +173,8 @@
 
               if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
 
-              empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':$comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
+              empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':
+              $comprobante='<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".','."'".$reg->tipo_comprobante."'".','."'".$reg->nro_comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';
               
               $tool = '"tooltip"';   $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>"; 
               
@@ -175,7 +182,7 @@
 
                 "0"=>$cont++,
                 "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_comprobante('.$reg->idfactura_break .')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-danger  btn-sm" onclick="eliminar_comprobante(' . $reg->idfactura_break . ')"><i class="fas fa-skull-crossbones"></i> </button>',
+                ' <button class="btn btn-danger  btn-sm" onclick="eliminar_comprobante(' . $reg->idfactura_break . ','."'".$reg->tipo_comprobante."'".','."'".$reg->nro_comprobante."'".')"><i class="fas fa-skull-crossbones"></i> </button>',
                 "2"=> empty($reg->forma_de_pago)?' - ':$reg->forma_de_pago,
                 "3"=>'<div class="user-block">
                     <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.$reg->tipo_comprobante.'</p> </span>
@@ -209,14 +216,14 @@
 
         case 'desactivar_comprobante':
 
-          $rspta=$breaks->desactivar_comprobante($idfactura_break);
+          $rspta=$breaks->desactivar_comprobante($_GET['id_tabla']);
           echo json_encode($rspta,true);
 	
         break;
 
         case 'eliminar_comprobante':
 
-          $rspta=$breaks->eliminar_comprobante($idfactura_break);
+          $rspta=$breaks->eliminar_comprobante($_GET['id_tabla']);
           echo json_encode($rspta,true);
 	
         break;
