@@ -121,7 +121,12 @@ function listar(nube_idproyecto) {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+    buttons: [
+    { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,4,5,6,2], } }, 
+    { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,4,5,6,2], } }, 
+    { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,4,5,6,2], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+    {extend: "colvis"} ,
+    ],
     ajax: {
       url: "../ajax/break.php?op=listar_totales_semana&nube_idproyecto=" + nube_idproyecto,
       type: "get",
@@ -148,7 +153,11 @@ function listar(nube_idproyecto) {
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [4,5,6], visible: false, searchable: false, },    
+    ],
   }).DataTable();
+
 }
 
 //Función Listar
@@ -269,30 +278,6 @@ function guardaryeditar_semana_break() {
     // contentType: false,
     // processData: false,
     success: function (e) {
-
-      // if (datos == "ok") {
-      //   datos_semana(f1_reload, f2_reload, i_reload);
-      //   listar(localStorage.getItem("nube_idproyecto"));
-
-      //   $("#icono-respuesta").html(
-      //     `<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>`
-      //   );
-
-      //   // Swal.fire("Correcto!", "Asistencia registrada correctamente", "success");
-
-      //   $(".progress-bar").addClass("bg-success");
-      //   $("#barra_progress").text("100% Completado!");
-      // } else {
-      //   $("#icono-respuesta").html(
-      //     `<div class="swal2-icon swal2-error swal2-icon-show" style="display: flex;"> <span class="swal2-x-mark"> <span class="swal2-x-mark-line-left"></span> <span class="swal2-x-mark-line-right"></span> </span> </div> <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Error!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">${datos}</div> </div>`
-      //   );
-
-      //   $(".progress-bar").addClass("bg-danger");
-      //   $("#barra_progress").text("100% Error!");
-
-      //   // Swal.fire("Error!", datos, "error");
-      // }
-
             
       try {
 
@@ -699,7 +684,6 @@ function regresar() {
   $("#guardar").hide();
 }
 
-//Función limpiar-factura
 function limpiar_comprobante() {
   $("#nro_comprobante").val("");
   $("#monto").val("");
@@ -728,7 +712,6 @@ function limpiar_comprobante() {
   $(".error.invalid-feedback").remove();
 }
 
-//Guardar y editar
 function guardaryeditar_factura(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-agregar-comprobante")[0]);
@@ -783,7 +766,12 @@ function listar_comprobantes(idsemana_break) {
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      buttons: [
+        { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
+        { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
+        { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+        {extend: "colvis"} ,
+        ],
       ajax: {
         url: "../ajax/break.php?op=listar_comprobantes&idsemana_break=" + idsemana_break,
         type: "get",
@@ -823,6 +811,9 @@ function listar_comprobantes(idsemana_break) {
       bDestroy: true,
       iDisplayLength: 10, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [
+        { targets: [10,11,12,13,14,15,16], visible: false, searchable: false, },    
+      ],
     })
     .DataTable();
   total_monto(localStorage.getItem("idsemana_break_nube"));
@@ -963,7 +954,6 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
   return precio_sin_igv; 
 }
 
-//mostrar
 function mostrar_comprobante(idfactura_break) {
   limpiar_comprobante();
 

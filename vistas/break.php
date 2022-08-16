@@ -98,6 +98,9 @@
                                   <th class="">Fecha semana</th>
                                   <th>Total</th>
                                   <th>Comprobantes</th>
+                                  <th>N° Semana</th>
+                                  <th>Fecha inicial</th>
+                                  <th>Fecha final</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -107,6 +110,9 @@
                                   <th class="">Fecha semana</th>
                                   <th>Total</th>
                                   <th>Comprobantes</th>
+                                  <th>N° Semana</th>
+                                  <th>Fecha inicial</th>
+                                  <th>Fecha final</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -156,6 +162,13 @@
                                   <th>Monto</th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
+                                  <th>R.U.C</th>
+                                  <th>Razón social</th>
+                                  <th>Dirección</th>
+                                  <th>Tipo comprobante</th>
+                                  <th>N° comprobante</th>
+                                  <th>T. grabada</th>
+                                  <th>Glosa</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -171,6 +184,13 @@
                                   <th class="text-nowrap text-right" id="monto_total_f"></th>
                                   <th>Descripción</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
+                                  <th>R.U.C</th>
+                                  <th>Razón social</th>
+                                  <th>Dirección</th>
+                                  <th>Tipo comprobante</th>
+                                  <th>N° comprobante</th>
+                                  <th>T. grabada</th>
+                                  <th>Glosa</th>
                                 </tr>
                               </tfoot>
                             </table>

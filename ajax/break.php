@@ -83,6 +83,9 @@
                     </div>',
                 "2"=>'<b>'.number_format($reg->total, 2, '.', ',').'</b>', 
                 "3"=>'<div class="text-center"> <button class="btn btn-info btn-sm" onclick="listar_comprobantes('.$reg->idsemana_break.')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button></div>',   
+                "4"=> "Semana".' '.$reg->numero_semana,
+                "5"=>date("d/m/Y", strtotime($reg->fecha_inicial)),
+                "6"=>date("d/m/Y", strtotime($reg->fecha_final))
               );
 
             }
@@ -165,11 +168,7 @@
 
             while ($reg=$rspta['data']->fetch_object()){
 
-              $subtotal=round($reg->subtotal, 2);
-
-              $igv=round($reg->igv, 2);
-
-              $monto=round($reg->monto, 2 );
+              $subtotal=round($reg->subtotal, 2); $igv=round($reg->igv, 2); $monto=round($reg->monto, 2 );
 
               if (strlen($reg->descripcion) >= 20 ) { $descripcion = substr($reg->descripcion, 0, 20).'...';  } else { $descripcion = $reg->descripcion; }
 
@@ -193,7 +192,14 @@
                 "6"=>'S/ '.number_format($igv, 2, '.', ','),
                 "7"=>'S/ '.number_format($monto, 2, '.', ','),
                 "8"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-                "9"=>$comprobante.''.$toltip
+                "9"=>$comprobante.''.$toltip,
+                "10"=>$reg->ruc,
+                "11"=>$reg->razon_social,
+                "12"=>$reg->direccion,
+                "13"=>$reg->tipo_comprobante,
+                "14"=>$reg->nro_comprobante,
+                "15"=>$reg->tipo_gravada,
+                "16"=>$reg->glosa,
               
               );
 
