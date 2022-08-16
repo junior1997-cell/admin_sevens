@@ -3,7 +3,6 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
 
-  //Activamos el "aside"
   $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
   $("#bloc_Viaticos").addClass("menu-open");
@@ -30,10 +29,9 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();
+
 }
 
-
-// abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
 $("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
@@ -50,7 +48,6 @@ function doc1_eliminar() {
 //Función limpiar
 function limpiar() {
 
- // idcomida_extra ,fecha_inicio,fecha_fin,cantidad,unidad,precio_unitario,precio_parcial,descripcion
   $("#idcomida_extra").val("");
   $("#fecha").val(""); 
   $("#precio_parcial").val("");  
@@ -81,7 +78,6 @@ function limpiar() {
   $(".error.invalid-feedback").remove();
 }
 
-//Función Listar
 function listar() {
 
   $("#total_monto").html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
@@ -94,7 +90,12 @@ function listar() {
     "aProcessing": true,//Activamos el procesamiento del datatables
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+      {extend: "colvis"} ,
+    ],
     "ajax":{
         url: '../ajax/comidas_extras.php?op=listar&idproyecto='+idproyecto,
         type : "get",
@@ -122,46 +123,40 @@ function listar() {
       },
     "bDestroy": true,
     "iDisplayLength": 10,//Paginación
-    "order": [[ 0, "asc" ]]//Ordenar (columna,orden)
+    "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [10,11,12,13,14,15,16], visible: false, searchable: false, },    
+    ],
   }).DataTable();
   total();
 }
-//ver ficha tecnica
-function modal_comprobante(comprobante){
-  limpiar();
-  var comprobante = comprobante;
 
-  var extencion = comprobante.substr(comprobante.length - 3); // => "1"
-  //console.log(extencion);
-  $('#ver_fact_pdf').html('');
-  $('#img-factura').attr("src", "");
+function modal_comprobante(comprobante,tipo,numero_comprobante){
+  limpiar();
+
+  var dia_actual = moment().format('DD-MM-YYYY');
+
+  $(".nombre_comprobante").html(`${tipo}-${numero_comprobante}`);
   $('#modal-ver-comprobante').modal("show");
 
-  if (extencion=='jpeg' || extencion=='jpg' || extencion=='png' || extencion=='webp') {
-    $('#ver_fact_pdf').hide();
-    $('#img-factura').show();
-    $('#img-factura').attr("src", "../dist/docs/comida_extra/comprobante/"+comprobante);
+  $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'comida_extra', 'comprobante', '100%', '550'));
 
-    $("#iddescargar").attr("href","../dist/docs/comida_extra/comprobante/"+comprobante);
-
-  }else{
-    $('#img-factura').hide();
-    
-    $('#ver_fact_pdf').show();
-
-    $('#ver_fact_pdf').html('<iframe src="../dist/docs/comida_extra/comprobante/'+comprobante+'" frameborder="0" scrolling="no" width="100%" height="350"></iframe>');
-
-    $("#iddescargar").attr("href","../dist/docs/comida_extra/comprobante/"+comprobante);
+  if (DocExist(`dist/docs/comida_extra/comprobante/${comprobante}`) == 200) {
+    $("#iddescargar").attr("href","../dist/docs/comida_extra/comprobante/"+comprobante).attr("download", `${tipo}-${numero_comprobante}  - ${dia_actual}`).removeClass("disabled");
+    $("#ver_completo").attr("href","../dist/docs/comida_extra/comprobante/"+comprobante).removeClass("disabled");
+  } else {
+    $("#iddescargar").addClass("disabled");
+    $("#ver_completo").addClass("disabled");
   }
+
+  $('.jq_image_zoom').zoom({ on:'grab' }); 
 
 }
 
-//segun tipo de comprobante
 function calc_total() {
 
-  $('.div_ruc').hide();
-  $('.div_razon_social').hide();
   $(".nro_comprobante").html("Núm. Comprobante");
+  $( "#num_documento" ).rules( "remove","required" );
 
   var total         = es_numero($('#precio_parcial').val()) == true? parseFloat($('#precio_parcial').val()) : 0;
   var val_igv       = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0;
@@ -176,6 +171,10 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
+
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $("#num_documento").val(""); $("#razon_social").val("");
+    
   }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00"); 
@@ -183,17 +182,26 @@ function calc_total() {
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
     $(".nro_comprobante").html("Núm. de Operación");
+
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $("#num_documento").val(""); $("#razon_social").val("");
+
   }else if ($("#tipo_comprobante").select2("val") =="Boleta") {  
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00"); 
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
-    $('.div_ruc').show();  $('.div_razon_social').show();
+    $(".nro_comprobante").html("Núm. de Operación");
+
+    $(".div_ruc").show(); $(".div_razon_social").show();
+    $("#num_documento").val(""); $("#razon_social").val("");
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
+
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
-    $("#val_igv").prop("readonly",false);   
-    $('.div_ruc').show();  $('.div_razon_social').show();
+    $("#val_igv").prop("readonly",false);    
 
     if (total == null || total == "") {
       $("#subtotal").val(0.00);
@@ -217,13 +225,24 @@ function calc_total() {
         $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
       }    
     }
+    $(".div_ruc").show(); $(".div_razon_social").show();
+
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
   } else {
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00");
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
-    $("#val_igv").prop("readonly",true);    
+    $("#val_igv").prop("readonly",true);
+    $(".div_ruc").hide(); $(".div_razon_social").hide();   
   }
+  if (val_igv > 0 && val_igv <= 1) {
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+  } else {
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+  }
+
 }
 
 function select_comprobante() {
@@ -270,7 +289,6 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 }
 
 //Función para guardar o editar
-
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-comidas_ex")[0]);
@@ -281,18 +299,35 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {             
-      if (datos == 'ok') {
-				toastr.success('Registrado correctamente')
+    success: function (e) {             
+
+      try {
+      e = JSON.parse(e);  console.log(e); 
+
+      if (e.status == true) {
+
+				toastr.success('Registrado correctamente');
+
 	      tabla.ajax.reload(null, false);         
+
 				limpiar();
+
         $("#modal-agregar-comidas_ex").modal("hide");
+
         total();
-			}else{
-				toastr.error(datos)
-			}
+
+      }else{  
+
+        ver_errores(e);
+      } 
+
       $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-    },
+
+    } catch (err) {
+      console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
+    } 
+
+  },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
       xhr.upload.addEventListener("progress", function (evt) {
@@ -320,7 +355,7 @@ function guardaryeditar(e) {
 
 function mostrar(idcomida_extra ) {
   limpiar();
-  //$("#proveedor").val("").trigger("change"); 
+
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
@@ -328,158 +363,94 @@ function mostrar(idcomida_extra ) {
   $("#tipo_comprobante").val("").trigger("change");
   $("#forma_pago").val("null").trigger("change");
 
-  $.post("../ajax/comidas_extras.php?op=mostrar", { idcomida_extra : idcomida_extra  }, function (data, status) {
+  $.post("../ajax/comidas_extras.php?op=mostrar", { idcomida_extra : idcomida_extra  }, function (e, status) {
 
-    data = JSON.parse(data); 
+    e = JSON.parse(e); console.log(e);   
+    if (e.status == true) {
         
-    $("#tipo_comprobante").val(data.tipo_comprobante).trigger("change");
-    $("#idcomida_extra").val(data.idcomida_extra);      
-    $("#forma_pago").val(data.forma_de_pago).trigger("change");
-    $("#nro_comprobante").val(data.numero_comprobante);
-    $("#fecha").val(data.fecha_comida);
-    $("#num_documento").val(data.ruc).trigger("change");
-    $("#razon_social").val(data.razon_social);
-    $("#direccion").val(data.direccion);
-    $("#descripcion").val(data.descripcion);
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
+      $("#idcomida_extra").val(e.data.idcomida_extra);      
+      $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
+      $("#nro_comprobante").val(e.data.numero_comprobante);
+      $("#fecha").val(e.data.fecha_comida);
+      $("#num_documento").val(e.data.ruc).trigger("change");
+      $("#razon_social").val(e.data.razon_social);
+      $("#direccion").val(e.data.direccion);
+      $("#descripcion").val(e.data.descripcion);
 
-    $("#precio_parcial").val(redondearExp(data.costo_parcial));
-    $("#subtotal").val(redondearExp(data.subtotal));
-    $("#igv").val(redondearExp(data.igv));
-    $("#val_igv").val(data.val_igv).trigger("change");
-    
-    /**-------------------------*/
-  
-    if (data.comprobante == "" || data.comprobante == null  ) {
-
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-  
-      $("#doc1_nombre").html('');
-  
-      $("#doc_old_1").val(""); $("#doc1").val("");
-  
-    } else {
-  
-      $("#doc_old_1").val(data.comprobante); 
-  
-      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.comprobante)}</i></div></div>`);
+      $("#precio_parcial").val(redondearExp(e.data.costo_parcial));
+      $("#subtotal").val(redondearExp(e.data.subtotal));
+      $("#igv").val(redondearExp(e.data.igv));
+      $("#tipo_gravada").val(e.data.tipo_gravada)
       
-      // cargamos la imagen adecuada par el archivo
-      $("#doc1_ver").html(doc_view_extencion(data.comprobante,'comida_extra', 'comprobante', '100%', '210' ));
-            
+      $("#val_igv").val(e.data.val_igv).trigger("change");
+    
+      if (e.data.comprobante == "" || e.data.comprobante == null  ) {
+
+        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+    
+        $("#doc1_nombre").html('');
+    
+        $("#doc_old_1").val(""); $("#doc1").val("");
+    
+      } else {
+    
+        $("#doc_old_1").val(e.data.comprobante); 
+    
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
+        
+        // cargamos la imagen adecuada par el archivo
+        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante,'comida_extra', 'comprobante', '100%', '210' ));
+              
+      }
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+    } else {
+      ver_errores(e);
     }
+  $('.jq_image_zoom').zoom({ on:'grab' });  
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-
-  });
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function total() {
   $("#total_monto").html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   var idproyecto=localStorage.getItem('nube_idproyecto');
   $("#total_monto").html("");
-  $.post("../ajax/comidas_extras.php?op=total", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/comidas_extras.php?op=total", { idproyecto: idproyecto }, function (e, status) {
 
-    data = JSON.parse(data);  console.log(data);  
+    e = JSON.parse(e); console.log(e);   
+    if (e.status == true) {
 
-    $("#total_monto").html('S/ '+ formato_miles(data.precio_parcial));
-   // $("#cargando").hide();
-  });
-}
+      $("#total_monto").html('S/ '+ formato_miles(e.data.precio_parcial));
 
-
-//Función para desactivar registros
-function desactivar(idcomida_extra ) {
-  Swal.fire({
-    title: "¿Está Seguro de  Desactivar el registro?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/comidas_extras.php?op=desactivar", { idcomida_extra : idcomida_extra  }, function (e) {
-
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-    
-        tabla.ajax.reload(null, false);
-        total();
-      });      
-    }
-  });   
-}
-
-//Función para activar registros
-function activar(idcomida_extra ) {
-  Swal.fire({
-    title: "¿Está Seguro de  Activar el registro?",
-    text: "Este proveedor tendra acceso al sistema",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/comidas_extras.php?op=activar", { idcomida_extra : idcomida_extra  }, function (e) {
-
-        Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
-
-        tabla.ajax.reload(null, false);
-        total();
-      });
-      
-    }
-  });      
-}
-
-//Función para desactivar registros
-function eliminar(idcomida_extra ) {
- 
-  Swal.fire({
-
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-    //Desactivar
-    $.post("../ajax/comidas_extras.php?op=desactivar", { idcomida_extra : idcomida_extra  }, function (e) {
-
-      Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-
-      tabla.ajax.reload(null, false);
-      total();
-    }); 
-
-    }else if (result.isDenied) {
-
-      // Eliminar
-      $.post("../ajax/comidas_extras.php?op=eliminar", { idcomida_extra : idcomida_extra  }, function (e) {
-
-        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-    
-        tabla.ajax.reload(null, false);
-        total();
-      }); 
-
+    } else {
+      ver_errores(e);
     }
 
-  }); 
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function eliminar(idcomida_extra, tipo, numero) {
+
+  crud_eliminar_papelera(
+    "../ajax/comidas_extras.php?op=desactivar",
+    "../ajax/comidas_extras.php?op=eliminar", 
+    idcomida_extra, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del> ${tipo} N° ${numero} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla.ajax.reload(null, false);total(); },
+    false, 
+    false, 
+    false,
+    false
+  );
 
 }
+
 
 
 init();

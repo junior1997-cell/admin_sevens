@@ -230,7 +230,12 @@ function listar() {
       aProcessing: true, //Activamos el procesamiento del datatables
       aServerSide: true, //Paginación y filtrado realizados por el servidor
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdf", "colvis"],
+      buttons: [
+        { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
+        { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
+        { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+        {extend: "colvis"} ,
+      ],
       ajax: {
         url: "../ajax/otro_gasto.php?op=listar&idproyecto=" + idproyecto,
         type: "get",
@@ -261,7 +266,7 @@ function listar() {
       order: [[0, "asc"]], //Ordenar (columna,orden)
       columnDefs: [
         { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-        //{ targets: [8,11],  visible: false,  searchable: false,  },
+        { targets: [10,11,12,13,14,15,16], visible: false, searchable: false, }, 
       ],
     }).DataTable();
   total();
@@ -353,7 +358,6 @@ function mostrar(idotro_gasto) {
       $("#tipo_gravada").val(e.data.tipo_gravada);
       $("#precio_parcial").val(e.data.costo_parcial);
       $("#descripcion").val(e.data.descripcion); 
-
       
       $("#val_igv").val(e.data.val_igv).trigger("change");
   

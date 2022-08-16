@@ -1,6 +1,6 @@
 <?php 
 //Incluímos inicialmente la conexión a la base de datos
-require "../config/Conexion_v1.php";
+require "../config/Conexion_v2.php";
 
 Class Comidas_extras
 {
@@ -9,17 +9,42 @@ Class Comidas_extras
 	{
 
 	}
-	//$idcomida_extra,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
-	//Implementamos un método para insertar registros
+
 	public function insertar($idproyecto,$fecha,$precio_parcial,$descripcion,$forma_pago,$tipo_comprobante,$nro_comprobante,$subtotal,$igv,$val_igv,$tipo_gravada,$comprobante,$ruc,$razon_social,$direccion)
 	{
 		if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else {
 			$ruc =''; $razon_social =''; $direccion ='';
-		}		
+		}	
+				
+		$sql_1 = "SELECT ruc, razon_social, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_comida, subtotal, costo_parcial,estado, estado_delete 
+		FROM comida_extra WHERE idproyecto ='$idproyecto' AND ruc='$ruc' AND tipo_comprobante ='$tipo_comprobante' AND numero_comprobante ='$nro_comprobante';";
+		$val_compr = ejecutarConsultaArray($sql_1);
+
+		if ($val_compr['status'] == false) { return  $val_compr;}
+
+		if (empty($val_compr['data']) || $tipo_comprobante=='Ninguno') {
+
+			$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,val_igv,tipo_gravada,comprobante,ruc,razon_social,direccion) 
+			VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$val_igv','$tipo_gravada','$comprobante','$ruc','$razon_social','$direccion')";
+			return ejecutarConsulta($sql);
+
+		} else {
+			$info_repetida = '';
 	
-		$sql="INSERT INTO comida_extra (idproyecto,fecha_comida,costo_parcial,descripcion,forma_de_pago,tipo_comprobante,numero_comprobante,subtotal,igv,val_igv,tipo_gravada,comprobante,ruc,razon_social,direccion) 
-		VALUES ('$idproyecto','$fecha','$precio_parcial','$descripcion','$forma_pago','$tipo_comprobante','$nro_comprobante','$subtotal','$igv','$val_igv','$tipo_gravada','$comprobante','$ruc','$razon_social','$direccion')";
-		return ejecutarConsulta($sql);
+			foreach ($val_compr['data'] as $key => $value) {
+			$info_repetida .= '<li class="text-left font-size-13px">
+			<span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
+			<b>Razón Social: </b>'.$value['razon_social'].'<br>
+			<b>Ruc: </b>'.$value['ruc'].'<br>
+			<b>Fecha: </b>'.format_d_m_a($value['fecha_comida']).'<br>
+			<b>Forma de pago: </b>'.$value['forma_de_pago'].'<br>
+			<b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+			<b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+			<hr class="m-t-2px m-b-2px">
+			</li>';
+			}
+			return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+		}
 			
 	}
 

@@ -785,7 +785,6 @@ function listar_comprobantes(idsemana_break) {
         if (data[0] != "") {
           $("td", row).eq(0).addClass("text-center");
         }
-
         // columna: 1
         if (data[1] != "") {
           $("td", row).eq(1).addClass("text-nowrap");

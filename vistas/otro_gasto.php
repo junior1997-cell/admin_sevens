@@ -75,7 +75,13 @@
                                 <th>Monto Total</th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                <th>Estado</th>
+                                <th>R.U.C</th>
+                                <th>Razón social</th>
+                                <th>Dirección</th>
+                                <th>Tipo comprobante</th>
+                                <th>N° comprobante</th>
+                                <th>T. grabada</th>
+                                <th>Glosa</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -91,7 +97,13 @@
                                 <th class="text-nowrap" id="total_monto"></th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
-                                <th>Estado</th>
+                                <th>R.U.C</th>
+                                <th>Razón social</th>
+                                <th>Dirección</th>
+                                <th>Tipo comprobante</th>
+                                <th>N° comprobante</th>
+                                <th>T. grabada</th>
+                                <th>Glosa</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -329,7 +341,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Datos otros gastos</h4>
+                        <h4 class="modal-title">Detalles</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>

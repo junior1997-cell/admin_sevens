@@ -158,8 +158,14 @@
                 "6" =>'S/ '. number_format($reg->igv, 2, '.', ','),
                 "7" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
                 "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "9" => $comprobante,
-                "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+                "9" => $comprobante. $toltip,
+                "10"=>$reg->ruc,
+                "11"=>$reg->razon_social,
+                "12"=>$reg->direccion,
+                "13"=>$reg->tipo_comprobante,
+                "14"=>$reg->numero_comprobante,
+                "15"=>$reg->tipo_gravada,
+                "16"=>$reg->glosa,
               ];
             }
             $results = [
