@@ -13,8 +13,8 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Insumos | Admin Sevens</title>
-        <?php $title = "Insumos"; require 'head.php';  ?>       
+        <title>Fierro | Admin Sevens</title>
+        <?php $title = "Fierro"; require 'head.php';  ?>       
 
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
@@ -36,12 +36,12 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1><img src="../dist/svg/negro-palana-ico.svg" class="nav-icon" alt="" style="width: 21px !important;"> Insumos</h1>
+                      <h1><i class="nav-icon fas fa-dumpster"></i> Fierro</h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Insumos</li>
+                        <li class="breadcrumb-item active">Fierro</li>
                       </ol>
                     </div>
                   </div>
@@ -397,13 +397,9 @@
 
         <?php  require 'script.php'; ?>        
 
-        <script type="text/javascript" src="scripts/materiales.js"></script>
+        <script type="text/javascript" src="scripts/fierro.js"></script>
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
         <?php require 'extra_script.php'; ?>
 

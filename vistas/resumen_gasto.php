@@ -298,6 +298,48 @@
                   </div>
                 </div>
 
+                <!-- MODAL - COMRPOBANTE multiple -->
+                <div class="modal fade" id="modal-tabla-comprobantes-multiple">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-multiple">Lista de Comprobantes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body row">                        
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                          <table id="tabla-comprobantes-multiple" class="table table-bordered table-striped display " style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">#</th>
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">#</th>
+                                <th class="">OP</th>
+                                <th>Doc</th>
+                                <th>Fecha</th>                                    
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </section>
               <!-- /.content -->
             </div>

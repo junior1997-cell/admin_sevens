@@ -20,16 +20,19 @@
       date_default_timezone_set('America/Lima');
       $date_now = date("d-m-Y h.i.s A");
 
+      $imagen_error = "this.src='../dist/svg/user_default.svg'";
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';    
+
       switch ($_GET["op"]) {        
-    
+
+        // ════════════════════════════════════════ S E C C I O N   - R E S U M E N ════════════════════════════════════════
+
         case 'tabla_principal':
           
           $rspta = $resumen_gasto->tabla_principal($_GET['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'], $_GET['estado_vb'] );
           // echo json_encode($rspta);
           //Vamos a declarar un array
-          $data = []; $cont = 1;   
-          $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';        
+          $data = []; $cont = 1;                 
           
           if ($rspta['status'] == true) {
             foreach ($rspta['data']['datos'] as $key => $value) {
@@ -38,6 +41,11 @@
               $tipo_comprobante = '<b>'.$value['tipo_comprobante'] .'</b>'.   (empty($value['serie_comprobante']) ? '' : ' ─ ' . $value['serie_comprobante']);
               $add_remove_vb = ($value['estado_user_vb']) ? '\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'quitar\', \''. $tipo_comprobante .'\'' : '\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'agregar\', \''. $tipo_comprobante .'\''  ;
               $eliminar = '\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla']  .'\', \'' . $value['idtabla'] .'\', \'' . encodeCadenaHtml($tipo_comprobante) .'\'';
+              
+              if ($value['comprobante_multiple'] == true) {
+                $documento = ($value['cant_comprobante'] == 0) ? '<center> <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-original-title="Vacío" ><i class="fas fa-file-invoice fa-lg"></i></button> </center>' : '<center> <button class="btn btn-info btn-sm" onclick="comprobante_multiple( \'' . $value['idtabla'] .'\', \''. $value['fecha'] .'\', \''. $value['tipo_comprobante'] .'\', \''. $value['serie_comprobante'] .'\', \''. $value['ruta'] .'\', \''. $value['carpeta'] .'\', \''. $value['subcarpeta'] . '\')" data-toggle="tooltip" data-original-title="'.($value['cant_comprobante']>1? $value['cant_comprobante'].'comprobantes.':'1 comprobante.').'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'  ;
+              }
+
               $data[] = [
                 "0" => $cont++,
                 "1" => '<div class="text-nowrap"> ' . 
@@ -91,7 +99,39 @@
         case 'visto_bueno':
           $rspta = $resumen_gasto->visto_bueno($_GET['name_tabla'], $_GET['name_id_tabla'], $_GET['id_tabla'], $_GET['accion']);
           echo json_encode($rspta, true);
-        break;        
+        break; 
+
+        case 'tbla_comprobantes_multiple_compra_insumo':          
+          
+          $rspta = $compra_insumo->tbla_comprobantes( $_GET["id_tabla"] );
+          //Vamos a declarar un array
+          $data = []; $cont = 1;        
+          
+          if ($rspta['status']) {
+            while ($reg = $rspta['data']->fetch_object()) {
+              $data[] = [
+                "0" => $cont,
+                "1" => '<div class="text-nowrap">'.                
+                ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$reg->tipo_comprobante.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>' .           
+                '</div>'.$toltip,
+                "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
+                "3" => $reg->updated_at,
+              ];
+              $cont++;
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
+            ];
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+        break;
+
+        // ════════════════════════════════════════ S E C C I O N   -  D E T A L L E   M O D U L O S ════════════════════════════════════════
 
         case 'detalle_compra_insumo':
           
@@ -314,7 +354,7 @@
           echo json_encode($rspta, true);
         break;
 
-        // Select2 - Proveedores
+        // ════════════════════════════════════════ S E L E C T 2   -   P R O V E E D O R ════════════════════════════════════════
         case 'select2Proveedor':
 
           $rspta = $resumen_gasto->select_proveedores($_GET['idproyecto']);

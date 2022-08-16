@@ -140,7 +140,7 @@ if (!function_exists('ejecutarConsulta')) {
   /*  ══════════════════════════════════════════ - O T R O S - ══════════════════════════════════════════ */
 
   function validar_url( $host, $ruta, $file )  {
-    
+    clearstatcache();
     $armar_ruta = $host . $ruta . $file;
 
     if (empty($armar_ruta)) { return false; }
@@ -165,6 +165,13 @@ if (!function_exists('ejecutarConsulta')) {
     } 
   }
 
+  // function validar_url_completo( $ruta )  {   
+  //   stream_context_set_default(['http' => ['method' => 'HEAD',],]); $headers = @get_headers($ruta); sscanf($headers[0], 'HTTP/%*d.%*d %d', $httpcode);
+  //   // Aceptar solo respuesta 200 (Ok), 301 (redirección permanente) o 302 (redirección temporal)
+  //   return $httpcode;
+  // }
+
+  function validar_url_completo( $ruta ) { clearstatcache(); if (is_readable($ruta)) { return true; } else { return false; }  }
   /*  ══════════════════════════════════════════ - M O D U L O S - ══════════════════════════════════════════ */
 
   function suma_totales_modulos($idproyecto, $fecha_1, $fecha_2) {

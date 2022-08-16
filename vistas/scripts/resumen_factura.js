@@ -7,12 +7,11 @@ function init() {
 
   $("#lResumenFacura").addClass("active bg-primary");
   
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════ 
   $.get("../ajax/resumen_facturas.php?op=select2Proveedor", function (r) { $("#proveedor_filtro").html(r); $(".cargando_proveedor").html('Proveedor'); });
 
-  //Initialize: Select2 PROVEEDOR
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════ 
   $("#proveedor_filtro").select2({ theme: "bootstrap4", placeholder: "Selecionar proveedor", allowClear: true, });
-
-  //Initialize: Select2 PROVEEDOR
   $("#tipo_comprobante_filtro").select2({ theme: "bootstrap4", placeholder: "Selecionar comprobante", allowClear: true, });
   
   // Formato para telefono
@@ -155,7 +154,46 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
     }    
   }
 
+  $('.jq_image_zoom').zoom({ on:'grab' });
   $(".tooltip").removeClass("show").addClass("hidde");
+}
+
+function comprobante_multiple(id_tabla, fecha, tipo_comprobante, serie_comprobante, ruta, carpeta, subcarpeta) {
+  $('.titulo-comprobante-multiple').html(`Comprobante: <b>${tipo_comprobante} - ${serie_comprobante} - ${fecha}</b>`);
+  $("#modal-tabla-comprobantes-multiple").modal("show"); 
+
+  tabla_comprobantes = $("#tabla-comprobantes-multiple").dataTable({
+    responsive: true, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [ ],
+    ajax: {
+      url: `../ajax/resumen_gasto.php?op=tbla_comprobantes_multiple_${carpeta}&id_tabla=${id_tabla}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    }, 
+    createdRow: function (row, data, ixdex) {
+      // columna: 1
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY hh:mm:ss a'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();
 }
 
 function cargando_search() {

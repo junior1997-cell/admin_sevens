@@ -13,8 +13,13 @@
     if ($_SESSION['resumen_factura'] == 1) {    
 
       require_once "../modelos/Resumen_facturas.php";
+      require_once "../modelos/Compra_insumos.php";
       
-      $resumen_factura = new Resumenfacturas();      
+      $resumen_factura = new Resumenfacturas();   
+      $compra_insumo = new Compra_insumos();
+      
+      $imagen_error = "this.src='../dist/svg/user_default.svg'";
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       switch ($_GET["op"]) {
 
@@ -23,14 +28,17 @@
           $rspta = $resumen_factura->facturas_compras($_GET['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'] );
           // echo json_encode($rspta);
           //Vamos a declarar un array
-          $data = []; $cont = 1;   
-          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';        
+          $data = []; $cont = 1;       
           
           if ($rspta['status'] == true) {
             foreach ($rspta['data']['datos'] as $key => $value) {
 
               $documento = (empty($value['comprobante'])) ? '<center> <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-original-title="Vacío" ><i class="fas fa-file-invoice fa-lg"></i></button> </center>' : '<center> <button class="btn btn-info btn-sm" onclick="modal_comprobante( \'' . $value['comprobante'] .'\', \''. $value['fecha'] .'\', \''. $value['tipo_comprobante'] .'\', \''. $value['serie_comprobante'] .'\', \''. $value['ruta'] .'\', \''. $value['carpeta'] .'\', \''. $value['subcarpeta'] . '\')" data-toggle="tooltip" data-original-title="Ver Comprobante"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'  ;   
               
+              if ($value['comprobante_multiple'] == true) {
+                $documento = ($value['cant_comprobante'] == 0) ? '<center> <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-original-title="Vacío" ><i class="fas fa-file-invoice fa-lg"></i></button> </center>' : '<center> <button class="btn btn-info btn-sm" onclick="comprobante_multiple( \'' . $value['idtabla'] .'\', \''. $value['fecha'] .'\', \''. $value['tipo_comprobante'] .'\', \''. $value['serie_comprobante'] .'\', \''. $value['ruta'] .'\', \''. $value['carpeta'] .'\', \''. $value['subcarpeta'] . '\')" data-toggle="tooltip" data-original-title="'.($value['cant_comprobante']>1? $value['cant_comprobante'].'comprobantes.':'1 comprobante.').'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'  ;
+              }
+
               $data[] = [
                 "0" => $cont++,
                 "1" => $value['fecha'],
@@ -77,7 +85,37 @@
 
         break;
 
-        // Select2 - Proveedores
+        case 'tbla_comprobantes_multiple_compra_insumo':          
+          
+          $rspta = $compra_insumo->tbla_comprobantes( $_GET["id_tabla"] );
+          //Vamos a declarar un array
+          $data = []; $cont = 1;        
+          
+          if ($rspta['status']) {
+            while ($reg = $rspta['data']->fetch_object()) {
+              $data[] = [
+                "0" => $cont,
+                "1" => '<div class="text-nowrap">'.                
+                ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$reg->tipo_comprobante.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>' .           
+                '</div>'.$toltip,
+                "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
+                "3" => $reg->updated_at,
+              ];
+              $cont++;
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
+            ];
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+        break;
+
+        // ════════════════════════════════════════ S E L E C T 2   -   P R O V E E D O R ════════════════════════════════════════
         case 'select2Proveedor':
 
           $rspta = $resumen_factura->select_proveedores();

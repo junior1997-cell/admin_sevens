@@ -47,11 +47,16 @@ class Resumenfacturas
 
     if (!empty($compra['data'])) {
       foreach ($compra['data'] as $key => $value) {
+        $id_compra = $value['idcompra_proyecto'];
+        $sql3 = "SELECT COUNT(comprobante) as cant FROM factura_compra_insumo WHERE idcompra_proyecto='$id_compra' AND estado='1' AND estado_delete='1'";
+        $cant_comprob = ejecutarConsultaSimpleFila($sql3);
+        if ($cant_comprob['status'] == false) { return $cant_comprob; }
+
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idcompra_proyecto'],
           "fecha"             => $value['fecha_compra'],
-          "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal1 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal2 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta' ? 'BV' : ''))) ,
           "serie_comprobante" => $value['serie_comprobante'],
           "proveedor"         => $value['razon_social'],
           "tipo_documento"    => $value['tipo_documento'],
@@ -66,6 +71,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante_compra',
           "ruta"              => 'dist/docs/compra_insumo/comprobante_compra/',
           "modulo"            => 'COMPRAS',
+          "comprobante_multiple" => true,
+          'cant_comprobante' => (empty($cant_comprob['data']) ? 0 : (empty($cant_comprob['data']['cant']) ? 0 : floatval($cant_comprob['data']['cant']) ) ),
         );
 
         if (!empty($value['comprobante'])) {
@@ -132,6 +139,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante_servicio',
           "ruta"              => 'dist/docs/servicio_maquina/comprobante_servicio/',
           "modulo"              => 'MAQUINA Y/O EQUIPO',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['imagen'])) {
           if (validar_url( $scheme_host, 'dist/docs/servicio_maquina/comprobante_servicio/', $value['imagen'])) {
@@ -199,6 +208,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante_subcontrato',
           "ruta"              => 'dist/docs/sub_contrato/comprobante_subcontrato/',
           "modulo"            => 'SUB CONTRATO',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
 
         if (!empty($value['comprobante'])) {
@@ -267,6 +278,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/planilla_seguro/comprobante/',
           "modulo"              => 'PLANILLA SEGURO',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/planilla_seguro/comprobante/', $value['comprobante']) ) {
@@ -332,6 +345,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/otro_gasto/comprobante/',
           "modulo"              => 'OTRO GASTO',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/otro_gasto/comprobante/', $value['comprobante']) ) {
@@ -398,6 +413,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/transporte/comprobante/',
           "modulo"              => 'TRANSPORTE',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/transporte/comprobante/', $value['comprobante']) ) {
@@ -464,6 +481,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/hospedaje/comprobante/',
           "modulo"              => 'HOSPEDAJE',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/hospedaje/comprobante/', $value['comprobante']) ) {
@@ -532,6 +551,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/pension/comprobante/',
           "modulo"            => 'PENSION',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
@@ -599,6 +620,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/break/comprobante/',
           "modulo"              => 'BREAK',
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/break/comprobante/', $value['comprobante']) ) {
@@ -664,7 +687,9 @@ class Resumenfacturas
           "carpeta"           => 'comida_extra',
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/comida_extra/comprobante/',
-          "modulo"              => 'COMIDA EXTRA',
+          "modulo"            => 'COMIDA EXTRA',
+          "comprobante_multiple" => false,
+          "cant_comprobante"  => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/comida_extra/comprobante/', $value['comprobante']) ) {
@@ -731,6 +756,8 @@ class Resumenfacturas
           "subcarpeta"        => 'comprobante',
           "ruta"              => 'dist/docs/otra_factura/comprobante/',
           "modulo"              => 'OTRA FACTURA',
+          "comprobante_multiple" => false,
+          "cant_comprobante"  => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {

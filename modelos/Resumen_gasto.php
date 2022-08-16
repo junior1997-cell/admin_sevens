@@ -14,7 +14,7 @@ class ResumenGasto
 
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
     $host       = $_SERVER['HTTP_HOST'];
-    $estado_vb = (empty($visto_bueno) ? "estado_user_vb >=0" : "estado_user_vb =$visto_bueno" );
+    $estado_vb = (empty($visto_bueno) ? "estado_user_vb IN ('0','1')" : "estado_user_vb =$visto_bueno" );
 
     // FACTURAS - COMPRAS INSUMOS ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -49,6 +49,11 @@ class ResumenGasto
 
     if (!empty($compra['data'])) {
       foreach ($compra['data'] as $key => $value) {
+        $id_compra = $value['idcompra_proyecto'];
+        $sql3 = "SELECT COUNT(comprobante) as cant FROM factura_compra_insumo WHERE idcompra_proyecto='$id_compra' AND estado='1' AND estado_delete='1'";
+        $cant_comprob = ejecutarConsultaSimpleFila($sql3);
+        if ($cant_comprob['status'] == false) { return $cant_comprob; }
+
         $data[] = array(
         	"idproyecto"        => $value['idproyecto'],
           "idtabla"           => $value['idcompra_proyecto'],
@@ -73,20 +78,34 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => true,
-        );
-
-        if (!empty($value['comprobante'])) {
-          if ( validar_url( $scheme_host, 'dist/docs/compra_insumo/comprobante_compra/', $value['comprobante']) ) {
-            $data_comprobante[] = array(
-              "comprobante"    => $value['comprobante'],
-              "carpeta"        => 'compra_insumo',
-              "subcarpeta"     => 'comprobante_compra',
-              "host"           => $host,
-              "ruta_file"      => $scheme_host.'dist/docs/compra_insumo/comprobante_compra/'.$value['comprobante'],
-            );
-          }          
-        }        
+          "comprobante_multiple" => true,
+          'cant_comprobante' => (empty($cant_comprob['data']) ? 0 : (empty($cant_comprob['data']['cant']) ? 0 : floatval($cant_comprob['data']['cant']) ) ),
+        );                      
       }
+    }
+    
+    $sql_3 = "SELECT fci.comprobante , fci.idcompra_proyecto
+    FROM factura_compra_insumo as fci, compra_por_proyecto as cpp, proveedor as p 
+    WHERE fci.idcompra_proyecto = cpp.idcompra_proyecto AND  cpp.idproveedor=p.idproveedor AND fci.estado='1' AND fci.estado_delete='1' 
+    AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.$estado_vb AND  cpp.idproyecto = $idproyecto
+    $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
+    $comprob = ejecutarConsultaArray($sql_3);
+    if ($comprob['status'] == false) { return $comprob; }
+
+    foreach ($comprob['data'] as $key => $valor) {
+      if (!empty($valor['comprobante'])) {            
+        if ( validar_url( $scheme_host, 'dist/docs/compra_insumo/comprobante_compra/', $valor['comprobante']) == true) {
+          $data_comprobante[] = array(
+            "idcompra"       => $valor['idcompra_proyecto'],
+            "vall"       =>validar_url( $scheme_host, 'dist/docs/compra_insumo/comprobante_compra/', $valor['comprobante']),
+            "comprobante"    => $valor['comprobante'],
+            "carpeta"        => 'compra_insumo',
+            "subcarpeta"     => 'comprobante_compra',
+            "host"           => $host,
+            "ruta_file"      => $scheme_host.'dist/docs/compra_insumo/comprobante_compra/'.$valor['comprobante'],
+          );
+        }
+      }                  
     }
 
     // FACTURAS - COMPRAS ACTIVO FIJO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
@@ -143,6 +162,8 @@ class ResumenGasto
     //       "ruta"              => 'dist/docs/compra_activo_fijo/comprobante_compra/',
     //       "modulo"            => 'COMPRAS ACTIVO FIJO',
     //       "detalle"            => true,
+    //       "comprobante_multiple" => false,
+    //      "cant_comprobante" => 0,
     //     );
 
     //     if (!empty($value['comprobante'])) {
@@ -214,6 +235,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"            => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['imagen'])) {
           if (validar_url( $scheme_host, 'dist/docs/servicio_maquina/comprobante_servicio/', $value['imagen'])) {
@@ -286,6 +309,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"            => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['imagen'])) {
           if (validar_url( $scheme_host, 'dist/docs/servicio_equipo/comprobante_servicio/', $value['imagen'])) {
@@ -359,6 +384,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/sub_contrato/comprobante_subcontrato/', $value['comprobante']) ) {
@@ -431,6 +458,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/planilla_seguro/comprobante/', $value['comprobante']) ) {
@@ -501,6 +530,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/otro_gasto/comprobante/', $value['comprobante']) ) {
@@ -572,6 +603,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/transporte/comprobante/', $value['comprobante']) ) {
@@ -643,6 +676,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/hospedaje/comprobante/', $value['comprobante']) ) {
@@ -716,6 +751,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/pension/comprobante/', $value['comprobante']) ) {
@@ -789,6 +826,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"            => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/break/comprobante/', $value['comprobante']) ) {
@@ -860,6 +899,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['comprobante'])) {
           if ( validar_url( $scheme_host, 'dist/docs/comida_extra/comprobante/', $value['comprobante']) ) {
@@ -932,6 +973,8 @@ class ResumenGasto
     //       "imagen_user_vb"    => $value['imagen_user_vb'],
     //       "estado_user_vb"    => $value['estado_user_vb'],
     //       "detalle"           => false,
+    //        "comprobante_multiple" => false,
+    //        "cant_comprobante" => 0,
     //     );
     //     if (!empty($value['comprobante'])) {
     //       if ( validar_url( $scheme_host, 'dist/docs/otro_ingreso/comprobante/', $value['comprobante']) ) {
@@ -1003,6 +1046,8 @@ class ResumenGasto
     //       "imagen_user_vb"    => $value['imagen_user_vb'],
     //       "estado_user_vb"    => $value['estado_user_vb'],
     //       "detalle"           => false,
+    //        "comprobante_multiple" => false,
+    //       "cant_comprobante" => 0,
     //     );
     //     if (!empty($value['comprobante'])) {
     //       if ( validar_url( $scheme_host, 'dist/docs/otra_factura/comprobante/', $value['comprobante']) ) {
@@ -1077,6 +1122,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['recibos_x_honorarios'])) {
           if ( validar_url( $scheme_host, 'dist/docs/pago_administrador/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {
@@ -1151,6 +1198,8 @@ class ResumenGasto
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
           "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
         );
         if (!empty($value['recibos_x_honorarios'])) {
           if ( validar_url( $scheme_host, 'dist/docs/pago_obrero/recibos_x_honorarios/', $value['recibos_x_honorarios']) ) {

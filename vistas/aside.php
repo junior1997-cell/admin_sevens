@@ -310,7 +310,7 @@
                   <!-- Compras del proyecto -->
                   <li class="nav-item ">
                     <a href="compra_insumos.php" class="nav-link" id="lCompras">
-                      <i class="nav-icon fas fa-cart-plus"></i> <p>Compras de insumos</p>
+                      <i class="nav-icon fas fa-cart-plus"></i> <p>Compras</p>
                     </a>
                   </li>
                   <!-- Resumend de Insumos -->
@@ -365,6 +365,30 @@
               </a>
             </li>
             <?php  }  ?>
+            <!-- MOVIMIENTO DE TIERRA -->       
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="movimiento_tierra.php" class="nav-link pl-2" id="lMovientoTierras">
+                <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
+                <i class="nav-icon fas fa-dumpster"></i>
+                <p>Movimiento de Tierras</p>
+              </a>
+            </li>
+            <!-- CONCRETO, CEMENTO Y AGREGADO -->       
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="concreto_agregado.php" class="nav-link pl-2" id="lConcretoAgregado">
+                <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
+                <i class="nav-icon fas fa-dumpster"></i>
+                <p>Concreto y Agregado</p>
+              </a>
+            </li>
+            <!-- FIERROS -->       
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="fierro.php" class="nav-link pl-2" id="lFierro">
+                <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
+                <i class="nav-icon fas fa-dumpster"></i>
+                <p>Fierros</p>
+              </a>
+            </li>
             
             <?php if ($_SESSION['planilla_seguro']==1) {  ?>
               <!-- PLANILLAS Y SEGUROS -->       
