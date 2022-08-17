@@ -57,8 +57,8 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_material();"><i class="fas fa-plus-circle"></i> Agregar Item</button>
-                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items" onclick="limpiar_form_material();"><i class="fas fa-eye"></i> Ver Item</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_item();"><i class="fas fa-plus-circle"></i> Agregar Item</button>
+                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items"><i class="fas fa-eye"></i> Ver Item</button>
                             Admnistra de manera eficiente el Concreto y Agregado.
                           </h3>
                         </div>
@@ -120,72 +120,91 @@
                                 </div>
                               </div>     
                             </div>
+
                             <div class=" col-12 col-sm-12">
                               <div class="card card-primary card-outline card-outline-tabs mb-0">
                                 <div class="card-header p-0 border-bottom-0">
-                                  <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-                                    <li class="nav-item">
-                                      <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Resumen</a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Arena Gruesa</a>
-                                    </li>
-                                    <li class="nav-item ">
-                                      <a class="nav-link " id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Piedra Chancada</a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Tierra Negra</a>
-                                    </li>
+                                  <ul class="nav nav-tabs lista-items" id="tabs-for-tab" role="tablist">
+                                   <li class="nav-item">
+                                      <a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a>
+                                    </li>  
                                   </ul>
                                 </div>
-                                <div class="card-body">
-                                  <div class="tab-content" id="custom-tabs-four-tabContent">
-                                    <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-                                      <div class="row">
-                                        <div class="col-12 mb-2">
-                                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-detalle-items" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
-                                          <!-- <button type="button" class="btn bg-gradient-danger btn-sm"><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button> -->
-                                        </div>
+
+                                <div class="card-body" >
+                                  <!-- TABLA - RESUMEN -->
+                                  <div class="tab-content" id="tabs-for-tabContent">
+                                    <div class="tab-pane fade show active" id="tabs-for-resumen" role="tabpanel" aria-labelledby="tabs-for-resumen-tab">
+                                      <div class="row">                                        
                                         <div class="col-12">
-                                          <table id="tabla-materiales" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                          <table id="tabla-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                               <tr>
                                                 <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                                               </tr>
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th>Nombre</th>
-                                                <th>Unidad</th>
-                                                <th>Marca</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">Subtotal</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                                <th>Ficha técnica</th>
-                                                <th>Estado</th>
-                                                <th>Nombre</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
+                                                <th>INSUMO</th>
+                                                <th>UND</th>
+                                                <th>CANTIDAD</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
+                                                <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
+                                                <th data-toggle="tooltip" data-original-title="IGV">Acumulado</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
                                             <tfoot>
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th>Nombre</th>
-                                                <th>Unidad</th>
-                                                <th>Marca</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                                <th>Ficha técnica</th>
-                                                <th>Estado</th>
-                                                <th>Nombre</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
+                                                <th>INSUMO</th>
+                                                <th>UND</th>
+                                                <th>CANTIDAD</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
+                                                <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
+                                                <th data-toggle="tooltip" data-original-title="IGV">Acumulado</th>
+                                              </tr>
+                                            </tfoot>
+                                          </table>
+                                        </div>
+                                        <!-- /.col -->
+                                      </div>
+                                      <!-- /.row -->
+                                    </div>
+
+                                    <!-- TABLA - TIERRAS -->
+                                    <div class="tab-pane fade" id="tabs-for-tierra" role="tabpanel" aria-labelledby="tabs-for-tierra-tab">
+                                      <div class="row">
+                                        <div class="col-12 mb-2">
+                                          <button type="button" class="btn bg-gradient-success btn-sm btn-agregar-tierra" data-toggle="modal" data-target="#modal-agregar-detalle-items" onclick="limpiar_form_detalle_item();" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
+                                        </div>
+                                        <div class="col-12 row-horizon disenio-scroll">
+                                          <table id="tabla-tierra" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <thead>
+                                              <tr>
+                                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                              </tr>
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                                <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
+                                                <th>Fecha</th>
+                                                <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Parcial">Precio Parcial</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Total">Precio Total</th>
+                                                <th data-toggle="tooltip" data-original-title="Provedor">Provedor</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                                <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
+                                                <th>Fecha</th>
+                                                <th class="text-nowrap text-center px-2 text-bold"><span id="total_cantidad"><i class="fas fa-spinner fa-pulse fa-lg"></i> </span> </th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Parcial">Precio Parcial</th>
+                                                <th class="text-nowrap text-right px-2 text-bold"> S/ <span id="total_monto"><i class="fas fa-spinner fa-pulse fa-lg"></i> </span> </th>
+                                                <th data-toggle="tooltip" data-original-title="Provedor">Provedor</th>
                                               </tr>
                                             </tfoot>
                                           </table>
@@ -227,25 +246,25 @@
 
                       <div class="modal-body row">
                         <div class="col-12">
-                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-comprobantes-compra" onclick="limpiar_form_comprobante();" >Agregar</button>
+                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-items" onclick="limpiar_form_item();" >Agregar</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
-                          <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                          <table id="tabla_item" class="table table-bordered table-striped display " style="width: 100% !important;">
                             <thead>
                               <tr>
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                                <th data-toggle="tooltip" data-original-title="Nombre">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="descripcion">Descripcion</th>                          
                               </tr>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
                               <tr>
                                 <th class="">#</th>
-                                <th class="">OP</th>
-                                <th>Doc</th>
-                                <th>Fecha</th>                                    
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Nombre">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="descripcion">Descripcion</th>                                      
                               </tr>
                             </tfoot>
                           </table>
@@ -260,11 +279,11 @@
                 </div>
 
                 <!-- MODAL - ITEMS AGREGAR  -->
-                <div class="modal fade" id="modal-agregar-items">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal fade bg-color-02020280" id="modal-agregar-items">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Insumos</h4>
+                        <h4 class="modal-title">Agregar Item</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -272,36 +291,28 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-materiales" name="form-materiales" method="POST">
+                        <form id="form-item" name="form-item" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id proyecto -->
                               <input type="hidden" name="idproyecto" id="idproyecto" />
-                              <!-- id tabla -->
-                              <input type="hidden" name="idproducto" id="idproducto" />
-                              <!-- id categoria_insumos_af -->
-                              <input type="hidden" name="modulo" id="modulo" value="concreto_agregado" />
+                              <!-- idtipo_tierra -->
+                              <input type="hidden" name="idtipo_tierra" id="idtipo_tierra" />
+                              <!--  modulo -->
+                              <input type="hidden" name="modulo" id="modulo" value="Movimiento de Tierras" />
 
                               <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">calidad </label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-
-                              <!--descripcion_material-->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="descripcion_material">Descripción </label> <br />
-                                  <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
+                                  <label for="nombre">Nombre <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del Insumo." />
+                                </div>
+                              </div>
+                              <!--descripcion-->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                  <label for="descripcion">Descripción </label> <br />
+                                  <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
                               
@@ -327,12 +338,12 @@
                             <!-- /.cargando -->
                           </div>
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-materiales">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-item">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_material();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_item();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_item">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
@@ -343,7 +354,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar </h4>
+                        <h4 class="modal-title">Agregar: <b class="modal-title-detalle-items"></b> </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -351,50 +362,67 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-materiales" name="form-materiales" method="POST">
+                        <form id="form-detalle-item" name="form-detalle-item" method="POST">
                           <div class="card-body">
-                            <div class="row" id="cargando-1-fomulario">
-                              <!-- id proyecto -->
-                              <input type="hidden" name="idproyecto" id="idproyecto" />
+                            <div class="row" id="cargando-3-fomulario">
                               <!-- id tabla -->
-                              <input type="hidden" name="idproducto" id="idproducto" />
+                              <input type="hidden" name="idmovimiento_tierra" id="idmovimiento_tierra" />
                               <!-- id categoria_insumos_af -->
-                              <input type="hidden" name="modulo" id="modulo" />
+                              <input type="hidden" name="idtipo_tierra_det" id="idtipo_tierra_det" />
 
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                               <!-- Proveedor -->
+                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
+                                  <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
+                                  <select id="idproveedor" name="idproveedor" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
 
-                              <!--descripcion_material-->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                              <!-- Fecha  -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
-                                  <label for="descripcion_material">Descripción </label> <br />
-                                  <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
+                                  <label for="fecha">Fecha <sup class="text-danger">*</sup></label>
+                                  <input type="date" name="fecha" class="form-control" id="fecha" onchange="optener_dia_de_semana();" onkeyup="optener_dia_de_semana();" />
+                                </div>
+                              </div>
+                              <!-- idmovimiento_tierra,idtipo_tierra_det,idproveedor,fecha,nombre_dia,cantidad,precio_unitario,total,descripcion_tierra -->
+                              <!-- Nombre dia -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="nombre_dia">Nombre dia <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="nombre_dia" class="form-control" id="nombre_dia" placeholder="Nombre dia." readonly />
+                                </div>
+                              </div>
+
+                              <!-- Cantidad -->
+                              <div class="col-12 col-sm-3 col-md-3 col-lg-4">
+                                <div class="form-group">
+                                  <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calcular_total();" onkeyup="calcular_total();"/>
+                                </div>
+                              </div>                            
+
+                              <!-- Precio Parcial  -->
+                              <div class="col-12 col-sm-5 col-md-5 col-lg-4">
+                                <div class="form-group">
+                                  <label for="precio_unitario">Precio Parcial  <sup class="text-danger">(unico*)</sup></label>
+                                  <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Parcial." onchange="calcular_total();" onkeyup="calcular_total();" />
+                                </div>
+                              </div>
+
+                               <!-- Precio Total -->
+                               <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="form-group">
+                                  <label for="total">Precio Total <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="total" class="form-control" id="total" placeholder="Precio Total." readonly />
+                                </div>
+                              </div>
+                              <!--  -->
+                              <!-- Descripcion -->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12" style="display:none;">
+                                <div class="form-group">
+                                  <label for="">Descripción </label> <br />
+                                  <textarea name="descripcion_tierra" id="descripcion_tierra" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
                               
@@ -410,7 +438,7 @@
                             </div>
                             <!-- /.cargando -->
 
-                            <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="row" id="cargando-4-fomulario" style="display: none;">
                               <div class="col-lg-12 text-center">
                                 <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                                 <br />
@@ -420,12 +448,12 @@
                             <!-- /.cargando -->
                           </div>
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-materiales">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-detalle-item">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_material();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_detalle_item();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_detalle_item">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
