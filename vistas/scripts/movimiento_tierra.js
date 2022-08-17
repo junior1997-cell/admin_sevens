@@ -1,6 +1,8 @@
-var tabla;
+var tabla;  
+var tabla_detalle_items;
 
-//Función que se ejecuta al inicio
+var id_proyecto_r="",idtipo_tierra_r="",nombre_item_r="",fecha_i_r="",fecha_f_r="",proveedor_r="",comprobante_r="";
+
 function init() {
   
   //Activamos el "aside"
@@ -12,13 +14,18 @@ function init() {
 
   $("#lMovientoTierras").addClass("active bg-primary");
 
-  tbla_principal();
+  $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
+
+  tbla_principal_item(localStorage.getItem("nube_idproyecto"));
+  listar_items(localStorage.getItem("nube_idproyecto"));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
-  $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
+  $("#guardar_registro_item").on("click", function (e) { $("#submit-form-item").submit(); });
+  $("#guardar_registro_detalle_item").on("click", function (e) { $("#submit-form-detalle-item").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
   $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
@@ -28,6 +35,8 @@ function init() {
   $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
  
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccionar", allowClear: true, });
 
   $('.jq_image_zoom').zoom({ on:'grab' });
   // Formato para telefono
@@ -37,42 +46,14 @@ function init() {
 $('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
 $('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
 
-// abrimos el navegador de archivos
 
-//ficha tecnica
-$("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
-$("#doc2").change(function(e) {  addImageApplication(e,$("#doc2").attr("id")) });
+function limpiar_form_item() {
 
-// Eliminamos el doc 2
-function doc2_eliminar() {
+  $("#guardar_registro_item").html('Guardar Cambios').removeClass('disabled');
 
-	$("#doc2").val("");
-
-	$("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-	$("#doc2_nombre").html("");
-}
-
-//Función limpiar
-function limpiar_form_material() {
-
-  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-
-  //Mostramos los Materiales
-  $("#idproducto").val("");
-  $("#nombre_material").val("");
-  
-  $("#precio_real").val("");
-  $(".precio_real").val("");  
-  $("#monto_igv").val("");
-  $(".monto_igv").val("");
-  $("#total_precio").val("");
-  $(".total_precio").val("");  
-
-  $("#doc_old_2").val("");
-  $("#doc2").val("");  
-  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc2_nombre').html("");
+  $("#idtipo_tierra").val("");
+  $("#nombre").val("");
+  $("#descripcion").val("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -80,21 +61,21 @@ function limpiar_form_material() {
   $(".error.invalid-feedback").remove();
 }
 
-//Función Listar
-function tbla_principal() {
-  tabla = $("#tabla-materiales").dataTable({
+function tbla_principal_item(nube_idproyecto) {
+
+  tabla = $("#tabla_item").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3], } }, 
     ],
     ajax: {
-      url: "../ajax/materiales.php?op=tbla_principal",
+      url: `../ajax/movimiento_tierra.php?op=tbla_principal&proyecto=${nube_idproyecto}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -102,18 +83,6 @@ function tbla_principal() {
       },
     },
     createdRow: function (row, data, ixdex) {    
-      // columna: #
-      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-      // columna: 1
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
-      // columna: # 5
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-right text-nowrap"); }
-      // columna: # 6
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-right text-nowrap"); }
-      // columna: # 7
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right text-nowrap"); }
-      // columna: #8
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -124,37 +93,17 @@ function tbla_principal() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11,12,13], visible: false, searchable: false, },  
+      // { targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();
 }
 
-//ver ficha tecnica
-function modal_ficha_tec(ficha_tecnica) {
-
-  // ------------------------
-  //$('.tile-modal-comprobante').html(nombre); 
-  $("#modal-ver-ficha_tec").modal("show");
-  $('#ver_fact_pdf').html(doc_view_extencion(ficha_tecnica, 'material', 'ficha_tecnica', '100%', '550'));
-
-  if (DocExist(`dist/docs/material/ficha_tecnica/${ficha_tecnica}`) == 200) {
-    $("#iddescargar").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).attr("download", 'ficha tecncia').removeClass("disabled");
-    $("#ver_completo").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).removeClass("disabled");
-  } else {
-    $("#iddescargar").addClass("disabled");
-    $("#ver_completo").addClass("disabled");
-  }
-  $('.jq_image_zoom').zoom({ on:'grab' });
-  $(".tooltip").removeClass("show").addClass("hidde");
-}
-
-//Función para guardar o editar
 function guardaryeditar(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-materiales")[0]);
+
+  var formData = new FormData($("#form-item")[0]);
 
   $.ajax({
-    url: "../ajax/materiales.php?op=guardaryeditar",
+    url: "../ajax/movimiento_tierra.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -163,20 +112,21 @@ function guardaryeditar(e) {
       try {
         e = JSON.parse(e);  console.log(e);  
         if (e.status == true) {
-          Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
+          Swal.fire("Correcto!", "Registro guardado correctamente", "success");
 
           tabla.ajax.reload(null, false);
 
-          limpiar_form_material();
+          limpiar_form_item();
 
-          $("#modal-agregar-material").modal("hide");
+          $("#modal-agregar-items").modal("hide");
+          listar_items(localStorage.getItem("nube_idproyecto"));
           
         } else {
           ver_errores(e);
         }
       } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
 
-      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+      $("#guardar_registro_item").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -191,7 +141,7 @@ function guardaryeditar(e) {
       return xhr;
     },
     beforeSend: function () {
-      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#guardar_registro_item").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
       $("#barra_progress").css({ width: "0%",  });
       $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
     },
@@ -203,66 +153,27 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idproducto) {
-  limpiar_form_material(); //console.log(idproducto);
+function mostrar(idtipo_tierra) {
+
+  limpiar_form_item(); 
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-material").modal("show");
+  $("#modal-agregar-items").modal("show");
 
-  $.post("../ajax/materiales.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
+  $.post("../ajax/movimiento_tierra.php?op=mostrar", { 'idtipo_tierra': idtipo_tierra }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
     if (e.status) {
-      $("#idproducto").val(e.data.idproducto);
-      $("#nombre_material").val(e.data.nombre);
-      $("#modelo").val(e.data.modelo);
-      $("#serie").val(e.data.serie);
-      $("#marca").val(e.data.marca);            
-      $("#descripcion_material").val(e.data.descripcion);
 
-      $("#precio_unitario").val(parseFloat(e.data.precio_unitario).toFixed(2));
-      
-      $("#precio_real").val(e.data.precio_sin_igv);    
-      $("#monto_igv").val(e.data.precio_igv);
-      $("#total_precio").val(parseFloat(e.data.precio_total).toFixed(2));    
+      $("#idtipo_tierra").val(e.data.idtipo_tierra);
+      $("#idproyecto").val(e.data.idproyecto );
+      $("#modulo").val(e.data.modulo);
+      $("#nombre").val(e.data.nombre);
+      $("#descripcion").val(e.data.descripcion);            
 
-      $(".precio_real").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
-      $(".monto_igv").val(parseFloat(e.data.precio_igv).toFixed(2));
-      $(".total_precio").val(parseFloat(e.data.precio_total).toFixed(2));    
-      
-      $("#unidad_medida").val(e.data.idunidad_medida).trigger("change");
-      $("#color").val(e.data.idcolor).trigger("change");
-
-      if (e.data.estado_igv == "1") {
-        $("#my-switch_igv").prop("checked", true);
-        $("#estado_igv").val(1);
-      } else {
-        $("#my-switch_igv").prop("checked", false);
-        $("#estado_igv").val(0);
-      }     
-       
-      if (e.data.imagen != "") {
-        $("#imagen1_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);  
-        $("#imagen1_actual").val(e.data.imagen);
-      }
-  
-      // FICHA TECNICA
-      if (e.data.ficha_tecnica == "" || e.data.ficha_tecnica == null  ) {
-  
-        $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');  
-        $("#doc2_nombre").html('');  
-        $("#doc_old_2").val(""); $("#doc2").val("");
-  
-      } else {
-  
-        $("#doc_old_2").val(e.data.ficha_tecnica);   
-        $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.ficha_tecnica)}</i></div></div>`);
-        $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%'));
-              
-      }
       $('.jq_image_zoom').zoom({ on:'grab' });
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
@@ -272,151 +183,17 @@ function mostrar(idproducto) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-// ver detallles del registro
-function verdatos(idproducto){
-
-  $(".tooltip").removeClass("show").addClass("hidde");
-
-  $('#datosinsumo').html(`<div class="row"><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div></div>`);
-
-  var imagen_perfil =''; var btn_imagen_perfil = '';
-  
-  var ficha_tecnica=''; var btn_ficha_tecnica = '';
-
-  $("#modal-ver-insumo").modal("show");
-
-  $.post("../ajax/materiales.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
-
-    e = JSON.parse(e);  //console.log(e); 
-    
-    if (e.status) {     
-    
-      if (e.data.imagen != '') {
-
-        imagen_perfil=`<img src="../dist/docs/material/img_perfil/${e.data.imagen}" onerror="this.src='../dist/svg/404-v2.svg';" alt="" class="img-thumbnail w-150px">`
-        
-        btn_imagen_perfil=`
-        <div class="row">
-          <div class="col-6"">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/img_perfil/${e.data.imagen}"> <i class="fas fa-expand"></i></a>
-          </div>
-          <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/img_perfil/${e.data.imagen}" download="PERFIL - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
-          </div>
-        </div>`;
-      
-      } else {
-
-        imagen_perfil=`<img src="../dist/docs/material/img_perfil/producto-sin-foto.svg" onerror="this.src='../dist/svg/404-v2.svg';" alt="" class="img-thumbnail w-150px">`;
-        btn_imagen_perfil='';
-
-      }     
-
-      if (e.data.ficha_tecnica != '') {
-        
-        ficha_tecnica =  doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%');
-        
-        btn_ficha_tecnica=`
-        <div class="row">
-          <div class="col-6"">
-            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}"> <i class="fas fa-expand"></i></a>
-          </div>
-          <div class="col-6"">
-            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/material/ficha_tecnica/${e.data.ficha_tecnica}" download="Ficha Tecnica - ${removeCaracterEspecial(e.data.nombre)}"> <i class="fas fa-download"></i></a>
-          </div>
-        </div>`;
-      
-      } else {
-
-        ficha_tecnica='Sin Ficha Técnica';
-        btn_ficha_tecnica='';
-
-      }     
-
-      var retorno_html=`                                                                            
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <table class="table table-hover table-bordered">        
-              <tbody>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}</th>
-                  <td> <b>Nombre: </b> ${e.data.nombre}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <td> <b>Color: </b> ${e.data.nombre_color}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>U.M.</th>
-                  <td>${e.data.nombre_medida}</td>
-                </tr>                
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Marca</th>
-                    <td>${e.data.marca}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Con IGV</th>
-                  <td>${(e.data.estado_igv==1? '<div class="myestilo-switch ml-2"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" checked disabled /><label for="my-switch-igv-2"></label></div></div>' : '<div class="myestilo-switch ml-3"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" disabled/><label for="my-switch-igv-2"></label></div></div>')}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Precio  </th>
-                  <td>${e.data.precio_unitario}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Sub Total</th>
-                  <td>${e.data.precio_sin_igv}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>IGV</th>
-                  <td>${e.data.precio_igv}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Total </th>
-                  <td>${e.data.precio_total}</td>
-                </tr> 
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Modelo</th>
-                  <td>${e.data.modelo}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Serie</th>
-                  <td>${e.data.serie}</td>
-                </tr>               
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Descripción</th>
-                  <td><textarea cols="30" rows="2" class="textarea_datatable" readonly="">${e.data.descripcion}</textarea></td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Ficha Técnica</th>
-                  <td> ${ficha_tecnica} <br>${btn_ficha_tecnica}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>`;
-    
-      $("#datosinsumo").html(retorno_html);
-      $('.jq_image_zoom').zoom({ on:'grab' });
-    } else {
-      ver_errores(e);
-    }
-
-  }).fail( function(e) { ver_errores(e); } );
-}
-
-//Función para desactivar registros
-function eliminar(idproducto, nombre) {
+function eliminar(idtipo_tierra, nombre) {
 
   crud_eliminar_papelera(
-    "../ajax/materiales.php?op=desactivar",
-    "../ajax/materiales.php?op=eliminar", 
-    idproducto, 
+    "../ajax/movimiento_tierra.php?op=desactivar",
+    "../ajax/movimiento_tierra.php?op=eliminar", 
+    idtipo_tierra, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload(null, false) },
+    function(){ tabla.ajax.reload(null, false);listar_items(localStorage.getItem("nube_idproyecto")); },
     false, 
     false, 
     false,
@@ -424,29 +201,290 @@ function eliminar(idproducto, nombre) {
   );
 }
 
+//-----------------------------------------------------------------------------------------
+//----------------------------------- Tabs -----------------------------------------------
+//-----------------------------------------------------------------------------------------
+
+// , '${val.idtipo_tierra}', '${val.columna_calidad}', '${val.columna_descripcion}', '${val.nombre}'
+
+function listar_items(proyecto_nube) {
+
+  $.post("../ajax/movimiento_tierra.php?op=listar_items", { 'proyecto_nube': proyecto_nube }, function (e, status) {
+
+    e = JSON.parse(e); console.log(e);
+
+    if (e.status) {
+
+      var data_html = '';
+
+      e.data.forEach((val, index) => {
+
+        data_html = data_html.concat(`
+        <li class="nav-item">
+          <a class="nav-link" onclick="tbla_principal_tierra('${val.idproyecto}', '${val.idtipo_tierra}', '${val.nombre}', '', '', '', '');" id="tabs-for-tierra-tab" data-toggle="pill" href="#tabs-for-tierra" role="tab" aria-controls="tabs-for-tierra" aria-selected="false">${val.nombre}</a>
+        </li>`);
+      });
+
+      $(".lista-items").html(`
+        <li class="nav-item">
+          <a class="nav-link" id="tabs-for-resumen-tab" data-toggle="pill" href="#tabs-for-resumen" role="tab" aria-controls="tabs-for-resumen" aria-selected="true" onclick="tbla_principal_resumen(localStorage.getItem('nube_idproyecto'))">Resumen</a>
+        </li>
+        ${data_html}
+        
+      `); 
+
+      // delay(function(){$('#tabs-for-resumen-tab').click();}, 100 );
+      $('#tabs-for-resumen-tab').click();
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+//----------------------- S E C C I O N  S E G Ú N  I T E M -------------------------------
+//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+
+// <!-- idmovimiento_tierra,idtipo_tierra,fecha,fechanombre_dia,cantidad,precio_unitario,total,descripcion_tierra -->
+
+function limpiar_form_detalle_item() { 
+
+  $("#idmovimiento_tierra").val("");
+  $("#fecha").val("");
+  $("#nombre_dia").val("");
+  $("#cantidad").val("");
+  $("#precio_unitario").val("");
+  $("#total").val("");
+  $("#descripcion_tierra").val("");
+
+}
+
+function tbla_principal_tierra(id_proyecto, idtipo_tierra,nombre_item,fecha_i, fecha_f, proveedor, comprobante) {
+
+  id_proyecto_r=id_proyecto; idtipo_tierra_r=idtipo_tierra; nombre_item_r=nombre_item; fecha_i_r=fecha_i; fecha_f_r=fecha_f; proveedor_r=proveedor; comprobante_r=comprobante;
+
+  $('.modal-title-detalle-items').html(nombre_item);
+  $("#idtipo_tierra_det").val(idtipo_tierra);
+
+  tabla_detalle_items = $("#tabla-tierra").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3], } }, 
+    ],
+    ajax: {
+      url: `../ajax/movimiento_tierra.php?op=tbla_principal_tierra&id_proyecto=${id_proyecto}&idtipo_tierra=${idtipo_tierra}&fecha_i=${fecha_i}&fecha_f=${fecha_f}&proveedor=${proveedor}&comprobante=${comprobante}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {    
+      // columna: #
+      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
+      // columna: sub acciones
+      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); }
+      // columna: sub fecha
+      if (data[2] != "") { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: sub total
+      if (data[4] != "") { $("td", row).eq(4).addClass("text-nowrap text-center"); }
+      // columna: igv
+      if (data[5] != "") { $("td", row).eq(5).addClass("text-nowrap text-right"); }
+      // columna: total
+      if (data[6] != "") { $("td", row).eq(6).addClass("text-nowrap text-right"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [11,12,13], visible: false, searchable: false, },  
+    ],
+  }).DataTable();
+
+// idtipo_tierra,nombre_item,fecha_i,fecha_f,proveedor,comprobante
+  $.post("../ajax/movimiento_tierra.php?op=mostrar_total_det_item", {'idtipo_tierra': idtipo_tierra,'fecha_i': fecha_i,'fecha_f': fecha_f,'proveedor': proveedor,'comprobante': comprobante }, function (e, status) {
+    
+    e = JSON.parse(e); console.log(e);
+
+    if (e.status) { 
+
+      $("#total_cantidad").html(e.data.t_cantidad);
+      $("#total_monto").html(formato_miles(e.data.total) );
+      $('.cargando').hide();
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+
+
+}
+
+function guardaryeditar_tierra(e) {
+
+  var formData = new FormData($("#form-detalle-item")[0]);
+
+  $.ajax({
+    url: "../ajax/movimiento_tierra.php?op=guardaryeditar_tierra",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Registro guardado correctamente", "success");
+
+          tabla_detalle_items.ajax.reload(null, false);
+
+          limpiar_form_detalle_item()
+
+          $("#modal-agregar-detalle-items").modal("hide");
+          //  listar_items(localStorage.getItem("nube_idproyecto"));
+
+           tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r,fecha_i_r, fecha_f_r, proveedor_r, comprobante_r);
+          
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+
+      $("#guardar_registro_item").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_item").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress").css({ width: "0%",  });
+      $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress").css({ width: "0%", });
+      $("#barra_progress").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+function optener_dia_de_semana() {
+
+  var nombre_dia = extraer_dia_semana_completo($("#fecha").val());
+  $("#nombre_dia").val(nombre_dia);
+
+}
+
+function calcular_total() {
+
+  var cantidad         = es_numero($('#cantidad').val()) == true? parseFloat($('#cantidad').val()) : 0;
+  var precio_parcial   = es_numero($('#precio_unitario').val()) == true? parseFloat($('#precio_unitario').val()) : 0;
+
+  var total = cantidad*precio_parcial;
+
+  $("#total").val(formato_miles(total) );
+
+}
+
+no_select_tomorrow($("#fecha"));
+
+
+function mostrar_detalle_item(idmovimiento_tierra) {
+
+  limpiar_form_item(); 
+
+  $("#cargando-3-fomulario").hide();
+  $("#cargando-4-fomulario").show();
+
+  $("#modal-agregar-detalle-items").modal("show");
+  $("#idproveedor").val("").trigger("change");
+
+  $.post("../ajax/movimiento_tierra.php?op=mostrar_detalle_item", { 'idmovimiento_tierra': idmovimiento_tierra }, function (e, status) {
+    
+    e = JSON.parse(e); console.log(e);
+
+    if (e.status) { 
+
+      $("#idproveedor").val(e.data.idproveedor).trigger("change");
+      $("#idmovimiento_tierra").val(e.data.idmovimiento_tierra);
+      $("#idtipo_tierra_det").val(e.data.idtipo_tierra);
+      $("#fecha").val(e.data.fecha);
+      $("#nombre_dia").val(e.data.nombre_dia);
+      $("#cantidad").val(e.data.cantidad);
+      $("#precio_unitario").val(e.data.precio_unitario);
+      $("#total").val(formato_miles(e.data.total));
+           
+
+      $('.jq_image_zoom').zoom({ on:'grab' });
+      $("#cargando-3-fomulario").show();
+      $("#cargando-4-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function eliminar_detalle_item(idmovimiento_tierra, nombre, fecha) {
+
+  crud_eliminar_papelera(
+    "../ajax/movimiento_tierra.php?op=desactivar_detalle_item",
+    "../ajax/movimiento_tierra.php?op=eliminar_detalle_item", 
+    idmovimiento_tierra, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>Registro de ${nombre} con fecha ${fecha} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla_detalle_items.ajax.reload(null, false); tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r,fecha_i_r, fecha_f_r, proveedor_r, comprobante_r); },
+    false, 
+    false, 
+    false,
+    false
+  );
+}
+
+//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+//----------------------------- T A B L A   R E S U M E N ---------------------------------
+//-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
+
+function tbla_principal_resumen(gg) {  }
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {   
 
-  $('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
-  $('#color').on('change', function() { $(this).trigger('blur'); });
+  $('#idproveedor').on('change', function() { $(this).trigger('blur'); });
+  // $('#color').on('change', function() { $(this).trigger('blur'); });
 
-  $("#form-materiales").validate({
+  $("#form-item").validate({
     rules: {
-      nombre_material:      { required: true },
-      descripcion_material: { minlength: 4 },
-      unidad_medida:          { required: true },
-      color:                { required: true },
-      precio_unitario:      { required: true },
+      nombre: { required: true },
     },
-    messages: {
-      nombre_material:      { required: "Campo requerido.", },
-      descripcion_material: { minlength: "MINIMO 4 caracteres." },
-      unidad_medida:          { required: "Campo requerido.", },
-      color:                { required: "Campo requerido.", },
-      precio_unitario:      { required: "Campo requerido.", },
+    messages: { nombre: { required: "Campo requerido.", },
     },
 
     errorElement: "span",
@@ -470,8 +508,42 @@ $(function () {
     },
   });
 
-  $('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#form-detalle-item").validate({
+    rules: {
+      // <!-- idmovimiento_tierra,idtipo_tierra,fecha,fechanombre_dia,cantidad,precio_unitario,total,descripcion_tierra -->
+      fecha: { required: true },
+      cantidad: { required: true },
+      precio_unitario: { required: true },
+    },
+    messages: { 
+      fecha: { required: "Campo requerido.", },
+      cantidad: { required: "Campo requerido.", },
+      precio_unitario: { required: "Campo requerido.", },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardaryeditar_tierra(e);
+    },
+  });
+
+  $('#idproveedor').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  // $('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
@@ -482,26 +554,26 @@ function cargando_search() {
 
 function filtros() {  
 
-  // var fecha_1       = $("#filtro_fecha_inicio").val();
-  // var fecha_2       = $("#filtro_fecha_fin").val();  
-  // var id_proveedor  = $("#filtro_proveedor").select2('val');
-  // var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
+  var fecha_1       = $("#filtro_fecha_inicio").val();
+  var fecha_2       = $("#filtro_fecha_fin").val();  
+  var id_proveedor  = $("#filtro_proveedor").select2('val');
+  var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
   
-  // var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
-  // var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+  var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
+  var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
 
-  // // filtro de fechas
-  // if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
-  // if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
 
-  // // filtro de proveedor
-  // if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
 
-  // // filtro de trabajdor
-  // if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
 
-  // $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
-  // //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
 
-  // tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante);
+  tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r, fecha_1, fecha_2, id_proveedor, comprobante);
+  //fecha_i_r=fecha_1, fecha_f_r=fecha_2, proveedor_r, comprobante_r;
 }

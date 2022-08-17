@@ -92,6 +92,7 @@ class ConcretoAgregado
     $sql = "SELECT * FROM tipo_tierra WHERE idproyecto = '$id_proyecto' AND estado_delete='1' AND estado='1' ORDER BY nombre ASC";
     return ejecutarConsultaArray($sql);
   }
+  
   // :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
 
   //Implementar un método para listar los registros
