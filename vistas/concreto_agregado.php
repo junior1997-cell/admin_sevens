@@ -123,21 +123,19 @@
                             <div class=" col-12 col-sm-12">
                               <div class="card card-primary card-outline card-outline-tabs mb-0">
                                 <div class="card-header p-0 border-bottom-0">
-                                  <ul class="nav nav-tabs" id="tabs-for-tab" role="tablist">
+                                  <ul class="nav nav-tabs lista-items" id="tabs-for-tab" role="tablist">
                                     <li class="nav-item">
-                                      <a class="nav-link active" id="tabs-for-resumen-tab" data-toggle="pill" href="#tabs-for-resumen" role="tab" aria-controls="tabs-for-resumen" aria-selected="true">Resumen</a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link" id="tabs-for-concreto-tab" data-toggle="pill" href="#tabs-for-concreto" role="tab" aria-controls="tabs-for-concreto" aria-selected="false">Arena Gruesa</a>
-                                    </li>                                    
+                                      <a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a>
+                                    </li>           
                                   </ul>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" >
+                                  <!-- TABLA - RESUMEN -->
                                   <div class="tab-content" id="tabs-for-tabContent">
                                     <div class="tab-pane fade show active" id="tabs-for-resumen" role="tabpanel" aria-labelledby="tabs-for-resumen-tab">
                                       <div class="row">                                        
                                         <div class="col-12">
-                                          <table id="tabla-materiales" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                          <table id="tabla-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                               <tr>
                                                 <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
@@ -184,6 +182,8 @@
                                       </div>
                                       <!-- /.row -->
                                     </div>
+
+                                    <!-- TABLA - CONCRETO -->
                                     <div class="tab-pane fade" id="tabs-for-concreto" role="tabpanel" aria-labelledby="tabs-for-concreto-tab">
                                       <div class="row">
                                         <div class="col-12 mb-2">
@@ -191,45 +191,37 @@
                                           <!-- <button type="button" class="btn bg-gradient-danger btn-sm"><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button> -->
                                         </div>
                                         <div class="col-12">
-                                          <table id="tabla-materiales" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                          <table id="tabla-concreto" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                               <tr>
                                                 <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                                               </tr>
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th>Nombre</th>
-                                                <th>Unidad</th>
-                                                <th>Marca</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">Subtotal</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                                <th>Ficha técnica</th>
-                                                <th>Estado</th>
-                                                <th>Nombre</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
+                                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                                <th>Descipcion</th>
+                                                <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
+                                                <th>Fecha</th>
+                                                <th>Calidad</th>
+                                                <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Parcial">Precio Parcial</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Total">Precio Total</th>
+                                                <th data-toggle="tooltip" data-original-title="Provedor">Provedor</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
                                             <tfoot>
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th>Nombre</th>
-                                                <th>Unidad</th>
-                                                <th>Marca</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                                <th>Ficha técnica</th>
-                                                <th>Estado</th>
-                                                <th>Nombre</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
+                                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                                <th>Descipcion</th>
+                                                <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
+                                                <th>Fecha</th>
+                                                <th>Calidad</th>
+                                                <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Parcial">Precio Parcial</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Total">Precio Total</th>
+                                                <th data-toggle="tooltip" data-original-title="Provedor">Provedor</th>
                                               </tr>
                                             </tfoot>
                                           </table>
@@ -280,8 +272,9 @@
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
-                                <th data-toggle="tooltip" data-original-title="Columna">Colum. Calidad</th>
-                                <th data-toggle="tooltip" data-original-title="Columna">Descripción</th>                        
+                                <th data-toggle="tooltip" data-original-title="Columna Calidad">Colum. Calidad</th>
+                                <th data-toggle="tooltip" data-original-title="Columna Descripcion">Colum. Descrip.</th>
+                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>                        
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -291,7 +284,8 @@
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
                                 <th data-toggle="tooltip" data-original-title="Columna">Colum. Calidad</th>
-                                <th data-toggle="tooltip" data-original-title="Columna">Descripción</th>                                   
+                                <th data-toggle="tooltip" data-original-title="Columna">Colum. Descrip.</th>
+                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>                                   
                               </tr>
                             </tfoot>
                           </table>
@@ -329,24 +323,36 @@
                               <input type="hidden" name="modulo" id="modulo" value="Concreto y Agregado" />
 
                               <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
                                   <label for="nombre_item">Nombre <sup class="text-danger">*</sup></label>
                                   <input type="text" name="nombre_item" class="form-control" id="nombre_item" placeholder="Nombre del Item." />
                                 </div>
                               </div>
 
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                              <!-- Columna Calidad -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <div class="form-group">
                                   <label for="columna_calidad">Columna Calidad </label>                                  
                                   <div class="custom-control custom-switch custom-switch-on-success">
-                                    <input type="checkbox" class="custom-control-input" id="columna_calidad" name="columna_calidad" id="columna_calidad" value="1">
+                                    <input type="checkbox" class="custom-control-input" name="columna_calidad" id="columna_calidad" value="1">
                                     <label class="custom-control-label cursor-pointer" for="columna_calidad"></label>
                                   </div>                               
                                 </div>
                               </div>
+                              
+                              <!-- Columna Descipcion --> 
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                <div class="form-group">
+                                  <label for="columna_descripcion">Columna Descripción </label>                                  
+                                  <div class="custom-control custom-switch custom-switch-on-success">
+                                    <input type="checkbox" class="custom-control-input"  name="columna_descripcion" id="columna_descripcion" value="1">
+                                    <label class="custom-control-label cursor-pointer" for="columna_descripcion"></label>
+                                  </div>                               
+                                </div>
+                              </div>
 
-                              <!--descripcion_material-->
+                              <!-- Descripción -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="descripcion_item">Descripción </label> <br />
