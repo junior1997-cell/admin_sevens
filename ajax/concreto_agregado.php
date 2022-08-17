@@ -32,12 +32,18 @@
       
       
       // :::::::::::::::::::::::::: S E C C I O N   I T E M S  ::::::::::::::::::::::::::
-      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
-      $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadena($_POST["monto_igv"]) : "";
-      $precio_real = isset($_POST["precio_real"]) ? limpiarCadena($_POST["precio_real"]) : "";      
-      $unidad_medida = isset($_POST["unidad_medida"]) ? limpiarCadena($_POST["unidad_medida"]) : "";
-      $color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
-      $total_precio = isset($_POST["total_precio"]) ? limpiarCadena($_POST["total_precio"]) : "";
+      $idtipo_tierra_c   = isset($_POST["idtipo_tierra_c"]) ? limpiarCadena($_POST["idtipo_tierra_c"]) : "";
+      $idconcreto_agregado      = isset($_POST["idconcreto_agregado"]) ? limpiarCadena($_POST["idconcreto_agregado"]) : "";
+      $idproveedor              = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";      
+      $fecha                    = isset($_POST["fecha"]) ? limpiarCadena($_POST["fecha"]) : "";
+      $nombre_dia               = isset($_POST["nombre_dia"]) ? limpiarCadena($_POST["nombre_dia"]) : "";
+      $calidad                  = isset($_POST["calidad"]) ? limpiarCadena($_POST["calidad"]) : "";
+      $cantidad                 = isset($_POST["cantidad"]) ? limpiarCadena($_POST["cantidad"]) : "";
+      $precio_unitario          = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
+      $total                    = isset($_POST["total"]) ? limpiarCadena($_POST["total"]) : "";
+      $descripcion_concreto     = isset($_POST["descripcion_concreto"]) ? limpiarCadena($_POST["descripcion_concreto"]) : "";
+
+      
 
       switch ($_GET["op"]) {
         // :::::::::::::::::::::::::: S E C C I O N   I T E M S  ::::::::::::::::::::::::::
@@ -124,6 +130,29 @@
         break;
 
         // :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
+        case 'guardar_y_editar_concreto':
+          
+          if (empty($idconcreto_agregado)) {
+            
+            $rspta = $concreto_agregado->insertar_concreto($idtipo_tierra_c, $idproveedor, $fecha, $nombre_dia, $calidad, $cantidad, $precio_unitario, $total, $descripcion_concreto );
+            
+            echo json_encode( $rspta, true);
+
+          } else {            
+             
+            $rspta = $concreto_agregado->editar_concreto($idconcreto_agregado, $idtipo_tierra_c, $idproveedor, $fecha, $nombre_dia, $calidad, $cantidad, $precio_unitario, $total, $descripcion_concreto );
+            
+            echo json_encode( $rspta, true) ;
+          }
+        break;
+
+        case 'mostrar_concreto':
+
+          $rspta = $concreto_agregado->mostrar_concreto($idconcreto_agregado);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+
+        break;
 
         case 'tbla_principal_concreto':
           $rspta = $concreto_agregado->tbla_principal_concreto($_GET["idtipo_tierra"]);
@@ -135,10 +164,10 @@
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idconcreto_agregado . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_item(' . $reg->idconcreto_agregado .', \''.encodeCadenaHtml($reg->total).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
-                '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idconcreto_agregado . ')"><i class="fa fa-pencil-alt"></i></button>',
-                "2" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_concreto(' . $reg->idconcreto_agregado . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_concreto(' . $reg->idconcreto_agregado .', \''.encodeCadenaHtml( $reg->nombre_dia.' '.date("d/m/Y", strtotime($reg->fecha)). ' | '.number_format($reg->total,2,'.',',')  ).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
+                '<button class="btn btn-warning btn-sm" onclick="mostrar_concreto(' . $reg->idconcreto_agregado . ')"><i class="fa fa-pencil-alt"></i></button>',
+                "2" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->detalle . '</textarea>',
                 "3" => $reg->nombre_dia,
                 "4" => $reg->fecha,
                 "5" => $reg->calidad,
@@ -164,10 +193,18 @@
           
         break;
 
+        case 'total_concreto':
+
+          $rspta = $concreto_agregado->total_concreto($idtipo_tierra);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+
+        break;
+
         // :::::::::::::::::::::::::: S E C C I O N    R E S U M E N ::::::::::::::::::::::::::
 
         case 'tbla_principal_resumen':
-          $rspta = $concreto_agregado->tbla_principal_resumen($_GET["id_proyecto"]);
+          $rspta = $concreto_agregado->tbla_principal_resumen($_GET["idproyecto"]);
           //Vamos a declarar un array
           $data = [];  $cont=1;         
 
@@ -176,18 +213,11 @@
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idconcreto_agregado . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_item(' . $reg->idconcreto_agregado .', \''.encodeCadenaHtml($reg->total).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
-                '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idconcreto_agregado . ')"><i class="fa fa-pencil-alt"></i></button>',
-                "2" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "3" => $reg->nombre_dia,
-                "4" => $reg->fecha,
-                "5" => $reg->calidad,
-                "6" => $reg->cantidad,
-                "7" => $reg->precio_unitario,
-                "8" => $reg->total,
-                "9" => $reg->razon_social,
-                "10" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') .$toltip,                
+                "1" => $reg->nombre ,
+                "2" => 'M3' ,
+                "3" => $reg->cantidad,
+                "4" => $reg->precio_unitario,
+                "5" => $reg->total,        
               ];
             }
   
@@ -203,6 +233,14 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
           
+        break;
+
+        case 'total_resumen':
+
+          $rspta = $concreto_agregado->total_resumen($idproyecto);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+
         break;
     
         case 'salir':

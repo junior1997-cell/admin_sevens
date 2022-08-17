@@ -77,8 +77,7 @@ class ConcretoAgregado
   public function mostrar_item($idtipo_tierra) {
     $sql = "SELECT * FROM tipo_tierra WHERE  idtipo_tierra ='$idtipo_tierra'";
 
-    return ejecutarConsultaSimpleFila($sql);
-    
+    return ejecutarConsultaSimpleFila($sql);    
   }
 
   //Implementar un método para listar los registros
@@ -94,6 +93,25 @@ class ConcretoAgregado
   }
   // :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
 
+  //Implementamos un método para insertar registros
+  public function insertar_concreto( $idtipo_tierra_c, $idproveedor, $fecha, $nombre_dia, $calidad, $cantidad, $precio_unitario, $total, $descripcion_concreto) {    
+    
+    $sql = "INSERT INTO concreto_agregado( idproveedor, idtipo_tierra, fecha, nombre_dia, calidad, cantidad, precio_unitario, total, detalle) 
+    VALUES ('$idproveedor', '$idtipo_tierra_c', ' $fecha', '$nombre_dia', '$calidad', '$cantidad', '$precio_unitario', '$total', '$descripcion_concreto')";
+    return ejecutarConsulta($sql);   
+    
+  }
+
+  //Implementamos un método para editar registros
+  public function editar_concreto($idconcreto_agregado, $idtipo_tierra_c, $idproveedor, $fecha, $nombre_dia, $calidad, $cantidad, $precio_unitario, $total, $descripcion_concreto)  {
+     
+    $sql = "UPDATE concreto_agregado 
+    SET idproveedor='$idproveedor', idtipo_tierra='$idtipo_tierra_c', fecha='$fecha', nombre_dia='$nombre_dia',
+    calidad='$calidad', cantidad='$cantidad', precio_unitario='$precio_unitario', total='$total', detalle='$descripcion_concreto' 
+    WHERE idconcreto_agregado ='$idconcreto_agregado'";
+    return ejecutarConsulta($sql);
+  }
+
   //Implementar un método para listar los registros
   public function tbla_principal_concreto($idtipo_tierra) {
     $sql = "SELECT p.razon_social, p.tipo_documento, p.ruc, tt.idtipo_tierra, tt.idproyecto, tt.nombre, tt.modulo, tt.columna_calidad, 
@@ -104,15 +122,38 @@ class ConcretoAgregado
     return ejecutarConsulta($sql);
   }
 
+  //Implementar un método para listar los registros
+  public function total_concreto($idtipo_tierra) {
+    $sql = "SELECT  SUM(ca.cantidad) AS cantidad, AVG(ca.precio_unitario) AS precio_unitario, SUM(ca.total) AS total
+    FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
+    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idtipo_tierra = '$idtipo_tierra' and ca.estado = '1' AND ca.estado_delete ='1'
+    ORDER BY ca.fecha ASC";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  //Implementar un método para mostrar los datos de un registro a modificar
+  public function mostrar_concreto($idconcreto_agregado) {
+    $sql = "SELECT * FROM concreto_agregado WHERE  idconcreto_agregado ='$idconcreto_agregado'";
+
+    return ejecutarConsultaSimpleFila($sql);
+    
+  }
+
   // :::::::::::::::::::::::::: S E C C I O N    R E S U M E N ::::::::::::::::::::::::::
   //Implementar un método para listar los registros
   public function tbla_principal_resumen($idproyecto) {
-    $sql = "SELECT p.razon_social, p.tipo_documento, p.ruc, tt.idtipo_tierra, tt.idproyecto, tt.nombre, tt.modulo, tt.columna_calidad, 
-    tt.columna_descripcion, ca.idconcreto_agregado, ca.detalle, ca.nombre_dia, ca.fecha, ca.calidad, ca.cantidad, ca.precio_unitario, ca.total, ca.estado
+    $sql = "SELECT  tt.nombre,  SUM(ca.cantidad) AS cantidad, AVG(ca.precio_unitario) AS precio_unitario, SUM(ca.total) AS total
     FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
-    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and ca.estado = '1' AND ca.estado_delete ='1'
-    ORDER BY ca.fecha ASC";
+    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Concreto y Agregado' and ca.estado = '1' AND ca.estado_delete ='1'
+    GROUP BY tt.nombre  ORDER BY tt.nombre ASC ";
     return ejecutarConsulta($sql);
+  }
+
+  public function total_resumen($idproyecto) {
+    $sql = "SELECT tt.nombre, SUM(ca.cantidad) AS cantidad, AVG(ca.precio_unitario) AS precio_unitario, SUM(ca.total) AS total
+    FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
+    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Concreto y Agregado' and ca.estado = '1' AND ca.estado_delete ='1'";
+    return ejecutarConsultaSimpleFila($sql);
   }
 }
 
