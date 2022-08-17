@@ -65,7 +65,7 @@
                         <!-- /.card-header -->
                         <div class="card-body px-1 py-1">
                           <div class="row"> 
-                            <div class="filtros-inputs col-12 col-sm-12">       
+                            <div class="filtros-inputs col-12 col-sm-12 hidden">       
                               <!-- filtros -->
                               <div class="row my-2">
 
@@ -142,38 +142,24 @@
                                               </tr>
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th>Nombre</th>
-                                                <th>Unidad</th>
-                                                <th>Marca</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">Subtotal</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                                <th>Ficha técnica</th>
-                                                <th>Estado</th>
-                                                <th>Nombre</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
+                                                <th>INSUMO</th>
+                                                <th>UND</th>
+                                                <th>CANTIDAD</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
+                                                <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
+                                                <th data-toggle="tooltip" data-original-title="IGV">Acumulado</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
                                             <tfoot>
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th>Nombre</th>
-                                                <th>Unidad</th>
-                                                <th>Marca</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                                <th>Ficha técnica</th>
-                                                <th>Estado</th>
-                                                <th>Nombre</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
+                                                <th>INSUMO</th>
+                                                <th>UND</th>
+                                                <th>CANTIDAD</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
+                                                <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
+                                                <th data-toggle="tooltip" data-original-title="IGV">Acumulado</th>
                                               </tr>
                                             </tfoot>
                                           </table>
@@ -187,7 +173,7 @@
                                     <div class="tab-pane fade" id="tabs-for-concreto" role="tabpanel" aria-labelledby="tabs-for-concreto-tab">
                                       <div class="row">
                                         <div class="col-12 mb-2">
-                                          <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-detalle-items" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
+                                          <button type="button" class="btn bg-gradient-success btn-sm btn-agregar-concreto" data-toggle="modal" data-target="#modal-agregar-concreto" onclick="" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
                                           <!-- <button type="button" class="btn bg-gradient-danger btn-sm"><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button> -->
                                         </div>
                                         <div class="col-12">
@@ -299,7 +285,7 @@
                   </div>
                 </div>
 
-                <!-- MODAL - ITEMS AGREGAR  -->
+                <!-- MODAL -  AGREGAR ITEMS -->
                 <div class="modal fade bg-color-02020280" id="modal-agregar-items">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -393,12 +379,12 @@
                   </div>
                 </div>
 
-                <!-- MODAL - ITEMS AGREGAR DETALLE -->
-                <div class="modal fade" id="modal-agregar-detalle-items">
+                <!-- MODAL - AGREGAR CONCRETO -->
+                <div class="modal fade" id="modal-agregar-concreto">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar </h4>
+                        <h4 class="modal-title">Agregar: <b class="modal-title-detalle-items"></b> </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -406,49 +392,75 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-materiales" name="form-materiales" method="POST">
+                        <form id="form-concreto" name="form-concreto" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id proyecto -->
-                              <input type="hidden" name="idproyecto" id="idproyecto" />
+                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" />
                               <!-- id tabla -->
-                              <input type="hidden" name="idproducto" id="idproducto" />
+                              <input type="hidden" name="idconcreto_agregado" id="idconcreto_agregado" />                              
                               
-
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-                              <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-
-                              <!--descripcion_material-->
+                              <!-- Proveedor -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="descripcion_material">Descripción </label> <br />
-                                  <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
+                                  <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
+                                  <select id="idproveedor" name="idproveedor" class="form-control select2" style="width: 100%;"> </select>
+                                </div>
+                              </div>
+
+                              <!-- Fecha  -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha">Fecha <sup class="text-danger">*</sup></label>
+                                  <input type="date" name="fecha" class="form-control" id="fecha" onchange="optener_dia_de_semana();" onkeyup="optener_dia_de_semana();" />
+                                </div>
+                              </div>
+
+                              <!-- Nombre dia -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="nombre_dia">Nombre dia <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="nombre_dia" class="form-control" id="nombre_dia" placeholder="Nombre dia." />
+                                </div>
+                              </div>
+
+                              <!-- Calidad -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 calidad">
+                                <div class="form-group">
+                                  <label for="calidad">Calidad </label>
+                                  <input type="number" name="calidad" class="form-control" id="calidad" placeholder="Calidad." />
+                                </div>
+                              </div>
+
+                              <!-- Cantidad -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." />
+                                </div>
+                              </div>                            
+
+                              <!-- Precio Parcial  -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="precio_unitario">Precio Parcial  <sup class="text-danger">(unico*)</sup></label>
+                                  <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Parcial." />
+                                </div>
+                              </div>
+
+                               <!-- Precio Total -->
+                               <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="total">Precio Total <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="total" class="form-control" id="total" placeholder="Precio Total." />
+                                </div>
+                              </div>
+
+                              <!-- Descripcion -->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 descripcion_concreto">
+                                <div class="form-group">
+                                  <label for="descripcion_concreto">Descripción </label> <br />
+                                  <textarea name="descripcion_concreto" id="descripcion_concreto" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
                               

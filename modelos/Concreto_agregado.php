@@ -97,7 +97,7 @@ class ConcretoAgregado
   //Implementar un método para listar los registros
   public function tbla_principal_concreto($idtipo_tierra) {
     $sql = "SELECT p.razon_social, p.tipo_documento, p.ruc, tt.idtipo_tierra, tt.idproyecto, tt.nombre, tt.modulo, tt.columna_calidad, 
-    tt.columna_descripcion, ca.idconcreto_agregado, ca.detalle, ca.nombre_dia, ca.fecha, ca.calidad, ca.cantidad, ca.precio_unitario, ca.total
+    tt.columna_descripcion, ca.idconcreto_agregado, ca.detalle, ca.nombre_dia, ca.fecha, ca.calidad, ca.cantidad, ca.precio_unitario, ca.total, ca.estado
     FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
     WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idtipo_tierra = '$idtipo_tierra' and ca.estado = '1' AND ca.estado_delete ='1'
     ORDER BY ca.fecha ASC";
@@ -105,7 +105,15 @@ class ConcretoAgregado
   }
 
   // :::::::::::::::::::::::::: S E C C I O N    R E S U M E N ::::::::::::::::::::::::::
-
+  //Implementar un método para listar los registros
+  public function tbla_principal_resumen($idproyecto) {
+    $sql = "SELECT p.razon_social, p.tipo_documento, p.ruc, tt.idtipo_tierra, tt.idproyecto, tt.nombre, tt.modulo, tt.columna_calidad, 
+    tt.columna_descripcion, ca.idconcreto_agregado, ca.detalle, ca.nombre_dia, ca.fecha, ca.calidad, ca.cantidad, ca.precio_unitario, ca.total, ca.estado
+    FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
+    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and ca.estado = '1' AND ca.estado_delete ='1'
+    ORDER BY ca.fecha ASC";
+    return ejecutarConsulta($sql);
+  }
 }
 
 ?>

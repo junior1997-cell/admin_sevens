@@ -16,12 +16,18 @@ function init() {
 
   tbla_principal_item(localStorage.getItem('nube_idproyecto'));
   lista_de_items(localStorage.getItem('nube_idproyecto'));
+  tbla_principal_resumen(localStorage.getItem('nube_idproyecto'));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
+
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_items").on("click", function (e) { $("#submit-form-items").submit(); });
+
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
+  $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
   $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
@@ -63,7 +69,7 @@ function limpiar_form_item() {
   
   $("#idtipo_tierra").val("");  
   $("#nombre_item").val("");
-  $('#columna_calidad').attr('checked', false);
+  $('#columna_calidad').prop('checked', false);
   $("#columna_descripcion").prop("checked", false);
   $("#descripcion_item").val("");
 
@@ -88,89 +94,6 @@ function tbla_principal_item(id_proyecto) {
     ],
     ajax: {
       url: `../ajax/concreto_agregado.php?op=tbla_principal_item&id_proyecto=${id_proyecto}`,
-      type: "get",
-      dataType: "json",
-      error: function (e) {
-        console.log(e.responseText); ver_errores(e);
-      },
-    },
-    createdRow: function (row, data, ixdex) {    
-      // columna: #
-      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-      // columna: 1
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 10, //Paginación
-    order: [[0, "asc"]], //Ordenar (columna,orden)
-    columnDefs: [
-      //{ targets: [11,12,13], visible: false, searchable: false, },  
-    ],
-  }).DataTable();
-}
-
-//Función Listar
-function tbla_principal_resumen(id_proyecto) {
-  tabla_item = $("#tabla-resumen").dataTable({
-    responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-    aProcessing: true, //Activamos el procesamiento del datatables
-    aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },       
-    ],
-    ajax: {
-      url: `../ajax/concreto_agregado.php?op=tbla_principal_item&id_proyecto=${id_proyecto}`,
-      type: "get",
-      dataType: "json",
-      error: function (e) {
-        console.log(e.responseText); ver_errores(e);
-      },
-    },
-    createdRow: function (row, data, ixdex) {    
-      // columna: #
-      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-      // columna: 1
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 10, //Paginación
-    order: [[0, "asc"]], //Ordenar (columna,orden)
-    columnDefs: [
-      //{ targets: [11,12,13], visible: false, searchable: false, },  
-    ],
-  }).DataTable();
-}
-
-//Función Listar
-function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_calidad, columna_descripcion) {
-   var calidad = columna_calidad=='1' ?  { targets: [11,12,13], visible: false, searchable: false, }: { targets: [11,12,13], visible: false, searchable: false, } ;
-  tabla_item = $("#tabla-concreto").dataTable({
-    responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-    aProcessing: true, //Activamos el procesamiento del datatables
-    aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },       
-    ],
-    ajax: {
-      url: `../ajax/concreto_agregado.php?op=tbla_principal_concreto&id_proyecto=${idtipo_tierra}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -435,6 +358,7 @@ function eliminar_item(idproducto, nombre) {
   );
 }
 
+// :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
 function lista_de_items(idproyecto) { 
 
   $(".lista-items").html(`<li class="nav-item"><a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a></li>`); 
@@ -449,13 +373,13 @@ function lista_de_items(idproyecto) {
       e.data.forEach((val, index) => {
         data_html = data_html.concat(`
         <li class="nav-item">
-          <a class="nav-link" onclick="tbla_principal_concreto('${val.idproyecto}', '${val.idtipo_tierra}', '${val.columna_calidad}', '${val.columna_descripcion}');" id="tabs-for-concreto-tab" data-toggle="pill" href="#tabs-for-concreto" role="tab" aria-controls="tabs-for-concreto" aria-selected="false">${val.nombre}</a>
+          <a class="nav-link" onclick="tbla_principal_concreto('${val.idproyecto}', '${val.idtipo_tierra}', '${val.columna_calidad}', '${val.columna_descripcion}', '${val.nombre}');" id="tabs-for-concreto-tab" data-toggle="pill" href="#tabs-for-concreto" role="tab" aria-controls="tabs-for-concreto" aria-selected="false">${val.nombre}</a>
         </li>`);
       });
 
       $(".lista-items").html(`
         <li class="nav-item">
-          <a class="nav-link active" id="tabs-for-resumen-tab" data-toggle="pill" href="#tabs-for-resumen" role="tab" aria-controls="tabs-for-resumen" aria-selected="true">Resumen</a>
+          <a class="nav-link active" id="tabs-for-resumen-tab" data-toggle="pill" href="#tabs-for-resumen" role="tab" aria-controls="tabs-for-resumen" aria-selected="true" onclick="tbla_principal_resumen(localStorage.getItem('nube_idproyecto'))">Resumen</a>
         </li>
         ${data_html}
       `); 
@@ -466,7 +390,57 @@ function lista_de_items(idproyecto) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-// :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
+//Función Listar
+function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_calidad, columna_descripcion, nombre_item) {
+  $('.filtros-inputs').show();
+  $('.modal-title-detalle-items').html(nombre_item);
+
+  var calidad = columna_calidad=='1' ?  { targets: [5], visible: false, searchable: false, }: { targets: [5], visible: false, searchable: false, } ;
+  var descripcion = columna_descripcion=='1' ?  { targets: [2], visible: false, searchable: false, }: { targets: [2], visible: false, searchable: false, } ;
+
+  var calidad = columna_calidad=='1' ?  $('.calidad').show():$('.calidad').hide() ;
+  var descripcion = columna_descripcion=='1' ? $('.descripcion_concreto').show(): $('.descripcion_concreto').hide() ;
+
+  tabla_item = $("#tabla-concreto").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+    ],
+    ajax: {
+      url: `../ajax/concreto_agregado.php?op=tbla_principal_concreto&idtipo_tierra=${idtipo_tierra}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {    
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      //{ targets: [11,12,13], visible: false, searchable: false, },  
+      calidad,
+      descripcion,
+    ],
+ }).DataTable();
+}
 
 //ver ficha tecnica
 function modal_ficha_tec(ficha_tecnica) {
@@ -487,6 +461,55 @@ function modal_ficha_tec(ficha_tecnica) {
   $(".tooltip").removeClass("show").addClass("hidde");
 }
 
+function optener_dia_de_semana() {
+  
+}
+
+// :::::::::::::::::::::::::: S E C C I O N    R E S U M E N ::::::::::::::::::::::::::
+//Función Listar
+function tbla_principal_resumen(id_proyecto) {
+
+  $('.filtros-inputs').hide();
+
+  tabla_item = $("#tabla-resumen").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+    ],
+    ajax: {
+      url: `../ajax/concreto_agregado.php?op=tbla_principal_resumen&id_proyecto=${id_proyecto}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {    
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      //{ targets: [11,12,13], visible: false, searchable: false, },  
+    ],
+  }).DataTable();
+}
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -497,6 +520,37 @@ $(function () {
   $('#color').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-items").validate({
+    rules: {
+      nombre_item:      { required: true, minlength: 3, maxlength:100, },
+      descripcion_item: { minlength: 3, maxlength:150, },
+    },
+    messages: {
+      nombre_item:      { required: "Campo requerido.", minlength: "MÍNIMO 3 caracteres.",maxlength: "MÁXIMO 100 caracteres." },
+      descripcion_item: { required: "Campo requerido.", minlength: "MÍNIMO 3 caracteres.", maxlength: "MÁXIMO 150 caracteres." },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_items(e);
+    },
+  });
+
+  $("#form-concreto").validate({
     rules: {
       nombre_item:      { required: true, minlength: 3, maxlength:100, },
       descripcion_item: { minlength: 3, maxlength:150, },
