@@ -57,8 +57,8 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_material();"><i class="fas fa-plus-circle"></i> Agregar Item</button>
-                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items" onclick="limpiar_form_material();"><i class="fas fa-eye"></i> Ver Item</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_item();"><i class="fas fa-plus-circle"></i> Agregar Item</button>
+                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items" onclick="limpiar_form_item();"><i class="fas fa-eye"></i> Ver Item</button>
                             Admnistra de manera eficiente el Concreto y Agregado.
                           </h3>
                         </div>
@@ -123,24 +123,68 @@
                             <div class=" col-12 col-sm-12">
                               <div class="card card-primary card-outline card-outline-tabs mb-0">
                                 <div class="card-header p-0 border-bottom-0">
-                                  <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                  <ul class="nav nav-tabs" id="tabs-for-tab" role="tablist">
                                     <li class="nav-item">
-                                      <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Resumen</a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Arena Gruesa</a>
-                                    </li>
-                                    <li class="nav-item ">
-                                      <a class="nav-link " id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Piedra Chancada</a>
+                                      <a class="nav-link active" id="tabs-for-resumen-tab" data-toggle="pill" href="#tabs-for-resumen" role="tab" aria-controls="tabs-for-resumen" aria-selected="true">Resumen</a>
                                     </li>
                                     <li class="nav-item">
-                                      <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Tierra Negra</a>
-                                    </li>
+                                      <a class="nav-link" id="tabs-for-concreto-tab" data-toggle="pill" href="#tabs-for-concreto" role="tab" aria-controls="tabs-for-concreto" aria-selected="false">Arena Gruesa</a>
+                                    </li>                                    
                                   </ul>
                                 </div>
                                 <div class="card-body">
-                                  <div class="tab-content" id="custom-tabs-four-tabContent">
-                                    <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                                  <div class="tab-content" id="tabs-for-tabContent">
+                                    <div class="tab-pane fade show active" id="tabs-for-resumen" role="tabpanel" aria-labelledby="tabs-for-resumen-tab">
+                                      <div class="row">                                        
+                                        <div class="col-12">
+                                          <table id="tabla-materiales" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <thead>
+                                              <tr>
+                                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                              </tr>
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="">Acciones</th>
+                                                <th>Nombre</th>
+                                                <th>Unidad</th>
+                                                <th>Marca</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
+                                                <th data-toggle="tooltip" data-original-title="Sub total">Subtotal</th>
+                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                                <th>Ficha técnica</th>
+                                                <th>Estado</th>
+                                                <th>Nombre</th>
+                                                <th>Color</th>
+                                                <th>Descripción</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="">Acciones</th>
+                                                <th>Nombre</th>
+                                                <th>Unidad</th>
+                                                <th>Marca</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
+                                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
+                                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                                <th>Ficha técnica</th>
+                                                <th>Estado</th>
+                                                <th>Nombre</th>
+                                                <th>Color</th>
+                                                <th>Descripción</th>
+                                              </tr>
+                                            </tfoot>
+                                          </table>
+                                        </div>
+                                        <!-- /.col -->
+                                      </div>
+                                      <!-- /.row -->
+                                    </div>
+                                    <div class="tab-pane fade" id="tabs-for-concreto" role="tabpanel" aria-labelledby="tabs-for-concreto-tab">
                                       <div class="row">
                                         <div class="col-12 mb-2">
                                           <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-detalle-items" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
@@ -227,25 +271,27 @@
 
                       <div class="modal-body row">
                         <div class="col-12">
-                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-comprobantes-compra" onclick="limpiar_form_comprobante();" >Agregar</button>
+                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-items" onclick="limpiar_form_item();" >Agregar Item</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
-                          <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                          <table id="tabla-items" class="table table-bordered table-striped display " style="width: 100% !important;">
                             <thead>
                               <tr>
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
-                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                                <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="Columna">Colum. Calidad</th>
+                                <th data-toggle="tooltip" data-original-title="Columna">Descripción</th>                        
                               </tr>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
                               <tr>
                                 <th class="">#</th>
-                                <th class="">OP</th>
-                                <th>Doc</th>
-                                <th>Fecha</th>                                    
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="Columna">Colum. Calidad</th>
+                                <th data-toggle="tooltip" data-original-title="Columna">Descripción</th>                                   
                               </tr>
                             </tfoot>
                           </table>
@@ -260,11 +306,11 @@
                 </div>
 
                 <!-- MODAL - ITEMS AGREGAR  -->
-                <div class="modal fade" id="modal-agregar-items">
+                <div class="modal fade bg-color-02020280" id="modal-agregar-items">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Insumos</h4>
+                        <h4 class="modal-title">Agregar Items</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -272,43 +318,46 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-materiales" name="form-materiales" method="POST">
+                        <form id="form-items" name="form-items" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id proyecto -->
                               <input type="hidden" name="idproyecto" id="idproyecto" />
                               <!-- id tabla -->
-                              <input type="hidden" name="idproducto" id="idproducto" />
+                              <input type="hidden" name="idtipo_tierra" id="idtipo_tierra" />
                               <!-- id categoria_insumos_af -->
-                              <input type="hidden" name="modulo" id="modulo" value="concreto_agregado" />
+                              <input type="hidden" name="modulo" id="modulo" value="Concreto y Agregado" />
 
                               <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
                                 <div class="form-group">
-                                  <label for="nombre_material">Nombre <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
+                                  <label for="nombre_item">Nombre <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="nombre_item" class="form-control" id="nombre_item" placeholder="Nombre del Item." />
                                 </div>
                               </div>
 
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
                                 <div class="form-group">
-                                  <label for="nombre_material">calidad </label>
-                                  <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
+                                  <label for="columna_calidad">Columna Calidad </label>                                  
+                                  <div class="custom-control custom-switch custom-switch-on-success">
+                                    <input type="checkbox" class="custom-control-input" id="columna_calidad" name="columna_calidad" id="columna_calidad" value="1">
+                                    <label class="custom-control-label cursor-pointer" for="columna_calidad"></label>
+                                  </div>                               
                                 </div>
                               </div>
 
                               <!--descripcion_material-->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="descripcion_material">Descripción </label> <br />
-                                  <textarea name="descripcion_material" id="descripcion_material" class="form-control" rows="2"></textarea>
+                                  <label for="descripcion_item">Descripción </label> <br />
+                                  <textarea name="descripcion_item" id="descripcion_item" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
                               
                               <!-- barprogress -->
                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="barra_progress_div">
-                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                <div class="progress" id="barra_progress_items_div">
+                                  <div id="barra_progress_items" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                     0%
                                   </div>
                                 </div>
@@ -327,12 +376,12 @@
                             <!-- /.cargando -->
                           </div>
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-materiales">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-items">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_material();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_item();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_items">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
@@ -358,8 +407,7 @@
                               <input type="hidden" name="idproyecto" id="idproyecto" />
                               <!-- id tabla -->
                               <input type="hidden" name="idproducto" id="idproducto" />
-                              <!-- id categoria_insumos_af -->
-                              <input type="hidden" name="modulo" id="modulo" />
+                              
 
                               <!-- Nombre -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-6">
@@ -495,7 +543,7 @@
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
-        <?php require 'extra_script.php'; ?>
+        <?php require 'extra_script.php'; ?>        
 
       </body>
     </html>

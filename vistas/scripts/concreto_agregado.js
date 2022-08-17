@@ -1,4 +1,4 @@
-var tabla;
+var tabla_item;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -12,13 +12,15 @@ function init() {
 
   $("#lConcretoAgregado").addClass("active bg-primary");
 
-  tbla_principal();
+  $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+
+  tbla_principal(localStorage.getItem('nube_idproyecto'));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
-  $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
+  $("#guardar_registro_items").on("click", function (e) { $("#submit-form-items").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
   $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
@@ -52,26 +54,16 @@ function doc2_eliminar() {
 	$("#doc2_nombre").html("");
 }
 
+// :::::::::::::::::::::::::: S E C C I O N    I T E M  ::::::::::::::::::::::::::
 //Función limpiar
-function limpiar_form_material() {
+function limpiar_form_item() {
 
-  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-
-  //Mostramos los Materiales
-  $("#idproducto").val("");
-  $("#nombre_material").val("");
+  $("#guardar_registro_items").html('Guardar Cambios').removeClass('disabled');
   
-  $("#precio_real").val("");
-  $(".precio_real").val("");  
-  $("#monto_igv").val("");
-  $(".monto_igv").val("");
-  $("#total_precio").val("");
-  $(".total_precio").val("");  
-
-  $("#doc_old_2").val("");
-  $("#doc2").val("");  
-  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc2_nombre').html("");
+  $("#idtipo_tierra").val("");  
+  $("#nombre_item").val("");
+  $('#columna_calidad').attr('checked', false);
+  $("#descripcion_item").val("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -80,20 +72,20 @@ function limpiar_form_material() {
 }
 
 //Función Listar
-function tbla_principal() {
-  tabla = $("#tabla-materiales").dataTable({
+function tbla_principal(id_proyecto) {
+  tabla_item = $("#tabla-items").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } },       
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
-      url: "../ajax/materiales.php?op=tbla_principal",
+      url: `../ajax/concreto_agregado.php?op=tbla_principal_item&id_proyecto=${id_proyecto}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -105,14 +97,6 @@ function tbla_principal() {
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
-      // columna: # 5
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-right text-nowrap"); }
-      // columna: # 6
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-right text-nowrap"); }
-      // columna: # 7
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right text-nowrap"); }
-      // columna: #8
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -123,37 +107,18 @@ function tbla_principal() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11,12,13], visible: false, searchable: false, },  
+      //{ targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();
 }
 
-//ver ficha tecnica
-function modal_ficha_tec(ficha_tecnica) {
-
-  // ------------------------
-  //$('.tile-modal-comprobante').html(nombre); 
-  $("#modal-ver-ficha_tec").modal("show");
-  $('#ver_fact_pdf').html(doc_view_extencion(ficha_tecnica, 'material', 'ficha_tecnica', '100%', '550'));
-
-  if (DocExist(`dist/docs/material/ficha_tecnica/${ficha_tecnica}`) == 200) {
-    $("#iddescargar").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).attr("download", 'ficha tecncia').removeClass("disabled");
-    $("#ver_completo").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).removeClass("disabled");
-  } else {
-    $("#iddescargar").addClass("disabled");
-    $("#ver_completo").addClass("disabled");
-  }
-  $('.jq_image_zoom').zoom({ on:'grab' });
-  $(".tooltip").removeClass("show").addClass("hidde");
-}
-
 //Función para guardar o editar
-function guardaryeditar(e) {
+function guardar_y_editar_items(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-materiales")[0]);
+  var formData = new FormData($("#form-items")[0]);
 
   $.ajax({
-    url: "../ajax/materiales.php?op=guardaryeditar",
+    url: "../ajax/concreto_agregado.php?op=guardar_y_editar_items",
     type: "POST",
     data: formData,
     contentType: false,
@@ -162,20 +127,20 @@ function guardaryeditar(e) {
       try {
         e = JSON.parse(e);  console.log(e);  
         if (e.status == true) {
-          Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
+          Swal.fire("Correcto!", "Item guardado correctamente", "success");
 
-          tabla.ajax.reload(null, false);
+          tabla_item.ajax.reload(null, false);
 
-          limpiar_form_material();
+          limpiar_form_item();
 
-          $("#modal-agregar-material").modal("hide");
+          $("#modal-agregar-items").modal("hide");
           
         } else {
           ver_errores(e);
         }
       } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
 
-      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
+      $("#guardar_registro_items").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -183,86 +148,49 @@ function guardaryeditar(e) {
         if (evt.lengthComputable) {
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
-          $("#barra_progress").css({"width": percentComplete+'%'});
-          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+          $("#barra_progress_items").css({"width": percentComplete+'%'});
+          $("#barra_progress_items").text(percentComplete.toFixed(2)+" %");
         }
       }, false);
       return xhr;
     },
     beforeSend: function () {
-      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress").css({ width: "0%",  });
-      $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
+      $("#guardar_registro_items").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_items").css({ width: "0%",  });
+      $("#barra_progress_items").text("0%").addClass('progress-bar-striped progress-bar-animated');
     },
     complete: function () {
-      $("#barra_progress").css({ width: "0%", });
-      $("#barra_progress").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_items").css({ width: "0%", });
+      $("#barra_progress_items").text("0%").removeClass('progress-bar-striped progress-bar-animated');
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
-function mostrar(idproducto) {
-  limpiar_form_material(); //console.log(idproducto);
+function mostrar_item(idtipo_tierra) {
+  limpiar_form_item(); //console.log(idproducto);
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-material").modal("show");
+  $("#modal-agregar-items").modal("show");
 
-  $.post("../ajax/materiales.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
+  $.post("../ajax/concreto_agregado.php?op=mostrar_item", { 'idtipo_tierra': idtipo_tierra }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
     if (e.status) {
-      $("#idproducto").val(e.data.idproducto);
-      $("#nombre_material").val(e.data.nombre);
-      $("#modelo").val(e.data.modelo);
-      $("#serie").val(e.data.serie);
-      $("#marca").val(e.data.marca);            
-      $("#descripcion_material").val(e.data.descripcion);
 
-      $("#precio_unitario").val(parseFloat(e.data.precio_unitario).toFixed(2));
-      
-      $("#precio_real").val(e.data.precio_sin_igv);    
-      $("#monto_igv").val(e.data.precio_igv);
-      $("#total_precio").val(parseFloat(e.data.precio_total).toFixed(2));    
+      $("#idtipo_tierra").val(e.data.idtipo_tierra);  
+      $("#nombre_item").val(e.data.nombre);      
+      $("#descripcion_item").val(e.data.descripcion);     
 
-      $(".precio_real").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
-      $(".monto_igv").val(parseFloat(e.data.precio_igv).toFixed(2));
-      $(".total_precio").val(parseFloat(e.data.precio_total).toFixed(2));    
-      
-      $("#unidad_medida").val(e.data.idunidad_medida).trigger("change");
-      $("#color").val(e.data.idcolor).trigger("change");
-
-      if (e.data.estado_igv == "1") {
-        $("#my-switch_igv").prop("checked", true);
-        $("#estado_igv").val(1);
+      if (e.data.estado_columna_calidad == "1") {
+        $("#columna_calidad").prop("checked", true);         
       } else {
-        $("#my-switch_igv").prop("checked", false);
-        $("#estado_igv").val(0);
-      }     
-       
-      if (e.data.imagen != "") {
-        $("#imagen1_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);  
-        $("#imagen1_actual").val(e.data.imagen);
-      }
-  
-      // FICHA TECNICA
-      if (e.data.ficha_tecnica == "" || e.data.ficha_tecnica == null  ) {
-  
-        $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');  
-        $("#doc2_nombre").html('');  
-        $("#doc_old_2").val(""); $("#doc2").val("");
-  
-      } else {
-  
-        $("#doc_old_2").val(e.data.ficha_tecnica);   
-        $("#doc2_nombre").html(`<div class="row"> <div class="col-md-12"><i>Ficha-tecnica.${extrae_extencion(e.data.ficha_tecnica)}</i></div></div>`);
-        $("#doc2_ver").html(doc_view_extencion(e.data.ficha_tecnica, 'material', 'ficha_tecnica', '100%'));
-              
-      }
-      $('.jq_image_zoom').zoom({ on:'grab' });
+        $("#columna_calidad").prop("checked", false);         
+      }        
+      
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
     } else {
@@ -272,7 +200,7 @@ function mostrar(idproducto) {
 }
 
 // ver detallles del registro
-function verdatos(idproducto){
+function verdatos_item(idproducto){
 
   $(".tooltip").removeClass("show").addClass("hidde");
 
@@ -284,7 +212,7 @@ function verdatos(idproducto){
 
   $("#modal-ver-insumo").modal("show");
 
-  $.post("../ajax/materiales.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
+  $.post("../ajax/concreto_agregado.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
 
     e = JSON.parse(e);  //console.log(e); 
     
@@ -405,11 +333,11 @@ function verdatos(idproducto){
 }
 
 //Función para desactivar registros
-function eliminar(idproducto, nombre) {
+function eliminar_item(idproducto, nombre) {
 
   crud_eliminar_papelera(
-    "../ajax/materiales.php?op=desactivar",
-    "../ajax/materiales.php?op=eliminar", 
+    "../ajax/concreto_agregado.php?op=desactivar",
+    "../ajax/concreto_agregado.php?op=eliminar", 
     idproducto, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
@@ -423,6 +351,27 @@ function eliminar(idproducto, nombre) {
   );
 }
 
+// :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
+
+//ver ficha tecnica
+function modal_ficha_tec(ficha_tecnica) {
+
+  // ------------------------
+  //$('.tile-modal-comprobante').html(nombre); 
+  $("#modal-ver-ficha_tec").modal("show");
+  $('#ver_fact_pdf').html(doc_view_extencion(ficha_tecnica, 'material', 'ficha_tecnica', '100%', '550'));
+
+  if (DocExist(`dist/docs/material/ficha_tecnica/${ficha_tecnica}`) == 200) {
+    $("#iddescargar").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).attr("download", 'ficha tecncia').removeClass("disabled");
+    $("#ver_completo").attr("href","../dist/docs/material/ficha_tecnica/"+ficha_tecnica).removeClass("disabled");
+  } else {
+    $("#iddescargar").addClass("disabled");
+    $("#ver_completo").addClass("disabled");
+  }
+  $('.jq_image_zoom').zoom({ on:'grab' });
+  $(".tooltip").removeClass("show").addClass("hidde");
+}
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -432,20 +381,14 @@ $(function () {
   $('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
   $('#color').on('change', function() { $(this).trigger('blur'); });
 
-  $("#form-materiales").validate({
+  $("#form-items").validate({
     rules: {
-      nombre_material:      { required: true },
-      descripcion_material: { minlength: 4 },
-      unidad_medida:          { required: true },
-      color:                { required: true },
-      precio_unitario:      { required: true },
+      nombre_item:      { required: true, minlength: 3, maxlength:100, },
+      descripcion_item: { minlength: 3, maxlength:150, },
     },
     messages: {
-      nombre_material:      { required: "Campo requerido.", },
-      descripcion_material: { minlength: "MINIMO 4 caracteres." },
-      unidad_medida:          { required: "Campo requerido.", },
-      color:                { required: "Campo requerido.", },
-      precio_unitario:      { required: "Campo requerido.", },
+      nombre_item:      { required: "Campo requerido.", minlength: "MÍNIMO 3 caracteres.",maxlength: "MÁXIMO 100 caracteres." },
+      descripcion_item: { required: "Campo requerido.", minlength: "MÍNIMO 3 caracteres.", maxlength: "MÁXIMO 150 caracteres." },
     },
 
     errorElement: "span",
@@ -465,7 +408,7 @@ $(function () {
     
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardaryeditar(e);
+      guardar_y_editar_items(e);
     },
   });
 
