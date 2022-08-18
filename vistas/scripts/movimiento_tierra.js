@@ -221,7 +221,7 @@ function listar_items(proyecto_nube) {
 
         data_html = data_html.concat(`
         <li class="nav-item">
-          <a class="nav-link" onclick="tbla_principal_tierra('${val.idproyecto}', '${val.idtipo_tierra}', '${val.nombre}', '', '', '', '');" id="tabs-for-tierra-tab" data-toggle="pill" href="#tabs-for-tierra" role="tab" aria-controls="tabs-for-tierra" aria-selected="false">${val.nombre}</a>
+          <a class="nav-link" onclick="tbla_principal_tierra('${val.idproyecto}', '${val.idtipo_tierra}', '${val.nombre}', '', '', '', ''); show_hide_filtro();" id="tabs-for-tierra-tab" data-toggle="pill" href="#tabs-for-tierra" role="tab" aria-controls="tabs-for-tierra" aria-selected="false">${val.nombre}</a>
         </li>`);
       });
 
@@ -645,4 +645,8 @@ function filtros() {
 
   tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r, fecha_1, fecha_2, id_proveedor, comprobante);
   //fecha_i_r=fecha_1, fecha_f_r=fecha_2, proveedor_r, comprobante_r;
+}
+
+function show_hide_filtro() {
+  $('.filtros-inputs').show();
 }

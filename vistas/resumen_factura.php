@@ -282,8 +282,6 @@
         <script type="text/javascript" src="scripts/resumen_factura.js"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
-
-        <?php require 'extra_script.php'; ?>
         
       </body>
     </html>

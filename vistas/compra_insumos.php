@@ -1418,8 +1418,6 @@
         <script type="text/javascript" src="scripts/compra_insumos.js"></script>         
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
-
-        <?php require 'extra_script.php'; ?>
         
       </body>
     </html>

@@ -63,17 +63,17 @@
           }
         break;
     
-        case 'desactivar':
+        case 'desactivar_item':
 
-          $rspta = $concreto_agregado->desactivar( $_GET["id_tabla"] );
+          $rspta = $concreto_agregado->desactivar_item( $_GET["id_tabla"] );
 
           echo json_encode( $rspta, true) ;
 
         break;      
 
-        case 'eliminar':
+        case 'eliminar_item':
 
-          $rspta = $concreto_agregado->eliminar( $_GET["id_tabla"] );
+          $rspta = $concreto_agregado->eliminar_item( $_GET["id_tabla"] );
 
           echo json_encode( $rspta, true) ;
 
@@ -155,7 +155,7 @@
         break;
 
         case 'tbla_principal_concreto':
-          $rspta = $concreto_agregado->tbla_principal_concreto($_GET["idtipo_tierra"]);
+          $rspta = $concreto_agregado->tbla_principal_concreto($_GET["id_proyecto"], $_GET["idtipo_tierra"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = [];  $cont=1;         
 
@@ -195,8 +195,24 @@
 
         case 'total_concreto':
 
-          $rspta = $concreto_agregado->total_concreto($idtipo_tierra);
+          $rspta = $concreto_agregado->total_concreto($_POST["id_proyecto"], $_POST["idtipo_tierra"], $_POST["fecha_1"], $_POST["fecha_2"], $_POST["id_proveedor"], $_POST["comprobante"]);
           //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+
+        break;
+
+        case 'desactivar_concreto':
+
+          $rspta = $concreto_agregado->desactivar_concreto( $_GET["id_tabla"] );
+
+          echo json_encode( $rspta, true) ;
+
+        break;      
+
+        case 'eliminar_concreto':
+
+          $rspta = $concreto_agregado->eliminar_concreto( $_GET["id_tabla"] );
+
           echo json_encode( $rspta, true) ;
 
         break;

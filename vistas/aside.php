@@ -174,7 +174,7 @@
         <?php  }  ?>
 
         <?php if ($_SESSION['otra_factura']==1) {  ?>
-          <li class="nav-item ver-otros-modulos-1">
+          <li class="nav-item">
             <a href="otra_factura.php" class="nav-link pl-2" id="lOtraFactura">
               <i class="nav-icon fas fa-receipt"></i>
               <p>Otras Facturas</p>
@@ -183,7 +183,7 @@
         <?php  }  ?>
         
         <?php if ($_SESSION['resumen_factura']==1) {  ?>
-          <li class="nav-item ver-otros-modulos-1">
+          <li class="nav-item">
             <a href="resumen_factura.php" class="nav-link pl-2" id="lResumenFacura">            
               <i class="nav-icon fas fa-poll"></i>
               <p>Resumen de Facturas</p>
@@ -192,7 +192,7 @@
         <?php  }  ?>
 
         <?php if ($_SESSION['resumen_recibo_por_honorario']==1) {  ?>
-          <li class="nav-item ver-otros-modulos-1">
+          <li class="nav-item">
             <a href="resumen_rh.php" class="nav-link pl-2" id="lResumenRH">            
               <i class="nav-icon fas fa-poll"></i>
               <p>Resumen de RH</p>
@@ -201,7 +201,7 @@
         <?php  }  ?>
         
         <?php if ($_SESSION['papelera']==1) {  ?>
-          <li class="nav-item ver-otros-modulos-1">
+          <li class="nav-item">
             <a href="papelera.php" class="nav-link pl-2" id="mPapelera">
               <i class="nav-icon fas fa-trash-alt"></i>
               <p>Papelera</p>

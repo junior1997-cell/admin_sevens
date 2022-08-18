@@ -132,8 +132,10 @@
                                 </div>
 
                                 <div class="card-body" >
-                                  <!-- TABLA - RESUMEN -->
+                                  
                                   <div class="tab-content" id="tabs-for-tabContent">
+                                    
+                                    <!-- TABLA - RESUMEN -->
                                     <div class="tab-pane fade show active" id="tabs-for-resumen" role="tabpanel" aria-labelledby="tabs-for-resumen-tab">
                                       <div class="row">                                        
                                         <div class="col-12">
@@ -517,8 +519,6 @@
         <script type="text/javascript" src="scripts/movimiento_tierra.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
-
-        <?php require 'extra_script.php'; ?>
 
       </body>
     </html>

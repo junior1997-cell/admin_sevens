@@ -1035,11 +1035,7 @@
         <!-- <script src="../plugins/moment/locale/es.js"></script> -->
         <script type="text/javascript" src="scripts/proyecto.js"></script>
 
-        <script>
-          $(function () { $('[data-toggle="tooltip"]').tooltip(); });
-        </script>
-
-        <?php require 'extra_script.php'; ?>
+        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         
       </body>
     </html>
