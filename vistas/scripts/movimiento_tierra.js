@@ -227,7 +227,7 @@ function listar_items(proyecto_nube) {
 
       $(".lista-items").html(`
         <li class="nav-item">
-          <a class="nav-link" id="tabs-for-resumen-tab" data-toggle="pill" href="#tabs-for-resumen" role="tab" aria-controls="tabs-for-resumen" aria-selected="true" onclick="tbla_principal_resumen(localStorage.getItem('nube_idproyecto'))">Resumen</a>
+          <a class="nav-link" id="tabs-for-resumen-tab" data-toggle="pill" href="#tabs-for-resumen" role="tab" aria-controls="tabs-for-resumen" aria-selected="true" onclick="tbla_principal_resumen(${localStorage.getItem('nube_idproyecto')})">Resumen</a>
         </li>
         ${data_html}
         
@@ -469,7 +469,75 @@ function eliminar_detalle_item(idmovimiento_tierra, nombre, fecha) {
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
 
-function tbla_principal_resumen(gg) {  }
+//Función Listar
+function tbla_principal_resumen(idproyecto) {
+
+  $('.filtros-inputs').hide();
+
+  tabla_resumen = $("#tabla-resumen").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,1,2,3,4,5], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+    ],
+    ajax: {
+      url: `../ajax/movimiento_tierra.php?op=tbla_principal_resumen&idproyecto=${idproyecto}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {    
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3,4,5], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
+      //{ targets: [11,12,13], visible: false, searchable: false, },  
+    ],
+  }).DataTable();
+
+  total_tierra_resumen(idproyecto);
+}
+
+function total_tierra_resumen(idproyecto) {
+
+  $(".total_cantidad_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');  
+  $(".total_precio_unitario_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');      
+  $(".total_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');  
+
+  $.post("../ajax/movimiento_tierra.php?op=total_resumen", { 'idproyecto': idproyecto }, function (e, status) {
+    
+    e = JSON.parse(e); console.log(e);
+
+    if (e.status) {
+
+      $(".total_resumen_cantidad").html( formato_miles(e.data.cantidad));  
+      $(".total_resumen_precio_unitario").html(formato_miles(e.data.precio_unitario));      
+      $(".total_resumen").html(formato_miles(e.data.total));    
+
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
 
 init();
 

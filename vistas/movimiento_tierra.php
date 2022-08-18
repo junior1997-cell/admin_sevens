@@ -138,38 +138,33 @@
                                       <div class="row">                                        
                                         <div class="col-12">
                                           <table id="tabla-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
-                                            <thead>
-                                              <tr>
-                                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-                                              </tr>
-                                              <tr>
-                                                <th class="text-center">#</th>
-                                                <th>INSUMO</th>
-                                                <th>UND</th>
-                                                <th>CANTIDAD</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">Acumulado</th>
-                                              </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                            <tfoot>
-                                              <tr>
-                                                <th class="text-center">#</th>
-                                                <th>INSUMO</th>
-                                                <th>UND</th>
-                                                <th>CANTIDAD</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
-                                                <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
-                                                <th data-toggle="tooltip" data-original-title="IGV">Acumulado</th>
-                                              </tr>
-                                            </tfoot>
-                                          </table>
+                                              <thead>                                              
+                                                <tr>
+                                                  <th class="text-center">#</th>
+                                                  <th>INSUMO</th>
+                                                  <th>UND</th>
+                                                  <th>CANTIDAD</th>
+                                                  <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
+                                                  <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody></tbody>
+                                              <tfoot>
+                                                <tr>
+                                                  <th class="text-center">#</th>
+                                                  <th>INSUMO</th>
+                                                  <th>UND</th>
+                                                  <th class="text-nowrap px-2" ><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen_cantidad">0.00</span></div></th>
+                                                  <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen_precio_unitario">0.00</span></div></th>
+                                                  <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen">0.00</span></div></th>
+                                                </tr>
+                                              </tfoot>
+                                            </table>
                                         </div>
                                         <!-- /.col -->
                                       </div>
                                       <!-- /.row -->
-                                    </div>
+                                    </div> 
 
                                     <!-- TABLA - TIERRAS -->
                                     <div class="tab-pane fade" id="tabs-for-tierra" role="tabpanel" aria-labelledby="tabs-for-tierra-tab">

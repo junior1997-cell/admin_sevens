@@ -214,6 +214,50 @@
           echo json_encode( $rspta, true) ;
 
         break;
+
+        //-----------------------------------------------------------------------------------------
+        //----------------------- S E C C I O N    R E S U M E N -------------------------------
+        //-----------------------------------------------------------------------------------------
+
+        case 'tbla_principal_resumen':
+          $rspta = $movimiento_tierra->tbla_principal_resumen($_GET["idproyecto"]);
+          //Vamos a declarar un array
+          $data = [];  $cont=1;         
+
+          if ($rspta['status'] == true) {
+            while ($reg = $rspta['data']->fetch_object()) {              
+              
+              $data[] = [
+                "0"=>$cont++,
+                "1" => $reg->nombre ,
+                "2" => 'M3' ,
+                "3" => $reg->cantidad,
+                "4" => $reg->precio_unitario,
+                "5" => $reg->total,        
+              ];
+            }
+  
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
+            ];
+  
+            echo json_encode( $results, true) ;
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+          
+        break;
+
+        case 'total_resumen':
+
+          $rspta = $movimiento_tierra->total_resumen($idproyecto);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+
+        break;
     
         case 'salir':
           //Limpiamos las variables de sesión
