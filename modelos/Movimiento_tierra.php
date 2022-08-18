@@ -194,7 +194,8 @@ class Movimiento_tierra
   public function tbla_principal_resumen($idproyecto) {
     $sql = "SELECT  tt.nombre,  SUM(mt.cantidad) AS cantidad, AVG(mt.precio_unitario) AS precio_unitario, SUM(mt.total) AS total
     FROM tipo_tierra AS tt, movimiento_tierra AS mt, proveedor as p
-    WHERE tt.idtipo_tierra = mt.idtipo_tierra AND mt.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Movimiento de Tierras' and mt.estado = '1' AND mt.estado_delete ='1'
+    WHERE tt.idtipo_tierra = mt.idtipo_tierra AND mt.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Movimiento de Tierras' 
+    and mt.estado = '1' AND mt.estado_delete ='1' and tt.estado = '1' AND tt.estado_delete ='1'
     GROUP BY tt.nombre  ORDER BY tt.nombre ASC ";
     return ejecutarConsulta($sql);
   }
@@ -202,7 +203,8 @@ class Movimiento_tierra
   public function total_resumen($idproyecto) {
     $sql = "SELECT tt.nombre, SUM(mt.cantidad) AS cantidad, AVG(mt.precio_unitario) AS precio_unitario, SUM(mt.total) AS total
     FROM tipo_tierra AS tt, movimiento_tierra AS mt, proveedor as p
-    WHERE tt.idtipo_tierra = mt.idtipo_tierra AND mt.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Movimiento de Tierras' and mt.estado = '1' AND mt.estado_delete ='1'";
+    WHERE tt.idtipo_tierra = mt.idtipo_tierra AND mt.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Movimiento de Tierras' 
+    and mt.estado = '1' AND mt.estado_delete ='1' and tt.estado = '1' AND tt.estado_delete ='1'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
