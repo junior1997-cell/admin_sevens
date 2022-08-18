@@ -365,6 +365,8 @@
               </a>
             </li>
             <?php  }  ?>
+
+            <?php if ($_SESSION['movimiento_tierras']==1) {  ?>
             <!-- MOVIMIENTO DE TIERRA -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="movimiento_tierra.php" class="nav-link pl-2" id="lMovientoTierras">
@@ -373,6 +375,9 @@
                 <p>Movimiento de Tierras</p>
               </a>
             </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['concreto_agregado']==1) {  ?>
             <!-- CONCRETO, CEMENTO Y AGREGADO -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="concreto_agregado.php" class="nav-link pl-2" id="lConcretoAgregado">
@@ -381,6 +386,9 @@
                 <p>Concreto y Agregado</p>
               </a>
             </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['fierro']==1) {  ?>
             <!-- FIERROS -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="fierro.php" class="nav-link pl-2" id="lFierro">
@@ -389,6 +397,7 @@
                 <p>Fierros</p>
               </a>
             </li>
+            <?php  }  ?>
             
             <?php if ($_SESSION['planilla_seguro']==1) {  ?>
               <!-- PLANILLAS Y SEGUROS -->       
