@@ -262,7 +262,7 @@ function limpiar_form_detalle_item() {
 }
 
 function tbla_principal_tierra(id_proyecto, idtipo_tierra,nombre_item,fecha_i, fecha_f, proveedor, comprobante) {
-  $('.filtros-inputs').show();
+  // $('.filtros-inputs').show();
 
   id_proyecto_r=id_proyecto; idtipo_tierra_r=idtipo_tierra; nombre_item_r=nombre_item; fecha_i_r=fecha_i; fecha_f_r=fecha_f; proveedor_r=proveedor; comprobante_r=comprobante;
 
