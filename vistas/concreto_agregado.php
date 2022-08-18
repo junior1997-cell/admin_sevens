@@ -25,7 +25,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['recurso']==1){
+          if ($_SESSION['concreto_agregado']==1){
             //require 'enmantenimiento.php';
             ?>
 
@@ -36,7 +36,7 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1><i class="nav-icon fas fa-dumpster"></i> Concreto y Agregado</h1>
+                      <h1><img src="../dist/svg/negro-concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 41px !important;" > Concreto y Agregado</h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
@@ -135,7 +135,7 @@
                                     <!-- TABLA - RESUMEN -->
                                     <div class="tab-pane fade show active" id="tabs-for-resumen" role="tabpanel" aria-labelledby="tabs-for-resumen-tab">
                                       <div class="row">                                        
-                                        <div class="col-12">
+                                        <div class="col-12 row-horizon disenio-scroll">
                                           <table id="tabla-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>                                              
                                               <tr>
@@ -172,7 +172,7 @@
                                           <button type="button" class="btn bg-gradient-success btn-sm btn-agregar-concreto" data-toggle="modal" data-target="#modal-agregar-concreto" onclick="limpiar_form_concreto();" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
                                           <!-- <button type="button" class="btn bg-gradient-danger btn-sm"><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button> -->
                                         </div>
-                                        <div class="col-12">
+                                        <div class="col-12 row-horizon disenio-scroll">
                                           <table id="tabla-concreto" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                               <tr>

@@ -18,12 +18,11 @@ function init() {
 
   tbla_principal_item(localStorage.getItem('nube_idproyecto'));
   lista_de_items(localStorage.getItem('nube_idproyecto'));
-  tbla_principal_resumen(localStorage.getItem('nube_idproyecto'));
+  //tbla_principal_resumen(localStorage.getItem('nube_idproyecto'));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
-
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_items").on("click", function (e) { $("#submit-form-items").submit(); });
@@ -521,6 +520,7 @@ function guardar_y_editar_concreto(e) {
         if (e.status == true) {
           Swal.fire("Correcto!", "Registro guardado correctamente", "success");
           tabla_concreto.ajax.reload(null, false); 
+          total_concreto(id_proyecto_r, idtipo_tierra_r, columna_calidad_r, columna_descripcion_r, nombre_item_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
           limpiar_form_concreto();
           $("#modal-agregar-concreto").modal("hide");          
         } else {
@@ -612,8 +612,8 @@ function eliminar_concreto(idproducto, nombre) {
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
     function(){ tabla_concreto.ajax.reload(null, false); tabla_resumen.ajax.reload(null, false); },
-    false, 
-    false, 
+    function(){ total_concreto(id_proyecto_r, idtipo_tierra_r, columna_calidad_r, columna_descripcion_r, nombre_item_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r); },
+    function(){ total_concreto_resumen(localStorage.getItem('nube_idproyecto')); },
     false,
     false
   );
