@@ -416,7 +416,31 @@
                               <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="nombre_dia">Nombre dia <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="nombre_dia" class="form-control" id="nombre_dia" placeholder="Nombre dia." />
+                                  <input type="text" name="nombre_dia" class="form-control" id="nombre_dia" placeholder="Nombre dia." readonly />
+                                </div>
+                              </div>                              
+
+                              <!-- Cantidad -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calcular_total();" onkeyup="calcular_total();" />
+                                </div>
+                              </div>                            
+
+                              <!-- Precio Parcial  -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="precio_unitario">Precio Parcial  <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Parcial." onchange="calcular_total();" onkeyup="calcular_total();"  />
+                                </div>
+                              </div>
+
+                               <!-- Precio Total -->
+                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="total">Precio Total <sup class="text-danger">*</sup></label>
+                                  <input type="number" name="total" class="form-control" id="total" placeholder="Precio Total." readonly />
                                 </div>
                               </div>
 
@@ -425,30 +449,6 @@
                                 <div class="form-group">
                                   <label for="calidad">Calidad </label>
                                   <input type="number" name="calidad" class="form-control" id="calidad" placeholder="Calidad." />
-                                </div>
-                              </div>
-
-                              <!-- Cantidad -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calcular_total();" onkeyup="calcular_total();" />
-                                </div>
-                              </div>                            
-
-                              <!-- Precio Parcial  -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="precio_unitario">Precio Parcial  <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Parcial." onchange="calcular_total();" onkeyup="calcular_total();"  />
-                                </div>
-                              </div>
-
-                               <!-- Precio Total -->
-                               <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="total">Precio Total <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="total" class="form-control" id="total" placeholder="Precio Total." />
                                 </div>
                               </div>
 
@@ -551,13 +551,12 @@
         </div>
         <!-- /.content-wrapper -->
 
-        <?php  require 'script.php'; ?>        
+        <?php  require 'script.php'; ?> 
+                
 
         <script type="text/javascript" src="scripts/concreto_agregado.js"></script>
 
-        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
-
-        <?php require 'extra_script.php'; ?>        
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>               
 
       </body>
     </html>

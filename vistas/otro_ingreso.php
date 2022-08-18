@@ -516,8 +516,6 @@
         <script type="text/javascript" src="scripts/otro_ingreso.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
-
-        <?php require 'extra_script.php'; ?>
         
       </body>
     </html>

@@ -852,13 +852,7 @@
 
         <script type="text/javascript" src="scripts/servicio_equipos.js"></script>
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
-
-        <?php require 'extra_script.php'; ?>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         
       </body>
     </html>

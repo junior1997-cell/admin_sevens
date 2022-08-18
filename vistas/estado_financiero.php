@@ -583,8 +583,6 @@
         <script type="text/javascript" src="scripts/estado_financiero.js"></script>
          
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
-
-        <?php require 'extra_script.php'; ?>
         
         <!-- para el ICONO - gira al hacer clic -->
         <style>

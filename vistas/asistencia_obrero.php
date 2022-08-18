@@ -747,8 +747,6 @@
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         
-        <?php require 'extra_script.php'; ?>
-        
       </body>
     </html>
 

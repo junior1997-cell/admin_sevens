@@ -1182,7 +1182,9 @@
           require 'footer.php';
           ?>
         </div>
+
         <?php require 'script.php'; ?>
+
         <!-- table export EXCEL -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
@@ -1190,13 +1192,7 @@
 
         <script type="text/javascript" src="scripts/compra_activos_fijos.js"></script>
         
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
-
-        <?php require 'extra_script.php'; ?>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         
       </body>
     </html>

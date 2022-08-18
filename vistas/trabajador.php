@@ -328,13 +328,8 @@
 
         <script type="text/javascript" src="scripts/trabajador.js"></script>
 
-        <script>
-          $(function () {
-            $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
-
-        <?php require 'extra_script.php'; ?>
+        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
+        
       </body>
     </html>
 

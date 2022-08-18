@@ -1015,13 +1015,7 @@
         <script type="text/javascript" src="scripts/cargo.js"></script>
         <script type="text/javascript" src="scripts/categoria_af.js"></script>
 
-        <script>
-          $(function () {
-              $('[data-toggle="tooltip"]').tooltip();
-          });
-        </script>
-
-        <?php require 'extra_script.php'; ?>
+        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         
       </body>
     </html>
