@@ -275,9 +275,9 @@ function tbla_principal_tierra(id_proyecto, idtipo_tierra,nombre_item,fecha_i, f
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3], } }, 
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6,7], } }, 
     ],
     ajax: {
       url: `../ajax/movimiento_tierra.php?op=tbla_principal_tierra&id_proyecto=${id_proyecto}&idtipo_tierra=${idtipo_tierra}&fecha_i=${fecha_i}&fecha_f=${fecha_f}&proveedor=${proveedor}&comprobante=${comprobante}`,
