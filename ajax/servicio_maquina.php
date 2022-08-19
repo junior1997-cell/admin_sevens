@@ -88,7 +88,7 @@
 
           $c = ""; $nombre = ""; $icon = "";
           $cc = ""; $nombree = ""; $icons = "";
-
+          $fecha_i= "";  $fecha_f= "";  $proveedor= "";  $comprobante= ""; 
           $cont = 1;
 
           if ($rspta['status'] == true) {
@@ -134,13 +134,13 @@
                 }
               }
 
-              $verdatos = '\''.$reg['idmaquinaria'].'\', \''.$reg['idproyecto'].'\', \''.$reg['costo_parcial'].'\', \''.$reg['total_pagos'].'\'';
+              $verdatos = '\''.$reg['idmaquinaria'].'\', \''.$reg['idproyecto'].'\', \''.$reg['costo_parcial'].'\', \''.$reg['total_pagos'].'\', \''.$reg['maquina'].'\', \''.$fecha_i.'\', \''.$fecha_f.'\'';
 
-              $unidad_medida = '\''.$reg['idmaquinaria'].'\', \''.$reg['idproyecto'].'\', \''.$reg['unidad_medida'].'\'';
+              $unidad_medida = '\''.$reg['idmaquinaria'].'\', \''.$reg['idproyecto'].'\', \''.$reg['unidad_medida'].'\', \''.$reg['maquina'].'\', \''. $fecha_i.'\', \''. $fecha_f.'\'';
 
               $data[] = [
                 "0" => $cont++,
-                "1" => ' <button class="btn btn-info btn-sm" onclick="listar_detalle(' . $unidad_medida . ')"><i class="far fa-eye"></i></button>',
+                "1" => ' <button class="btn btn-info btn-sm" onclick="listar_detalle(' . $unidad_medida . '); show_hide_filtro(); mostrar_form_table(2);"><i class="far fa-eye"></i></button>',
                 "2" =>'<div class="user-block">
                         <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' .$reg['maquina'] .'</p></span>
                         <span class="description" style="margin-left: 0px !important;">' .$reg['codigo_maquina'].' </span>
@@ -150,12 +150,12 @@
                 "5" => $reg['cantidad_veces'],
                 "6" =>'S/ '. number_format($reg['costo_parcial'], 2, '.', ','),
                 "7" =>'<div class="text-center text-nowrap"> 
-                        <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos .')"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
+                        <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos .'); show_hide_filtro(); mostrar_form_table(3);"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
                         '<button style="font-size: 14px;" class="btn btn-' .$c .' btn-xs">' .number_format($reg['total_pagos'], 2, '.', ',') .'</button> 
                       </div>',
                 "8" => number_format($reg['saldo'], 2, '.', ','),
                 "9" =>'<div class="text-center text-nowrap">
-                        <button class="btn btn-' .$cc .' btn-sm" onclick="listar_facturas(' .$unidad_medida .')"><i class="fas fa-file-invoice fa-lg btn-' .$cc .' nav-icon"></i></button> ' .
+                        <button class="btn btn-' .$cc .' btn-sm" onclick="listar_facturas(' .$unidad_medida .'); show_hide_filtro(); mostrar_form_table(4);"><i class="fas fa-file-invoice fa-lg btn-' .$cc .' nav-icon"></i></button> ' .
                         ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($reg['total_comprob_fact'], 2, '.', ',') . '</button> 
                       </div>',
                 "10" => $estado,
@@ -229,10 +229,9 @@
   
         case 'ver_detalle_maquina':
 
-          $idmaquinaria = $_GET["idmaquinaria"];
-          $idproyecto = $_GET["idproyecto"];
+          //$idmaquinaria = $_GET["idmaquinaria"];$idproyecto = $_GET["idproyecto"];$fecha_i = $_GET["fecha_i"];$fecha_f = $_GET["fecha_f"];$proveedor = $_GET["proveedor"]; $comprobante = $_GET["comprobante"];
 
-          $rspta = $serviciomaquina->ver_detalle_m($idmaquinaria, $idproyecto);
+          $rspta = $serviciomaquina->ver_detalle_m($_GET["idmaquinaria"], $_GET["idproyecto"],$_GET["fecha_i"],$_GET["fecha_f"]);
           $fecha_entreg = '';
           $fecha_recoj = '';
           $fecha = '';
@@ -297,27 +296,12 @@
   
         case 'total_costo_parcial_detalle':
   
-          $rspta = $serviciomaquina->total_costo_parcial_detalle($_POST["idmaquinaria"], $_POST["idproyecto"]);
+          $rspta = $serviciomaquina->total_costo_parcial_detalle($_POST["idmaquinaria"], $_POST["idproyecto"],$_POST["fecha_i"], $_POST["fecha_f"]);
 
           echo json_encode($rspta,true);
   
         break;
-  
-        // case 'select2_servicio':
-
-        //   $rspta = $serviciomaquina->select2_servicio();
-  
-        //   if ($rspta['status'] == true) {
-
-        //     while ($reg = $rspta['data']->fetch_object()) {
-        //       echo '<option value=' . $reg->idmaquinaria . '>' . $reg->nombre . ' : ' . $reg->codigo_maquina . ' ---> ' . $reg->nombre_proveedor . '</option>';
-        //     }
-
-        //   } else {
-        //     echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
-        //   } 
-        // break;
-  
+    
         //-------------------------------------------------------------------------------
         //----------------------S E C C   P A G O  P O R  S E R V------------------------
         //-------------------------------------------------------------------------------
@@ -399,7 +383,7 @@
           $idproyecto = $_GET["idproyecto"];
           $tipopago = 'Proveedor';
 
-          $rspta = $serviciomaquina->listar_pagos($idmaquinaria, $idproyecto, $tipopago);
+          $rspta = $serviciomaquina->listar_pagos($idmaquinaria, $idproyecto, $tipopago,$_GET["fecha_i"],$_GET["fecha_f"]);
 
           $data = [];
           $suma = 0;
@@ -457,7 +441,7 @@
           $idproyecto = $_GET["idproyecto"];
           $tipopago = 'Detraccion';
 
-          $rspta = $serviciomaquina->listar_pagos($idmaquinaria, $idproyecto, $tipopago);
+          $rspta = $serviciomaquina->listar_pagos($idmaquinaria, $idproyecto, $tipopago,$_GET["fecha_i"],$_GET["fecha_f"]);
           $data = [];
           $suma = 0;
           $imagen = '';
@@ -532,7 +516,7 @@
           $idproyecto = $_POST["idproyecto"];
           $tipopago = 'Proveedor';
 
-          $rspta = $serviciomaquina->suma_total_pagos($idmaquinaria, $idproyecto, $tipopago);
+          $rspta = $serviciomaquina->suma_total_pagos($idmaquinaria, $idproyecto, $tipopago,$_POST["fecha_i"],$_POST["fecha_f"]);
           echo json_encode($rspta,true);
 
         break;
@@ -543,7 +527,7 @@
           $idproyecto = $_POST["idproyecto"];
           $tipopago = 'Detraccion';
   
-          $rspta = $serviciomaquina->suma_total_pagos($idmaquinaria, $idproyecto, $tipopago);
+          $rspta = $serviciomaquina->suma_total_pagos($idmaquinaria, $idproyecto, $tipopago,$_POST["fecha_i"],$_POST["fecha_f"]);
           echo json_encode($rspta,true);
 
   
@@ -612,7 +596,7 @@
           $idmaquinaria = $_GET["idmaquinaria"];
           $idproyecto = $_GET["idproyecto"];
 
-          $rspta = $serviciomaquina->listar_facturas($idmaquinaria, $idproyecto);
+          $rspta = $serviciomaquina->listar_facturas($idmaquinaria, $idproyecto,$_GET["fecha_i"],$_GET["fecha_f"]);
 
           $data = [];
           $suma = 0;
@@ -695,7 +679,7 @@
           $idmaquinaria = $_POST["idmaquinaria"];
           $idproyecto = $_POST["idproyecto"];
   
-          $rspta = $serviciomaquina->total_monto_f($idmaquinaria, $idproyecto);
+          $rspta = $serviciomaquina->total_monto_f($idmaquinaria, $idproyecto,$_POST["fecha_i"],$_POST["fecha_f"]);
           echo json_encode($rspta,true);
   
         break;

@@ -1,12 +1,11 @@
-var tabla;
-var tabla2;
-var tabla3;
-var tabla4;
-var tabladetrecc;
-var idmaquina;
+var tabla, tabla2, tabla3, tabla4, tabladetrecc, idmaquina;
 
+var idmaquinaria_r="",idproyecto_r="",unidad_medida_r="",maquina_r="",fecha_i_r="",fecha_f_r="",proveedor_r="",comprobante_r="";
+var costo_parcial_r="",monto_r="";
 //Función que se ejecuta al inicio
 function init() {
+
+  mostrar_form_table(1);
 
   $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
@@ -18,10 +17,19 @@ function init() {
 
   listar(localStorage.getItem("nube_idproyecto"));
 
-  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);
 
   lista_select2("../ajax/ajax_general.php?op=select2_servicio_maquina", '#maquinaria', null);
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
+  $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
+  $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+
+  // Inicializar - Date picker  
+  $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  
   
   // ══════════════════════════════════════ G U A R D A R  S E R V I C I O ═════════════════════
 
@@ -37,13 +45,9 @@ function init() {
 
   // ══════════════════════════════════════ INICIALIZE SELECT2 ELEMENTS ══════════════════════════
 
-  //============SERVICIO================
-
   $("#maquinaria").select2({ theme: "bootstrap4", placeholder: "Selecione maquinaria", allowClear: true, });
 
   $("#unidad_m").select2({ theme: "bootstrap4", placeholder: "Selecione una unidad de medida", allowClear: false, });
-
-  //============pagoo================
 
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione una forma de pago", allowClear: true, });
 
@@ -51,6 +55,8 @@ function init() {
 
   $("#banco_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
 
+  $('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
+  $('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
@@ -79,26 +85,84 @@ function doc2_eliminar() {
   $("#doc2_nombre").html("");
 }
 
-//regresar_principal
-function regresar_principal() {
-  $("#tabla_principal").show();
-  $("#btn-agregar").show();
+function mostrar_form_table(estados) {
+  // principal
+  if (estados == 1 ) {
 
-  $("#tabla_detalles").hide();
-  $("#btn-regresar").hide();
+    $("#tabla_principal").show();
+    $("#btn-agregar").show();
+  
+    $("#tabla_detalles").hide();
+    $("#btn-regresar").hide();
+  
+    $("#tabla_pagos").hide();
+    $("#btn-pagar").hide();
+  
+    $("#tabla_facturas_h").hide();
+    $("#btn-factura").hide();
 
-  $("#tabla_pagos").hide();
-  $("#btn-pagar").hide();
+    $("#t_proveedor").html("");
+    $("#t_provee_porc").html("");
 
-  $("#tabla_facturas_h").hide();
-  $("#btn-factura").hide();
-  limpiar();
-  limpiar_c_pagos();
-  $("#t_proveedor").html("");
-  $("#t_provee_porc").html("");
-  //-------------
-  $("#t_detaccion").html("");
-  $("#t_detacc_porc").html("");
+    $("#t_detaccion").html("");
+    $("#t_detacc_porc").html("");
+
+    $('.filtros-inputs').hide();  
+
+  // detalle 
+  } else if (estados == 2) {
+      
+    $("#tabla_principal").hide();
+    $("#tabla_detalles").show();
+    $("#btn-agregar").hide();
+    $("#btn-regresar").show();
+    $("#btn-pagar").hide();  
+  
+  // pagos 
+  } else if (estados == 3) {
+
+    $("#tabla_principal").hide();
+    $("#tabla_pagos").show();
+    $("#btn-agregar").hide();
+    $("#btn-regresar").show();
+    $("#btn-pagar").show();
+
+  // pagos facturas
+  } else if (estados == 4) {
+
+    $("#tabla_principal").hide();
+    $("#tabla_pagos").hide();
+    $("#tabla_facturas_h").show();
+    $("#btn-agregar").hide();
+    $("#btn-regresar").show();
+    $("#btn-pagar").hide();
+    $("#btn-factura").show();
+
+  // pagos Regresar a la principal
+  }else if (estados == 5) {
+
+    $("#tabla_principal").show();
+    $("#btn-agregar").show();
+  
+    $("#tabla_detalles").hide();
+    $("#btn-regresar").hide();
+  
+    $("#tabla_pagos").hide();
+    $("#btn-pagar").hide();
+  
+    $("#tabla_facturas_h").hide();
+    $("#btn-factura").hide();
+    limpiar();
+    limpiar_c_pagos();
+    $("#t_proveedor").html("");
+    $("#t_provee_porc").html("");
+
+    $("#t_detaccion").html("");
+    $("#t_detacc_porc").html("");
+    $('.filtros-inputs').hide();  
+    
+  }
+
 }
 
 //---------------------------------------------------------------------------------
@@ -107,6 +171,7 @@ function regresar_principal() {
 
 function listar(nube_idproyecto) {
 
+  $('.filtros-inputs').hide();
   tabla = $("#tabla-servicio").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
@@ -158,14 +223,21 @@ function listar(nube_idproyecto) {
 //--------------------------------------------------------------------------
 
 //Función detalles po maquina
-function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
+function listar_detalle(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,fecha_f) {
+
+  idmaquinaria_r=idmaquinaria; idproyecto_r=idproyecto;  unidad_medida_r=unidad_medida; maquina_r=maquina; fecha_i_r=fecha_i; fecha_f_r=fecha_f;
+  //maquina
+  var nombre_m_e = maquina==null || maquina=="" ? `<i class="fas fa-spinner fa-pulse fa-sm"></i>` : maquina;
+
+  $(".head_name_m_e").html(`<h3 class="text-bold">Registros :  ${nombre_m_e} </h3>`);
+
   var hideen_colums;
 
-  $("#tabla_principal").hide();
-  $("#tabla_detalles").show();
-  $("#btn-agregar").hide();
-  $("#btn-regresar").show();
-  $("#btn-pagar").hide();
+  // $("#tabla_principal").hide();
+  // $("#tabla_detalles").show();
+  // $("#btn-agregar").hide();
+  // $("#btn-regresar").show();
+  // $("#btn-pagar").hide();
   if (unidad_medida == "Hora") {
     hideen_colums = [];
   } else {
@@ -184,7 +256,7 @@ function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
     ajax: {
-      url: "../ajax/servicio_maquina.php?op=ver_detalle_maquina&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      url: `../ajax/servicio_maquina.php?op=ver_detalle_maquina&idmaquinaria=${idmaquinaria}&idproyecto=${idproyecto}&fecha_i=${fecha_i_r}&fecha_f=${fecha_f_r}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -214,8 +286,8 @@ function listar_detalle(idmaquinaria, idproyecto, unidad_medida) {
     columnDefs: hideen_colums,
   }).DataTable();
 
-  total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto"));
-
+  total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto"), fecha_i_r, fecha_f_r);
+  $('.cargando').hide();
 }
 
 //función capturar unidad select (hora-dia-mes)
@@ -441,11 +513,11 @@ function limpiar() {
 }
 
 //Función total_costo_parcial_detalle
-function total_costo_parcial_detalle(idmaquinaria, idproyecto) {
+function total_costo_parcial_detalle(idmaquinaria, idproyecto,fecha_i_r, fecha_f_r) {
 
   $("#costo-parcial").html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
 
-  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial_detalle", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial_detalle", { idmaquinaria: idmaquinaria, idproyecto: idproyecto,fecha_i:fecha_i_r, fecha_f:fecha_f_r }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
@@ -490,7 +562,7 @@ function guardaryeditar(e) {
   
           var idmaquinaria = $("#maquinaria").val();
           if (idmaquinaria != "") {
-            total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto"));
+            total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto"),fecha_i, fecha_f);
           }
           limpiar();
 
@@ -627,7 +699,7 @@ function guardaryeditar_pago(e) {
           
           tabladetrecc.ajax.reload(null, false);
           
-          total_pagos(localStorage.getItem("nubeidmaquinaria"), localStorage.getItem("nube_idproyecto"));
+          total_pagos(localStorage.getItem("nubeidmaquinaria"), localStorage.getItem("nube_idproyecto"),fecha_i_r,fecha_f_r);
   
           total_costo_secc_pagoss(localStorage.getItem("nubeidmaquinaria"), localStorage.getItem("nube_idproyecto"));
   
@@ -647,19 +719,18 @@ function guardaryeditar_pago(e) {
   });
 }
 
-//Listar pagos.
-function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
+//Listar pagos. costo_parcial_r,monto_r
+function listar_pagos(idmaquinaria,idproyecto,costo_parcial,monto,maquina,fecha_i,fecha_f) {
+
+  idmaquinaria_r=idmaquinaria; idproyecto_r=idproyecto; costo_parcial_r=costo_parcial; monto_r=monto; maquina_r=maquina; fecha_i_r=fecha_i; fecha_f_r=fecha_f;
+ 
+  var nombre_m_e = maquina==null || maquina=="" ? `<i class="fas fa-spinner fa-pulse fa-sm"></i>` : maquina;
+
+  $(".head_name_pago_m_e").html(`<h3 class="text-bold">Pagos :  ${nombre_m_e} </h3>`);
 
   localStorage.setItem("monto_total_p", costo_parcial);
   localStorage.setItem("monto_total_dep", monto);
 
-  // var proveedor = "Proveedor";
-  // var detraccion = "Detraccion";
-  $("#tabla_principal").hide();
-  $("#tabla_pagos").show();
-  $("#btn-agregar").hide();
-  $("#btn-regresar").show();
-  $("#btn-pagar").show();
   //_____________________________________________
   //_____________tabla-pagos-proveedor___________
   //_____________________________________________
@@ -672,7 +743,7 @@ function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
     ajax: {
-      url: "../ajax/servicio_maquina.php?op=listar_pagos_proveedor&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      url: `../ajax/servicio_maquina.php?op=listar_pagos_proveedor&idmaquinaria=${idmaquinaria}&idproyecto=${idproyecto}&fecha_i=${fecha_i_r}&fecha_f=${fecha_f_r}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -708,7 +779,7 @@ function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
     ajax: {
-      url: "../ajax/servicio_maquina.php?op=listar_pagos_detraccion&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
+      url: `../ajax/servicio_maquina.php?op=listar_pagos_detraccion&idmaquinaria=${idmaquinaria}&idproyecto=${idproyecto}&fecha_i=${fecha_i_r}&fecha_f=${fecha_f_r}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -735,7 +806,7 @@ function listar_pagos(idmaquinaria, idproyecto, costo_parcial, monto) {
     order: [[0, "asc"]], //Ordenar (columna,orden)
   }).DataTable();
 
-  total_pagos(idmaquinaria, idproyecto);
+  total_pagos(idmaquinaria, idproyecto,fecha_i_r,fecha_f_r);
   most_datos_prov_pago(idmaquinaria, idproyecto);
   total_costo_secc_pagoss(idmaquinaria, idproyecto);
 
@@ -763,7 +834,7 @@ function total_costo_secc_pagoss(idmaquinaria, idproyecto) {
 }
 
 //-mostramos los totales con sus pocentajes en la secc de pagos
-function total_pagos(idmaquinaria, idproyecto) {
+function total_pagos(idmaquinaria, idproyecto,fecha_i_r,fecha_f_r) {
 
   //_____________________________________________________________________________________________________
   //_____________________________________________________________________________________________________
@@ -802,7 +873,7 @@ function total_pagos(idmaquinaria, idproyecto) {
   //_____________________________________________________________________________________________________
   //_____________________________________________________________________________________________________
 
-  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_proveedor", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_proveedor", { idmaquinaria: idmaquinaria, idproyecto: idproyecto, fecha_i:fecha_i_r, fecha_f:fecha_f_r }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);   
 
@@ -842,7 +913,7 @@ function total_pagos(idmaquinaria, idproyecto) {
 
   }).fail( function(e) { ver_errores(e); } );
 
-  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_detracc", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/servicio_maquina.php?op=suma_total_pagos_detracc", { idmaquinaria: idmaquinaria, idproyecto: idproyecto, fecha_i:fecha_i_r, fecha_f:fecha_f_r }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);   
 
@@ -1029,17 +1100,17 @@ function mostrar_pagos(idpago_servicio, id_maquinaria) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function eliminar_pagos(idservicio, idmaquinaria, numero_operacion) {
+function eliminar_pagos(idpago_servicio, idmaquinaria, numero_operacion) {
 
   crud_eliminar_papelera(
     "../ajax/servicio_maquina.php?op=desactivar_pagos",
     "../ajax/servicio_maquina.php?op=eliminar_pagos", 
-    idservicio, 
+    idpago_servicio, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del> N° Operación-${numero_operacion} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto")); total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"));  },
+    function(){ total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto")); total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"),fecha_i_r,fecha_f_r);  },
     function(){ tabla.ajax.reload(null, false); tabla3.ajax.reload(null, false); tabladetrecc.ajax.reload(null, false); },
     false, 
     false,
@@ -1121,7 +1192,7 @@ function guardaryeditar_factura(e) {
   
           $("#modal-agregar-factura").modal("hide");
 
-          total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"));
+          total_monto_f(localStorage.getItem("nubeidmaquif"), localStorage.getItem("nubeidproyectf"),fecha_i_r,fecha_f_r);
 
           limpiar_factura();
 
@@ -1141,19 +1212,16 @@ function guardaryeditar_factura(e) {
   });
 }
 
-function listar_facturas(idmaquinaria, idproyecto) {
-  console.log(idmaquinaria, idproyecto);
+function listar_facturas(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,fecha_f) {
+
+  idmaquinaria_r=idmaquinaria; idproyecto_r=idproyecto;  unidad_medida_r=unidad_medida; maquina_r=maquina; fecha_i_r=fecha_i; fecha_f_r=fecha_f;
+  // maquina
+  var nombre_m_e = maquina==null || maquina=="" ? `<i class="fas fa-spinner fa-pulse fa-sm"></i>` : maquina;
+
+  $(".head_name_facturas_m_e").html(`<h3 class="text-bold">Facturas :  ${nombre_m_e} </h3>`);
 
   localStorage.setItem("nubeidmaquif", idmaquinaria);
   localStorage.setItem("nubeidproyectf", idproyecto);
-
-  $("#tabla_principal").hide();
-  $("#tabla_pagos").hide();
-  $("#tabla_facturas_h").show();
-  $("#btn-agregar").hide();
-  $("#btn-regresar").show();
-  $("#btn-pagar").hide();
-  $("#btn-factura").show();
 
   tabla4 = $("#tabla_facturas").dataTable({
 
@@ -1164,8 +1232,8 @@ function listar_facturas(idmaquinaria, idproyecto) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
     ajax: {
-      url: "../ajax/servicio_maquina.php?op=listar_facturas&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-      type: "get",
+      url: `../ajax/servicio_maquina.php?op=listar_facturas&&idmaquinaria=${idmaquinaria}&idproyecto=${idproyecto}&fecha_i=${fecha_i_r}&fecha_f=${fecha_f_r}`,
+      type: "get",   
       dataType: "json",
       error: function (e) {
         console.log(e.responseText);
@@ -1200,7 +1268,7 @@ function listar_facturas(idmaquinaria, idproyecto) {
   $("#idmaquina").val(idmaquinaria);
   $("#idproyectof").val(idproyecto);
 
-  total_monto_f(idmaquinaria, idproyecto);
+  total_monto_f(idmaquinaria, idproyecto,fecha_i_r,fecha_f_r);
   total_costo_parcial(idmaquinaria, idproyecto);
 }
 
@@ -1283,7 +1351,6 @@ function limpiar_factura() {
   $("#descripcion_f").val("Por concepto de alquiler de maquinaria");
   $("#subtotal").val("");
   $("#igv").val("");
-  $("#tipo_gravada").val("");
   $("#nota").val("");
   
   $("#doc_old_2").val("");
@@ -1360,7 +1427,7 @@ function eliminar_factura(idfactura, numero_fac) {
     `<b class="text-danger"><del> N° Fectura - ${numero_fac} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){  total_monto_f(localStorage.getItem("nubeidmaquif"),localStorage.getItem("nubeidproyectf")); },
+    function(){  total_monto_f(localStorage.getItem("nubeidmaquif"),localStorage.getItem("nubeidproyectf"),fecha_i_r,fecha_f_r); },
     function(){ tabla.ajax.reload(null, false); tabla4.ajax.reload(null, false);},
     false, 
     false,
@@ -1391,11 +1458,11 @@ function ver_modal_factura(comprobante,numero_operacion) {
 }
 
 //-total Pagos
-function total_monto_f(idmaquinaria, idproyecto) {
+function total_monto_f(idmaquinaria, idproyecto,fecha_i_r,fecha_f_r) {
 
   $("#monto_total_f").html(`<i class="fas fa-spinner fa-pulse fa-sm"></i>`);
 
-  $.post("../ajax/servicio_maquina.php?op=total_monto_f", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/servicio_maquina.php?op=total_monto_f", { idmaquinaria: idmaquinaria, idproyecto: idproyecto, fecha_i:fecha_i_r, fecha_f:fecha_f_r }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);   
 
@@ -1417,7 +1484,7 @@ function total_costo_parcial(idmaquinaria, idproyecto) {
   
   $("#total_costo").html(`<i class="fas fa-spinner fa-pulse fa-sm"></i>`);
 
-  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial", { idmaquinaria: idmaquinaria, idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/servicio_maquina.php?op=total_costo_parcial", { idmaquinaria: idmaquinaria, idproyecto: idproyecto, fecha_i:fecha_i_r, fecha_f:fecha_f_r }, function (e, status) {
    
     e = JSON.parse(e); console.log(e);   
 
@@ -1436,28 +1503,16 @@ function total_costo_parcial(idmaquinaria, idproyecto) {
 
 //========FIN=================
 init();
-
-function formato_miles(num) {
-  if (!num || num == "NaN") return "0.00";
-  if (num == "Infinity") return "&#x221e;";
-  num = num.toString().replace(/\$|\,/g, "");
-  if (isNaN(num)) num = "0";
-  sign = num == (num = Math.abs(num));
-  num = Math.floor(num * 100 + 0.50000000001);
-  cents = num % 100;
-  num = Math.floor(num / 100).toString();
-  if (cents < 10) cents = "0" + cents;
-  for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++) num = num.substring(0, num.length - (4 * i + 3)) + "," + num.substring(num.length - (4 * i + 3));
-  return (sign ? "" : "-") + num + "." + cents;
-}
-/**=======form-servicios============ */
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 $(function () {
-
-  $.validator.setDefaults({ submitHandler: function (e) { guardaryeditar(e); }, });
 
   // Aplicando la validacion del select cada vez que cambie
   $("#maquinaria").on("change", function () { $(this).trigger("blur"); });
   $("#unidad_m").on("change", function () { $(this).trigger("blur"); });
+  // Aplicando la validacion del select cada vez que cambie
+  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#tipo_pago").on("change", function () { $(this).trigger("blur"); });
+  $("#banco_pago").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-servicios").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -1494,27 +1549,8 @@ $(function () {
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
+    submitHandler: function (e) { guardaryeditar(e); },
   });
-
-  //agregando la validacion del select  ya que no tiene un atributo name el plugin
-  $("#maquinaria").rules("add", { required: true, messages: { required: "Campo requerido" } });
-  $("#unidad_m").rules("add", { required: true, messages: { required: "Campo requerido" } });
-
-});
-
-/**=======form-servicios-pago============ */
-$(function () {
-
-  $.validator.setDefaults({
-    submitHandler: function (e) {
-      guardaryeditar_pago(e);
-    },
-  });
-
-  // Aplicando la validacion del select cada vez que cambie
-  $("#forma_pago").on("change", function () { $(this).trigger("blur"); });
-  $("#tipo_pago").on("change", function () { $(this).trigger("blur"); });
-  $("#banco_pago").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-servicios-pago").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -1553,23 +1589,7 @@ $(function () {
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
-  });
-
-  //agregando la validacion del select  ya que no tiene un atributo name el plugin
-  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
-  $("#tipo_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
-  $("#banco_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
-
-});
-
-/**=======form-agregar-factura============*/
-$(function () {
-
-  $.validator.setDefaults({
-    submitHandler: function (e) {
-      guardaryeditar_factura(e);
-      //console.log('factura 22222');
-    },
+    submitHandler: function (e) { guardaryeditar_pago(e); },
   });
 
   $("#form-agregar-factura").validate({
@@ -1581,10 +1601,10 @@ $(function () {
       descripcion_f: { minlength: 1 },
       foto2_i: { required: true },
       val_igv: { required: true, number: true, min:0, max:1 },
-      // terms: { required: true },
+      
     },
     messages: {
-      //====================
+      
       forma_pago: { codigo: "Por favor ingresar el código", },
       monto: { required: "Por favor ingresar el monto", },
       fecha_emision: { required: "Por favor ingresar la fecha de emisión", },
@@ -1606,125 +1626,55 @@ $(function () {
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
+    submitHandler: function (e) { guardaryeditar_factura(e); },
   });
-  
+
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#maquinaria").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#unidad_m").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
+  //agregando la validacion del select  ya que no tiene un atributo name el plugin
+  $("#forma_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#tipo_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#banco_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
 });
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-// Buscar Reniec SUNAT
-function buscar_sunat_reniec() {
-  $("#search").hide();
-
-  $("#charge").show();
-
-  let tipo_doc = $("#tipo_documento").val();
-
-  let dni_ruc = $("#num_documento").val();
-
-  if (tipo_doc == "DNI") {
-    if (dni_ruc.length == "8") {
-      $.post("../ajax/persona.php?op=reniec", { dni: dni_ruc }, function (data, status) {
-        data = JSON.parse(data);
-
-        console.log(data);
-
-        if (data.success == false) {
-          $("#search").show();
-
-          $("#charge").hide();
-
-          toastr.error("Es probable que el sistema de busqueda esta en mantenimiento o los datos no existe en la RENIEC!!!");
-        } else {
-          $("#search").show();
-
-          $("#charge").hide();
-
-          $("#nombre").val(data.nombres + " " + data.apellidoPaterno + " " + data.apellidoMaterno);
-
-          toastr.success("Cliente encontrado!!!!");
-        }
-      });
-    } else {
-      $("#search").show();
-
-      $("#charge").hide();
-
-      toastr.info("Asegurese de que el DNI tenga 8 dígitos!!!");
-    }
-  } else {
-    if (tipo_doc == "RUC") {
-      if (dni_ruc.length == "11") {
-        $.post("../ajax/persona.php?op=sunat", { ruc: dni_ruc }, function (data, status) {
-          data = JSON.parse(data);
-
-          console.log(data);
-          if (data.success == false) {
-            $("#search").show();
-
-            $("#charge").hide();
-
-            toastr.error("Datos no encontrados en la SUNAT!!!");
-          } else {
-            if (data.estado == "ACTIVO") {
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-              // $("#direccion").val(data.direccion);
-              toastr.success("Cliente encontrado");
-            } else {
-              toastr.info("Se recomienda no generar BOLETAS o Facturas!!!");
-
-              $("#search").show();
-
-              $("#charge").hide();
-
-              $("#nombre").val(data.razonSocial);
-
-              data.nombreComercial == null ? $("#apellidos_nombre_comercial").val("-") : $("#apellidos_nombre_comercial").val(data.nombreComercial);
-
-              data.direccion == null ? $("#direccion").val("-") : $("#direccion").val(data.direccion);
-
-              // $("#direccion").val(data.direccion);
-            }
-          }
-        });
-      } else {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("Asegurese de que el RUC tenga 11 dígitos!!!");
-      }
-    } else {
-      if (tipo_doc == "CEDULA" || tipo_doc == "OTRO") {
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.info("No necesita hacer consulta");
-      } else {
-        $("#tipo_doc").addClass("is-invalid");
-
-        $("#search").show();
-
-        $("#charge").hide();
-
-        toastr.error("Selecione un tipo de documento");
-      }
-    }
-  }
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
 }
 
-function extrae_extencion(filename) {
-  return filename.split(".").pop();
+function filtros() {  
+
+  var fecha_1       = $("#filtro_fecha_inicio").val();
+  var fecha_2       = $("#filtro_fecha_fin").val();  
+  var id_proveedor  = $("#filtro_proveedor").select2('val');
+  var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
+  
+  var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
+  var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+
+  //tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r, fecha_1, fecha_2, id_proveedor, comprobante);
+  listar_detalle(idmaquinaria_r,idproyecto_r,unidad_medida_r,maquina_r,fecha_1,fecha_2);
+  //fecha_i_r=fecha_1, fecha_f_r=fecha_2, proveedor_r, comprobante_r;
+  listar_pagos(idmaquinaria_r,idproyecto_r,costo_parcial_r,monto_r,maquina_r,fecha_1,fecha_2);
+  //
+  listar_facturas(idmaquinaria_r,idproyecto_r,unidad_medida_r,maquina_r,fecha_1,fecha_2);
 }
-//quietar formato
-function quitar_formato_miles(numero) {
-  let inVal = numero.replace(/,/g, "");
-  return inVal;
+
+function show_hide_filtro() {
+  $('.filtros-inputs').show();
 }

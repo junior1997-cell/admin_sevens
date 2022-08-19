@@ -316,7 +316,7 @@
                                   <div class="form-group">
                                     <label for="subtotal" class="text-gray">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                     <input type="text" name="subtotal" id="subtotal" class="form-control"  placeholder="Sub total" readonly> 
-                                    <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" />
+                                    <input class="form-control" type="hidden" id="tipo_gravada" name="tipo_gravada" value="GRAVADA" />
                                   </div>
                                 </div>
 

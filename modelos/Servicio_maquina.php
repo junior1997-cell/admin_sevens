@@ -109,24 +109,44 @@ class ServicioMaquina
     return ejecutarConsulta($sql);
   }
 
-  //ver detallete por maquina
-  public function ver_detalle_m($idmaquinaria, $idproyecto)
+  //ver detallete por maquina $_GET["idmaquinaria"], $_GET["idproyecto"],$_GET["fecha_i"],$_GET["fecha_f"],$_GET["proveedor"],$_GET["comprobante"]
+  public function ver_detalle_m($idmaquinaria, $idproyecto,$fecha_1,$fecha_2)
   {
+      
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND s.fecha_entrega BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND s.fecha_entrega = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND s.fecha_entrega = '$fecha_2'";
+    }   
+
+   // if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.idproveedor = '$id_proveedor'"; }
     $sql = "SELECT * FROM servicio as s 
-		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND estado = '1' AND  estado_delete= '1'
+		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND estado = '1' AND  estado_delete= '1' $filtro_fecha
 		ORDER BY s.fecha_entrega DESC";
 
     return ejecutarConsulta($sql);
   }
 
   //total_costo_parcial_detalle
-  public function total_costo_parcial_detalle($idmaquinaria, $idproyecto)
+  public function total_costo_parcial_detalle($idmaquinaria, $idproyecto,$fecha_1,$fecha_2 )
   {
-    $sql = "SELECT 
-		SUM(s.horas) as horas, 
-		SUM(s.costo_parcial) as costo_parcial  
-		FROM servicio as s 
-		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1' AND s.estado_delete='1'";
+     $filtro_fecha = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND s.fecha_entrega BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND s.fecha_entrega = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND s.fecha_entrega = '$fecha_2'";
+    }   
+
+    $sql = "SELECT SUM(s.horas) as horas, SUM(s.costo_parcial) as costo_parcial  		
+    FROM servicio as s 
+		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1' AND s.estado_delete='1' $filtro_fecha";
 
     return ejecutarConsultaSimpleFila($sql);
   }
@@ -180,20 +200,6 @@ class ServicioMaquina
     return ejecutarConsultaSimpleFila($sql);
   }
 
-  // //Seleccionar Trabajador Select2
-  // public function select2_servicio()
-  // {
-  //   $sql = "SELECT 
-	// 	mq.idmaquinaria as idmaquinaria, 
-	// 	mq.nombre as nombre, 
-	// 	mq.codigo_maquina as codigo_maquina, 
-	// 	p.razon_social as nombre_proveedor, 
-	// 	mq.idproveedor as idproveedor
-	// 	FROM maquinaria as mq, proveedor as p 
-	// 	WHERE mq.idproveedor=p.idproveedor AND mq.estado='1' AND mq.estado_delete='1' AND mq.tipo=1";
-  //   return ejecutarConsulta($sql);
-  // }
-
   //-------------------------------------------------------------------------------
   //----------------------S E C C   P A G O  P O R  S E R V------------------------
   //-------------------------------------------------------------------------------
@@ -227,14 +233,24 @@ class ServicioMaquina
     return ejecutarConsulta($sql);
   }
 
-  public function listar_pagos($idmaquinaria, $idproyecto, $tipopago)
+  public function listar_pagos($idmaquinaria, $idproyecto, $tipopago,$fecha_1,$fecha_2)
   {
+    $filtro_fecha = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND ps.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND ps.fecha_pago = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND ps.fecha_pago = '$fecha_2'";
+    }   
+
     $sql = "SELECT ps.idpago_servicio as idpago_servicio,ps.idproyecto as idproyecto, ps.id_maquinaria as id_maquinaria, ps.forma_pago as forma_pago, ps.tipo_pago as tipo_pago,
 		ps.beneficiario as beneficiario,ps.cuenta_destino as cuenta_destino, ps.titular_cuenta as titular_cuenta, ps.fecha_pago as fecha_pago, ps.descripcion as descripcion,
 		ps.id_banco as id_banco, bn.nombre as banco, ps.numero_operacion as numero_operacion, ps.monto as monto, ps.imagen as imagen, ps.estado as estado
 		FROM pago_servicio ps, bancos as bn 
 		WHERE ps.idproyecto='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND bn.idbancos=ps.id_banco 
-    AND ps.tipo_pago='$tipopago' AND ps.estado = '1' AND  ps.estado_delete= '1' ORDER BY ps.fecha_pago DESC";
+    AND ps.tipo_pago='$tipopago' AND ps.estado = '1' AND  ps.estado_delete= '1'  $filtro_fecha ORDER BY ps.fecha_pago DESC";
     return ejecutarConsulta($sql);
   }
 
@@ -271,16 +287,36 @@ class ServicioMaquina
 
   }
 
-  public function suma_total_pagos($idmaquinaria, $idproyecto, $tipopago)
+  public function suma_total_pagos($idmaquinaria, $idproyecto, $tipopago,$fecha_1,$fecha_2)
   {
+    $filtro_fecha = "";  //,$fecha_1,$fecha_2
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND ps.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND ps.fecha_pago = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND ps.fecha_pago = '$fecha_2'";
+    }   
+
     $sql = "SELECT SUM(ps.monto) as total_monto
 		FROM pago_servicio as ps
-		WHERE ps.idproyecto ='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1' AND ps.estado_delete='1' AND ps.tipo_pago='$tipopago'";
+		WHERE ps.idproyecto ='$idproyecto' AND ps.id_maquinaria='$idmaquinaria' AND ps.estado='1' AND ps.estado_delete='1' AND ps.tipo_pago='$tipopago' $filtro_fecha";
     return ejecutarConsultaSimpleFila($sql);
   }
   
   public function total_costo_parcial_pago($idmaquinaria, $idproyecto)
   {
+    // $filtro_fecha = ""; 
+
+    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    //   $filtro_fecha = "AND ps.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
+    // } else if (!empty($fecha_1)) {      
+    //   $filtro_fecha = "AND ps.fecha_pago = '$fecha_1'";
+    // }else if (!empty($fecha_2)) {        
+    //   $filtro_fecha = "AND ps.fecha_pago = '$fecha_2'";
+    // }   
+
     $sql = "SELECT
 		SUM(s.costo_parcial) as costo_parcial  
 		FROM servicio as s 
@@ -345,10 +381,20 @@ class ServicioMaquina
   }
 
   //Listar
-  public function listar_facturas($idmaquinaria, $idproyecto)
+  public function listar_facturas($idmaquinaria, $idproyecto,$fecha_1,$fecha_2)
   {
+    $filtro_fecha = "";  //,$fecha_1,$fecha_2
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND fecha_emision = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND fecha_emision = '$fecha_2'";
+    }   
+
     $sql = "SELECT *
-		FROM factura WHERE idproyecto='$idproyecto' AND idmaquinaria = '$idmaquinaria' AND  estado='1' AND estado_delete='1'  ORDER BY fecha_emision DESC";
+		FROM factura WHERE idproyecto='$idproyecto' AND idmaquinaria = '$idmaquinaria' AND  estado='1' AND estado_delete='1' $filtro_fecha  ORDER BY fecha_emision DESC";
     return ejecutarConsulta($sql);
   }
   
@@ -382,11 +428,21 @@ class ServicioMaquina
     return ejecutarConsulta($sql);
   }
 
-  public function total_monto_f($idmaquinaria, $idproyecto)
+  public function total_monto_f($idmaquinaria, $idproyecto,$fecha_1,$fecha_2)
   {
+    $filtro_fecha = "";  //,$fecha_1,$fecha_2
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fs.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND fs.fecha_emision = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND fs.fecha_emision = '$fecha_2'";
+    }   
+
     $sql = "SELECT SUM(fs.monto) as total_mont_f
 		FROM factura as fs
-		WHERE fs.idproyecto ='$idproyecto' AND fs.idmaquinaria='$idmaquinaria' AND fs.estado='1' AND fs.estado_delete='1'";
+		WHERE fs.idproyecto ='$idproyecto' AND fs.idmaquinaria='$idmaquinaria' AND fs.estado='1'  AND fs.estado_delete='1' $filtro_fecha";
     return ejecutarConsultaSimpleFila($sql);
   }
 

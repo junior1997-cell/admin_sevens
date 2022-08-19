@@ -58,10 +58,10 @@
                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="card-header">
                               <h3 class="card-title display" id="btn-agregar">
-                                <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                                <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="mostrar_form_table(1); limpiar(); "><i class="fas fa-plus-circle"></i> Agregar</button>
                                 Administra tus servicios.
                               </h3>
-                              <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
+                              <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="mostrar_form_table(5);"><i class="fas fa-arrow-left"></i> Regresar</button>
                               <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();">
                                 <i class="fas fa-dollar-sign"></i> Agregar Pago
                               </button>
@@ -107,6 +107,59 @@
                             </div>
                           </div>
                         </div>
+                          <!-- filtros -->
+                        <div class="card-body filtros-inputs row pt-3 pb-0">
+
+                          <!-- filtro por: fecha inicial -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">    
+                            <div class="form-group">
+                              <!-- <label for="filtro_fecha_inicio" >Fecha inicio </label> -->
+                              <div class="input-group date"  >
+                                <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                              </div>
+                            </div>                                
+                          </div>
+
+                          <!-- filtro por: fecha final -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">                                
+                            <div class="form-group">
+                              <!-- <label for="filtro_fecha_inicio" >Fecha fin </label> -->
+                              <div class="input-group date"  >
+                                <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                              </div>
+                            </div> 
+                          </div>
+
+                          <!-- filtro por: proveedor -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                              <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
+                              <select id="filtro_proveedor" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                              </select>
+                            </div>                          
+                          </div>
+
+                          <!-- filtro por: comprobante -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-2" >
+                            <div class="form-group">
+                              <!-- <label for="filtros" >Tipo comprobante </label> -->
+                              <select id="filtro_tipo_comprobante" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
+                                <option value="0">Todos</option>
+                                <option value="Ninguno">Ninguno</option>
+                                <option value="Boleta">Boleta</option>
+                                <option value="Factura">Factura</option>
+                                <option value="Nota de venta">Nota de venta</option>
+                              </select>
+                            </div>
+                            
+                          </div>
+                        </div>
 
                         <!--===============Tabla Principal =========-->
                         <div class="card-body display" id="tabla_principal">
@@ -146,9 +199,13 @@
                         </div>
 
                         <!--===============Tabla detalle por maquina  =======--->
-                        <div class="card-body" id="tabla_detalles" style="display: none;">
+                        <div class="card-body pt-1" id="tabla_detalles" style="display: none;">
+                          <div class="head_name_m_e">  </div>
                           <table id="tabla-detalle-m" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
                               <tr>
                                 <th>#</th>
                                 <th>Acciones</th>
@@ -185,7 +242,8 @@
                         </div>
 
                         <!--===============Tabla Pagos =======--->
-                        <div class="card-body" id="tabla_pagos" style="display: none;">
+                        <div class="card-body pt-1" id="tabla_pagos" style="display: none;">
+                          <div class="head_name_pago_m_e">  </div>
                           <div style="text-align: center;">
                             <div>
                               <h4>Total a pagar: <b id="total_costo_secc_pagos"></b></h4>
@@ -198,6 +256,9 @@
                           <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
                           <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
                               <tr>
                                 <th>#</th>
                                 <th>Acciones</th>
@@ -249,6 +310,9 @@
                           <table id="tabla-pagos-detrecciones" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
+                              <tr>
                                 <th>#</th>
                                 <th>Acciones</th>
                                 <th>Forma pago</th>
@@ -292,12 +356,16 @@
                         </div>
 
                         <!--===============Tabla facturas =======--->
-                        <div class="card-body" id="tabla_facturas_h" style="display: none;">
+                        <div class="card-body pt-1" id="tabla_facturas_h" style="display: none;">
+                          <div class="head_name_facturas_m_e">  </div>                        
                           <div style="text-align: center;">
                             <h5 style="background: aliceblue;">Costo parcial: <b id="total_costo" style="color: #e52929;"></b></h5>
                           </div>
                           <table id="tabla_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
                               <tr>
                                 <th>#</th>
                                 <th>Aciones</th>
@@ -752,7 +820,7 @@
                               <!-- Sub total -->
                               <div class="col-lg-3">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase">(GRAVADA)</small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                 </div>
                               </div>
