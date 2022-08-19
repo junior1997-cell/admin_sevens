@@ -628,7 +628,7 @@
               
               empty($reg->imagen)
                 ? ($imagen = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
-                : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_factura(' . "'" . $reg->imagen . "'" . ',,' . "'" . $reg->codigo . "'" . ')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>');
+                : ($imagen = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_factura(' . "'" . $reg->imagen . "'" . ',' . "'" . $reg->codigo . "'" . ')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>');
               $tool = '"tooltip"';
 
               $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";

@@ -617,7 +617,7 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <div class="col-6 col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante_pago');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'servicio_maquina', 'comprobante_pago', '100%', '320'); reload_zoom();">
                                     <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                   </div>
@@ -696,7 +696,7 @@
                               <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo_f"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
                             </div>
                             <div class="col-12 col-md-12 mt-2">
-                              <div id="ver_fact_pdf" width="auto"></div>
+                              <div id="ver_fact_pdf_f" width="auto"></div>
                             </div>
                           </div> 
                       </div>
@@ -797,7 +797,7 @@
                                     <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <div class="col-6 col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobante_servicio');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'servicio_maquina', 'comprobante_servicio', '100%', '320'); reload_zoom();">
                                     <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                   </div>
