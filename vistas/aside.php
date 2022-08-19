@@ -365,6 +365,8 @@
               </a>
             </li>
             <?php  }  ?>
+
+            <?php if ($_SESSION['movimiento_tierras']==1) {  ?>
             <!-- MOVIMIENTO DE TIERRA -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="movimiento_tierra.php" class="nav-link pl-2" id="lMovientoTierras">
@@ -373,22 +375,29 @@
                 <p>Movimiento de Tierras</p>
               </a>
             </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['concreto_agregado']==1) {  ?>
             <!-- CONCRETO, CEMENTO Y AGREGADO -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="concreto_agregado.php" class="nav-link pl-2" id="lConcretoAgregado">
-                <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
-                <i class="nav-icon fas fa-dumpster"></i>
+                <!-- <i class="nav-icon fas fa-dumpster"></i> -->
+                <img src="../dist/svg/concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                 <p>Concreto y Agregado</p>
               </a>
             </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['fierro']==1) {  ?>
             <!-- FIERROS -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="fierro.php" class="nav-link pl-2" id="lFierro">
-                <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
-                <i class="nav-icon fas fa-dumpster"></i>
+                <!-- <i class="nav-icon fas fa-dumpster"></i> -->
+                <img src="../dist/svg/fierro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                 <p>Fierros</p>
               </a>
             </li>
+            <?php  }  ?>
             
             <?php if ($_SESSION['planilla_seguro']==1) {  ?>
               <!-- PLANILLAS Y SEGUROS -->       

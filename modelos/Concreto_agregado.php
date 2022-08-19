@@ -109,7 +109,7 @@ class ConcretoAgregado
   }
 
   //Implementar un método para listar los registros
-  public function tbla_principal_concreto($id_proyecto, $idtipo_tierra, $fecha_i, $fecha_f, $proveedor, $comprobante) {
+  public function tbla_principal_concreto($id_proyecto, $idtipo_tierra, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
 
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
 
@@ -131,7 +131,7 @@ class ConcretoAgregado
   }
 
   //Implementar un método para listar los registros
-  public function total_concreto($id_proyecto, $idtipo_tierra, $fecha_i, $fecha_f, $proveedor, $comprobante) {
+  public function total_concreto($id_proyecto, $idtipo_tierra, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
 
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
 

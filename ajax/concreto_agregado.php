@@ -9,7 +9,7 @@
     echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
-    if ($_SESSION['recurso'] == 1) {
+    if ($_SESSION['concreto_agregado'] == 1) {
       
       require_once "../modelos/Concreto_agregado.php";
 

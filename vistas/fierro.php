@@ -26,17 +26,18 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['recurso']==1){
-            //require 'enmantenimiento.php';
+            //require 'enmantenimiento.php'; 
+            require 'endesarrollo.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
+            <div class="content-wrapper hidden">
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1><i class="nav-icon fas fa-dumpster"></i> Fierro</h1>
+                      <h1><img src="../dist/svg/negro-fierro-ico.svg" class="nav-icon" alt="" style="width: 41px !important;" > Fierro</h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
