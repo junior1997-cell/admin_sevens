@@ -341,6 +341,7 @@
                 <!-- /.container-fluid -->
 
                 <!--===============Modal agregar servicios =========-->
+
                 <div class="modal fade" id="modal-agregar-servicio">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -365,8 +366,8 @@
                               <div class="col-lg-12">
                                 <div class="form-group">
                                   <label for="maquinaria">Seleccionar maquina</label>
-                                  <div id="sssss">
-                                    <select name="maquinaria" id="maquinaria" class="form-control select2" style="width: 100%;" onchange="seleccion();" readonly> </select>
+                                  <div id="ocultar_select">
+                                    <select name="maquinaria" id="maquinaria" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                   <input class="form-control" style="display: none;" id="nomb_maq" disabled />
                                 </div>
@@ -375,7 +376,7 @@
                               <div class="col-lg-6" id="unidad">
                                 <div class="form-group">
                                   <label for="unidad_m">Unidad de medida</label>
-                                  <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;" onchange="capture_unidad();">
+                                  <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;" onchange="capture_unidad();" onkeyup="costo_partcial();">
                                     <option value="Hora">Hora</option>
                                     <option value="Dia">Dia</option>
                                     <option value="Mes">Mes</option>
@@ -393,7 +394,7 @@
                               <!-- Fecha Inicio-->
                               <div class="col-lg-6" id="fecha_i">
                                 <div class="form-group">
-                                  <label for="fecha_inicio" id="fecha-i-tutulo">Fecha Inicio </label>
+                                  <label for="fecha_inicio" id="fecha-i-titulo">Fecha Inicio </label>
                                   <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" onchange="calculardia();" onkeyup="costo_partcial();" />
                                 </div>
                               </div>
@@ -654,17 +655,23 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title">voucher</h4>
+                        <h4 class="modal-title">Comprobante :  <span class="nombre_comprobante text-bold"></span></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div id="datosservicios" class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="descargar" download="Voucher" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
-                        </div>
+                          <div class="row">
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                            </div>
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                            </div>
+                            <div class="col-12 col-md-12 mt-2">
+                              <div id="ver_fact_pdf" width="auto"></div>
+                            </div>
+                          </div> 
                       </div>
                     </div>
                   </div>
@@ -675,18 +682,23 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title">Factura</h4>
+                        <h4 class="modal-title">Comprobante :  <span class="nombre_comprobante_f text-bold"></span></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="iddescargar" download="factura" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
-                        </div>
+                          <div class="row">
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar_f" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                            </div>
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo_f"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                            </div>
+                            <div class="col-12 col-md-12 mt-2">
+                              <div id="ver_fact_pdf" width="auto"></div>
+                            </div>
+                          </div> 
                       </div>
                     </div>
                   </div>

@@ -486,6 +486,58 @@
         }
     
       break;
+      /* ══════════════════════════════════════ S E R V i C I O S  M A Q U I N A R I A ════════════════════════════ */
+
+      case 'select2_servicio_maquina':
+        $tipo ='1';
+        $rspta = $ajax_general->select2_servicio($tipo);
+        $data = "";
+
+        if ($rspta['status'] == true) {
+
+           foreach ($rspta['data'] as $key => $reg) { 
+            $data .= '<option value=' . $reg['idmaquinaria'] . '>' . $reg['nombre'] . ' : ' . $reg['codigo_maquina'] . ' -> ' . $reg['nombre_proveedor'] . '</option>';
+          }
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+
+      break;
+
+      /* ══════════════════════════════════════ S E R V i C I O S  E Q U I P O S ════════════════════════════ */
+
+      case 'select2_servicio_equipo':
+        $tipo ='2';
+        $rspta = $ajax_general->select2_servicio($tipo);
+        $data = "";
+        if ($rspta['status'] == true) {
+
+           foreach ($rspta['data'] as $key => $reg) { 
+            $data .= '<option value=' . $reg['idmaquinaria'] . '>' . $reg['nombre'] . ' : ' . $reg['codigo_maquina'] . ' -> ' . $reg['nombre_proveedor'] . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
 
       default: 
         $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 

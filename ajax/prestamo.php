@@ -279,6 +279,7 @@
           $descrip_toltip="Clic en botón para entrar el detalle de pagos";
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
           $pago_prest = "_pago_prestamo";
+          
           if ($rspta['status'] == true) {
 
             foreach ($rspta['data'] as $key => $reg) {

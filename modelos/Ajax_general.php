@@ -165,6 +165,14 @@
       ORDER BY p.nombre ASC;";
       return ejecutarConsulta($sql);
     }
+    /* ══════════════════════════════════════ S E R V i C I O S  M A Q U I N A RI A ════════════════════════════ */
+
+    public function select2_servicio($tipo) {
+      $sql = "SELECT mq.idmaquinaria as idmaquinaria, mq.nombre as nombre, mq.codigo_maquina as codigo_maquina, p.razon_social as nombre_proveedor, mq.idproveedor as idproveedor
+      FROM maquinaria as mq, proveedor as p WHERE mq.idproveedor=p.idproveedor AND mq.estado='1' AND mq.estado_delete='1' AND mq.tipo=$tipo";
+      return ejecutarConsulta($sql);
+    }
+
   }
 
 ?>

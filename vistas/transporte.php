@@ -381,6 +381,7 @@
                       </div>
                     </div>
                   </div>
+                  
                   <!--Modal ver datos-->
                   <div class="modal fade" id="modal-ver-transporte">
                     <div class="modal-dialog modal-dialog-scrollable modal-xm">
