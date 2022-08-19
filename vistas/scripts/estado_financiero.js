@@ -1,4 +1,4 @@
-var tabla_principal; 
+var tabla_fecha_proyeccion; 
 
 //Función que se ejecuta al inicio
 function init() {
@@ -10,6 +10,8 @@ function init() {
   $("#lEstadoFinanciero").addClass("active bg-primary");
   
   tbla_estado_financiero(localStorage.getItem('nube_idproyecto'));
+  listar_fechas_proyeccion(localStorage.getItem('nube_idproyecto'));
+  // tbla_principal_fecha_proyeccion(localStorage.getItem('nube_idproyecto'))
 
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
   $("#guardar_registro_proyecciones").on("click", function (e) { $("#submit-form-proyecciones").submit();  });
@@ -20,6 +22,7 @@ function init() {
   $('#fecha_p').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true,  weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
   formato_miles_input('.input_ef');
+  formato_miles_input(`.input_caja_pry`);
 
   // Insertamos el ID del proyecto actual
   $("#idproyecto_p").val(localStorage.getItem('nube_idproyecto'));
@@ -162,42 +165,128 @@ function update_interes_y_ganancia_ef() {
   $('.ganacia_actual_porcentaje').html(formato_miles(ganacia_actual_porcentaje) + '%');
 }
 
-// ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
+// ══════════════════════════════════════ P R O Y E C C I O N E S ══════════════════════════════════════ 
 function show_hide_span_input_p(flag, id_span) {
   if (flag == 1) {
     // ocultamos los span
     $(`.span_p_${id_span}`).show();
+    $(`.span_caja_pry`).show();
     // mostramos los inputs
     $(`.input_p_${id_span}`).hide();
+    $(`.input_caja_pry`).hide();
 
     // ocultamos el boton editar
-    $(`.btn-editar-p-${id_span}`).show();
+    $(`.btn-editar-p`).show();
     // mostramos el boton guardar
-    $(`.btn-guardar-p-${id_span}`).hide();
+    $(`.btn-guardar-p`).hide();
+
+    // ocultamos el boton delete-detalle-proyeccion
+    $(`.btn-delete-sdp`).hide();
   } else if (flag == 2) {
     
     // ocultamos los span
     $(`.span_p_${id_span}`).hide();
+    $(`.span_caja_pry`).hide();
     // mostramos los inputs
     $(`.input_p_${id_span}`).show();
+    $(`.input_caja_pry`).show();
 
     // ocultamos el boton editar
-    $(`.btn-editar-p-${id_span}`).hide();
+    $(`.btn-editar-p`).hide();
     // mostramos el boton guardar
-    $(`.btn-guardar-p-${id_span}`).show();
+    $(`.btn-guardar-p`).show();
+     // mostramos el boton delete-detalle-proyeccion
+     $(`.btn-delete-sdp`).show();
   } 
 }
+
+function listar_fechas_proyeccion(idproyecto) { 
+
+  $(".lista-fechas-proyeccion").html(`<li class="nav-item"><a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a></li>`); 
+
+  $.post("../ajax/estado_financiero.php?op=listar_fechas_proyeccion", { 'idproyecto': idproyecto }, function (e, status) {
+    
+    e = JSON.parse(e); console.log(e);
+    // e.data.idtipo_tierra
+    if (e.status) {
+      var data_html = '';
+
+      e.data.forEach((val, index) => {
+        data_html = data_html.concat(`
+        <li class="nav-item">
+          <a class="nav-link" onclick="tbla_principal_detalle_proyeccion('${val.idproyecto}', '${val.idproyeccion}', '${val.fecha}', '${val.caja}');" id="tabs-for-detalle-proyeccion-tab" data-toggle="pill" href="#tabs-for-detalle-proyeccion" role="tab" aria-controls="tabs-for-detalle-proyeccion" aria-selected="false">${ format_a_m_d(val.fecha)}</a>
+        </li>`);
+      });
+
+      $(".lista-fechas-proyeccion").html(`
+        <li class="nav-item">
+          <a class="nav-link" id="tabs-for-fecha-proyeccion-tab" data-toggle="pill" href="#tabs-for-fecha-proyeccion" role="tab" aria-controls="tabs-for-fecha-proyeccion" aria-selected="true" onclick="tbla_principal_fecha_proyeccion(${localStorage.getItem('nube_idproyecto')})">Fechas</a>
+        </li>
+        ${data_html}
+      `); 
+      //delay(function(){$('#tabs-for-resumen-tab').click();}, 100 );
+      
+      $('#tabs-for-fecha-proyeccion-tab').click();
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
 //Función limpiar
 function limpiar_form_proyecciones() {  
 
-  $("#idproyeccion").val("");
-  $("#fecha_proyeccion").val(""); 
-  $("#caja_proyeccion").val(""); 
+  $("#idproyeccion_p").val("");
+  $("#fecha_p").val(""); 
+  $("#caja_p").val(""); 
+  $("#descripcion_p").val(""); 
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
+}
+
+function tbla_principal_fecha_proyeccion(idproyecto) {
+  tabla_fecha_proyeccion = $("#tabla-fecha-proyeccion").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+    ],
+    ajax: {
+      url: `../ajax/estado_financiero.php?op=tbla_principal_fecha_proyeccion&idproyecto=${idproyecto}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {    
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [3], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
+      //{ targets: [11,12,13], visible: false, searchable: false, },  
+    ],
+  }).DataTable();
 }
 
 function guardar_y_editar_proyecciones(e) {
@@ -215,8 +304,8 @@ function guardar_y_editar_proyecciones(e) {
         e = JSON.parse(e);  console.log(e);  
         if (e.status == true) {
           Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
-
-          limpiar_form_proyecciones();
+          listar_fechas_proyeccion(localStorage.getItem('nube_idproyecto'));
+          limpiar_form_proyecciones(); 
 
           $("#modal-agregar-proyecciones").modal("hide");
           
@@ -252,61 +341,228 @@ function guardar_y_editar_proyecciones(e) {
   });
 }
 
-function desactivar_pago_x_mes(id) {
+function mostrar_fecha_proyeccion(idproyeccion) {
+  limpiar_form_proyecciones(); //console.log(idproducto);
 
-  var id_fechas_mes = $('#idfechas_mes_pagos_administrador_pxm').val();
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
 
+  $("#modal-agregar-proyecciones").modal("show");
+
+  $.post("../ajax/estado_financiero.php?op=mostrar_fecha_proyeccion", { 'idproyeccion': idproyeccion }, function (e, status) {
+    
+    e = JSON.parse(e); console.log(e);
+
+    if (e.status) {
+
+      $("#idproyeccion_p").val(e.data.idproyeccion);  
+      $("#idproyecto_p").val(e.data.idproyecto);      
+      $("#fecha_p").datepicker("setDate" , format_d_m_a(e.data.fecha));
+      $("#caja_p").val(e.data.caja);  
+      $("#descripcion_p").val(e.data.descripcion);      
+      
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+//Función para desactivar registros
+function eliminar_fechas_proyeccion(idproyeccion, nombre) {
+
+  crud_eliminar_papelera(
+    "../ajax/estado_financiero.php?op=desactivar_fechas_proyeccion",
+    "../ajax/estado_financiero.php?op=eliminar_fechas_proyeccion", 
+    idproyeccion, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ listar_fechas_proyeccion(localStorage.getItem('nube_idproyecto')); },
+    false,
+    false,
+    false,
+    false
+  );
+}
+
+// ══════════════════════════════════════ D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════ 
+
+function tbla_principal_detalle_proyeccion(idproyecto, idproyeccion, fecha, caja) {
+
+  $(".fecha_pd").html('<i class="fas fa-spinner fa-pulse"></i>');  
+  $(".detalle_pd").html('<i class="fas fa-spinner fa-pulse"></i>');  
+
+  $(".btn-guardar-p").attr('onclick',`guardar_y_editar_detalle_proyeccion(${idproyeccion});`); 
+  $(".btn-editar-p").attr('onclick',`show_hide_span_input_p(2,${idproyeccion});`); 
+
+  $.post("../ajax/estado_financiero.php?op=tbla_principal_detalle_proyeccion", { 'idproyecto':idproyecto, 'idproyeccion': idproyeccion }, function (e, status) {
+    
+    e = JSON.parse(e); console.log(e);
+
+    if (e.status) {
+      
+      var html_data = ''; var total_proyeccion = 0;
+
+      e.data.detalle.forEach((val, indice) => {
+
+        var icon_acordion = val.sub_detalle.length === 0 ? '' : '<i class="expandable-table-caret fas fa-caret-right fa-fw"></i>';
+        var input_readonly = val.sub_detalle.length === 0 ? '' : 'readonly' ;
+        var input_no_border = val.sub_detalle.length === 0 ? '' : 'input-no-border-center-bold' ;
+
+        html_data = html_data.concat(`
+        <tr class="data_${val.idproyeccion} data_bloque_${indice+1} detalle_tr_${indice+1} sub_${indice+1}_0 ${val.sub_detalle.length}">
+          <td class="py-1 text-center detalle_td_num_${indice+1}" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_${indice+1}','.sub_detalle_tr_${indice+1}')}, 200 );">${icon_acordion} ${indice+1}</td>
+          <td class="py-1">
+            <span class="span_p_${val.idproyeccion}">${val.nombre_proyeccion}</span> 
+            <input type="text" id="" class="hidden input_p_${val.idproyeccion} w-100" value="${val.nombre_proyeccion}">
+          </td>
+          <td class="py-1">
+          </td>                           
+          <td class="py-1">
+            <div class="formato-numero-conta span_p_${val.idproyeccion}">
+              <span>S/</span> <span >${formato_miles(val.monto)}</span> 
+            </div> 
+            <input type="text" id="" class="hidden input_p_${val.idproyeccion} input_dp_${val.idproyeccion}_${indice+1} w-100 ${input_no_border} input_miles" ${input_readonly} value="${val.monto}" onkeyup="delay(function(){calc_total_proyeccion(${val.idproyeccion}, ${indice+1})}, 100 );">
+          </td> 
+          <td class="py-1">
+            <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_${indice+1} " onclick="add_tr_sub_detalle(${val.idproyeccion},${indice+1}, ${val.sub_detalle.length})" data-toggle="tooltip" data-original-title="Agregar Sub-Item" ><i class="fas fa-plus"></i> </button>
+            <button type="button" class="btn btn-xs bg-gradient-danger btn-delete-sdp hidden" onclick="remove_tr_detalle(${val.idproyeccion},${indice+1},0)" data-toggle="tooltip" data-original-title="Eliminar Item"><i class="far fa-trash-alt"></i> </button>
+            <input type="hidden" name="" id="cant_sub_detalle_${idproyeccion}_${indice+1}" value="${val.sub_detalle.length}">
+          </td>
+        </tr>`);
+
+        total_proyeccion += parseFloat(val.monto);
+
+        val.sub_detalle.forEach((val2, indice2) => {
+          html_data = html_data.concat(`
+          <tr class="data_bloque_${indice+1} sub_detalle_tr_${indice+1} sub_${indice+1}_${indice2+1}">
+            <td class="py-1 text-center"></td>
+            <td class="py-1 text-right"> 
+              <span class="span_p_${val.idproyeccion}">${val2.nombre}</span> 
+              <input type="text" id="" class="hidden input_p_${val.idproyeccion} w-75 float-right " value="${val2.nombre}">
+            </td>                                                            
+            <td class="py-1">
+              <div class="formato-numero-conta span_p_${val.idproyeccion}">
+                <span>S/</span>${formato_miles(val2.monto)}
+              </div> 
+              <input type="text" id="" class="hidden input_p_${val.idproyeccion} w-100 input_sdp_${val.idproyeccion}_${indice+1}_${indice2+1} input_miles" value="${val2.monto}" onkeyup="delay(function(){calc_total_proyeccion(${val.idproyeccion}, ${indice+1})}, 100 );">
+            </td> 
+            <td class="py-1"> </td> 
+            <td class="py-1">
+              <button type="button" class="btn bg-gradient-danger btn-xs btn-delete-sdp hidden" onclick="remove_tr_sub_detalle(${val.idproyeccion},${indice+1}, ${indice2+1})" data-toggle="tooltip" data-original-title="Eliminar Sub-Item" ><i class="far fa-trash-alt"></i> </button>
+            </td>
+          </tr>`);
+          // total_proyeccion += es_numero(val2.monto) == true ? parseFloat(val2.monto) : 0;
+        });
+      });
+
+      $(".fecha_pd").html(format_d_m_a(e.data.fecha)); 
+      $(".btn-add-detalle").addClass(`btn_th_${e.data.idproyeccion}`).attr('onclick', `add_tr_detalle(${e.data.idproyeccion}, ${e.data.detalle.length})`); 
+      $(".detalle_pd").html(e.data.descripcion);
+
+      // caja
+      $(".caja_pry").html(formato_miles(e.data.caja));
+      $(".input_caja_pry").val(e.data.caja);
+
+      $('.prestamo_credito_pry').html(formato_miles(e.data.prestamo_y_credito));
+      $('.gasto_actualizado_pry').html(formato_miles(e.data.gasto_de_modulos));
+      $('.valorizacion_cobrada_pry').html(formato_miles(e.data.valorizacion_cobrada.val_cobrada));     
+      $('.cant_cobradas_pry').html(e.data.valorizacion_cobrada.cant_val_cobrada);
+      $('.valorizacion_por_cobrar_pry').html(formato_miles(e.data.valorizacion_por_cobrada.val_por_cobrar));  
+      $('.cant_por_cobrar_pry').html(e.data.valorizacion_por_cobrada.cant_val_por_cobrar);
+      $('.garantia_pry').html(formato_miles(e.data.garantia));
+      $('.monto_obra_pry').html(formato_miles(e.data.monto_de_obra));
+      
+      $(".tbody_proyeccion").html(html_data);
+      $("#cant_detalle").val(e.data.detalle.length);
+      $(".gasto_proyectado").html(formato_miles(total_proyeccion)); 
+      // Formato miles - input
+      formato_miles_input(`.input_miles`);      
+      // acticar tooltip
+      $('[data-toggle="tooltip"]').tooltip();
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function calc_total_proyeccion(idproyeccion, cont ='0') {
+
+  var cant_detalle_class = $(`.data_${idproyeccion}`).toArray().length; 
+  var cant_detalle = $(`#cant_detalle`).val(); 
+  var total_detalle = 0;  
+
+  for (let index = 1; index <= cant_detalle; index++) {
+
+    var total_subdetalle = 0;
+
+    var cant_sub_detalle_class = $(`.data_bloque_${index}`).toArray().length == 0 ? 0 : $(`.data_bloque_${index}`).toArray().length - 1;
+    var cant_sub_detalle = $(`#cant_sub_detalle_${idproyeccion}_${index}`).val(); 
+    console.log(`${index}. cant: ${cant_detalle} ${cant_sub_detalle}`);
+
+    for (let index2 = 1; index2 <= cant_sub_detalle; index2++) {
+      var input_subdetalle = es_numero(quitar_formato_miles($(`.input_sdp_${idproyeccion}_${index}_${index2}`).val())) == true ? parseFloat(quitar_formato_miles($(`.input_sdp_${idproyeccion}_${index}_${index2}`).val())) : 0 ;
+      console.log(`subtotal: ${index2} - ${index} = ` + input_subdetalle);  
+      total_subdetalle += input_subdetalle;
+    }
+
+    if (cant_sub_detalle > 0) {
+      $(`.input_dp_${idproyeccion}_${index}`).val(formato_miles(total_subdetalle));
+    }
+    
+    var input_detalle = es_numero(quitar_formato_miles( $(`.input_dp_${idproyeccion}_${index}`).val())) == true ? parseFloat(quitar_formato_miles($(`.input_dp_${idproyeccion}_${index}`).val())) : 0 ;
+    console.log(`total: ${idproyeccion} - ${index} = ` + input_detalle);  
+    total_detalle += input_detalle;
+    console.log(`acumulado: ${total_detalle}`);
+  }
+  //console.log(total_detalle);
+  //console.log(total_subdetalle);
+  $(".gasto_proyectado").html(formato_miles(total_detalle)); 
+  $(".tooltip").remove();
+}
+
+function guardar_y_editar_detalle_proyeccion(idproyeccion) {
   Swal.fire({
-    title: "¿Está Seguro de ANULAR el pago?",
-    text: "Al anularlo este pago, el monto NO se contara como un deposito realizado.",
+    title: "¿Está seguro que deseas guardar esta proyeccion?",
+    html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Si, desactivar!",
+    confirmButtonText: "Si, Guardar!",
+    preConfirm: (input) => {
+      return fetch("../ajax/compra_insumos.php?op=guardaryeditarcompra", {
+        method: 'POST', // or 'PUT'
+        body: formData, // data can be `string` or {object}!        
+      }).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+    },
+    showLoaderOnConfirm: true,
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/pago_administrador.php?op=desactivar_pago_x_mes", { 'idpagos_x_mes_administrador': id }, function (e) {
+      if (result.value.status == true){        
+        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
 
-        if (e == "ok") {
-          listar_tbla_principal(localStorage.getItem('nube_idproyecto')); 
-          reload_table_pagos_x_mes(id_fechas_mes);
-          Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
-        } else {
-          Swal.fire("Error!", e, "error");
-        }        
-      });      
+        tabla_compra_insumo.ajax.reload(null, false);
+        tabla_compra_x_proveedor.ajax.reload(null, false);
+
+        limpiar_form_compra(); regresar();
+        
+        $("#modal-agregar-usuario").modal("hide");        
+      } else {
+        ver_errores(result.value);
+      }      
     }
   });  
 }
 
-function activar_pago_x_mes(id) {
-
-  var id_fechas_mes = $('#idfechas_mes_pagos_administrador_pxm').val();
-
-  Swal.fire({
-    title: "¿Está Seguro de ReActivar el pago?",
-    text: "Al ReActivarlo este pago, el monto contara como un deposito realizado.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#28a745",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Si, activar!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      $.post("../ajax/pago_administrador.php?op=activar_pago_x_mes", { 'idpagos_x_mes_administrador': id }, function (e) {
-
-        if (e == "ok") {
-          listar_tbla_principal(localStorage.getItem('nube_idproyecto')); 
-          reload_table_pagos_x_mes(id_fechas_mes);
-          Swal.fire("ReActivado!", "Tu registro ha sido ReActivado.", "success");
-        } else {
-          Swal.fire("Error!", e, "error");
-        }        
-      });      
-    }
-  });
-}
+// ══════════════════════════════════════ S U B   D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════ 
 
 init();
 
@@ -367,30 +623,39 @@ function show_hide_tr(tr, sub_tr) {
 }
 
 function add_tr_detalle(id_all, count) {
-  $(`.detalle_tbody_${id_all}`).append(`
-  <tr class="data_${id_all} data_bloque_${count + 1} detalle_tr_${count + 1} sub_${count + 1}_0 ultimo_${count + 1}">
+  $(`.tbody_proyeccion`).append(`
+  <tr class="data_${id_all} data_bloque_${count + 1} detalle_tr_${count + 1} sub_${count + 1}_0 0 ultimo_${count + 1}">
     <td class="py-1 text-center detalle_td_num_${count + 1}" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_${count + 1}','.sub_detalle_tr_${count + 1}')}, 200 );">${count + 1}</td>
     <td class="py-1">
-      <span class="span_p_1"></span> 
-      <input type="text" id="" class="hidden input_p_1 w-100" value="">
+      <span class="span_p_${id_all}"></span> 
+      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="">
     </td>
-    <td class="py-1">
-    </td>                           
+    <td class="py-1"> </td>                           
     <td class="py-1">
       <div class="formato-numero-conta span_p_${id_all}">
-        <span>S/</span> <span >100</span> 
+        <span>S/</span> <span >0.00</span> 
       </div> 
-      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="100">
+      <input type="text" id="" class="hidden input_p_${id_all} input_dp_${id_all}_${count} w-100 input_miles" value="0.00" onkeyup="delay(function(){calc_total_proyeccion(${id_all}, ${count})}, 100 );">
     </td> 
     <td class="py-1">
-      <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_${count + 1} " onclick="add_tr_sub_detalle(${id_all}, ${count + 1}, 0)" ><i class="fas fa-plus"></i> </button>
-      <button type="button" class="btn btn-xs bg-gradient-danger "onclick="remove_tr_detalle(${id_all}, ${count + 1},0)" ><i class="far fa-trash-alt"></i> </button>
+      <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_${count + 1} " onclick="add_tr_sub_detalle(${id_all}, ${count + 1}, 0)" data-toggle="tooltip" data-original-title="Agregar Item" ><i class="fas fa-plus"></i> </button>
+      <button type="button" class="btn btn-xs bg-gradient-danger btn-delete-sdp" onclick="remove_tr_detalle(${id_all}, ${count + 1},0)" data-toggle="tooltip" data-original-title="Eliminar Item" ><i class="far fa-trash-alt"></i> </button>
+      <input type="hidden" name="" id="cant_sub_detalle_${id_all}_${count}">
     </td>
   </tr>
   <!-- /.tr -->
   `);
   $(`.btn_th_${id_all}`).attr('onclick', `add_tr_detalle(${id_all}, ${count + 1})`);
   show_hide_span_input_p(2, id_all);
+
+  // Formato miles - input
+  formato_miles_input(`.input_miles`);
+  // mensaje ok
+  toastr_success('Item agregado', 'Se agrego un nueva fila', 700);
+  // removemos la ultima clase ||  agregamos la catidad de SUBDETALLES
+  $("#cant_detalle").val(count + 1);
+  $(".tooltip").remove();
+  $('[data-toggle="tooltip"]').tooltip();
 }
 
 function add_tr_sub_detalle(id_all, id, count) {  
@@ -400,30 +665,44 @@ function add_tr_sub_detalle(id_all, id, count) {
     <td class="py-1 text-center"></td>
     <td class="py-1 text-right">
       <span class="span_p_${id_all}"></span> 
-      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="">
+      <input type="text" id="" class="hidden input_p_${id_all} w-75 float-right" value="">
     </td>                                                            
     <td class="py-1">
       <div class="formato-numero-conta span_p_${id_all}">
         <span>S/</span>0.00
       </div> 
-      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="0.00">
+      <input type="text" id="" class="hidden input_p_${id_all} w-100 input_sdp_${id_all}_${id}_${count + 1} input_miles" value="0.00" onkeyup="delay(function(){calc_total_proyeccion(${id_all}, ${id})}, 100 );" >
     </td> 
     <td class="py-1"> </td> 
     <td class="py-1">
-      <button type="button" class="btn btn-xs bg-gradient-danger " onclick="remove_tr_sub_detalle(${id_all},${id}, ${count + 1})" ><i class="far fa-trash-alt"></i> </button>
+      <button type="button" class="btn btn-xs bg-gradient-danger btn-delete-sdp" onclick="remove_tr_sub_detalle(${id_all},${id}, ${count + 1})" data-toggle="tooltip" data-original-title="Eliminar Sub-Item" ><i class="far fa-trash-alt"></i> </button>
     </td>
   </tr>
   ` );
 
+  // removemos la clase: ultimo_
   $(`.detalle_tr_${id}`).removeClass(`ultimo_${id}`);
   $(`.sub_${id}_${count}`).removeClass(`ultimo_${id}`);
-  var cant = $(`.sub_detalle_tr_${id}`).toArray().length; console.log(cant);
+  var cant = $(`.sub_detalle_tr_${id}`).toArray().length; //console.log(cant);
   if (cant > 0) {
+    // Agregamos icono
     $(`.detalle_td_num_${id}`).html(`<i class="expandable-table-caret fas fa-caret-right fa-fw"></i> ${id}`).attr('aria-expanded','true');
+    // agregamos readonly
+    $(`.input_dp_${id_all}_${id}`).attr('readonly', 'readonly').addClass('input-no-border-center-bold');
   }
 
+  // Formato miles - input
+  formato_miles_input(`.input_miles`);
+  // mensaje ok
+  toastr_success('Sub-Item agregado', 'Se agrego un nueva fila', 700);
+  // removemos la ultima clase || agregamos la catidad de SUBDETALLES
+  $(`#cant_sub_detalle_${id_all}_${id}`).val(count + 1);
+
+  // actualizamos la funcion
   $(`.detalle_btn_${id}`).attr('onclick', `add_tr_sub_detalle(${id_all},${id}, ${count + 1})`);
-  show_hide_span_input_p(2, id);
+  show_hide_span_input_p(2, id_all);
+  $(".tooltip").remove();
+  $('[data-toggle="tooltip"]').tooltip();
 }
 
 function remove_tr_detalle(id_all, id, count) {
@@ -435,6 +714,8 @@ function remove_tr_detalle(id_all, id, count) {
   if (cant == 0) {  
     $(`.btn_th_${id_all}`).attr('onclick', `add_tr_detalle(${id_all}, 0)`);
   }
+  calc_total_proyeccion(id_all, id);  
+  toastr_warning('Item REMOVIDO', 'Se removio la fila.', 7000);
 }
 
 function remove_tr_sub_detalle( id_all, id, count) {
@@ -445,11 +726,15 @@ function remove_tr_sub_detalle( id_all, id, count) {
   $(`.sub_${id}_${count}`).remove();
 
   // extraemos la cantidad de SUB-DETALLES
-  var cant = $(`.sub_detalle_tr_${id}`).toArray().length; console.log(cant);
+  var cant = $(`.sub_detalle_tr_${id}`).toArray().length; //console.log(cant);
   // si es 0 reiniciamos el ultimo
   if (cant == 0) {  
     $(`.detalle_btn_${id}`).attr('onclick', `add_tr_sub_detalle(${id_all}, ${id}, 0)`);
     $(`.detalle_tr_${id}`).addClass(`ultimo_${id}`);
     $(`.detalle_td_num_${id}`).html(`${id}`);
+    $(`.input_dp_${id_all}_${id}`).removeAttr('readonly').removeClass('input-no-border-center-bold');
   }
+  calc_total_proyeccion(id_all, id);
+  toastr_warning('Sub-Item REMOVIDO', 'Se removio la fila.', 700);
 }
+

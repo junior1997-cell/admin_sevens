@@ -430,12 +430,12 @@ function toastr_success(titulo = "Éxito!!", mensaje = "Acción ejecutada con é
 
 function toastr_info(titulo = "Informa!!", mensaje = "Verificar esta accion.", timer_duration = 700) {
   // console.log(titulo, mensaje, timer_duration );
-  toastr.info( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
+  toastr.info( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut", iconClass:"toast-info toast-text-black" });
 }
 
 function toastr_warning(titulo = "Alerta!!", mensaje = "Verificar esta accion.", timer_duration = 700) {
   // console.log(titulo, mensaje, timer_duration );
-  toastr.warning( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
+  toastr.warning( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut", iconClass:"toast-warning toast-text-black" });
 }
 
 /*  ══════════════════════════════════════════ - E R R O R E S - ══════════════════════════════════════════ */

@@ -637,15 +637,15 @@ table th { vertical-align: top !important; }
 
 /*  ═══════════════════════════════════ - P A R P A D E A N T E    M U L T I C O L O R    C O L O R - ═══════════════════════════════════ */
 
-@keyframes animacion{
-  0% {background-color: #17a2b8;} /*Amarillo*/
-  25% {background-color: #15c3df;} /*Naranja*/
-  50% {background-color: #17cce9;} /*Negro*/
-  75% {background-color: #0fdafb;} /*Otra vez naranja*/
-  100% {background-color: #17a2b8;} /*Otra vez amarillo*/
+@keyframes animacion_parpadeante{
+  0% {background-color: #17a2b8;} /*0*/
+  25% {background-color: #15c3df;} /*25*/
+  50% {background-color: #17cce9;} /*50*/
+  75% {background-color: #0fdafb;} /*75*/
+  100% {background-color: #17a2b8;} /*100*/
 }
-.parpadeante_color_17a2b8 {
-  animation-name: animacion;
+.background_parpadeante_17a2b8 {
+  animation-name: animacion_parpadeante;
   animation-duration: 4s;
   animation-iteration-count: infinite;
 }
@@ -655,6 +655,17 @@ table th { vertical-align: top !important; }
 .input-no-border{
   border: none !important; 
   text-align: center !important;
+}
+
+.input-no-border-center{
+  border: none !important; 
+  text-align: center !important;
+}
+
+.input-no-border-center-bold{
+  border: none !important; 
+  text-align: center !important;
+  font-weight: bold !important;
 }
 
 .input-valido{
@@ -696,6 +707,11 @@ table th { vertical-align: top !important; }
 .jq_image_zoom img::selection { background-color: transparent; }
 .jq_image_zoom img:hover { cursor: url(../../plugins/jquery-zoom/grab.cur), default; }
 .jq_image_zoom img:active { cursor: url(../../plugins/jquery-zoom/grabbed.cur), default; }
+
+
+/*  ══════════════════════════════════════════ - T O A S T - ══════════════════════════════════════════ */
+/* this will set the toastr style */
+.toast-text-black { color: black !important; }
 
 /*  ══════════════════════════════════════════ - O T R O S - ══════════════════════════════════════════ */
 .hidden{ display: none; }

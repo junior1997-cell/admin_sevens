@@ -361,26 +361,6 @@ function eliminar_item(idproducto, nombre) {
 }
 
 // :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
-//Función limpiar
-function limpiar_form_concreto() {
-
-  $("#guardar_registro_items").html('Guardar Cambios').removeClass('disabled');
-  
-  $("#idconcreto_agregado").val("");  
-  $("#idproveedor").val("").val("null").trigger("change");
-  $('#fecha').val("");
-  $("#nombre_dia").val("");
-  $("#calidad").val("");
-  $("#cantidad").val("");
-  $("#precio_unitario").val("");
-  $("#total").val("");
-  $("#descripcion_concreto").val("");
-
-  // Limpiamos las validaciones
-  $(".form-control").removeClass('is-valid');
-  $(".form-control").removeClass('is-invalid');
-  $(".error.invalid-feedback").remove();
-}
 
 function lista_de_items(idproyecto) { 
 
@@ -413,6 +393,27 @@ function lista_de_items(idproyecto) {
       ver_errores(e);
     }
   }).fail( function(e) { ver_errores(e); } );
+}
+
+//Función limpiar
+function limpiar_form_concreto() {
+
+  $("#guardar_registro_items").html('Guardar Cambios').removeClass('disabled');
+  
+  $("#idconcreto_agregado").val("");  
+  $("#idproveedor").val("").val("null").trigger("change");
+  $('#fecha').val("");
+  $("#nombre_dia").val("");
+  $("#calidad").val("");
+  $("#cantidad").val("");
+  $("#precio_unitario").val("");
+  $("#total").val("");
+  $("#descripcion_concreto").val("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
 }
 
 //Función Listar

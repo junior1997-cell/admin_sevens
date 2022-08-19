@@ -59,31 +59,6 @@ class EstadoFinanciero
      
   }
 
-  //Implementar un método para listar los registros
-  public function tbla_principal() {
-    $sql = "SELECT
-			p.idproducto as idproducto,
-			p.idunidad_medida as idunidad_medida,
-			p.idcolor as idcolor,
-			p.nombre as nombre,
-			p.marca as marca,
-			p.descripcion as descripcion,
-			p.imagen as imagen,
-			p.estado_igv as estado_igv,
-			p.precio_unitario as precio_unitario,
-			p.precio_igv as precio_igv,
-			p.precio_sin_igv as precio_sin_igv,
-			p.precio_total as precio_total,
-			p.ficha_tecnica as ficha_tecnica,
-			p.estado as estado,
-			c.nombre_color as nombre_color,
-			um.nombre_medida as nombre_medida
-			FROM producto p, unidad_medida as um, color as c  
-			WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor AND idcategoria_insumos_af = '1' 
-			AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC";
-    return ejecutarConsulta($sql);
-  }
-
   // ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
   public function insertar_proyecciones($idproyecto_p, $fecha_p, $caja_p, $descripcion_p)  {
     $sql = "INSERT INTO proyeccion( idproyecto, fecha, caja, descripcion) 
@@ -99,23 +74,109 @@ class EstadoFinanciero
   }
 
   //Implementamos un método para activar categorías
-  public function eliminar($idproducto) {
-    $sql = "UPDATE producto SET estado_delete='0' WHERE idproducto ='$idproducto'";
-    return ejecutarConsulta($sql);
+  public function listar_fechas_proyeccion($idproyecto) {
+    $sql = "SELECT * FROM proyeccion WHERE idproyecto ='$idproyecto' AND estado='1' AND estado_delete='1' ORDER BY fecha ASC ";
+    return ejecutarConsultaArray($sql);
   }
 
-  //Implementamos un método para desactivar categorías
-  public function desactivar($idproducto) {
-    $sql = "UPDATE producto SET estado='0' WHERE idproducto ='$idproducto'";
+  //Implementamos un método para activar categorías
+  public function tbla_principal_fecha_proyeccion($idproyecto) {
+    $sql = "SELECT * FROM proyeccion WHERE idproyecto ='$idproyecto' AND estado='1' AND estado_delete='1' ORDER BY fecha ASC ";
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para activar categorías
-  public function activar($idproducto) {
-    $sql = "UPDATE producto SET estado='1' WHERE idproducto ='$idproducto'";
+  public function mostrar_fecha_proyeccion($idproyecto) {
+    $sql = "SELECT * FROM proyeccion WHERE idproyeccion ='$idproyecto'";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  //Implementamos un método para activar categorías
+  public function eliminar_fechas_proyeccion($idproyeccion) {
+    $sql = "UPDATE proyeccion SET estado_delete='0' WHERE idproyeccion ='$idproyeccion'";
     return ejecutarConsulta($sql);
   }
+
+  //Implementamos un método para desactivar categorías
+  public function desactivar_fechas_proyeccion($idproyeccion) {
+    $sql = "UPDATE proyeccion SET estado='0' WHERE idproyeccion ='$idproyeccion'";
+    return ejecutarConsulta($sql);
+  }
+
+  //Implementamos un método para activar categorías
+  public function activar($idproyeccion) {
+    $sql = "UPDATE proyeccion SET estado='1' WHERE idproyeccion ='$idproyeccion'";
+    return ejecutarConsulta($sql);
+  }
+
+  // ══════════════════════════════════════ D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════ 
+  //Implementamos un método para activar categorías
+  public function tbla_principal_detalle_proyeccion($id_proyecto, $idproyeccion) {
+
+    $data = []; $data_detalle = [];
+
+    $sql_1 = "SELECT * FROM proyeccion WHERE idproyeccion ='$idproyeccion'";
+    $proyeccion = ejecutarConsultaSimpleFila($sql_1);
+    if ($proyeccion['status'] == false) { return $proyeccion; }
+
+    $sql_2 = "SELECT dp.iddetalle_proyeccion, dp.idproyeccion, dp.nombre, dp.monto
+    FROM detalle_proyeccion as dp , proyeccion as p
+    WHERE dp.idproyeccion = p.idproyeccion AND dp.idproyeccion = '$idproyeccion' AND dp.estado ='1' AND dp.estado_delete ='1';";
+    $detalle = ejecutarConsultaArray($sql_2);
+    if ($detalle['status'] == false) { return $detalle; }
+
+    foreach ($detalle['data'] as $key => $value) {
+      $id = $value['iddetalle_proyeccion'];
+      $sql_3 = "SELECT idsub_detalle_proyeccion, iddetalle_proyeccion, nombre, monto FROM sub_detalle_proyeccion WHERE iddetalle_proyeccion = '$id' AND estado ='1' AND estado_delete ='1'";
+      $sub_detalle = ejecutarConsultaArray($sql_3);
+      if ($sub_detalle['status'] == false) { return $sub_detalle; }
+
+      $data_detalle[] = array(
+        'iddetalle_proyeccion'=> $value['iddetalle_proyeccion'],
+        'idproyeccion'        => $value['idproyeccion'],
+        'nombre_proyeccion'   => $value['nombre'],
+        'monto'               =>  (empty($value['monto']) ? 0 :  floatval($value['monto']) ),
+        'sub_detalle'         => $sub_detalle['data'],
+      );
+    }
+
+    $prestamo = deuda_prestamo($id_proyecto) ;
+    $credito =  deuda_credito($id_proyecto);
+
+    $gasto_de_modulos = suma_totales_modulos($id_proyecto, '', '');
+
+    $valorizacion_cobrada = valorizacion_cobrada($id_proyecto);
+    $valorizacion_por_cobrada = valorizacion_por_cobrar($id_proyecto);
+
+    $garantia = garantia($id_proyecto);
+
+    $monto_de_obra = garantia_y_costo_proyecto($id_proyecto, 'costo');
+
+    $data = array(
+      'idproyeccion'              => $proyeccion['data']['idproyeccion'],
+      'idproyecto'                => $proyeccion['data']['idproyecto'],      
+      'fecha'                     => $proyeccion['data']['fecha'],
+      'caja'                      => $proyeccion['data']['caja'],
+      'descripcion'               => $proyeccion['data']['descripcion'],
+      
+      'detalle'                   => $data_detalle,
+
+      'prestamo_y_credito'        => ($prestamo + $credito),
+      'gasto_de_modulos'          => $gasto_de_modulos,
+      'valorizacion_cobrada'      => $valorizacion_cobrada,
+      'valorizacion_por_cobrada'  => $valorizacion_por_cobrada ,
+      'garantia'                  => $garantia,
+      'monto_de_obra'             => $monto_de_obra
+    );
+
+    return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data  ] ;
+
+  }
+  // ══════════════════════════════════════ S U B   D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════
+
 }
+
+// ══════════════════════════════════════ SUMAS ══════════════════════════════════════
 
 function deuda_prestamo($id_proyecto){
   $sql_1 = "SELECT SUM(monto) AS gasto FROM prestamo 

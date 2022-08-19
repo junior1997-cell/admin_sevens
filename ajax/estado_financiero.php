@@ -18,6 +18,8 @@
       date_default_timezone_set('America/Lima');
       $date_now = date("d-m-Y h.i.s A");
 
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
       //  ESTADO FINANCIERO
       $idproyecto           = isset($_GET["nube_idproyecto"]) ? limpiarCadena($_GET["nube_idproyecto"]) : "";
       $idestado_financiero  = isset($_GET["idestado_financiero"]) ? limpiarCadena($_GET["idestado_financiero"]) : "";
@@ -58,46 +60,42 @@
 
         break;
     
-        case 'tbla_principal':
-          $rspta = $estadofinanciero->tbla_principal();
+        // ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
+
+        case 'listar_fechas_proyeccion':
+
+          $rspta = $estadofinanciero->listar_fechas_proyeccion( $_POST["idproyecto"] );
+
+          echo json_encode( $rspta, true) ;
+
+        break;   
+
+        case 'mostrar_fecha_proyeccion':
+
+          $rspta = $estadofinanciero->mostrar_fecha_proyeccion($_POST["idproyeccion"]);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+
+        break;
+
+        case 'tbla_principal_fecha_proyeccion':
+          $rspta = $estadofinanciero->tbla_principal_fecha_proyeccion($_GET["idproyecto"]);
           //Vamos a declarar un array
-          $data = [];
-          $imagen_error = "this.src='../dist/svg/404-v2.svg'";
-          $cont=1;
-          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+          $data = [];  $cont=1;
+          
 
           if ($rspta['status'] == true) {
-            while ($reg = $rspta['data']->fetch_object()) {
-
-              $imagen = (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen) ;
-              
-              $ficha_tecnica = empty($reg->ficha_tecnica) ? ( '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ( '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
-              
-              $monto_igv = (empty($reg->precio_igv) ?  '-' :  $reg->precio_igv);
+            while ($reg = $rspta['data']->fetch_object()) {          
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idproducto .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'. 
-                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idproducto.')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>' : 
-                '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>',
-                "2" =>
-                  '<div class="user-block">
-                    <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg->nombre).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
-                    <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
-                    <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
-                  </div>',
-                "3" => $reg->nombre_medida,
-                "4" => $reg->marca,
-                "5" =>'S/ '. number_format($reg->precio_unitario, 2, '.', ','),
-                "6" =>'S/ '.number_format($reg->precio_sin_igv, 2, '.', ','),
-                "7" =>'S/ '. number_format($monto_igv, 2, '.', ','),
-                "8" =>'S/ '.number_format($reg->precio_total, 2, '.', ','),
-                "9" => $ficha_tecnica,
-                "10" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
-                "11" => $reg->nombre,
-                "12" => $reg->nombre_color,
-                "13" => $reg->descripcion,
+                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_fecha_proyeccion(' . $reg->idproyeccion . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_fechas_proyeccion(' . $reg->idproyeccion .', \''.encodeCadenaHtml(date("d/m/Y", strtotime($reg->fecha)) . ' | ' . number_format($reg->caja, 2, '.', ',')).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
+                '<button class="btn btn-warning btn-sm" onclick="mostrar_fecha_proyeccion(' . $reg->idproyeccion . ')"><i class="fa fa-pencil-alt"></i></button>',
+                "2" => $reg->fecha,
+                "3" => $reg->caja,
+                "4" =>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "5" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
               ];
             }
   
@@ -115,8 +113,6 @@
           
         break;
 
-        // ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
-
         case 'guardar_y_editar_proyecciones':
           
           if (empty($idproyeccion_p)) {
@@ -133,21 +129,30 @@
           }
         break;  
 
-        case 'desactivar':
+        case 'desactivar_fechas_proyeccion':
 
-          $rspta = $estadofinanciero->desactivar( $_GET["id_tabla"] );
+          $rspta = $estadofinanciero->desactivar_fechas_proyeccion( $_GET["id_tabla"] );
 
           echo json_encode( $rspta, true) ;
 
         break;      
 
-        case 'eliminar':
+        case 'eliminar_fechas_proyeccion':
 
-          $rspta = $estadofinanciero->eliminar( $_GET["id_tabla"] );
+          $rspta = $estadofinanciero->eliminar_fechas_proyeccion( $_GET["id_tabla"] );
 
           echo json_encode( $rspta, true) ;
 
         break;
+
+        // ══════════════════════════════════════ D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════ 
+        case 'tbla_principal_detalle_proyeccion':
+          $rspta = $estadofinanciero->tbla_principal_detalle_proyeccion($_POST["idproyecto"],$_POST["idproyeccion"]);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+          
+        break;
+        // ══════════════════════════════════════ S U B   D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════
 
         case 'salir':
           //Limpiamos las variables de sesión
