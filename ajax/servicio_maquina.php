@@ -140,7 +140,7 @@
 
               $data[] = [
                 "0" => $cont++,
-                "1" => ' <button class="btn btn-info btn-sm" onclick="listar_detalle(' . $unidad_medida . '); show_hide_filtro(); mostrar_form_table(2);"><i class="far fa-eye"></i></button>',
+                "1" => ' <button class="btn btn-info btn-sm" onclick="listar_detalle(' . $unidad_medida . '); mostrar_form_table(2); show_hide_filtro();"><i class="far fa-eye"></i></button>',
                 "2" =>'<div class="user-block">
                         <span class="username" style="margin-left: 0px !important;"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >' .$reg['maquina'] .'</p></span>
                         <span class="description" style="margin-left: 0px !important;">' .$reg['codigo_maquina'].' </span>
@@ -150,12 +150,12 @@
                 "5" => $reg['cantidad_veces'],
                 "6" =>'S/ '. number_format($reg['costo_parcial'], 2, '.', ','),
                 "7" =>'<div class="text-center text-nowrap"> 
-                        <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos .'); show_hide_filtro(); mostrar_form_table(3);"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
+                        <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos .'); mostrar_form_table(3); show_hide_filtro();"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
                         '<button style="font-size: 14px;" class="btn btn-' .$c .' btn-xs">' .number_format($reg['total_pagos'], 2, '.', ',') .'</button> 
                       </div>',
                 "8" => number_format($reg['saldo'], 2, '.', ','),
                 "9" =>'<div class="text-center text-nowrap">
-                        <button class="btn btn-' .$cc .' btn-sm" onclick="listar_facturas(' .$unidad_medida .'); show_hide_filtro(); mostrar_form_table(4);"><i class="fas fa-file-invoice fa-lg btn-' .$cc .' nav-icon"></i></button> ' .
+                        <button class="btn btn-' .$cc .' btn-sm" onclick="listar_facturas(' .$unidad_medida .'); mostrar_form_table(4); show_hide_filtro();"><i class="fas fa-file-invoice fa-lg btn-' .$cc .' nav-icon"></i></button> ' .
                         ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($reg['total_comprob_fact'], 2, '.', ',') . '</button> 
                       </div>',
                 "10" => $estado,
@@ -185,16 +185,14 @@
 
             $rspta = $serviciomaquina->insertar($idproyecto, $maquinaria, $fecha_inicio, $fecha_fin, $horometro_inicial, $horometro_final, $horas, $costo_unitario,
               $costo_adicional, $costo_parcial, $unidad_m, $dias, $mes, $descripcion, $cantidad );
-            echo json_encode($rspta,true);
+            echo json_encode($rspta);
 
           } else {
 
             $rspta = $serviciomaquina->editar( $idservicio, $idproyecto, $maquinaria, $fecha_inicio, $fecha_fin, $horometro_inicial, $horometro_final, $horas, 
-            $costo_unitario, $costo_adicional, $costo_parcial, $unidad_m, $dias, $mes, $descripcion,
-              $cantidad
-            );
+            $costo_unitario, $costo_adicional, $costo_parcial, $unidad_m, $dias, $mes, $descripcion, $cantidad );
 
-          echo json_encode($rspta,true);
+          echo json_encode($rspta);
           }
 
         break;

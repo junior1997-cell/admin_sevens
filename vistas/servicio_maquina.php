@@ -61,7 +61,7 @@
                                 <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="mostrar_form_table(1); limpiar(); "><i class="fas fa-plus-circle"></i> Agregar</button>
                                 Administra tus servicios.
                               </h3>
-                              <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="mostrar_form_table(5);"><i class="fas fa-arrow-left"></i> Regresar</button>
+                              <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="mostrar_form_table(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
                               <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();">
                                 <i class="fas fa-dollar-sign"></i> Agregar Pago
                               </button>
@@ -585,7 +585,7 @@
                                   <label for="id_maquinaria_pago">Maquinaria </label>
                                   <input type="hidden" name="id_maquinaria_pago" id="id_maquinaria_pago" class="form-control" placeholder="maquinaria" />
                                   <br />
-                                  <b class="clase_nomb_maq_benef" id="maquinaria_pago" style="font-size: 16px; color: red;"></b>
+                                  <b class="form-control-mejorado" id="maquinaria_pago" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
 
@@ -595,7 +595,7 @@
                                   <label for="beneficiario_pago">Beneficiario</label>
                                   <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
                                   <br />
-                                  <b class="clase_nomb_maq_benef" id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
+                                  <b class="form-control-mejorado" id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
                               <!--Forma de pago -->
@@ -820,7 +820,7 @@
                               <!-- Sub total -->
                               <div class="col-lg-3">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase">(GRAVADA)</small></label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                 </div>
                               </div>
@@ -828,7 +828,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calcula_igv_subt();"> 
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onchange="calcula_igv_subt();" onkeyup="calcula_igv_subt();"> 
                                   <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>
@@ -909,25 +909,6 @@
         </div>
         <!-- /.content-wrapper -->
         <?php require 'script.php'; ?>
-
-        <style>
-          .clase_nomb_maq_benef{
-            display: block;
-            width: 100%;
-            height: 100%;
-            padding: 0.375rem 0.75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #ced4da;
-            border-radius: 0.25rem;
-            box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-          }
-        </style>
 
         <script type="text/javascript" src="scripts/servicio_maquina.js"></script>
 

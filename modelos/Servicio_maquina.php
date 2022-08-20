@@ -307,15 +307,6 @@ class ServicioMaquina
   
   public function total_costo_parcial_pago($idmaquinaria, $idproyecto)
   {
-    // $filtro_fecha = ""; 
-
-    // if ( !empty($fecha_1) && !empty($fecha_2) ) {
-    //   $filtro_fecha = "AND ps.fecha_pago BETWEEN '$fecha_1' AND '$fecha_2'";
-    // } else if (!empty($fecha_1)) {      
-    //   $filtro_fecha = "AND ps.fecha_pago = '$fecha_1'";
-    // }else if (!empty($fecha_2)) {        
-    //   $filtro_fecha = "AND ps.fecha_pago = '$fecha_2'";
-    // }   
 
     $sql = "SELECT
 		SUM(s.costo_parcial) as costo_parcial  
@@ -335,7 +326,9 @@ class ServicioMaquina
 
   public function most_datos_prov_pago($idmaquinaria)
   {
-    $sql = "SELECT * FROM maquinaria as m, proveedor as p  WHERE m.idproveedor=p.idproveedor AND m.idmaquinaria='$idmaquinaria'";
+
+    $sql = "SELECT m.idmaquinaria,m.nombre,p.razon_social,p.titular_cuenta,p.idbancos, p.cuenta_bancaria, p.cuenta_detracciones
+    FROM maquinaria as m, proveedor as p  WHERE m.idproveedor=p.idproveedor AND m.idmaquinaria='$idmaquinaria'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
