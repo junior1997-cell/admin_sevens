@@ -13,7 +13,7 @@ function init() {
 
   $("#mLogisticaAdquisiciones").addClass("active");
 
-  $("#lMaquina").addClass("active bg-primary");
+  $("#lEquipo").addClass("active bg-primary");
 
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
@@ -532,6 +532,7 @@ function limpiar() {
 
 //Función total_costo_parcial_detalle
 function total_costo_parcial_detalle(idmaquinaria, idproyecto,fecha_i_r, fecha_f_r) {
+  console.log(idmaquinaria, idproyecto,fecha_i_r, fecha_f_r);
 
   $("#costo-parcial").html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
 
@@ -651,6 +652,7 @@ function mostrar(idservicio) {
 }
 
 function eliminar(idservicio, idmaquinaria, fecha_entreg, fecha_recojo) {
+
   var fecha="";
   if (fecha_recojo=="" || fecha_recojo==null) { fecha=fecha_entreg;}else{ fecha=fecha_entreg+' - '+fecha_recojo;}
 
@@ -751,6 +753,7 @@ function guardaryeditar_pago(e) {
 function listar_pagos(idmaquinaria,idproyecto,costo_parcial,monto,maquina,fecha_i,fecha_f) {
 
   idmaquinaria_r=idmaquinaria; idproyecto_r=idproyecto; costo_parcial_r=costo_parcial; monto_r=monto; maquina_r=maquina; fecha_i_r=fecha_i; fecha_f_r=fecha_f;
+  console.log('-------- '+fecha_i_r,fecha_f_r);
  
   var nombre_m_e = maquina==null || maquina=="" ? `<i class="fas fa-spinner fa-pulse fa-sm"></i>` : maquina;
 
@@ -1136,7 +1139,7 @@ function eliminar_pagos(idpago_servicio, idmaquinaria, numero_operacion) {
     `<b class="text-danger"><del> N° Operación-${numero_operacion} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto")); total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"),fecha_i_r,fecha_f_r); },
+    function(){ total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"),fecha_i_r,fecha_f_r); },
     function(){ if(tabla){tabla.ajax.reload(null, false);}; if(tabla3){tabla3.ajax.reload(null, false);}; if(tabladetrecc){ tabladetrecc.ajax.reload(null, false);}; },
     false, 
     false,

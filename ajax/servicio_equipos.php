@@ -89,7 +89,7 @@
 
           $c = ""; $nombre = ""; $icon = "";
           $cc = ""; $nombree = ""; $icons = "";
-          $fecha_i= "";  $fecha_f= "";  $proveedor= "";  $comprobante= ""; 
+          $fecha_i="";  $fecha_f=""; 
           $cont = 1;
 
           if ($rspta['status'] == true) {
@@ -151,7 +151,7 @@
                 "5" => $reg['cantidad_veces'],
                 "6" =>'S/ '. number_format($reg['costo_parcial'], 2, '.', ','),
                 "7" =>'<div class="text-center text-nowrap"> 
-                        <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos .'); mostrar_form_table(3); show_hide_filtro();"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
+                        <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos.'); mostrar_form_table(3); show_hide_filtro();"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
                         '<button style="font-size: 14px;" class="btn btn-' .$c .' btn-xs">' .number_format($reg['total_pagos'], 2, '.', ',') .'</button> 
                       </div>',
                 "8" => number_format($reg['saldo'], 2, '.', ','),
@@ -357,7 +357,7 @@
   
         case 'desactivar_pagos':
 
-          $rspta = $servicioequipos->desactivar_pagos($idpago_servicio);
+          $rspta = $servicioequipos->desactivar_pagos($_GET['id_tabla']);
           echo json_encode($rspta,true);
 
         break;
@@ -387,7 +387,7 @@
           $data = [];
           $suma = 0;
           $imagen = '';
-
+          $fecha_i="";  $fecha_f=""; 
           $cont = 1;
 
           if ($rspta['status'] == true) {
@@ -405,7 +405,7 @@
               $data[] = [
                 "0" => $cont++,
                 "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .$reg->idpago_servicio .',' .$reg->id_maquinaria .')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' .$reg->idpago_servicio .',' .$reg->id_maquinaria .',' . "'" . $reg->numero_operacion . "'" . ')"><i class="fas fa-skull-crossbones"></i></button>',
+                    ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' .$reg->idpago_servicio .',' .$reg->id_maquinaria .',' . "'" . $reg->numero_operacion . "'" . ',' . "'" . $fecha_i . "'" . ',' . "'" . $fecha_f . "'" . ' )"><i class="fas fa-skull-crossbones"></i></button>',
                 "2" => $reg->forma_pago,
                 "3" => '<div class="user-block">
                   <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
@@ -444,6 +444,7 @@
           $data = [];
           $suma = 0;
           $imagen = '';
+          $fecha_i="";  $fecha_f="";
           $cont = 1;
 
           if ($rspta['status'] == true) {
@@ -458,27 +459,9 @@
               $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
               $data[] = [
                 "0" => $cont++,
-                "1" => $reg->estado
-                  ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fas fa-skull-crossbones"></i></button>'
-                  : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fa fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fa fa-check"></i></button>',
+                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_servicio . ',' .$reg->id_maquinaria . ')"><i class="fas fa-pencil-alt"></i></button>' . 
+                    ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="fas fa-skull-crossbones"></i></button>',
+
                 "2" => $reg->forma_pago,
                 "3" => '<div class="user-block">
                   <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>

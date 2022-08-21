@@ -356,7 +356,7 @@
   
         case 'desactivar_pagos':
 
-          $rspta = $serviciomaquina->desactivar_pagos($idpago_servicio);
+          $rspta = $serviciomaquina->desactivar_pagos($_GET['id_tabla']);
           echo json_encode($rspta,true);
 
         break;
