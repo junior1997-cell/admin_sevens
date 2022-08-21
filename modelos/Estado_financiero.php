@@ -205,8 +205,26 @@ class EstadoFinanciero
       // Agregamos o Editamos la tabla DETALLE PROYECCION
       if (empty($value_det['iddetalle_proyeccion'])) {
         $sql_2 = "INSERT INTO detalle_proyeccion( idproyeccion, nombre, monto) VALUES ('$idproyeccion', '$nombre_det', '$total_det');";
-        $d_pry = ejecutarConsulta($sql_2);  
+        $d_pry = ejecutarConsulta_retornarID($sql_2);  
         if ($d_pry['status'] == false) {  return $d_pry;  } 
+
+        $id_detalle_proyeccion = $d_pry['data'];
+
+        foreach ($value_det['subdetalle'] as $key => $value_sub_det) {
+          $idsub_detalle_proyeccion = $value_sub_det['idsub_detalle_proyeccion'];
+          $nombre_sub_det           = $value_sub_det['nombre'];
+          $total_sub_det            = $value_sub_det['total'];
+  
+          // Agregamos o Editamos la tabla SUB-DETALLE PROYECCION
+          if ( empty($value_sub_det['idsub_detalle_proyeccion']) ) {
+            $sql_3 = "INSERT INTO sub_detalle_proyeccion( iddetalle_proyeccion, nombre, monto) VALUES ('$id_detalle_proyeccion','$nombre_sub_det','$total_sub_det');";
+            $sd_pry = ejecutarConsulta($sql_3);
+            if ($sd_pry['status'] == false) {  return $sd_pry;  } 
+          } else {           
+            return $retorno = ['status'=> 'error_ing_pool', 'user' => $_SESSION['nombre'], 'message' => 'Porfavor no modifique el codigo, sus datos personales como: IP, MAC sera registrados por su seguridad.', 'data' => [] ];
+          }        
+        }
+
       } else {
         // desactivamos TODOS los registros de: SUB-DETALLE PROYECCION
         $sql_0 = "UPDATE sub_detalle_proyeccion SET estado='0'  WHERE iddetalle_proyeccion ='$iddetalle_proyeccion';";
@@ -217,25 +235,27 @@ class EstadoFinanciero
         WHERE iddetalle_proyeccion ='$iddetalle_proyeccion';";
         $d_pry = ejecutarConsulta($sql_2);
         if ($d_pry['status'] == false) {  return $d_pry;  } 
+
+        foreach ($value_det['subdetalle'] as $key => $value_sub_det) {
+          $idsub_detalle_proyeccion = $value_sub_det['idsub_detalle_proyeccion'];
+          $nombre_sub_det           = $value_sub_det['nombre'];
+          $total_sub_det            = $value_sub_det['total'];
+  
+          // Agregamos o Editamos la tabla SUB-DETALLE PROYECCION
+          if ( empty($value_sub_det['idsub_detalle_proyeccion']) ) {
+            $sql_3 = "INSERT INTO sub_detalle_proyeccion( iddetalle_proyeccion, nombre, monto) VALUES ('$iddetalle_proyeccion','$nombre_sub_det','$total_sub_det');";
+            $sd_pry = ejecutarConsulta($sql_3);
+            if ($sd_pry['status'] == false) {  return $sd_pry;  } 
+          } else {
+            $sql_3 = "UPDATE sub_detalle_proyeccion SET iddetalle_proyeccion='$iddetalle_proyeccion', nombre='$nombre_sub_det', monto='$total_sub_det', estado='1' 
+            WHERE idsub_detalle_proyeccion ='$idsub_detalle_proyeccion';";
+            $sd_pry = ejecutarConsulta($sql_3);
+            if ($sd_pry['status'] == false) {  return $sd_pry;  } 
+          }        
+        }
       }  
       
-      foreach ($value_det['subdetalle'] as $key => $value_sub_det) {
-        $idsub_detalle_proyeccion = $value_sub_det['idsub_detalle_proyeccion'];
-        $nombre_sub_det           = $value_sub_det['nombre'];
-        $total_sub_det            = $value_sub_det['total'];
-
-        // Agregamos o Editamos la tabla SUB-DETALLE PROYECCION
-        if ( empty($value_sub_det['idsub_detalle_proyeccion']) ) {
-          $sql_3 = "INSERT INTO sub_detalle_proyeccion( iddetalle_proyeccion, nombre, monto) VALUES ('$iddetalle_proyeccion','$nombre_sub_det','$total_sub_det');";
-          $sd_pry = ejecutarConsulta($sql_3);
-          if ($sd_pry['status'] == false) {  return $sd_pry;  } 
-        } else {
-          $sql_3 = "UPDATE sub_detalle_proyeccion SET iddetalle_proyeccion='$iddetalle_proyeccion', nombre='$nombre_sub_det', monto='$total_sub_det', estado='1' 
-          WHERE idsub_detalle_proyeccion ='$idsub_detalle_proyeccion';";
-          $sd_pry = ejecutarConsulta($sql_3);
-          if ($sd_pry['status'] == false) {  return $sd_pry;  } 
-        }        
-      } 
+       
     }  
     return  (empty($sd_pry) ? $d_pry : $sd_pry );  
   }
