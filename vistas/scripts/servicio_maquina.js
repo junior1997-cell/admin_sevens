@@ -1113,7 +1113,7 @@ function eliminar_pagos(idpago_servicio, idmaquinaria, numero_operacion) {
     `<b class="text-danger"><del> N° Operación-${numero_operacion} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ total_costo_parcial_detalle(idmaquinaria, localStorage.getItem("nube_idproyecto")); total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"),fecha_i_r,fecha_f_r); },
+    function(){ total_pagos(idmaquinaria, localStorage.getItem("nube_idproyecto"),fecha_i_r,fecha_f_r); },
     function(){ if(tabla){tabla.ajax.reload(null, false);}; if(tabla3){tabla3.ajax.reload(null, false);}; if(tabladetrecc){ tabladetrecc.ajax.reload(null, false);}; },
     false, 
     false,
