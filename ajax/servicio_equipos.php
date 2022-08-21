@@ -474,6 +474,7 @@
                 "7" =>'S/ '. number_format($reg->monto, 2, '.', ','),
                 "8" => $imagen,
                 "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+             
               ];
             }
 

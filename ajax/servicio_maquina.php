@@ -457,27 +457,8 @@
               $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
               $data[] = [
                 "0" => $cont++,
-                "1" => $reg->estado
-                  ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fas fa-skull-crossbones"></i></button>'
-                  : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fa fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' .
-                    $reg->idpago_servicio .
-                    ',' .
-                    $reg->id_maquinaria .
-                    ')"><i class="fa fa-check"></i></button>',
+                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="fas fa-pencil-alt"></i></button>' .
+                    ' <button class="btn btn-danger btn-sm" onclick="eliminar_pagos(' . $reg->idpago_servicio . ',' . $reg->id_maquinaria . ')"><i class="fas fa-skull-crossbones"></i></button>',
                 "2" => $reg->forma_pago,
                 "3" => '<div class="user-block">
                   <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>

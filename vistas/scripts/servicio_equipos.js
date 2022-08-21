@@ -1266,7 +1266,12 @@ function listar_facturas(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,f
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,3,4,5,6,7,8], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+      {extend: "colvis"} ,
+    ],
     ajax: {
       url: `../ajax/servicio_equipos.php?op=listar_facturas&&idmaquinaria=${idmaquinaria}&idproyecto=${idproyecto}&fecha_i=${fecha_i_r}&fecha_f=${fecha_f_r}`,
       type: "get",   
