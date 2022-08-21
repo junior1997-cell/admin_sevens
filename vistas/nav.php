@@ -12,14 +12,15 @@
       <a href="#" data-toggle="modal" data-target="#modal-contacto-desarrollador" class="nav-link"><i class="fas fa-user-secret"></i> <p class="d-inline-block hide-max-width-1080px">Contacto</p></a>
     </li>
 
-    <li class="nav-item b-radio-10px font-size-18px font-weight-bold mr-1" style=" background-color: #8eff27;">
-      <a href="#" data-toggle="modal" data-target="#modal-ver-proyecto" class="nav-link" id="ver-proyecto"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </a>
+    <li class="nav-item b-radio-10px font-size-18px font-weight-bold mr-1" >
+      <button  data-toggle="modal" data-target="#modal-para-todos-los-modulos-proyecto" class="nav-link btn bg-color-8eff27 b-radio-10px text-bold" id="ver-proyecto" onclick="tbla_principal_para_todos_los_modulos(3);"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </button>
     </li>
 
     <li class="nav-item d-none  d-md-inline-block b-radio-10px font-size-18px font-weight-bold bg-warning" >
       <a href="#" data-toggle="modal" data-target="#modal-ver---" class="nav-link" id="ver-sesion"><i class="fas fa-spinner fa-pulse "></i> </a>
     </li>
   </ul>
+  <!-- <button></button> -->
 
   <!-- Right navbar links -->
   <ul class="navbar-nav ml-auto">

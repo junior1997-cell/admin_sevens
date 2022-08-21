@@ -1,14 +1,14 @@
 var tabla; var tabla2; 
 
-tablero(); 
-box_proyecto(); 
-
 //Función que se ejecuta al inicio
 function init(){  
 
   $('#mEscritorio').addClass("active");  
 
-  tbla_principal(1, 'shadow-0px-05rem-1rem-rgb-255-193-7', '.box-proceso'); 
+  tbla_principal(1, 'shadow-0px-05rem-1rem-rgb-255-193-7', '.box-proceso');
+
+  tablero(); 
+  box_proyecto();
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });   
 
@@ -396,7 +396,7 @@ function empezar_proyecto(idproyecto, nombre_proyecto ) {
     `<b class="text-success">${nombre_proyecto}</b> <br> Tendras acceso a agregar o editar: provedores, trabajadores!`, 
     'Si, Empezar!',
     function(){ Swal.fire("En curso!", "Tu proyecto esta en curso.", "success"); },
-    function(){ tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);}
+    function(){ tabla.ajax.reload(null, false);  box_proyecto();}
   );  
 }
 
@@ -410,7 +410,7 @@ function terminar_proyecto(idproyecto, nombre_proyecto) {
     `<b class="text-danger"><del>${nombre_proyecto}</del></b> <br> No tendras acceso a editar o agregar: proveedores o trabajadores!`, 
     'Si, Terminar!',
     function(){ Swal.fire("Terminado!", "Tu Proyecto ha sido terminado.", "success"); },
-    function(){ tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);}
+    function(){ tabla.ajax.reload(null, false);  box_proyecto();}
   );        
 }
 
@@ -424,7 +424,7 @@ function reiniciar_proyecto(idproyecto, nombre_proyecto) {
     `<b class="text-success">${nombre_proyecto}</b> <br> Despues de esto tendrás que empezar el proyecto!`, 
     'Si, Reactivar!',
     function(){ Swal.fire("Reactivado!", "Tu Proyecto ha sido Reactivado.", "success"); },
-    function(){ tabla.ajax.reload(null, false); tabla2.ajax.reload(null, false);}
+    function(){ tabla.ajax.reload(null, false);  box_proyecto();}
   );       
 }
 
@@ -1210,59 +1210,6 @@ function box_proyecto() {
     } 
 
   }).fail( function(e) { ver_errores(e); } );
-}
-
-function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
-
-  if ($("#foo" ).hasClass('className')) {
-
-    $( "#foo" ).removeClass( 'className');
-
-  } else {
-    
-    $( "#foo" ).addClass( 'className');
-  }
-
-  if ( localStorage.getItem('nube_idproyecto') ) {
-
-    $("#icon_folder_"+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder"></i>')
-
-  }
-
-  $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
-
-  localStorage.setItem('nube_idproyecto', idproyecto);
-
-  localStorage.setItem('nube_fecha_inicial_proyecto', fecha_inicial);
-  localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
-
-  localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
-
-  
-  // mostramos el nombre en el NAV
-  $("#ver-proyecto").html(`<i class="fas fa-tools"></i> <p class="d-inline-block hide-max-width-1080px">Proyecto:</p> ${nombre_proyecto}`);
-  $("#ver-proyecto").show();
-  $("#ver-otros-modulos").show();
-
-  setTimeout(function() {
-    $(".ver-otros-modulos-1").fadeOut(0);
-  },0);
-
-  setTimeout(function() {
-    $(".ver-otros-modulos-2").fadeIn(150);
-  },4);
-
-  setTimeout(function() {
-    $(".ver-otros-modulos-2").fadeOut(200);
-  },400);
-
-  setTimeout(function() {
-    $(".ver-otros-modulos-1").fadeIn(400);
-  },500);
-
-  Swal.fire("Abierto!", `<b class="text-success">${nombre_proyecto}</b> <br> Proyecto abierto corrrectamente`, "success");
-
-  $(".tooltip").removeClass("show").addClass("hidde");
 }
 
 function ver_modal_docs_valorizaciones(idproyecto, documento) {

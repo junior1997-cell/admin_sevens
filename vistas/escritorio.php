@@ -145,7 +145,7 @@
                           <div class="card-body">
 
                             <div class="row mb-3">
-                              <div class="col-md-3 col-sm-6 col-6">
+                              <div class="col-md-3 col-sm-6 col-12">
                                 <div class="info-box cursor-pointer box-proceso" onclick="delay(function(){tbla_principal(1, 'shadow-0px-05rem-1rem-rgb-255-193-7', '.box-proceso')}, 100 );" data-toggle="tooltip" data-original-title="Click para ver">
                                   <span class="info-box-icon bg-warning "><i class="fas fa-hourglass-half"></i></span>
 
@@ -159,7 +159,7 @@
                               </div>
                               <!-- /.col -->
 
-                              <div class="col-md-3 col-sm-6 col-6">
+                              <div class="col-md-3 col-sm-6 col-12">
                                 <div class="info-box cursor-pointer box-no-empezado" onclick="delay(function(){tbla_principal(2, 'shadow-0px-05rem-1rem-rgb-220-53-69', '.box-no-empezado')}, 100 );" data-toggle="tooltip" data-original-title="Click para ver">
                                   <span class="info-box-icon bg-danger"><i class="fas fa-hourglass-start"></i></span>
 
@@ -173,7 +173,7 @@
                               </div>
                               <!-- /.col -->
 
-                              <div class="col-md-3 col-sm-6 col-6">
+                              <div class="col-md-3 col-sm-6 col-12">
                                 <div class="info-box cursor-pointer box-terminado" onclick="delay(function(){tbla_principal(0, 'shadow-0px-05rem-1rem-rgb-40-167-69', '.box-terminado')}, 100 );" data-toggle="tooltip" data-original-title="Click para ver">
                                   <span class="info-box-icon bg-success"><i class="fas fa-hourglass-end"></i></span>
 
@@ -187,7 +187,7 @@
                               </div>
                               <!-- /.col -->
 
-                              <div class="col-md-3 col-sm-6 col-6">
+                              <div class="col-md-3 col-sm-6 col-12">
                                 <div class="info-box cursor-pointer box-todos" onclick="delay(function(){tbla_principal(3, 'shadow-0px-05rem-1rem-rgb-23-162-184', '.box-todos')}, 100 );" data-toggle="tooltip" data-original-title="Click para ver">
                                   <span class="info-box-icon bg-info"><i class="fas fa-tasks"></i></span>
 

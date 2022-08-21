@@ -116,17 +116,13 @@ class Proyecto
   public function tbla_principal($estado)  {
     # 0: terminado
     # 1: en proceso
-    # 2: si empezar
+    # 2: no empezado
     # 3: listar todos
 
     $sql_estado = "";
-    if ($estado == 3) {
-      $sql_estado = "p.estado >= 0 ";
-    } else {
-      $sql_estado = "p.estado = '$estado'";
-    }
+    if ($estado == 3) { $sql_estado = "p.estado >= 0 "; } else { $sql_estado = "p.estado = '$estado'"; }
 
-    $sql = "SELECT * FROM proyecto as p WHERE $sql_estado;";
+    $sql = "SELECT * FROM proyecto as p WHERE $sql_estado ORDER BY p.idproyecto DESC;";
     return ejecutarConsulta($sql);
   }
 
@@ -164,11 +160,11 @@ class Proyecto
   public function box_proyecto()  {
     # 0: terminado
     # 1: en proceso
-    # 2: si empezar
+    # 2: no empezado
     # 3: listar todos
 
-    $sql = "SELECT COUNT(empresa) AS cant_proceso FROM proyecto WHERE estado = 2;";
-    $sql2 = "SELECT COUNT(empresa) AS cant_no_emmpezado FROM proyecto WHERE estado = 1;";
+    $sql = "SELECT COUNT(empresa) AS cant_proceso FROM proyecto WHERE estado = 1;";
+    $sql2 = "SELECT COUNT(empresa) AS cant_no_empezado FROM proyecto WHERE estado = 2;";
     $sql3 = "SELECT COUNT(empresa) AS cant_terminado FROM proyecto  WHERE estado = 0;";
     $sql4 = "SELECT COUNT(empresa) AS cant_todos FROM proyecto ;";
 
@@ -181,7 +177,7 @@ class Proyecto
       "status" => true,
       "data" => [
         "cant_proceso"      => (empty($data1['data']) ? 0 : (empty($data1['data']['cant_proceso']) ? 0 : $data1['data']['cant_proceso'] ) ),
-        "cant_no_emmpezado" => (empty($data2['data']) ? 0 : (empty($data2['data']['cant_no_emmpezado']) ? 0 : $data2['data']['cant_no_emmpezado'] ) ),
+        "cant_no_emmpezado" => (empty($data2['data']) ? 0 : (empty($data2['data']['cant_no_empezado']) ? 0 : $data2['data']['cant_no_empezado'] ) ),
         "cant_teminado"     => (empty($data3['data']) ? 0 : (empty($data3['data']['cant_terminado']) ? 0 : $data3['data']['cant_terminado'] ) ),
         "cant_todos"        => (empty($data4['data']) ? 0 : (empty($data4['data']['cant_todos']) ? 0 : $data4['data']['cant_todos'] ) ),
       ],

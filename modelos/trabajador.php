@@ -97,6 +97,9 @@ class Trabajador
 
   //Implementar un método para listar los registros
   public function tbla_principal($nube_idproyecto, $estado) {
+    
+    $data = [];
+
     $sql = "SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento,  t.imagen_perfil as imagen, tp.idcargo_trabajador , 
     tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.fecha_inicio, tp.fecha_fin, tp.estado, tp.idtrabajador_por_proyecto, 
 		ct.nombre as cargo, ct.idtipo_trabjador, tt.nombre as nombre_tipo

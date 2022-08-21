@@ -1,8 +1,13 @@
 
-localStorage.removeItem("nube_idproyecto");
-localStorage.removeItem("nube_fecha_inicial_proyecto");
-localStorage.removeItem("nube_fecha_final_proyecto");
-localStorage.removeItem("nube_nombre_proyecto");
+// localStorage.removeItem("nube_idproyecto");
+// localStorage.removeItem("nube_fecha_inicial_proyecto");
+// localStorage.removeItem("nube_fecha_final_proyecto");
+// localStorage.removeItem("nube_nombre_proyecto");
+
+localStorage.setItem('nube_idproyecto', 0);
+localStorage.setItem('nube_fecha_inicial_proyecto', '');
+localStorage.setItem('nube_fecha_final_proyecto', '');
+localStorage.setItem('nube_nombre_proyecto', '');
 
 $("#frmAcceso").on('submit',function(e) {
     $('.login-btn').html('<i class="fas fa-spinner fa-pulse fa-lg"></i> Comprobando...').removeClass('btn-outline-warning').addClass('btn-info disabled');

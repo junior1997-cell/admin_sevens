@@ -387,6 +387,65 @@
           }
 
         break;
+
+        case 'tbla_principal_para_todos_los_modulos':
+
+          $rspta = $proyecto->tbla_principal($_GET["estado"]);
+          //Vamos a declarar un array
+          $data= Array();  $cont=1;
+
+          if ($rspta['status']) {
+            foreach ($rspta['data'] as $key => $value) {
+
+              $estado = ""; $acciones = "";
+  
+              if ($value['estado'] == '2') {  
+                $estado = '<span class="text-center badge badge-danger">No empezado</span>';
+                $acciones = '<button class="btn btn-success btn-sm" onclick="empezar_proyecto('.$value['idproyecto'].', \''.encodeCadenaHtml($value['nombre_codigo']).'\')" data-toggle="tooltip" data-original-title="Empezar proyecto" /*style="margin-right: 3px !important;"*/><i class="fa fa-check"></i></button>';
+              } else if ($value['estado'] == '1') {  
+                $estado = '<span class="text-center badge badge-warning">En proceso</span>';
+                $acciones = '<button class="btn btn-danger btn-sm" onclick="terminar_proyecto('.$value['idproyecto'].', \''.encodeCadenaHtml($value['nombre_codigo']).'\')" data-toggle="tooltip" data-original-title="Terminar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-times"></i></button>';
+              } else {  
+                $estado = '<span class="text-center badge badge-success">Terminado</span>';
+                $acciones = '<button class="btn btn-primary btn-sm" onclick="reiniciar_proyecto('.$value['idproyecto'].', \''.encodeCadenaHtml($value['nombre_codigo']).'\')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';            
+              }
+  
+              if (strlen($value['empresa']) >= 20 ) { $empresa = substr($value['empresa'], 0, 20).'...';  } else { $empresa = $value['empresa']; }
+                  
+              $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\'';
+  
+              $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
+              
+              $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';                
+  
+              $data[]=array(
+                "0"=>$cont++,
+                "1"=>'<div class="asignar_paint_'.$value['idproyecto'].'"> 
+                  <button class="btn bg-secondary btn-sm" onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$value['idproyecto'].'">
+                    <i class="fas fa-folder"></i>
+                  </button> 
+                </div>',
+                "2"=>'<div class="user-block asignar_paint_'.$value['idproyecto'].'">                  
+                  <span class="username ml-0"><p class="text-primary m-02rem" >'. $empresa .'</p></span>
+                  <span class="description ml-0">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+                </div>',              
+                "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description" >'.$value['nombre_codigo'].'</span> </div>' ,
+                "4"=> '<div class="asignar_paint_'.$value['idproyecto'].'"> <div class="justify-content-between"><span><b> S/ </b></span> <span >'. number_format($value['costo'], 2, '.', ',').'</span></div> </div>',                 
+                "5"=> '<div class="asignar_paint_'.$value['idproyecto'].'">'. $estado.'</div>'.$toltip
+              );
+            }
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data
+            );
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+
+        break;
         
         case 'listar-proyectos-terminados':
 
