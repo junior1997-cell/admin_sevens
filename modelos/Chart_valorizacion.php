@@ -106,7 +106,7 @@ class ChartValorizacion
       if ($init_valorizado['status'] == false) { return $init_valorizado; }
 
       if (empty($fecha_proyecto['data']['fecha_inicio']) || empty($fecha_proyecto['data']['fecha_fin'])) {       
-        return $retorno = ['status'=>'error_ing_pool', 'mesage'=>'No ha definido las fechas de <b>INICIO</b> o <b>FIN</b> de proyecto.', 'data'=>'sin data', ]; 
+        return $retorno = ['status'=>'error_ing_pool', 'user' => $_SESSION['nombre'], 'mesage'=>'No ha definido las fechas de <b>INICIO</b> o <b>FIN</b> de proyecto.', 'data'=>'sin data', ]; 
       } 
 
       $monto_valorizacion_gastado   = suma_totales_modulos($id_proyecto, $fecha_proyecto['data']['fecha_inicio'],$fecha_proyecto['data']['fecha_fin']);
@@ -306,7 +306,7 @@ class ChartValorizacion
       if ($init_valorizado['status'] == false) { return $init_valorizado; }
 
       if (empty($fecha_i) || empty($fecha_f)) {       
-        return $retorno = ['status'=>'error_ing_pool', 'mesage'=>'No ha definido las fechas de <b>INICIO</b> o <b>FIN</b> de proyecto.', 'data'=>'sin data', ]; 
+        return $retorno = ['status'=>'error_ing_pool', 'user' => $_SESSION['nombre'], 'mesage'=>'No ha definido las fechas de <b>INICIO</b> o <b>FIN</b> de proyecto.', 'data'=>'sin data', ]; 
       } 
 
       $monto_valorizacion_gastado   = suma_totales_modulos($id_proyecto, $fecha_i,$fecha_f);

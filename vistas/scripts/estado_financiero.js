@@ -1,5 +1,7 @@
 var tabla_fecha_proyeccion; 
 
+var idproyecto_r='', idproyeccion_r='', fecha_r='', caja_r='';
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -21,8 +23,8 @@ function init() {
 
   $('#fecha_p').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true,  weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
-  formato_miles_input('.input_ef');
-  formato_miles_input(`.input_caja_pry`);
+  //formato_miles_input_negativo('.input_ef');
+  //formato_miles_input(`.caja_pry`);
 
   // Insertamos el ID del proyecto actual
   $("#idproyecto_p").val(localStorage.getItem('nube_idproyecto'));
@@ -170,10 +172,8 @@ function show_hide_span_input_p(flag, id_span) {
   if (flag == 1) {
     // ocultamos los span
     $(`.span_p_${id_span}`).show();
-    $(`.span_caja_pry`).show();
     // mostramos los inputs
     $(`.input_p_${id_span}`).hide();
-    $(`.input_caja_pry`).hide();
 
     // ocultamos el boton editar
     $(`.btn-editar-p`).show();
@@ -186,10 +186,8 @@ function show_hide_span_input_p(flag, id_span) {
     
     // ocultamos los span
     $(`.span_p_${id_span}`).hide();
-    $(`.span_caja_pry`).hide();
     // mostramos los inputs
     $(`.input_p_${id_span}`).show();
-    $(`.input_caja_pry`).show();
 
     // ocultamos el boton editar
     $(`.btn-editar-p`).hide();
@@ -238,7 +236,7 @@ function limpiar_form_proyecciones() {
 
   $("#idproyeccion_p").val("");
   $("#fecha_p").val(""); 
-  $("#caja_p").val(""); 
+  $("#caja_p").val( quitar_formato_miles($(".caja_ef").text()) ); 
   $("#descripcion_p").val(""); 
 
   // Limpiamos las validaciones
@@ -255,9 +253,9 @@ function tbla_principal_fecha_proyeccion(idproyecto) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4,5], }, orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
       url: `../ajax/estado_financiero.php?op=tbla_principal_fecha_proyeccion&idproyecto=${idproyecto}`,
@@ -283,7 +281,8 @@ function tbla_principal_fecha_proyeccion(idproyecto) {
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [3], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
+      // { targets: [3,4], render: 't' + $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
+      { targets: [3,4], render: function ( data, type, row, meta ) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); var color_text = data >= 0 ? 'numero_positivos' : 'numero_negativos' ;  return `<div class="formato-numero-conta"><span>S/</span> <span class="${color_text}">${(number == null || number == '' ? '0.00' : number)}</span></div>`; }},
       //{ targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();
@@ -392,6 +391,16 @@ function eliminar_fechas_proyeccion(idproyeccion, nombre) {
 
 function tbla_principal_detalle_proyeccion(idproyecto, idproyeccion, fecha, caja) {
 
+  idproyecto_r=idproyecto; idproyeccion_r=idproyeccion; fecha_r=fecha; caja_r=caja;
+
+  $(".tbody_proyeccion").html(`<tr>
+    <td colspan="4">
+      <div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-3x mb-2"></i><br/><h5>Cargando<span class="texto-parpadeante">...</span></h5></div></div>
+    </td>                                                  
+  </tr>`);
+  
+  show_hide_span_input_p(1, idproyeccion);
+
   $(".fecha_pd").html('<i class="fas fa-spinner fa-pulse"></i>');  
   $(".detalle_pd").html('<i class="fas fa-spinner fa-pulse"></i>');  
 
@@ -406,67 +415,82 @@ function tbla_principal_detalle_proyeccion(idproyecto, idproyeccion, fecha, caja
       
       var html_data = ''; var total_proyeccion = 0;
 
-      e.data.detalle.forEach((val, indice) => {
-
-        var icon_acordion = val.sub_detalle.length === 0 ? '' : '<i class="expandable-table-caret fas fa-caret-right fa-fw"></i>';
-        var input_readonly = val.sub_detalle.length === 0 ? '' : 'readonly' ;
-        var input_no_border = val.sub_detalle.length === 0 ? '' : 'input-no-border-center-bold' ;
-
-        html_data = html_data.concat(`
-        <tr class="data_${val.idproyeccion} data_bloque_${indice+1} detalle_tr_${indice+1} sub_${indice+1}_0 ${val.sub_detalle.length}">
-          <td class="py-1 text-center detalle_td_num_${indice+1}" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_${indice+1}','.sub_detalle_tr_${indice+1}')}, 200 );">${icon_acordion} ${indice+1}</td>
-          <td class="py-1">
-            <span class="span_p_${val.idproyeccion}">${val.nombre_proyeccion}</span> 
-            <input type="text" id="" class="hidden input_p_${val.idproyeccion} w-100" value="${val.nombre_proyeccion}">
-          </td>
-          <td class="py-1">
-          </td>                           
-          <td class="py-1">
-            <div class="formato-numero-conta span_p_${val.idproyeccion}">
-              <span>S/</span> <span >${formato_miles(val.monto)}</span> 
-            </div> 
-            <input type="text" id="" class="hidden input_p_${val.idproyeccion} input_dp_${val.idproyeccion}_${indice+1} w-100 ${input_no_border} input_miles" ${input_readonly} value="${val.monto}" onkeyup="delay(function(){calc_total_proyeccion(${val.idproyeccion}, ${indice+1})}, 100 );">
-          </td> 
-          <td class="py-1">
-            <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_${indice+1} " onclick="add_tr_sub_detalle(${val.idproyeccion},${indice+1}, ${val.sub_detalle.length})" data-toggle="tooltip" data-original-title="Agregar Sub-Item" ><i class="fas fa-plus"></i> </button>
-            <button type="button" class="btn btn-xs bg-gradient-danger btn-delete-sdp hidden" onclick="remove_tr_detalle(${val.idproyeccion},${indice+1},0)" data-toggle="tooltip" data-original-title="Eliminar Item"><i class="far fa-trash-alt"></i> </button>
-            <input type="hidden" name="" id="cant_sub_detalle_${idproyeccion}_${indice+1}" value="${val.sub_detalle.length}">
-          </td>
+      if (e.data.detalle.length === 0) {
+        $(".tbody_proyeccion").html(`<tr>
+          <td colspan="4">
+            <div class="row" ><div class="col-lg-12 text-center"><h5>​😟​​ Sin datos</h5></div></div>
+          </td>                                                  
         </tr>`);
+      } else {      
+        e.data.detalle.forEach((val, indice) => {
 
-        total_proyeccion += parseFloat(val.monto);
+          var icon_acordion = val.sub_detalle.length === 0 ? '' : '<i class="expandable-table-caret fas fa-caret-right fa-fw"></i>';
+          var input_readonly = val.sub_detalle.length === 0 ? '' : 'readonly' ;
+          var input_no_border = val.sub_detalle.length === 0 ? '' : 'input-no-border-center-bold' ;
 
-        val.sub_detalle.forEach((val2, indice2) => {
+          var color_number_d = val.monto >= 0 ? 'numero_positivos' : 'numero_negativos' ;
+
           html_data = html_data.concat(`
-          <tr class="data_bloque_${indice+1} sub_detalle_tr_${indice+1} sub_${indice+1}_${indice2+1}">
-            <td class="py-1 text-center"></td>
-            <td class="py-1 text-right"> 
-              <span class="span_p_${val.idproyeccion}">${val2.nombre}</span> 
-              <input type="text" id="" class="hidden input_p_${val.idproyeccion} w-75 float-right " value="${val2.nombre}">
-            </td>                                                            
+          <tr class="data_${val.idproyeccion} data_bloque_${indice+1} detalle_tr_${indice+1} sub_${indice+1}_0 ${val.sub_detalle.length}">
+            <td class="py-1 text-center detalle_td_num_${indice+1}" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_${indice+1}','.sub_detalle_tr_${indice+1}')}, 200 );">${icon_acordion} ${indice+1}</td>
+            <td class="py-1">
+              <span class="span_p_${val.idproyeccion}">${val.nombre_proyeccion}</span> 
+              <input type="text" id="" class="hidden input_p_${val.idproyeccion} input_n_dp_${val.idproyeccion}_${indice+1} w-100" value="${val.nombre_proyeccion}">
+            </td>
+            <td class="py-1">
+            </td>                           
             <td class="py-1">
               <div class="formato-numero-conta span_p_${val.idproyeccion}">
-                <span>S/</span>${formato_miles(val2.monto)}
+                <span>S/</span> <span class="${color_number_d}">${formato_miles(val.monto)}</span> 
               </div> 
-              <input type="text" id="" class="hidden input_p_${val.idproyeccion} w-100 input_sdp_${val.idproyeccion}_${indice+1}_${indice2+1} input_miles" value="${val2.monto}" onkeyup="delay(function(){calc_total_proyeccion(${val.idproyeccion}, ${indice+1})}, 100 );">
+              <input type="hidden"  class="input_id_dp_${val.idproyeccion}_${indice+1}" value="${val.iddetalle_proyeccion}">
+              <input type="text" id="" class="numberIndistintoFixed ${color_number_d} hidden input_p_${val.idproyeccion} input_dp_${val.idproyeccion}_${indice+1} w-100 ${input_no_border}" ${input_readonly} value="${formato_miles(val.monto)}" onkeyup="delay(function(){calc_total_proyeccion(${val.idproyeccion}, ${indice+1})}, 100 );" onfocus="this.select();">
             </td> 
-            <td class="py-1"> </td> 
             <td class="py-1">
-              <button type="button" class="btn bg-gradient-danger btn-xs btn-delete-sdp hidden" onclick="remove_tr_sub_detalle(${val.idproyeccion},${indice+1}, ${indice2+1})" data-toggle="tooltip" data-original-title="Eliminar Sub-Item" ><i class="far fa-trash-alt"></i> </button>
+              <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_${indice+1} " onclick="add_tr_sub_detalle(${val.idproyeccion},${indice+1}, ${val.sub_detalle.length})" data-toggle="tooltip" data-original-title="Agregar Sub-Item" ><i class="fas fa-plus"></i> </button>
+              <button type="button" class="btn btn-xs bg-gradient-danger btn-delete-sdp hidden" onclick="remove_tr_detalle(${val.idproyeccion},${indice+1},0)" data-toggle="tooltip" data-original-title="Eliminar Item"><i class="far fa-trash-alt"></i> </button>
+              <input type="hidden" name="" id="cant_sub_detalle_${idproyeccion}_${indice+1}" value="${val.sub_detalle.length}">
             </td>
           </tr>`);
-          // total_proyeccion += es_numero(val2.monto) == true ? parseFloat(val2.monto) : 0;
+
+          total_proyeccion += parseFloat(val.monto);
+
+          val.sub_detalle.forEach((val2, indice2) => {
+
+            var color_number_sd = val2.monto >= 0 ? 'numero_positivos' : 'numero_negativos' ;
+
+            html_data = html_data.concat(`
+            <tr class="data_bloque_${indice+1} sub_detalle_tr_${indice+1} sub_${indice+1}_${indice2+1}">
+              <td class="py-1 text-center"></td>
+              <td class="py-1 text-right"> 
+                <span class="span_p_${val.idproyeccion}">${val2.nombre}</span> 
+                <input type="text" id="" class="hidden input_p_${val.idproyeccion} input_n_sdp_${val.idproyeccion}_${indice+1}_${indice2+1} w-75 float-right " value="${val2.nombre}">
+              </td>                                                            
+              <td class="py-1">
+                <div class="formato-numero-conta span_p_${val.idproyeccion}">
+                  <span>S/</span> <span class="${color_number_sd}">${formato_miles(val2.monto)}</span>
+                </div> 
+                <input type="hidden"  class="input_id_sdp_${val.idproyeccion}_${indice+1}_${indice2+1}" value="${val2.idsub_detalle_proyeccion}">
+                <input type="text" id="" class="numberIndistintoFixed ${color_number_sd} hidden input_p_${val.idproyeccion} w-100 input_sdp_${val.idproyeccion}_${indice+1}_${indice2+1}" value="${formato_miles(val2.monto)}" onkeyup="delay(function(){calc_total_proyeccion(${val.idproyeccion}, ${indice+1})}, 100 );" onfocus="this.select();">
+              </td> 
+              <td class="py-1"> </td> 
+              <td class="py-1">
+                <button type="button" class="btn bg-gradient-danger btn-xs btn-delete-sdp hidden" onclick="remove_tr_sub_detalle(${val.idproyeccion},${indice+1}, ${indice2+1})" data-toggle="tooltip" data-original-title="Eliminar Sub-Item" ><i class="far fa-trash-alt"></i> </button>
+              </td>
+            </tr>`);
+            // total_proyeccion += es_numero(val2.monto) == true ? parseFloat(val2.monto) : 0;
+          });
         });
-      });
+
+        $(".tbody_proyeccion").html(html_data);
+      }
 
       $(".fecha_pd").html(format_d_m_a(e.data.fecha)); 
       $(".btn-add-detalle").addClass(`btn_th_${e.data.idproyeccion}`).attr('onclick', `add_tr_detalle(${e.data.idproyeccion}, ${e.data.detalle.length})`); 
       $(".detalle_pd").html(e.data.descripcion);
 
       // caja
-      $(".caja_pry").html(formato_miles(e.data.caja));
-      $(".input_caja_pry").val(e.data.caja);
-
+      $(".caja_pry").html(formato_miles(e.data.caja + total_proyeccion));
       $('.prestamo_credito_pry').html(formato_miles(e.data.prestamo_y_credito));
       $('.gasto_actualizado_pry').html(formato_miles(e.data.gasto_de_modulos));
       $('.valorizacion_cobrada_pry').html(formato_miles(e.data.valorizacion_cobrada.val_cobrada));     
@@ -474,13 +498,23 @@ function tbla_principal_detalle_proyeccion(idproyecto, idproyeccion, fecha, caja
       $('.valorizacion_por_cobrar_pry').html(formato_miles(e.data.valorizacion_por_cobrada.val_por_cobrar));  
       $('.cant_por_cobrar_pry').html(e.data.valorizacion_por_cobrada.cant_val_por_cobrar);
       $('.garantia_pry').html(formato_miles(e.data.garantia));
-      $('.monto_obra_pry').html(formato_miles(e.data.monto_de_obra));
+      $('.monto_obra_pry').html(formato_miles(e.data.monto_de_obra));   
       
-      $(".tbody_proyeccion").html(html_data);
+      var interes_pagado =  e.data.prestamo_y_credito + e.data.valorizacion_cobrada.val_cobrada - e.data.gasto_de_modulos - (e.data.caja + total_proyeccion);
+      var ganacia_actual =  e.data.valorizacion_cobrada.val_cobrada - e.data.gasto_de_modulos - interes_pagado;
+      var ganacia_actual_porcentaje = ( ganacia_actual / e.data.monto_de_obra) * 100;
+
+      $('.interes_pagado_pry').html(formato_miles(interes_pagado));
+      $('.ganancia_actual_pry').html(formato_miles(ganacia_actual));
+      $('.porcentaje_pry').html(formato_miles(ganacia_actual_porcentaje) + '%');
+      
       $("#cant_detalle").val(e.data.detalle.length);
       $(".gasto_proyectado").html(formato_miles(total_proyeccion)); 
+      total_proyeccion >= 0 ? $(".gasto_proyectado").removeClass('numero_negativos').addClass('numero_positivos') : $(".gasto_proyectado").removeClass('numero_positivos').addClass('numero_negativos') ;
+
       // Formato miles - input
-      formato_miles_input(`.input_miles`);      
+      //formato_miles_input(`.input_miles`);      
+      document.querySelectorAll(".numberIndistintoFixed").forEach((el) => el.addEventListener("keyup", numberFormatIndistintoFixed));
       // acticar tooltip
       $('[data-toggle="tooltip"]').tooltip();
     } else {
@@ -501,15 +535,17 @@ function calc_total_proyeccion(idproyeccion, cont ='0') {
 
     var cant_sub_detalle_class = $(`.data_bloque_${index}`).toArray().length == 0 ? 0 : $(`.data_bloque_${index}`).toArray().length - 1;
     var cant_sub_detalle = $(`#cant_sub_detalle_${idproyeccion}_${index}`).val(); 
-    console.log(`${index}. cant: ${cant_detalle} ${cant_sub_detalle}`);
+    console.log(`${index}. cant: ${cant_detalle} ${cant_sub_detalle} ${cant_sub_detalle_class}`);
 
+    // subdetalle
     for (let index2 = 1; index2 <= cant_sub_detalle; index2++) {
       var input_subdetalle = es_numero(quitar_formato_miles($(`.input_sdp_${idproyeccion}_${index}_${index2}`).val())) == true ? parseFloat(quitar_formato_miles($(`.input_sdp_${idproyeccion}_${index}_${index2}`).val())) : 0 ;
       console.log(`subtotal: ${index2} - ${index} = ` + input_subdetalle);  
       total_subdetalle += input_subdetalle;
     }
 
-    if (cant_sub_detalle > 0) {
+    // reemplazamos el total sumado
+    if (cant_sub_detalle_class > 0) {
       $(`.input_dp_${idproyeccion}_${index}`).val(formato_miles(total_subdetalle));
     }
     
@@ -521,22 +557,106 @@ function calc_total_proyeccion(idproyeccion, cont ='0') {
   //console.log(total_detalle);
   //console.log(total_subdetalle);
   $(".gasto_proyectado").html(formato_miles(total_detalle)); 
+  total_detalle >= 0 ? $(".gasto_proyectado").removeClass('numero_negativos').addClass('numero_positivos') : $(".gasto_proyectado").removeClass('numero_positivos').addClass('numero_negativos') ;
+
+  var caja_ef = quitar_formato_miles($(".caja_ef").text());
+  $(".caja_pry").html(formato_miles(total_detalle + caja_ef));  
+
   $(".tooltip").remove();
+
+  // actualizamos los montos de Est. Finan.
+  update_interes_y_ganancia_por_proyeccion();
+}
+
+// mostramos loa datos para editar: "pagos por mes"
+function update_interes_y_ganancia_por_proyeccion() { 
+  var caja                = quitar_formato_miles($('.caja_pry').text()); console.log(caja);
+  var prestamo_y_credito  = quitar_formato_miles($('.prestamo_credito_pry').text());
+  var gasto_de_modulos    = quitar_formato_miles($('.gasto_actualizado_pry').text());
+  var val_cobrada         = quitar_formato_miles($('.valorizacion_cobrada_pry').text());  
+  var monto_de_obra       = quitar_formato_miles($('.monto_obra_pry').text());
+
+  var interes_pagado      =  prestamo_y_credito + val_cobrada - gasto_de_modulos - caja;
+  var ganacia_actual      =  val_cobrada - gasto_de_modulos - interes_pagado;
+  var ganacia_actual_porcentaje = ( ganacia_actual / monto_de_obra) * 100;
+
+  $('.interes_pagado_pry').html(formato_miles(interes_pagado));
+  $('.ganancia_actual_pry').html(formato_miles(ganacia_actual));
+  $('.porcentaje_pry').html(formato_miles(ganacia_actual_porcentaje) + '%');
 }
 
 function guardar_y_editar_detalle_proyeccion(idproyeccion) {
+
+  var cant_detalle = $(`#cant_detalle`).val(); 
+  var total_detalle = 0;  
+
+  var data_array = [];
+  var data_detalle = [] ;  
+
+  for (let index = 1; index <= cant_detalle; index++) {
+
+    var total_subdetalle = 0;
+
+    var cant_sub_detalle_class = $(`.data_bloque_${index}`).toArray().length == 0 ? 0 : $(`.data_bloque_${index}`).toArray().length - 1;
+    var cant_sub_detalle = $(`#cant_sub_detalle_${idproyeccion}_${index}`).val(); 
+    console.log(`${index}. cant: ${cant_detalle} ${cant_sub_detalle} ${cant_sub_detalle_class}`);
+    
+    var data_subdetalle = [] ;  
+
+    // subdetalle
+    for ( let index2 = 1; index2 <= cant_sub_detalle; index2++ ) {
+      var input_subdetalle = es_numero(quitar_formato_miles($(`.input_sdp_${idproyeccion}_${index}_${index2}`).val())) == true ? parseFloat(quitar_formato_miles($(`.input_sdp_${idproyeccion}_${index}_${index2}`).val())) : 0 ;
+      console.log(`subdetalle: ${index2} - ${index} = ` + input_subdetalle);  
+      total_subdetalle += input_subdetalle;
+
+      if ( $(`.input_n_sdp_${idproyeccion}_${index}_${index2}`).val() === undefined ) { }else{
+        data_subdetalle.push({ 
+          'idsub_detalle_proyeccion': $(`.input_id_sdp_${idproyeccion}_${index}_${index2}`).val()=== undefined ? '': $(`.input_id_sdp_${idproyeccion}_${index}_${index2}`).val() ,
+          'nombre': $(`.input_n_sdp_${idproyeccion}_${index}_${index2}`).val(), 
+          'total': input_subdetalle,
+        });
+      }      
+    }
+
+    var input_detalle = es_numero(quitar_formato_miles( $(`.input_dp_${idproyeccion}_${index}`).val())) == true ? parseFloat(quitar_formato_miles($(`.input_dp_${idproyeccion}_${index}`).val())) : 0 ;
+
+    if ( $(`.input_n_dp_${idproyeccion}_${index}`).val() === undefined ) { }else{
+      data_detalle.push({   
+        'iddetalle_proyeccion': $(`.input_id_dp_${idproyeccion}_${index}`).val() === undefined ? '': $(`.input_id_dp_${idproyeccion}_${index}`).val(),   
+        'nombre': $(`.input_n_dp_${idproyeccion}_${index}`).val(),
+        'total': input_detalle,
+        'subdetalle': data_subdetalle ,      
+      });
+    }
+
+    console.log(`total: ${idproyeccion} - ${index}   = ` + input_detalle);  
+    total_detalle += input_detalle;
+    console.log(`acumulado: ${total_detalle}`);
+  }
+
+  data_array = {
+    'idproyeccion': idproyeccion,
+    'gasto_proyectado': quitar_formato_miles($(`.gasto_proyectado`).text()),
+    'caja': quitar_formato_miles($(`.caja_pry`).text()),      
+    'detalle': data_detalle
+  };
+
+  console.log(data_array);
+
+  // alerta antes de guardar
   Swal.fire({
-    title: "¿Está seguro que deseas guardar esta proyeccion?",
-    html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
+    title: '¿Está seguro que deseas guardar esta proyección?',
+    html: "Verifica que todos lo <b>campos</b> esten <b>conformes</b>!!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#28a745",
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
     preConfirm: (input) => {
-      return fetch("../ajax/compra_insumos.php?op=guardaryeditarcompra", {
+      return fetch("../ajax/estado_financiero.php?op=guardar_y_editar_detalle_proyecciones", {
         method: 'POST', // or 'PUT'
-        body: formData, // data can be `string` or {object}!        
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 'data_array': data_array}),// data can be `string` or {object}!        
       }).then(response => {
         //console.log(response);
         if (!response.ok) { throw new Error(response.statusText) }
@@ -546,15 +666,9 @@ function guardar_y_editar_detalle_proyeccion(idproyeccion) {
     showLoaderOnConfirm: true,
   }).then((result) => {
     if (result.isConfirmed) {
-      if (result.value.status == true){        
-        Swal.fire("Correcto!", "Compra guardada correctamente", "success");
-
-        tabla_compra_insumo.ajax.reload(null, false);
-        tabla_compra_x_proveedor.ajax.reload(null, false);
-
-        limpiar_form_compra(); regresar();
-        
-        $("#modal-agregar-usuario").modal("hide");        
+      if (result.value.status == true){       
+        tbla_principal_detalle_proyeccion(idproyecto_r, idproyeccion_r, fecha_r, caja_r);
+        Swal.fire("Correcto!", "Proyección guardado correctamente", "success");
       } else {
         ver_errores(result.value);
       }      
@@ -623,24 +737,31 @@ function show_hide_tr(tr, sub_tr) {
 }
 
 function add_tr_detalle(id_all, count) {
+  // eliminamos el mensaje VACIO
+  // extraemos la cantidad de SUB-DETALLES
+  var cant = $(`.data_${id_all}`).toArray().length; console.log(cant);
+  // si es 0 VACIOAMOS EL BODY
+  if (cant == 0) {  $(`.tbody_proyeccion`).html('') }
+
+  // AGREGAMOS EL DETALLE --
   $(`.tbody_proyeccion`).append(`
   <tr class="data_${id_all} data_bloque_${count + 1} detalle_tr_${count + 1} sub_${count + 1}_0 0 ultimo_${count + 1}">
     <td class="py-1 text-center detalle_td_num_${count + 1}" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_${count + 1}','.sub_detalle_tr_${count + 1}')}, 200 );">${count + 1}</td>
     <td class="py-1">
       <span class="span_p_${id_all}"></span> 
-      <input type="text" id="" class="hidden input_p_${id_all} w-100" value="">
+      <input type="text" id="" class="hidden input_p_${id_all} input_n_dp_${id_all}_${count + 1} w-100" value="">
     </td>
     <td class="py-1"> </td>                           
     <td class="py-1">
       <div class="formato-numero-conta span_p_${id_all}">
         <span>S/</span> <span >0.00</span> 
       </div> 
-      <input type="text" id="" class="hidden input_p_${id_all} input_dp_${id_all}_${count} w-100 input_miles" value="0.00" onkeyup="delay(function(){calc_total_proyeccion(${id_all}, ${count})}, 100 );">
+      <input type="text" id="" class="numberIndistintoFixed hidden input_p_${id_all} input_dp_${id_all}_${count + 1} w-100" value="0.00" onkeyup="delay(function(){calc_total_proyeccion(${id_all}, ${count + 1})}, 100 );" onfocus="this.select();">
     </td> 
     <td class="py-1">
       <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_${count + 1} " onclick="add_tr_sub_detalle(${id_all}, ${count + 1}, 0)" data-toggle="tooltip" data-original-title="Agregar Item" ><i class="fas fa-plus"></i> </button>
       <button type="button" class="btn btn-xs bg-gradient-danger btn-delete-sdp" onclick="remove_tr_detalle(${id_all}, ${count + 1},0)" data-toggle="tooltip" data-original-title="Eliminar Item" ><i class="far fa-trash-alt"></i> </button>
-      <input type="hidden" name="" id="cant_sub_detalle_${id_all}_${count}">
+      <input type="hidden" name="" id="cant_sub_detalle_${id_all}_${count + 1}">
     </td>
   </tr>
   <!-- /.tr -->
@@ -649,11 +770,13 @@ function add_tr_detalle(id_all, count) {
   show_hide_span_input_p(2, id_all);
 
   // Formato miles - input
-  formato_miles_input(`.input_miles`);
+  //formato_miles_input(`.input_miles`);
+  document.querySelectorAll(".numberIndistintoFixed").forEach((el) => el.addEventListener("keyup", numberFormatIndistintoFixed));
   // mensaje ok
   toastr_success('Item agregado', 'Se agrego un nueva fila', 700);
   // removemos la ultima clase ||  agregamos la catidad de SUBDETALLES
-  $("#cant_detalle").val(count + 1);
+  $("#cant_detalle").val(count + 1); 
+
   $(".tooltip").remove();
   $('[data-toggle="tooltip"]').tooltip();
 }
@@ -665,13 +788,13 @@ function add_tr_sub_detalle(id_all, id, count) {
     <td class="py-1 text-center"></td>
     <td class="py-1 text-right">
       <span class="span_p_${id_all}"></span> 
-      <input type="text" id="" class="hidden input_p_${id_all} w-75 float-right" value="">
+      <input type="text" id="" class="hidden input_p_${id_all} input_n_sdp_${id_all}_${id}_${count + 1} w-75 float-right" value="">
     </td>                                                            
     <td class="py-1">
       <div class="formato-numero-conta span_p_${id_all}">
         <span>S/</span>0.00
       </div> 
-      <input type="text" id="" class="hidden input_p_${id_all} w-100 input_sdp_${id_all}_${id}_${count + 1} input_miles" value="0.00" onkeyup="delay(function(){calc_total_proyeccion(${id_all}, ${id})}, 100 );" >
+      <input type="text" id="" class="numberIndistintoFixed hidden input_p_${id_all} w-100 input_sdp_${id_all}_${id}_${count + 1}" value="0.00" onkeyup="delay(function(){calc_total_proyeccion(${id_all}, ${id})}, 100 );" onfocus="this.select();">
     </td> 
     <td class="py-1"> </td> 
     <td class="py-1">
@@ -692,7 +815,8 @@ function add_tr_sub_detalle(id_all, id, count) {
   }
 
   // Formato miles - input
-  formato_miles_input(`.input_miles`);
+  //formato_miles_input(`.input_miles`);
+  document.querySelectorAll(".numberIndistintoFixed").forEach((el) => el.addEventListener("keyup", numberFormatIndistintoFixed));
   // mensaje ok
   toastr_success('Sub-Item agregado', 'Se agrego un nueva fila', 700);
   // removemos la ultima clase || agregamos la catidad de SUBDETALLES
@@ -715,7 +839,7 @@ function remove_tr_detalle(id_all, id, count) {
     $(`.btn_th_${id_all}`).attr('onclick', `add_tr_detalle(${id_all}, 0)`);
   }
   calc_total_proyeccion(id_all, id);  
-  toastr_warning('Item REMOVIDO', 'Se removio la fila.', 7000);
+  toastr_warning('Item REMOVIDO', 'Se removio la fila.', 700);
 }
 
 function remove_tr_sub_detalle( id_all, id, count) {

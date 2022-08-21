@@ -94,8 +94,9 @@
                 '<button class="btn btn-warning btn-sm" onclick="mostrar_fecha_proyeccion(' . $reg->idproyeccion . ')"><i class="fa fa-pencil-alt"></i></button>',
                 "2" => $reg->fecha,
                 "3" => $reg->caja,
-                "4" =>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "5" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                "4" => $reg->total_gasto,
+                "5" =>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "6" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
               ];
             }
   
@@ -152,6 +153,22 @@
           echo json_encode( $rspta, true) ;
           
         break;
+
+        case 'guardar_y_editar_detalle_proyecciones':
+          $_post = json_decode(file_get_contents('php://input'),true);
+          
+          if ( empty($_post["data_array"]["detalle"]) || empty($_post["data_array"]["idproyeccion"]) ) {
+            
+            $rspta = ['status' => 'error_ing_pool', 'user' => $_SESSION['nombre'], 'message' => 'Tus items estan vacios, <b>ingresa algunos</b> para tener un registro exitoso.', 'data' =>$_post["data_array"]  ];
+            echo json_encode( $rspta, true) ;
+
+          } else {            
+             
+            $rspta = $estadofinanciero->guardar_y_editar_detalle_proyecciones( $_post["data_array"] );
+            
+            echo json_encode( $rspta, true) ;
+          }
+        break;  
         // ══════════════════════════════════════ S U B   D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════
 
         case 'salir':

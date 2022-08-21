@@ -505,7 +505,7 @@ function ver_errores(e) {
   }else if (e.status == 'error_code') {
     sw_error('Error de escritura de <b>codigo</b>!', `${e.message} <br> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, 5000);
   }else if (e.status == 'error_ing_pool') {
-    sw_error('Upss!! <b>codigo</b>!', `${e.message} <br> Contacte al <b>Ing. de Sistemas</b>`,  5000);
+    sw_error(`Upss!! Estimado <br> ${e.user}!`, `${e.message} <br> <small>─ o contacte al <b class="cursor-pointer text-primary" data-toggle="modal" data-target="#modal-contacto-desarrollador" >Ing. de Sistemas</b> ─</small>`,  6000);
   } else {
     console.group("Error"); console.warn('Error Grave -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error Grave 😱!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, "error");

@@ -652,6 +652,13 @@ table th { vertical-align: top !important; }
 
 /*  ══════════════════════════════════════════ - I N P U T - ══════════════════════════════════════════ */
 
+.numero_positivos {
+  color: black;
+}
+.numero_negativos {
+  color: red;
+}
+
 .input-no-border{
   border: none !important; 
   text-align: center !important;

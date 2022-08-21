@@ -72,7 +72,7 @@
                             </h3>
 
                             <h3 class="card-title mr-3 p-l-2px">
-                              <button type="button" class="btn bg-gradient-success btn-sm " onclick="html_table_to_excel('tabla_estado_financiero', 'xlsx', 'Estado Financiero Actual', 'detalle');"><i class="far fa-file-excel"></i> <span class="d-none d-sm-inline-block"> Exportar</span></button>
+                              <button type="button" class="btn bg-gradient-gray btn-sm " onclick="html_table_to_excel('tabla_estado_financiero', 'xlsx', 'Estado Financiero Actual', 'detalle');"><i class="far fa-file-excel"></i> <span class="d-none d-sm-inline-block"> Exportar</span></button>
                             </h3>
 
                           </div>
@@ -99,7 +99,7 @@
                                         <td class="py-1">CAJA</td>
                                         <td class="py-1">
                                           <div class="formato-numero-conta span_ef"><span>S/</span> <span class="caja_ef"><i class="fas fa-spinner fa-pulse"></i></span> </div> 
-                                          <input type="text" id="caja_ef" class="hidden input_ef w-100" onkeyup="delay(function(){update_interes_y_ganancia_ef()}, 200 );" autocomplete="off">
+                                          <input type="text" id="caja_ef" class="numberIndistintoFixed hidden input_ef w-100" onkeyup="delay(function(){update_interes_y_ganancia_ef()}, 200 );" autocomplete="off" onfocus="this.select();">
                                           <input type="hidden" id="idestado_financiero" >
                                         </td> 
                                       </tr>
@@ -219,6 +219,7 @@
                                                   <th>OPCIONES</th>                                                 
                                                   <th>FECHA</th>
                                                   <th data-toggle="tooltip" data-original-title="CAJA">CAJA</th>
+                                                  <th >TOTAL PROYECCIÓN</th>
                                                   <th>DESCIPCION</th>
                                                   <th data-toggle="tooltip" data-original-title="ESTADO">ESTADO</th>
                                                 </tr>
@@ -230,6 +231,7 @@
                                                   <th>OPCIONES</th>
                                                   <th>FECHA</th>
                                                   <th data-toggle="tooltip" data-original-title="CAJA">CAJA</th>
+                                                  <th >TOTAL PROYECCIÓN</th>
                                                   <th>DESCIPCION</th>
                                                   <th data-toggle="tooltip" data-original-title="ESTADO">ESTADO</th>
                                                 </tr>
@@ -247,7 +249,7 @@
                                           <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
                                             <button type="button" class="btn bg-gradient-warning btn-sm btn-editar-p" onclick="show_hide_span_input_p(2,1);"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar </span></button>
                                             <button type="button" class="btn bg-gradient-success btn-sm btn-guardar-p hidden" onclick=""><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar</span></button>                                
-                                            <button type="button" class="btn bg-gradient-danger btn-sm" onclick=""><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button>
+                                            <!-- <button type="button" class="btn bg-gradient-danger btn-sm" onclick=""><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button> -->
                                             <button type="button" class="btn bg-gradient-gray btn-sm " onclick="html_table_to_excel('proyeccion-1', 'xlsx', 'detalle excel', 'hoja 1');"><i class="far fa-file-excel"></i> <span class="d-none d-sm-inline-block">Exportar</span></button>
                                           </div>                                  
                                           <div class="col-12 row-horizon disenio-scroll ">
@@ -269,7 +271,7 @@
                                                   <th class="py-1 text-center w-25px">#</th> 
                                                   <th class="py-1">DESCRIPCIÓN</th>
                                                   <th class="py-1 ">DETALLE</th>
-                                                  <th class="py-1 text-center">MONTO</th> 
+                                                  <th class="py-1 text-center">MONTO</th>                                                   
                                                   <th class="py-1 bg-gradient-white">
                                                     <button type="button" class="btn btn-xs bg-gradient-success w-40px btn-add-detalle " onclick="" data-toggle="tooltip" data-original-title="Agregar Item" ><i class="fas fa-plus"></i> </button>     
                                                     <input type="hidden" name="" id="cant_detalle">                                 
@@ -277,29 +279,13 @@
                                                 </tr>
                                               </thead>
                                               <!-- /.thead -->
-                                              <tbody class="tbody_proyeccion 0">                         
-                                                <tr class="data_1 data_bloque_1 detalle_tr_1 sub_1_0">
-                                                  <td class="py-1 text-center detalle_td_num_1" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_1','.sub_detalle_tr_1')}, 200 );">1</td>
-                                                  <td class="py-1">
-                                                    <span class="span_p_1">SEGUROS DE VIDA</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="SEGUROS DE VIDA">
-                                                  </td>
-                                                  <td class="py-1">
-                                                  </td>                           
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta span_p_1">
-                                                      <span>S/</span> <span >100</span> 
-                                                    </div> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="100">
-                                                  </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_1 " onclick="add_tr_sub_detalle(1,1, 0)" ><i class="fas fa-plus"></i> </button>
-                                                    <button type="button" class="btn btn-xs bg-gradient-danger" onclick="remove_tr_detalle(1,1,0)"><i class="far fa-trash-alt"></i> </button>
-                                                  </td>
+                                              <tbody class="tbody_proyeccion 0">                                                 
+                                                <tr>
+                                                  <td colspan="4"> 
+                                                    <div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div>
+                                                  </td>                                                  
                                                 </tr>
-                                                <!-- /.tr -->
-
-                                                <tr class="data_1 data_bloque_2 detalle_tr_2 sub_2_0" >
+                                                <!-- <tr class="data_1 data_bloque_2 detalle_tr_2 sub_2_0" >
                                                   <td class="py-1 text-center detalle_td_num_2" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_num_2','.sub_detalle_tr_2')}, 200 );" > <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>2 </td>
                                                   <td class="py-1">
                                                     <span class="span_p_1">DEVOLUCIÓN DE PRESTAMOS</span> 
@@ -312,13 +298,13 @@
                                                     </div> 
                                                   </td>   
                                                   <td class="py-1">
-                                                    <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_2" onclick="add_tr_sub_detalle(1,2, 3)"><i class="fas fa-plus"></i> </button>
+                                                    <button type="button" class="btn btn-xs bg-gradient-success detalle_btn_2" onclick="add_tr_sub_detalle(1,2,1)"><i class="fas fa-plus"></i> </button>
                                                     <button type="button" class="btn btn-xs bg-gradient-danger" onclick="remove_tr_detalle(1,2,0)"><i class="far fa-trash-alt"></i> </button>
                                                   </td>                                  
-                                                </tr>
+                                                </tr> -->
                                                 <!-- /.tr --> 
 
-                                                <tr class="data_bloque_2 sub_detalle_tr_2 sub_2_1">
+                                                <!-- <tr class="data_bloque_2 sub_detalle_tr_2 sub_2_1">
                                                   <td class="py-1 text-center"></td>
                                                   <td class="py-1 text-right"> 
                                                     <span class="span_p_1">DAVID REQUEJO</span> 
@@ -334,144 +320,9 @@
                                                   <td class="py-1">
                                                     <button type="button" class="btn bg-gradient-danger btn-xs" onclick="remove_tr_sub_detalle(1,2, 1)" ><i class="far fa-trash-alt"></i> </button>
                                                   </td>
-                                                </tr>
-                                                <!-- /.tr -->                                  
-
-                                                <tr class="data_bloque_2 sub_detalle_tr_2 sub_2_2">
-                                                  <td class="py-1 text-center"></td>
-                                                  <td class="py-1 text-right">
-                                                    <span class="span_p_1">DAVID REQUEJO</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="DAVID REQUEJO">
-                                                  </td>                                                            
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta span_p_1">
-                                                      <span>S/</span>20,000.00
-                                                    </div> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="20,000.00">
-                                                  </td> 
-                                                  <td class="py-1"> </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn bg-gradient-danger btn-xs" onclick="remove_tr_sub_detalle(1,2, 2)"><i class="far fa-trash-alt"></i> </button>
-                                                  </td>
-                                                </tr>
-                                                <!-- /.tr -->
-
-                                                <tr class="data_bloque_2 sub_detalle_tr_2 sub_2_3 ultimo_2">
-                                                  <td class="py-1 text-center"></td>
-                                                  <td class="py-1 text-right">
-                                                    <span class="span_p_1">DAVID REQUEJO</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="DAVID REQUEJO">
-                                                  </td>                                                            
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta span_p_1">
-                                                      <span>S/</span>30,000.00
-                                                    </div> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="30,000.00">
-                                                  </td> 
-                                                  <td class="py-1"> </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn bg-gradient-danger btn-xs" onclick="remove_tr_sub_detalle(1, 2, 3)" ><i class="far fa-trash-alt"></i> </button>
-                                                  </td>
-                                                </tr>
-                                                <!-- /.tr -->                               
-
-                                                <tr class="data_1 data_bloque_3 detalle_tr_3" >
-                                                  <td class="py-1 text-center detalle_td_3" data-widget="expandable-table" aria-expanded="true" onclick="delay(function(){show_hide_tr('.detalle_td_3','.sub_detalle_tr_3')}, 200 );"><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>3</td>
-                                                  <td class="py-1">
-                                                    <span class="span_p_1">COMPRAS</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="COMPRAS">
-                                                  </td>
-                                                  <td class="py-1"> </td>                           
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta">
-                                                      <span>S/</span>500
-                                                    </div> 
-                                                  </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn bg-gradient-success btn-xs" ><i class="fas fa-plus"></i> </button>
-                                                    <button type="button" class="btn bg-gradient-danger btn-xs" onclick="remove_tr_detalle(1,3,0)"><i class="far fa-trash-alt"></i> </button>
-                                                  </td> 
-                                                </tr>
-                                                <!-- /.tr -->
-
-                                                <tr class="data_bloque_3 sub_detalle_tr_3">
-                                                  <td class="py-1 text-center"></td>
-                                                  <td class="py-1 text-right">
-                                                    <span class="span_p_1">VIGA CERO</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="VIGA CERO">
-                                                  </td>
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta span_p_1">
-                                                      <span>S/</span>5,000.00
-                                                    </div> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="5,000.00">
-                                                  </td>                           
-                                                  <td class="py-1"> </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn bg-gradient-danger btn-xs" ><i class="far fa-trash-alt"></i> </button>
-                                                  </td> 
-                                                </tr>
-                                                <!-- /.tr -->
-
-                                                <tr class="data_bloque_3 sub_detalle_tr_3">
-                                                  <td class="py-1 text-center"></td>
-                                                  <td class="py-1 text-right">
-                                                    <span class="span_p_1">MADERA</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="MADERA">
-                                                  </td>
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta span_p_1">
-                                                      <span>S/</span>7,000.00
-                                                    </div> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="7,000.00">
-                                                  </td>                           
-                                                  <td class="py-1"> </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn bg-gradient-danger btn-xs" ><i class="far fa-trash-alt"></i> </button>
-                                                  </td> 
-                                                </tr>
-                                                <!-- /.tr -->
-
-                                                <tr class="data_1 data_bloque_4">
-                                                  <td class="py-1 text-center">4</td>
-                                                  <td class="py-1">
-                                                    <span class="span_p_1">MANO DE OBRA</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="MANO DE OBRA">
-                                                  </td>
-                                                  <td class="py-1">
-                                                  </td>                           
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta span_p_1">
-                                                      <span>S/</span>19,500.00
-                                                    </div> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="19,500.00">
-                                                  </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn bg-gradient-success btn-xs" ><i class="fas fa-plus"></i> </button>
-                                                    <button type="button" class="btn bg-gradient-danger btn-xs" onclick="remove_tr_detalle(1,4,0)"><i class="far fa-trash-alt"></i> </button>
-                                                  </td> 
-                                                </tr>
-                                                <!-- /.tr -->
-
-                                                <tr class="data_1 data_bloque_5">
-                                                  <td class="py-1 text-center">5</td>
-                                                  <td class="py-1">
-                                                    <span class="span_p_1">DONACIONES</span> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="DONACIONES">
-                                                  </td>
-                                                  <td class="py-1"> </td>                           
-                                                  <td class="py-1">
-                                                    <div class="formato-numero-conta span_p_1">
-                                                      <span>S/</span>3,500.00
-                                                    </div> 
-                                                    <input type="text" id="" class="hidden input_p_1 w-100" value="3,500.00">
-                                                  </td> 
-                                                  <td class="py-1">
-                                                    <button type="button" class="btn bg-gradient-success btn-xs" ><i class="fas fa-plus"></i> </button>
-                                                    <button type="button" class="btn bg-gradient-danger btn-xs" onclick="remove_tr_detalle(1,5,0)"><i class="far fa-trash-alt"></i> </button>
-                                                  </td> 
-                                                </tr>
-                                                <!-- /.tr -->
+                                                </tr> -->
+                                                <!-- /.tr -->                   
+                                                
                                               </tbody>
                                               <!-- /.tbody -->
                                               <tr>
@@ -486,13 +337,12 @@
                                               </tr>
                                               <!-- /.tr -->
                                               <tbody>
-                                                <tr>
-                                                  <td class="py-1 text-center">1</td>
+                                                <tr> 
+                                                  <td class="py-1 text-center ">1</td>
                                                   <td class="py-1">CAJA</td>
                                                   <td class="py-1 text-center fecha_pd"><i class="fas fa-spinner fa-pulse"></i></td>
                                                   <td class="py-1">
-                                                    <div class="formato-numero-conta span_caja_pry"><span>S/</span><span class="caja_pry"><i class="fas fa-spinner fa-pulse"></i></span></div> 
-                                                    <input type="text" id="input_caja_pry" class="hidden input_caja_pry w-100">
+                                                    <div class="formato-numero-conta"><span>S/</span><span class="caja_pry"><i class="fas fa-spinner fa-pulse"></i></span></div>
                                                   </td> 
                                                 </tr>
                                                 <tr>
@@ -615,7 +465,7 @@
                                 <div class="col-lg-6">
                                   <div class="form-group">
                                     <label for="caja_p">Caja</label>
-                                    <input type="number" class="form-control" name="caja_p" id="caja_p"  placeholder="Caja" />
+                                    <input type="number" class="form-control" name="caja_p" id="caja_p" readonly placeholder="Caja" />
                                   </div>
                                 </div>
                                 

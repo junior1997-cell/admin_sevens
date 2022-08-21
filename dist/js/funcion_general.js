@@ -302,6 +302,89 @@ function formato_miles_input (nombre_input) {
   });
 }
 
+//variables globales para definir el separador de millares y decimales
+//Para coma millares y punto en decimales (USA)
+const DECIMALES = ".";
+// cambiar por "," para coma decimal y punto en millares (ESPAÑA)
+const INFLOCAL = DECIMALES === "." ? new Intl.NumberFormat("en-US") : new Intl.NumberFormat("es-ES");
+//============================================================================
+let regexpInteger = new RegExp("[^0-9]", "g");
+let regexpNumber = new RegExp("[^0-9" + "\\" + DECIMALES + "]", "g");
+//============================================================================
+
+// Formatear numeros decimales indistintamente tanto positivos como negativos
+function numberFormatIndistinto(e) {
+  if (this.value !== "") {
+    //ver si el primer caracter es el simbolo minus "-"
+    let caracterInicial = this.value.substring(0, 1);
+    //si hay caracter negativo al inicio se quita del proceso de formateo
+    //se filtra el contenido de caracteres no admisibles
+    //se divide el numero entre la parte entera y la parte decimal
+    let contenido = caracterInicial === "-" ? this.value.substring(1, this.value.length).replace(regexpNumber, "").split(DECIMALES) : this.value.replace(regexpNumber, "").split(DECIMALES);
+    // añadimos los separadores de miles a la parte entera del numero
+    contenido[0] = contenido[0].length ? INFLOCAL.format(parseInt(contenido[0])) : "0";
+    // Juntamos el numero con los decimales si hay decimales
+    this.value = contenido.length > 1 ? contenido.slice(0, 2).join(DECIMALES) : contenido[0];
+    // Juntamos el signo "-" minus si existe
+    if (caracterInicial === "-") {
+      this.value = caracterInicial + this.value;
+    }
+    //damos color rojo si numero negativo
+    // this.className = this.value.substring(0, 1) !== "-" ? "numberIndistinto numero_positivos" : "numberIndistinto numero_negativos";
+    if (this.value.substring(0, 1) !== "-") {
+      this.classList.remove('numberIndistinto', 'numero_negativos'); this.classList.add('numberIndistinto', 'numero_positivos');
+    }else{
+      this.classList.remove('numberIndistinto', 'numero_positivos'); this.classList.add('numberIndistinto', 'numero_negativos');
+    }
+  }
+}
+
+// Formatear numeros decimales indistintamente tanto positivos como negativos con solo 2 decimales
+function numberFormatIndistintoFixed (nombre_input) {  
+  console.log('holaaaaaa');
+  if (this.value !== "") {
+    
+    //ver si el primer caracter es el simbolo minus "-"
+    let caracterInicial = this.value.substring(0, 1);
+    //si hay caracter negativo al inicio se quita del proceso de formateo
+    //se filtra el contenido de caracteres no admisibles
+    //se divide el numero entre la parte entera y la parte decimal
+    let contenido = caracterInicial === "-" ? this.value.substring(1, this.value.length).replace(regexpNumber, "").split(DECIMALES) : this.value.replace(regexpNumber, "").split(DECIMALES);
+    //ver si hay ya 2 decimales introducidos
+    if (contenido.length > 1) {
+      if (contenido[1].length > 2) {
+        contenido[1] = contenido[1].substring(0, contenido[1].length - 1);
+      }
+    }
+    // añadimos los separadores de miles a la parte entera del numero
+    contenido[0] = contenido[0].length ? INFLOCAL.format(parseInt(contenido[0])) : "0";
+    // Juntamos el numero con los decimales si hay decimales
+    this.value = contenido.length > 1 ? contenido.slice(0, 2).join(DECIMALES) : contenido[0];
+    // Juntamos el signo "-" minus si existe
+    if (caracterInicial === "-") {
+      this.value = caracterInicial + this.value;
+    }
+    //damos color rojo si numero negativo
+    // this.className = this.value.substring(0, 1) !== "-" ? "numberIndistinto numero_positivos" : "numberIndistinto numero_negativos";
+    if (this.value.substring(0, 1) !== "-") {
+     this.classList.remove('numberIndistinto', 'numero_negativos'); this.classList.add('numberIndistinto', 'numero_positivos');
+    }else{
+      this.classList.remove('numberIndistinto', 'numero_positivos'); this.classList.add('numberIndistinto', 'numero_negativos');
+    }
+  }
+}
+
+window.onload = function () {
+  // ################ SE EJECUTA DESPUES CARGAR EL CODIGO CSS y HTML #############
+  // Creamos el evento keyup para cada clase definida
+  // document.querySelectorAll(".integerIndistinto").forEach((el) => el.addEventListener("keyup", integerFormatIndistinto));
+  // document.querySelectorAll(".integerPositivo").forEach((el) => el.addEventListener("keyup", integerFormatPositivo));
+  document.querySelectorAll(".numberIndistinto").forEach((el) => el.addEventListener("keyup", numberFormatIndistinto));
+  // document.querySelectorAll(".numberPositivo").forEach((el) => el.addEventListener("keyup", numberFormatPositivo));
+  document.querySelectorAll(".numberIndistintoFixed").forEach((el) => el.addEventListener("keyup", numberFormatIndistintoFixed));
+  // document.querySelectorAll(".numberPositivoFixed").forEach((el) => el.addEventListener("keyup", numberFormatPositivoFixed));
+};
+
 // Formato de miles
 function formato_miles(num) {
   if (num == 0) return "0.00";

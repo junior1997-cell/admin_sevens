@@ -62,14 +62,14 @@ class EstadoFinanciero
   // ══════════════════════════════════════ PROYECIONES ══════════════════════════════════════ 
   public function insertar_proyecciones($idproyecto_p, $fecha_p, $caja_p, $descripcion_p)  {
     $sql = "INSERT INTO proyeccion( idproyecto, fecha, caja, descripcion) 
-    VALUES ('$idproyecto_p','$fecha_p','$caja_p','$descripcion_p')";
+    VALUES ('$idproyecto_p','$fecha_p','$caja_p','$descripcion_p');";
     return ejecutarConsulta($sql);     
   }
 
   //Implementamos un método para editar registros
-  public function editar_proyecciones( $idestado_financiero, $idproyecto, $caja, $garantia) {
-    $sql = "UPDATE estado_financiero SET idproyecto='$idproyecto', caja='$caja', garantia='$garantia'
-    WHERE idestado_financiero='$idestado_financiero'";
+  public function editar_proyecciones($idproyeccion_p, $idproyecto_p, $fecha_p, $caja_p, $descripcion_p) {
+    $sql = "UPDATE proyeccion SET idproyecto='$idproyecto_p', fecha='$fecha_p', caja='$caja_p', descripcion='$descripcion_p' 
+    WHERE idproyeccion ='$idproyeccion_p';";
     return ejecutarConsulta($sql);
   }
 
@@ -140,6 +140,12 @@ class EstadoFinanciero
       );
     }
 
+    // data estado financiero
+    $sql_4 = "SELECT idestado_financiero, caja, garantia FROM estado_financiero WHERE idproyecto= '$id_proyecto'";
+    $data_caja = ejecutarConsultaSimpleFila($sql_4);
+    if ($data_caja['status'] == false) {  return $data_caja;  }
+    $caja = (empty($data_caja['data']) ? 0 : (empty($data_caja['data']['caja']) ? 0 : floatval($data_caja['data']['caja']) ) );
+
     $prestamo = deuda_prestamo($id_proyecto) ;
     $credito =  deuda_credito($id_proyecto);
 
@@ -156,7 +162,7 @@ class EstadoFinanciero
       'idproyeccion'              => $proyeccion['data']['idproyeccion'],
       'idproyecto'                => $proyeccion['data']['idproyecto'],      
       'fecha'                     => $proyeccion['data']['fecha'],
-      'caja'                      => $proyeccion['data']['caja'],
+      'caja'                      => $caja,
       'descripcion'               => $proyeccion['data']['descripcion'],
       
       'detalle'                   => $data_detalle,
@@ -172,8 +178,69 @@ class EstadoFinanciero
     return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data  ] ;
 
   }
-  // ══════════════════════════════════════ S U B   D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════
 
+  // ══════════════════════════════════════ S U B   D E T A L L E   P R O Y E C I O N E S ══════════════════════════════════════
+  public function guardar_y_editar_detalle_proyecciones( $data_array )  {
+    $sd_pry =''; $d_pry ='';
+    $idproyeccion     = $data_array['idproyeccion'];
+    $caja             = $data_array['caja'];
+    $gasto_proyectado = $data_array['gasto_proyectado'];
+
+    // actualizamos la tabla PROYECCION
+    $sql_1 = "UPDATE proyeccion SET caja='$caja', total_gasto='$gasto_proyectado' WHERE idproyeccion ='$idproyeccion';";
+    $pry = ejecutarConsulta($sql_1);   
+    if ($pry['status'] == false) {  return $pry;  }
+
+    // desactivamos TODOS los registros de: DETALLE PROYECCION
+    $sql_0 = "UPDATE detalle_proyeccion SET estado='0' WHERE idproyeccion ='$idproyeccion';";
+    $desactivar_d_pry = ejecutarConsulta($sql_0);  
+    if ($desactivar_d_pry['status'] == false) {  return $desactivar_d_pry;  }
+
+    foreach ($data_array['detalle'] as $key => $value_det) {
+
+      $iddetalle_proyeccion = $value_det['iddetalle_proyeccion'];
+      $nombre_det           = $value_det['nombre'];
+      $total_det            = $value_det['total'];      
+
+      // Agregamos o Editamos la tabla DETALLE PROYECCION
+      if (empty($value_det['iddetalle_proyeccion'])) {
+        $sql_2 = "INSERT INTO detalle_proyeccion( idproyeccion, nombre, monto) VALUES ('$idproyeccion', '$nombre_det', '$total_det');";
+        $d_pry = ejecutarConsulta($sql_2);  
+        if ($d_pry['status'] == false) {  return $d_pry;  } 
+      } else {
+        // desactivamos TODOS los registros de: SUB-DETALLE PROYECCION
+        $sql_0 = "UPDATE sub_detalle_proyeccion SET estado='0'  WHERE iddetalle_proyeccion ='$iddetalle_proyeccion';";
+        $desactivar_sd_pry = ejecutarConsulta($sql_0);  
+        if ($desactivar_sd_pry['status'] == false) {  return $desactivar_sd_pry;  }
+
+        $sql_2 = "UPDATE detalle_proyeccion SET idproyeccion='$idproyeccion', nombre='$nombre_det', monto='$total_det', estado='1'
+        WHERE iddetalle_proyeccion ='$iddetalle_proyeccion';";
+        $d_pry = ejecutarConsulta($sql_2);
+        if ($d_pry['status'] == false) {  return $d_pry;  } 
+      }  
+      
+      foreach ($value_det['subdetalle'] as $key => $value_sub_det) {
+        $idsub_detalle_proyeccion = $value_sub_det['idsub_detalle_proyeccion'];
+        $nombre_sub_det           = $value_sub_det['nombre'];
+        $total_sub_det            = $value_sub_det['total'];
+
+        // Agregamos o Editamos la tabla SUB-DETALLE PROYECCION
+        if ( empty($value_sub_det['idsub_detalle_proyeccion']) ) {
+          $sql_3 = "INSERT INTO sub_detalle_proyeccion( iddetalle_proyeccion, nombre, monto) VALUES ('$iddetalle_proyeccion','$nombre_sub_det','$total_sub_det');";
+          $sd_pry = ejecutarConsulta($sql_3);
+          if ($sd_pry['status'] == false) {  return $sd_pry;  } 
+        } else {
+          $sql_3 = "UPDATE sub_detalle_proyeccion SET iddetalle_proyeccion='$iddetalle_proyeccion', nombre='$nombre_sub_det', monto='$total_sub_det', estado='1' 
+          WHERE idsub_detalle_proyeccion ='$idsub_detalle_proyeccion';";
+          $sd_pry = ejecutarConsulta($sql_3);
+          if ($sd_pry['status'] == false) {  return $sd_pry;  } 
+        }        
+      } 
+    }  
+    return  (empty($sd_pry) ? $d_pry : $sd_pry );  
+  }
+
+  # .class
 }
 
 // ══════════════════════════════════════ SUMAS ══════════════════════════════════════
