@@ -7,7 +7,7 @@ function init(){
 
   $('#mEscritorio').addClass("active");  
 
-  tbla_principal(); tbla_secundaria();
+  tbla_principal(1, 'shadow-0px-05rem-1rem-rgb-255-193-7', '.box-proceso'); 
 
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });   
 
@@ -48,17 +48,6 @@ $('.click-btn-fecha-inicio').on('click', function (e) {$('#fecha_inicio').focus(
 
 init();
 
-// input con comas de miles
-// $("#costo").on({
-//   focus: function (event) {
-//     $(event.target).select();
-//   },
-//   keyup: function (event) {
-//     $(event.target).val(function (index, value) {
-//       return value.replace(/\D/g, "").replace(/([0-9])([0-9]{2})$/, "$1.$2").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
-//     });
-//   },
-// });
 
 function validar_permanent() { if ($("#fecha_pago_obrero").select2('val') == null) {  $("#definiendo").prop('checked', false); } }
 
@@ -165,7 +154,10 @@ function limpiar() {
 }
 
 //Función Listar en curso o no empezados
-function tbla_principal() {
+function tbla_principal(estado, class_color, box_select) {
+
+  $('.info-box').removeClass('shadow-0px-05rem-1rem-rgb-255-193-7 shadow-0px-05rem-1rem-rgb-220-53-69 shadow-0px-05rem-1rem-rgb-40-167-69 shadow-0px-05rem-1rem-rgb-23-162-184');
+  $(box_select).addClass(class_color);
 
   tabla=$('#tabla-proyectos').dataTable({
     responsive: true,
@@ -177,7 +169,7 @@ function tbla_principal() {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,6,7,3,8,5,9,10,11,12,13,14,15,], } }, {extend: "colvis"} ,        
     ],
     ajax:{
-      url: '../ajax/proyecto.php?op=tbla_principal',
+      url: `../ajax/proyecto.php?op=tbla_principal&estado=${estado}`,
       type : "get",
       dataType : "json",						
       error: function(e){

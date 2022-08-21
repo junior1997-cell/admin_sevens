@@ -624,16 +624,26 @@ table th { vertical-align: top !important; }
 .b-radio-10px{ border-radius: 10px; }
 
 /*  ══════════════════════════════════════════ - S H A D O W  C O L O R - ══════════════════════════════════════════ */
-.shadow-1px1rem2rem-rgb-52-174-193-77{
-  box-shadow: 1px 1rem 2rem rgb(52 174 193 / 77%);
-}
+/* celeste */
+.shadow-1px1rem2rem-rgb-52-174-193-77{ box-shadow: 1px 1rem 2rem rgb(52 174 193 / 77%) !important; }
+.shadow-1px06rem09rem-rgb-52-174-193-77 { box-shadow: 1px 0.6rem 0.9rem rgb(52 174 193 / 77%) !important; }
+.shadow-0px-05rem-1rem-rgb-23-162-184 {  box-shadow: 0 0.5rem 1rem rgb(23 162 184) !important; }
 
-.shadow-1px06rem09rem-rgb-52-174-193-77 {
-  box-shadow: 1px 0.6rem 0.9rem rgb(52 174 193 / 77%);
-}
-.shadow-0px1rem3rem-rgb-0-0-0-50 {
-  box-shadow: 0 1rem 3rem rgb(0 0 0 / 50%) !important;
-}
+/* rojo */
+.shadow-0px-05rem-1rem-rgb-220-53-69 { box-shadow: 0 0.5rem 1rem rgb(220 53 69) !important; }
+
+/* amarillo */
+.shadow-0px-05rem-1rem-rgb-255-193-7 { box-shadow: 0 0.5rem 1rem rgb(255 193 7) !important; }
+
+/* azul */
+
+/* verde */
+.shadow-0px-05rem-1rem-rgb-40-167-69 { box-shadow: 0 0.5rem 1rem rgb(40 167 69) !important; }
+
+/* negro */
+.shadow-0px-0125rem-025rem-rgb-0-0-0-38{ box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 38%) !important; }
+.shadow-0px1rem3rem-rgb-0-0-0-50 { box-shadow: 0 1rem 3rem rgb(0 0 0 / 50%) !important; }
+.shadow-0px-05rem-1rem-rgb-0-0-0-65 { box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 65%) !important; }
 
 /*  ═══════════════════════════════════ - P A R P A D E A N T E    M U L T I C O L O R    C O L O R - ═══════════════════════════════════ */
 

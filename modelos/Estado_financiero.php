@@ -231,6 +231,7 @@ class EstadoFinanciero
         $desactivar_sd_pry = ejecutarConsulta($sql_0);  
         if ($desactivar_sd_pry['status'] == false) {  return $desactivar_sd_pry;  }
 
+        // actualizamos los detalles
         $sql_2 = "UPDATE detalle_proyeccion SET idproyeccion='$idproyeccion', nombre='$nombre_det', monto='$total_det', estado='1'
         WHERE iddetalle_proyeccion ='$iddetalle_proyeccion';";
         $d_pry = ejecutarConsulta($sql_2);

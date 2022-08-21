@@ -295,7 +295,7 @@
 
         case 'tbla_principal':
 
-          $rspta = $proyecto->tbla_principal();
+          $rspta = $proyecto->tbla_principal($_GET["estado"]);
           //Vamos a declarar un array
           $data= Array();  $cont=1;
 

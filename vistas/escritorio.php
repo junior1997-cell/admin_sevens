@@ -143,7 +143,65 @@
                           </div>
                           <!-- /.card-header -->
                           <div class="card-body">
-                            <h1 style="text-align: center;background-color: aliceblue;">Proyectos en Proceso o no Empezado</h1>
+
+                            <div class="row mb-3">
+                              <div class="col-md-3 col-sm-6 col-12">
+                                <div class="info-box cursor-pointer box-proceso" onclick="tbla_principal(1, 'shadow-0px-05rem-1rem-rgb-255-193-7', '.box-proceso')" data-toggle="tooltip" data-original-title="Click para ver">
+                                  <span class="info-box-icon bg-warning "><i class="far fa-envelope"></i></span>
+
+                                  <div class="info-box-content">
+                                    <span class="info-box-text">Proyectos</span>
+                                    <span class="info-box-number">EN PROCESO</span>
+                                  </div>
+                                  <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                              </div>
+                              <!-- /.col -->
+
+                              <div class="col-md-3 col-sm-6 col-12">
+                                <div class="info-box cursor-pointer box-no-empezado" onclick="tbla_principal(2, 'shadow-0px-05rem-1rem-rgb-220-53-69', '.box-no-empezado')" data-toggle="tooltip" data-original-title="Click para ver">
+                                  <span class="info-box-icon bg-danger"><i class="far fa-copy"></i></span>
+
+                                  <div class="info-box-content">
+                                    <span class="info-box-text">Proyectos</span>
+                                    <span class="info-box-number">NO EMPEZADOS</span>
+                                  </div>
+                                  <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                              </div>
+                              <!-- /.col -->
+
+                              <div class="col-md-3 col-sm-6 col-12">
+                                <div class="info-box cursor-pointer box-terminado" onclick="tbla_principal(0, 'shadow-0px-05rem-1rem-rgb-40-167-69', '.box-terminado')" data-toggle="tooltip" data-original-title="Click para ver">
+                                  <span class="info-box-icon bg-success"><i class="far fa-envelope"></i></span>
+
+                                  <div class="info-box-content">
+                                    <span class="info-box-text">Proyectos</span>
+                                    <span class="info-box-number">TERMINADOS</span>
+                                  </div>
+                                  <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                              </div>
+                              <!-- /.col -->
+
+                              <div class="col-md-3 col-sm-6 col-12">
+                                <div class="info-box cursor-pointer box-todos" onclick="tbla_principal(3, 'shadow-0px-05rem-1rem-rgb-23-162-184', '.box-todos')" data-toggle="tooltip" data-original-title="Click para ver">
+                                  <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+
+                                  <div class="info-box-content">
+                                    <span class="info-box-text">Proyectos</span>
+                                    <span class="info-box-number">TODOS</span>
+                                  </div>
+                                  <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                              </div>
+                              <!-- /.col -->
+                            </div>                            
+                            
                             <table id="tabla-proyectos" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
@@ -194,7 +252,7 @@
                               </tfoot>
                             </table>
 
-                            <div class="mt-4 card-danger card-outline ">
+                            <div class="mt-4 card-danger card-outline hidden">
                               <h1 style="text-align: center;background-color: aliceblue;">Proyectos Terminados</h1>
                               <table id="tabla-proyectos-terminados" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>

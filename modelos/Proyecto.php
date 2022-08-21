@@ -113,9 +113,17 @@ Class Proyecto
 	}
 
 	//Implementar un método para listar los registros
-	public function tbla_principal()
-	{
-		$sql="SELECT * FROM proyecto as p WHERE p.estado = 1 OR p.estado = 2;";
+	public function tbla_principal($estado)	{
+
+		# 0: terminado
+		# 1: en proceso 
+		# 2: si empezar
+		# 2: listar todos
+		
+		$sql_estado = "";
+		if ($estado == 3) {	$sql_estado = "p.estado >= 0 ";	} else { $sql_estado = "p.estado = '$estado'"; }
+		
+		$sql="SELECT * FROM proyecto as p WHERE $sql_estado;";
 		return ejecutarConsulta($sql);		
 	}
 

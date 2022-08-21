@@ -238,7 +238,7 @@ function chart_linea_barra(idnubeproyecto) {
           datasets: [
             {
               data: e.data.producto_mas_vendido_cantidad,
-              backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#2d1582']
+              backgroundColor: ['#dc3545', '#00a65a', '#f39c12', '#09a5be', '#007bff', '#2d1582']
             }
           ]
         },

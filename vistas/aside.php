@@ -32,7 +32,7 @@
 
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+      <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu" data-accordion="false">
         <!-- MANUAL DE USUARIO -->
         <li class="nav-item">
           <a href="manual_de_usuario.php" class="nav-link pl-2" id="mManualDeUsuario">
