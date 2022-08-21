@@ -73,7 +73,8 @@ function calc_cantidad() {
 function calc_total() {  
 
   $(".nro_comprobante").html("Núm. Comprobante");
-
+  $( "#num_documento" ).rules( "remove","required" );
+  
   var cantidad      =  es_numero($('#cantidad').val()) == true? parseFloat($('#cantidad').val()) : 0;
   var precio_unit   =  es_numero($('#precio_unitario').val()) == true? parseFloat($('#precio_unitario').val()) : 0;
 
@@ -106,6 +107,8 @@ function calc_total() {
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
     $(".div_ruc").show(); $(".div_razon_social").show();
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    
@@ -132,6 +135,7 @@ function calc_total() {
         $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
       }    
     }
+    $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
     $(".div_ruc").show(); $(".div_razon_social").show();
 
   } else {

@@ -1596,7 +1596,7 @@ $(function () {
       banco_pago: { required: true },
       fecha_pago: { required: true },
       monto_pago: { required: true },
-      numero_op_pago: { minlength: 1 },
+      numero_op_pago: {required: true, minlength: 1 },
       descripcion_pago: { minlength: 1 },
       titular_cuenta_pago: { minlength: 1 },
       // terms: { required: true },
@@ -1608,6 +1608,7 @@ $(function () {
       banco_pago: { required: "Por favor selecione un banco", },
       fecha_pago: { required: "Por favor ingresar una fecha", },
       monto_pago: { required: "Por favor ingresar el monto a pagar", },
+      numero_op_pago: { required: "Campo Requerido", },
     },
 
     errorElement: "span",
