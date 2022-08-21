@@ -293,6 +293,12 @@
           echo json_encode($rspta, true);	
         break;
 
+        case 'box_proyecto':
+          $rspta=$proyecto->box_proyecto();
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);	
+        break;
+
         case 'tbla_principal':
 
           $rspta = $proyecto->tbla_principal($_GET["estado"]);

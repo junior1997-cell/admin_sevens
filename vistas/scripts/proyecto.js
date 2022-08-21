@@ -1,6 +1,7 @@
 var tabla; var tabla2; 
 
 tablero(); 
+box_proyecto(); 
 
 //Función que se ejecuta al inicio
 function init(){  
@@ -1182,12 +1183,30 @@ function tablero() {
     data = JSON.parse(data);  //console.log(data);
 
     if (data.status) {
-      $("#cantidad_proyectos").html(data.data.proyecto.cantidad_proyectos);
-      $("#cantidad_proveedores").html(data.data.proveedor.cantidad_proveedores);
-      $("#cantidad_trabajadores").html(data.data.trabajador.cantidad_trabajadores);
-      $("#cantidad_compra").html(data.data.servicio.cantidad_compra_insumos);
+      $("#cantidad_proyectos").html(data.data.proyecto);
+      $("#cantidad_proveedores").html(data.data.proveedor);
+      $("#cantidad_trabajadores").html(data.data.trabajador);
+      $("#cantidad_compra").html(data.data.servicio);
     } else {
       ver_errores(data);
+    } 
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function box_proyecto() {   
+
+  $.post("../ajax/proyecto.php?op=box_proyecto",  function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status) {
+      $(".cant_proceso").html(e.data.cant_proceso);
+      $(".cant_no_emmpezado").html(e.data.cant_no_emmpezado);
+      $(".cant_teminado").html(e.data.cant_teminado);
+      $(".cant_todos").html(e.data.cant_todos);
+    } else {
+      ver_errores(e);
     } 
 
   }).fail( function(e) { ver_errores(e); } );
