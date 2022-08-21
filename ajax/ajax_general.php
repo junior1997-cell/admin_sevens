@@ -521,22 +521,21 @@
         $data = "";
         if ($rspta['status'] == true) {
 
-           foreach ($rspta['data'] as $key => $reg) { 
-            $data .= '<option value=' . $reg['idmaquinaria'] . '>' . $reg['nombre'] . ' : ' . $reg['codigo_maquina'] . ' -> ' . $reg['nombre_proveedor'] . '</option>';
-          }
+          foreach ($rspta['data'] as $key => $reg) { 
+           $data .= '<option value=' . $reg['idmaquinaria'] . '>' . $reg['nombre'] . ' : ' . $reg['codigo_maquina'] . ' -> ' . $reg['nombre_proveedor'] . '</option>';
+         }
+         $retorno = array(
+           'status' => true, 
+           'message' => 'Salió todo ok', 
+           'data' => $data, 
+         );
+ 
+         echo json_encode($retorno, true);
 
-          $retorno = array(
-            'status' => true, 
-            'message' => 'Salió todo ok', 
-            'data' => $data, 
-          );
-  
-          echo json_encode($retorno, true);
+       } else {
 
-        } else {
-
-          echo json_encode($rspta, true); 
-        }
+         echo json_encode($rspta, true); 
+       }
       break;
 
       default: 

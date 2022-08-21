@@ -12,9 +12,9 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Servicio - Equipo</title>
+        <title>Admin Sevens | Servicio - Equipos</title>
 
-        <?php $title = "Servicio - Equipo"; require 'head.php'; ?>
+        <?php $title = "Servicios - Equipos"; require 'head.php'; ?>
 
         <link rel="stylesheet" href="../dist/css/leyenda.css" />
       </head>
@@ -58,10 +58,10 @@
                           <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="card-header">
                               <h3 class="card-title display" id="btn-agregar">
-                                <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                                <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="mostrar_form_table(1); limpiar(); "><i class="fas fa-plus-circle"></i> Agregar</button>
                                 Administra tus servicios.
                               </h3>
-                              <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="regresar_principal();"><i class="fas fa-arrow-left"></i> Regresar</button>
+                              <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="mostrar_form_table(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
                               <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();">
                                 <i class="fas fa-dollar-sign"></i> Agregar Pago
                               </button>
@@ -107,6 +107,59 @@
                             </div>
                           </div>
                         </div>
+                          <!-- filtros -->
+                        <div class="card-body filtros-inputs row pt-3 pb-0">
+
+                          <!-- filtro por: fecha inicial -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">    
+                            <div class="form-group">
+                              <!-- <label for="filtro_fecha_inicio" >Fecha inicio </label> -->
+                              <div class="input-group date"  >
+                                <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                              </div>
+                            </div>                                
+                          </div>
+
+                          <!-- filtro por: fecha final -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">                                
+                            <div class="form-group">
+                              <!-- <label for="filtro_fecha_inicio" >Fecha fin </label> -->
+                              <div class="input-group date"  >
+                                <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
+                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                                <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                              </div>
+                            </div> 
+                          </div>
+
+                          <!-- filtro por: proveedor -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-group">
+                              <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
+                              <select id="filtro_proveedor" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                              </select>
+                            </div>                          
+                          </div>
+
+                          <!-- filtro por: comprobante -->
+                          <div class="col-12 col-sm-6 col-md-6 col-lg-2" >
+                            <div class="form-group">
+                              <!-- <label for="filtros" >Tipo comprobante </label> -->
+                              <select id="filtro_tipo_comprobante" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
+                                <option value="0">Todos</option>
+                                <option value="Ninguno">Ninguno</option>
+                                <option value="Boleta">Boleta</option>
+                                <option value="Factura">Factura</option>
+                                <option value="Nota de venta">Nota de venta</option>
+                              </select>
+                            </div>
+                            
+                          </div>
+                        </div>
 
                         <!--===============Tabla Principal =========-->
                         <div class="card-body display" id="tabla_principal">
@@ -115,7 +168,7 @@
                               <tr>
                                 <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
-                                <th>Nombre Equipos</th>
+                                <th>Nombre Máquina</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
@@ -131,7 +184,7 @@
                               <tr>
                                 <th>#</th>
                                 <th data-toggle="tooltip" data-original-title="Acciones">Acc.</th>
-                                <th>Nombre Equipos</th>
+                                <th>Nombre Máquina</th>
                                 <th>Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
@@ -146,9 +199,13 @@
                         </div>
 
                         <!--===============Tabla detalle por maquina  =======--->
-                        <div class="card-body" id="tabla_detalles" style="display: none;">
+                        <div class="card-body pt-1" id="tabla_detalles" style="display: none;">
+                          <div class="head_name_m_e">  </div>
                           <table id="tabla-detalle-m" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
                               <tr>
                                 <th>#</th>
                                 <th>Acciones</th>
@@ -185,7 +242,8 @@
                         </div>
 
                         <!--===============Tabla Pagos =======--->
-                        <div class="card-body" id="tabla_pagos" style="display: none;">
+                        <div class="card-body pt-1" id="tabla_pagos" style="display: none;">
+                          <div class="head_name_pago_m_e">  </div>
                           <div style="text-align: center;">
                             <div>
                               <h4>Total a pagar: <b id="total_costo_secc_pagos"></b></h4>
@@ -198,6 +256,9 @@
                           <!--tabla 1 t_proveedor, t_provee_porc,t_detaccion, t_detacc_porc -->
                           <table id="tabla-pagos-proveedor" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
                               <tr>
                                 <th>#</th>
                                 <th>Acciones</th>
@@ -249,6 +310,9 @@
                           <table id="tabla-pagos-detrecciones" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
                               <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
+                              <tr>
                                 <th>#</th>
                                 <th>Acciones</th>
                                 <th>Forma pago</th>
@@ -292,12 +356,16 @@
                         </div>
 
                         <!--===============Tabla facturas =======--->
-                        <div class="card-body" id="tabla_facturas_h" style="display: none;">
+                        <div class="card-body pt-1" id="tabla_facturas_h" style="display: none;">
+                          <div class="head_name_facturas_m_e">  </div>                        
                           <div style="text-align: center;">
                             <h5 style="background: aliceblue;">Costo parcial: <b id="total_costo" style="color: #e52929;"></b></h5>
                           </div>
                           <table id="tabla_facturas" class="table table-bordered table-striped display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
                               <tr>
                                 <th>#</th>
                                 <th>Aciones</th>
@@ -341,6 +409,7 @@
                 <!-- /.container-fluid -->
 
                 <!--===============Modal agregar servicios =========-->
+
                 <div class="modal fade" id="modal-agregar-servicio">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
@@ -365,8 +434,8 @@
                               <div class="col-lg-12">
                                 <div class="form-group">
                                   <label for="maquinaria">Seleccionar maquina</label>
-                                  <div id="sssss">
-                                    <select name="maquinaria" id="maquinaria" class="form-control select2" style="width: 100%;" onchange="seleccion();" readonly> </select>
+                                  <div id="ocultar_select">
+                                    <select name="maquinaria" id="maquinaria" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                   <input class="form-control" style="display: none;" id="nomb_maq" disabled />
                                 </div>
@@ -375,7 +444,7 @@
                               <div class="col-lg-6" id="unidad">
                                 <div class="form-group">
                                   <label for="unidad_m">Unidad de medida</label>
-                                  <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;" onchange="capture_unidad();">
+                                  <select name="unidad_m" id="unidad_m" class="form-control select2" style="width: 100%;" onchange="capture_unidad();" onkeyup="costo_partcial();">
                                     <option value="Hora">Hora</option>
                                     <option value="Dia">Dia</option>
                                     <option value="Mes">Mes</option>
@@ -393,7 +462,7 @@
                               <!-- Fecha Inicio-->
                               <div class="col-lg-6" id="fecha_i">
                                 <div class="form-group">
-                                  <label for="fecha_inicio" id="fecha-i-tutulo">Fecha Inicio </label>
+                                  <label for="fecha_inicio" id="fecha-i-titulo">Fecha Inicio </label>
                                   <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" onchange="calculardia();" onkeyup="costo_partcial();" />
                                 </div>
                               </div>
@@ -516,7 +585,7 @@
                                   <label for="id_maquinaria_pago">Maquinaria </label>
                                   <input type="hidden" name="id_maquinaria_pago" id="id_maquinaria_pago" class="form-control" placeholder="maquinaria" />
                                   <br />
-                                  <b  class="clase_nomb_maq_benef" id="maquinaria_pago" style="font-size: 16px; color: red;"></b>
+                                  <b class="form-control-mejorado" id="maquinaria_pago" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
 
@@ -526,7 +595,7 @@
                                   <label for="beneficiario_pago">Beneficiario</label>
                                   <input class="form-control" type="hidden" id="beneficiario_pago" name="beneficiario_pago" />
                                   <br />
-                                  <b class="clase_nomb_maq_benef"  id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
+                                  <b class="form-control-mejorado" id="h4_mostrar_beneficiario" style="font-size: 16px; color: red;"></b>
                                 </div>
                               </div>
                               <!--Forma de pago -->
@@ -616,7 +685,7 @@
                                     <input style="display: none;" id="doc1" type="file" name="doc1" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <div class="col-6 col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'comprobante_pago');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'servicio_maquina', 'comprobante_pago', '100%', '320'); reload_zoom();">
                                     <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                   </div>
@@ -654,17 +723,23 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title">voucher</h4>
+                        <h4 class="modal-title">Comprobante :  <span class="nombre_comprobante text-bold"></span></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div id="datosservicios" class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="descargar" download="Voucher" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
-                        </div>
+                          <div class="row">
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                            </div>
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                            </div>
+                            <div class="col-12 col-md-12 mt-2">
+                              <div id="ver_fact_pdf" width="auto"></div>
+                            </div>
+                          </div> 
                       </div>
                     </div>
                   </div>
@@ -675,18 +750,23 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
                       <div class="modal-header" style="background-color: #ce834926;">
-                        <h4 class="modal-title">Factura</h4>
+                        <h4 class="modal-title">Comprobante :  <span class="nombre_comprobante_f text-bold"></span></h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
-                        <div class="class-style" style="text-align: center;">
-                          <a class="btn btn-warning btn-block" href="#" id="iddescargar" download="factura" style="padding: 0px 12px 0px 12px !important;" type="button"><i class="fas fa-download"></i></a>
-                          <br />
-                          <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-factura" style="cursor: pointer !important;" width="auto" />
-                          <div id="ver_fact_pdf" style="cursor: pointer !important;" width="auto"></div>
-                        </div>
+                          <div class="row">
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar_f" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
+                            </div>
+                            <div class="col-6 col-md-6">
+                              <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo_f"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
+                            </div>
+                            <div class="col-12 col-md-12 mt-2">
+                              <div id="ver_fact_pdf_f" width="auto"></div>
+                            </div>
+                          </div> 
                       </div>
                     </div>
                   </div>
@@ -740,7 +820,7 @@
                               <!-- Sub total -->
                               <div class="col-lg-3">
                                 <div class="form-group">
-                                  <label for="subtotal">Sub total</label>
+                                  <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
                                   <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />
                                 </div>
                               </div>
@@ -748,7 +828,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onkeyup="calcula_igv_subt();"> 
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onchange="calcula_igv_subt();" onkeyup="calcula_igv_subt();"> 
                                   <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>
@@ -756,10 +836,10 @@
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="igv">IGV</label>
-                                  <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV"  readonly />
+                                  <input class="form-control" type="number" id="igv" name="igv" placeholder="IGV" readonly />
                                 </div>
                               </div>
-                              <!-- Descripcion o Nota-->
+                              <!-- Descripcion-->
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="nota">Nota </label> <br />
@@ -785,7 +865,7 @@
                                     <input style="display: none;" id="doc2" type="file" name="doc2" accept="application/pdf, image/*" class="docpdf" /> 
                                   </div>
                                   <div class="col-6 col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'comprobante_servicio');">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(2, 'servicio_maquina', 'comprobante_servicio', '100%', '320'); reload_zoom();">
                                     <i class="fas fa-redo"></i> Recargar.
                                     </button>
                                   </div>
@@ -828,27 +908,7 @@
           ?>
         </div>
         <!-- /.content-wrapper -->
-
         <?php require 'script.php'; ?>
-
-        <style>
-          .clase_nomb_maq_benef{
-            display: block;
-            width: 100%;
-            height:100%;
-            padding: 0.375rem 0.75rem;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #495057;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #ced4da;
-            border-radius: 0.25rem;
-            box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-          }
-        </style>
 
         <script type="text/javascript" src="scripts/servicio_equipos.js"></script>
 

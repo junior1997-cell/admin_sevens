@@ -207,9 +207,36 @@ class ServicioMaquina
   public function insertar_pago( $idproyecto_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago,
     $monto_pago, $numero_op_pago, $descripcion_pago, $id_maquinaria_pago, $imagen1 ) 
   {
-    $sql = "INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria,imagen) 
-		VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago','$imagen1')";
-    return ejecutarConsulta($sql);
+
+    $sql_1 = "SELECT forma_pago, tipo_pago, beneficiario, cuenta_destino, titular_cuenta, fecha_pago, numero_operacion,estado,estado_delete FROM pago_servicio WHERE numero_operacion='$numero_op_pago' AND id_maquinaria='$id_maquinaria_pago';";
+    $prov = ejecutarConsultaArray($sql_1);
+
+    if ($prov['status'] == false) { return  $prov;}
+
+    if (empty($prov['data'])) {
+
+      $sql = "INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria,imagen) 
+      VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago','$imagen1')";
+      return ejecutarConsulta($sql);
+
+    } else {
+      $info_repetida = '';
+
+      foreach ($prov['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+        <span class="font-size-18px text-danger"><b >N° comprobante : </b> '.$value['numero_operacion'].'</span><br>
+        <b>Beneficiario: </b>'.$value['beneficiario'].'<br>
+        <b>Titular cuenta: </b>'.$value['titular_cuenta'].'<br>
+        <b>Fecha: </b>'.format_d_m_a($value['fecha_pago']).'<br>
+        <b>Forma de pago: </b>'.$value['forma_pago'].'<br>
+        <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+        <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+        <hr class="m-t-2px m-b-2px">
+        </li>';
+      }
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }
+    
   }
 
   public function editar_pago($idpago_servicio, $idproyecto_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago,
@@ -338,9 +365,34 @@ class ServicioMaquina
 
   public function insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
   {
-    $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota) 
-		VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv', '$val_igv', '$tipo_gravada','$nota')";
-    return ejecutarConsulta($sql);
+
+    
+    $sql_1 = "SELECT tipo_comprobante, codigo, fecha_emision, monto, estado, estado_delete, created_at, updated_at FROM factura WHERE  codigo='$codigo' AND idmaquinaria='$idmaquina';";
+    $prov = ejecutarConsultaArray($sql_1);
+
+    if ($prov['status'] == false) { return  $prov;}
+
+    if (empty($prov['data'])) {
+
+
+      $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota) 
+      VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv', '$val_igv', '$tipo_gravada','$nota')";
+      return ejecutarConsulta($sql);
+
+    } else {
+      $info_repetida = '';
+
+      foreach ($prov['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+        <span class="font-size-18px text-danger"><b >N° Factura : </b> '.$value['codigo'].'</span><br>
+        <b>Fecha de creación: </b>'.extr_fecha_creacion($value['created_at']).'<br>
+        <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
+        <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+        <hr class="m-t-2px m-b-2px">
+        </li>';
+      }
+      return $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ol>'.$info_repetida.'</ol>', 'id_tabla' => '' );
+    }
   }
 
   // obtebnemos los DOCS para eliminar
