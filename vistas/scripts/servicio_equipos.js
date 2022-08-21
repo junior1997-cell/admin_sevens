@@ -305,7 +305,12 @@ function listar_detalle(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,fe
 //función capturar unidad select (hora-dia-mes)
 function capture_unidad() {
   //Hora
+  $( "#horometro_inicial" ).rules( "remove","required" );
+  $( "#horometro_final" ).rules( "remove","required" );
+
   if ($("#unidad_m").select2("val") == "Hora") {
+    $("#horometro_inicial").rules("add", { required: true, messages: { required: "Campo requerido" } });
+    $("#horometro_final").rules("add", { required: true, messages: { required: "Campo requerido" } });
     $("#dias_head").hide();
     $("#meses_head").hide();
     $("#fecha_i").show();
@@ -1549,9 +1554,9 @@ $(function () {
       maquinaria: { required: true },
       fecha_inicio: { required: true },
       fecha_fin: { minlength: 1 },
-      horometro_inicial: { required: true, minlength: 1 },
+      //horometro_inicial: { required: true, minlength: 1 },
       horometro_final: { minlength: 1 },
-      costo_unitario: { minlength: 1 },
+      costo_unitario: { required: true,minlength: 1 },
       unidad_m: { required: true },
       descripcion: { minlength: 1 },
       // terms: { required: true },
@@ -1559,8 +1564,10 @@ $(function () {
     messages: {
       maquinaria: { required: "Por favor selecione una maquina",},
       fecha_inicio: { required: "Por favor ingrese fecha inicial", },
-      horometro_inicial: { required: "Por favor ingrese horometro inicial", },
+      //horometro_inicial: { required: "Por favor ingrese horometro inicial", },
       unidad_m: { required: "Por favor seleccione un tipo de unidad", },
+      costo_unitario: { required: "Campo requerido", },
+
     },
 
     errorElement: "span",
