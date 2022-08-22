@@ -680,7 +680,7 @@
         </div>
 
         <?php require 'script.php'; ?>        
-
+        
         <script type="text/javascript" src="scripts/pago_obrero.js"></script>        
          
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }) </script>

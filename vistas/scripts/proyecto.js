@@ -387,6 +387,36 @@ function l_m(){
   
 }
 
+function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
+
+  if ($("#foo" ).hasClass('className')) { $( "#foo" ).removeClass( 'className'); } else { $( "#foo" ).addClass( 'className'); }
+
+  if ( localStorage.getItem('nube_idproyecto') ) {
+    $("#icon_folder_"+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder"></i>');
+  }
+
+  $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
+
+  localStorage.setItem('nube_idproyecto', idproyecto);
+  localStorage.setItem('nube_fecha_inicial_proyecto', fecha_inicial);
+  localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
+  localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
+
+  // mostramos el nombre en el NAV
+  $("#ver-proyecto").html(`<i class="fas fa-tools"></i> <p class="d-inline-block hide-max-width-1080px">Proyecto:</p> ${nombre_proyecto}`);
+  $("#ver-proyecto").show();
+  $("#ver-otros-modulos").show();
+
+  setTimeout(function() { $(".ver-otros-modulos-1").fadeOut(0);  },0);
+  setTimeout(function() { $(".ver-otros-modulos-2").fadeIn(150); },4);
+  setTimeout(function() { $(".ver-otros-modulos-2").fadeOut(200); },400);
+  setTimeout(function() { $(".ver-otros-modulos-1").fadeIn(400); },500);
+
+  Swal.fire("Abierto!", `<b class="text-success">${nombre_proyecto}</b> <br> Proyecto abierto corrrectamente`, "success");
+
+  $(".tooltip").removeClass("show").addClass("hidde");
+}
+
 //Función para desactivar registros
 function empezar_proyecto(idproyecto, nombre_proyecto ) {
   crud_simple_alerta(

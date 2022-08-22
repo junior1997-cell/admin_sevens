@@ -1,5 +1,7 @@
 var tabla;
 
+var idproyecto_r = '', fecha_1_r = '', fecha_2_r = '', id_proveedor_r = '', comprobante_r = '';
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -16,9 +18,10 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  tabla_principal();    
+  // tabla_principal();    
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
+  lista_select2(`../ajax/hospedaje.php?op=select2Proveedor&idproyecto=${localStorage.getItem('nube_idproyecto')}`, '#filtro_proveedor', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) {$("#submit-form-hospedaje").submit();});
@@ -28,6 +31,14 @@ function init() {
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccinar tipo comprobante", allowClear: true, });  
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
 
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
+  $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
+  $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+  // Inicializar - Date picker  
+  $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  
+
   // restringimos la fecha para no elegir mañana
   no_select_tomorrow("#fecha_inicio");
   no_select_tomorrow("#fecha_comprobante");
@@ -35,6 +46,9 @@ function init() {
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+$('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
+$('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
@@ -232,8 +246,8 @@ function limpiar() {
 }
 
 //Función Listar
-function tabla_principal() {
-  var idproyecto=localStorage.getItem('nube_idproyecto');
+function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
+  idproyecto_r = idproyecto; fecha_1_r = fecha_1; fecha_2_r = fecha_2; id_proveedor_r = id_proveedor; comprobante_r = comprobante;
   tabla=$('#tabla-hospedaje').dataTable({
     responsive: true,
     lengthMenu: [[ -1, 6, 10, 25, 75, 100, 200,], ["Todos", 6, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
@@ -241,13 +255,12 @@ function tabla_principal() {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,10,11,2,12,13,3,5,14,6,7,15,16,17,18,19,20,21,8], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,10,11,2,12,13,3,5,14,6,7,15,16,17,18,19,20,21,8], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,10,11,2,12,13,3,5,14,6,7,15,16,17,18,19,20,21,8], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
-      {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,9,10,11,2,12,13,14,6,15,16,17,18,19,20,21,7], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,9,10,11,2,12,13,14,6,15,16,17,18,19,20,21,7], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,3,9,10,11,2,12,13,14,6,15,16,17,18,19,20,21,7], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
     ],
     ajax:{
-      url: '../ajax/hospedaje.php?op=tabla_principal&idproyecto='+idproyecto,
+      url: `../ajax/hospedaje.php?op=tabla_principal&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -259,10 +272,6 @@ function tabla_principal() {
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
       // columna: 1
       if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); }
-      // columna: sub total
-      if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right'); }
-      // columna: igv
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
       // columna: total
       if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap'); }
     },
@@ -277,24 +286,27 @@ function tabla_principal() {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [5,6,7], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [10,11,12,13,14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
+      { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [9,10,11,12,13,14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
     ],
   }).DataTable();
-  total();
+
+  total(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
 }
 
-function total() {
-  var idproyecto=localStorage.getItem('nube_idproyecto');
+function total(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
+   
   $("#total_monto").html("");
-  $.post("../ajax/hospedaje.php?op=total", { idproyecto: idproyecto }, function (e, status) {
+
+  $.post("../ajax/hospedaje.php?op=total", { 'idproyecto': idproyecto, 'fecha_1': fecha_1, 'fecha_2': fecha_2, 'id_proveedor': id_proveedor, 'comprobante': comprobante }, function (e, status) {
 
     e = JSON.parse(e);  console.log(e);  
     if (e.status ==true) {      
-      $("#total_subtotal").html(formato_miles(e.data.subtotal));
-      $("#total_igv").html(formato_miles(e.data.igv));
+      // $("#total_subtotal").html(formato_miles(e.data.subtotal));
+      // $("#total_igv").html(formato_miles(e.data.igv));
       $("#total_monto").html(formato_miles(e.data.precio_parcial));
+      $('.cargando').hide();
     } else {
       ver_errores(e);
     }    
@@ -336,7 +348,7 @@ function guardaryeditar(e) {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           Swal.fire("Correcto!", "Hospedaje guardado correctamente", "success");
-          tabla.ajax.reload(null, false); total();    
+          tabla.ajax.reload(null, false); total(idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
           limpiar();        
           
           $("#modal-agregar-hospedaje").modal("hide");
@@ -553,7 +565,7 @@ function activar(idhospedaje) {
         if (e.status == true) {
           Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
           tabla.ajax.reload(null, false);
-          total();
+          total(idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
         } else {
           ver_errores(e);
         }        
@@ -572,7 +584,7 @@ function eliminar(idhospedaje, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload(null, false);  total(); },
+    function(){ tabla.ajax.reload(null, false); total(idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r); },
     false, 
     false, 
     false,
@@ -581,6 +593,8 @@ function eliminar(idhospedaje, nombre) {
 }
 
 init();
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {
 
@@ -640,10 +654,40 @@ $(function () {
   $("#unidad").rules("add", { required: true, messages: { required: "Campo requerido" } });
 });
 
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
 function restrigir_fecha_input() {  restrigir_fecha_ant("#fecha_fin",$("#fecha_inicio").val());}
 
 
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+}
 
+function filtros() {  
+
+  var fecha_1       = $("#filtro_fecha_inicio").val();
+  var fecha_2       = $("#filtro_fecha_fin").val();  
+  var id_proveedor  = $("#filtro_proveedor").select2('val');
+  var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
+  
+  var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
+  var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+  //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+
+  tabla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante);
+}
 
 
 

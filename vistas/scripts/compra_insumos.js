@@ -281,7 +281,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       //console.log(data);
       if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
       if (data[5] != '') { $("td", row).eq(5).addClass('text-center'); }
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap'); }
       if (data[9] != "") {
         var num = parseFloat(quitar_formato_miles(data[9])); //console.log(num);
         if (num > 0) {
@@ -303,6 +303,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
+      { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [8,11],  visible: false,  searchable: false,  },
     ],

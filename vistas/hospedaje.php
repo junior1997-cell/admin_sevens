@@ -64,32 +64,90 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                          <table id="tabla-hospedaje" class="table table-bordered table-striped display" style="width: 100% !important;">
+                          <!-- filtros -->
+                          <div class="filtros-inputs row mb-4">
+
+                            <!-- filtro por: fecha inicial -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">    
+                              <div class="form-group">
+                                <!-- <label for="filtro_fecha_inicio" >Fecha inicio </label> -->
+                                <div class="input-group date"  >
+                                  <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                                  <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                                </div>
+                              </div>                                
+                            </div>
+
+                            <!-- filtro por: fecha final -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">                                
+                              <div class="form-group">
+                                <!-- <label for="filtro_fecha_inicio" >Fecha fin </label> -->
+                                <div class="input-group date"  >
+                                  <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                                  <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                                </div>
+                              </div> 
+                            </div>
+
+                            <!-- filtro por: proveedor -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="form-group">
+                                <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
+                                <select id="filtro_proveedor" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                                </select>
+                              </div>                              
+                            </div>
+
+                            <!-- filtro por: proveedor -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <!-- <label for="filtros" >Tipo comprobante </label> -->
+                                <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                                  <option value="0">Todos</option>
+                                  <option value="Ninguno">Ninguno</option>
+                                  <option value="Boleta">Boleta</option>
+                                  <option value="Factura">Factura</option>
+                                  <option value="Nota de venta">Nota de venta</option>
+                                </select>
+                              </div>                              
+                            </div>
+
+                          </div>
+                          <!-- /.filtro -->
+
+                          <table id="tabla-hospedaje" class="table table-bordered table-striped  display" style="width: 100% !important;">
                             <thead>
+                              <tr>
+                                <th colspan="10" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                              </tr>
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Fecha</th>
+                                <th >Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>                                
-                                <th>Sub total</th>
-                                <th>Igv</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>     
                                 <th>Total</th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
-                                 
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Proveedor</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">RUC</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Comprob.</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Num. Comprob.</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Val IGV</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Unidad</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Inicio</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Fin</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Cantidad</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Precio Unit.</th>                                
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Glosa</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Grabada</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                                 
+                                
+                                <th >RUC</th>
+                                <th >Tipo Comprob.</th>
+                                <th >Num. Comprob.</th>
+                                <th>Sub total</th>
+                                <th>Igv</th>
+                                <th >Val IGV</th>
+                                <th >Unidad</th>
+                                <th >Fecha Inicio</th>
+                                <th >Fecha Fin</th>
+                                <th >Cantidad</th>
+                                <th >Precio Unit.</th>                                
+                                <th >Glosa</th>
+                                <th >Tipo Grabada</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -98,26 +156,26 @@
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th>Fecha</th>
+                                <th >Proveedor</th>
                                 <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                 <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo comprob</th>
-                                <th class="px-2 text-nowrap"><div class="formato-numero-conta"> <span>S/</span><span id="total_subtotal"></span> </div></th>
-                                <th class="px-2 text-nowrap"><div class="formato-numero-conta"> <span>S/</span><span id="total_igv"></span> </div></th>
                                 <th class="px-2 text-nowrap"><div class="formato-numero-conta"> <span>S/</span><span id="total_monto"></span> </div></th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
-                                 
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Proveedor</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">RUC</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Comprob.</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Num. Comprob.</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Val IGV</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Unidad</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Inicio</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Fecha Fin</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Cantidad</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Precio Unit.</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Glosa</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Tipo Grabada</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                                 
+                                
+                                <th >RUC</th>
+                                <th >Tipo Comprob.</th>
+                                <th >Num. Comprob.</th>
+                                <th>Sub total</th>
+                                <th>Igv</th>
+                                <th >Val IGV</th>
+                                <th >Unidad</th>
+                                <th >Fecha Inicio</th>
+                                <th >Fecha Fin</th>
+                                <th >Cantidad</th>
+                                <th >Precio Unit.</th>
+                                <th >Glosa</th>
+                                <th >Tipo Grabada</th>
                               </tr>
                             </tfoot>
                           </table>

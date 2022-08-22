@@ -110,6 +110,8 @@ function table_show_hide(estado) {
 
     $('#add_sub_contrato').show();
     $('#tbl-principal').show();
+
+    $('.filtros-inputs').show();
     
   } else if (estado==2) {
 
@@ -121,7 +123,7 @@ function table_show_hide(estado) {
     $('#tbl-pagos').show();
     $('#regresar').show();
     $('#add_agregar_pago').show();    
-    
+    $('.filtros-inputs').hide();
   }  
 }
 
@@ -156,7 +158,9 @@ function limpiar() {
 }
 
 function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
-  idproyecto_r = idproyecto, fecha_1_r = fecha_1, fecha_2_r = fecha_2, id_proveedor_r = id_proveedor, comprobante = comprobante;
+
+  idproyecto_r = idproyecto, fecha_1_r = fecha_1, fecha_2_r = fecha_2, id_proveedor_r = id_proveedor, comprobante = comprobante;  
+
   tabla=$('#tabla-sub-contratos').dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
@@ -167,7 +171,6 @@ function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,10,11,12,13,2,14,15,16,17,6,18,8,19,20,5], } }, 
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,10,11,12,13,2,14,15,16,17,6,18,8,19,20,5], } }, 
       { extend: 'pdfHtml5', footer: true,  exportOptions: { columns: [0,3,10,11,12,13,2,14,15,16,17,6,18,8,19,20,5], }, orientation: 'landscape', pageSize: 'LEGAL', }, 
-      
     ],
     ajax:{
       url: `../ajax/sub_contrato.php?op=tabla_principal&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
@@ -272,7 +275,7 @@ function guardaryeditar(e) {
 
           Swal.fire("Correcto!", "Subcontrato guardado correctamente", "success");
           tabla.ajax.reload(null, false);    
-          total(localStorage.getItem('nube_idproyecto'));     
+          total(idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r)
           limpiar();
   
           $("#modal-agregar-sub-contrato").modal("hide");       
@@ -466,7 +469,7 @@ function activar(idsubcontrato) {
         if (e.status == true) {
           Swal.fire("Activado!", "Tu registro ha sido activado.", "success");
           tabla.ajax.reload(null, false);
-          total(localStorage.getItem('nube_idproyecto'));
+          total(idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r)
         } else {
           ver_errores(e);
         }        
@@ -485,12 +488,11 @@ function eliminar(idsubcontrato, nombre) {
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
     function(){ tabla.ajax.reload(null, false); },
-    function(){ total(localStorage.getItem('nube_idproyecto')); },
+    function(){ total(idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r) },
     false, 
     false,
     false
-  );
-  
+  );  
 }
 
 // calcular totales
@@ -1245,3 +1247,4 @@ function filtros() {
 
   tabla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante);
 }
+

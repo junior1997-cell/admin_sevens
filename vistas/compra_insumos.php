@@ -188,7 +188,8 @@
                                 
                               </div>
                             </div>
-                          
+                            <!-- /.filtro -->
+                            
                             <table id="tabla-compra" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>

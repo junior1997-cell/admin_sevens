@@ -163,7 +163,7 @@
 </div>
 
 <script>
-  function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
+  function abrir_proyecto_para_todos_los_modulos(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
 
     if ($("#foo" ).hasClass('className')) { $( "#foo" ).removeClass( 'className'); } else { $( "#foo" ).addClass( 'className'); }
 

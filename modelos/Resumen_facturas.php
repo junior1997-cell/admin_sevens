@@ -1176,7 +1176,7 @@ class Resumenfacturas
       }      
     }   
     
-    $sql2 = "SELECT ruc, razon_social FROM otro_gasto WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
+    $sql2 = "SELECT ruc, razon_social FROM otro_gasto WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '' GROUP BY ruc;";
     $otro_gasto = ejecutarConsultaArray($sql2);
     if ($otro_gasto['status'] == false) { return $otro_gasto; }
 
@@ -1190,7 +1190,7 @@ class Resumenfacturas
       }      
     } 
 
-    $sql2 = "SELECT ruc, razon_social  FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
+    $sql2 = "SELECT ruc, razon_social  FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '' GROUP BY ruc;";
     $hospedaje = ejecutarConsultaArray($sql2);
     if ($hospedaje['status'] == false) { return $hospedaje; }
 
@@ -1204,7 +1204,7 @@ class Resumenfacturas
       }      
     } 
 
-    $sql2 = "SELECT ruc, razon_social  FROM comida_extra WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '';";
+    $sql2 = "SELECT ruc, razon_social  FROM comida_extra WHERE estado = '1' AND estado_delete = '1' AND ruc != '' AND razon_social != '' GROUP BY ruc;";
     $comida_extra = ejecutarConsultaArray($sql2);
     if ($comida_extra['status'] == false) { return $comida_extra; }
 

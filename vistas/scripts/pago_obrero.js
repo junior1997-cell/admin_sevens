@@ -218,7 +218,7 @@ function listar_tbla_principal(id_proyecto) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
     ],
   }).DataTable(); 

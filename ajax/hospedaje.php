@@ -63,7 +63,7 @@
           } else {
             //validamos si existe comprobante para eliminarlo
             if ($flat_ficha1 == true) {
-              $datos_ficha1 = $hospedaje->ficha_tec($idhospedaje);
+              $datos_ficha1 = $hospedaje->comprobante_hospedaje($idhospedaje);
               $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
               if ($ficha1_ant != "") { unlink("../dist/docs/hospedaje/comprobante/" . $ficha1_ant);  }
             }
@@ -102,13 +102,13 @@
         break;
 
         case 'total':
-          $rspta = $hospedaje->total($idproyecto);
+          $rspta = $hospedaje->total($_POST["idproyecto"], $_POST["fecha_1"], $_POST["fecha_2"], $_POST["id_proveedor"], $_POST["comprobante"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;
 
         case 'tabla_principal':
-          $rspta = $hospedaje->tabla_principal($_GET["idproyecto"]);
+          $rspta = $hospedaje->tabla_principal($_GET["idproyecto"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = [];  $cont = 1;
 
@@ -122,27 +122,28 @@
                 "0" => $cont++,
                 "1" => $reg->estado
                   ? '<button class="btn btn-sm btn-warning" onclick="mostrar(' .  $reg->idhospedaje . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-sm btn-danger" onclick="eliminar(' . $reg->idhospedaje . ')"><i class="fas fa-skull-crossbones"></i> </button>' .
+                    ' <button class="btn btn-sm btn-danger" onclick="eliminar(' . $reg->idhospedaje .', \''.encodeCadenaHtml($reg->tipo_comprobante .' - '.(empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante)).'\')"><i class="fas fa-skull-crossbones"></i> </button>' .
                     ' <button class="btn btn-sm btn-info" onclick="ver_datos(' . $reg->idhospedaje . ')"><i class="far fa-eye"></i></button>'
                   : '<button class="btn btn-sm btn-warning" onclick="mostrar(' . $reg->idhospedaje . ')"><i class="fa fa-pencil-alt"></i></button>' .
                     ' <button class="btn btn-sm btn-primary" onclick="activar(' . $reg->idhospedaje . ')"><i class="fa fa-check"></i></button>' .
                     ' <button class="btn btn-sm btn-info" onclick="ver_datos(' . $reg->idhospedaje . ')"><i class="far fa-eye"></i></button>',
                 "2" => $reg->fecha_comprobante,
-                "3" => $reg->forma_de_pago,
-                "4" => '<span ><b class="text-primary">'.$reg->tipo_comprobante.'</b>'. (empty($reg->numero_comprobante)?"":' - '.$reg->numero_comprobante ).'</span>',                
-                "5" => $reg->subtotal,
-                "6" => $reg->igv,
-                "7" => $reg->precio_parcial,
-                "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "9" => $comprobante . $toltip,
-                "10" => $reg->razon_social,   
-                "11" => $reg->ruc, 
-                "12" => $reg->tipo_comprobante,
-                "13" => $reg->numero_comprobante,
+                "3" =>'<div class="w-200px recorte-text" data-toggle="tooltip" data-original-title="'.encodeCadenaHtml($reg->razon_social) .' - '.$reg->ruc .'">'. ( empty($reg->razon_social) ? 'Sin Razón social' : $reg->razon_social ) .'</div>' ,
+                "4" => $reg->forma_de_pago,
+                "5" => '<span ><b class="text-primary">'.$reg->tipo_comprobante.'</b>'. (empty($reg->numero_comprobante)?"":' - '.$reg->numero_comprobante ).'</span>',                                
+                "6" => $reg->precio_parcial,
+                "7" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "8" => $comprobante . $toltip,
+
+                "9" => $reg->ruc, 
+                "10" => $reg->tipo_comprobante,
+                "11" => $reg->numero_comprobante,
+                "12" => number_format($reg->subtotal, 2, '.', ','),
+                "13" => number_format($reg->igv, 2, '.', ','),
                 "14" => $reg->val_igv,   
                 "15" => $reg->unidad,        
-                "16" => $reg->fecha_inicio,
-                "17" => $reg->fecha_fin,
+                "16" => date("d/m/Y", strtotime($reg->fecha_inicio)),
+                "17" => date("d/m/Y", strtotime($reg->fecha_fin)),
                 "18" => $reg->cantidad,
                 "19" => number_format($reg->precio_unitario, 2, '.', ','),                
                 "20" => $reg->glosa,
@@ -160,6 +161,32 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
           
+        break;
+
+        // ════════════════════════════════════════ S E L E C T 2   -   P R O V E E D O R ════════════════════════════════════════
+        case 'select2Proveedor':
+
+          $rspta = $hospedaje->select2Proveedor($_GET['idproyecto']);
+
+          $data = "";
+
+          if ($rspta['status'] == true) {
+
+            foreach ($rspta['data'] as $key => $reg) { 
+              $data .= '<option value="' . $reg['ruc'] . '" >' . (empty($reg['razon_social']) ? '': $reg['razon_social'] .' - ') . $reg['ruc']. '</option>';
+            }
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => '<option value="vacio">Sin proveedor</option>'.$data, 
+            );
+    
+            echo json_encode($retorno, true);
+
+          } else {
+
+            echo json_encode($rspta, true); 
+          }
         break;
         
         case 'salir':

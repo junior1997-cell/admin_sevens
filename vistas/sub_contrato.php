@@ -128,7 +128,7 @@
                               <table id="tabla-sub-contratos" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
                                     <tr>
-                                      <th colspan="11" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                      <th colspan="10" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                                     </tr>
                                     <tr>
                                       <th class="text-center">#</th>                                                    

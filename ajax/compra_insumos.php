@@ -327,7 +327,7 @@ if (!isset($_SESSION["nombre"])) {
               "3" => '<span class="text-primary font-weight-bold" >' . $reg['razon_social'] . '</span>',
               "4" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',
               "5" => empty($reg['estado_detraccion']) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
-              "6" => number_format($reg['total'], 2, '.', ','),
+              "6" => $reg['total'],
               "7" => $list_segun_estado_detracc,
               "8" => number_format($reg['total_pago_compras'], 2, '.', ','),
               "9" => number_format($saldo, 2, '.', ','),

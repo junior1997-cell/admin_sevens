@@ -417,7 +417,7 @@
               $data[]=array(
                 "0"=>$cont++,
                 "1"=>'<div class="asignar_paint_'.$value['idproyecto'].'"> 
-                  <button class="btn bg-secondary btn-sm" onclick="abrir_proyecto('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$value['idproyecto'].'">
+                  <button class="btn bg-secondary btn-sm" onclick="abrir_proyecto_para_todos_los_modulos('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$value['idproyecto'].'">
                     <i class="fas fa-folder"></i>
                   </button> 
                 </div>',
