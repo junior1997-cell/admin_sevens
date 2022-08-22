@@ -171,7 +171,7 @@
                               <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="codigo_m">Modelo</label>
-                                  <input type="text" name="codigo_m" class="form-control" id="codigo_m" placeholder="Dirección" />
+                                  <input type="text" name="codigo_m" class="form-control" id="codigo_m" placeholder="Modelo" />
                                 </div>
                               </div>
 

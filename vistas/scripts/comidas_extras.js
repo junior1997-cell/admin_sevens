@@ -128,11 +128,11 @@ function listar(fecha_1, fecha_2, id_proveedor, comprobante) {
         // columna: 1
         if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); }
         // columna: sub total
-        if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right'); }
-        // columna: igv
         if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right'); }
-        // columna: total
+        // columna: igv
         if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right'); }
+        // columna: total
+        if (data[8] != '') { $("td", row).eq(8).addClass('text-nowrap text-right'); }
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
