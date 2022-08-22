@@ -86,6 +86,7 @@ Class Comidas_extras
 	//Implementamos un método para activar categorías
 	public function activar($idcomida_extra )
 	{
+
 		$sql="UPDATE comida_extra SET estado='1' WHERE idcomida_extra ='$idcomida_extra'";
 		return ejecutarConsulta($sql);
 	}
@@ -104,9 +105,29 @@ Class Comidas_extras
 	}
 
 	//Implementar un método para listar los registros
-	public function listar($idproyecto)
+	public function listar($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante)
 	{
-		$sql="SELECT*FROM comida_extra WHERE idproyecto='$idproyecto' AND estado_delete='1' AND  estado='1' ORDER BY idcomida_extra DESC";
+		$filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+		if ( !empty($fecha_1) && !empty($fecha_2) ) {
+		  $filtro_fecha = "AND fecha_comida BETWEEN '$fecha_1' AND '$fecha_2'";
+		} else if (!empty($fecha_1)) {      
+		  $filtro_fecha = "AND fecha_comida = '$fecha_1'";
+		}else if (!empty($fecha_2)) {        
+		  $filtro_fecha = "AND fecha_comida = '$fecha_2'";
+		}   
+	
+		if (empty($id_proveedor)) {
+		  $filtro_proveedor = "";
+		} else if ( $id_proveedor=='vacio' ) { 
+		  $filtro_proveedor = "AND ruc IN ('',NULL)";
+		} else { 
+		  $filtro_proveedor = "AND ruc = '$id_proveedor'"; 
+		}
+	
+		if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; } 
+		
+		$sql="SELECT*FROM comida_extra WHERE idproyecto='$idproyecto' AND estado_delete='1' AND  estado='1' $filtro_proveedor $filtro_fecha $filtro_comprobante ORDER BY idcomida_extra DESC";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -117,9 +138,38 @@ Class Comidas_extras
 		return ejecutarConsulta($sql);		
 	}
 	//total
-	public function total($idproyecto){
-		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM comida_extra WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1'";
+	public function total($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante){
+
+		$filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+		if ( !empty($fecha_1) && !empty($fecha_2) ) {
+		  $filtro_fecha = "AND fecha_comida BETWEEN '$fecha_1' AND '$fecha_2'";
+		} else if (!empty($fecha_1)) {      
+		  $filtro_fecha = "AND fecha_comida = '$fecha_1'";
+		}else if (!empty($fecha_2)) {        
+		  $filtro_fecha = "AND fecha_comida = '$fecha_2'";
+		}   
+	
+		if (empty($id_proveedor)) {
+		  $filtro_proveedor = "";
+		} else if ( $id_proveedor=='vacio' ) { 
+		  $filtro_proveedor = "AND ruc IN ('',NULL)";
+		} else { 
+		  $filtro_proveedor = "AND ruc = '$id_proveedor'"; 
+		}
+	
+		if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; } 
+
+		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM comida_extra WHERE idproyecto='$idproyecto' AND estado='1' AND estado_delete='1' $filtro_proveedor $filtro_fecha $filtro_comprobante";
 		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	
+	//seelect2  - proveedores
+	public function selecct_provedor_comidas_ex($idproyecto)
+	{
+		$sql = "SELECT ruc,razon_social,direccion FROM comida_extra WHERE ruc!='' AND ruc!='null' AND idproyecto = '$idproyecto'  GROUP BY ruc;";
+		return ejecutarConsultaArray($sql);
 	}
 
 }

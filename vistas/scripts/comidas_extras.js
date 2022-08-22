@@ -1,5 +1,5 @@
 var tabla;
-
+var fecha_1_r="", fecha_2_r="", id_proveedor_r="", comprobante_r="";
 //Función que se ejecuta al inicio
 function init() {
 
@@ -19,18 +19,35 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  listar();  
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
+  lista_select2(`../ajax/comidas_extras.php?op=selecct2_prov_comidas_ex&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#filtro_proveedor', null);
+
+    // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
   $("#guardar_registro").on("click", function (e) {$("#submit-form-comidas-ex").submit();});
 
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
+  $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
+  $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+  
   //Initialize Select2 Elements
   $("#tipo_comprobante").select2({  theme: "bootstrap4", placeholder: "Selecione tipo comprobante", allowClear: true, });
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione forma de pago", allowClear: true, });
+
+  // Inicializar - Date picker  
+  $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+
+
 
   // Formato para telefono
   $("[data-mask]").inputmask();
 
 }
+
+$('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
+$('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
+
 
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
 $("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
@@ -78,8 +95,9 @@ function limpiar() {
   $(".error.invalid-feedback").remove();
 }
 
-function listar() {
+function listar(fecha_1, fecha_2, id_proveedor, comprobante) { 
 
+  fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor, comprobante_r=comprobante;
   $("#total_monto").html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   var idproyecto=localStorage.getItem('nube_idproyecto');
@@ -97,7 +115,7 @@ function listar() {
       {extend: "colvis"} ,
     ],
     "ajax":{
-        url: '../ajax/comidas_extras.php?op=listar&idproyecto='+idproyecto,
+        url: `../ajax/comidas_extras.php?op=listar&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -128,7 +146,8 @@ function listar() {
       { targets: [10,11,12,13,14,15,16], visible: false, searchable: false, },    
     ],
   }).DataTable();
-  total();
+  total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);
+  $(tabla).ready(function () {  $('.cargando').hide(); });
 }
 
 function modal_comprobante(comprobante,tipo,numero_comprobante){
@@ -314,7 +333,7 @@ function guardaryeditar(e) {
 
         $("#modal-agregar-comidas_ex").modal("hide");
 
-        total();
+        total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);
 
       }else{  
 
@@ -414,11 +433,11 @@ function mostrar(idcomida_extra ) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function total() {
+function total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r) {
   $("#total_monto").html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   var idproyecto=localStorage.getItem('nube_idproyecto');
   $("#total_monto").html("");
-  $.post("../ajax/comidas_extras.php?op=total", { idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/comidas_extras.php?op=total", { idproyecto: idproyecto, fecha_1:fecha_1_r, fecha_2:fecha_2_r, id_proveedor:id_proveedor_r, comprobante:comprobante_r  }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
@@ -442,7 +461,7 @@ function eliminar(idcomida_extra, tipo, numero) {
     `<b class="text-danger"><del> ${tipo} N° ${numero} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload(null, false);total(); },
+    function(){ tabla.ajax.reload(null, false);total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r); },
     false, 
     false, 
     false,
@@ -509,9 +528,45 @@ $(function () {
 
 });
 
-
-// restringimos la fecha para no elegir mañana
-
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 no_select_tomorrow("#fecha")
+
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+}
+
+function filtros() {  
+
+  var fecha_1       = $("#filtro_fecha_inicio").val();
+  var fecha_2       = $("#filtro_fecha_fin").val();  
+  var id_proveedor  = $("#filtro_proveedor").select2('val');
+  var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
+  
+  var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
+  var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+  //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+
+  listar(fecha_1, fecha_2, id_proveedor, comprobante);
+}
+
+function extrae_ruc() {
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { }  else{    
+    var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+    $('#ruc_proveedor').val(ruc);
+  }
+}
+
 
 

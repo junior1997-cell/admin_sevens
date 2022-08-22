@@ -121,14 +121,14 @@
 
         case 'total':
 
-          $rspta = $comidas_extras->total($idproyecto);
+          $rspta = $comidas_extras->total($_POST['idproyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante']);
           echo json_encode($rspta,true);
 
         break;
 
         case 'listar':
 
-          $rspta = $comidas_extras->listar( $_GET["idproyecto"]);
+          $rspta = $comidas_extras->listar($_GET["idproyecto"],$_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
 
           $data = [];
           $comprobante = '';
@@ -184,7 +184,34 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
 
-        break;      
+        break; 
+
+        case 'selecct2_prov_comidas_ex':
+
+          $rspta = $comidas_extras->selecct_provedor_comidas_ex($_GET['idproyecto']); $cont = 1; $data = "";
+
+          if ($rspta['status']) {
+  
+            foreach ($rspta['data'] as $key => $value) {  
+
+                $data .= '<option value=' .$value['ruc']. '>'.( !empty($value['razon_social']) ? $value['razon_social'].' - ' : '') .$value['ruc'].'</option>';
+    
+            }
+  
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => '<option value="vacio">Sin proveedor</option>'.$data, 
+            );
+    
+            echo json_encode($retorno, true);
+  
+          } else {
+  
+            echo json_encode($rspta, true); 
+          }
+
+        break;   
 
         case 'salir':
           //Limpiamos las variables de sesión
