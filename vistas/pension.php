@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Pensión</title>
+        <title>Pensión | Admin Sevens</title>
 
         <?php $title = "Pensión"; require 'head.php'; ?>
         
@@ -85,7 +85,7 @@
                                   <th>Pension</th>
                                   <th>Descripción</th>
                                   <th>Total</th>
-                                  <th>Actualización</th>
+                                  <th class="text-center">Actualización</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -95,16 +95,73 @@
                                   <th><i class="fas fa-cogs"></i></th> 
                                   <th>Pension</th>
                                   <th>Descripción</th>
-                                  <th class="text-right text-nowrap pl-2 pr-2"><div class="formato-numero-conta"><span>S/</span><span id="total_pension"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>                                  
-                                  <th>Actualización</th>
+                                  <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span id="total_pension">0.00</span></div></th>                                  
+                                  <th class="text-center">Actualización</th>
                                 </tr>
                               </tfoot>
                             </table>
                           </div>
+
                           <!-- Registrar pension al sistema -->
                           <div id="div-tabla-detalle" style="display: none;">
+                            <!-- filtros -->
+                            <div class="filtros-inputs row mb-4">
+
+                              <!-- filtro por: fecha inicial -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-2">    
+                                <div class="form-group">
+                                  <!-- <label for="filtro_fecha_inicio" >Fecha inicio </label> -->
+                                  <div class="input-group date"  >
+                                    <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                                  </div>
+                                </div>                                
+                              </div>
+
+                              <!-- filtro por: fecha final -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-2">                                
+                                <div class="form-group">
+                                  <!-- <label for="filtro_fecha_inicio" >Fecha fin </label> -->
+                                  <div class="input-group date"  >
+                                    <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                    <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                                  </div>
+                                </div> 
+                              </div>
+
+                              <!-- filtro por: proveedor -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
+                                  <select id="filtro_proveedor" class="form-control select2" disabled style="width: 100%;"> 
+                                  </select>
+                                </div>                                
+                              </div>
+
+                              <!-- filtro por: proveedor -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                                <div class="form-group">
+                                  <!-- <label for="filtros" >Tipo comprobante </label> -->
+                                  <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                                    <option value="0">Todos</option>
+                                    <option value="Ninguno">Ninguno</option>
+                                    <option value="Boleta">Boleta</option>
+                                    <option value="Factura">Factura</option>
+                                    <option value="Nota de venta">Nota de venta</option>
+                                  </select>
+                                </div>                                
+                              </div>
+                            </div>
+                            <!-- /.filtro -->
                             <table id="tabla-detalle-pension" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
+                                <tr>
+                                  <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                </tr>
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th>OP</th>
@@ -138,9 +195,9 @@
                                   <th data-toggle="tooltip" data-original-title="Forma de pago">Forma</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
                                   <th data-toggle="tooltip" data-original-title="Fecha Emisión">F. Emisión</th>
-                                  <th class="text-right text-nowrap pr-2" id="total_subtotal"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-right text-nowrap pr-2" id="total_igv"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-right text-nowrap pr-2" id="total_monto">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-nowrap px-2" ><div class="formato-numero-conta"><span>S/</span><span id="total_subtotal">0.00</span></div></th>                                  
+                                  <th class="text-nowrap px-2" ><div class="formato-numero-conta"><span>S/</span><span id="total_igv">0.00</span></div></th>
+                                  <th class="text-nowrap px-2" ><div class="formato-numero-conta"><span>S/</span><span id="total_monto">0.00</span></div></th>
                                   <th >CFDI.</th>
 
                                   <th>Fecha Inicial</th>
@@ -500,16 +557,7 @@
         </div>
         <!-- /.content-wrapper -->
 
-        <?php require 'script.php'; ?>
-
-        <style>        
-          .tcuerpo tr td {
-            text-align: center !important;
-            padding-top: 18px !important;
-            border: black 1px solid;
-            padding: 0.45rem 0.45rem 0.45rem 0.45rem !important;
-          }
-        </style>    
+        <?php require 'script.php'; ?>        
 
         <script type="text/javascript" src="scripts/pension.js"></script> 
 

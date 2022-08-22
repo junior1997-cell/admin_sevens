@@ -21,8 +21,8 @@ class Pension
     foreach ($pension['data'] as $key => $value) {
       $id = $value['idpension'];
       $sql_2 = "SELECT SUM(precio_parcial) AS total_gasto FROM detalle_pension WHERE idpension ='$id' AND estado='1' AND  estado_delete='1';";
-      $total_x_pension = ejecutarConsultaSimpleFila($sql_2);
-      if ($total_x_pension['status'] == false) { return $total_x_pension; }
+      $total = ejecutarConsultaSimpleFila($sql_2);
+      if ($total['status'] == false) { return $total; }
 
       $data[] = [
         'idpension' => $value['idpension'],
@@ -33,7 +33,7 @@ class Pension
         'direccion' => $value['direccion'],
         'estado' => $value['estado'],
         'updated_at' => $value['updated_at'],
-        'total_gasto' => (empty($total_x_pension['data']) ? 0 : ( empty($total_x_pension['data']['total_gasto']) ? 0 : $total_x_pension['data']['total_gasto'])),
+        'total_gasto' => (empty($total['data']) ? 0 : ( empty($total['data']['total_gasto']) ? 0 : floatval( $total['data']['total_gasto'])) ),
       ];
     }   
     return $retorno = ['status'=> true, 'message'=> 'todo oka bro', 'data'=> $data,];
@@ -93,10 +93,49 @@ class Pension
 
   // :::::::::::::::::::::::::: S E C C I O N   D E T A L L E   P E N S I O N  ::::::::::::::::::::::::::
 
-  public function tbla_detalle_pension($idpension)
-  {
-    $sql = "SELECT * FROM detalle_pension WHERE  idpension ='$idpension' AND estado='1' AND  estado_delete='1' ORDER BY fecha_inicial DESC";
+  public function tbla_detalle_pension($idpension, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
+
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND fecha_emision = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND fecha_emision = '$fecha_2'";
+    }    
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
+    } 
+
+    $sql = "SELECT * FROM detalle_pension 
+    WHERE  idpension ='$idpension' AND estado='1' AND  estado_delete='1'  $filtro_comprobante $filtro_fecha
+    ORDER BY fecha_inicial DESC";
     return ejecutarConsulta($sql);
+  }
+
+  public function total_detalle_pension($idpension, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
+
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND fecha_emision = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND fecha_emision = '$fecha_2'";
+    }    
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; 
+    } 
+
+    $sql = "SELECT SUM(cantidad_persona) AS total_pers, SUM(precio_parcial) AS total_monto,  SUM(subtotal) as subtotal,  SUM(igv) as igv
+    FROM detalle_pension 
+    WHERE idpension='$idpension' AND estado='1' AND estado_delete='1' $filtro_comprobante $filtro_fecha;";
+    return ejecutarConsultaSimpleFila($sql);
+
   }
 
   public function insertar_detalles_pension($id_pension,$fecha_inicial,$fecha_final,$cantidad_persona,$subtotal,$igv,$val_igv,$monto,$forma_pago,$tipo_comprobante,$fecha_emision,$tipo_gravada,$nro_comprobante,$descripcion_detalle,$imagen2)  {
@@ -147,33 +186,21 @@ class Pension
     return ejecutarConsultaSimpleFila($sql);
      
   }
-
-  public function total_detalle_pension($idpension) {
-
-    $sql = "SELECT SUM(cantidad_persona) AS total_pers, SUM(precio_parcial) AS total_monto,  SUM(subtotal) as subtotal,  SUM(igv) as igv
-    FROM detalle_pension 
-    WHERE idpension='$idpension' AND estado='1' AND estado_delete='1';";
-    return ejecutarConsultaSimpleFila($sql);
-
-  }
   
   //Implementamos un método para activar
-  public function desactivar_detalle_comprobante($iddetalle_pension)
-  {
+  public function desactivar_detalle_comprobante($iddetalle_pension)  {
     $sql = "UPDATE detalle_pension SET estado_delete='0' WHERE iddetalle_pension ='$iddetalle_pension'";
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para activar
-  public function eliminar_detalle_comprobante($iddetalle_pension)
-  {
+  public function eliminar_detalle_comprobante($iddetalle_pension)  {
     $sql = "UPDATE detalle_pension SET estado='0' WHERE iddetalle_pension ='$iddetalle_pension'";
     return ejecutarConsulta($sql);
   }
 
   // obtebnemos los DOCS para eliminar
-  public function obtenerDoc($iddetalle_pension)
-  {
+  public function obtenerDoc($iddetalle_pension)  {
     $sql = "SELECT comprobante FROM detalle_pension WHERE iddetalle_pension='$iddetalle_pension'";
 
     return ejecutarConsulta($sql);
