@@ -109,9 +109,9 @@ function listar(fecha_1, fecha_2, id_proveedor, comprobante) {
     "aServerSide": true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,11,10,12,13,14,2,5,6,7,15,16,8], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,12,11,13,14,2,5,6,7,8,16,17,9], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,12,11,13,14,2,5,6,7,8,16,17,9], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,12,11,13,14,2,5,6,7,8,16,17,9], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
       {extend: "colvis"} ,
     ],
     "ajax":{
@@ -143,7 +143,7 @@ function listar(fecha_1, fecha_2, id_proveedor, comprobante) {
     "iDisplayLength": 10,//Paginación
     "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [10,11,12,13,14,15,16], visible: false, searchable: false, },    
+      { targets: [11,12,13,14,15,16,17], visible: false, searchable: false, },    
     ],
   }).DataTable();
   total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);

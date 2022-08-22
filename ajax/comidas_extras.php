@@ -151,24 +151,31 @@
                 "0" => $cont++,
                 "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' .$reg->idcomida_extra .')"><i class="fas fa-pencil-alt"></i></button>' .
                     ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' .$reg->idcomida_extra .',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . $reg->numero_comprobante . "'" . ')"><i class="fas fa-skull-crossbones"></i> </button>',
-                "2" => $reg->forma_de_pago,
+                "2" => date("d/m/Y", strtotime($reg->fecha_comida)),
                 "3" =>'<div class="user-block">
+                    <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.
+                    ((empty($reg->razon_social)) ? 'Sin Razón social' : $reg->razon_social ) .'</p> </span>
+                    <span class="description" style="margin-left: 0px !important;">N° '.
+                    (empty($reg->ruc) ? "Sin Ruc" : $reg->ruc) .'</span>         
+                  </div>',
+
+                "4" =>'<div class="user-block">
                         <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .$reg->tipo_comprobante .'</p> </span>
                         <span class="description" style="margin-left: 0px !important;">N° ' .(empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) .'</span>         
                       </div>',
-                "4" => date("d/m/Y", strtotime($reg->fecha_comida)),
-                "5" => 'S/ ' . number_format($reg->subtotal, 2, '.', ','),
-                "6" => 'S/ ' . number_format($reg->igv, 2, '.', ','),
-                "7" => 'S/ ' . number_format($reg->costo_parcial, 2, '.', ','),
-                "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "9" => $comprobante. $toltip,
-                "10"=>$reg->ruc,
-                "11"=>$reg->razon_social,
-                "12"=>$reg->direccion,
-                "13"=>$reg->tipo_comprobante,
-                "14"=>$reg->numero_comprobante,
-                "15"=>$reg->tipo_gravada,
-                "16"=>$reg->glosa,
+                "5" => $reg->forma_de_pago,
+                "6" => 'S/ ' . number_format($reg->subtotal, 2, '.', ','),
+                "7" => 'S/ ' . number_format($reg->igv, 2, '.', ','),
+                "8" => 'S/ ' . number_format($reg->costo_parcial, 2, '.', ','),
+                "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "10" => $comprobante. $toltip,
+                "11"=>$reg->ruc,
+                "12"=>$reg->razon_social,
+                "13"=>$reg->direccion,
+                "14"=>$reg->tipo_comprobante,
+                "15"=>$reg->numero_comprobante,
+                "16"=>$reg->tipo_gravada,
+                "17"=>$reg->glosa,
               
               ];
             }

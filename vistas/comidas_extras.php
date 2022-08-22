@@ -128,9 +128,10 @@
                               <tr>
                                 <th class="">#</th>
                                 <th class="">Acciones</th>
-                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
                                 <th>Fecha</th>
+                                <th>Proveedor</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                 <th>Sub total</th>
                                 <th>Igv</th>
                                 <th>Total</th>
@@ -150,9 +151,10 @@
                               <tr>
                                 <th class="">#</th>
                                 <th class="">Acciones</th>
-                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
                                 <th>Fecha</th>
+                                <th>Proveedor</th>
+                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
                                 <th>Sub total</th>
                                 <th>Igv</th>
                                 <th style="background-color: #ffdd00;" class="text-right text-nowrap" id="total_monto"><i class="fas fa-spinner fa-pulse fa-1x"> </i></th>
