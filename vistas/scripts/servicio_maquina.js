@@ -664,6 +664,7 @@ function limpiar_c_pagos() {
   $("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_servicio").val("");
+  $("#fecha_pago").val("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -1148,11 +1149,17 @@ function validar_forma_de_pago() {
 
   var forma_pago = $("#forma_pago").select2("val");
 
+  $("#numero_op_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
+  var forma_pago = $("#forma_pago").select2("val");
+
   if (forma_pago == null || forma_pago == "") {
     // no ejecutamos nada
     $(".validar_fp").show();
   } else {
     if (forma_pago == "Efectivo") {
+      $( "#numero_op_pago" ).rules( "remove","required" );
+
       $(".validar_fp").hide();
       $("#tipo_pago").val("Proveedor").trigger("change");
       $("#banco_pago").val("1").trigger("change");

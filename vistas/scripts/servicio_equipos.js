@@ -689,6 +689,7 @@ function limpiar_c_pagos() {
   $("#cuenta_destino_pago").val("");
   $("#descripcion_pago").val("");
   $("#idpago_servicio").val("");
+  $("#fecha_pago").val("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -1173,6 +1174,8 @@ function ver_modal_vaucher(comprobante,numero_operacion) {
 function validar_forma_de_pago() {
 
   var forma_pago = $("#forma_pago").select2("val");
+  $("#numero_op_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
+
 
   if (forma_pago == null || forma_pago == "") {
     // no ejecutamos nada
@@ -1180,6 +1183,8 @@ function validar_forma_de_pago() {
   } else {
     if (forma_pago == "Efectivo") {
       $(".validar_fp").hide();
+      $( "#numero_op_pago" ).rules( "remove","required" );
+
       $("#tipo_pago").val("Proveedor").trigger("change");
       $("#banco_pago").val("1").trigger("change");
       $("#cuenta_destino_pago").val("");
@@ -1604,7 +1609,7 @@ $(function () {
       banco_pago: { required: true },
       fecha_pago: { required: true },
       monto_pago: { required: true },
-      numero_op_pago: {required: true, minlength: 1 },
+     // numero_op_pago: {required: true, minlength: 1 },
       descripcion_pago: { minlength: 1 },
       titular_cuenta_pago: { minlength: 1 },
       // terms: { required: true },
@@ -1616,7 +1621,7 @@ $(function () {
       banco_pago: { required: "Por favor selecione un banco", },
       fecha_pago: { required: "Por favor ingresar una fecha", },
       monto_pago: { required: "Por favor ingresar el monto a pagar", },
-      numero_op_pago: { required: "Campo Requerido", },
+     // numero_op_pago: { required: "Campo Requerido", },
     },
 
     errorElement: "span",

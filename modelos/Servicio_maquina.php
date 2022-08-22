@@ -213,7 +213,7 @@ class ServicioMaquina
 
     if ($prov['status'] == false) { return  $prov;}
 
-    if (empty($prov['data'])) {
+    if (empty($prov['data']) || $forma_pago =='Efectivo') {
 
       $sql = "INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria,imagen) 
       VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago','$imagen1')";
