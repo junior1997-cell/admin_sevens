@@ -125,14 +125,14 @@
 				break;
 
 				case 'total':
-          $rspta=$sub_contrato->total($idproyecto);
+          $rspta=$sub_contrato->total($_POST["idproyecto"], $_POST["fecha_1"], $_POST["fecha_2"], $_POST["id_proveedor"], $_POST["comprobante"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);	
 				break;
 
 				case 'tabla_principal':
 
-          $rspta=$sub_contrato->tabla_principal($_GET["idproyecto"]);
+          $rspta=$sub_contrato->tabla_principal($_GET["idproyecto"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data= Array();
            
@@ -180,28 +180,28 @@
                   ' <button class="btn btn-primary btn-sm" onclick="activar('.$reg['idsubcontrato'].')" data-toggle="tooltip" data-original-title="Activar"><i class="fa fa-check"></i></button>').
                   ' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg['idsubcontrato'].')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="far fa-eye"></i></button>',
                 "2"=> $reg['fecha_subcontrato'], 
-                "3"=>'<span ><b class="text-primary">'.$reg['tipo_comprobante'].'</b>'. (empty($reg['numero_comprobante'])?"":' - '.$reg['numero_comprobante'] ).'</span>',                
-                "4"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',
-                "5"=>'<div class="formato-numero-conta"> <span>S/</span>'.number_format($reg['subtotal'], 2, '.', ',').'</div>',
-                "6"=>'<div class="formato-numero-conta"> <span>S/</span>'.number_format($reg['igv'], 2, '.', ',').'</div>',
-                "7"=>'<div class="formato-numero-conta"> <span>S/</span>'.number_format($reg['costo_parcial'], 2, '.', ',').'</div>',
-                "8"=>'<div class="text-nowrap formato-numero-conta"> 
+                "3"=> '<div class="w-150px recorte-text" data-toggle="tooltip" data-original-title="'. $reg['proveedor'] .'">'. $reg['proveedor'] .'</div>' ,
+                "4"=>'<span ><b class="text-primary">'.$reg['tipo_comprobante'].'</b>'. (empty($reg['numero_comprobante'])?"":' - '.$reg['numero_comprobante'] ).'</span>',                
+                "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',                
+                "6"=> $reg['costo_parcial'],
+                "7"=>'<div class="text-nowrap formato-numero-conta"> 
                     <button class="btn btn-' . $c . ' btn-xs" onclick="listar_pagos(' .$reg['idsubcontrato']. ' , '.$reg['costo_parcial'].' , '.$reg['total_deposito'].')"><i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . '</button> ' .
                     ' <button style="font-size: 14px;" class="btn btn-' . $c . ' btn-xs">' . number_format($reg['total_deposito'], 2, '.', ',') . '</button> 
                   </div>',
-                "9"=>number_format($saldo, 2, '.', ','),
-                "10"=>$comprobante . $toltip,
+                "8"=>number_format($saldo, 2, '.', ','),
+                "9"=>$comprobante . $toltip,
 
-                "11"=>$reg['proveedor'],
-                "12"=>$reg['tipo_documento'],
-                "13"=>$reg['ruc'],
-                "14"=>$reg['tipo_comprobante'],
-                "15"=>$reg['numero_comprobante'],
-                "16"=>$reg['forma_de_pago'],
-                "17"=>$reg['val_igv'],
-                "18"=>number_format($reg['total_deposito'], 2, '.', ','),
-                "19"=>$reg['tipo_gravada'],
-                "20"=>$reg['glosa'],
+                "10"=> $reg['tipo_documento'],
+                "11"=> $reg['ruc'],
+                "12"=> $reg['tipo_comprobante'],
+                "13"=> $reg['numero_comprobante'],
+                "14"=> $reg['forma_de_pago'],
+                "15"=> number_format($reg['subtotal'], 2, '.', ','),
+                "16"=> number_format($reg['igv'], 2, '.', ','),
+                "17"=> $reg['val_igv'],
+                "18"=> number_format($reg['total_deposito'], 2, '.', ','),
+                "19"=> $reg['tipo_gravada'],
+                "20"=> $reg['glosa'],
               );
 
             }

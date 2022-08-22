@@ -281,8 +281,7 @@ function tbla_principal_fecha_proyeccion(idproyecto) {
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      // { targets: [3,4], render: 't' + $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
-      { targets: [3,4], render: function ( data, type, row, meta ) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); var color_text = data >= 0 ? 'numero_positivos' : 'numero_negativos' ;  return `<div class="formato-numero-conta"><span>S/</span> <span class="${color_text}">${(number == null || number == '' ? '0.00' : number)}</span></div>`; }},
+      { targets: [3,4], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
       //{ targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();

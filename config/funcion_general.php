@@ -133,6 +133,18 @@ if (!function_exists('ejecutarConsulta')) {
     return $res;
   }
 
+  function cortar_string($cadena, $limite='25', $sufijo='...'){
+    if ( !empty($cadena) ) {
+      // Si la longitud es mayor que el límite...
+      if(strlen($cadena) > $limite){
+        // Entonces corta la cadena y ponle el sufijo
+        return substr($cadena, 0, $limite) . $sufijo;
+      }    
+    }    
+    // Si no, entonces devuelve la cadena normal
+    return $cadena;
+  }
+
   /*  ══════════════════════════════════════════ - S U B I R   D O C S  - ══════════════════════════════════════════ */
   /*  ══════════════════════════════════════════ - A P I S - ══════════════════════════════════════════ */
   /*  ══════════════════════════════════════════ - M E N S A J E S - ══════════════════════════════════════════ */

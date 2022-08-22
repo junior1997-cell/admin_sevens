@@ -13,7 +13,7 @@
     </li>
 
     <li class="nav-item b-radio-10px font-size-18px font-weight-bold mr-1" >
-      <button  data-toggle="modal" data-target="#modal-para-todos-los-modulos-proyecto" class="nav-link btn bg-color-8eff27 b-radio-10px text-bold" id="ver-proyecto" onclick="tbla_principal_para_todos_los_modulos(3);"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </button>
+      <button  data-toggle="modal" data-target="#modal-para-todos-los-modulos-proyecto" class="nav-link btn bg-color-8eff27 b-radio-10px text-bold" id="ver-proyecto" onclick="delay(function(){tbla_principal_para_todos_los_modulos(3)}, 50 );"><i class="fas fa-tools"></i> Proyecto: <i class="fas fa-spinner fa-pulse "></i> </button>
     </li>
 
     <li class="nav-item d-none  d-md-inline-block b-radio-10px font-size-18px font-weight-bold bg-warning" >

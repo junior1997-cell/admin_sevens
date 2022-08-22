@@ -206,7 +206,7 @@
   //Función Listar en curso o no empezados
   function tbla_principal_para_todos_los_modulos(estado = 3) {    
 
-    tabla=$('#tabla-para-todos-los-modulos-proyecto').dataTable({
+    var tabla_proyectos = $('#tabla-para-todos-los-modulos-proyecto').dataTable({
       responsive: true,
       lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
       aProcessing: true,//Activamos el procesamiento del datatables

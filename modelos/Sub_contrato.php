@@ -98,14 +98,31 @@ class Sub_contrato
   }
 
   //Implementar un método para listar los registros
-  public function tabla_principal($idproyecto) {
+  public function tabla_principal($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
     $list_subcontrato = [];
+
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_2'";
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND s.idproveedor = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; 
+    } 
+
 
     $sql_1 = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, s.fecha_subcontrato, 
     s.val_igv, s.tipo_gravada, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, s.estado, p.razon_social, 
     p.tipo_documento, p.ruc 
     FROM subcontrato as s, proveedor as p
-    WHERE s.idproveedor = p.idproveedor AND s.idproyecto='3' AND s.estado='1' AND  s.estado_delete='1' 
+    WHERE s.idproveedor = p.idproveedor AND s.idproyecto='$idproyecto' AND s.estado='1' AND  s.estado_delete='1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY s.fecha_subcontrato DESC";
     $subcontrato = ejecutarConsultaArray($sql_1);
     if ($subcontrato['status'] == false) {  return $subcontrato; }
@@ -119,26 +136,26 @@ class Sub_contrato
         if ($deposito['status'] == false) {  return $deposito; }
 
         $list_subcontrato[] = [
-          "idsubcontrato" => $value['idsubcontrato'],
-          "idproyecto" => $value['idproyecto'],
-          "idproveedor" => $value['idproveedor'],
-          "tipo_comprobante" => $value['tipo_comprobante'],
-          "numero_comprobante" => $value['numero_comprobante'],
-          "forma_de_pago" => $value['forma_de_pago'],          
-          "fecha_subcontrato" => $value['fecha_subcontrato'],
-          "val_igv" => $value['val_igv'],
-          "tipo_gravada" => $value['tipo_gravada'],
-          "subtotal" => $value['subtotal'],
-          "igv" => $value['igv'],
-          "costo_parcial" => $value['costo_parcial'],
-          "descripcion" => $value['descripcion'],
-          "glosa" => $value['glosa'],
-          "comprobante" => $value['comprobante'],
-          "estado" => $value['estado'],
+          "idsubcontrato"       => $value['idsubcontrato'],
+          "idproyecto"          => $value['idproyecto'],
+          "idproveedor"         => $value['idproveedor'],
+          "tipo_comprobante"    => $value['tipo_comprobante'],
+          "numero_comprobante"  => $value['numero_comprobante'],
+          "forma_de_pago"       => $value['forma_de_pago'],          
+          "fecha_subcontrato"   => $value['fecha_subcontrato'],
+          "val_igv"             => (empty($value['val_igv']) ? 0 : floatval($value['val_igv']) ),
+          "tipo_gravada"        => $value['tipo_gravada'],
+          "subtotal"            => (empty($value['subtotal']) ? 0 : floatval($value['subtotal']) ),
+          "igv"                 => (empty($value['igv']) ? 0 : floatval($value['igv']) ),
+          "costo_parcial"       => (empty($value['costo_parcial']) ? 0 : floatval($value['costo_parcial']) ),
+          "descripcion"         => $value['descripcion'],
+          "glosa"               => $value['glosa'],
+          "comprobante"         => $value['comprobante'],
+          "estado"              => $value['estado'],
 
-          "proveedor" => $value['razon_social'],
-          "tipo_documento" => $value['tipo_documento'],
-          "ruc" => $value['ruc'],
+          "proveedor"           => $value['razon_social'],
+          "tipo_documento"      => $value['tipo_documento'],
+          "ruc"                 => $value['ruc'],
 
           "total_deposito" => (empty($deposito['data']) ? 0 : ( empty($deposito['data']['total_deposito']) ? 0 : $deposito['data']['total_deposito'])),
         ];
@@ -149,14 +166,33 @@ class Sub_contrato
   }
 
   //total
-  public function total($idproyecto) {
-    $sql = "SELECT SUM(costo_parcial) as total, SUM(subtotal) as subtotal, SUM(igv) as igv FROM subcontrato WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete=1";
+  public function total($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_2'";
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND s.idproveedor = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; 
+    } 
+
+    $sql = "SELECT SUM(s.costo_parcial) as total, SUM(s.subtotal) as subtotal, SUM(s.igv) as igv 
+    FROM subcontrato as s , proveedor as p
+    WHERE s.idproveedor = p.idproveedor AND s.idproyecto='$idproyecto' AND s.estado='1' AND s.estado_delete='1' $filtro_proveedor $filtro_comprobante $filtro_fecha";
     $gasto = ejecutarConsultaSimpleFila($sql);
     if ($gasto['status'] == false) {  return $gasto; }
 
     $sql_2 = "SELECT SUM(ps.monto) as monto
-    FROM pago_subcontrato as ps, subcontrato as s
-    WHERE ps.idsubcontrato = s.idsubcontrato AND s.idproyecto ='$idproyecto' AND ps.estado ='1' AND ps.estado_delete ='1' AND s.estado ='1' AND s.estado_delete ='1';";
+    FROM pago_subcontrato as ps, subcontrato as s, proveedor as p
+    WHERE ps.idsubcontrato = s.idsubcontrato AND s.idproveedor = p.idproveedor AND s.idproyecto ='$idproyecto' AND ps.estado ='1' 
+    AND ps.estado_delete ='1' AND s.estado ='1' AND s.estado_delete ='1' $filtro_proveedor $filtro_comprobante $filtro_fecha ;";
     $deposito = ejecutarConsultaSimpleFila($sql_2);
     if ($deposito['status'] == false) {  return $deposito; }
 

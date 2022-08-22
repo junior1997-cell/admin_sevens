@@ -20,6 +20,8 @@
       date_default_timezone_set('America/Lima');
       $date_now = date("d-m-Y h.i.s A");
 
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
       $idproyecto				    = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):""; 
       $tipo_documento			  = isset($_POST["tipo_documento"])? limpiarCadena($_POST["tipo_documento"]):"";
       $numero_documento		  = isset($_POST["num_documento"])? limpiarCadena($_POST["num_documento"]):"";
@@ -321,17 +323,13 @@
                 $acciones = '<button class="btn btn-primary btn-sm" onclick="reiniciar_proyecto('.$value['idproyecto'].', \''.encodeCadenaHtml($value['nombre_codigo']).'\')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';            
               }
   
-              if (strlen($value['empresa']) >= 20 ) { $empresa = substr($value['empresa'], 0, 20).'...';  } else { $empresa = $value['empresa']; }
-  
-              if (strlen($value['ubicacion']) >= 20 ) { $ubicacion = substr($value['ubicacion'], 0, 20).'...';  } else { $ubicacion = $value['ubicacion']; }
-  
-              if (strlen($value['nombre_proyecto']) >= 21 ) { $nombre_proyecto = substr($value['nombre_proyecto'], 0, 21).'...'; } else { $nombre_proyecto = $value['nombre_proyecto']; }
+              $empresa = cortar_string($value['empresa'], 20, '...');  
+              $ubicacion = cortar_string($value['ubicacion'], 20, '...');  
+              $nombre_proyecto = cortar_string($value['nombre_proyecto'], 20, '...'); 
                 
               $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\'';
   
               $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
-              
-              $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';                
   
               $data[]=array(
                 "0"=>$cont++,
@@ -410,13 +408,11 @@
                 $acciones = '<button class="btn btn-primary btn-sm" onclick="reiniciar_proyecto('.$value['idproyecto'].', \''.encodeCadenaHtml($value['nombre_codigo']).'\')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';            
               }
   
-              if (strlen($value['empresa']) >= 20 ) { $empresa = substr($value['empresa'], 0, 20).'...';  } else { $empresa = $value['empresa']; }
+              $empresa = cortar_string($value['empresa'], 20, '...');  
                   
               $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\'';
   
               $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
-              
-              $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';                
   
               $data[]=array(
                 "0"=>$cont++,
