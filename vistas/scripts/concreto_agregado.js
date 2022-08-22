@@ -376,7 +376,7 @@ function lista_de_items(idproyecto) {
       e.data.forEach((val, index) => {
         data_html = data_html.concat(`
         <li class="nav-item">
-          <a class="nav-link" onclick="tbla_principal_concreto('${val.idproyecto}', '${val.idtipo_tierra}', '${val.columna_calidad}', '${val.columna_descripcion}', '${val.nombre}', '', '', '', ''); show_hide_filtro();" id="tabs-for-concreto-tab" data-toggle="pill" href="#tabs-for-concreto" role="tab" aria-controls="tabs-for-concreto" aria-selected="false">${val.nombre}</a>
+          <a class="nav-link" onclick="delay(function(){tbla_principal_concreto('${val.idproyecto}', '${val.idtipo_tierra}', '${val.columna_calidad}', '${val.columna_descripcion}', '${val.nombre}', '', '', '', '');}, 50 ); show_hide_filtro();" id="tabs-for-concreto-tab" data-toggle="pill" href="#tabs-for-concreto" role="tab" aria-controls="tabs-for-concreto" aria-selected="false">${val.nombre}</a>
         </li>`);
       });
 
@@ -471,7 +471,8 @@ function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_calidad, co
     columnDefs: [
       //{ targets: [11,12,13], visible: false, searchable: false, },  
       { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [6,7,8], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
+      { targets: [6,7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
       calidad_column,
       descripcion_column,
     ],

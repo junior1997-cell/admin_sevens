@@ -184,7 +184,10 @@ function tbla_principal(id_proyecto) {
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
-    columnDefs:[ { "targets": [ 3 ], "visible": false, "searchable": false }, ]
+    columnDefs:[ 
+      { "targets": [ 3 ], "visible": false, "searchable": false }, 
+      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+    ]
 	}).DataTable();
 
   $.post("../ajax/resumen_insumos.php?op=suma_total_compras", { 'idproyecto': id_proyecto }, function (e, status) {
@@ -201,13 +204,13 @@ function tbla_principal(id_proyecto) {
         if (e.data.suma_total_compras == null || e.data.suma_total_compras == '') {
           $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
         } else {
-          $(".suma_total_de_compras").html( 'S/ '+ formato_miles(e.data.suma_total_compras));
+          $(".suma_total_de_compras").html(formato_miles(e.data.suma_total_compras));
         }
 
         if (e.data.suma_total_productos == null || e.data.suma_total_productos == '') {
           $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
         } else {
-          $('.suma_total_productos').html(e.data.suma_total_productos);
+          $('.suma_total_productos').html(formato_miles(e.data.suma_total_productos));
         }
       }    
     } else {
@@ -267,7 +270,8 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 		iDisplayLength: 10,//Paginación
 		order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [      
-      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [6,7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
       //{ targets: [10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
     ],
 	}).DataTable();  
@@ -294,19 +298,19 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
         if (e.data.precio_promedio == null || e.data.precio_promedio == '') {
           $(".precio_promedio").html('<i class="far fa-frown fa-lg text-danger"></i>');
         } else {
-          $(".precio_promedio").html( 'S/ '+ formato_miles(e.data.precio_promedio));
+          $(".precio_promedio").html( formato_miles(e.data.precio_promedio));
         }
 
         if (e.data.descuento == null || e.data.descuento == '') {
           $(".descuento_x_producto").html('<i class="far fa-frown fa-lg text-danger"></i>');
         } else {
-          $(".descuento_x_producto").html( 'S/ '+ formato_miles(e.data.descuento));
+          $(".descuento_x_producto").html( formato_miles(e.data.descuento));
         }
 
         if (e.data.subtotal == null || e.data.subtotal == '') {
           $('.subtotal_x_producto').html('<i class="far fa-frown fa-lg text-danger"></i>');
         } else {
-          $('.subtotal_x_producto').html('S/ '+ e.data.subtotal);
+          $('.subtotal_x_producto').html(formato_miles(e.data.subtotal));
         }
       }    
     } else {

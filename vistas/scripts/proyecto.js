@@ -192,16 +192,8 @@ function tbla_principal(estado, class_color, box_select) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [6], visible: false, searchable: false, },
-      { targets: [7], visible: false, searchable: false, },
-      { targets: [8], visible: false, searchable: false, },
-      { targets: [9], visible: false, searchable: false, },
-      { targets: [10], visible: false, searchable: false, },
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },
-      { targets: [13], visible: false, searchable: false, },
-      { targets: [14], visible: false, searchable: false, },
-      { targets: [15], visible: false, searchable: false, },      
+      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [6,7,8,9,10,11,12,13,14,15], visible: false, searchable: false, },
     ],
   }).DataTable();   
   

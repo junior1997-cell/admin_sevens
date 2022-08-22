@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Activos fijos</title>
+        <title>Activos fijos | Admin Sevens</title>
         
         <?php $title = "Activos fijos"; require 'head.php'; ?>
         
@@ -64,46 +64,76 @@
                           </h3>
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body">
-                          <table id="tabla-activos" class="table table-bordered table-striped display" style="width: 100% !important;">
-                            <thead> 
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th class="">Acciones</th>
-                                <th>Nombre</th>
-                                <th>Categoria</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                <th class="text-center">Ficha técnica</th>
-                                <th class="text-center">Estado</th>
-                                <th>Nombre</th>
-                                <th>Marca</th>
-                                <th>Color</th>
-                                <th>Descripción</th>
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th class="">Acciones</th>
-                                <th>Nombre</th>
-                                <th>Categoria</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                <th class="text-center">Ficha técnica</th>
-                                <th class="text-center">Estado</th>
-                                <th>Nombre</th>
-                                <th>Marca</th>
-                                <th>Color</th>
-                                <th>Descripción</th>
-                              </tr>
-                            </tfoot>
-                          </table>
+                        <div class="card-body px-1 py-1">
+                          <div class="row">                              
+                            <div class=" col-12 col-sm-12">
+                              <div class="card card-primary card-outline card-outline-tabs mb-0">
+                                <div class="card-header p-0 border-bottom-0">
+                                  <ul class="nav nav-tabs lista-items" id="tabs-for-tab" role="tablist">
+                                    <li class="nav-item">
+                                      <a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a>
+                                    </li>           
+                                  </ul>
+                                </div>
+                                <div class="card-body" >                                  
+                                  <div class="tab-content" id="tabs-for-tabContent">
+                                    <!-- TABLA - RESUMEN -->
+                                    <div class="tab-pane fade show active" id="tabs-for-activo-fijo" role="tabpanel" aria-labelledby="tabs-for-activo-fijo-tab">
+                                      <div class="row">                                        
+                                        <div class="col-12">
+                                          <table id="tabla-activos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                            <thead> 
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="">Acciones</th>
+                                                <th>Nombre</th>
+                                                <th>Categoria</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                                <th class="text-center">Ficha técnica</th>
+                                                <th class="text-center">Estado</th>
+                                                <th>Nombre</th>
+                                                <th>Marca</th>
+                                                <th>Color</th>
+                                                <th>Descripción</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="">Acciones</th>
+                                                <th>Nombre</th>
+                                                <th>Categoria</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
+                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                                <th class="text-center">Ficha técnica</th>
+                                                <th class="text-center">Estado</th>
+                                                <th>Nombre</th>
+                                                <th>Marca</th>
+                                                <th>Color</th>
+                                                <th>Descripción</th>
+                                              </tr>
+                                            </tfoot>
+                                          </table>
+                                        </div>
+                                        <!-- /.col -->
+                                      </div>
+                                      <!-- /.row -->
+                                    </div>                                    
+                                  </div>
+                                  <!-- /.tab-content -->
+                                </div>
+                                <!-- /.card-body -->
+                              </div>
+                            </div>
+                            <!-- /.col -->
+                          </div>
+                          
                         </div>
                         <!-- /.card-body -->
                       </div>

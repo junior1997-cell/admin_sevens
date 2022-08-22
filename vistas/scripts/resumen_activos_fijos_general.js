@@ -186,6 +186,7 @@ function tbla_principal_maquinaria() {
 	  order: [[ 0, "asc" ]],//Ordenar (columna,orden)
   columnDefs:[  
     { "targets": [ 10,11, ], "visible": false, "searchable": false },
+    { targets: [7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
   ]
 	}).DataTable();
 
@@ -203,7 +204,7 @@ function tbla_principal_maquinaria() {
       if (e.data.total_monto == null || e.data.total_monto == '') {
         $('.suma_total_de_maquinarias').html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $('.suma_total_de_maquinarias').html( 'S/ '+ formato_miles(e.data.total_monto));
+        $('.suma_total_de_maquinarias').html( formato_miles(e.data.total_monto));
       }     
 
     } else {
@@ -259,6 +260,7 @@ function tbla_principal_equipo() {
 	  order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs:[ 
       { "targets": [ 10,11 ], "visible": false, "searchable": false }, 
+      { targets: [7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
 
@@ -276,7 +278,7 @@ function tbla_principal_equipo() {
       if (e.data.total_monto == null || e.data.total_monto == '') {
         $('.suma_total_de_equipos').html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $('.suma_total_de_equipos').html( 'S/ '+ formato_miles(e.data.total_monto));
+        $('.suma_total_de_equipos').html( formato_miles(e.data.total_monto));
       }     
 
     } else {
@@ -332,6 +334,7 @@ function tbla_principal_herramienta() {
 	  order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs:[       
       { "targets": [ 10,11 ], "visible": false, "searchable": false }, 
+      { targets: [7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
 
@@ -349,7 +352,7 @@ function tbla_principal_herramienta() {
       if (e.data.total_monto == null || e.data.total_monto == '') {
         $('.suma_total_de_herramientas').html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $('.suma_total_de_herramientas').html( 'S/ '+ formato_miles(e.data.total_monto));
+        $('.suma_total_de_herramientas').html( formato_miles(e.data.total_monto));
       }     
 
     } else {
@@ -402,7 +405,10 @@ function tbla_principal_oficina(){
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
 	  order: [[ 0, "asc" ]],//Ordenar (columna,orden)
-    columnDefs:[ { "targets": [ 10,11 ], "visible": false, "searchable": false }, ]
+    columnDefs:[ 
+      { "targets": [ 10,11 ], "visible": false, "searchable": false }, 
+      { targets: [7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+    ]
 	}).DataTable();
 
   $.post("../ajax/resumen_activos_fijos_general.php?op=suma_total_compras", {'id_categoria_suma':5}, function (e, status) {
@@ -419,7 +425,7 @@ function tbla_principal_oficina(){
       if (e.data.total_monto == null || e.data.total_monto == '') {
         $('.suma_total_de_oficina').html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $('.suma_total_de_oficina').html( 'S/ '+ formato_miles((e.data.total_monto).toFixed(2)));
+        $('.suma_total_de_oficina').html( formato_miles((e.data.total_monto).toFixed(2)));
       }     
 
     } else {      
@@ -997,7 +1003,9 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
 		iDisplayLength: 10,//Paginación
 		order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs:[       
-      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
     ]
 	}).DataTable();  
 
@@ -1016,19 +1024,19 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
       if (e.data.precio_promedio == null || e.data.precio_promedio == '') {
         $(".precio_promedio").html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $(".precio_promedio").html( 'S/ '+ formato_miles(e.data.precio_promedio));
+        $(".precio_promedio").html( formato_miles(e.data.precio_promedio));
       }
 
       if (e.data.descuento == null || e.data.descuento == '') {
         $(".descuento_x_producto").html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $(".descuento_x_producto").html( 'S/ '+ formato_miles(e.data.descuento));
+        $(".descuento_x_producto").html(  formato_miles(e.data.descuento));
       }
 
       if (e.data.subtotal == null || e.data.subtotal == '') {
         $('.subtotal_x_producto').html('<i class="far fa-frown fa-lg text-danger"></i>');
       } else {
-        $('.subtotal_x_producto').html('S/ '+ formato_miles(e.data.subtotal));
+        $('.subtotal_x_producto').html(formato_miles(e.data.subtotal));
       }
 
     } else {

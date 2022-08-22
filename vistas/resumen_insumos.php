@@ -112,7 +112,7 @@
                                   <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
-                                  <th class="text-nowrap text-right suma_total_de_compras h5">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></th>                               
+                                  <th class="text-nowrap text-right px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras">0.00</span></div></th>                               
                                 </tr>
                               </tfoot>
                             </table>
@@ -143,10 +143,10 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th >Fecha compra</th>
-                                  <th class="cantidad_x_producto"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-right precio_promedio text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>  
-                                  <th class="descuento_x_producto text-nowrap"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th class="text-right subtotal_x_producto text-nowrap h5"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-nowrap h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
+                                  <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
+                                  <th class="text-nowrap px-2"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
                                 </tr>
                               </tfoot>

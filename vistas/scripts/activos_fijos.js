@@ -1,15 +1,16 @@
 var tabla;
 
 //Función que se ejecuta al inicio
-function init() {
-
-  listar();
+function init() {  
   
   $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
 
   $("#mRecurso").addClass("active");
 
   $("#lActivosfijos").addClass("active");
+
+  lista_de_items();
+  tabla_principal('todos');
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
@@ -99,8 +100,38 @@ function limpiar() {
   $(".error.invalid-feedback").remove();
 }
 
+function lista_de_items() { 
+
+  $(".lista-items").html(`<li class="nav-item"><a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a></li>`); 
+
+  $.post("../ajax/activos_fijos.php?op=lista_de_categorias", function (e, status) {
+    
+    e = JSON.parse(e); console.log(e);
+    // e.data.idtipo_tierra
+    if (e.status) {
+      var data_html = '';
+
+      e.data.forEach((val, index) => {
+        data_html = data_html.concat(`
+        <li class="nav-item">
+          <a class="nav-link" onclick="delay(function(){tabla_principal('${val.idcategoria}')}, 50 );" id="tabs-for-activo-fijo-tab" data-toggle="pill" href="#tabs-for-activo-fijo" role="tab" aria-controls="tabs-for-activo-fijo" aria-selected="false">${val.nombre}</a>
+        </li>`);
+      });
+
+      $(".lista-items").html(`
+        <li class="nav-item">
+          <a class="nav-link active" onclick="delay(function(){tabla_principal('todos')}, 50 );" id="tabs-for-activo-fijo-tab" data-toggle="pill" href="#tabs-for-activo-fijo" role="tab" aria-controls="tabs-for-activo-fijo" aria-selected="true">Todos</a>
+        </li>
+        ${data_html}
+      `); 
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
 //Función Listar
-function listar() {
+function tabla_principal(id_categoria) {
   tabla = $("#tabla-activos").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
@@ -108,33 +139,29 @@ function listar() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } },      
     ],
     ajax: {
-      url: "../ajax/activos_fijos.php?op=listar",
+      url: `../ajax/activos_fijos.php?op=tabla_principal&id_categoria=${id_categoria}`,
       type: "get",
       dataType: "json",
       error: function (e) {
         console.log(e.responseText); ver_errores(e);
       },
     },
-    createdRow: function (row, data, ixdex) {   
-        
+    createdRow: function (row, data, ixdex) {         
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); } 
       // columna: #
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: pago total
-      if (data[3] != '') { $("td", row).eq(3).addClass('text-center'); } 
-      
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-center'); }       
       if (data[4] != '') { $("td", row).eq(4).addClass('text-right  text-nowrap'); } 
-
       if (data[5] != '') { $("td", row).eq(5).addClass('text-right  text-nowrap'); } 
-
       if (data[6] != '') { $("td", row).eq(6).addClass('text-right  text-nowrap'); }
-
       if (data[7] != '') { $("td", row).eq(7).addClass('text-right  text-nowrap'); }
-
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -145,10 +172,8 @@ function listar() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [10], visible: false, searchable: false, },
-      { targets: [11], visible: false, searchable: false, },
-      { targets: [12], visible: false, searchable: false, },  
-      { targets: [13], visible: false, searchable: false, },            
+      { targets: [10,11,12,13], visible: false, searchable: false, },
+      { targets: [4,5,6,7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 }
@@ -195,34 +220,23 @@ function guardaryeditar(e) {
     processData: false,
     success: function (e) {
       e = JSON.parse(e);  console.log(e);  
-      if (e.status == true) {
-         
+      if (e.status == true) {         
         Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");
-
         tabla.ajax.reload(null, false);
-
         limpiar();
-
         $("#modal-agregar-activos-fijos").modal("hide");
-
         $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-
       } else {         
         ver_errores(e);
       }
     },
     xhr: function () {
-
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener("progress", function (evt) {
-
         if (evt.lengthComputable) {
-
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
           $("#barra_progress").css({"width": percentComplete+'%'});
-
           $("#barra_progress").text(percentComplete.toFixed(2)+" %");
         }
       }, false);
@@ -282,10 +296,8 @@ function mostrar(idproducto) {
         $("#estado_igv").val(0);
       }
        
-      if (e.data.imagen != "") {
-        
-        $("#foto1_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);
-  
+      if (e.data.imagen != "") {        
+        $("#foto1_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);  
         $("#foto1_actual").val(e.data.imagen);
       }
   
@@ -311,11 +323,7 @@ function mostrar(idproducto) {
       $("#cargando-2-fomulario").hide();
     } else {
       ver_errores(e);
-    }   
-
-        
-
-    
+    }     
   }).fail( function(e) { ver_errores(e); } );
 }
 

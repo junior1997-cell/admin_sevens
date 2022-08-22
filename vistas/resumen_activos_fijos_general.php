@@ -97,14 +97,12 @@
                                   <th class="">Producto</th>
                                   <th>Color</th>
                                   <th>U. M</th>
-                                  <th class="text-center">
-                                    <h5 class="suma_total_cant_maquinarias" style="font-weight: bold;"><i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
-                                  </th>
+                                  <th class="text-nowrap text-center suma_total_cant_maquinarias" > <i class="fas fa-spinner fa-pulse fa-sm"></i> </th>
                                   <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
-                                  <th class="text-right">
-                                    <h5 class="suma_total_de_maquinarias" style="font-weight: bold;">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
+                                  <th class="text-nowrap px-2" >
+                                    <div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_maquinarias">0.00</span></div>
                                   </th>
                                   <th>Producto</th>
                                   <th>Modelo</th>
@@ -155,14 +153,12 @@
                                   <th class="">Producto</th>
                                   <th>Color</th>
                                   <th>U. M</th>
-                                  <th class="text-center">
-                                    <h5 class="suma_total_cant_equipos" style="font-weight: bold;"><i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
-                                  </th>
+                                  <th class="text-nowrap text-center suma_total_cant_equipos"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th>Cantidad</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
-                                  <th class="text-right">
-                                    <h5 class="suma_total_de_equipos" style="font-weight: bold;">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
+                                  <th class="text-nowrap px-2">
+                                    <div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_equipos">0.00</span></div>
                                   </th>
                                   <th>Producto</th>
                                   <th>Modelo</th>
@@ -213,14 +209,12 @@
                                   <th class="">Producto</th>
                                   <th>Color</th>
                                   <th>U. M</th>
-                                  <th class="text-center">
-                                    <h5 class="suma_total_herramientas"><i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
-                                  </th>
+                                  <th class="text-center text-nowrap suma_total_herramientas"><i class="fas fa-spinner fa-pulse fa-sm"></i> </th>
                                   <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
-                                  <th class="text-center">
-                                    <h5 class="suma_total_de_herramientas">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
+                                  <th class="text-nowrap">
+                                    <div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_herramientas">0.00</span></div>
                                   </th>
                                   <th>Producto</th>
                                   <th>Modelo</th>
@@ -271,14 +265,12 @@
                                   <th class="">Producto</th>
                                   <th>Color</th>
                                   <th>U. M</th>
-                                  <th class="text-center">
-                                    <h5 class="suma_total_oficina"><i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
-                                  </th>
+                                  <th class="text-center suma_total_oficina"> <i class="fas fa-spinner fa-pulse fa-sm"></i> </th>
                                   <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>
-                                  <th class="text-center">
-                                    <h5 class="suma_total_de_oficina">S/ <i class="fas fa-spinner fa-pulse fa-sm"></i></h5>
+                                  <th class="text-nowrap">
+                                    <div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_oficina">0.00</span></div>
                                   </th>
                                   <th>Producto</th>
                                   <th>Modelo</th>
@@ -344,10 +336,10 @@
                                   <th>Módulo</th>
                                   <th>Proveedor</th>
                                   <th >Fecha compra</th>
-                                  <th class="cantidad_x_producto" data-toggle="tooltip" data-original-title="Suma total de cantidad"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-right precio_promedio text-nowrap h5" data-toggle="tooltip" data-original-title="Precio promedio"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>  
-                                  <th class="text-right descuento_x_producto text-nowrap" data-toggle="tooltip" data-original-title="Suma total de descuento"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th class="text-right subtotal_x_producto text-nowrap h5" data-toggle="tooltip" data-original-title="Suma"> <i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="cantidad_x_producto text-center" data-toggle="tooltip" data-original-title="Suma total de cantidad"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="px-2 text-nowrap h5" data-toggle="tooltip" data-original-title="Precio promedio"> <div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
+                                  <th class="px-2 text-nowrap" data-toggle="tooltip" data-original-title="Suma total de descuento"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
+                                  <th class="px-2 text-nowrap h5" data-toggle="tooltip" data-original-title="Suma"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
                                 </tr>
                               </tfoot>

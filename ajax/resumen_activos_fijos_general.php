@@ -108,9 +108,9 @@
                 "4" => $reg['nombre_medida'],
                 "5" => '<center>' . $reg['cantidad'] . '</center>',
                 "6" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproducto'] . ', \'' . htmlspecialchars($reg['nombre_producto'], ENT_QUOTES) . '\', \'' . $reg['promedio_precio'] . '\', \'' . number_format($reg['subtotal'], 2, ".", ",") . '\')" data-toggle="tooltip" data-original-title="Ver facturas"><i class="far fa-eye"></i></button>'.$toltip,
-                "7" => '<span class="text-right"> S/ ' . number_format($reg['promedio_precio'], 2, ".", ",") . '</span>',
-                "8" => 'S/ ' . number_format($reg['precio_actual'], 2, ".", ","),
-                "9" => 'S/ ' . number_format($reg['subtotal'], 2, ".", ","),
+                "7" => number_format($reg['promedio_precio'], 2, ".", "") ,
+                "8" => number_format($reg['precio_actual'], 2, ".", ""),
+                "9" => number_format($reg['subtotal'], 2, ".", ""),
                 "10" => $reg['nombre_producto'], 
                 "11" => $reg['modelo'],
               ];
@@ -178,10 +178,10 @@
                 "2" => $reg['modulo'],
                 "3" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',
                 "4" => $reg['fecha_compra'],
-                "5" => $reg['cantidad'],
+                "5" => number_format($reg['cantidad'], 2, ".", ","),
                 "6" => '<b class="h5 font-weight-bold">' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
-                "7" => 'S/ ' . number_format($reg['descuento'], 2, ".", ","),
-                "8" => 'S/ ' . number_format($reg['subtotal'], 2, ".", ","),
+                "7" => number_format($reg['descuento'], 2, ".", ""),
+                "8" => number_format($reg['subtotal'], 2, ".", ""),
                 "9" => $ficha_tecnica,
               ];
             }

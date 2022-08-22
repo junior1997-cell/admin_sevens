@@ -352,7 +352,7 @@
                 </div>',              
                 "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description" >'.$value['nombre_codigo'].'</span> </div>' ,
                 "4"=> '<div class="asignar_paint_'.$value['idproyecto'].'">'. $ubicacion.'</div>',             
-                "5"=> '<div class="asignar_paint_'.$value['idproyecto'].'"> <div class="justify-content-between"><span><b> S/ </b></span> <span >'. number_format($value['costo'], 2, '.', ',').'</span></div> </div>',
+                "5"=>  number_format($value['costo'], 2, '.', ''),
                 "6"=> $value['empresa'],
                 "7"=> $value['tipo_documento'] . ': '. $value['numero_documento'],
                 "8"=> $value['ubicacion'],
@@ -426,7 +426,7 @@
                   <span class="description ml-0">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 </div>',              
                 "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description" >'.$value['nombre_codigo'].'</span> </div>' ,
-                "4"=> '<div class="asignar_paint_'.$value['idproyecto'].'"> <div class="justify-content-between"><span><b> S/ </b></span> <span >'. number_format($value['costo'], 2, '.', ',').'</span></div> </div>',                 
+                "4"=>  number_format($value['costo'], 2, '.', ''),                 
                 "5"=> '<div class="asignar_paint_'.$value['idproyecto'].'">'. $estado.'</div>'.$toltip
               );
             }

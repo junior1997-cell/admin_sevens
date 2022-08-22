@@ -128,8 +128,8 @@
 
         break;
 
-        case 'listar':
-          $rspta = $activos_fijos->listar();
+        case 'tabla_principal':
+          $rspta = $activos_fijos->tabla_principal($_GET["id_categoria"]);
           //Vamos a declarar un array
           $data = [];
           $imagen = '';
@@ -163,10 +163,10 @@
                   <span class="description"><b>UM: </b>' . $reg->nombre_medida . '</span>
                 </div>',
                 "3" => $reg->categoria, 
-                "4" =>'S/ '. number_format($reg->precio_unitario, 2, '.', ','),
-                "5" =>'S/ '. number_format($reg->precio_sin_igv, 2, '.', ','),
-                "6" =>'S/ '. (empty($reg->precio_igv) ? '-' : number_format($reg->precio_igv, 2, '.', ',')) ,
-                "7" =>'S/ '. number_format($reg->precio_total, 2, '.', ','),
+                "4" =>number_format($reg->precio_unitario, 2, '.', ''),
+                "5" =>number_format($reg->precio_sin_igv, 2, '.', ''),
+                "6" =>(empty($reg->precio_igv) ? 0 : number_format($reg->precio_igv, 2, '.', '')) ,
+                "7" =>number_format($reg->precio_total, 2, '.', ''),
                 "8" => $ficha_tecnica,
                 "9" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
                 "10" => $reg->nombre,
@@ -188,7 +188,15 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
 
-        break;       
+        break;     
+        
+        case 'lista_de_categorias':
+
+          $rspta = $activos_fijos->lista_de_categorias();
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true);
+
+        break;
 
         case 'salir':
           //Limpiamos las variables de sesión

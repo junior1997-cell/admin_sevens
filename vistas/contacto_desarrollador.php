@@ -125,7 +125,7 @@
       </div>
 
       <div class="modal-body">
-         <div class="row">
+        <div class="row">
           <div class="col-12">
             <table id="tabla-para-todos-los-modulos-proyecto" class="table table-bordered table-striped display" style="width: 100% !important;">
               <thead>
@@ -151,11 +151,11 @@
               </tfoot>
             </table>
           </div>
-         </div>
+        </div>
       </div>
 
-      <div class="modal-footer justify-content-end">
-        <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn bg-dark" onclick="salir_proyecto_para_todos_los_modulos();" >Salir de proyecto</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -163,42 +163,70 @@
 </div>
 
 <script>
-  function abrir_proyecto_para_todos_los_modulos(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
 
-    if ($("#foo" ).hasClass('className')) { $( "#foo" ).removeClass( 'className'); } else { $( "#foo" ).addClass( 'className'); }
-
-    if ( localStorage.getItem('nube_idproyecto') ) {
-      $("#icon_folder_"+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder"></i>');
-    }
-
-    $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
-
-    localStorage.setItem('nube_idproyecto', idproyecto);
-    localStorage.setItem('nube_fecha_inicial_proyecto', fecha_inicial);
-    localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
-    localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
-
-    // mostramos el nombre en el NAV
-    $("#ver-proyecto").html(`<i class="fas fa-tools"></i> <p class="d-inline-block hide-max-width-1080px">Proyecto:</p> ${nombre_proyecto}`);
-    $("#ver-proyecto").show();
-    $("#ver-otros-modulos").show();
-
-    setTimeout(function() { $(".ver-otros-modulos-1").fadeOut(0);  },0);
-    setTimeout(function() { $(".ver-otros-modulos-2").fadeIn(150); },4);
-    setTimeout(function() { $(".ver-otros-modulos-2").fadeOut(200); },400);
-    setTimeout(function() { $(".ver-otros-modulos-1").fadeIn(400); },500);
-
-    // Swal.fire("Abierto!", `<b class="text-success">${nombre_proyecto}</b> <br> Proyecto abierto corrrectamente`, "success");
+  function salir_proyecto_para_todos_los_modulos() {
+    
 
     let timerInterval
     Swal.fire({
-      title: 'Abierto!!',
-      html: `<span class="text-success text-bold">${nombre_proyecto}</span> <br> Proyecto abierto corrrectamente, la página se recargara en <b></b> seconds`,
+      title: 'Cerrando!!',
+      html: `Tu proyecto <span class="text-danger text-bold"> se esta cerrado</span> <br> La página se recargara en <b></b> seconds`,
       timer: 3000,
       timerProgressBar: true,
       didOpen: () => { Swal.showLoading(); const b = Swal.getHtmlContainer().querySelector('b'); timerInterval = setInterval(() => { b.textContent = Swal.getTimerLeft(); }, 100); },
       willClose: () => { clearInterval(timerInterval)   }
-    }).then((result) => { if (result.dismiss === Swal.DismissReason.timer) { window.location.reload(); } });
+    }).then((result) => { 
+
+      if (result.dismiss === Swal.DismissReason.timer) { 
+
+        localStorage.setItem('nube_idproyecto', 0);
+        localStorage.setItem('nube_fecha_inicial_proyecto', '');
+        localStorage.setItem('nube_fecha_final_proyecto', '');
+        localStorage.setItem('nube_nombre_proyecto', '');
+
+        window.location.reload(); 
+      } 
+    });
+  }
+
+  function abrir_proyecto_para_todos_los_modulos(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
+
+    let timerInterval
+    Swal.fire({
+      title: 'Abriendo!!',
+      html: `<span class="text-success text-bold">${nombre_proyecto}</span> <br> Tu proyecto <span class="text-success text-bold">se está abriendo</span>, la página se recargara en <b></b> seconds`,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: () => { Swal.showLoading(); const b = Swal.getHtmlContainer().querySelector('b'); timerInterval = setInterval(() => { b.textContent = Swal.getTimerLeft(); }, 100); },
+      willClose: () => { clearInterval(timerInterval)   }
+    }).then((result) => { 
+      
+      if (result.dismiss === Swal.DismissReason.timer) { 
+
+        if ($("#foo" ).hasClass('className')) { $( "#foo" ).removeClass( 'className'); } else { $( "#foo" ).addClass( 'className'); }
+
+        if ( localStorage.getItem('nube_idproyecto') ) { $("#icon_folder_"+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder"></i>'); }
+
+        $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
+
+        localStorage.setItem('nube_idproyecto', idproyecto);
+        localStorage.setItem('nube_fecha_inicial_proyecto', fecha_inicial);
+        localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
+        localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
+
+        // mostramos el nombre en el NAV
+        $("#ver-proyecto").html(`<i class="fas fa-tools"></i> <p class="d-inline-block hide-max-width-1080px">Proyecto:</p> ${nombre_proyecto}`);
+        $("#ver-proyecto").show();
+        $("#ver-otros-modulos").show();
+
+        setTimeout(function() { $(".ver-otros-modulos-1").fadeOut(0);  },0);
+        setTimeout(function() { $(".ver-otros-modulos-2").fadeIn(150); },4);
+        setTimeout(function() { $(".ver-otros-modulos-2").fadeOut(200); },400);
+        setTimeout(function() { $(".ver-otros-modulos-1").fadeIn(400); },500);
+
+        window.location.reload(); 
+      } 
+    });
 
     $(".tooltip").removeClass("show").addClass("hidde");
   }
@@ -240,6 +268,8 @@
       iDisplayLength: 10,//Paginación
       order: [[ 0, "asc" ]],//Ordenar (columna,orden)
       columnDefs: [
+      { targets: [4], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
         // { targets: [6], visible: false, searchable: false, },             
       ],
     }).DataTable();   
