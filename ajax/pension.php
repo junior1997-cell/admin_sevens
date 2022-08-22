@@ -55,15 +55,11 @@
         // :::::::::::::::::::::::::: S E C C I O N   P E N S I O N  ::::::::::::::::::::::::::::::::::::::::::
         case 'guardaryeditar_pension':
 
-          if (empty($idpension)){
-            
+          if (empty($idpension)){            
             $rspta=$pension->insertar_pension($idproyecto_p,$proveedor,$descripcion_pension);
             echo json_encode($rspta,true);
-          }
-          else {
-            
-            $rspta=$pension->editar_pension($idproyecto_p,$idpension,$proveedor,$descripcion_pension);
-            
+          } else {            
+            $rspta=$pension->editar_pension($idproyecto_p,$idpension,$proveedor,$descripcion_pension);            
             echo json_encode($rspta,true);
           }
 
@@ -83,14 +79,14 @@
               $data[]=array(
                 "0"=>$cont++,
                 "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pension('.$reg['idpension'].')"><i class="fas fa-pencil-alt"></i></button>'.
-                ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg['idpension'].',\'' . $reg['razon_social'].  '\')"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
+                ' <button class="btn btn-info btn-sm" onclick="ingresar_a_pension('.$reg['idpension'].',\'' . $reg['razon_social'].  '\', \'\', \'\', \'\', \'\' ); mostrar_form_table(2);"><span class="d-none d-sm-inline-block">Ingresar</span> <i class="fas fa-sign-in-alt"></i></button>',
                 "2"=>'<div class="user-block">
                   <span ><p class="text-primary m-b-02rem font-weight-bold" > Pensión. '.$reg['razon_social'].'</p></span>
                   <span class=" text-gray font-size-13px">'.$reg['direccion'].' </span>
                   </div>',
                 "3"=>'<textarea cols="30" rows="2" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',
-                "4"=>'<div class="formato-numero-conta"> S/ <b>'.number_format($reg['total_gasto'], 2, '.', ',').'</b></div>',       
-                "5"=>date("d-m-Y", strtotime($reg['updated_at'])) .' <b>'. date("h:i", strtotime($reg['updated_at'])) .'</b> '. date("a", strtotime($reg['updated_at']))               
+                "4"=>$reg['total_gasto'],       
+                "5"=>date("d/m/Y", strtotime($reg['updated_at'])) .' <b>'. date("h:i", strtotime($reg['updated_at'])) .'</b> '. date("a", strtotime($reg['updated_at']))               
               );
 
             }
@@ -172,7 +168,7 @@
 
         case 'tbla_detalle_comprobante':
 
-          $rspta=$pension->tbla_detalle_pension($_GET['id_pension']);
+          $rspta=$pension->tbla_detalle_pension($_GET['id_pension'], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
 
           //Vamos a declarar un array
           $data= Array();  $cont=1;
@@ -192,9 +188,9 @@
                 "5"=> empty($reg->forma_pago)?' - ':$reg->forma_pago, 
                 "6"=>'<span class="text-nowrap"><b class="text-primary">'.$reg->tipo_comprobante.'</b>'.(empty($reg->numero_comprobante)?"":' ─ '.$reg->numero_comprobante).'</span>',
                 "7"=>$reg->fecha_emision,
-                "8"=>'S/ '.number_format($reg->subtotal, 2, '.', ','), 
-                "9"=>'S/ '.number_format($reg->igv, 2, '.', ','),
-                "10"=>'S/ '.number_format($reg->precio_parcial, 2, '.', ','),
+                "8"=>number_format($reg->subtotal, 2, '.', ''), 
+                "9"=>number_format($reg->igv, 2, '.', ''),
+                "10"=>number_format($reg->precio_parcial, 2, '.', ''),
                 "11"=>$comprobante . $toltip,
 
                 "12"=>date("d/m/Y", strtotime($reg->fecha_inicial)),
@@ -229,7 +225,7 @@
         case 'total_detalle_pension':
 
           //$idpago_Comprobante='1';
-          $rspta=$pension->total_detalle_pension($_POST['id_pension']);
+          $rspta=$pension->total_detalle_pension($_POST['id_pension'], $_POST["fecha_1"], $_POST["fecha_2"], $_POST["id_proveedor"], $_POST["comprobante"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta,true);
 

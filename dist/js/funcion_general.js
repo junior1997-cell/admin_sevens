@@ -407,6 +407,10 @@ function es_numero(num) {
   if (isNaN(num)){ return false } else { return true };
 }
 
+function convertir_a_numero(num) {
+  return es_numero(num) == true ? parseFloat(num) : 0.00 ;
+}
+
 // Quitar formato de miles
 function quitar_formato_miles(num) {
   let inVal = 0;
