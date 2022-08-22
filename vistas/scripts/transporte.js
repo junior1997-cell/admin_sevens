@@ -1,5 +1,5 @@
 var tabla;
-
+var fecha_1_r="", fecha_2_r="", id_proveedor_r="", comprobante_r="";
 //Función que se ejecuta al inicio
 function init() {
 
@@ -17,13 +17,14 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));  
   console.log(localStorage.getItem('nube_idproyecto'));
 
-  listar();  
-
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
 
+  // ══════════════════════════════════════ G U A R D A R   F O R M ════════════════════════════════
   $("#guardar_registro").on("click", function (e) {$("#submit-form-transporte").submit();});
 
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   //Initialize Select2 tipo_viajero
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccinar un proveedor", allowClear: true, });
   //Initialize Select2 tipo_viajero
@@ -34,10 +35,22 @@ function init() {
   $("#tipo_ruta").select2({ theme: "bootstrap4",  placeholder: "Seleccinar tipo ruta", allowClear: true, });
   //Initialize Select2 tipo_viajero
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar forma de pago", allowClear: true, });
-  
+
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
+  $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
+  $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+
+  // Inicializar - Date picker  
+  $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+$('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
+$('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
+
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
 $("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
@@ -273,7 +286,8 @@ function selecct_glosa() {
 }
 
 //Función Listar
-function listar() {
+function listar(fecha_1, fecha_2, id_proveedor, comprobante) {
+  fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor, comprobante_r=comprobante;
 
   var idproyecto=localStorage.getItem('nube_idproyecto');
 
@@ -291,7 +305,7 @@ function listar() {
       {extend: "colvis"} ,
     ],
     "ajax":{
-        url: '../ajax/transporte.php?op=listar&idproyecto='+idproyecto,
+        url: `../ajax/transporte.php?op=listar&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
         type : "get",
         dataType : "json",						
         error: function(e){
@@ -332,7 +346,8 @@ function listar() {
       { targets: [10,11,12,13,14,15,16,17,18,19,20,21,22], visible: false, searchable: false, },    
     ],
   }).DataTable();
-  total();
+  total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);
+  $(tabla).ready(function () {  $('.cargando').hide(); });
 }
 
 function modal_comprobante(comprobante,tipo,numero_comprobante){
@@ -380,7 +395,7 @@ function guardaryeditar(e) {
           limpiar();
   
           $("#modal-agregar-transporte").modal("hide");
-          total();
+          total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);
 
         }else{  
           ver_errores(e);
@@ -587,12 +602,12 @@ function ver_datos(idtransporte) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function total() {
+function total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r) {
   var idproyecto=localStorage.getItem('nube_idproyecto');
   $(".total_monto").html("");
   $(".total_monto").html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
 
-  $.post("../ajax/transporte.php?op=total", { idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/transporte.php?op=total", { idproyecto: idproyecto, fecha_1:fecha_1_r, fecha_2:fecha_2_r, id_proveedor:id_proveedor_r, comprobante:comprobante_r }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);   
     if (e.status == true) {
@@ -696,6 +711,42 @@ $(function () {
     }
   }
 
+  function cargando_search() {
+    $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+  }
+  
+  function filtros() {  
+  
+    var fecha_1       = $("#filtro_fecha_inicio").val();
+    var fecha_2       = $("#filtro_fecha_fin").val();  
+    var id_proveedor  = $("#filtro_proveedor").select2('val');
+    var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
+    
+    var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
+    var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+  
+    // filtro de fechas
+    if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
+    if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+  
+    // filtro de proveedor
+    if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+  
+    // filtro de trabajdor
+    if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+  
+    $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+    //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+  
+    listar(fecha_1, fecha_2, id_proveedor, comprobante);
+  }
+  
+  function extrae_ruc() {
+    if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { }  else{    
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+    }
+  }
 
   no_select_tomorrow("#fecha_viaje");
 

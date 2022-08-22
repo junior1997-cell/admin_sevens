@@ -114,13 +114,28 @@ Class Transporte
 	}
 
 	//Implementar un método para listar los registros
-	public function listar($idproyecto)
+	public function listar($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante)
+
 	{
+				  
+		$filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+		if ( !empty($fecha_1) && !empty($fecha_2) ) {
+		  $filtro_fecha = "AND t.fecha_viaje BETWEEN '$fecha_1' AND '$fecha_2'";
+		} else if (!empty($fecha_1)) {      
+		  $filtro_fecha = "AND t.fecha_viaje = '$fecha_1'";
+		}else if (!empty($fecha_2)) {        
+		  $filtro_fecha = "AND t.fecha_viaje = '$fecha_2'";
+		}   
+		if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND t.idproveedor = '$id_proveedor'"; }
+	
+		if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; }  
+
 		$sql="SELECT t.idtransporte, t.idproyecto, t.idproveedor, t.tipo_comprobante, t.numero_comprobante, t.forma_de_pago, 
 		t.fecha_viaje, t.tipo_viajero, t.tipo_ruta, t.ruta, t.cantidad, t.precio_unitario, t.subtotal, t.igv, t.precio_parcial, 
 		t.descripcion, t.val_igv, t.tipo_gravada, t.glosa, t.estado, t.estado_delete, p.razon_social,p.tipo_documento,p.ruc,p.direccion 
 		FROM transporte as t, proveedor as p
-		WHERE t.idproveedor = p.idproveedor AND t.idproyecto='$idproyecto' AND t.estado='1' AND  t.estado_delete='1' ORDER BY t.fecha_viaje DESC;";
+		WHERE t.idproveedor = p.idproveedor AND t.idproyecto='$idproyecto' AND t.estado='1' AND  t.estado_delete='1' $filtro_proveedor $filtro_fecha $filtro_comprobante  ORDER BY t.fecha_viaje DESC;";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -139,9 +154,25 @@ Class Transporte
 	}
 
 	//total
-	public function total($idproyecto){
-		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM transporte WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete=1";
+	public function total($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante){
+		  
+		$filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+		if ( !empty($fecha_1) && !empty($fecha_2) ) {
+		  $filtro_fecha = "AND fecha_viaje BETWEEN '$fecha_1' AND '$fecha_2'";
+		} else if (!empty($fecha_1)) {      
+		  $filtro_fecha = "AND fecha_viaje = '$fecha_1'";
+		}else if (!empty($fecha_2)) {        
+		  $filtro_fecha = "AND fecha_viaje = '$fecha_2'";
+		}   
+		if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND idproveedor = '$id_proveedor'"; }
+	
+		if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }  
+
+		$sql="SELECT SUM(precio_parcial) as precio_parcial FROM transporte 
+		WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete=1 $filtro_proveedor $filtro_fecha $filtro_comprobante ";
 		return ejecutarConsultaSimpleFila($sql);
+
 	}
 
 

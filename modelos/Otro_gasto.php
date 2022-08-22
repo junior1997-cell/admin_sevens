@@ -96,9 +96,30 @@ class Otro_gasto
   }
 
   //Implementar un método para listar los registros
-  public function listar($idproyecto)
+  public function listar($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante)
   {
-    $sql = "SELECT*FROM otro_gasto WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' ORDER BY idotro_gasto DESC";
+      
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; $filtro_proveedor_1="";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fecha_g BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND fecha_g = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND fecha_g = '$fecha_2'";
+    }  
+
+    if ( empty($id_proveedor)) {
+      $filtro_proveedor = "";
+    } else if ( $id_proveedor=='vacio' ) { 
+      $filtro_proveedor = "AND ruc IN ('',NULL)";
+    } else { 
+      $filtro_proveedor = "AND ruc = '$id_proveedor'"; 
+    }
+
+    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; } 
+
+    $sql = "SELECT*FROM otro_gasto WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' $filtro_proveedor $filtro_fecha $filtro_comprobante  ORDER BY idotro_gasto DESC";
     return ejecutarConsulta($sql);
   }
 
@@ -110,10 +131,38 @@ class Otro_gasto
   }
 
   //total
-  public function total($idproyecto)
+  public function total($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante)
   {
-    $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otro_gasto WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete='1'";
+      
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND fecha_g BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND fecha_g = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND fecha_g = '$fecha_2'";
+    }   
+
+    if (empty($id_proveedor)) {
+      $filtro_proveedor = "";
+    } else if ( $id_proveedor=='vacio' ) { 
+      $filtro_proveedor = "AND ruc IN ('',NULL)";
+    } else { 
+      $filtro_proveedor = "AND ruc = '$id_proveedor'"; 
+    }
+
+    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; } 
+
+    $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otro_gasto WHERE idproyecto='$idproyecto' $filtro_proveedor $filtro_fecha $filtro_comprobante  AND estado=1 AND estado_delete='1'";
     return ejecutarConsultaSimpleFila($sql);
+  }
+
+  //seelect2  - proveedores
+  public function selecct_provedor_og($idproyecto)
+  {
+    $sql = "SELECT ruc,razon_social,direccion FROM otro_gasto WHERE ruc!='' AND ruc!='null' AND idproyecto = '$idproyecto'  GROUP BY ruc;";
+    return ejecutarConsultaArray($sql);
   }
 
 }

@@ -1,5 +1,5 @@
 var tabla;
-
+var idproyecto="",fecha_1="", fecha_2="", id_proveedor="", comprobante=""
 //Función que se ejecuta al inicio
 function init() {
 
@@ -12,11 +12,11 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
-  tbla_principal(localStorage.getItem('nube_idproyecto'));
+  //tbla_principal(localStorage.getItem('nube_idproyecto'));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
-
+  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) {$("#submit-form-otro_servicio").submit();});
 
@@ -28,10 +28,22 @@ function init() {
 
   no_select_tomorrow('#fecha_p_s');
 
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
+  $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
+  $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+
+  // Inicializar - Date picker  
+  $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+
+
   // Formato para telefono
   $("[data-mask]").inputmask();
+
 }
 
+$('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
+$('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
@@ -186,7 +198,7 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 
 
 //Función Listar
-function tbla_principal(idproyecto) {
+function tbla_principal(idproyecto,fecha_1, fecha_2, id_proveedor, comprobante) {
   
   tabla=$('#tabla-otro_servicio').dataTable({
     responsive: true,
@@ -199,7 +211,7 @@ function tbla_principal(idproyecto) {
 
     ],
     ajax:{
-      url: `../ajax/planillas_seguros.php?op=tbla_principal&idproyecto=${idproyecto}`,
+      url: `../ajax/planillas_seguros.php?op=tbla_principal&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -224,13 +236,15 @@ function tbla_principal(idproyecto) {
     ],
   }).DataTable();
 
-  total(idproyecto);
+  total(idproyecto,fecha_1, fecha_2, id_proveedor, comprobante);
+
+  $(tabla).ready(function () {  $('.cargando').hide(); });
 }
 
-function total(idproyecto) {   
+function total(idproyecto,fecha_1, fecha_2, id_proveedor, comprobante) {   
   $("#total_monto").html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
 
-  $.post("../ajax/planillas_seguros.php?op=total", { idproyecto: idproyecto }, function (e, status) {
+  $.post("../ajax/planillas_seguros.php?op=total", { idproyecto: idproyecto,fecha_1: fecha_1,fecha_2: fecha_2,id_proveedor: id_proveedor,comprobante: comprobante }, function (e, status) {
 
     e = JSON.parse(e);  //console.log(e);  
 
@@ -579,9 +593,38 @@ $(function () {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
+function cargando_search() {
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
+}
+
+function filtros() {  
+
+  var fecha_1       = $("#filtro_fecha_inicio").val();
+  var fecha_2       = $("#filtro_fecha_fin").val();  
+  var id_proveedor  = $("#filtro_proveedor").select2('val');
+  var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
+  
+  var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
+  var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+  //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+
+  tbla_principal(localStorage.getItem('nube_idproyecto'),fecha_1, fecha_2, id_proveedor, comprobante);
+}
+
 function extrae_ruc() {
-  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { }  else{
-    
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { }  else{    
     var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
     $('#ruc_proveedor').val(ruc);
   }

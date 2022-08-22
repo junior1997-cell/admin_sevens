@@ -112,12 +112,26 @@ Class Planillas_seguros
 	}
 
 	//Implementar un método para listar los registros
-	public function listar($idproyecto)
+	public function listar($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante)
 	{
+		$filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+		if ( !empty($fecha_1) && !empty($fecha_2) ) {
+		  $filtro_fecha = "AND ps.fecha_p_s BETWEEN '$fecha_1' AND '$fecha_2'";
+		} else if (!empty($fecha_1)) {      
+		  $filtro_fecha = "AND ps.fecha_p_s = '$fecha_1'";
+		}else if (!empty($fecha_2)) {        
+		  $filtro_fecha = "AND ps.fecha_p_s = '$fecha_2'";
+		}   
+		if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ps.idproveedor = '$id_proveedor'"; }
+	
+		if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; }  
+	
+
 		$sql="SELECT ps.idplanilla_seguro, ps.idproyecto, ps.idproveedor, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.glosa, ps.comprobante,
 		p.razon_social, p.tipo_documento, p.ruc, ps.estado
 		FROM planilla_seguro as ps, proveedor as p 
-		WHERE ps.idproveedor = p.idproveedor and ps.idproyecto='$idproyecto' AND ps.estado_delete='1' AND ps.estado='1' ORDER BY ps.idplanilla_seguro DESC";
+		WHERE ps.idproveedor = p.idproveedor and ps.idproyecto='$idproyecto' AND ps.estado_delete='1' AND ps.estado='1' $filtro_proveedor $filtro_fecha $filtro_comprobante   ORDER BY ps.idplanilla_seguro DESC";
 		return ejecutarConsulta($sql);		
 	}
 
@@ -128,8 +142,24 @@ Class Planillas_seguros
 		return ejecutarConsulta($sql);		
 	}
 	//total
-	public function total($idproyecto){
-		$sql="SELECT SUM(costo_parcial) as precio_parcial FROM planilla_seguro WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1'";
+	public function total($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante){
+
+		$filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+		if ( !empty($fecha_1) && !empty($fecha_2) ) {
+		  $filtro_fecha = "AND ps.fecha_p_s BETWEEN '$fecha_1' AND '$fecha_2'";
+		} else if (!empty($fecha_1)) {      
+		  $filtro_fecha = "AND ps.fecha_p_s = '$fecha_1'";
+		}else if (!empty($fecha_2)) {        
+		  $filtro_fecha = "AND ps.fecha_p_s = '$fecha_2'";
+		}   
+		if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ps.idproveedor = '$id_proveedor'"; }
+	
+		if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; }  
+
+		$sql="SELECT SUM(ps.costo_parcial) as precio_parcial 
+		FROM planilla_seguro as ps, proveedor as p 
+		WHERE ps.idproveedor = p.idproveedor and ps.idproyecto='$idproyecto' AND ps.estado_delete='1' AND ps.estado='1' $filtro_proveedor $filtro_fecha $filtro_comprobante   ORDER BY ps.idplanilla_seguro DESC";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 

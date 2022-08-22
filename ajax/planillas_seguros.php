@@ -97,14 +97,14 @@
         break;
 
         case 'total':
-          $rspta = $planillas_seguros->total($idproyecto);
+          $rspta = $planillas_seguros->total($_POST["idproyecto"],$_POST['fecha_1'],$_POST['fecha_2'],$_POST['id_proveedor'],$_POST['comprobante']);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;
 
         case 'tbla_principal':
-          
-          $rspta = $planillas_seguros->listar($_GET["idproyecto"]);
+
+          $rspta = $planillas_seguros->listar($_GET["idproyecto"],$_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = [];     $cont = 1;
 

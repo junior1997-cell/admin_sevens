@@ -145,13 +145,14 @@
         break;
 
         case 'total':
-          $rspta = $transporte->total($idproyecto);
+          
+          $rspta = $transporte->total($_POST['idproyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante']);
           echo json_encode($rspta,true);
         break;
 
         case 'listar':
-          $idproyecto = $_GET["idproyecto"];
-          $rspta = $transporte->listar($idproyecto);
+         // $idproyecto = $_GET["idproyecto"];
+          $rspta = $transporte->listar($_GET["idproyecto"],$_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = [];
           $comprobante = '';
@@ -161,24 +162,17 @@
             while ($reg = $rspta['data']->fetch_object()) {
               // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/docs/transporte/comprobante/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 
-              empty($reg->comprobante)
-                ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
-                : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . $reg->numero_comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-              
-              if (strlen($reg->descripcion) >= 20) {
-                $descripcion = substr($reg->descripcion, 0, 20) . '...';
-              } else {
-                $descripcion = $reg->descripcion;
-              }
+                empty($reg->comprobante)
+                  ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
+                  : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . $reg->numero_comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+                
+                if (strlen($reg->descripcion) >= 20) { $descripcion = substr($reg->descripcion, 0, 20) . '...'; } else { $descripcion = $reg->descripcion; }
 
-              $tool = '"tooltip"';
+               $tool = '"tooltip"';
 
-              $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+               $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
-  
-		// t.descripcion, t.val_igv, t.tipo_gravada, t.glosa, t.estado, t.estado_delete, p.razon_social,p.tipo_documento,p.ruc,p.direccion 
-
-              $data[] = [
+                $data[] = [
                 "0" => $cont++,
                 "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idtransporte . ')"><i class="fas fa-pencil-alt"></i></button>' .
                       ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idtransporte . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . $reg->numero_comprobante . "'" . ')"><i class="fas fa-skull-crossbones"></i> </button>' .
