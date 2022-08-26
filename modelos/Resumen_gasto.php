@@ -14,7 +14,7 @@ class ResumenGasto
 
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
     $host       = $_SERVER['HTTP_HOST'];
-    $estado_vb = (empty($visto_bueno) ? "estado_user_vb IN ('0','1')" : "estado_user_vb =$visto_bueno" );
+    $estado_vb  = (empty($visto_bueno) ? "estado_user_vb IN ('0','1')" : "estado_user_vb =$visto_bueno" );
 
     // FACTURAS - COMPRAS INSUMOS ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
@@ -1728,7 +1728,7 @@ class ResumenGasto
     return $data ;
   }  
 
-  // SELECT2
+  // ════════════════════════════════════════ S E L E C T 2   -   P R O V E E D O R ════════════════════════════════════════
   public function select_proveedores($id)  {
 
     $data = Array();
@@ -1831,6 +1831,7 @@ class ResumenGasto
     return $retorno;
   }
   
+  // ════════════════════════════════════════ VISTO BUENO ════════════════════════════════════════
   public function visto_bueno($nombre_tabla, $nombre_id_tabla, $id_tabla, $accion) {
 
     $id_user_vb = $_SESSION["idusuario"]; $nombre_user_vb = $_SESSION["nombre"]; $imagen_user_vb = $_SESSION["imagen"];
@@ -1847,6 +1848,7 @@ class ResumenGasto
     } 
   }
 
+  // ════════════════════════════════════════ DETALLE MODULO ════════════════════════════════════════
   // detalle_servicio_maquina
   public function detalle_servicio_maquina($id) {
     $sql = "SELECT mq.nombre as nombre_maquina, prov.razon_social, f.codigo, f.fecha_emision,  f.subtotal, f.igv, f.monto as total, 
@@ -1966,6 +1968,7 @@ class ResumenGasto
     return ejecutarConsultaSimpleFila($sql);
   }
 
+  // ════════════════════════════════════════ ACCIONES ════════════════════════════════════════
   // eliminar permanente
   public function eliminar_permanente($nombre_tabla, $nombre_id_tabla, $id_tabla) {
     $sql = "UPDATE $nombre_tabla SET estado_delete='0' WHERE $nombre_id_tabla ='$id_tabla'";

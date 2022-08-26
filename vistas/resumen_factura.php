@@ -40,7 +40,7 @@
                       <div class="col-sm-6">
                         <h1 class="m-0 nombre-trabajador">
                           Resumen de Factura 
-                          <button class="btn btn-success btn-md btn-zip" onclick="desccargar_zip_comprobantes();">
+                          <button class="btn btn-success btn-md btn-zip" onclick="descargar_zip_comprobantes();">
                             <i class="far fa-file-archive fa-lg"></i> Comprobantes .zip 
                           </button>
                         </h1>
@@ -108,53 +108,162 @@
                             </div>                        
                           </div>
                           <!-- /.card-header -->
-                          <div class="card-body">
+                          <div class="card-body px-1 py-1">
+                            <div class="row">
+                              <div class="col-12 col-sm-12">
+                                <div class="card card-primary card-outline card-outline-tabs mb-0">
+                                  <div class="card-header p-0 border-bottom-0">
+                                    <ul class="nav nav-tabs " id="tabs-for-tab" role="tablist">
+                                      <li class="nav-item">
+                                        <a class="nav-link active" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'todos'); tbla_principal_visto_bueno('', '', '', '', '', 'todos');}, 100 );" id="tabs-for-resumen-factura-tab" data-toggle="pill" href="#tabs-for-resumen-factura" role="tab" aria-controls="tabs-for-resumen-factura" aria-selected="true" >Todos</a>
+                                      </li>                                       
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="COMPRAS">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'compra_insumo'); tbla_principal_visto_bueno('', '', '', '', '', 'compra_insumo');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><i class="fas fa-shopping-cart nav-icon"></i> </a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="SERVICIO MAQUINA">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'servicio_maquina'); tbla_principal_visto_bueno('', '', '', '', '', 'servicio_maquina');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><img src="../dist/svg/azul-excabadora-ico.svg" class="nav-icon" alt="" style="width: 15px !important;" > </a>
+                                      </li>      
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="SERVICIO EQUIPO">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'servicio_equipo'); tbla_principal_visto_bueno('', '', '', '', '', 'servicio_equipo');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><img src="../dist/svg/azul-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 14px !important;" ></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="SUB CONTRATO">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'sub_contrato'); tbla_principal_visto_bueno('', '', '', '', '', 'sub_contrato');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><i class="nav-icon fas fa-hands-helping"></i></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="PLANILLA SEGURO">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'planilla_seguro'); tbla_principal_visto_bueno('', '', '', '', '', 'planilla_seguro');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><img src="../dist/svg/azul-planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 15px !important;" > </a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="OTRO GASTO">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'otro_gasto'); tbla_principal_visto_bueno('', '', '', '', '', 'otro_gasto');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><i class="nav-icon fas fa-network-wired"></i> </a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="TRANSPORTE">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'transporte'); tbla_principal_visto_bueno('', '', '', '', '', 'transporte');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><i class="fas fa-shuttle-van nav-icon"></i></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="HOSPEDAJE">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'hospedaje'); tbla_principal_visto_bueno('', '', '', '', '', 'hospedaje');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><i class="fas fa-hotel nav-icon"></i></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="PENSION">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'pension'); tbla_principal_visto_bueno('', '', '', '', '', 'pension');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><i class="fas fa-utensils nav-icon"></i></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="BREAK">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'breack'); tbla_principal_visto_bueno('', '', '', '', '', 'breack');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura" ><i class="fas fa-hamburger nav-icon"></i></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="COMIDA EXTRA">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'comida_extra'); tbla_principal_visto_bueno('', '', '', '', '', 'comida_extra');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura"data-toggle="tooltip" data-original-title="COMIDA EXTRA" ><i class="fas fa-drumstick-bite nav-icon"></i></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="OTRA FACTURA">
+                                        <a class="nav-link" onclick="cargando_search(); delay(function(){tbla_principal('', '', '', '', '', 'otra_factura'); tbla_principal_visto_bueno('', '', '', '', '', 'otra_factura');}, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura"><i class="nav-icon fas fa-receipt"></i></a>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                  <div class="card-body" >                                  
+                                    <div class="tab-content" id="tabs-for-tabContent">
 
-                            <!-- tabla resumen facturas compras -->
-                            <div class="pb-3">
-                              <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3>
-                              <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                                <thead>
-                                  <tr>
-                                    <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-                                  </tr>
-                                  <tr> 
-                                    <th class="text-center">#</th> 
-                                    <th class="text-center">Fecha</th>
-                                    <th>Comprobante</th>
-                                    <th>Documento</th>
-                                    <th>RUC</th>
-                                    <th>Razón social</th>                                     
-                                    <th class="text-center">Subtotal</th>                                
-                                    <th class="text-center">IGV</th>
-                                    <th class="text-center">Total</th>
-                                    <th class="text-center">Glosa</th> 
-                                    <th class="text-center">Operación</th> 
-                                    <th class="text-center">CFDI.</th>
-                                    <th class="text-center">Módulo</th>                                                     
-                                  </tr>
-                                </thead>
-                                <tbody> </tbody>
-                                <tfoot> 
-                                  <tr> 
-                                    <th class="text-center text-black-50">#</th> 
-                                    <th class="text-center text-black-50">Fecha</th>
-                                    <th class="text-black-50">Comprobante</th>
-                                    <th class="text-black-50">Documento</th>
-                                    <th>RUC</th>
-                                    <th class="text-black-50">Razón social</th>                                      
-                                    <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
-                                    <th class="text-right text-nowrap total-igv">IGV</th>
-                                    <th class="text-right text-nowrap total-total">Total</th>
-                                    <th class="text-center text-black-50">Glosa</th> 
-                                    <th class="text-center text-black-50">Operación</th> 
-                                    <th class="text-center text-black-50">CFDI.</th>
-                                    <th class="text-center">Módulo</th>                                             
-                                  </tr>
-                                </tfoot>
-                              </table>
+                                      <!-- TABLA - RESUMEN -->
+                                      <div class="tab-pane fade show active" id="tabs-for-resumen-factura" role="tabpanel" aria-labelledby="tabs-for-resumen-factura-tab">
+                                        <div class="row">                                        
+                                          <div class="col-12 pb-2 row-horizon disenio-scroll">
+                                            <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                                              <thead>
+                                                <tr>
+                                                  <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                                </tr>
+                                                <tr> 
+                                                  <th class="text-center">#</th> 
+                                                  <th class="text-center" data-toggle="tooltip" data-original-title="Opciones">OP</th> 
+                                                  <th class="text-center">V°B°</th>
+                                                  <th class="text-center">Fecha</th>
+                                                  <th>Comprobante</th>
+                                                  <th>Documento</th>
+                                                  <th>RUC</th>
+                                                  <th>Razón social</th>                                     
+                                                  <th class="text-center">Subtotal</th>                                
+                                                  <th class="text-center">IGV</th>
+                                                  <th class="text-center">Total</th>
+                                                  <th class="text-center">Glosa</th> 
+                                                  <th class="text-center">Operación</th> 
+                                                  <th class="text-center">CFDI.</th>                                                 
+                                                </tr>
+                                              </thead>
+                                              <tbody> </tbody>
+                                              <tfoot> 
+                                                <tr> 
+                                                  <th class="text-center text-black-50">#</th> 
+                                                  <th class="text-center text-black-50">OP</th>
+                                                  <th class="text-center text-black-50">V°B°</th>
+                                                  <th class="text-center text-black-50">Fecha</th>
+                                                  <th class="text-black-50">Comprobante</th>
+                                                  <th class="text-black-50">Documento</th>
+                                                  <th class="text-black-50">RUC</th>
+                                                  <th class="text-black-50">Razón social</th>                                      
+                                                  <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
+                                                  <th class="text-right text-nowrap total-igv">IGV</th>
+                                                  <th class="text-right text-nowrap total-total">Total</th>
+                                                  <th class="text-center text-black-50">Glosa</th> 
+                                                  <th class="text-center text-black-50">Operación</th> 
+                                                  <th class="text-center text-black-50">CFDI.</th>                                
+                                                </tr>
+                                              </tfoot>
+                                            </table>
+                                          </div>
+                                          <!-- /.col -->
+                                          <div class="col-12 pb-2 mt-4 row-horizon disenio-scroll">
+                                            <h4><b>Lista de Aceptados</b></h4>
+                                            <table id="tabla-principal-visto-bueno" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                                              <thead>
+                                                <tr>
+                                                  <th colspan="14" class="cargando_visto_bueno text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                                </tr>
+                                                <tr> 
+                                                  <th class="text-center">#</th> 
+                                                  <th class="text-center" data-toggle="tooltip" data-original-title="Opciones">OP</th> 
+                                                  <th class="text-center text-black-50">V°B°</th>
+                                                  <th class="text-center">Fecha</th>
+                                                  <th>Comprobante</th>
+                                                  <th>Documento</th>
+                                                  <th>RUC</th>
+                                                  <th>Razón social</th>                                     
+                                                  <th class="text-center">Subtotal</th>                                
+                                                  <th class="text-center">IGV</th>
+                                                  <th class="text-center">Total</th>
+                                                  <th class="text-center">Glosa</th> 
+                                                  <th class="text-center">Operación</th> 
+                                                  <th class="text-center">CFDI.</th>                                                 
+                                                </tr>
+                                              </thead>
+                                              <tbody> </tbody>
+                                              <tfoot> 
+                                                <tr> 
+                                                  <th class="text-center text-black-50">#</th> 
+                                                  <th class="text-center">OP</th>
+                                                  <th class="text-center text-black-50">V°B°</th>
+                                                  <th class="text-center text-black-50">Fecha</th>
+                                                  <th class="text-black-50">Comprobante</th>
+                                                  <th class="text-black-50">Documento</th>
+                                                  <th>RUC</th>
+                                                  <th class="text-black-50">Razón social</th>                                      
+                                                  <th class="text-right text-nowrap total-subtotal-visto-bueno">Subtotal</th>                                
+                                                  <th class="text-right text-nowrap total-igv-visto-bueno">IGV</th>
+                                                  <th class="text-right text-nowrap total-total-visto-bueno">Total</th>
+                                                  <th class="text-center text-black-50">Glosa</th> 
+                                                  <th class="text-center text-black-50">Operación</th> 
+                                                  <th class="text-center text-black-50">CFDI.</th>                                
+                                                </tr>
+                                              </tfoot>
+                                            </table>
+                                          </div>
+                                        </div>
+                                        <!-- /.row -->
+                                      </div>
+                                      <!-- /.tab-pane -->
+                                    </div>
+                                    <!-- /.tab-content -->
+                                  </div>
+                                  <!-- /.card-body -->
+                                </div>
+                              </div>
+                              <!-- /.col -->
                             </div>
-
+                            <!-- /.row -->
                           </div>
                           <!-- /.card-body -->
                         </div>
@@ -259,6 +368,42 @@
                     </div>
                   </div>
 
+                  <!-- MODAL - DETALLE compras - charge -->
+                  <div class="modal fade" id="modal-ver-compras">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title nombre-title-detalle-modal">Detalle</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div class="modal-body">
+                          <div class="row detalle_de_modulo" id="cargando-1-fomulario"> 
+                            <!--detalle de la compra-->
+                          </div>
+
+                          <div class="row" id="cargando-2-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div> 
+
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-outline-danger modal-eliminar-permanente" data-toggle="tooltip" data-original-title="Eliminar permanente" onclick=""><i class="fas fa-trash-alt"></i></button>
+                          <button type="button" class="btn btn-outline-success modal-add-remove-visto-bueno" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick=""><i class="fas fa-check"></i></button>
+                          <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> <span class="d-none d-sm-inline-block">Excel</span></button>
+                          <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i><span class="d-none d-sm-inline-block">Imprimir/PDF</span></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>                
+
                 </section>
                 <!-- /.content -->
               </div>
@@ -274,10 +419,16 @@
         </div>
 
         <?php require 'script.php'; ?>    
-
+        
+        <!-- ZIP -->
         <script src="../plugins/jszip/jszip.js"></script>
         <script src="../plugins/jszip/dist/jszip-utils.js"></script>
         <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
+
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <script type="text/javascript" src="scripts/resumen_factura.js"></script>
         

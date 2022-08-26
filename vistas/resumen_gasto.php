@@ -156,7 +156,7 @@
 
                           <!-- tabla resumen facturas compras -->
                           <div class="pb-3">
-                          <h4><b>Lista de Gastos Aceptados</b></h4>
+                            <h4><b>Lista de Gastos Aceptados</b></h4>
                             <!-- <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3> -->
                             <table id="tabla-visto-bueno" class="table table-bordered  table-striped display" style="width: 100% !important;">
                               <thead>

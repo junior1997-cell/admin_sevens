@@ -27,7 +27,7 @@ function init() {
 //Función Listar - tabla compras
 function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
 
-  nube_idproyecto_r=nube_idproyecto, fecha_1_r=fecha_1, fecha_2_r=fecha_2, id_proveedor_r=id_proveedor, comprobante_r=comprobante;
+  nube_idproyecto_r=nube_idproyecto; fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor; comprobante_r=comprobante;
 
   $('.total-subtotal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
   $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
@@ -516,7 +516,7 @@ function detalle_servicio_maquina(id_tabla, name_tabla, name_id_tabla, id_tabla,
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -621,6 +621,7 @@ function detalle_servicio_equipo(id_tabla, name_tabla, name_id_tabla, id_tabla, 
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -729,6 +730,7 @@ function detalle_sub_contrato(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -833,7 +835,7 @@ function detalle_planilla_seguro(id_tabla, name_tabla, name_id_tabla, id_tabla, 
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -946,7 +948,7 @@ function detalle_otro_gasto(id_tabla, name_tabla, name_id_tabla, id_tabla, accio
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -1079,7 +1081,7 @@ function detalle_transporte(id_tabla, name_tabla, name_id_tabla, id_tabla, accio
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -1208,7 +1210,7 @@ function detalle_hospedaje(id_tabla, name_tabla, name_id_tabla, id_tabla, accion
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -1321,7 +1323,7 @@ function detalle_pension(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, 
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -1434,7 +1436,7 @@ function detalle_break(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, no
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -1547,7 +1549,7 @@ function detalle_comida_extra(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -1704,7 +1706,7 @@ function detalle_pago_administrador(id_tabla, name_tabla, name_id_tabla, id_tabl
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }
@@ -1839,7 +1841,7 @@ function detalle_pago_obrero(id_tabla, name_tabla, name_id_tabla, id_tabla, acci
 
       $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
       $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
-
+      $('.jq_image_zoom').zoom({ on:'grab' });
     } else {
       ver_errores(e);
     }

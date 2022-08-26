@@ -95,6 +95,8 @@
           echo json_encode($rspta, true);
 
         break;
+        
+        // ════════════════════════════════════════ VISTO BUENO ════════════════════════════════════════
 
         case 'visto_bueno':
           $rspta = $resumen_gasto->visto_bueno($_GET['name_tabla'], $_GET['name_id_tabla'], $_GET['id_tabla'], $_GET['accion']);
@@ -347,7 +349,8 @@
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;
-
+        
+        // ════════════════════════════════════════ ACCIONES ════════════════════════════════════════
         case 'eliminar_comprobante':
           $rspta = $resumen_gasto->eliminar_permanente($_GET['nombre_tabla'], $_GET['nombre_id_tabla'], $_GET['id_tabla']);
           //Codificar el resultado utilizando json
