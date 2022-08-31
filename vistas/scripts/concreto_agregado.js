@@ -459,6 +459,8 @@ function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_calidad, co
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
+      // columna: cantidad
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -471,7 +473,7 @@ function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_calidad, co
     columnDefs: [
       //{ targets: [11,12,13], visible: false, searchable: false, },  
       { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [6,7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
 
       calidad_column,
       descripcion_column,
@@ -670,6 +672,8 @@ function tbla_principal_resumen(idproyecto) {
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      // columna: cantidad
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -680,7 +684,7 @@ function tbla_principal_resumen(idproyecto) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [3,4,5], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
+      { targets: [4,5], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
       //{ targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();

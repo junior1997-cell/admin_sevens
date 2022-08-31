@@ -153,7 +153,7 @@
                                                 <th class="text-center">#</th>
                                                 <th>INSUMO</th>
                                                 <th>UND</th>
-                                                <th class="text-nowrap px-2" ><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen_cantidad">0.00</span></div></th>
+                                                <th class="text-nowrap px-2 text-center" ><span class="total_resumen_cantidad">0.00</span></th>
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen_precio_unitario">0.00</span></div></th>
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen">0.00</span></div></th>
                                               </tr>
@@ -200,7 +200,7 @@
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
                                                 <th>Calidad</th>
-                                                <th class="text-nowrap px-2" ><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_cantidad">0.00</span></div></th>
+                                                <th class="text-nowrap px-2 text-center" ><span class="total_concreto_cantidad">0.00</span></th>
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_precio_unitario">0.00</span></div></th>
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto">0.00</span></div></th>
                                                 <th >Provedor</th>

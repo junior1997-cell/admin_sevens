@@ -50,7 +50,7 @@
 
         $rspta = $ajax_general->select2_trabajador();  $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {
 
@@ -75,7 +75,7 @@
 
         $rspta = $ajax_general->select2_tipo_trabajador(); $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {
 
@@ -100,7 +100,7 @@
          
         $rspta=$ajax_general->select2_cargo_trabajador_id( $_GET["idtipo"] ); $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {
 
@@ -125,7 +125,7 @@
          
         $rspta=$ajax_general->select2_ocupacion_trabajador( ); $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {
 
@@ -151,7 +151,7 @@
     
         $rspta=$ajax_general->select2_proveedor();  $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {  
 
@@ -176,7 +176,7 @@
     
         $rspta=$ajax_general->select2_proveedor_filtro();  $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {  
 
@@ -202,7 +202,7 @@
     
         $rspta = $ajax_general->select2_banco(); $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {    
             
@@ -236,7 +236,7 @@
     
         $rspta = $ajax_general->select2_color(); $cont = 1; $data = "";
         
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {    
 
@@ -262,7 +262,7 @@
     
         $rspta = $ajax_general->select2_unidad_medida(); $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {    
 
@@ -288,7 +288,7 @@
     
         $rspta = $ajax_general->select2_categoria(); $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {  
 
@@ -313,7 +313,33 @@
     
         $rspta = $ajax_general->select2_categoria_all(); $cont = 1; $data = "";
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {  
+
+            $data .= '<option value=' . $value['id'] . '>' . $value['nombre'] .'</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
+
+      /* ══════════════════════════════════════ T I P O   T I E R R A   C O N C R E T O ══════════════════════════════════════ */
+      case 'select2TierraConcreto': 
+    
+        $rspta = $ajax_general->select2_tierra_concreto(); $cont = 1; $data = "";
+
+        if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {  
 

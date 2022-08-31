@@ -14,6 +14,7 @@ function init() {
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida', null);
+  lista_select2("../ajax/ajax_general.php?op=select2TierraConcreto", '#idtipo_tierra_concreto', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
@@ -21,6 +22,13 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unidad_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
+  $("#idtipo_tierra_concreto").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
+
+  // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
+  $('#precio_unitario').number( true, 2 );
+  $('#precio_sin_igv').number( true, 2 );
+  $('#precio_igv').number( true, 2 );
+  $('#precio_con_igv').number( true, 2 );
 
   $('.jq_image_zoom').zoom({ on:'grab' });
   // Formato para telefono
@@ -75,14 +83,10 @@ function limpiar_form_material() {
   $("#descripcion_material").val("");
 
   $("#precio_unitario").val("");
-  $("#estado_igv").val("");
-  
-  $("#precio_real").val("");
-  $(".precio_real").val("");  
-  $("#monto_igv").val("");
-  $(".monto_igv").val("");
-  $("#total_precio").val("");
-  $(".total_precio").val("");  
+  $("#estado_igv").val("");  
+  $("#precio_sin_igv").val("");
+  $("#precio_igv").val("");
+  $("#precio_con_igv").val("");
 
   $("#imagen1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
   $("#imagen1").val("");
@@ -94,6 +98,7 @@ function limpiar_form_material() {
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
 
+  $("#idtipo_tierra_concreto").val("").trigger("change");
   $("#unidad_medida").val("null").trigger("change");
   $("#color").val("1").trigger("change");
   $("#my-switch_igv").prop("checked", true);
@@ -114,7 +119,9 @@ function tbla_principal() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } },
     ],
     ajax: {
       url: "../ajax/materiales.php?op=tbla_principal",
@@ -127,16 +134,16 @@ function tbla_principal() {
     createdRow: function (row, data, ixdex) {    
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-      // columna: 1
+      // columna: opciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
-      // columna: # 5
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-right text-nowrap"); }
-      // columna: # 6
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-right text-nowrap"); }
-      // columna: # 7
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right text-nowrap"); }
-      // columna: #8
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right text-nowrap"); }
+      // columna: precio unitario
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-nowrap"); }
+      // columna: precio sin igv
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-nowrap"); }
+      // columna: monto igv
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-nowrap"); }
+      // columna: precio total
+      if (data[9] != '') { $("td", row).eq(9).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -148,6 +155,7 @@ function tbla_principal() {
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
       { targets: [11,12,13], visible: false, searchable: false, },  
+      { targets: [6,7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 }
@@ -185,14 +193,15 @@ function guardaryeditar(e) {
     success: function (e) {
       try {
         e = JSON.parse(e);  console.log(e);  
-        if (e.status == true) {
-          Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
+        if (e.status == true) {         
 
           tabla.ajax.reload(null, false);
 
           limpiar_form_material();
 
-          $("#modal-agregar-material").modal("hide");
+          Swal.fire("Correcto!", "Insumo guardado correctamente", "success");
+
+          $("#modal-agregar-material").modal("hide");          
           
         } else {
           ver_errores(e);
@@ -246,16 +255,13 @@ function mostrar(idproducto) {
       $("#marca").val(e.data.marca);            
       $("#descripcion_material").val(e.data.descripcion);
 
-      $("#precio_unitario").val(parseFloat(e.data.precio_unitario).toFixed(2));
+      $("#precio_unitario").val(e.data.precio_unitario);
       
-      $("#precio_real").val(e.data.precio_sin_igv);    
-      $("#monto_igv").val(e.data.precio_igv);
-      $("#total_precio").val(parseFloat(e.data.precio_total).toFixed(2));    
-
-      $(".precio_real").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
-      $(".monto_igv").val(parseFloat(e.data.precio_igv).toFixed(2));
-      $(".total_precio").val(parseFloat(e.data.precio_total).toFixed(2));    
+      $("#precio_sin_igv").val(e.data.precio_sin_igv);    
+      $("#precio_igv").val(e.data.precio_igv);
+      $("#precio_con_igv").val(e.data.precio_total);          
       
+      $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto).trigger("change");
       $("#unidad_medida").val(e.data.idunidad_medida).trigger("change");
       $("#color").val(e.data.idcolor).trigger("change");
 
@@ -365,10 +371,14 @@ function verdatos(idproducto){
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}</th>
                   <td> <b>Nombre: </b> ${e.data.nombre}</td>
-                </tr>
+                </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <td> <b>Color: </b> ${e.data.nombre_color}</td>
                 </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Grupo</th>
+                  <td>${e.data.tipo_tierra_concreto}</td>
+                </tr>     
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>U.M.</th>
                   <td>${e.data.nombre_medida}</td>
@@ -455,7 +465,13 @@ function eliminar(idproducto, nombre) {
   );
 }
 
-function precio_con_igv() {
+$("#precio_unitario").on("keyup change", function(e) { desglosar_precio(); });
+$("#precio_sin_igv").on("keyup change", function(e) { desglosar_precio(); });
+$("#precio_igv").on("keyup change", function(e) { desglosar_precio(); });
+$("#precio_con_igv").on("keyup change", function(e) { desglosar_precio(); });
+
+
+function desglosar_precio() {
   var precio_ingresado =  $("#precio_unitario").val()=='' ? 0 : parseFloat($("#precio_unitario").val());
 
   var input_precio_con_igv = 0;
@@ -466,36 +482,26 @@ function precio_con_igv() {
     input_precio_sin_igv = precio_ingresado / 1.18;
     igv = precio_ingresado - input_precio_sin_igv;
     input_precio_con_igv = precio_ingresado;
-
-    $(".precio_real").val(redondearExp(input_precio_sin_igv, 2));
-    $("#precio_real").val(redondearExp(input_precio_sin_igv, 2));
-
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $("#monto_igv").val(redondearExp(igv, 2));
-
-    $(".total_precio").val(redondearExp(input_precio_con_igv, 2));
-    $("#total_precio").val(redondearExp(input_precio_con_igv, 2));
+    
+    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));    
+    $("#precio_igv").val(redondearExp(igv, 2));    
+    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
 
     $("#estado_igv").val("1");
   } else {
     input_precio_con_igv = precio_ingresado * 1.18;
     igv = input_precio_con_igv - parseFloat(precio_ingresado);
     input_precio_sin_igv = precio_ingresado;
-
-    $(".precio_real").val(redondearExp(input_precio_sin_igv, 2));
-    $("#precio_real").val(redondearExp(input_precio_sin_igv, 2));
-
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $("#monto_igv").val(redondearExp(igv, 2));    
-
-    $(".total_precio").val(redondearExp(input_precio_con_igv, 2));
-    $("#total_precio").val(redondearExp(input_precio_con_igv, 2));
+    
+    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));    
+    $("#precio_igv").val(redondearExp(igv, 2));     
+    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
 
     $("#estado_igv").val("0");
   }
 }
 
-$("#my-switch_igv").on("click ", function (e) {
+$("#my-switch_igv").on("click", function (e) {
   var precio_ingresado =  $("#precio_unitario").val()=='' ? 0 : parseFloat($("#precio_unitario").val());
   var input_precio_con_igv = 0;
   var igv = 0;
@@ -505,30 +511,20 @@ $("#my-switch_igv").on("click ", function (e) {
     input_precio_sin_igv = precio_ingresado / 1.18;
     igv = precio_ingresado - input_precio_sin_igv;
     input_precio_con_igv = precio_ingresado;
-
-    $(".precio_real").val(redondearExp(input_precio_sin_igv, 2));
-    $("#precio_real").val(redondearExp(input_precio_sin_igv, 2));
-
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $("#monto_igv").val(redondearExp(igv, 2));
-
-    $(".total_precio").val(redondearExp(input_precio_con_igv, 2));
-    $("#total_precio").val(redondearExp(input_precio_con_igv, 2));
+    
+    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));    
+    $("#precio_igv").val(redondearExp(igv, 2));    
+    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
 
     $("#estado_igv").val("1");
   } else {
     input_precio_con_igv = precio_ingresado * 1.18;
     igv = input_precio_con_igv - precio_ingresado;
     input_precio_sin_igv = precio_ingresado;
-
-    $(".precio_real").val(redondearExp(input_precio_sin_igv, 2));
-    $("#precio_real").val(redondearExp(input_precio_sin_igv, 2));
-
-    $(".monto_igv").val(redondearExp(igv, 2));
-    $("#monto_igv").val(redondearExp(igv, 2));
-
-    $(".total_precio").val(redondearExp(input_precio_con_igv, 2));
-    $("#total_precio").val(redondearExp(input_precio_con_igv, 2));
+    
+    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));   
+    $("#precio_igv").val(redondearExp(igv, 2));    
+    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
 
     $("#estado_igv").val("0");
   }
@@ -542,21 +538,24 @@ $(function () {
 
   $('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
   $('#color').on('change', function() { $(this).trigger('blur'); });
+  $('#idtipo_tierra_concreto').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-materiales").validate({
     rules: {
       nombre_material:      { required: true },
       descripcion_material: { minlength: 4 },
-      unidad_medida:          { required: true },
+      unidad_medida:        { required: true },
       color:                { required: true },
       precio_unitario:      { required: true },
+      idtipo_tierra_concreto:{ required: true },
     },
     messages: {
       nombre_material:      { required: "Campo requerido.", },
       descripcion_material: { minlength: "MINIMO 4 caracteres." },
-      unidad_medida:          { required: "Campo requerido.", },
+      unidad_medida:        { required: "Campo requerido.", },
       color:                { required: "Campo requerido.", },
       precio_unitario:      { required: "Campo requerido.", },
+      idtipo_tierra_concreto:{ required: "Campo requerido.", },
     },
 
     errorElement: "span",
@@ -582,6 +581,7 @@ $(function () {
 
   $('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#idtipo_tierra_concreto').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

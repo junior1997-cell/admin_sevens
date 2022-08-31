@@ -254,12 +254,12 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
     },
     createdRow: function (row, data, ixdex) {
       // columna: Cantidad
-      if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-right h5"); }
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-right h5"); }
       // columna: Precio actual
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }    
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }    
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -270,8 +270,8 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 		iDisplayLength: 10,//Paginación
 		order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [      
-      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [6,7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
       //{ targets: [10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
     ],
 	}).DataTable();  

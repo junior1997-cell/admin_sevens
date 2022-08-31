@@ -126,6 +126,7 @@
                                   <th>#</th>
                                   <th>Op.</th>
                                   <th>Proveedor</th>
+                                  <th>N° Comprob.</th>
                                   <th>Fecha compra</th>
                                   <th data-toggle="tooltip" data-original-title="Centidad">Cant.</th>
                                   <th>Precio</th>  
@@ -142,6 +143,7 @@
                                   <th>#</th>
                                   <th>Op.</th>
                                   <th>Proveedor</th>
+                                  <th>N° Comprob.</th>
                                   <th >Fecha compra</th>
                                   <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="text-nowrap h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  

@@ -10,7 +10,7 @@ class Activos_fijos
   }
 
   //Implementamos un método para insertar registros
-  public function insertar($unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $imagen)
+  public function insertar($unidad_medida, $color, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $imagen)
   {
     $sql = "SELECT p.nombre, p.modelo , p.serie, p.marca, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
     um.nombre_medida, p.estado, p.estado_delete, ciaf.nombre as nombre_categoria
@@ -20,8 +20,8 @@ class Activos_fijos
 
     if ($buscando['status']) {
       if ( empty($buscando['data']) ) {
-        $sql = "INSERT INTO producto(idunidad_medida, idcolor, idcategoria_insumos_af, nombre, modelo, serie, marca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, precio_total, ficha_tecnica, descripcion, imagen) 
-        VALUES ('$unidad_medida', '$color', '$idcategoria', '$nombre', '$modelo', '$serie', '$marca', '$estado_igv', '$precio_unitario', '$precio_igv', '$precio_sin_igv', '$precio_total', '$ficha_tecnica', '$descripcion', '$imagen')";
+        $sql = "INSERT INTO producto(idunidad_medida, idcolor, idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, marca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, precio_total, ficha_tecnica, descripcion, imagen) 
+        VALUES ('$unidad_medida', '$color', '$idcategoria', '$idgrupo', '$nombre', '$modelo', '$serie', '$marca', '$estado_igv', '$precio_unitario', '$precio_igv', '$precio_sin_igv', '$precio_total', '$ficha_tecnica', '$descripcion', '$imagen')";
         return ejecutarConsulta($sql);
       } else {
         $info_repetida = ''; 
@@ -47,13 +47,14 @@ class Activos_fijos
   }
 
   //Implementamos un método para editar registros
-  public function editar($idproducto, $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $img_pefil)
+  public function editar($idproducto, $unidad_medida, $color, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $img_pefil)
   {
    // var_dump($idproducto, $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $img_pefil);die();
     $sql = "UPDATE producto SET 
 		idunidad_medida = '$unidad_medida',
 		idcolor = '$color',
 		idcategoria_insumos_af = '$idcategoria',
+    idtipo_tierra_concreto ='$idgrupo',
 		nombre = '$nombre',
 		modelo = '$modelo',
 		serie = '$serie',
@@ -96,10 +97,10 @@ class Activos_fijos
 
     $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca, p.estado_igv, 
     p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.created_at,
-    um.nombre_medida, c.nombre_color, ciaf.nombre AS categoria
-		FROM producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+    um.nombre_medida, c.nombre_color, ciaf.nombre AS categoria, p.idtipo_tierra_concreto, ttc.nombre as tipo_tierra_concreto
+		FROM producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf, tipo_tierra_concreto as ttc
     WHERE p.idunidad_medida = um.idunidad_medida AND p.idcolor = c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af 
-    AND p.idproducto = '$idproducto'";
+    AND ttc.idtipo_tierra_concreto = p.idtipo_tierra_concreto AND p.idproducto = '$idproducto'";
     $activos = ejecutarConsultaSimpleFila($sql);
 
     if ($activos['status']) {
@@ -109,8 +110,10 @@ class Activos_fijos
         'nombre_medida'   => $activos['data']['nombre_medida'],
         'idcolor'         => $activos['data']['idcolor'],
         'nombre_color'    => $activos['data']['nombre_color'],
-        'idcategoria_insumos_af' => $activos['data']['idcategoria_insumos_af'],
-        'categoria'       => $activos['data']['categoria'],
+        'idcategoria_insumos_af'  => $activos['data']['idcategoria_insumos_af'],
+        'categoria'               => $activos['data']['categoria'],
+        'idtipo_tierra_concreto'  => ( empty($activos['data']['idtipo_tierra_concreto']) ? '' : $activos['data']['idtipo_tierra_concreto']),
+        'tipo_tierra_concreto'    => ( empty($activos['data']['tipo_tierra_concreto']) ? '' : $activos['data']['tipo_tierra_concreto']),
         'nombre'          => decodeCadenaHtml($activos['data']['nombre']),
         'modelo'          => decodeCadenaHtml($activos['data']['modelo']),
         'serie'           => decodeCadenaHtml($activos['data']['serie']),
@@ -168,7 +171,7 @@ class Activos_fijos
     return ejecutarConsulta($sql);
   }
 
-   //Seleccionar Trabajador Select2
+  //Seleccionar Trabajador Select2
   public function lista_de_categorias() {
     $sql = "SELECT idcategoria_insumos_af as idcategoria , nombre 
     FROM categoria_insumos_af WHERE estado='1' AND estado_delete='1' AND idcategoria_insumos_af != '1' ";

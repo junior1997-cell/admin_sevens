@@ -162,7 +162,8 @@
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!--  -->
-                              <input type="hidden" name="idproducto" id="idproducto" />                              
+                              <input type="hidden" name="idproducto" id="idproducto" />   
+                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">                           
 
                               <!-- Nombre -->
                               <div class="col-12 col-sm-6 col-md-12 col-lg-8">
@@ -225,7 +226,7 @@
                               <div class="col-7 col-sm-7 col-md-8 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_unitario">Precio <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                  <input type="text" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                 </div>
                               </div>
 
@@ -249,7 +250,7 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_sin_igv">Sub Total</label>
-                                  <input type="number" class="form-control" name="precio_sin_igv" id="precio_sin_igv" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                  <input type="text" class="form-control" name="precio_sin_igv" id="precio_sin_igv" placeholder="Subtotal" onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                 </div>
                               </div>
 
@@ -257,7 +258,7 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_igv">IGV</label>
-                                  <input type="number" class="form-control" name="precio_igv" id="precio_igv" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                  <input type="text" class="form-control" name="precio_igv" id="precio_igv" placeholder="IGV" onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                 </div>
                               </div>
 
@@ -265,7 +266,7 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="precio_total">Total</label>
-                                  <input type="number" class="form-control" name="precio_total" id="precio_total" placeholder="Precio real." readonly />
+                                  <input type="text" class="form-control" name="precio_total" id="precio_total" placeholder="Precio real." readonly />
                                 </div>
                               </div>
 

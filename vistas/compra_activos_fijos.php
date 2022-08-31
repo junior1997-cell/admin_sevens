@@ -266,6 +266,14 @@
                                         </button>
                                       </a>
                                     </div>
+                                    <div class="form-group">
+                                      <label for="Add" style="color: white;">.</label>
+                                      <a data-toggle="modal" href="#modal-agregar-proveedor" >
+                                        <button type="button" class="btn btn-warning btn-block" data-toggle="tooltip" data-original-title="Editar Provedor Selecionado" onclick="limpiar_form_proveedor();">
+                                          <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                        </button>
+                                      </a>
+                                    </div>
                                   </div>
 
                                   <!-- fecha -->

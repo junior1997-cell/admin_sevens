@@ -22,6 +22,7 @@
       $unidad_medida  = isset($_POST["unid_medida"]) ? limpiarCadena($_POST["unid_medida"]) : "" ;
       $color          = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "" ;
       $idcategoria    = isset($_POST["categoria_insumos_af"]) ? limpiarCadena($_POST["categoria_insumos_af"]) : "" ;
+      $idgrupo        = isset($_POST["idtipo_tierra_concreto"]) ? limpiarCadena($_POST["idtipo_tierra_concreto"]) : "";
       $nombre         = isset($_POST["nombre"]) ? encodeCadenaHtml($_POST["nombre"]) : "" ;
       $modelo         = isset($_POST["modelo"]) ? encodeCadenaHtml($_POST["modelo"]) : "" ;
       $serie          = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "" ;
@@ -78,7 +79,7 @@
 
           if (empty($idproducto)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $activos_fijos->insertar( $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
+            $rspta = $activos_fijos->insertar( $unidad_medida, $color, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
             
             echo json_encode( $rspta, true);
 
@@ -97,7 +98,7 @@
               }
             }
             
-            $rspta = $activos_fijos->editar( $idproducto, $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
+            $rspta = $activos_fijos->editar( $idproducto, $unidad_medida, $color, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion,  $imagen1);
             //var_dump($idactivos_fijos,$idproveedor);
             echo json_encode( $rspta, true);
           }

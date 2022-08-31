@@ -24,6 +24,12 @@ function init() {
   $("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unid_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
   $("#categoria_insumos_af").select2({ theme: "bootstrap4", placeholder: "Seleccinar una categoria", allowClear: true, });
+
+  // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
+  $('#precio_unitario').number( true, 2 );
+  $('#precio_sin_igv').number( true, 2 );
+  $('#precio_igv').number( true, 2 );
+  $('#precio_total').number( true, 2 );
 }
 
 function templateColor (state) {

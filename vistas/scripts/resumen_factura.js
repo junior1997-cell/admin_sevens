@@ -41,11 +41,11 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } }, 
-      { extend: 'excelHtml5', title: name_export, footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } }, 
+      { extend: 'excelHtml5', title: name_export, footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
         action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando EXCEL<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.excelHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); });  }, 1000); }
       }, 
-      { extend: 'pdfHtml5', title: name_export, footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } ,
+      { extend: 'pdfHtml5', title: name_export, footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
         action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando PDF<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.pdfHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); }); }, 1000); }
       }, 
       "colvis"
@@ -126,11 +126,11 @@ function tbla_principal_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_provee
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } }, 
-      { extend: 'excelHtml5', title: name_export, footer: true, exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } }, 
+      { extend: 'excelHtml5', title: name_export, footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
         action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando EXCEL<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.excelHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); });  }, 1000); }
       }, 
-      { extend: 'pdfHtml5', title: name_export, footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3,4,5,6,7,8,9,10], } ,
+      { extend: 'pdfHtml5', title: name_export, footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
         action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando PDF<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.pdfHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); }); }, 1000); }
       }, 
       "colvis"

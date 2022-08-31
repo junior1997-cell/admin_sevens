@@ -15,26 +15,27 @@
 
       $materiales = new Materiales();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima'); $date_now = date("d-m-Y h.i.s A");
+
+      $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
       $idproducto = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "";
       $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadena($_POST["idcategoria_insumos_af"]) : "";
+      $idgrupo = isset($_POST["idtipo_tierra_concreto"]) ? limpiarCadena($_POST["idtipo_tierra_concreto"]) : "";
 
       $nombre = isset($_POST["nombre_material"]) ? encodeCadenaHtml($_POST["nombre_material"] ) : "";
       $modelo = isset($_POST["modelo"]) ? encodeCadenaHtml($_POST["modelo"] ) : "";
       $serie = isset($_POST["serie"]) ? encodeCadenaHtml($_POST["serie"] ) : "";
-      $marca = isset($_POST["marca"]) ? encodeCadenaHtml($_POST["marca"]) : "";
-      $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
-      $descripcion = isset($_POST["descripcion_material"]) ? encodeCadenaHtml($_POST["descripcion_material"]) : "";      
-
-      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
-      $monto_igv = isset($_POST["monto_igv"]) ? limpiarCadena($_POST["monto_igv"]) : "";
-      $precio_real = isset($_POST["precio_real"]) ? limpiarCadena($_POST["precio_real"]) : "";
-      
+      $marca = isset($_POST["marca"]) ? encodeCadenaHtml($_POST["marca"]) : "";         
       $unidad_medida = isset($_POST["unidad_medida"]) ? limpiarCadena($_POST["unidad_medida"]) : "";
       $color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
-      $total_precio = isset($_POST["total_precio"]) ? limpiarCadena($_POST["total_precio"]) : "";
+      $descripcion = isset($_POST["descripcion_material"]) ? encodeCadenaHtml($_POST["descripcion_material"]) : "";   
+
+      $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
+      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
+      $precio_real = isset($_POST["precio_sin_igv"]) ? limpiarCadena($_POST["precio_sin_igv"]) : "";
+      $monto_igv = isset($_POST["precio_igv"]) ? limpiarCadena($_POST["precio_igv"]) : "";      
+      $total_precio = isset($_POST["precio_con_igv"]) ? limpiarCadena($_POST["precio_con_igv"]) : "";     
 
       $imagen1 = isset($_POST["imagen1"]) ? limpiarCadena($_POST["imagen1"]) : "";
       $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : ""; 
@@ -80,7 +81,7 @@
 
           if (empty($idproducto)) {
             
-            $rspta = $materiales->insertar($idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
+            $rspta = $materiales->insertar($idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
             
             echo json_encode( $rspta, true);
 
@@ -90,16 +91,14 @@
             if ($flat_img1 == true) {
 
               $datos_f1 = $materiales->obtenerImg($idproducto);
-
               $img1_ant = $datos_f1['data']['imagen'];
 
-              if ($img1_ant != "") {
-
+              if ( validar_url_completo($scheme_host. "dist/docs/material/img_perfil/" . $img1_ant)  == 200) {
                 unlink("../dist/docs/material/img_perfil/" . $img1_ant);
               }
             }
              
-            $rspta = $materiales->editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
+            $rspta = $materiales->editar($idproducto, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
             
             echo json_encode( $rspta, true) ;
           }
@@ -158,14 +157,14 @@
                     <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
                     <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
                   </div>',
-                "3" => $reg->nombre_medida,
-                "4" => $reg->marca,
-                "5" =>'S/ '. number_format($reg->precio_unitario, 2, '.', ','),
-                "6" =>'S/ '.number_format($reg->precio_sin_igv, 2, '.', ','),
-                "7" =>'S/ '. number_format($monto_igv, 2, '.', ','),
-                "8" =>'S/ '.number_format($reg->precio_total, 2, '.', ','),
-                "9" => $ficha_tecnica,
-                "10" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                "3" => $reg->tipo_tierra_concreto,
+                "4" => $reg->nombre_medida,
+                "5" => $reg->marca,
+                "6" => number_format($reg->precio_unitario, 2, '.', ''),
+                "7" => number_format($reg->precio_sin_igv, 2, '.', ''),
+                "8" => number_format($monto_igv, 2, '.', ','),
+                "9" => number_format($reg->precio_total, 2, '.', ''),
+                "10" => $ficha_tecnica . $toltip,                
                 "11" => $reg->nombre,
                 "12" => $reg->nombre_color,
                 "13" => $reg->descripcion,

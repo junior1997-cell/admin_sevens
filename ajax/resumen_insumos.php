@@ -293,12 +293,13 @@
               "0" => $cont++,
               "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
               ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
-              "2" => '<span class="text-primary font-weight-bold" >' . $reg->proveedor . '</span>',      
-              "3" => $reg->fecha_compra,
-              "4" => number_format($reg->cantidad, 2, ".", ","),
-              "5" => '<b>' . number_format($reg->precio_con_igv, 2, ".", ",") . '</b>',
-              "6" => number_format($reg->descuento, 2, ".", ""),
-              "7" => number_format($reg->subtotal, 2, ".", ""),
+              "2" => '<span class="text-primary font-weight-bold" >' . $reg->proveedor . '</span>',    
+              "3" =>'<span class="" ><b>' . $reg->tipo_comprobante .  '</b> '.(empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante).'</span>',  
+              "4" => $reg->fecha_compra,
+              "5" => number_format($reg->cantidad, 2, ".", ","),
+              "6" => '<b>' . number_format($reg->precio_con_igv, 2, ".", ",") . '</b>',
+              "7" => number_format($reg->descuento, 2, ".", ""),
+              "8" => number_format($reg->subtotal, 2, ".", ""),
               // "7" => $ficha_tecnica,
             ];
           }

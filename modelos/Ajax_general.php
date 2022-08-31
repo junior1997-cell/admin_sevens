@@ -132,6 +132,13 @@
       return ejecutarConsulta($sql);
     }
 
+    /* ══════════════════════════════════════ T I P O   T I E R R A   C O N C R E T O ══════════════════════════════════════ */
+
+    public function select2_tierra_concreto() {
+      $sql = "SELECT idtipo_tierra_concreto as id, nombre, modulo FROM tipo_tierra_concreto  WHERE estado='1' AND estado_delete = '1'  ORDER BY idtipo_tierra_concreto ASC;";
+      return ejecutarConsulta($sql);
+    }
+
     /* ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════ */
     public function tblaActivosFijos() {
       $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 

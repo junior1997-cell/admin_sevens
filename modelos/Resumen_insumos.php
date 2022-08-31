@@ -30,7 +30,7 @@ Class ResumenInsumos
 	public function tbla_facturas($idproyecto, $idproducto)	{
 
 		$sql="SELECT cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
-		pr.nombre AS nombre_producto, dc.cantidad, 
+		pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
 		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
