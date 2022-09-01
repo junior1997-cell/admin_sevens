@@ -49,7 +49,7 @@ class Activos_fijos
   //Implementamos un método para editar registros
   public function editar($idproducto, $unidad_medida, $color, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $img_pefil)
   {
-   // var_dump($idproducto, $unidad_medida, $color, $idcategoria, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $img_pefil);die();
+  //var_dump($idproducto, $unidad_medida, $color, $idcategoria,'idhrupo_'.$idgrupo, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $img_pefil);die();
     $sql = "UPDATE producto SET 
 		idunidad_medida = '$unidad_medida',
 		idcolor = '$color',

@@ -1,6 +1,7 @@
 var tabla_principal;
 var tabla_factura;
 var tabla_materiales;
+var tabla_comprobantes;
 
 var array_class_trabajador = [];
 var cont = 0;
@@ -924,6 +925,58 @@ $("#my-switch_detracc").on("click ", function (e) {
   }
 });
 
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPROBANTES FACTURAS ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+function comprobante_compras(idcompra_proyecto,num_orden, num_comprobante,fecha) {
+  // limpiar_form_comprobante();
+  tbla_comprobantes_compras(idcompra_proyecto, num_orden);
+
+  $("#id_compra_proyecto").val(idcompra_proyecto);
+
+  $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
+  $("#modal-tabla-comprobantes-compra").modal("show"); 
+}
+
+
+function tbla_comprobantes_compras(id_compra, num_orden) {
+  tabla_comprobantes = $("#tabla-comprobantes-compra").dataTable({
+    responsive: true, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [ ],
+    ajax: {
+      url: `../ajax/resumen_insumos.php?op=tbla_comprobantes_compra&id_compra=${id_compra}&num_orden=${num_orden}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    }, 
+    createdRow: function (row, data, ixdex) {
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-center"); }
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY hh:mm:ss a'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();
+}
+
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR PRODUCTO ::::::::::::::::::::::::::::::::::::::::::::::::::::
 // TABLA - MATERIALES
 function tbla_materiales() {
@@ -1066,6 +1119,7 @@ function mostrar_material(idproducto, cont) {
     $("#serie_p").val(e.data.serie);
     $("#marca_p").val(e.data.marca);
     $("#descripcion_p").val(e.data.descripcion);
+    $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto);
 
     $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
     $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));

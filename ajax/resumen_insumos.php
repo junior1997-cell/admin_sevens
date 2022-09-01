@@ -48,6 +48,7 @@
       $unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;
       $color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;
       $categoria_insumos_af_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
+      $idgrupo          = isset($_POST["idtipo_tierra_concreto"]) ? limpiarCadena($_POST["idtipo_tierra_concreto"]) : "";
       $nombre_p         = isset($_POST["nombre_p"]) ? encodeCadenaHtml($_POST["nombre_p"]) : "" ;
       $modelo_p         = isset($_POST["modelo_p"]) ? encodeCadenaHtml($_POST["modelo_p"]) : "" ;
       $serie_p          = isset($_POST["serie_p"]) ? encodeCadenaHtml($_POST["serie_p"]) : "" ;
@@ -178,7 +179,7 @@
       
           if (empty($idproducto_p)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+            $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p,$idgrupo, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
             
             echo json_encode($rspta, true);
       
@@ -193,7 +194,7 @@
               if ($img1_ant != "") { unlink("../dist/docs/material/img_perfil/" . $img1_ant); }
             }
             
-            $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+            $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p,$idgrupo, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
             //var_dump($idactivos_fijos,$idproveedor);
             echo json_encode($rspta, true);
           }
@@ -282,25 +283,30 @@
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           $ficha_tecnica = "";
-
-          while ($reg = $rspta['data']->fetch_object()) {
+          // idcompra_proyecto,num_orden, num_comprobante, fecha
+          foreach ($rspta['data'] as $key => $reg) {
             // validamos si existe una ficha tecnica
-            !empty($reg->ficha_tecnica)
-              ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-lg text-success"></i></a></center>')
+            !empty($reg['ficha_tecnica'])
+              ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-lg text-success"></i></a></center>')
               : ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-lg text-gray-50"></i></center>');
+
+            $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');
+            $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
 
             $data[] = [    
               "0" => $cont++,
-              "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-              ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
-              "2" => '<span class="text-primary font-weight-bold" >' . $reg->proveedor . '</span>',    
-              "3" =>'<span class="" ><b>' . $reg->tipo_comprobante .  '</b> '.(empty($reg->serie_comprobante) ?  "" :  '- '.$reg->serie_comprobante).'</span>',  
-              "4" => $reg->fecha_compra,
-              "5" => number_format($reg->cantidad, 2, ".", ","),
-              "6" => '<b>' . number_format($reg->precio_con_igv, 2, ".", ",") . '</b>',
-              "7" => number_format($reg->descuento, 2, ".", ""),
-              "8" => number_format($reg->subtotal, 2, ".", ""),
-              // "7" => $ficha_tecnica,
+              "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+              ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
+              "2" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor']. '</span>',    
+              "3" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',  
+              "4" => $reg['fecha_compra'],
+              "5" => number_format($reg['cantidad'], 2, ".", ","),
+              "6" => '<b>' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
+              "7" => number_format($reg['descuento'], 2, ".", ""),
+              "8" => number_format($reg['subtotal'], 2, ".", ""),
+              // "9" => $ficha_tecnica,
+              "9" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idcompra_proyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
+
             ];
           }
 
@@ -477,6 +483,38 @@
             </table>
           </div> ';
 
+        break;
+        // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
+
+        case 'tbla_comprobantes_compra':
+          $cont_compra = $_GET["num_orden"];
+          $id_compra = $_GET["id_compra"];
+          $rspta = $compra->tbla_comprobantes( $id_compra );
+          //Vamos a declarar un array
+          $data = []; $cont = 1;        
+          
+          if ($rspta['status']) {
+            while ($reg = $rspta['data']->fetch_object()) {
+              $data[] = [
+                "0" => $cont,
+                "1" => '<div class="text-nowrap">'.
+                ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.'·'.$cont.' '.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>              
+                </div>'.$toltip,
+                "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
+                "3" => $reg->updated_at,
+              ];
+              $cont++;
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
+            ];
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
         break;
 
         default: 

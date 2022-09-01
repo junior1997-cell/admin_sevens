@@ -712,6 +712,7 @@
 
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_p" id="idproducto_p" />    
+                              <!-- <input type="text" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">                            -->
                               <!-- cont registro -->
                               <input type="hidden" name="cont" id="cont" />                           
 

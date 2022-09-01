@@ -29,7 +29,7 @@ Class ResumenInsumos
 
 	public function tbla_facturas($idproyecto, $idproducto)	{
 
-		$sql="SELECT cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
+		$sql="SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
 		pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
 		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
@@ -37,8 +37,36 @@ Class ResumenInsumos
 		AND dc.idproducto = pr.idproducto AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1'
 		AND cpp.idproveedor = prov.idproveedor AND dc.idproducto = '$idproducto' 
 		ORDER BY cpp.fecha_compra DESC;";
+				// return ejecutarConsulta($sql);	
+		$compra = ejecutarConsultaArray($sql);	
+		if ($compra['status'] == false) { return $compra; }
 
-		return ejecutarConsulta($sql);		
+      foreach ($compra['data'] as $key => $value) {
+        $idcompra_proyecto = $value['idcompra_proyecto'];
+      
+        $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+        $cant_comprobantes = ejecutarConsultaSimpleFila($sql3);
+        if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
+      
+        $data[] = [
+          'idproyecto' => $value['idproyecto'],
+          'idcompra_proyecto' => $value['idcompra_proyecto'],
+          'fecha_compra' => $value['fecha_compra'],
+          'ficha_tecnica' => $value['ficha_tecnica'],
+          'nombre_producto' => $value['nombre_producto'],
+          'cantidad' => $value['cantidad'],
+          'tipo_comprobante' => $value['tipo_comprobante'],
+          'serie_comprobante' => $value['serie_comprobante'],
+          'precio_con_igv' => $value['precio_con_igv'],
+          'descuento' => $value['descuento'],
+          'subtotal' => $value['subtotal'],
+          'proveedor' => $value['proveedor'],
+          'cant_comprobantes' => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
+        ];
+		  }
+	  
+		  return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data, 'affected_rows' =>$compra['affected_rows'],  ] ;
+
 	}
 
 	public function sumas_factura_x_material($idproyecto, $idproducto)	{

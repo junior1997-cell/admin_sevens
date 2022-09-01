@@ -132,7 +132,7 @@
                                   <th>Precio</th>  
                                   <th data-toggle="tooltip" data-original-title="Descuento">Dcto.</th>
                                   <th>SubTotal</th>
-                                  <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                                -->
+                                  <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                               
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -149,7 +149,8 @@
                                   <th class="text-nowrap h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
                                   <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
                                   <th class="text-nowrap px-2"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
-                                  <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
+                                  <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                            
+                                  
                                 </tr>
                               </tfoot>
                             </table>
@@ -536,6 +537,8 @@
 
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_p" id="idproducto_p" /> 
+                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">                           
+
                               <!-- cont registro -->
                               <input type="hidden" name="cont" id="cont" />                              
 
@@ -794,6 +797,50 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- MODAL -  agregar comprobantes - charge -->
+                <div class="modal fade" id="modal-tabla-comprobantes-compra">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                          <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">#</th>
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">#</th>
+                                <th class="">OP</th>
+                                <th>Doc</th>
+                                <th>Fecha</th>                                    
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
                 
               </section>
               <!-- /.content -->
