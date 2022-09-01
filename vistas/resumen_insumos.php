@@ -87,7 +87,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
                                   <th>Cantidad</th>
@@ -105,7 +105,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th>UM</th>
                                   <th class="text-center suma_total_productos h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 

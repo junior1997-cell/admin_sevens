@@ -102,7 +102,7 @@
                   <span class="username"><p class="text-primary m-b-02rem" >' . $reg->nombre_producto . '</p></span>
                   <span class="description"> '.(empty($reg->modelo) ? '' : '<b class="d-none">═</b> <b >Modelo:</b> ' . $reg->modelo ).'</span>
                 </div>',
-                "3" => $reg->nombre_color,
+                "3" => $reg->grupo,
                 "4" => $reg->marca,
                 "5" => $reg->nombre_medida,
                 "6" => number_format($reg->cantidad_total,2, ".", ","),

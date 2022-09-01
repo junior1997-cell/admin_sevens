@@ -15,14 +15,14 @@ Class ResumenInsumos
 	public function tbla_principal($idproyecto){
 
 		$sql="SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida, 
-		c.nombre_color, pr.nombre AS nombre_producto, pr.modelo, pr.marca, pr.imagen, pr.precio_total AS precio_actual, 
+		c.nombre_color, pr.nombre AS nombre_producto, pr.modelo, pr.marca, ttc.nombre as grupo, pr.imagen, pr.precio_total AS precio_actual, 
 		SUM(dc.cantidad) AS cantidad_total, SUM(dc.precio_con_igv) AS precio_con_igv, SUM(dc.descuento) AS descuento_total, 
 		SUM(dc.subtotal) precio_total , COUNT(dc.idproducto) AS count_productos, AVG(dc.precio_con_igv) AS promedio_precio
-		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, unidad_medida AS um, color AS c 
-		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto 
-		AND um.idunidad_medida  = pr.idunidad_medida  AND c.idcolor = pr.idcolor  AND cpp.idproyecto = '$idproyecto' 
-		AND pr.idcategoria_insumos_af = '1' AND cpp.estado = '1' AND cpp.estado_delete = '1'
-		GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr,tipo_tierra_concreto AS ttc,
+        unidad_medida AS um, color AS c WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
+        AND dc.idproducto = pr.idproducto AND um.idunidad_medida  = pr.idunidad_medida  AND c.idcolor = pr.idcolor  
+        AND cpp.idproyecto = '$idproyecto' AND pr.idtipo_tierra_concreto=ttc.idtipo_tierra_concreto AND pr.idcategoria_insumos_af = '1' 
+        AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";
 
 		return ejecutarConsulta($sql);		
 	}

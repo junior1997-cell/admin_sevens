@@ -172,14 +172,17 @@ function tbla_principal(id_proyecto) {
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: UM
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Compra
+     //columna:cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
+      // columna: Compra
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-center");  }
       // columna: Precio promedio
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
       // columna: Precio actual
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right");  }
-      // columna: Suma Total
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right");  }
+      // columna: Suma Total
+      if (data[10] != '') { $("td", row).eq(10).addClass("text-right");  }
+
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -190,7 +193,7 @@ function tbla_principal(id_proyecto) {
 		iDisplayLength: 10,//Paginación
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      { "targets": [ 3 ], "visible": false, "searchable": false }, 
+      // { "targets": [ 3 ], "visible": false, "searchable": false }, 
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
