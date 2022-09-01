@@ -139,11 +139,11 @@
                                   <th rowspan="2" class="stile-celda ">Nombre del trabajador</th>
                                   <th rowspan="2" class="stile-celda ">Cargo</th>
                                   <th colspan="14" id="dias_asistidos_s_q" class="text-center " style="border: black 1px solid;">
-                                    <span class="badge badge-info float-left cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Horas multiples" onclick="modal_horas_multiples();"><i class="far fa-clock fa-lg m-1"></i></span>  
+                                    <span class="badge badge-info float-left cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px" data-toggle="tooltip" data-original-title="Horas multiples" onclick="modal_horas_multiples();"><i class="far fa-clock fa-lg m-1"></i></span>  
                                     Horas de trabajo por día
-                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 ir_a_right mr-1" data-toggle="tooltip" data-original-title="Deslizar al la derecha"><i class="far fa-arrow-alt-circle-right fa-lg m-1"></i></span>
-                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 ir_a_bottom mr-1" data-toggle="tooltip" data-original-title="Deslizar al final"><i class="far fa-arrow-alt-circle-down fa-lg m-1"></i></span>
-                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 ir_a_left mr-1" data-toggle="tooltip" data-original-title="Deslizar al la izquierda"><i class="far fa-arrow-alt-circle-left fa-lg m-1"></i></span>                                  
+                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_right mr-1" data-toggle="tooltip" data-original-title="Deslizar al la derecha"><i class="far fa-arrow-alt-circle-right fa-lg m-1"></i></span>
+                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_bottom mr-1" data-toggle="tooltip" data-original-title="Deslizar al final"><i class="far fa-arrow-alt-circle-down fa-lg m-1"></i></span>
+                                    <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_left mr-1" data-toggle="tooltip" data-original-title="Deslizar al la izquierda"><i class="far fa-arrow-alt-circle-left fa-lg m-1"></i></span>                                  
                                   </th>
                                   <th rowspan="2" class="stile-celda ">Horas<br>normal/extras</th>
                                   <th rowspan="2" class="stile-celda ">Días<br>asistidos</th>

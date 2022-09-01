@@ -143,7 +143,7 @@ function doc2_eliminar() {
 
 //Función limpiar
 function limpiar_form_compra() {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
 
   $("#idcompra_af_general").val("");
   $("#idcompra_proyecto").val("");
@@ -424,7 +424,7 @@ function guardaryeditar_compras(e) {
 
 function eliminar_compra(idcompra_af_general, nombre) {
 
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
 
   crud_eliminar_papelera(
     "../ajax/compra_activos_fijos.php?op=anular_compra",
@@ -528,6 +528,8 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
     // alert("Error al ingresar el detalle, revisar los datos del artículo");
     toastr.error("Error al ingresar el detalle, revisar los datos del material.");
   }
+
+  $(".tooltip").remove();
 }
 
 function evaluar() {
@@ -932,7 +934,7 @@ function mostrar_compra_proyecto(params) {
 
 //DETALLE - COMRAS ACTIVOS FIJOS GENERAL
 function ver_detalle_compras_activo_fijo(idcompra_af_general) {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
 
@@ -957,7 +959,7 @@ function ver_detalle_compras_activo_fijo(idcompra_af_general) {
 
 //DETALLE - COMRAS ACTIVOS FIJOS PROYECTO
 function ver_detalle_compras_insumo(id_compra) {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
 
@@ -985,7 +987,7 @@ function ver_detalle_compras_insumo(id_compra) {
 
 //MOSTRAMOS LOS COMPROBANTES DE LA COMPRA GENERAL
 function comprobante_compra_activo_fijo(idcompra, doc) {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
   $("#modal-comprobante-compra").modal("show");
   $("#idcompra").val(idcompra);
   $("#ruta_guardar").val('guardar_y_editar_comprobante_activo_fijo');
@@ -1025,7 +1027,7 @@ function comprobante_compra_activo_fijo(idcompra, doc) {
 
 //MOSTRAMOS LOS COMPROBANTES DE LA COMPRA POR PROYECTO.
 function comprobante_compra_insumo(idcompra, doc) {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
   $("#modal-comprobante-compra").modal("show");
   $("#idcompra").val(idcompra);
   $("#ruta_guardar").val('guardar_y_editar_comprobante_insumo');
@@ -1369,7 +1371,7 @@ function mostrar_pagos(idpago_af_general) {
 
 //Función para eliminar registros
 function eliminar_pagos(idpago_af_general, nombre) {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
 
   crud_eliminar_papelera(
     "../ajax/compra_activos_fijos.php?op=desactivar_pagos",
@@ -1397,7 +1399,7 @@ function ver_modal_vaucher(imagen, proveedor) {
 
   $("#ver_completo_voucher_pago").attr("href", "../dist/docs/compra_activo_fijo/comprobante_pago/" + imagen);
 
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1420,7 +1422,7 @@ function limpiar_form_proveedor() {
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
 }
 
 // damos formato a: Cta, CCI
@@ -1482,6 +1484,38 @@ function guardar_proveedor(e) {
   
 }
 
+function mostrar_para_editar_proveedor() {
+  $("#cargando-7-fomulario").hide();
+  $("#cargando-8-fomulario").show();
+
+  $('#modal-agregar-proveedor').modal('show');
+  $(".tooltip").remove();
+
+  $.post("../ajax/compra_activos_fijos.php?op=mostrar_editar_proveedor", { 'idproveedor': $('#idproveedor').select2("val") }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status == true) {     
+      $("#idproveedor_prov").val(e.data.idproveedor);
+      $("#tipo_documento_prov option[value='" + e.data.tipo_documento + "']").attr("selected", true);
+      $("#nombre_prov").val(e.data.razon_social);
+      $("#num_documento_prov").val(e.data.ruc);
+      $("#direccion_prov").val(e.data.direccion);
+      $("#telefono_prov").val(e.data.telefono);
+      $("#banco_prov").val(e.data.idbancos).trigger("change");
+      $("#c_bancaria_prov").val(e.data.cuenta_bancaria);
+      $("#cci_prov").val(e.data.cci);
+      $("#c_detracciones_prov").val(e.data.cuenta_detracciones);
+      $("#titular_cuenta_prov").val(e.data.titular_cuenta);      
+
+      $("#cargando-7-fomulario").show();
+      $("#cargando-8-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); });
+}
+
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N    I N S U M O S   Y   A C T I V O S :::::::::::::::::::::::::::::::::::::::::::::::::::: 
 //Función limpiar
 function limpiar_materiales() {
@@ -1507,7 +1541,7 @@ function limpiar_materiales() {
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
 
-  $("#unid_medida_p").val(4).trigger("change");
+  $("#unidad_medida_p").val(4).trigger("change");
   $("#color_p").val(1).trigger("change");
   $("#categoria_insumos_af_p").val("").trigger("change");
 
@@ -1631,7 +1665,7 @@ function mostrar_material(idproducto, cont) {
       $("#precio_igv_p").val(parseFloat(e.data.precio_igv).toFixed(2));
       $("#precio_total_p").val(parseFloat(e.data.precio_total).toFixed(2));
       
-      $("#unid_medida_p").val(e.data.idunidad_medida).trigger("change");
+      $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
       $("#color_p").val(e.data.idcolor).trigger("change");  
       $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");    
 
@@ -1743,7 +1777,7 @@ function actualizar_producto() {
 
   var nombre_p = $("#nombre_p").val();  
   var precio_total_p = $("#precio_total_p").val();
-  var unid_medida_p = $("#unidad_medida_p").find(':selected').text();
+  var unidad_medida_p = $("#unidad_medida_p").find(':selected').text();
   var color_p = $("#color_p").find(':selected').text();  
 
   if (idproducto == "" || idproducto == null) {   
@@ -1751,8 +1785,8 @@ function actualizar_producto() {
     $(`.nombre_producto_${cont}`).html(nombre_p); 
     $(`.color_${cont}`).html(`<b>Color: </b>${color_p}`);
     $(`.color_${cont}`).val(color_p); 
-    $(`.unidad_medida_${cont}`).html(unid_medida_p); 
-    $(`.unidad_medida_${cont}`).val(unid_medida_p);
+    $(`.unidad_medida_${cont}`).html(unidad_medida_p); 
+    $(`.unidad_medida_${cont}`).val(unidad_medida_p);
     $(`.precio_con_igv_${cont}`).val(precio_total_p);    
      
     if ($('#foto2').val()) {
@@ -1954,7 +1988,7 @@ $(function () {
       categoria_insumos_af_p: { required: true },
       nombre_p:         { required: true, minlength:3, maxlength:200},      
       color_p:          { required: true },
-      unid_medida_p:    { required: true },
+      unidad_medida_p:    { required: true },
       precio_unitario_p:{ required: true },
       descripcion_p:    { minlength: 3 },
     },
@@ -1962,7 +1996,7 @@ $(function () {
       categoria_insumos_af_p: { required: "Campo requerido.", },
       nombre_p:         { required: "Campo requerido.", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },      
       color_p:          { required: "Campo requerido." },
-      unid_medida_p:    { required: "Campo requerido." },
+      unidad_medida_p:    { required: "Campo requerido." },
       precio_unitario_p:{ required: "Campo requerido.", },      
       descripcion_p:    { minlength: "Minimo 3 caracteres" },
     },
@@ -2057,7 +2091,7 @@ function validando_excedentes() {
 
 // ver imagen grande del producto agregado a la compra
 function ver_img_material(img_url, nombre, cont=null) {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
   if (cont == null || cont == "") {
     $("#ver_img_material").attr("src", img_url);
     $(".nombre-img-material").html(nombre);
@@ -2095,8 +2129,19 @@ function export_excel_detalle_factura() {
 }
 
 function extrae_ruc() {
-  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { }  else{    
-    var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
-    $('#ruc_proveedor').val(ruc);
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
+    $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');
+  } else { 
+    if ($('#idproveedor').select2("val") == 1) {
+      $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','No editable');
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+    } else{
+      var name_proveedor = $('#idproveedor').select2('data')[0].text;
+      $('.btn-editar-proveedor').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_proveedor, 15)}`);   
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+    }
   }
+  $('[data-toggle="tooltip"]').tooltip();
 }

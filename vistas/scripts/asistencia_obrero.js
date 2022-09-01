@@ -372,7 +372,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
     var weekday = extraer_dia_semana(format_a_m_d(fecha_inicial_quincena_regular));  
 
-    table_dia_semana = table_dia_semana.concat(`<th class="p-x-12px bg-color-acc3c7"> ${fecha_inicial_quincena_regular.substr(0,2)} <br> ${weekday} </th>`);
+    table_dia_semana = table_dia_semana.concat(`<th class="p-x-12px py-0 bg-color-acc3c7"> ${fecha_inicial_quincena_regular.substr(0,2)} <br> ${weekday} </th>`);
 
     // table_numero_semana = table_numero_semana.concat(`<th class="p-x-12px bg-color-acc3c7"> ${count_dias_de_asistencias} </th>`);
 
@@ -389,13 +389,13 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
 
     if (weekday != 'sa') {
 
-      table_dia_semana = table_dia_semana.concat(`<th class="p-x-12px"> ${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
+      table_dia_semana = table_dia_semana.concat(`<th class="p-x-12px py-0"> ${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
 
       // table_numero_semana = table_numero_semana.concat(`<th class="p-x-12px"> ${count_dias_de_asistencias} </th>`);
 
     } else {
 
-      table_dia_semana = table_dia_semana.concat(`<th class="p-x-12px bg-color-acc3c7">${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
+      table_dia_semana = table_dia_semana.concat(`<th class="p-x-12px py-0 bg-color-acc3c7">${fecha_inicial_quincena.substr(0,2)} <br> ${weekday} </th>`);
       
       // table_numero_semana = table_numero_semana.concat(`<td class="p-x-12px bg-color-acc3c7"> ${count_dias_de_asistencias} </td>`);
     }

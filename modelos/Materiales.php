@@ -10,19 +10,19 @@ class Materiales
   }
 
   //Implementamos un método para insertar registros
-  public function insertar($idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
+  public function insertar($idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $precio_igv, $precio_sin_igv, $unidad_medida, $color, $total_precio)
   {
     $sql = "SELECT p.nombre, p.modelo , p.serie, p.marca, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
     um.nombre_medida, p.estado, p.estado_delete, p.idtipo_tierra_concreto, ttc.nombre as tipo_tierra_concreto
 		FROM producto p, unidad_medida as um, color as c, tipo_tierra_concreto as ttc
     WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor AND ttc.idtipo_tierra_concreto = p.idtipo_tierra_concreto 
-    AND idcategoria_insumos_af = '1' AND p.idtipo_tierra_concreto ='$idgrupo' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unid_medida';";
+    AND idcategoria_insumos_af = '1' AND p.idtipo_tierra_concreto ='$idgrupo' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unidad_medida';";
     $buscando = ejecutarConsultaArray($sql);
     if ($buscando['status'] == false) { return $buscando; }
 
     if ( empty($buscando['data']) ) {
       $sql = "INSERT INTO producto (idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total) 
-      VALUES ('$idcategoria', '$idgrupo', '$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$monto_igv','$precio_real','$unid_medida','$color','$total_precio')";
+      VALUES ('$idcategoria', '$idgrupo', '$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$precio_igv','$precio_sin_igv','$unidad_medida','$color','$total_precio')";
       return ejecutarConsulta($sql);
     } else {
       $info_repetida = ''; 
@@ -44,7 +44,7 @@ class Materiales
   }
 
   //Implementamos un método para editar registros
-  public function editar($idproducto, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unid_medida, $color, $total_precio)
+  public function editar($idproducto, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $precio_igv, $precio_sin_igv, $unidad_medida, $color, $total_precio)
   {
     //var_dump($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);die();
     $sql = "UPDATE producto SET 
@@ -59,9 +59,9 @@ class Materiales
 		imagen='$imagen1',
 		ficha_tecnica='$ficha_tecnica',
 		estado_igv='$estado_igv',
-		precio_igv='$monto_igv',
-		precio_sin_igv='$precio_real',
-		idunidad_medida='$unid_medida',
+		precio_igv='$precio_igv',
+		precio_sin_igv='$precio_sin_igv',
+		idunidad_medida='$unidad_medida',
 		idcolor='$color',
 		precio_total='$total_precio'
 		WHERE idproducto='$idproducto'";
@@ -94,7 +94,7 @@ class Materiales
   {
     $data = Array();
 
-    $sql = "SELECT p.idproducto, p.idunidad_medida,	p.idcolor, p.nombre, p.modelo, p.serie,	p.marca,
+    $sql = "SELECT p.idproducto, p.idunidad_medida,	p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie,	p.marca,
 		p.descripcion, p.imagen, p.estado_igv, p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total,
 		p.ficha_tecnica, p.estado, c.nombre_color, um.nombre_medida, p.idtipo_tierra_concreto, ttc.nombre as tipo_tierra_concreto
 		FROM producto p, unidad_medida as um, color as c, tipo_tierra_concreto as ttc
@@ -106,6 +106,7 @@ class Materiales
     if ($producto['status']) {
       $data = array(
         'idproducto'      => ( empty($producto['data']['idproducto']) ? '' : $producto['data']['idproducto']),
+        'idcategoria_insumos_af' => ( empty($producto['data']['idcategoria_insumos_af']) ? '' : $producto['data']['idcategoria_insumos_af']),
         'idtipo_tierra_concreto' => ( empty($producto['data']['idtipo_tierra_concreto']) ? '' : $producto['data']['idtipo_tierra_concreto']),
         'tipo_tierra_concreto' => ( empty($producto['data']['tipo_tierra_concreto']) ? '' : $producto['data']['tipo_tierra_concreto']),
         'idunidad_medida' => ( empty($producto['data']['idunidad_medida']) ? '' : $producto['data']['idunidad_medida']),
@@ -113,14 +114,14 @@ class Materiales
         'nombre'          => ( empty($producto['data']['nombre']) ? '' :decodeCadenaHtml($producto['data']['nombre'])),
         'modelo'          => ( empty($producto['data']['modelo']) ? '' :decodeCadenaHtml($producto['data']['modelo'])),
         'serie'           => ( empty($producto['data']['serie']) ? '' :decodeCadenaHtml($producto['data']['serie'])),
-        'marca'           => ( empty($producto['data']['marca']) ? '' : decodeCadenaHtml($producto['data']['marca'])),
-        'descripcion'     => ( empty($producto['data']['descripcion']) ? '' : decodeCadenaHtml($producto['data']['descripcion'])),
-        'imagen'          => ( empty($producto['data']['imagen']) ? '' : $producto['data']['imagen']),
+        'marca'           => ( empty($producto['data']['marca']) ? '' : decodeCadenaHtml($producto['data']['marca'])),                
         'estado_igv'      => ( empty($producto['data']['estado_igv']) ? '' : $producto['data']['estado_igv']),
         'precio_unitario' => ( empty($producto['data']['precio_unitario']) ? 0 : number_format($producto['data']['precio_unitario'], 2, '.',',') ),
         'precio_igv'      => ( empty($producto['data']['precio_igv']) ? 0 :  number_format($producto['data']['precio_igv'], 2, '.',',') ),
         'precio_sin_igv'  => ( empty($producto['data']['precio_sin_igv']) ? 0 :  number_format($producto['data']['precio_sin_igv'], 2, '.',',') ),
         'precio_total'    => ( empty($producto['data']['precio_total']) ? 0 :  number_format($producto['data']['precio_total'], 2, '.',',') ),
+        'descripcion'     => ( empty($producto['data']['descripcion']) ? '' : decodeCadenaHtml($producto['data']['descripcion'])),
+        'imagen'          => ( empty($producto['data']['imagen']) ? '' : $producto['data']['imagen']),
         'ficha_tecnica'   => ( empty($producto['data']['ficha_tecnica']) ? '' : $producto['data']['ficha_tecnica']),
         'estado'          => ( empty($producto['data']['estado']) ? '' : $producto['data']['estado']),
         'nombre_color'    => ( empty($producto['data']['nombre_color']) ? '' : $producto['data']['nombre_color']),
@@ -154,7 +155,7 @@ class Materiales
   public function ficha_tec($idproducto)
   {
     $sql = "SELECT ficha_tecnica FROM producto WHERE idproducto='$idproducto'";
-    return ejecutarConsulta($sql);
+    return ejecutarConsultaSimpleFila($sql);
   }
 }
 

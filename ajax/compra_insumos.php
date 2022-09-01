@@ -13,15 +13,17 @@ if (!isset($_SESSION["nombre"])) {
     
     require_once "../modelos/Compra_insumos.php";
     require_once "../modelos/AllProveedor.php";
-    require_once "../modelos/Activos_fijos.php";
+    require_once "../modelos/Materiales.php";
 
     $compra_insumos = new Compra_insumos();
     $proveedor = new AllProveedor();
-    $activos_fijos = new Activos_fijos();      
+    $insumos = new Materiales();      
     
-    date_default_timezone_set('America/Lima');
-    $date_now = date("d-m-Y h.i.s A");
+    date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
+    $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
     $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
@@ -66,6 +68,7 @@ if (!isset($_SESSION["nombre"])) {
     $unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;
     $color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;
     $categoria_insumos_af_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
+    $idgrupo          = isset($_POST["idtipo_tierra_concreto"]) ? limpiarCadena($_POST["idtipo_tierra_concreto"]) : "";
     $nombre_p         = isset($_POST["nombre_p"]) ? encodeCadenaHtml($_POST["nombre_p"]) : "" ;
     $modelo_p         = isset($_POST["modelo_p"]) ? encodeCadenaHtml($_POST["modelo_p"]) : "" ;
     $serie_p          = isset($_POST["serie_p"]) ? limpiarCadena($_POST["serie_p"]) : "" ;
@@ -134,7 +137,8 @@ if (!isset($_SESSION["nombre"])) {
     
         if (empty($idproducto_p)) {
           //var_dump($idproyecto,$idproveedor);
-          $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+          $rspta = $insumos->insertar( $categoria_insumos_af_p, $idgrupo,$nombre_p, $modelo_p, $serie_p, $marca_p,$precio_unitario_p, $descripcion_p,$img_pefil_p,$ficha_tecnica_p,
+          $estado_igv_p, $precio_igv_p, $precio_sin_igv_p,$unidad_medida_p, $color_p, $precio_total_p   );
           
           echo json_encode($rspta, true);
     
@@ -143,17 +147,16 @@ if (!isset($_SESSION["nombre"])) {
           // validamos si existe LA IMG para eliminarlo
           if ($flat_img1 == true) {
     
-            $datos_f1 = $activos_fijos->obtenerImg($idproducto_p);
+            $datos_f1 = $insumos->obtenerImg($idproducto_p);    
+            $img1_ant = (empty($datos_f1['data']) ? '' : $datos_f1['data']['imagen']);
     
-            $img1_ant = $datos_f1['data']->fetch_object()->imagen;
-    
-            if ($img1_ant != "") {
-    
+            if (validar_url_completo($scheme_host. "dist/docs/material/img_perfil/" . $img1_ant)  == 200) {    
               unlink("../dist/docs/material/img_perfil/" . $img1_ant);
             }
           }
           
-          $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p, $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p, $descripcion_p,  $img_pefil_p);
+          $rspta = $insumos->editar($idproducto_p, $categoria_insumos_af_p, $idgrupo,$nombre_p, $modelo_p, $serie_p, $marca_p,$precio_unitario_p, $descripcion_p,$img_pefil_p,$ficha_tecnica_p,
+          $estado_igv_p, $precio_igv_p, $precio_sin_igv_p,$unidad_medida_p, $color_p, $precio_total_p);
           //var_dump($idactivos_fijos,$idproveedor);
           echo json_encode($rspta, true);
         }
@@ -162,7 +165,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'mostrar_materiales':
     
-        $rspta = $activos_fijos->mostrar($idproducto_p);
+        $rspta = $insumos->mostrar($idproducto_p);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
     

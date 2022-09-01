@@ -14,11 +14,13 @@ class AllProveedor
     $sw = Array();
     $sql_0 = "SELECT * FROM proveedor WHERE ruc = '$num_documento' ";
     $existe = ejecutarConsultaArray($sql_0);
+    if ($existe['status'] == false) {  return $existe; }
 
     if (empty($existe['data'])) {
       $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta)
       VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta')";
-      $sw =  ejecutarConsulta_retornarID($sql);      
+      $sw =  ejecutarConsulta_retornarID($sql);     
+      if ($sw['status'] == false) {  return $sw; } 
     } else{
 
       $info_repetida = ''; 
@@ -43,18 +45,14 @@ class AllProveedor
   {
     //var_dump($idproveedor,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$c_bancaria,$c_detracciones,$banco,$titular_cuenta);die;
 
-    $sql = "UPDATE proveedor SET idbancos='$banco',
-		razon_social='$nombre',
-		tipo_documento='$tipo_documento', 
-		ruc='$num_documento',
-		direccion='$direccion',
-		telefono='$telefono',
-		cuenta_bancaria='$c_bancaria', cci='$cci', 
-		cuenta_detracciones='$c_detracciones',
-		titular_cuenta='$titular_cuenta' 
-		WHERE idproveedor='$idproveedor'";
+    $sql = "UPDATE proveedor SET idbancos='$banco',	razon_social='$nombre',	tipo_documento='$tipo_documento', ruc='$num_documento',
+		direccion='$direccion',	telefono='$telefono',	cuenta_bancaria='$c_bancaria', cci='$cci', cuenta_detracciones='$c_detracciones',
+		titular_cuenta='$titular_cuenta' WHERE idproveedor='$idproveedor'";
 
-    return ejecutarConsulta($sql);
+    $edit_proveedor = ejecutarConsulta_retornarID($sql);
+    if ($edit_proveedor['status'] == false) {  return $edit_proveedor; }
+
+    return $sw = array( 'status' => true, 'message' => 'solio oka', 'data' => $idproveedor, 'id_tabla' => $idproveedor );
   }
 
   //Implementamos un método para desactivar categorías

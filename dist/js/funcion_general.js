@@ -516,6 +516,13 @@ function quitar_guion(str) {
     return str.replace("-", "");
   }  
 }
+function recorte_text(str='', cant = 10) {
+  if (str == '' || str == null) {
+    return "";
+  } else {
+    if (str.length > cant) { return `${str.slice(0,cant)}...`; }else{ return str.slice(0,cant); }    
+  }
+}
 
 //capitalize all words of a string. 
 function capitalizeWords(str) {

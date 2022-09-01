@@ -41,6 +41,7 @@ function init() {
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2TierraConcreto", '#idtipo_tierra_concreto', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
@@ -86,6 +87,8 @@ function init() {
 
   $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
+  $("#idtipo_tierra_concreto").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
+
   no_select_tomorrow("#fecha_compra");
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - MATERIAL ══════════════════════════════════════
@@ -94,6 +97,12 @@ function init() {
   // Inicializar - Date picker  
   $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+
+  // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
+  $('#precio_unitario_p').number( true, 2 );
+  $('#precio_sin_igv_p').number( true, 2 );
+  $('#precio_igv_p').number( true, 2 );
+  $('#precio_total_p').number( true, 2 );
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -1987,15 +1996,16 @@ function mostrar_material(idproducto, cont) {
       $("#marca_p").val(e.data.marca);
       $("#descripcion_p").val(e.data.descripcion);
 
-      $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
-      $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));
-      $("#precio_sin_igv_p").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
-      $("#precio_igv_p").val(parseFloat(e.data.precio_igv).toFixed(2));
-      $("#precio_total_p").val(parseFloat(e.data.precio_total).toFixed(2));
+      $('#precio_unitario_p').val(e.data.precio_unitario);
+      $("#estado_igv_p").val(e.data.estado_igv);
+      $("#precio_sin_igv_p").val(e.data.precio_sin_igv);
+      $("#precio_igv_p").val(e.data.precio_igv);
+      $("#precio_total_p").val(e.data.precio_total);
       
       $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
       $("#color_p").val(e.data.idcolor).trigger("change");  
-      $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");    
+      $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");
+      $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto).trigger("change");    
 
       if (e.data.estado_igv == "1") {
         $("#my-switch_igv").prop("checked", true);
@@ -2064,6 +2074,7 @@ function limpiar_materiales() {
   $("#unidad_medida_p").val("").trigger("change");
   $("#color_p").val(1).trigger("change");
   $("#categoria_insumos_af_p").val("").trigger("change");
+  $("#idtipo_tierra_concreto").val("").trigger("change");
 
   $("#my-switch_igv").prop("checked", true);
   $("#estado_igv_p").val("1");
@@ -2225,6 +2236,7 @@ $(function () {
   $("#categoria_insumos_af_p").on('change', function() { $(this).trigger('blur'); });
   $("#color_p").on('change', function() { $(this).trigger('blur'); });
   $("#unidad_medida_p").on('change', function() { $(this).trigger('blur'); });
+  $("#idtipo_tierra_concreto").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-compras").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -2396,6 +2408,7 @@ $(function () {
       unidad_medida_p:        { required: true },
       precio_unitario_p:      { required: true },      
       categoria_insumos_af_p: { required: true },
+      idtipo_tierra_concreto:  { required: true },
     },
     messages: {
       nombre_p:               { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },      
@@ -2405,6 +2418,7 @@ $(function () {
       unidad_medida_p:        { required: "Campo requerido" },
       precio_unitario_p:      { required: "Ingresar precio compra", },      
       categoria_insumos_af_p: { required: "Campo requerido", },
+      idtipo_tierra_concreto:  { required: "Campo requerido", },
     },
 
     errorElement: "span",
@@ -2438,6 +2452,7 @@ $(function () {
   $("#categoria_insumos_af_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#color_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#idtipo_tierra_concreto").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 function l_m() {

@@ -28,6 +28,7 @@
 
       $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idcompra_af_general= isset($_POST["idcompra_af_general"]) ? limpiarCadena($_POST["idcompra_af_general"]) : "";
+      $idgrupo             = isset($_POST["idtipo_tierra_concreto"]) ? limpiarCadena($_POST["idtipo_tierra_concreto"]) : "";
       $idcompra_proyecto  = isset($_POST["idcompra_proyecto"]) ? limpiarCadena($_POST["idcompra_proyecto"]) : "";
       $idproveedor        = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
       $fecha_compra       = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
@@ -559,8 +560,18 @@
             $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
             
             echo json_encode( $rspta, true);
+          }else{
+            $rspta = $proveedor->editar($idproveedor_prov, $nombre_prov, $tipo_documento_prov, $num_documento_prov, $direccion_prov, $telefono_prov,
+            $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
+            echo json_encode($rspta, true);
           }
       
+        break;
+
+        case 'mostrar_editar_proveedor':
+          $rspta = $proveedor->mostrar($_POST["idproveedor"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
         break;
 
         // :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S ::::::::::::::::::::::::::
@@ -605,7 +616,7 @@
           if (empty($idproducto_p)) {
 
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p,
+            $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $idgrupo, $nombre_p, $modelo_p,
             $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p,
             $descripcion_p, $img_pefil_p );
       
@@ -623,7 +634,7 @@
               if ($img1_ant != "") {  unlink("../dist/docs/material/img_perfil/" . $img1_ant); }
             }
       
-            $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p,
+            $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $idgrupo, $nombre_p, $modelo_p,
             $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p,
             $descripcion_p, $img_pefil_p );
               
