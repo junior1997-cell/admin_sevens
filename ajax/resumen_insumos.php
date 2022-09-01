@@ -294,41 +294,45 @@
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           $ficha_tecnica = "";
-          // idcompra_proyecto,num_orden, num_comprobante, fecha
-          foreach ($rspta['data'] as $key => $reg) {
-            // validamos si existe una ficha tecnica
-            !empty($reg['ficha_tecnica'])
-              ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-lg text-success"></i></a></center>')
-              : ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-lg text-gray-50"></i></center>');
+          if ($rspta['status']) {
+            // idcompra_proyecto,num_orden, num_comprobante, fecha
+            foreach ($rspta['data'] as $key => $reg) {
+              // validamos si existe una ficha tecnica
+              !empty($reg['ficha_tecnica'])
+                ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-lg text-success"></i></a></center>')
+                : ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-lg text-gray-50"></i></center>');
 
-            $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');
-            $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
+              $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');
+              $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
 
-            $data[] = [    
-              "0" => $cont++,
-              "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-              ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
-              "2" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor']. '</span>',    
-              "3" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',  
-              "4" => $reg['fecha_compra'],
-              "5" => number_format($reg['cantidad'], 2, ".", ","),
-              "6" => '<b>' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
-              "7" => number_format($reg['descuento'], 2, ".", ""),
-              "8" => number_format($reg['subtotal'], 2, ".", ""),
-              // "9" => $ficha_tecnica,
-              "9" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idcompra_proyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
+              $data[] = [    
+                "0" => $cont++,
+                "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
+                "2" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor']. '</span>',    
+                "3" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',  
+                "4" => $reg['fecha_compra'],
+                "5" => number_format($reg['cantidad'], 2, ".", ","),
+                "6" => '<b>' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
+                "7" => number_format($reg['descuento'], 2, ".", ""),
+                "8" => number_format($reg['subtotal'], 2, ".", ""),
+                // "9" => $ficha_tecnica,
+                "9" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idcompra_proyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
 
+              ];
+            }
+
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
             ];
+            echo json_encode($results, true);
+
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
-
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
-            "aaData" => $data,
-          ];
-          echo json_encode($results, true);
-
         break;
 
         case 'sumas_factura_x_material':
@@ -495,6 +499,7 @@
           </div> ';
 
         break;
+        
         // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
 
         case 'tbla_comprobantes_compra':

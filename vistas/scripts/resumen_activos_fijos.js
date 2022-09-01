@@ -165,14 +165,16 @@ function tbla_principal_maquinaria(id_proyecto) {
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap");  }
       // columna: UM
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
+      // columna: Compra
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
-      // columna: Precio actual
       if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -183,7 +185,7 @@ function tbla_principal_maquinaria(id_proyecto) {
 		iDisplayLength: 10,//Paginación
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      { "targets": [ 3 ], "visible": false, "searchable": false }, 
+      // { "targets": [ 3 ], "visible": false, "searchable": false }, 
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
@@ -238,14 +240,16 @@ function tbla_principal_equipo(id_proyecto) {
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: UM
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
+      // columna: Compra
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
-      // columna: Precio actual
       if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -256,7 +260,7 @@ function tbla_principal_equipo(id_proyecto) {
 		iDisplayLength: 10,//Paginación
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      { "targets": [ 3 ], "visible": false, "searchable": false }, 
+      // { "targets": [ 3 ], "visible": false, "searchable": false }, 
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
@@ -311,14 +315,16 @@ function tbla_principal_herramienta(id_proyecto) {
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: UM
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
+      // columna: Compra
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
-      // columna: Precio actual
       if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -329,7 +335,7 @@ function tbla_principal_herramienta(id_proyecto) {
 		iDisplayLength: 10,//Paginación
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      { "targets": [ 3 ], "visible": false, "searchable": false },
+      // { "targets": [ 3 ], "visible": false, "searchable": false },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
@@ -384,14 +390,16 @@ function tbla_principal_oficina(id_proyecto) {
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: UM
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
+      // columna: Compra
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
-      // columna: Precio actual
       if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -402,7 +410,7 @@ function tbla_principal_oficina(id_proyecto) {
 		iDisplayLength: 10,//Paginación
 	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      { "targets": [ 3 ], "visible": false, "searchable": false },
+      // { "targets": [ 3 ], "visible": false, "searchable": false },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
@@ -467,12 +475,12 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
     },
     createdRow: function (row, data, ixdex) {
       // columna: Cantidad
-      if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-right h5"); }
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-right h5"); }
       // columna: Precio actual
       if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }      
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -483,9 +491,9 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 		iDisplayLength: 10,//Paginación
 		order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [      
-      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       //{ targets: [10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
-      { targets: [6,7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
 	}).DataTable();  
 
@@ -1144,6 +1152,56 @@ $("#my-switch_detracc").on("click ", function (e) {
   }
 });
 
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPROBANTES FACTURAS ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+function comprobante_compras(idcompra_proyecto,num_orden, num_comprobante,fecha) {
+  // limpiar_form_comprobante();
+  tbla_comprobantes_compras(idcompra_proyecto, num_orden);
+
+  $("#id_compra_proyecto").val(idcompra_proyecto);
+
+  $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
+  $("#modal-tabla-comprobantes-compra").modal("show"); 
+}
+
+function tbla_comprobantes_compras(id_compra, num_orden) {
+  tabla_comprobantes = $("#tabla-comprobantes-compra").dataTable({
+    responsive: true, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [ ],
+    ajax: {
+      url: `../ajax/resumen_activos_fijos.php?op=tbla_comprobantes_compra&id_compra=${id_compra}&num_orden=${num_orden}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    }, 
+    createdRow: function (row, data, ixdex) {
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-center"); }
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY hh:mm:ss a'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();
+}
+
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S ::::::::::::::::::::::::::::::::::::::::::::::::::::
 // TABLA - MATERIALES
 function tbla_materiales() {
@@ -1293,7 +1351,8 @@ function mostrar_material(idproducto, cont) {
     $("#serie_p").val(e.data.serie);
     $("#marca_p").val(e.data.marca);
     $("#descripcion_p").val(e.data.descripcion);
-
+    $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto);
+    
     $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
     $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));
     $("#precio_sin_igv_p").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
@@ -1646,6 +1705,39 @@ function guardar_proveedor(e) {
   );
 }
 
+function mostrar_para_editar_proveedor() {
+  $("#cargando-7-fomulario").hide();
+  $("#cargando-8-fomulario").show();
+  limpiar_form_proveedor();
+  $('#modal-agregar-proveedor').modal('show');
+  $(".tooltip").remove();
+
+  $.post("../ajax/resumen_activos_fijos.php?op=mostrar_editar_proveedor", { 'idproveedor': $('#idproveedor').select2("val") }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status == true) {     
+      $("#idproveedor_prov").val(e.data.idproveedor);
+      $("#tipo_documento_prov option[value='" + e.data.tipo_documento + "']").attr("selected", true);
+      $("#nombre_prov").val(e.data.razon_social);
+      $("#num_documento_prov").val(e.data.ruc);
+      $("#direccion_prov").val(e.data.direccion);
+      $("#telefono_prov").val(e.data.telefono);
+      $("#banco_prov").val(e.data.idbancos).trigger("change");
+      $("#c_bancaria_prov").val(e.data.cuenta_bancaria);
+      $("#cci_prov").val(e.data.cci);
+      $("#c_detracciones_prov").val(e.data.cuenta_detracciones);
+      $("#titular_cuenta_prov").val(e.data.titular_cuenta);      
+
+      $("#cargando-7-fomulario").show();
+      $("#cargando-8-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); });
+}
+
+
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {
@@ -1822,6 +1914,31 @@ function export_excel_detalle_factura() {
 
 function dowload_pdf() {
   toastr.success("El documento se descargara en breve!!");
+}
+
+function extrae_ruc() {
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
+    $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');
+    $('.btn-editar-proveedor').removeAttr('onclick');
+
+  } else { 
+    if ($('#idproveedor').select2("val") == 1) {
+      $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','No editable');
+    $('.btn-editar-proveedor').removeAttr('onclick');
+
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+
+    } else{
+      var name_proveedor = $('#idproveedor').select2('data')[0].text;
+      $('.btn-editar-proveedor').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_proveedor, 15)}`);   
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+    $('.btn-editar-proveedor').attr('onclick', 'mostrar_para_editar_proveedor(this);');
+
+    }
+  }
+  $('[data-toggle="tooltip"]').tooltip();
 }
 
 init();

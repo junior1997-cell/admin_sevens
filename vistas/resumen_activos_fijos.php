@@ -76,7 +76,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
                                   <th>Cantidad</th>
@@ -94,7 +94,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th>UM</th>
                                   <th class="text-center suma_total_productos_m h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
@@ -127,7 +127,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
                                   <th>Cantidad</th>
@@ -145,7 +145,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th>UM</th>
                                   <th class="text-center suma_total_productos_e h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
@@ -178,7 +178,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
                                   <th>Cantidad</th>
@@ -196,7 +196,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th>UM</th>
                                   <th class="text-center suma_total_productos_h h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
@@ -230,7 +230,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
                                   <th>Cantidad</th>
@@ -248,7 +248,7 @@
                                   <th class="">#</th>
                                   <th class="">Op</th>
                                   <th class="">Producto</th>
-                                  <th class="">Color</th>
+                                  <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th>UM</th>
                                   <th class="text-center suma_total_productos_o h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
@@ -298,11 +298,13 @@
                                   <th>#</th>
                                   <th>Op.</th>
                                   <th>Proveedor</th>
+                                  <th>N° Comprob</th>
                                   <th>Fecha compra</th>
                                   <th data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
                                   <th>Precio</th>  
                                   <th data-toggle="tooltip" data-original-title="Descuento">Dcto.</th>
                                   <th>SubTotal</th>
+                                  <th data-toggle="tooltip" data-original-title="Comprobantes">CFDI.</th>
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                                -->
                                 </tr>
                               </thead>
@@ -314,11 +316,14 @@
                                   <th>#</th>
                                   <th>Op.</th>
                                   <th>Proveedor</th>
+                                  <th>N° Comprob</th>
                                   <th >Fecha compra</th>
                                   <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="px-2 text-nowrap h5"> <div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
                                   <th class="px-2 text-nowrap"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
                                   <th class="px-2 text-nowrap h5"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
+                                  <th data-toggle="tooltip" data-original-title="Comprobantes">CFDI.</th>
+                                 
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
                                 </tr>
                               </tfoot>
@@ -339,19 +344,24 @@
                                   <div class="col-lg-5">
                                     <div class="form-group">
                                       <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
-                                      <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
+                                      <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente" onchange="extrae_ruc();"> </select>
                                     </div>
                                   </div>
 
                                   <!-- adduser -->
                                   <div class="col-lg-1">
                                     <div class="form-group">
-                                      <label for="Add" style="color: white;">.</label>
-                                      <a data-toggle="modal" href="#modal-agregar-proveedor" >
-                                        <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
+                                      <label for="Add" class="d-none d-sm-inline-block text-break" style="color: white;">.</label> <br class="d-none d-sm-inline-block">
+                                      <a data-toggle="modal" href="#modal-agregar-proveedor" class="w-50" >
+                                        <button type="button" class="btn btn-success p-x-6px" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
                                           <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         </button>
                                       </a>
+                                      
+                                      <button type="button" class="btn btn-warning p-x-6px btn-editar-proveedor" data-toggle="tooltip" data-original-title="Editar:" onclick="mostrar_para_editar_proveedor();">
+                                        <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                                      </button>
+
                                     </div>
                                   </div>
 
@@ -712,7 +722,7 @@
 
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_p" id="idproducto_p" />    
-                              <!-- <input type="text" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">                            -->
+                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">
                               <!-- cont registro -->
                               <input type="hidden" name="cont" id="cont" />                           
 
@@ -971,6 +981,49 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- MODAL -  agregar comprobantes - charge -->
+                <div class="modal fade" id="modal-tabla-comprobantes-compra">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                          <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">#</th>
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">#</th>
+                                <th class="">OP</th>
+                                <th>Doc</th>
+                                <th>Fecha</th>                                    
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 
               </section>
               <!-- /.content -->
