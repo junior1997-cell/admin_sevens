@@ -65,6 +65,12 @@ function init() {
 
   $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
+  // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
+  $('#precio_unitario_p').number( true, 2 );
+  $('#precio_sin_igv_p').number( true, 2 );
+  $('#precio_igv_p').number( true, 2 );
+  $('#precio_total_p').number( true, 2 );
+
   // Formato para telefono
   $("[data-mask]").inputmask();
 }

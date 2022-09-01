@@ -745,6 +745,13 @@ table th { vertical-align: top !important; }
 .jq_image_zoom img:hover { cursor: url(../../plugins/jquery-zoom/grab.cur), default; }
 .jq_image_zoom img:active { cursor: url(../../plugins/jquery-zoom/grabbed.cur), default; }
 
+/*  ══════════════════════════════════════════ - T O A S T - ══════════════════════════════════════════ */
+select[readonly].select2-hidden-accessible + .select2-container { pointer-events: none; touch-action: none; }
+
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection { background: #eee; box-shadow: none; }
+
+select[readonly].select2-hidden-accessible + .select2-container .select2-selection__arrow, select[readonly].select2-hidden-accessible + .select2-container .select2-selection__clear { display: none; }
+
 
 /*  ══════════════════════════════════════════ - T O A S T - ══════════════════════════════════════════ */
 /* this will set the toastr style */

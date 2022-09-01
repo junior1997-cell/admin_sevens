@@ -1394,6 +1394,52 @@ function guardar_proveedor(e) {
   });
 }
 
+function mostrar_para_editar_proveedor() {
+  $("#cargando-11-fomulario").hide();
+  $("#cargando-12-fomulario").show();
+
+  $('#modal-agregar-proveedor').modal('show');
+  $(".tooltip").remove();
+
+  $.post("../ajax/compra_insumos.php?op=mostrar_editar_proveedor", { 'idproveedor': $('#idproveedor').select2("val") }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status == true) {     
+      $("#idproveedor_prov").val(e.data.idproveedor);
+      $("#tipo_documento_prov option[value='" + e.data.tipo_documento + "']").attr("selected", true);
+      $("#nombre_prov").val(e.data.razon_social);
+      $("#num_documento_prov").val(e.data.ruc);
+      $("#direccion_prov").val(e.data.direccion);
+      $("#telefono_prov").val(e.data.telefono);
+      $("#banco_prov").val(e.data.idbancos).trigger("change");
+      $("#c_bancaria_prov").val(e.data.cuenta_bancaria);
+      $("#cci_prov").val(e.data.cci);
+      $("#c_detracciones_prov").val(e.data.cuenta_detracciones);
+      $("#titular_cuenta_prov").val(e.data.titular_cuenta);      
+
+      $("#cargando-11-fomulario").show();
+      $("#cargando-12-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); });
+}
+
+function extrae_ruc() {
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
+    $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');
+  } else { 
+    if ($('#idproveedor').select2("val") == 1) {
+      $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','No editable');      
+    } else{
+      var name_proveedor = $('#idproveedor').select2('data')[0].text;
+      $('.btn-editar-proveedor').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_proveedor, 15)}`);      
+    }
+  }
+  $('[data-toggle="tooltip"]').tooltip();
+}
+
 // :::::::::::::::::::::::::: S E C C I O N   P A G O   C O M P R A S  ::::::::::::::::::::::::::
 
 function listar_pagos(idcompra_proyecto, idproyecto, monto_total, total_deposito) {
@@ -2218,6 +2264,17 @@ function actualizar_producto() {
   } 
   
   modificarSubtotales();
+}
+
+function grupo_no_select() {
+  if ($('#categoria_insumos_af_p').select2("val") == null || $('#idproveedor').select2("val") == '') { 
+    $("#idtipo_tierra_concreto").attr("readonly", false);
+  } else if ($('#categoria_insumos_af_p').select2("val") == '1') {     
+    $("#idtipo_tierra_concreto").attr("readonly", false);   
+  } else { 
+    $("#idtipo_tierra_concreto").val("1").trigger("change");   
+    $("#idtipo_tierra_concreto").attr("readonly", true);
+  }
 }
 
 init();

@@ -1044,7 +1044,7 @@
                                 <div class="col-7 col-sm-7 col-md-8 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_unitario_p">Precio <sup class="text-danger">*</sup></label>
-                                    <input type="number" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                    <input type="text" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
                                   </div>
                                 </div>
 
@@ -1068,7 +1068,7 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_sin_igv_p">Sub Total</label>
-                                    <input type="number" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                    <input type="text" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                   </div>
                                 </div>
 
@@ -1076,7 +1076,7 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_igv_p">IGV</label>
-                                    <input type="number" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
+                                    <input type="text" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
                                   </div>
                                 </div>
 
@@ -1084,7 +1084,7 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="precio_total_p">Total</label>
-                                    <input type="number" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
+                                    <input type="text" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
                                   </div>
                                 </div>
 

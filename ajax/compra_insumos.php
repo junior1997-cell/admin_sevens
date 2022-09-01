@@ -180,8 +180,19 @@ if (!isset($_SESSION["nombre"])) {
           $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
           
           echo json_encode($rspta, true);
+        }else{
+          $rspta=$proveedor->editar($idproveedor_prov, $nombre_prov, $tipo_documento_prov, $num_documento_prov, $direccion_prov, $telefono_prov,
+          $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
+          
+          echo json_encode($rspta, true);
         }
     
+      break;
+
+      case 'mostrar_editar_proveedor':
+        $rspta = $proveedor->mostrar($_POST["idproveedor"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
       break;
     
       // :::::::::::::::::::::::::: S E C C I O N   C O M P R A  ::::::::::::::::::::::::::
