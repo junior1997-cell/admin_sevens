@@ -167,28 +167,35 @@
                                   <input type="hidden" name="idproyecto" id="idproyecto" />
                                   <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
 
-                                  <!-- Tipo de Empresa -->
-                                  <div class="col-lg-5">
+                                  <!-- Proveedor -->
+                                  <div class="col-sm-10 col-md-10 col-lg-5">
                                     <div class="form-group">
                                       <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
-                                      <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
+                                      <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente" onchange="extrae_ruc();"> </select>
                                     </div>
                                   </div>
 
                                   <!-- adduser -->
-                                  <div class="col-lg-1">
+                                  <div class="col-sm-2 col-md-2 col-lg-1">
                                     <div class="form-group">
-                                      <label for="Add" style="color: white;">.</label>
-                                      <a data-toggle="modal" href="#modal-agregar-proveedor" >
-                                        <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
+                                      <label for="Add" class="d-none d-sm-inline-block text-break" style="color: white;">.</label> <br class="d-none d-sm-inline-block">
+                                      <a data-toggle="modal" href="#modal-agregar-proveedor" class="w-50">
+                                        <button type="button" class="btn btn-success p-x-6px " data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
                                           <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         </button>
                                       </a>
+
+                                      <button type="button" class="btn btn-warning p-x-6px btn-editar-proveedor" data-toggle="tooltip" data-original-title="Editar:" onclick="mostrar_para_editar_proveedor();">
+                                        <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                                      </button>
+
+
                                     </div>
+
                                   </div>
 
                                   <!-- fecha -->
-                                  <div class="col-lg-3">
+                                  <div class="col-sm-6 col-md-6 col-lg-3">
                                     <div class="form-group">
                                       <label for="fecha_compra">Fecha <sup class="text-danger">*</sup></label>
                                       <input type="date" name="fecha_compra" id="fecha_compra" class="form-control" placeholder="Fecha" />
@@ -196,7 +203,7 @@
                                   </div>
 
                                   <!-- Glosa -->
-                                  <div class="col-lg-3">
+                                  <div class="col-sm-6 col-md-6 col-lg-3">
                                     <div class="form-group">
                                       <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
@@ -207,7 +214,7 @@
                                   </div>
 
                                   <!-- Tipo de comprobante -->
-                                  <div class="col-lg-4" id="content-tipo-comprobante">
+                                  <div class="col-sm-6 col-md-6 col-lg-4" id="content-tipo-comprobante">
                                     <div class="form-group">
                                       <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">*</sup></label>
                                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2"  onchange="default_val_igv(); modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
@@ -220,7 +227,7 @@
                                   </div>
 
                                   <!-- serie_comprobante-->
-                                  <div class="col-lg-2" id="content-serie-comprobante">
+                                  <div class="col-sm-6 col-md-6 col-lg-2" id="content-serie-comprobante">
                                     <div class="form-group">
                                       <label for="serie_comprobante">N° de Comprobante</label>
                                       <input type="text" name="serie_comprobante" id="serie_comprobante" class="form-control" placeholder="N° de Comprobante" />
@@ -228,7 +235,7 @@
                                   </div>
 
                                   <!-- IGV-->
-                                  <div class="col-lg-1" id="content-igv">
+                                  <div class="col-sm-6 col-md-6 col-lg-1" id="content-igv">
                                     <div class="form-group">
                                       <label for="val_igv">IGV <sup class="text-danger">*</sup></label>
                                       <input type="text" name="val_igv" id="val_igv" class="form-control" value="0.18" onkeyup="modificarSubtotales();" />
@@ -537,13 +544,13 @@
 
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_p" id="idproducto_p" /> 
-                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">                           
+                              <!-- <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">                            -->
 
                               <!-- cont registro -->
                               <input type="hidden" name="cont" id="cont" />                              
 
                               <!-- Nombre -->
-                              <div class="col-lg-8 class_pading">
+                              <div class="col-lg-12 class_pading">
                                 <div class="form-group">
                                   <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
@@ -551,10 +558,18 @@
                               </div>
 
                               <!-- Categoria -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
+                                  <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;" onchange="grupo_no_select();"> 
+                                  </select>
+                                </div>
+                              </div>
+                              <!-- Grupo -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="idtipo_tierra_concreto">Grupo <sup class="text-danger">(unico*)</sup></label>
+                                  <select name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" class="form-control select2" style="width: 100%;"> 
                                   </select>
                                 </div>
                               </div>

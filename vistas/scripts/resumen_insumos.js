@@ -29,6 +29,8 @@ function init(){
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2TierraConcreto", '#idtipo_tierra_concreto', null);
+
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
@@ -48,6 +50,8 @@ function init(){
   $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#color_p").select2({ templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
+  $("#idtipo_tierra_concreto").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
+
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -1014,6 +1018,8 @@ function limpiar_materiales() {
   $("#serie_p").val("");
   $("#marca_p").val("");
   $("#descripcion_p").val("");
+  $("#idtipo_tierra_concreto").val("").trigger("change");
+
 
   $("#precio_unitario_p").val("");
   $("#precio_sin_igv_p").val("");
@@ -1119,7 +1125,8 @@ function mostrar_material(idproducto, cont) {
     $("#serie_p").val(e.data.serie);
     $("#marca_p").val(e.data.marca);
     $("#descripcion_p").val(e.data.descripcion);
-    $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto);
+    $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto).trigger("change");    
+
 
     $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
     $("#estado_igv_p").val(parseFloat(e.data.estado_igv).toFixed(2));
@@ -1165,6 +1172,17 @@ function mostrar_material(idproducto, cont) {
     $("#cargando-4-fomulario").hide();
 
   }).fail( function(e) { ver_errores(e); } ); 
+}
+
+function grupo_no_select() {
+  if ($('#categoria_insumos_af_p').select2("val") == null || $('#idproveedor').select2("val") == '') { 
+    $("#idtipo_tierra_concreto").attr("readonly", false);
+  } else if ($('#categoria_insumos_af_p').select2("val") == '1') {     
+    $("#idtipo_tierra_concreto").attr("readonly", false);   
+  } else { 
+    $("#idtipo_tierra_concreto").val("1").trigger("change");   
+    $("#idtipo_tierra_concreto").attr("readonly", true);
+  }
 }
 
 // DETALLE DEL MATERIAL
@@ -1478,6 +1496,38 @@ function guardar_proveedor(e) {
   );
 }
 
+function mostrar_para_editar_proveedor() {
+  $("#cargando-7-fomulario").hide();
+  $("#cargando-8-fomulario").show();
+  limpiar_form_proveedor();
+  $('#modal-agregar-proveedor').modal('show');
+  $(".tooltip").remove();
+
+  $.post("../ajax/resumen_insumos.php?op=mostrar_editar_proveedor", { 'idproveedor': $('#idproveedor').select2("val") }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status == true) {     
+      $("#idproveedor_prov").val(e.data.idproveedor);
+      $("#tipo_documento_prov option[value='" + e.data.tipo_documento + "']").attr("selected", true);
+      $("#nombre_prov").val(e.data.razon_social);
+      $("#num_documento_prov").val(e.data.ruc);
+      $("#direccion_prov").val(e.data.direccion);
+      $("#telefono_prov").val(e.data.telefono);
+      $("#banco_prov").val(e.data.idbancos).trigger("change");
+      $("#c_bancaria_prov").val(e.data.cuenta_bancaria);
+      $("#cci_prov").val(e.data.cci);
+      $("#c_detracciones_prov").val(e.data.cuenta_detracciones);
+      $("#titular_cuenta_prov").val(e.data.titular_cuenta);      
+
+      $("#cargando-7-fomulario").show();
+      $("#cargando-8-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); });
+}
+
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {
@@ -1490,6 +1540,8 @@ $(function () {
   $("#categoria_insumos_af_p").on('change', function() { $(this).trigger('blur'); });
   $("#color_p").on('change', function() { $(this).trigger('blur'); });
   $("#unidad_medida_p").on('change', function() { $(this).trigger('blur'); });
+  $("#idtipo_tierra_concreto").on('change', function() { $(this).trigger('blur'); });
+
 
   $("#form-compras").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -1590,6 +1642,8 @@ $(function () {
       unidad_medida_p:    { required: true },
       precio_unitario_p:{ required: true },
       descripcion_p:    { minlength: 3 },
+      idtipo_tierra_concreto:  { required: true },
+
     },
     messages: {
       nombre_p:         { required: "Campo requerido", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
@@ -1598,6 +1652,8 @@ $(function () {
       unidad_medida_p:  { required: "Campo requerido" },
       precio_unitario_p:{ required: "Ingresar precio compra", },      
       descripcion_p:    { minlength: "Minimo 3 caracteres" },
+      idtipo_tierra_concreto:  { required: "Campo requerido", },
+
     },
 
     errorElement: "span",
@@ -1630,6 +1686,7 @@ $(function () {
   $("#categoria_insumos_af_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#color_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#idtipo_tierra_concreto").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
 });
 
@@ -1668,6 +1725,30 @@ function export_excel_detalle_factura() {
   let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
+}
+function extrae_ruc() {
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
+    $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');
+    $('.btn-editar-proveedor').removeAttr('onclick');
+
+  } else { 
+    if ($('#idproveedor').select2("val") == 1) {
+      $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','No editable');
+    $('.btn-editar-proveedor').removeAttr('onclick');
+
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+
+    } else{
+      var name_proveedor = $('#idproveedor').select2('data')[0].text;
+      $('.btn-editar-proveedor').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_proveedor, 15)}`);   
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+    $('.btn-editar-proveedor').attr('onclick', 'mostrar_para_editar_proveedor(this);');
+
+    }
+  }
+  $('[data-toggle="tooltip"]').tooltip();
 }
 
 
