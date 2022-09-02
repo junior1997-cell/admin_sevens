@@ -149,7 +149,11 @@ function tbla_principal_maquinaria(id_proyecto) {
 		aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5',  'pdf' ],
+    buttons: [ 
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+    ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_maquinaria&id_proyecto='+id_proyecto,
       type : "get",
@@ -186,6 +190,8 @@ function tbla_principal_maquinaria(id_proyecto) {
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
       // { "targets": [ 3 ], "visible": false, "searchable": false }, 
+      { "targets": [ 11 ], "visible": false, "searchable": false },
+      { "targets": [ 12 ], "visible": false, "searchable": false },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
@@ -224,7 +230,11 @@ function tbla_principal_equipo(id_proyecto) {
 		aProcessing: true,//Activamos el procesamiento del datatables
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-	  buttons: ['copyHtml5', 'excelHtml5', 'pdf' ],
+    buttons: [ 
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+    ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_equipo&id_proyecto='+id_proyecto,
       type : "get",
@@ -261,6 +271,8 @@ function tbla_principal_equipo(id_proyecto) {
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
       // { "targets": [ 3 ], "visible": false, "searchable": false }, 
+      { "targets": [ 11 ], "visible": false, "searchable": false },
+      { "targets": [ 12 ], "visible": false, "searchable": false },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
@@ -299,7 +311,11 @@ function tbla_principal_herramienta(id_proyecto) {
 		aProcessing: true,//Activamos el procesamiento del datatables
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-	  buttons: ['copyHtml5', 'excelHtml5', 'pdf' ],
+    buttons: [ 
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+    ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_herramienta&id_proyecto='+id_proyecto,
       type : "get",
@@ -336,6 +352,8 @@ function tbla_principal_herramienta(id_proyecto) {
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
       // { "targets": [ 3 ], "visible": false, "searchable": false },
+      { "targets": [ 11 ], "visible": false, "searchable": false },
+      { "targets": [ 12 ], "visible": false, "searchable": false },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
@@ -374,7 +392,11 @@ function tbla_principal_oficina(id_proyecto) {
 		aProcessing: true,//Activamos el procesamiento del datatables
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-	  buttons: ['copyHtml5', 'excelHtml5', 'pdf' ],
+    buttons: [ 
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+    ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_oficina&id_proyecto='+id_proyecto,
       type : "get",
@@ -410,7 +432,8 @@ function tbla_principal_oficina(id_proyecto) {
 		iDisplayLength: 10,//Paginación
 	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      // { "targets": [ 3 ], "visible": false, "searchable": false },
+      { "targets": [ 11 ], "visible": false, "searchable": false },
+      { "targets": [ 12 ], "visible": false, "searchable": false },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();

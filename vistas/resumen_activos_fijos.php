@@ -84,6 +84,8 @@
                                   <th>Precio promedio</th> 
                                   <th>Precio actual</th>    
                                   <th>Suma Total</th>                      
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>                      
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -102,6 +104,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_m">0.00</span></div></th>                               
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>  
                                 </tr>
                               </tfoot>
                             </table>
@@ -134,7 +138,9 @@
                                   <th>Compra</th> 
                                   <th>Precio promedio</th> 
                                   <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
+                                  <th>Suma Total</th>  
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>                      
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -153,6 +159,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_e">0.00</span></div></th>                               
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>  
                                 </tr>
                               </tfoot>
                             </table>
@@ -185,7 +193,9 @@
                                   <th>Compra</th> 
                                   <th>Precio promedio</th> 
                                   <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
+                                  <th>Suma Total</th>   
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>                     
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -204,6 +214,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_h">0.00</span></div></th>                               
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>  
                                 </tr>
                               </tfoot>
                             </table>
@@ -237,7 +249,9 @@
                                   <th>Compra</th> 
                                   <th>Precio promedio</th> 
                                   <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
+                                  <th>Suma Total</th>   
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>                     
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -256,6 +270,8 @@
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
                                   <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_o">0.00</span></div></th>                               
+                                  <th>Activo</th>                      
+                                  <th>Modelo</th>  
                                 </tr>
                               </tfoot>
                             </table>

@@ -110,6 +110,8 @@
               "8" => number_format($reg->promedio_precio, 2, ".", ""),
               "9" => number_format($reg->precio_actual, 2, ".", ""),
               "10" => number_format($reg->precio_total, 2, ".", ""),             
+              "11" => $reg->nombre_producto,             
+              "12" => $reg->modelo,             
             ];
           }
 
@@ -163,7 +165,9 @@
               "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre_producto, ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"></i></button>' . $toltip,
               "8" => number_format($reg->promedio_precio, 2, ".", ""),
               "9" => number_format($reg->precio_actual, 2, ".", ""),
-              "10" => number_format($reg->precio_total, 2, ".", ""),             
+              "10" => number_format($reg->precio_total, 2, ".", ""), 
+              "11" => $reg->nombre_producto,             
+              "12" => $reg->modelo,              
             ];
           }
 
@@ -217,7 +221,9 @@
               "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre_producto, ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
               "8" => number_format($reg->promedio_precio, 2, ".", ""),
               "9" => number_format($reg->precio_actual, 2, ".", ""),
-              "10" => number_format($reg->precio_total, 2, ".", ""),             
+              "10" => number_format($reg->precio_total, 2, ".", ""),   
+              "11" => $reg->nombre_producto,             
+              "12" => $reg->modelo,            
             ];
           }
 
@@ -271,7 +277,9 @@
               "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg->idproyecto . ', ' . $reg->idproducto . ', \'' .  htmlspecialchars($reg->nombre_producto, ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg->precio_total, 2, ".", ",") . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"></i></button>' . $toltip,
               "8" => number_format($reg->promedio_precio, 2, ".", ""),
               "9" => number_format($reg->precio_actual, 2, ".", ""),
-              "10" => number_format($reg->precio_total, 2, ".", ""),             
+              "10" => number_format($reg->precio_total, 2, ".", ""),       
+              "11" => $reg->nombre_producto,             
+              "12" => $reg->modelo,        
             ];
           }
 

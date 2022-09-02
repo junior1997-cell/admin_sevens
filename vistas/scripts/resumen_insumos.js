@@ -156,7 +156,11 @@ function tbla_principal(id_proyecto) {
 		aProcessing: true,//Activamos el procesamiento del datatables
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-	  buttons: [ { extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"],
+	  buttons: [ 
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,8,9,10], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,8,9,10], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+    ],
 		ajax:	{
       url: '../ajax/resumen_insumos.php?op=tbla_principal&id_proyecto='+id_proyecto,
       type : "get",
