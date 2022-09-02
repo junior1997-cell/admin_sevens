@@ -498,6 +498,7 @@ function formato_banco() {
     }).fail( function(e) { ver_errores(e); } );
   }
 }
+// ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R E S :::::::::::::::::::::::::::::::::::::::::::::
 
 
 //guardar proveedor
@@ -516,6 +517,39 @@ function guardar_proveedor(e) {
   );
 
 }
+
+function mostrar_para_editar_proveedor() {
+  $("#cargando-7-fomulario").hide();
+  $("#cargando-8-fomulario").show();
+  limpiar_form_proveedor();
+  $('#modal-agregar-proveedor').modal('show');
+  $(".tooltip").remove();
+
+  $.post("../ajax/resumen_activos_fijos_general.php?op=mostrar_editar_proveedor", { 'idproveedor': $('#idproveedor').select2("val") }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);
+
+    if (e.status == true) {     
+      $("#idproveedor_prov").val(e.data.idproveedor);
+      $("#tipo_documento_prov option[value='" + e.data.tipo_documento + "']").attr("selected", true);
+      $("#nombre_prov").val(e.data.razon_social);
+      $("#num_documento_prov").val(e.data.ruc);
+      $("#direccion_prov").val(e.data.direccion);
+      $("#telefono_prov").val(e.data.telefono);
+      $("#banco_prov").val(e.data.idbancos).trigger("change");
+      $("#c_bancaria_prov").val(e.data.cuenta_bancaria);
+      $("#cci_prov").val(e.data.cci);
+      $("#c_detracciones_prov").val(e.data.cuenta_detracciones);
+      $("#titular_cuenta_prov").val(e.data.titular_cuenta);      
+
+      $("#cargando-7-fomulario").show();
+      $("#cargando-8-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); });
+}
+
 
 // ::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P R O D U C T O S :::::::::::::::::::::::::::::::::::::::::::::
 
@@ -681,6 +715,7 @@ function mostrar_material(idproducto, cont) {
       $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
       $("#color_p").val(e.data.idcolor).trigger("change");  
       $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");    
+      $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto)    
 
       if (e.data.estado_igv == "1") {
         $("#my-switch_igv").prop("checked", true);
@@ -987,12 +1022,12 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
     },
     createdRow: function (row, data, ixdex) {
       // columna: Cantidad
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-right h5"); }
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-right h5"); }
       // columna: Precio actual
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }      
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }      
+      if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -1003,8 +1038,8 @@ function tbla_facuras(  idproducto, nombre_producto, precio_promedio, subtotal_x
 		iDisplayLength: 10,//Paginación
 		order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs:[       
-      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
 
     ]
 	}).DataTable();  
@@ -1736,6 +1771,69 @@ function ver_detalle_compras(idcompra_proyecto, op) {
 $("#my-switch_detracc").on("click ", function (e) {
   if ($("#my-switch_detracc").is(":checked")) { $("#estado_detraccion").val("1"); } else { $("#estado_detraccion").val("0"); }
 });
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPROBANTES FACTURAS ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+function comprobantes_compras(idcompra_proyecto,num_orden, num_comprobante,fecha) {
+  // limpiar_form_comprobante();
+  tbla_comprobantes_compras(idcompra_proyecto, num_orden);
+
+  $("#id_compra_proyecto").val(idcompra_proyecto);
+
+  $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
+  $("#modal-tabla-comprobantes-compra").modal("show"); 
+}
+
+function tbla_comprobantes_compras(id_compra, num_orden) {
+  tabla_comprobantes = $("#tabla-comprobantes-compra").dataTable({
+    responsive: true, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [ ],
+    ajax: {
+      url: `../ajax/resumen_activos_fijos.php?op=tbla_comprobantes_compra&id_compra=${id_compra}&num_orden=${num_orden}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    }, 
+    createdRow: function (row, data, ixdex) {
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-center"); }
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY hh:mm:ss a'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();
+}
+function comprobante_unico(imagen, num_orden,num_comprobante,fecha) {
+  $("#detalle_comprobante").html(num_comprobante+'  '+fecha)
+  $("#img-vaucher").attr("src", "");
+  $("#modal-ver-vaucher").modal("show");
+  $("#img-vaucher").attr("src", "../dist/docs/compra_activo_fijo/comprobante_compra/" + imagen);
+  $("#descargar_voucher_pago").attr("href", "../dist/docs/compra_activo_fijo/comprobante_compra/" + imagen);
+  $("#descargar_voucher_pago").attr("download", `Vaucher pago: activo fijo - ${num_comprobante} - ${fecha}`);
+
+  $("#ver_completo_voucher_pago").attr("href", "../dist/docs/compra_activo_fijo/comprobante_compra/" + imagen);
+
+  $(".tooltip").remove();
+}
+
+
 
 
 // ::::::::::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::::::::
@@ -1930,6 +2028,31 @@ function export_excel_detalle_factura() {
   let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
+}
+
+function extrae_ruc() {
+  if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
+    $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');
+    $('.btn-editar-proveedor').removeAttr('onclick');
+
+  } else { 
+    if ($('#idproveedor').select2("val") == 1) {
+      $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','No editable');
+    $('.btn-editar-proveedor').removeAttr('onclick');
+
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+
+    } else{
+      var name_proveedor = $('#idproveedor').select2('data')[0].text;
+      $('.btn-editar-proveedor').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_proveedor, 15)}`);   
+      var ruc = $('#idproveedor').select2('data')[0].element.attributes.ruc.value; //console.log(ruc);
+      $('#ruc_proveedor').val(ruc);
+    $('.btn-editar-proveedor').attr('onclick', 'mostrar_para_editar_proveedor(this);');
+
+    }
+  }
+  $('[data-toggle="tooltip"]').tooltip();
 }
 
 init();

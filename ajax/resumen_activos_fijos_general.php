@@ -56,6 +56,7 @@
       $unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;
       $color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;
       $categoria_insumos_af_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
+      $id_grupo         = isset($_POST["idtipo_tierra_concreto"]) ? limpiarCadena($_POST["idtipo_tierra_concreto"]) : "" ;
       $nombre_p         = isset($_POST["nombre_p"]) ? encodeCadenaHtml($_POST["nombre_p"]) : "" ;
       $modelo_p         = isset($_POST["modelo_p"]) ? encodeCadenaHtml($_POST["modelo_p"]) : "" ;
       $serie_p          = isset($_POST["serie_p"]) ? encodeCadenaHtml($_POST["serie_p"]) : "" ;
@@ -164,11 +165,18 @@
 
           if ($rspta['status']) {
             foreach ($rspta['data'] as $key => $reg) {
-              $ficha_tecnica = "";
+              $ficha_tecnica = ""; $comprobantes="";
               !empty($reg['ficha_tecnica'])
                 ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
                 : ($ficha_tecnica = '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
     
+                $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');
+                $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
+  
+                (!empty($reg['idproyecto'])?
+                $comprobantes='<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobantes_compras(\''.$reg['idcompra'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip :
+                $comprobantes='<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_unico(\''.$reg['cant_comprobantes'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip);
+
               $data[] = [
                 "0" => $cont++,
                 "1" => empty($reg['idproyecto']) ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra'] . ', \'' . $op_general . '\')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>'.
@@ -177,12 +185,15 @@
                   ' <button class="btn btn-warning btn-sm" onclick="editar_detalle_compras(' .  $reg['idcompra'] . ', \'' . $op_proyecto . '\');" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>',
                 "2" => $reg['modulo'],
                 "3" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor'] . '</span>',
-                "4" => $reg['fecha_compra'],
-                "5" => number_format($reg['cantidad'], 2, ".", ","),
-                "6" => '<b class="h5 font-weight-bold">' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
-                "7" => number_format($reg['descuento'], 2, ".", ""),
-                "8" => number_format($reg['subtotal'], 2, ".", ""),
-                "9" => $ficha_tecnica,
+                "4" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',  
+                "5" => $reg['fecha_compra'],
+                "6" => number_format($reg['cantidad'], 2, ".", ","),
+                "7" => '<b class="h5 font-weight-bold">' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
+                "8" => number_format($reg['descuento'], 2, ".", ""),
+                "9" => number_format($reg['subtotal'], 2, ".", ""),
+                "10" => $comprobantes,
+                // '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idproyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
+                "11" => $ficha_tecnica,
               ];
             }
     
@@ -546,7 +557,7 @@
 
           if (empty($idproducto_p)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p,
+            $rspta = $activos_fijos->insertar( $unidad_medida_p, $color_p, $categoria_insumos_af_p,$id_grupo, $nombre_p, $modelo_p,
               $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p,  $ficha_tecnica_p,
               $descripcion_p,  $img_pefil_p );
 
@@ -563,7 +574,7 @@
               }
             }
 
-            $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p, $nombre_p, $modelo_p,
+            $rspta = $activos_fijos->editar( $idproducto_p, $unidad_medida_p, $color_p, $categoria_insumos_af_p,$id_grupo, $nombre_p, $modelo_p,
               $serie_p, $marca_p, $estado_igv_p, $precio_unitario_p, $precio_igv_p, $precio_sin_igv_p, $precio_total_p, $ficha_tecnica_p,
               $descripcion_p, $img_pefil_p );
             //var_dump($idactivos_fijos,$idproveedor);
@@ -681,16 +692,59 @@
             $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
             
             echo json_encode($rspta, true);
+          }else{
+
+            $rspta = $proveedor->editar($idproveedor_prov, $nombre_prov, $tipo_documento_prov, $num_documento_prov, $direccion_prov, $telefono_prov,
+            $c_bancaria_prov, $cci_prov, $c_detracciones_prov, $banco_prov, $titular_cuenta_prov);
+            echo json_encode($rspta, true);
           }
 
+        break;
+
+        case 'mostrar_editar_proveedor':
+          $rspta = $proveedor->mostrar($_POST["idproveedor"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
         break;
 
         default: 
           $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
         break;
         
+                            
+        // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
+
+        case 'tbla_comprobantes_compra':
+          $cont_compra = $_GET["num_orden"];
+          $id_compra = $_GET["id_compra"];
+          $rspta = $compra->tbla_comprobantes( $id_compra );
+          //Vamos a declarar un array
+          $data = []; $cont = 1;        
+          
+          if ($rspta['status']) {
+            while ($reg = $rspta['data']->fetch_object()) {
+              $data[] = [
+                "0" => $cont,
+                "1" => '<div class="text-nowrap">'.
+                ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.'·'.$cont.' '.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>              
+                </div>'.$toltip,
+                "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
+                "3" => $reg->updated_at,
+              ];
+              $cont++;
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
+            ];
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+        break;
       }
-      
       //Fin de las validaciones de acceso
     } else {
       $retorno = ['status'=>'nopermiso', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];

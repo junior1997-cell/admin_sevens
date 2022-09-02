@@ -318,11 +318,13 @@
                                   <th>Op.</th>
                                   <th>Módulo</th>
                                   <th>Proveedor</th>
+                                   <th>N° Comprob.</th>
                                   <th>Fecha compra</th>
                                   <th data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
                                   <th>Precio</th>  
                                   <th data-toggle="tooltip" data-original-title="Descuento">Dcto.</th>
                                   <th>SubTotal</th>
+                                  <th>CFDI</th>
                                   <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                                -->
                                 </tr>
                               </thead>
@@ -335,12 +337,13 @@
                                   <th>Op.</th>
                                   <th>Módulo</th>
                                   <th>Proveedor</th>
+                                   <th>N° Comprob.</th>
                                   <th >Fecha compra</th>
                                   <th class="cantidad_x_producto text-center" data-toggle="tooltip" data-original-title="Suma total de cantidad"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="px-2 text-nowrap h5" data-toggle="tooltip" data-original-title="Precio promedio"> <div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
                                   <th class="px-2 text-nowrap" data-toggle="tooltip" data-original-title="Suma total de descuento"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
                                   <th class="px-2 text-nowrap h5" data-toggle="tooltip" data-original-title="Suma"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
-                                  <!-- <th data-toggle="tooltip" data-original-title="Ficha Técnica">FT</th>                         -->
+                                  <th>CFDI</th>                        
                                 </tr>
                               </tfoot>
                             </table>
@@ -363,19 +366,24 @@
                                   <div class="col-lg-5">
                                     <div class="form-group">
                                       <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
-                                      <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente"> </select>
+                                      <select id="idproveedor" name="idproveedor" class="form-control select2" data-live-search="true" required title="Seleccione cliente" onchange="extrae_ruc();"> </select>
                                     </div>
                                   </div>
 
                                   <!-- adduser -->
                                   <div class="col-lg-1">
                                     <div class="form-group">
-                                      <label for="Add" style="color: white;">.</label>
-                                      <a data-toggle="modal" href="#modal-agregar-proveedor" >
-                                        <button type="button" class="btn btn-success btn-block" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
+                                      <label for="Add" class="d-none d-sm-inline-block text-break" style="color: white;">.</label> <br class="d-none d-sm-inline-block">
+                                      <a data-toggle="modal" href="#modal-agregar-proveedor"  class="w-50">
+                                        <button type="button" class="btn btn-success p-x-6px" data-toggle="tooltip" data-original-title="Agregar Provedor" onclick="limpiar_form_proveedor();">
                                           <i class="fa fa-user-plus" aria-hidden="true"></i>
                                         </button>
                                       </a>
+                                                                            
+                                      <button type="button" class="btn btn-warning p-x-6px btn-editar-proveedor" data-toggle="tooltip" data-original-title="Editar:" onclick="mostrar_para_editar_proveedor();">
+                                        <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                                      </button>
+
                                     </div>
                                   </div>
 
@@ -771,6 +779,8 @@
                             <div class="row" id="cargando-3-fomulario">
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_p" id="idproducto_p" />
+                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">
+
                               <input type="hidden" name="cont" id="cont" />
 
                               <!-- Nombre -->
@@ -990,7 +1000,79 @@
                       </div>
                     </div>
                   </div>
-                </div>                
+                </div>   
+                
+                <!-- MODAL -  agregar comprobantes - charge -->
+                <div class="modal fade" id="modal-tabla-comprobantes-compra">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                          <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">#</th>
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">#</th>
+                                <th class="">OP</th>
+                                <th>Doc</th>
+                                <th>Fecha</th>                                    
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal-- comprobante unico -->
+                <div class="modal fade" id="modal-ver-vaucher">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xm">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white">Comprobante: <b class="detalle_comprobante"></b></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row text-center" >
+
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                            <a class="btn btn-warning btn-block btn-xs" href="#" id="descargar_voucher_pago" download="Voucher" type="button" data-toggle="tooltip" data-original-title="Descargar Voucher"><i class="fas fa-download"></i></a>
+                          </div>
+
+                          <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                            <a class="btn btn-info btn-block btn-xs" target="_blank" href="#" id="ver_completo_voucher_pago" data-toggle="tooltip" data-original-title="Ver completo"><i class="fas fa-expand"></i></a>
+                          </div>
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 mt-3">
+                            <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="img-vaucher" style="cursor: pointer !important;" width="auto" />
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
               </section>
               <!-- /.content -->

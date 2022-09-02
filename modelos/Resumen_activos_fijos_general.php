@@ -80,8 +80,8 @@ class Resumen_activos_fijos_general
   public function ver_precios_y_mas($idproducto) {
     $data = [];
      
-    $sql_1 = "SELECT  cafg.idcompra_af_general, cafg.fecha_compra, dcafg.ficha_tecnica_producto AS ficha_tecnica, 
-		pr.nombre AS nombre_producto, dcafg.cantidad, dcafg.precio_con_igv , dcafg.descuento , dcafg.subtotal, prov.razon_social AS proveedor
+    $sql_1 = "SELECT  cafg.idcompra_af_general, cafg.fecha_compra, dcafg.ficha_tecnica_producto AS ficha_tecnica, cafg.comprobante,
+		cafg.tipo_comprobante,cafg.serie_comprobante,pr.nombre AS nombre_producto, dcafg.cantidad, dcafg.precio_con_igv , dcafg.descuento , dcafg.subtotal, prov.razon_social AS proveedor
 		FROM compra_af_general AS cafg, detalle_compra_af_g AS dcafg, producto AS pr,proveedor AS prov
 		WHERE cafg.idcompra_af_general = dcafg.idcompra_af_general AND dcafg.idproducto = pr.idproducto AND cafg.estado = '1' AND cafg.idproveedor = prov.idproveedor 
 		AND dcafg.idproducto = '$idproducto' ORDER BY cafg.fecha_compra DESC";
@@ -89,19 +89,26 @@ class Resumen_activos_fijos_general
     $compra_af_general = ejecutarConsultaArray($sql_1);
 
     if ($compra_af_general['status']) {
-      if (!empty($compra_af_general['data'])) {
+
+      if (!empty($compra_af_general['data'])) {       
+
         foreach ($compra_af_general['data'] as $key => $value) {
+
+         // $cantidad_comprobantes = (!empty($value['cantid_comprobantes'])) ? $value['cantid_comprobantes'] : '' ;
           $data[] = [
             'idproyecto' => '',
             'idcompra' => $value['idcompra_af_general'],
             'fecha_compra' => $value['fecha_compra'],
             'ficha_tecnica' => $value['ficha_tecnica'],
+            'tipo_comprobante' => $value['tipo_comprobante'],
+            'serie_comprobante' => $value['serie_comprobante'],
             'nombre_producto' => $value['nombre_producto'],
             'cantidad' => $value['cantidad'],
             'precio_con_igv' => $value['precio_con_igv'],
             'descuento' => $value['descuento'],
             'subtotal' => $value['subtotal'],
             'proveedor' => $value['proveedor'],
+            'cant_comprobantes' => $value['comprobante'],
             'modulo' => 'Compras de Activo Fijo',
           ];
         }
@@ -110,7 +117,7 @@ class Resumen_activos_fijos_general
       return $compra_af_general;
     }
 
-    $sql_2 = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
+    $sql_2 = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, cpp.tipo_comprobante, cpp.serie_comprobante,
 		pr.nombre AS nombre_producto, dc.cantidad, dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
@@ -122,17 +129,28 @@ class Resumen_activos_fijos_general
     if ($compras_proyecto['status']) {
       if (!empty($compras_proyecto['data'])) {
         foreach ($compras_proyecto['data'] as $key => $value) {
+
+          $idcompra_proyecto = $value['idcompra_proyecto'];
+    
+          $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+          $cant_comprobantes = ejecutarConsultaSimpleFila($sql3);
+          if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
+
+
           $data[] = [
             'idproyecto' => $value['idproyecto'],
             'idcompra' => $value['idcompra_proyecto'],
             'fecha_compra' => $value['fecha_compra'],
-            'ficha_tecnica' => $value['ficha_tecnica'],
+            'ficha_tecnica' => $value['ficha_tecnica'],            
+            'tipo_comprobante' => $value['tipo_comprobante'],
+            'serie_comprobante' => $value['serie_comprobante'],
             'nombre_producto' => $value['nombre_producto'],
             'cantidad' => $value['cantidad'],
             'precio_con_igv' => $value['precio_con_igv'],
             'descuento' => $value['descuento'],
             'subtotal' => $value['subtotal'],
             'proveedor' => $value['proveedor'],
+            'cant_comprobantes' => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
             'modulo' => 'Compras de Insumo',
           ];
         }
