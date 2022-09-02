@@ -57,8 +57,8 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_item();"><i class="fas fa-plus-circle"></i> Agregar Item</button>
-                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items" onclick="limpiar_form_item();"><i class="fas fa-eye"></i> Ver Item</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_item();"><i class="fas fa-plus-circle"></i> Agregar Grupo</button>
+                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items" onclick="limpiar_form_item();"><i class="fas fa-eye"></i> Ver Grupo</button>
                             Admnistra de manera eficiente el Concreto y Agregado.
                           </h3>
                         </div>
@@ -142,8 +142,9 @@
                                                 <th class="text-center">#</th>
                                                 <th>INSUMO</th>
                                                 <th>UND</th>
-                                                <th>CANTIDAD</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">PRECIO PARCIAL</th>
+                                                <th class="text-center" >CANTIDAD</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Promedio">PRECIO PARCIAL</th>
+                                                <th >DESCUENTO</th>
                                                 <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
                                               </tr>
                                             </thead>
@@ -154,7 +155,8 @@
                                                 <th>INSUMO</th>
                                                 <th>UND</th>
                                                 <th class="text-nowrap px-2 text-center" ><span class="total_resumen_cantidad">0.00</span></th>
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen_precio_unitario">0.00</span></div></th>
+                                                <th >PRECIO PARCIAL</th>
+                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen_descuento">0.00</span></div></th>
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen">0.00</span></div></th>
                                               </tr>
                                             </tfoot>
@@ -168,10 +170,10 @@
                                     <!-- TABLA - CONCRETO -->
                                     <div class="tab-pane fade" id="tabs-for-concreto" role="tabpanel" aria-labelledby="tabs-for-concreto-tab">
                                       <div class="row">
-                                        <div class="col-12 mb-2">
+                                        <!-- <div class="col-12 mb-2">
                                           <button type="button" class="btn bg-gradient-success btn-sm btn-agregar-concreto" data-toggle="modal" data-target="#modal-agregar-concreto" onclick="limpiar_form_concreto();" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
-                                          <!-- <button type="button" class="btn bg-gradient-danger btn-sm"><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button> -->
-                                        </div>
+                                          <button type="button" class="btn bg-gradient-danger btn-sm"><i class="fas fa-skull-crossbones"></i> <span class="d-none d-sm-inline-block">Eliminar</span></button>
+                                        </div> -->
                                         <div class="col-12 row-horizon disenio-scroll">
                                           <table id="tabla-concreto" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
@@ -184,11 +186,12 @@
                                                 <th>Descipcion</th>
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
-                                                <th>Calidad</th>
-                                                <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Parcial">Precio Parcial</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Total">Precio Total</th>
-                                                <th data-toggle="tooltip" data-original-title="Provedor">Provedor</th>
+                                                <th class="text-center">Cantidad</th>
+                                                <th >Precio Parcial</th>
+                                                <th >Descuento</th>
+                                                <th >Precio Total</th>
+                                                <th >Provedor</th>
+                                                <th >Estado</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -199,11 +202,12 @@
                                                 <th>Descipcion</th>
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
-                                                <th>Calidad</th>
                                                 <th class="text-nowrap px-2 text-center" ><span class="total_concreto_cantidad">0.00</span></th>
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_precio_unitario">0.00</span></div></th>
+                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_descuento">0.00</span></div></th>
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto">0.00</span></div></th>
                                                 <th >Provedor</th>
+                                                <th >Estado</th>
                                               </tr>
                                             </tfoot>
                                           </table>
@@ -254,9 +258,9 @@
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
-                                <th data-toggle="tooltip" data-original-title="Columna Calidad">Colum. Calidad</th>
-                                <th data-toggle="tooltip" data-original-title="Columna Descripcion">Colum. Descrip.</th>
-                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>                        
+                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Columna Calidad">Estado</th>
+                                                        
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -265,9 +269,8 @@
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
-                                <th data-toggle="tooltip" data-original-title="Columna">Colum. Calidad</th>
-                                <th data-toggle="tooltip" data-original-title="Columna">Colum. Descrip.</th>
-                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>                                   
+                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
+                                <th data-toggle="tooltip" data-original-title="Columna Calidad">Estado</th>                                  
                               </tr>
                             </tfoot>
                           </table>
@@ -283,10 +286,10 @@
 
                 <!-- MODAL -  AGREGAR ITEMS -->
                 <div class="modal fade bg-color-02020280" id="modal-agregar-items">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Items</h4>
+                        <h4 class="modal-title">Agregar Grupo</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -307,24 +310,23 @@
                               <!-- Nombre -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
-                                  <label for="nombre_item">Nombre <sup class="text-danger">*</sup></label>
+                                  <label for="nombre_item">Nombre de Grupo <sup class="text-danger">*</sup></label>
                                   <input type="text" name="nombre_item" class="form-control" id="nombre_item" placeholder="Nombre del Item." />
                                 </div>
                               </div>
 
                               <!-- Columna Calidad -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <div class="form-group">
-                                  <label for="columna_calidad">Columna Calidad </label>                                  
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">                              
                                   <div class="custom-control custom-switch custom-switch-on-success">
-                                    <input type="checkbox" class="custom-control-input" name="columna_calidad" id="columna_calidad" value="1">
-                                    <label class="custom-control-label cursor-pointer" for="columna_calidad"></label>
+                                    <input type="checkbox" class="custom-control-input" name="columna_servicio_bombeado" id="columna_servicio_bombeado" value="1">
+                                    <label class="custom-control-label cursor-pointer" for="columna_servicio_bombeado">Columna Serv. de Bombeado</label>
                                   </div>                               
                                 </div>
                               </div>
                               
                               <!-- Columna Descipcion --> 
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                              <!-- <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                 <div class="form-group">
                                   <label for="columna_descripcion">Columna Descripción </label>                                  
                                   <div class="custom-control custom-switch custom-switch-on-success">
@@ -332,7 +334,7 @@
                                     <label class="custom-control-label cursor-pointer" for="columna_descripcion"></label>
                                   </div>                               
                                 </div>
-                              </div>
+                              </div> -->
 
                               <!-- Descripción -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
@@ -538,6 +540,57 @@
                   </div>
                 </div> 
 
+                <!-- MODAL - DETALLE compras - charge -->
+                <div class="modal fade" id="modal-ver-compras">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Detalle Compra</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div class="row detalle_de_compra" id="cargando-5-fomulario">                            
+                          <!--detalle de la compra-->
+                        </div>
+
+                        <div class="row" id="cargando-6-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                            <br />
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
+                        <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir/PDF</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - ver grande img producto -->
+                <div class="modal fade bg-color-02020280" id="modal-ver-img-material">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md shadow-0px1rem3rem-rgb-0-0-0-50 rounded">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0" >
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white nombre-img-material">Img producto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="text-center" id="ver_img_insumo_o_activo_fijo"> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </section>
               <!-- /.content -->
             </div>
@@ -549,10 +602,14 @@
           require 'footer.php';
           ?>
         </div>
-        <!-- /.content-wrapper -->
+        <!-- /.content-wrapper -->       
 
-        <?php  require 'script.php'; ?> 
-                
+        <?php  require 'script.php'; ?>
+
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>         
 
         <script type="text/javascript" src="scripts/concreto_agregado.js"></script>
 

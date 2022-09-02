@@ -1,8 +1,9 @@
 <?php
-// validamos la repeticion de funciones
-if (!function_exists('ejecutarConsulta')) {
 
-  
+require_once "../modelos/Fechas.php";
+
+// validamos la repeticion de funciones
+if (!function_exists('ejecutarConsulta')) {  
 
   /*  ══════════════════════════════════════════ - F E C H A S - ══════════════════════════════════════════ */
 

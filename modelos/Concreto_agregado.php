@@ -12,15 +12,15 @@ class ConcretoAgregado
   // :::::::::::::::::::::::::: S E C C I O N   I T E M S  ::::::::::::::::::::::::::
 
   //Implementamos un método para insertar registros
-  public function insertar_item( $idproyecto, $nombre_item, $modulo, $columna_calidad, $columna_descripcion, $descripcion_item) {
-    $sql = "SELECT  nombre, columna_calidad, columna_descripcion, descripcion, modulo, estado, estado_delete
+  public function insertar_item( $idproyecto, $nombre_item, $modulo, $columna_bombeado, $descripcion_item) {
+    $sql = "SELECT  nombre, columna_servicio_bombeado,  descripcion, modulo, estado, estado_delete
     FROM tipo_tierra WHERE nombre = '$nombre_item' AND idproyecto = '$idproyecto';";
     $buscando = ejecutarConsultaArray($sql);
     if ($buscando['status'] == false) { return $buscando; }
 
     if ( empty($buscando['data']) ) {
-      $sql = "INSERT INTO tipo_tierra ( idproyecto, nombre, modulo, columna_calidad, columna_descripcion, descripcion) 
-      VALUES ('$idproyecto', '$nombre_item', '$modulo', '$columna_calidad', '$columna_descripcion', '$descripcion_item')";
+      $sql = "INSERT INTO tipo_tierra ( idproyecto, nombre, modulo, columna_servicio_bombeado, descripcion) 
+      VALUES ('$idproyecto', '$nombre_item', '$modulo', '$columna_bombeado', '$descripcion_item')";
       return ejecutarConsulta($sql);
     } else {
       $info_repetida = ''; 
@@ -29,8 +29,7 @@ class ConcretoAgregado
         $info_repetida .= '<li class="text-left font-size-13px">
           <b>Modulo: </b>'.$value['modulo'].'<br>
           <b>Nombre: </b>'.$value['nombre'].'<br>
-          <b>Columna Calidad: </b>'.($value['columna_calidad'] ? '<span class="text-center badge badge-success">Si</span>' : '<span class="text-center badge badge-danger">No</span>').'<br>
-          <b>Columna Descripción: </b>'.($value['columna_descripcion'] ? '<span class="text-center badge badge-success">Si</span>' : '<span class="text-center badge badge-danger">No</span>').'<br>
+          <b>Columna Calidad: </b>'.($value['columna_servicio_bombeado'] ? '<span class="text-center badge badge-success">Si</span>' : '<span class="text-center badge badge-danger">No</span>').'<br>
           <b>Descripción: </b>'.'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $value['descripcion'] . '</textarea>'.'<br>
           <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
           <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
@@ -44,46 +43,45 @@ class ConcretoAgregado
   }
 
   //Implementamos un método para editar registros
-  public function editar_item( $idproyecto, $idtipo_tierra, $nombre_item, $modulo, $columna_calidad, $columna_descripcion, $descripcion_item)  {
+  public function editar_item( $idproyecto, $idtipo_tierra, $nombre_item, $modulo, $columna_bombeado, $descripcion_item)  {
      
-    $sql = "UPDATE tipo_tierra 
-    SET  idproyecto='$idproyecto', nombre='$nombre_item', modulo='$modulo',
-    columna_calidad='$columna_calidad', columna_descripcion='$columna_descripcion', descripcion='$descripcion_item' 
+    $sql = "UPDATE tipo_tierra SET idproyecto='$idproyecto', nombre='$nombre_item', modulo='$modulo',
+    columna_servicio_bombeado='$columna_bombeado', descripcion='$descripcion_item' 
     WHERE idtipo_tierra='$idtipo_tierra'";
     return ejecutarConsulta($sql);
   }
 
   public function desactivar_item($idtipo_tierra) {
-    $sql = "UPDATE tipo_tierra SET estado='0' WHERE idtipo_tierra ='$idtipo_tierra'";
+    $sql = "UPDATE tipo_tierra_concreto SET estado='0' WHERE idtipo_tierra_concreto ='$idtipo_tierra'";
     return ejecutarConsulta($sql);
   }
 
   public function activar_item($idtipo_tierra)  {
-    $sql = "UPDATE tipo_tierra SET estado='1' WHERE idtipo_tierra ='$idtipo_tierra'";
+    $sql = "UPDATE tipo_tierra_concreto SET estado='1' WHERE idtipo_tierra_concreto ='$idtipo_tierra'";
     return ejecutarConsulta($sql);
   }
 
   public function eliminar_item($idtipo_tierra) {
-    $sql = "UPDATE tipo_tierra SET estado_delete='0' WHERE idtipo_tierra ='$idtipo_tierra'";
+    $sql = "UPDATE tipo_tierra_concreto SET estado_delete='0' WHERE idtipo_tierra_concreto ='$idtipo_tierra'";
     return ejecutarConsulta($sql);
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar_item($idtipo_tierra) {
-    $sql = "SELECT * FROM tipo_tierra WHERE  idtipo_tierra ='$idtipo_tierra'";
+    $sql = "SELECT * FROM tipo_tierra_concreto WHERE  idtipo_tierra_concreto ='$idtipo_tierra'";
 
     return ejecutarConsultaSimpleFila($sql);    
   }
 
   //Implementar un método para listar los registros
   public function tbla_principal_item($id_proyecto) {
-    $sql = "SELECT * FROM tipo_tierra WHERE idproyecto = '$id_proyecto' AND  modulo ='Concreto y Agregado' AND estado_delete='1'  AND estado='1' ORDER BY nombre ASC";
+    $sql = "SELECT * FROM tipo_tierra_concreto WHERE  modulo ='Concreto y Agregado' AND estado_delete='1'  AND estado='1' ORDER BY nombre ASC";
     return ejecutarConsulta($sql);
   }
   
   //Implementar un método para listar los registros
   public function lista_de_items($id_proyecto) {
-    $sql = "SELECT * FROM tipo_tierra WHERE idproyecto = '$id_proyecto' AND  modulo ='Concreto y Agregado' AND estado_delete='1' AND estado='1' ORDER BY nombre ASC";
+    $sql = "SELECT * FROM tipo_tierra_concreto WHERE  modulo ='Concreto y Agregado' AND estado_delete='1' AND estado='1' ORDER BY nombre ASC";
     return ejecutarConsultaArray($sql);
   }
   
@@ -110,24 +108,57 @@ class ConcretoAgregado
 
   //Implementar un método para listar los registros
   public function tbla_principal_concreto($id_proyecto, $idtipo_tierra, $fecha_1, $fecha_2, $id_proveedor, $comprobante) {
-
+    $data = [];
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND ca.fecha BETWEEN '$fecha_1' AND '$fecha_2'";
+      $filtro_fecha = "AND cpp.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
     } else if (!empty($fecha_1)) {      
-      $filtro_fecha = "AND ca.fecha = '$fecha_1'";
+      $filtro_fecha = "AND cpp.fecha_compra = '$fecha_1'";
     }else if (!empty($fecha_2)) {        
-      $filtro_fecha = "AND ca.fecha = '$fecha_2'";
+      $filtro_fecha = "AND cpp.fecha_compra = '$fecha_2'";
     }   
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.idproveedor = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.idproveedor = '$id_proveedor'"; }
 
-    $sql = "SELECT p.razon_social, p.tipo_documento, p.ruc, tt.idtipo_tierra, tt.idproyecto, tt.nombre, tt.modulo, tt.columna_calidad, 
-    tt.columna_descripcion, ca.idconcreto_agregado, ca.detalle, ca.nombre_dia, ca.fecha, ca.calidad, ca.cantidad, ca.precio_unitario, ca.total, ca.estado
-    FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
-    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idtipo_tierra = '$idtipo_tierra' and ca.estado = '1' AND ca.estado_delete ='1'
-    $filtro_fecha $filtro_proveedor ORDER BY ca.fecha ASC";
-    return ejecutarConsulta($sql);
+    $sql="SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
+		pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.estado as estado_compra,
+		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor, pr.idtipo_tierra_concreto, ttc.nombre as tipo_tierra_concreto
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov, tipo_tierra_concreto as ttc 
+		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto
+    AND ttc.idtipo_tierra_concreto = pr.idtipo_tierra_concreto AND cpp.idproveedor = prov.idproveedor AND cpp.idproyecto ='$id_proyecto' 
+    AND cpp.estado = '1' AND cpp.estado_delete = '1' AND pr.idtipo_tierra_concreto = '$idtipo_tierra' 
+		ORDER BY cpp.fecha_compra DESC;";	
+		$compra = ejecutarConsultaArray($sql);	
+
+		if ($compra['status'] == false) { return $compra; }
+
+    foreach ($compra['data'] as $key => $value) {
+      $idcompra_proyecto = $value['idcompra_proyecto'];
+    
+      $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+      $cant_comprobantes = ejecutarConsultaSimpleFila($sql3);
+      if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
+    
+      $data[] = [
+        'idproyecto'        => $value['idproyecto'],
+        'idcompra_proyecto' => $value['idcompra_proyecto'],
+        'fecha_compra'      => $value['fecha_compra'],
+        'nombre_dia'        => nombre_dia_semana($value['fecha_compra']),
+        'ficha_tecnica'     => $value['ficha_tecnica'],
+        'nombre_producto'   => $value['nombre_producto'],
+        'cantidad'          => $value['cantidad'],
+        'tipo_comprobante'  => $value['tipo_comprobante'],
+        'serie_comprobante' => $value['serie_comprobante'],
+        'precio_con_igv'    => $value['precio_con_igv'],
+        'descuento'         => $value['descuento'],
+        'subtotal'          => $value['subtotal'],
+        'proveedor'         => $value['proveedor'],
+        'estado_compra'     => $value['estado_compra'],
+        'cant_comprobantes' => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
+      ];
+    }
+  
+    return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data, 'affected_rows' =>$compra['affected_rows'],  ] ;
   }
 
   //Implementar un método para listar los registros
@@ -144,10 +175,13 @@ class ConcretoAgregado
     }   
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.idproveedor = '$id_proveedor'"; }
 
-    $sql = "SELECT  SUM(ca.cantidad) AS cantidad, AVG(ca.precio_unitario) AS precio_unitario, SUM(ca.total) AS total
-    FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
-    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idtipo_tierra = '$idtipo_tierra' and ca.estado = '1' AND ca.estado_delete ='1'
-    $filtro_fecha $filtro_proveedor";
+    $sql="SELECT  SUM(dc.cantidad) AS cantidad, AVG(dc.precio_con_igv) AS precio_promedio, SUM(dc.descuento) AS descuento, SUM(dc.subtotal) AS subtotal
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov, tipo_tierra_concreto as ttc 
+		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto 
+    AND ttc.idtipo_tierra_concreto = pr.idtipo_tierra_concreto AND cpp.idproyecto ='$id_proyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1'
+		AND cpp.idproveedor = prov.idproveedor AND pr.idtipo_tierra_concreto = '$idtipo_tierra' 
+		ORDER BY cpp.fecha_compra DESC;";
+    
     return ejecutarConsultaSimpleFila($sql);
   }
 
@@ -176,17 +210,25 @@ class ConcretoAgregado
   // :::::::::::::::::::::::::: S E C C I O N    R E S U M E N ::::::::::::::::::::::::::
   //Implementar un método para listar los registros
   public function tbla_principal_resumen($idproyecto) {
-    $sql = "SELECT  tt.nombre,  SUM(ca.cantidad) AS cantidad, AVG(ca.precio_unitario) AS precio_unitario, SUM(ca.total) AS total
-    FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
-    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Concreto y Agregado' and ca.estado = '1' AND ca.estado_delete ='1' and tt.estado = '1' AND tt.estado_delete ='1'
-    GROUP BY tt.nombre  ORDER BY tt.nombre ASC ";
+    $sql="SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida, um.abreviacion as um_abreviacion, 
+		c.nombre_color, ttc.nombre as grupo, SUM(dc.cantidad) AS cantidad_total, SUM(dc.precio_con_igv) AS precio_con_igv, 
+    SUM(dc.descuento) AS descuento_total, SUM(dc.subtotal) precio_total , COUNT(dc.idproducto) AS count_productos, 
+    AVG(dc.precio_con_igv) AS promedio_precio
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, tipo_tierra_concreto AS ttc,
+    unidad_medida AS um, color AS c
+    WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto 
+    AND um.idunidad_medida  = pr.idunidad_medida  AND c.idcolor = pr.idcolor  AND ttc.idtipo_tierra_concreto = pr.idtipo_tierra_concreto
+    AND cpp.idproyecto = '$idproyecto'  AND cpp.estado = '1' AND cpp.estado_delete = '1' 
+    AND pr.idtipo_tierra_concreto != '1' GROUP BY pr.idtipo_tierra_concreto ORDER BY ttc.nombre ASC;";
     return ejecutarConsulta($sql);
   }
 
   public function total_resumen($idproyecto) {
-    $sql = "SELECT tt.nombre, SUM(ca.cantidad) AS cantidad, AVG(ca.precio_unitario) AS precio_unitario, SUM(ca.total) AS total
-    FROM tipo_tierra AS tt, concreto_agregado AS ca, proveedor as p
-    WHERE tt.idtipo_tierra = ca.idtipo_tierra AND ca.idproveedor = p.idproveedor AND tt.idproyecto = '$idproyecto' and tt.modulo ='Concreto y Agregado' and ca.estado = '1' AND ca.estado_delete ='1' and tt.estado = '1' AND tt.estado_delete ='1'";
+    $sql = "SELECT SUM( dc.subtotal ) AS total, SUM( dc.cantidad ) AS cantidad, SUM( dc.descuento ) AS descuento 
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, tipo_tierra_concreto AS ttc
+		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto 
+		AND pr.idtipo_tierra_concreto=ttc.idtipo_tierra_concreto AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1' 
+    AND pr.idtipo_tierra_concreto != '1' AND cpp.estado_delete = '1';";
     return ejecutarConsultaSimpleFila($sql);
   }
 }

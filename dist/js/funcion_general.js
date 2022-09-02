@@ -865,27 +865,37 @@ function re_visualizacion(id, carpeta, sub_carpeta, width='100%', height='310') 
   }
 }
 
-function doc_view_extencion(filename, carpeta, sub_carpeta='', width='50%', height='auto') {
+function doc_view_extencion(filename, carpeta='', sub_carpeta='', width='50%', height='auto', return_error_img = false, error_img ='') {
 
   var html = ''; var extencion = '';
-  var host = '';
-  var ruta = sub_carpeta=='' || sub_carpeta == null ?  `../dist/docs/${carpeta}/${filename}`: `../dist/docs/${carpeta}/${sub_carpeta}/${filename}`;
-  
-  if (sub_carpeta == '' || sub_carpeta == null) {
-    host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${filename}` ;
+  var host = '';  var ruta = '';
+
+  if (carpeta == '' && sub_carpeta == '') {
+    host = window.location.host == 'localhost'? `http://localhost/admin_sevens/${filename}` : `${window.location.origin}/${filename}` ;
+    ruta = host;
   } else {
-    host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${sub_carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
+    ruta = sub_carpeta == '' || sub_carpeta == null ?  `../dist/docs/${carpeta}/${filename}`: `../dist/docs/${carpeta}/${sub_carpeta}/${filename}`;
+    
+    if (sub_carpeta == '' || sub_carpeta == null) {
+      host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${filename}` ;
+    } else {
+      host = window.location.host == 'localhost'? `http://localhost/admin_sevens/dist/docs/${carpeta}/${sub_carpeta}/${filename}` : `${window.location.origin}/dist/docs/${carpeta}/${sub_carpeta}/${filename}` ;
+    }
   }
+  
 
   // cargamos la imagen adecuada par el archivo
-  if ( UrlExists(host) != 200 ) {
-
-    html = `<div class="callout callout-danger">
-      <p class="text-danger font-size-12px text-left">404 Documento no encontrado!!</p>
-      <p class="font-size-10px text-left">Hubo un <b>error</b> al <b>encontrar este archivo</b> , los mas probable es que se haya eliminado, o se haya movido a otro lugar, se <b>recomienda editar</b> en su módulo correspodiente.</p>
-    </div>`;
-    extencion = extrae_extencion(filename);
-
+  if ( UrlExists(host) != 200 ) { console.log('no existe');
+    if (return_error_img == true) {    
+      var html_img_error =  error_img == '' || error_img == null ? `<img src="../dist/svg/404-v2.svg" alt="" width="${width}" >` : `<img src="${error_img}" alt="" width="${width}" onerror="this.src='../dist/svg/404-v2.svg';"  >`;
+      return html_img_error;
+    } else {
+      html = `<div class="callout callout-danger">
+        <p class="text-danger font-size-12px text-left">404 Documento no encontrado!!</p>
+        <p class="font-size-10px text-left">Hubo un <b>error</b> al <b>encontrar este archivo</b> , los mas probable es que se haya eliminado, o se haya movido a otro lugar, se <b>recomienda editar</b> en su módulo correspodiente.</p>
+      </div>`;
+      extencion = extrae_extencion(filename);
+    }
   }else if ( extrae_extencion(filename) == "xls") {
 
     html = `<img src="../dist/svg/xls.svg" alt="" width="50%" height="50%" >`;
@@ -1043,6 +1053,20 @@ function pdf_o_img(filename) {
     data = true;
     
   }
+  return data;
+}
+
+function es_img(filename) {
+  data = false;
+  if (
+    extrae_extencion(filename) == "jpeg" || extrae_extencion(filename) == "jpg" || extrae_extencion(filename) == "jpe" ||
+    extrae_extencion(filename) == "jfif" || extrae_extencion(filename) == "gif" || extrae_extencion(filename) == "png" ||
+    extrae_extencion(filename) == "tiff" || extrae_extencion(filename) == "tif" || extrae_extencion(filename) == "webp" ||
+    extrae_extencion(filename) == "bmp" || extrae_extencion(filename) == "svg" ) {
+
+    data = true;    
+  }
+
   return data;
 }
 
