@@ -6,11 +6,9 @@ var id_proyecto_r="",idtipo_tierra_r="",nombre_item_r="",fecha_i_r="",fecha_f_r=
 function init() {
   
   //Activamos el "aside"
-  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
+  $("#bloc_Tecnico").addClass("menu-open");
 
-  $("#bloc_Compras").addClass("menu-open");
-
-  $("#mLogisticaAdquisiciones").addClass("active");
+  $("#mTecnico").addClass("active");
 
   $("#lMovientoTierras").addClass("active bg-primary");
 
@@ -316,7 +314,7 @@ function tbla_principal_tierra(id_proyecto, idtipo_tierra,nombre_item,fecha_i, f
   }).DataTable();
 
 // idtipo_tierra,nombre_item,fecha_i,fecha_f,proveedor,comprobante
-  $.post("../ajax/movimiento_tierra.php?op=mostrar_total_det_item", {'idtipo_tierra': idtipo_tierra,'fecha_i': fecha_i,'fecha_f': fecha_f,'proveedor': proveedor,'comprobante': comprobante }, function (e, status) {
+  $.post("../ajax/movimiento_tierra.php?op=mostrar_total_det_item", {'id_proyecto': id_proyecto, 'idtipo_tierra': idtipo_tierra,'fecha_i': fecha_i,'fecha_f': fecha_f,'proveedor': proveedor,'comprobante': comprobante }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
@@ -509,7 +507,7 @@ function tbla_principal_resumen(idproyecto) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [3,4,5], render: $.fn.dataTable.render.number( ',', '.', 2, '<div class="formato-numero-conta"><span>S/</span>' ) },
+      { targets: [4,5,6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
       //{ targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();
@@ -530,7 +528,8 @@ function total_tierra_resumen(idproyecto) {
     if (e.status) {
 
       $(".total_resumen_cantidad").html( formato_miles(e.data.cantidad));  
-      $(".total_resumen_precio_unitario").html(formato_miles(e.data.precio_unitario));      
+      $(".total_resumen_precio_unitario").html(formato_miles(e.data.precio_unitario));  
+      $(".total_resumen_descuento").html(formato_miles(e.data.descuento));       
       $(".total_resumen").html(formato_miles(e.data.total));    
 
     } else {

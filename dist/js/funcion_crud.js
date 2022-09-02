@@ -441,8 +441,11 @@ function toastr_warning(titulo = "Alerta!!", mensaje = "Verificar esta accion.",
 /*  ══════════════════════════════════════════ - E R R O R E S - ══════════════════════════════════════════ */
 
 function ver_errores(e) {
-  
-  if (e.status == 404) {
+  console.log(e.status);
+  if (e.status == 403) {
+    console.group("Error"); console.warn('Error 403 -------------'); console.log(e); console.groupEnd();
+    Swal.fire(`Error 403 😅!`, `<h5>Prohibido</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, "error");
+  } else if (e.status == 404) {
     console.group("Error"); console.warn('Error 404 -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error 404 😅!`, `<h5>Archivo no encontrado</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, "error");
     

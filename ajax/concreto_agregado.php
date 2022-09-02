@@ -20,14 +20,16 @@
 
       $imagen_error = "this.src='../dist/svg/404-v2.svg'";
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+      $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+
 
       // :::::::::::::::::::::::::: S E C C I O N   I T E M S  ::::::::::::::::::::::::::
       $idproyecto       = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idtipo_tierra    = isset($_POST["idtipo_tierra"]) ? limpiarCadena($_POST["idtipo_tierra"]) : "";
       $modulo           = isset($_POST["modulo"]) ? limpiarCadena($_POST["modulo"]) : "";
       $nombre_item      = isset($_POST["nombre_item"]) ? encodeCadenaHtml($_POST["nombre_item"] ) : "";
-      $columna_calidad  = isset($_POST["columna_calidad"]) ? ( empty($_POST["columna_calidad"]) ? '0' : '1' ) : "";
-      $columna_descripcion= isset($_POST["columna_descripcion"]) ? ( empty($_POST["columna_descripcion"]) ? '0' : '1' ) : "";
+      $columna_bombeado  = isset($_POST["columna_servicio_bombeado"]) ? ( empty($_POST["columna_servicio_bombeado"]) ? '0' : '1' ) : "";
+      // $columna_descripcion= isset($_POST["columna_descripcion"]) ? ( empty($_POST["columna_descripcion"]) ? '0' : '1' ) : "";
       $descripcion_item = isset($_POST["descripcion_item"]) ? encodeCadenaHtml($_POST["descripcion_item"] ) : "";
       
       
@@ -41,9 +43,7 @@
       $cantidad                 = isset($_POST["cantidad"]) ? limpiarCadena($_POST["cantidad"]) : "";
       $precio_unitario          = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
       $total                    = isset($_POST["total"]) ? limpiarCadena($_POST["total"]) : "";
-      $descripcion_concreto     = isset($_POST["descripcion_concreto"]) ? limpiarCadena($_POST["descripcion_concreto"]) : "";
-
-      
+      $descripcion_concreto     = isset($_POST["descripcion_concreto"]) ? limpiarCadena($_POST["descripcion_concreto"]) : "";      
 
       switch ($_GET["op"]) {
         // :::::::::::::::::::::::::: S E C C I O N   I T E M S  ::::::::::::::::::::::::::
@@ -51,13 +51,13 @@
           
           if (empty($idtipo_tierra)) {
             
-            $rspta = $concreto_agregado->insertar_item($idproyecto, $nombre_item, $modulo, $columna_calidad, $columna_descripcion, $descripcion_item);
+            $rspta = $concreto_agregado->insertar_item($idproyecto, $nombre_item, $modulo, $columna_bombeado, $descripcion_item);
             
             echo json_encode( $rspta, true);
 
           } else {            
              
-            $rspta = $concreto_agregado->editar_item($idproyecto, $idtipo_tierra, $nombre_item, $modulo, $columna_calidad, $columna_descripcion, $descripcion_item);
+            $rspta = $concreto_agregado->editar_item($idproyecto, $idtipo_tierra, $nombre_item, $modulo, $columna_bombeado, $descripcion_item);
             
             echo json_encode( $rspta, true) ;
           }
@@ -97,13 +97,12 @@
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idtipo_tierra . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_item(' . $reg->idtipo_tierra .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
-                '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idtipo_tierra . ')"><i class="fa fa-pencil-alt"></i></button>',
+                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idtipo_tierra_concreto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_item(' . $reg->idtipo_tierra_concreto .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
+                '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idtipo_tierra_concreto . ')"><i class="fa fa-pencil-alt"></i></button>',
                 "2" => $reg->nombre,
-                "3" => ($reg->columna_calidad ? '<span class="text-center badge badge-success">Si</span>' : '<span class="text-center badge badge-danger">No</span>'),
-                "4" => ($reg->columna_descripcion ? '<span class="text-center badge badge-success">Si</span>' : '<span class="text-center badge badge-danger">No</span>') .$toltip,
-                "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "3" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
+                "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activo</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . $toltip,
               ];
             }
   
@@ -160,22 +159,21 @@
           $data = [];  $cont=1;         
 
           if ($rspta['status'] == true) {
-            while ($reg = $rspta['data']->fetch_object()) {              
+
+            foreach ($rspta['data'] as $key => $reg) {           
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_concreto(' . $reg->idconcreto_agregado . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_concreto(' . $reg->idconcreto_agregado .', \''.encodeCadenaHtml( $reg->nombre_dia.' '.date("d/m/Y", strtotime($reg->fecha)). ' | '.number_format($reg->total,2,'.',',')  ).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
-                '<button class="btn btn-warning btn-sm" onclick="mostrar_concreto(' . $reg->idconcreto_agregado . ')"><i class="fa fa-pencil-alt"></i></button>',
-                "2" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->detalle . '</textarea>',
-                "3" => $reg->nombre_dia,
-                "4" => $reg->fecha,
-                "5" => $reg->calidad,
-                "6" => $reg->cantidad,
-                "7" => $reg->precio_unitario,
-                "8" => $reg->total,
-                "9" => $reg->razon_social,
-                "10" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') .$toltip,                
+                "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' ,
+                "2" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['nombre_producto'] . '</textarea>',
+                "3" => $reg['nombre_dia'],
+                "4" => $reg['fecha_compra'],
+                "5" => number_format($reg['cantidad'], 2, '.',','),
+                "6" => $reg['precio_con_igv'],
+                "7" => $reg['descuento'],
+                "8" => $reg['subtotal'],
+                "9" => $reg['proveedor'],
+                "10" => ($reg['estado_compra'] ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') .$toltip,                
               ];
             }
   
@@ -229,11 +227,12 @@
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->nombre ,
-                "2" => 'M3' ,
-                "3" => $reg->cantidad,
-                "4" => $reg->precio_unitario,
-                "5" => $reg->total,        
+                "1" => $reg->grupo ,
+                "2" => $reg->um_abreviacion ,
+                "3" => number_format($reg->cantidad_total, 2, '.',','),
+                "4" => $reg->promedio_precio,
+                "5" => $reg->descuento_total,
+                "6" => $reg->precio_total,        
               ];
             }
   

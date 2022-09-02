@@ -15,9 +15,8 @@
 
      $movimiento_tierra = new Movimiento_tierra();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
-      //$idproyecto,$idtipo_tierra,$nombre,$modulo,$descripcion
+      date_default_timezone_set('America/Lima'); $date_now = date("d-m-Y h.i.s A");
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       $idproyecto     = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idtipo_tierra  = isset($_POST["idtipo_tierra"]) ? limpiarCadena($_POST["idtipo_tierra"]) : "";
@@ -149,23 +148,23 @@
          // $_GET['id_proyecto'],$_GET['idtipo_tierra'],$_GET['nombre_item'],$_GET['fecha_i'],$_GET['fecha_f'],$_GET['proveedor'],$_GET['comprobante']
           $rspta = $movimiento_tierra->tbla_principal_tierra($_GET['id_proyecto'],$_GET['idtipo_tierra'],$_GET['fecha_i'],$_GET['fecha_f'],$_GET['proveedor'],$_GET['comprobante']);
           //Vamos a declarar un array
-          $data = [];  $cont=1;         
-          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+          $data = [];  $cont=1;            
 
           if ($rspta['status'] == true) {
-            while ($reg = $rspta['data']->fetch_object()) {              
+            foreach ($rspta['data'] as $key => $reg) {          
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar_detalle_item(' . $reg->idmovimiento_tierra . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_detalle_item(' . $reg->idmovimiento_tierra .', \''.$reg->nombre.'\', \''.$reg->fecha.'\' )" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',
-                "2" => $reg->nombre_dia,
-                "3" => $reg->fecha,
-                "4" => $reg->cantidad,
-                "5" => $reg->precio_unitario,
-                "6" => $reg->total,
-                "7" => $reg->razon_social,
-                "8" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') .$toltip,                
+                "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' ,
+                "2" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['nombre_producto'] . '</textarea>',
+                "3" => $reg['nombre_dia'],
+                "4" => $reg['fecha_compra'],
+                "5" => number_format($reg['cantidad'], 2, '.',','),
+                "6" => $reg['precio_con_igv'],
+                "7" => $reg['descuento'],
+                "8" => $reg['subtotal'],
+                "9" => $reg['proveedor'],
+                "10" => ($reg['estado_compra'] ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') .$toltip,                
               ];
             }
   
@@ -181,6 +180,14 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
           
+        break;
+
+        case 'mostrar_total_det_item':
+          // $_POST['idtipo_tierra'],$_POST['fecha_i'],$_POST['fecha_f'],$_POST['proveedor'],$_POST['comprobante']
+          $rspta =$movimiento_tierra->mostrar_total_det_item($_POST['id_proyecto'], $_POST['idtipo_tierra'],$_POST['fecha_i'],$_POST['fecha_f'],$_POST['proveedor'],$_POST['comprobante']);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true) ;
+
         break;
 
         case 'desactivar_detalle_item':
@@ -205,15 +212,7 @@
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true) ;
 
-        break;
-
-        case 'mostrar_total_det_item':
-          // $_POST['idtipo_tierra'],$_POST['fecha_i'],$_POST['fecha_f'],$_POST['proveedor'],$_POST['comprobante']
-          $rspta =$movimiento_tierra->mostrar_total_det_item($_POST['idtipo_tierra'],$_POST['fecha_i'],$_POST['fecha_f'],$_POST['proveedor'],$_POST['comprobante']);
-          //Codificar el resultado utilizando json
-          echo json_encode( $rspta, true) ;
-
-        break;
+        break;       
 
         //-----------------------------------------------------------------------------------------
         //----------------------- S E C C I O N    R E S U M E N -------------------------------
@@ -229,11 +228,12 @@
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->nombre ,
-                "2" => 'M3' ,
-                "3" => $reg->cantidad,
-                "4" => $reg->precio_unitario,
-                "5" => $reg->total,        
+                "1" => $reg->grupo ,
+                "2" => $reg->um_abreviacion ,
+                "3" => number_format($reg->cantidad_total, 2, '.',','),
+                "4" => $reg->promedio_precio,
+                "5" => $reg->descuento_total,
+                "6" => $reg->precio_total,       
               ];
             }
   
