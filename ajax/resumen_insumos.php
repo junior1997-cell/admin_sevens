@@ -316,8 +316,9 @@
                 "6" => '<b>' . number_format($reg['precio_con_igv'], 2, ".", ",") . '</b>',
                 "7" => number_format($reg['descuento'], 2, ".", ""),
                 "8" => number_format($reg['subtotal'], 2, ".", ""),
-                // "9" => $ficha_tecnica,
                 "9" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idcompra_proyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
+                "10" => $reg['tipo_comprobante'],
+                "11" => $reg['serie_comprobante']
 
               ];
             }

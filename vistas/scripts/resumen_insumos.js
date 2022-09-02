@@ -255,7 +255,11 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 		aProcessing: true,//Activamos el procesamiento del datatables
 		aServerSide: true,//Paginación y filtrado realizados por el servidor
 		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-		buttons: [ { extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+		buttons: [ 
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]} }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]} }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]}, orientation: 'landscape', pageSize: 'LEGAL', }
+    ],
 		ajax:	{
       url: `../ajax/resumen_insumos.php?op=tbla_facturas&idproyecto=${idproyecto}&idproducto=${idproducto}`,
       type : "get",
@@ -284,7 +288,7 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
     columnDefs: [      
       { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
-      //{ targets: [10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
+      { targets: [10,11], visible: false, searchable: false, },
     ],
 	}).DataTable();  
 

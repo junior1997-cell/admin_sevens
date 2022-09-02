@@ -132,7 +132,9 @@
                                   <th>Precio</th>  
                                   <th data-toggle="tooltip" data-original-title="Descuento">Dcto.</th>
                                   <th>SubTotal</th>
-                                  <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                               
+                                  <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>    
+                                  <th>Tipo</th>
+                                  <th>N° Comprob</th>
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -150,7 +152,8 @@
                                   <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
                                   <th class="text-nowrap px-2"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
                                   <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                            
-                                  
+                                  <th>Tipo</th>
+                                  <th>N° Comprob</th>
                                 </tr>
                               </tfoot>
                             </table>
