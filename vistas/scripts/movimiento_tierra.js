@@ -1,7 +1,7 @@
-var tabla;  
-var tabla_detalle_items;
+var tabla_grupo;  
+var tabla_tierra;
 
-var id_proyecto_r="",idtipo_tierra_r="",nombre_item_r="",fecha_i_r="",fecha_f_r="",proveedor_r="",comprobante_r="";
+var id_proyecto_r = '', idtipo_tierra_r = '', columna_bombeado_r = '', nombre_item_r = '', fecha_1_r = '', fecha_2_r = '', id_proveedor_r = '', comprobante_r = '';
 
 function init() {
   
@@ -14,8 +14,8 @@ function init() {
 
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
 
-  tbla_principal_item(localStorage.getItem("nube_idproyecto"));
-  listar_items(localStorage.getItem("nube_idproyecto"));
+  tbla_principal_grupo(localStorage.getItem("nube_idproyecto"));
+  listar_de_grupo(localStorage.getItem("nube_idproyecto"));
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
@@ -45,13 +45,13 @@ $('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio')
 $('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
 
 
-function limpiar_form_item() {
+function limpiar_form_grupo() {
 
   $("#guardar_registro_item").html('Guardar Cambios').removeClass('disabled');
 
   $("#idtipo_tierra").val("");
-  $("#nombre").val("");
-  $("#descripcion").val("");
+  $("#nombre_item").val("");
+  $("#descripcion_item").val("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -59,9 +59,9 @@ function limpiar_form_item() {
   $(".error.invalid-feedback").remove();
 }
 
-function tbla_principal_item(nube_idproyecto) {
+function tbla_principal_grupo(nube_idproyecto) {
 
-  tabla = $("#tabla_item").dataTable({
+  tabla_grupo = $("#tabla_item").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
@@ -73,7 +73,7 @@ function tbla_principal_item(nube_idproyecto) {
       { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,1,2,3], } }, 
     ],
     ajax: {
-      url: `../ajax/movimiento_tierra.php?op=tbla_principal&proyecto=${nube_idproyecto}`,
+      url: `../ajax/movimiento_tierra.php?op=tbla_principal_grupo&id_proyecto=${nube_idproyecto}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -96,12 +96,12 @@ function tbla_principal_item(nube_idproyecto) {
   }).DataTable();
 }
 
-function guardaryeditar(e) {
+function guardar_y_editar_grupo(e) {
 
   var formData = new FormData($("#form-item")[0]);
 
   $.ajax({
-    url: "../ajax/movimiento_tierra.php?op=guardaryeditar",
+    url: "../ajax/movimiento_tierra.php?op=guardar_y_editar_grupo",
     type: "POST",
     data: formData,
     contentType: false,
@@ -112,12 +112,12 @@ function guardaryeditar(e) {
         if (e.status == true) {
           Swal.fire("Correcto!", "Registro guardado correctamente", "success");
 
-          tabla.ajax.reload(null, false);
+          tabla_grupo.ajax.reload(null, false);
 
-          limpiar_form_item();
+          limpiar_form_grupo();
 
           $("#modal-agregar-items").modal("hide");
-          listar_items(localStorage.getItem("nube_idproyecto"));
+          listar_de_grupo(localStorage.getItem("nube_idproyecto"));
           
         } else {
           ver_errores(e);
@@ -151,26 +151,25 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idtipo_tierra) {
+function mostrar_grupo(idtipo_tierra) {
 
-  limpiar_form_item(); 
+  limpiar_form_grupo(); 
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-items").modal("show");
 
-  $.post("../ajax/movimiento_tierra.php?op=mostrar", { 'idtipo_tierra': idtipo_tierra }, function (e, status) {
+  $.post("../ajax/movimiento_tierra.php?op=mostrar_grupo", { 'idtipo_tierra': idtipo_tierra }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
     if (e.status) {
 
-      $("#idtipo_tierra").val(e.data.idtipo_tierra);
-      $("#idproyecto").val(e.data.idproyecto );
+      $("#idtipo_tierra").val(e.data.idtipo_tierra_concreto);      
       $("#modulo").val(e.data.modulo);
-      $("#nombre").val(e.data.nombre);
-      $("#descripcion").val(e.data.descripcion);            
+      $("#nombre_item").val(e.data.nombre);
+      $("#descripcion_item").val(e.data.descripcion);            
 
       $('.jq_image_zoom').zoom({ on:'grab' });
       $("#cargando-1-fomulario").show();
@@ -181,17 +180,17 @@ function mostrar(idtipo_tierra) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function eliminar(idtipo_tierra, nombre) {
+function eliminar_grupo(idtipo_tierra, nombre) {
 
   crud_eliminar_papelera(
-    "../ajax/movimiento_tierra.php?op=desactivar",
-    "../ajax/movimiento_tierra.php?op=eliminar", 
+    "../ajax/movimiento_tierra.php?op=desactivar_grupo",
+    "../ajax/movimiento_tierra.php?op=eliminar_grupo", 
     idtipo_tierra, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload(null, false);listar_items(localStorage.getItem("nube_idproyecto")); },
+    function(){ tabla_grupo.ajax.reload(null, false);listar_de_grupo(localStorage.getItem("nube_idproyecto")); },
     false, 
     false, 
     false,
@@ -203,11 +202,9 @@ function eliminar(idtipo_tierra, nombre) {
 //----------------------------------- Tabs -----------------------------------------------
 //-----------------------------------------------------------------------------------------
 
-// , '${val.idtipo_tierra}', '${val.columna_calidad}', '${val.columna_descripcion}', '${val.nombre}'
+function listar_de_grupo(proyecto_nube) {
 
-function listar_items(proyecto_nube) {
-
-  $.post("../ajax/movimiento_tierra.php?op=listar_items", { 'proyecto_nube': proyecto_nube }, function (e, status) {
+  $.post("../ajax/movimiento_tierra.php?op=listar_de_grupo", { 'proyecto_nube': proyecto_nube }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);
 
@@ -219,7 +216,7 @@ function listar_items(proyecto_nube) {
 
         data_html = data_html.concat(`
         <li class="nav-item">
-          <a class="nav-link" onclick="tbla_principal_tierra('${val.idproyecto}', '${val.idtipo_tierra}', '${val.nombre}', '', '', '', ''); show_hide_filtro();" id="tabs-for-tierra-tab" data-toggle="pill" href="#tabs-for-tierra" role="tab" aria-controls="tabs-for-tierra" aria-selected="false">${val.nombre}</a>
+          <a class="nav-link" onclick="tbla_principal_tierra('${proyecto_nube}', '${val.idtipo_tierra_concreto}', '${val.columna_servicio_bombeado}', '${val.nombre}', '', '', '', ''); show_hide_filtro();" id="tabs-for-tierra-tab" data-toggle="pill" href="#tabs-for-tierra" role="tab" aria-controls="tabs-for-tierra" aria-selected="false">${val.nombre}</a>
         </li>`);
       });
 
@@ -241,13 +238,13 @@ function listar_items(proyecto_nube) {
 
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
-//----------------------- S E C C I O N  S E G Ú N  I T E M -------------------------------
+//-----------------------  S E C C I O N    T I E R R A  ----------------------------------
 //-----------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------
 
 // <!-- idmovimiento_tierra,idtipo_tierra,fecha,fechanombre_dia,cantidad,precio_unitario,total,descripcion_tierra -->
 
-function limpiar_form_detalle_item() { 
+function limpiar_form_tierra() { 
 
   $("#idmovimiento_tierra").val("");
   $("#fecha").val("");
@@ -259,27 +256,39 @@ function limpiar_form_detalle_item() {
 
 }
 
-function tbla_principal_tierra(id_proyecto, idtipo_tierra,nombre_item,fecha_i, fecha_f, proveedor, comprobante) {
-  // $('.filtros-inputs').show();
+function tbla_principal_tierra(id_proyecto, idtipo_tierra, columna_bombeado, nombre_item, fecha_1, fecha_2, id_proveedor, comprobante) {
 
-  id_proyecto_r=id_proyecto; idtipo_tierra_r=idtipo_tierra; nombre_item_r=nombre_item; fecha_i_r=fecha_i; fecha_f_r=fecha_f; proveedor_r=proveedor; comprobante_r=comprobante;
-
+  id_proyecto_r = id_proyecto; idtipo_tierra_r = idtipo_tierra; columna_bombeado_r = columna_bombeado;  nombre_item_r = nombre_item; 
+  fecha_1_r = fecha_1; fecha_2_r = fecha_2; id_proveedor_r = id_proveedor; comprobante_r = comprobante;
+  
+  var bombeado_columna = columna_bombeado=='1' ?  { targets: [7], visible: true, searchable: true, }: { targets: [7], visible: false, searchable: false, } ;
+  
   $('.modal-title-detalle-items').html(nombre_item);
-  $("#idtipo_tierra_det").val(idtipo_tierra);
+  $("#idtipo_tierra_c").val(idtipo_tierra);
 
-  tabla_detalle_items = $("#tabla-tierra").dataTable({
+  limpiar_form_tierra();
+
+  var cantidad = 0, subtotal = 0, bombeado = 0, descuento = 0, total_compra = 0;
+
+  $(".total_concreto_cantidad").html('0.00');  
+  $(".total_concreto_subtotal").html('0.00');  
+  $(".total_concreto_bombeado").html('0.00');
+  $(".total_concreto_descuento").html('0.00');
+  $(".total_concreto").html('0.00');
+
+  tabla_tierra = $("#tabla-tierra").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6,7], } }, 
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4,5,6,7,8,9], }, orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
-      url: `../ajax/movimiento_tierra.php?op=tbla_principal_tierra&id_proyecto=${id_proyecto}&idtipo_tierra=${idtipo_tierra}&fecha_i=${fecha_i}&fecha_f=${fecha_f}&proveedor=${proveedor}&comprobante=${comprobante}`,
+      url: `../ajax/movimiento_tierra.php?op=tbla_principal_tierra&id_proyecto=${id_proyecto}&idtipo_tierra=${idtipo_tierra}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -288,17 +297,19 @@ function tbla_principal_tierra(id_proyecto, idtipo_tierra,nombre_item,fecha_i, f
     },
     createdRow: function (row, data, ixdex) {    
       // columna: #
-      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
-      // columna: sub acciones
-      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); }
-      // columna: sub fecha
-      if (data[2] != "") { $("td", row).eq(2).addClass("text-nowrap"); }
-      // columna: sub total
-      if (data[4] != "") { $("td", row).eq(4).addClass("text-nowrap text-center"); }
-      // columna: igv
-      if (data[5] != "") { $("td", row).eq(5).addClass("text-nowrap text-right"); }
-      // columna: total
-      if (data[6] != "") { $("td", row).eq(6).addClass("text-nowrap text-right"); }
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
+      // columna: cantidad 
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); $(".total_concreto_cantidad").html( formato_miles( cantidad += parseFloat(data[5]) ) ); }
+      // columna: subtotal
+      if (data[6] != '') { $(".total_concreto_subtotal").html(formato_miles( subtotal += parseFloat(data[6]) ) ); }
+      // columna: bombeado
+      if (data[7] != '') { $(".total_concreto_bombeado").html(formato_miles( bombeado += parseFloat(data[7]) ) ); }
+      // columna: descuento
+      if (data[8] != '') { $(".total_concreto_descuento").html(formato_miles( descuento += parseFloat(data[8]) )); }
+      // columna: total compra
+      if (data[9] != '') { $(".total_concreto").html(formato_miles( total_compra += parseFloat(data[9]) )); }      
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -309,34 +320,27 @@ function tbla_principal_tierra(id_proyecto, idtipo_tierra,nombre_item,fecha_i, f
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      // { targets: [11,12,13], visible: false, searchable: false, },  
+      bombeado_columna,
+      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [6,7,8, 9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
     ],
   }).DataTable();
 
-// idtipo_tierra,nombre_item,fecha_i,fecha_f,proveedor,comprobante
-  $.post("../ajax/movimiento_tierra.php?op=mostrar_total_det_item", {'id_proyecto': id_proyecto, 'idtipo_tierra': idtipo_tierra,'fecha_i': fecha_i,'fecha_f': fecha_f,'proveedor': proveedor,'comprobante': comprobante }, function (e, status) {
-    
-    e = JSON.parse(e); console.log(e);
-
-    if (e.status) { 
-
-      $("#total_cantidad").html(e.data.t_cantidad);
-      $("#total_monto").html(formato_miles(e.data.total) );
-      $('.cargando').hide();
-    } else {
-      ver_errores(e);
-    }
-  }).fail( function(e) { ver_errores(e); } );
-
+  $(tabla_tierra).ready(function () { 
+    $('.cargando_concreto').hide(); 
+    // var elementsArray = document.getElementById("reload-all");
+    // elementsArray.style.display = 'none'; 
+  });
 
 }
 
-function guardaryeditar_tierra(e) {
+function guardar_y_editar_tierra(e) {
 
   var formData = new FormData($("#form-detalle-item")[0]);
 
   $.ajax({
-    url: "../ajax/movimiento_tierra.php?op=guardaryeditar_tierra",
+    url: "../ajax/movimiento_tierra.php?op=guardar_y_editar_tierra",
     type: "POST",
     data: formData,
     contentType: false,
@@ -347,14 +351,14 @@ function guardaryeditar_tierra(e) {
         if (e.status == true) {
           Swal.fire("Correcto!", "Registro guardado correctamente", "success");
 
-          tabla_detalle_items.ajax.reload(null, false);
+          tabla_tierra.ajax.reload(null, false);
 
           limpiar_form_detalle_item()
 
           $("#modal-agregar-detalle-items").modal("hide");
-          //  listar_items(localStorage.getItem("nube_idproyecto"));
+          //  listar_de_grupo(localStorage.getItem("nube_idproyecto"));
 
-           tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r,fecha_i_r, fecha_f_r, proveedor_r, comprobante_r);
+           tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r, columna_bombeado_r, nombre_item_r, fecha_1, fecha_2, id_proveedor, comprobante);
           
         } else {
           ver_errores(e);
@@ -409,9 +413,8 @@ function calcular_total() {
 no_select_tomorrow($("#fecha"));
 
 
-function mostrar_detalle_item(idmovimiento_tierra) {
+function mostrar_tierra(idmovimiento_tierra) {
 
-  limpiar_form_item(); 
 
   $("#cargando-3-fomulario").hide();
   $("#cargando-4-fomulario").show();
@@ -419,7 +422,7 @@ function mostrar_detalle_item(idmovimiento_tierra) {
   $("#modal-agregar-detalle-items").modal("show");
   $("#idproveedor").val("").trigger("change");
 
-  $.post("../ajax/movimiento_tierra.php?op=mostrar_detalle_item", { 'idmovimiento_tierra': idmovimiento_tierra }, function (e, status) {
+  $.post("../ajax/movimiento_tierra.php?op=mostrar_tierra", { 'idmovimiento_tierra': idmovimiento_tierra }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
@@ -444,22 +447,114 @@ function mostrar_detalle_item(idmovimiento_tierra) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function eliminar_detalle_item(idmovimiento_tierra, nombre, fecha) {
+function eliminar_tierra(idmovimiento_tierra, nombre, fecha) {
 
   crud_eliminar_papelera(
-    "../ajax/movimiento_tierra.php?op=desactivar_detalle_item",
-    "../ajax/movimiento_tierra.php?op=eliminar_detalle_item", 
+    "../ajax/movimiento_tierra.php?op=desactivar_tierra",
+    "../ajax/movimiento_tierra.php?op=eliminar_tierra", 
     idmovimiento_tierra, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>Registro de ${nombre} con fecha ${fecha} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla_detalle_items.ajax.reload(null, false); tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r,fecha_i_r, fecha_f_r, proveedor_r, comprobante_r); },
+    function(){ tabla_tierra.ajax.reload(null, false); tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r, columna_bombeado_r, nombre_item_r, fecha_1, fecha_2, id_proveedor, comprobante); },
     false, 
     false, 
     false,
     false
   );
+}
+
+
+function ver_detalle_compras(idcompra_proyecto) {
+
+  $("#cargando-5-fomulario").hide();
+  $("#cargando-6-fomulario").show();
+
+  $("#print_pdf_compra").addClass('disabled');
+  $("#excel_compra").addClass('disabled');
+  $(".tooltip").remove();
+  $("#modal-ver-compras").modal("show");
+
+  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_insumo&id_compra=${idcompra_proyecto}`, function (r) {
+    r = JSON.parse(r);
+    if (r.status == true) {
+      $(".detalle_de_compra").html(r.data); 
+      $("#cargando-5-fomulario").show();
+      $("#cargando-6-fomulario").hide();
+
+      $("#print_pdf_compra").removeClass('disabled');
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+      $("#excel_compra").removeClass('disabled');
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+// ver imagen grande del producto agregado a la compra
+function ver_img_material(img, nombre) {
+  $("#ver_img_insumo_o_activo_fijo").html(doc_view_extencion(img, '', '', '100%'));
+  $(".nombre-img-material").html(nombre);
+  $('.jq_image_zoom').zoom({ on:'grab' });
+  $("#modal-ver-img-material").modal("show");
+}
+
+function export_excel_detalle_factura() {
+  $tabla = document.querySelector("#tabla_detalle_compra_de_insumo");
+  let tableExport = new TableExport($tabla, {
+    exportButtons: false, // No queremos botones
+    filename: "Detalle comprobante", //Nombre del archivo de Excel
+    sheetname: "detalle factura", //Título de la hoja
+  });
+  let datos = tableExport.getExportData(); console.log(datos);
+  let preferenciasDocumento = datos.tabla_detalle_compra_de_insumo.xlsx;
+  tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+}
+
+// :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E ::::::::::::::::::::::::::
+
+function comprobante_compras( num_orden, idcompra_proyecto, num_comprobante, proveedor, fecha) {
+   
+  tbla_comprobantes_compras(idcompra_proyecto, num_orden);   
+
+  $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
+  $("#modal-tabla-comprobantes-compra").modal("show"); 
+}
+
+function tbla_comprobantes_compras(id_compra, num_orden) {
+  tabla_comprobantes = $("#tabla-comprobantes-compra").dataTable({
+    responsive: true, 
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [ ],
+    ajax: {
+      url: `../ajax/movimiento_tierra.php?op=tbla_comprobantes_compra&id_compra=${id_compra}&num_orden=${num_orden}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    }, 
+    createdRow: function (row, data, ixdex) {
+      // columna: 1
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY hh:mm:ss a'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();
 }
 
 //-----------------------------------------------------------------------------------------
@@ -472,6 +567,12 @@ function eliminar_detalle_item(idmovimiento_tierra, nombre, fecha) {
 function tbla_principal_resumen(idproyecto) {
 
   $('.filtros-inputs').hide();
+
+  var cantidad = 0, descuento = 0, precio_total = 0;
+
+  $(".total_resumen_cantidad").html('0.00');  
+  $(".total_resumen_descuento").html('0.00');      
+  $(".total_resumen").html('0.00');  
 
   tabla_resumen = $("#tabla-resumen").dataTable({
     responsive: true,
@@ -497,6 +598,12 @@ function tbla_principal_resumen(idproyecto) {
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      // columna: cantidad
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-center"); $(".total_resumen_cantidad").html( formato_miles( cantidad += parseFloat(data[3]) ));   }
+      // columna: descuento
+      if (data[5] != '') { $(".total_resumen_descuento").html(formato_miles( descuento += parseFloat(data[5]) )); }
+      // columna: total
+      if (data[6] != '') { $(".total_resumen").html(formato_miles( precio_total += parseFloat(data[6]) ));    }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -507,18 +614,19 @@ function tbla_principal_resumen(idproyecto) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.number( ',', '.', 2) },
       { targets: [4,5,6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },      
       //{ targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();
 
-  total_tierra_resumen(idproyecto);
+  // total_tierra_resumen(idproyecto);
 }
 
 function total_tierra_resumen(idproyecto) {
 
-  $(".total_cantidad_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');  
-  $(".total_precio_unitario_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');      
+  $(".total_resumen_cantidad").html('<i class="fas fa-spinner fa-pulse"></i>');  
+  $(".total_resumen_descuento").html('<i class="fas fa-spinner fa-pulse"></i>');      
   $(".total_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');  
 
   $.post("../ajax/movimiento_tierra.php?op=total_resumen", { 'idproyecto': idproyecto }, function (e, status) {
@@ -527,10 +635,10 @@ function total_tierra_resumen(idproyecto) {
 
     if (e.status) {
 
-      $(".total_resumen_cantidad").html( formato_miles(e.data.cantidad));  
-      $(".total_resumen_precio_unitario").html(formato_miles(e.data.precio_unitario));  
-      $(".total_resumen_descuento").html(formato_miles(e.data.descuento));       
-      $(".total_resumen").html(formato_miles(e.data.total));    
+      // $(".total_resumen_cantidad").html( formato_miles(e.data.cantidad));  
+      // $(".total_resumen_precio_unitario").html(formato_miles(e.data.precio_unitario));  
+      // $(".total_resumen_descuento").html(formato_miles(e.data.descuento));       
+      // $(".total_resumen").html(formato_miles(e.data.total));    
 
     } else {
       ver_errores(e);
@@ -572,7 +680,7 @@ $(function () {
     
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardaryeditar(e);
+      guardar_y_editar_grupo(e);
     },
   });
 
@@ -606,7 +714,7 @@ $(function () {
     
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardaryeditar_tierra(e);
+      guardar_y_editar_tierra(e);
     },
   });
 
@@ -642,7 +750,7 @@ function filtros() {
 
   $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
 
-  tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r,nombre_item_r, fecha_1, fecha_2, id_proveedor, comprobante);
+  tbla_principal_tierra(id_proyecto_r, idtipo_tierra_r, columna_bombeado_r, nombre_item_r, fecha_1, fecha_2, id_proveedor, comprobante);
   //fecha_i_r=fecha_1, fecha_f_r=fecha_2, proveedor_r, comprobante_r;
 }
 

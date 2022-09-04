@@ -101,6 +101,8 @@ function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comproba
 
       $('.cargando').hide();
       $('.btn-zip').removeClass('disabled');
+      var elementsArray = document.getElementById("reload-all");
+      elementsArray.style.display = 'none';
     } else {
       ver_errores(e);
     }
@@ -317,6 +319,8 @@ function comprobante_multiple(id_tabla, fecha, tipo_comprobante, serie_comproban
 // ══════════════════════════════════════  SECCION -  FILTRO ══════════════════════════════════════ 
 
 function cargando_search() {
+  var elementsArray = document.getElementById("reload-all");
+  elementsArray.style.display = '';
   $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
   $('.cargando_visto_bueno').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
 }

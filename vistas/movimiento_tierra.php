@@ -57,8 +57,8 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_item();"><i class="fas fa-plus-circle"></i> Agregar Item</button>
-                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items"><i class="fas fa-eye"></i> Ver Item</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_grupo();"><i class="fas fa-plus-circle"></i> Agregar Grupo</button>
+                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items"><i class="fas fa-eye"></i> Ver Grupo</button>
                             Admnistra de manera eficiente el Concreto y Agregado.
                           </h3>
                         </div>
@@ -173,24 +173,28 @@
                                     <!-- TABLA - TIERRAS -->
                                     <div class="tab-pane fade" id="tabs-for-tierra" role="tabpanel" aria-labelledby="tabs-for-tierra-tab">
                                       <div class="row">
-                                        <div class="col-12 mb-2">
+                                        <!-- <div class="col-12 mb-2">
                                           <button type="button" class="btn bg-gradient-success btn-sm btn-agregar-tierra" data-toggle="modal" data-target="#modal-agregar-detalle-items" onclick="limpiar_form_detalle_item();" ><i class="fas fa-plus-circle"></i> <span class="d-none d-sm-inline-block">Agregar </span></button>                                
-                                        </div>
+                                        </div> -->
                                         <div class="col-12 row-horizon disenio-scroll">
                                           <table id="tabla-tierra" class="table table-bordered table-striped display" style="width: 100% !important;">
                                             <thead>
                                               <tr>
-                                                <th colspan="14" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                                <th colspan="14" class="cargando_concreto text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                                               </tr>
                                               <tr>
                                                 <th class="text-center">#</th>
                                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                                <th>Descipcion</th>
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
-                                                <th data-toggle="tooltip" data-original-title="Cantidad">Cantidad</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Parcial">Precio Parcial</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Total">Precio Total</th>
-                                                <th data-toggle="tooltip" data-original-title="Provedor">Provedor</th>
+                                                <th class="text-center">Cantidad</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Subtotal</th>                                                
+                                                <th >Bombeado</th>
+                                                <th >Descuento</th>
+                                                <th >Precio Total</th>
+                                                <th >Provedor</th>
+                                                <th >CFDI</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -198,12 +202,16 @@
                                               <tr>
                                                 <th class="text-center">#</th>
                                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                                <th>Descipcion</th>
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
-                                                <th class="text-nowrap text-center px-2 text-bold"><span id="total_cantidad"><i class="fas fa-spinner fa-pulse fa-lg"></i> </span> </th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Parcial">Precio Parcial</th>
-                                                <th class="text-nowrap text-right px-2 text-bold"> S/ <span id="total_monto"><i class="fas fa-spinner fa-pulse fa-lg"></i> </span> </th>
-                                                <th data-toggle="tooltip" data-original-title="Provedor">Provedor</th>
+                                                <th class="text-nowrap px-2 text-center" ><span class="total_concreto_cantidad">0.00</span></th>
+                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_subtotal">0.00</span></div></th>
+                                                <th ><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_bombeado">0.00</span></div></th>
+                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_descuento">0.00</span></div></th>                                                
+                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto">0.00</span></div></th>
+                                                <th >Provedor</th>
+                                                <th >CFDI</th>
                                               </tr>
                                             </tfoot>
                                           </table>
@@ -237,7 +245,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header"> 
-                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Grupos</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -245,7 +253,7 @@
 
                       <div class="modal-body row">
                         <div class="col-12">
-                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-items" onclick="limpiar_form_item();" >Agregar</button>
+                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-items" onclick="limpiar_form_grupo();" >Agregar</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
                           <table id="tabla_item" class="table table-bordered table-striped display " style="width: 100% !important;">
@@ -282,7 +290,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Item</h4>
+                        <h4 class="modal-title">Agregar Grupo</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -299,19 +307,20 @@
                               <input type="hidden" name="idtipo_tierra" id="idtipo_tierra" />
                               <!--  modulo -->
                               <input type="hidden" name="modulo" id="modulo" value="Movimiento de Tierras" />
+                              <input type="hidden" name="columna_servicio_bombeado" id="columna_servicio_bombeado" value="0">
 
                               <!-- Nombre -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="nombre">Nombre <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del Insumo." />
+                                  <input type="text" name="nombre_item" class="form-control" id="nombre_item" placeholder="Nombre del Insumo." />
                                 </div>
                               </div>
                               <!--descripcion-->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="descripcion">Descripción </label> <br />
-                                  <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
+                                  <label for="descripcion_item">Descripción </label> <br />
+                                  <textarea name="descripcion_item" id="descripcion_item" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
                               
@@ -341,7 +350,7 @@
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_item();">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_grupo();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_item">Guardar Cambios</button>
                       </div>
                     </div>
@@ -478,26 +487,94 @@
                   </div>
                 </div>
 
-                <!-- MDOAL - VER COMPROBANTE -->
-                <div class="modal fade" id="modal-ver-comprobante">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg ">
+                <!-- MODAL - DETALLE compras - charge -->
+                <div class="modal fade" id="modal-ver-compras">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
-                      <div class="modal-header" >
-                        <h4 class="modal-title">Comprobante: <b class="tile-modal-comprobante"></b></h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
+                      <div class="modal-header">
+                        <h4 class="modal-title">Detalle Compra</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div class="row detalle_de_compra" id="cargando-5-fomulario">                            
+                          <!--detalle de la compra-->
+                        </div>
+
+                        <div class="row" id="cargando-6-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center">
+                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                            <br />
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success float-right" id="excel_compra" onclick="export_excel_detalle_factura()" ><i class="far fa-file-excel"></i> Excel</button>
+                        <a type="button" class="btn btn-info" id="print_pdf_compra" target="_blank" ><i class="fas fa-print"></i> Imprimir/PDF</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - ver grande img producto -->
+                <div class="modal fade bg-color-02020280" id="modal-ver-img-material">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md shadow-0px1rem3rem-rgb-0-0-0-50 rounded">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0" >
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white nombre-img-material">Img producto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white" aria-hidden="true">&times;</span>
+                        </button>
                       </div>
                       <div class="modal-body">
-                        <div class="row">
-                          <div class="col-6 col-md-6">
-                            <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
-                          </div>
-                          <div class="col-6 col-md-6">
-                            <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
-                          </div>
-                          <div class="col-12 col-md-12 mt-2">
-                            <div id="ver_fact_pdf" width="auto"></div>
-                          </div>
-                        </div>                          
+                        <div class="text-center" id="ver_img_insumo_o_activo_fijo"> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL -  comprobantes - charge -->
+                <div class="modal fade" id="modal-tabla-comprobantes-compra">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body row">                        
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                          <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">#</th>
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">#</th>
+                                <th class="">OP</th>
+                                <th>Doc</th>
+                                <th>Fecha</th>                                    
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>
@@ -516,7 +593,11 @@
         </div>
         <!-- /.content-wrapper -->
 
-        <?php  require 'script.php'; ?>        
+        <?php  require 'script.php'; ?>    
+        <!-- table export EXCEL -->
+        <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
+        <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script>    
 
         <script type="text/javascript" src="scripts/movimiento_tierra.js"></script>
 
