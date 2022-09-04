@@ -262,6 +262,7 @@ function tbla_principal_tierra(id_proyecto, idtipo_tierra, columna_bombeado, nom
   fecha_1_r = fecha_1; fecha_2_r = fecha_2; id_proveedor_r = id_proveedor; comprobante_r = comprobante;
   
   var bombeado_columna = columna_bombeado=='1' ?  { targets: [7], visible: true, searchable: true, }: { targets: [7], visible: false, searchable: false, } ;
+  var bombeado_export = columna_bombeado=='1' ?  [0,2,3,4,5,6,7,8,9,10]: [0,2,3,4,5,6,8,9,10] ;
   
   $('.modal-title-detalle-items').html(nombre_item);
   $("#idtipo_tierra_c").val(idtipo_tierra);
@@ -283,9 +284,9 @@ function tbla_principal_tierra(id_proyecto, idtipo_tierra, columna_bombeado, nom
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4,5,6,7,8,9], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: bombeado_export },title: removeCaracterEspecial(nombre_item), }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: bombeado_export },title: removeCaracterEspecial(nombre_item),}, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: bombeado_export }, title: removeCaracterEspecial(nombre_item), orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
       url: `../ajax/movimiento_tierra.php?op=tbla_principal_tierra&id_proyecto=${id_proyecto}&idtipo_tierra=${idtipo_tierra}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
@@ -581,9 +582,9 @@ function tbla_principal_resumen(idproyecto) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,1,2,3,4,5], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,1,2,3,4,5,6], }, orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
       url: `../ajax/movimiento_tierra.php?op=tbla_principal_resumen&idproyecto=${idproyecto}`,
