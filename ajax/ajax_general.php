@@ -351,7 +351,7 @@
           $retorno = array(
             'status' => true, 
             'message' => 'Salió todo ok', 
-            'data' => $data, 
+            'data' => '<option value="1" title="insumo" >Insumo</option>'.$data, 
           );
   
           echo json_encode($retorno, true);

@@ -745,7 +745,23 @@ table th { vertical-align: top !important; }
 .jq_image_zoom img:hover { cursor: url(../../plugins/jquery-zoom/grab.cur), default; }
 .jq_image_zoom img:active { cursor: url(../../plugins/jquery-zoom/grabbed.cur), default; }
 
-/*  ══════════════════════════════════════════ - T O A S T - ══════════════════════════════════════════ */
+/*  ══════════════════════════════════════════ - R E L O A D   A L L - ══════════════════════════════════════════ */
+
+.reload-all {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  z-index: 10000;
+  background-color: rgb(0 0 0 / 62%);
+}
+
+/*  ══════════════════════════════════════════ - S E L E C T 2   -   R E A D O N L Y - ══════════════════════════════════════════ */
 select[readonly].select2-hidden-accessible + .select2-container { pointer-events: none; touch-action: none; }
 
 select[readonly].select2-hidden-accessible + .select2-container .select2-selection { background: #eee; box-shadow: none; }

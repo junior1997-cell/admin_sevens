@@ -20,6 +20,7 @@
 
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
+        <div class="reload-all" id="reload-all" style="display: none;"><img src="../dist/svg/reload.svg" class="rounded-circle" width="80px"> </div>
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
@@ -187,11 +188,12 @@
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
                                                 <th class="text-center">Cantidad</th>
-                                                <th >Precio Parcial</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Subtotal</th>                                                
+                                                <th >Bombeado</th>
                                                 <th >Descuento</th>
                                                 <th >Precio Total</th>
                                                 <th >Provedor</th>
-                                                <th >Estado</th>
+                                                <th >CFDI</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -203,11 +205,12 @@
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
                                                 <th class="text-nowrap px-2 text-center" ><span class="total_concreto_cantidad">0.00</span></th>
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_precio_unitario">0.00</span></div></th>
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_descuento">0.00</span></div></th>
+                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_subtotal">0.00</span></div></th>
+                                                <th ><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_bombeado">0.00</span></div></th>
+                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_descuento">0.00</span></div></th>                                                
                                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto">0.00</span></div></th>
                                                 <th >Provedor</th>
-                                                <th >Estado</th>
+                                                <th >CFDI</th>
                                               </tr>
                                             </tfoot>
                                           </table>
@@ -241,7 +244,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header"> 
-                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Grupos</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -257,9 +260,10 @@
                               <tr>
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th>
                                 <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Columna Calidad">Estado</th>
+                                <th >Estado</th>
                                                         
                               </tr>
                             </thead>
@@ -268,9 +272,10 @@
                               <tr>
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                <th data-toggle="tooltip" data-original-title="Documentos">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
+                                <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th>
                                 <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Columna Calidad">Estado</th>                                  
+                                <th >Estado</th>                                  
                               </tr>
                             </tfoot>
                           </table>
@@ -513,32 +518,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <!-- MDOAL - VER COMPROBANTE -->
-                <div class="modal fade" id="modal-ver-comprobante">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg ">
-                    <div class="modal-content">
-                      <div class="modal-header" >
-                        <h4 class="modal-title">Comprobante: <b class="tile-modal-comprobante"></b></h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="row">
-                          <div class="col-6 col-md-6">
-                            <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
-                          </div>
-                          <div class="col-6 col-md-6">
-                            <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
-                          </div>
-                          <div class="col-12 col-md-12 mt-2">
-                            <div id="ver_fact_pdf" width="auto"></div>
-                          </div>
-                        </div>                          
-                      </div>
-                    </div>
-                  </div>
-                </div> 
+                </div>                
 
                 <!-- MODAL - DETALLE compras - charge -->
                 <div class="modal fade" id="modal-ver-compras">
@@ -586,6 +566,48 @@
                       </div>
                       <div class="modal-body">
                         <div class="text-center" id="ver_img_insumo_o_activo_fijo"> </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL -  comprobantes - charge -->
+                <div class="modal fade" id="modal-tabla-comprobantes-compra">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body row">                        
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                          <table id="tabla-comprobantes-compra" class="table table-bordered table-striped display " style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="">#</th>
+                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                <th data-toggle="tooltip" data-original-title="Documentos">Comprobante</th>
+                                <th data-toggle="tooltip" data-original-title="Fecha de subida">Fecha</th>                          
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="">#</th>
+                                <th class="">OP</th>
+                                <th>Doc</th>
+                                <th>Fecha</th>                                    
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>

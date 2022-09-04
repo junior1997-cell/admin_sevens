@@ -39,7 +39,7 @@ class Compra_activos_fijos
 
       while ($num_elementos < count($idproducto)) {
 
-        $subtotal_activo_g = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];
+        $subtotal_activo_g = (floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos])) - $descuento[$num_elementos];
 
         $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general, idproducto, unidad_medida, color, ficha_tecnica_producto, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal) 
         VALUES ('".$idcompra_af_generalnew['data']."','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$ficha_tecnica_producto[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_activo_g')";
@@ -91,7 +91,7 @@ class Compra_activos_fijos
 
       while ($num_elementos < count($idproducto)) {
 
-        $subtotal_activo_g = floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos]) + $descuento[$num_elementos];
+        $subtotal_activo_g = (floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos])) - $descuento[$num_elementos];
 
         $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general, idproducto, unidad_medida, color, ficha_tecnica_producto, cantidad, precio_sin_igv, igv, precio_con_igv, descuento,subtotal) 
         VALUES ('$idcompra_af_general','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$ficha_tecnica_producto[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_activo_g')";
