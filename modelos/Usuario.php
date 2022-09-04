@@ -12,57 +12,90 @@ class Usuario
   //Implementamos un método para insertar registros
   public function insertar($trabajador, $cargo, $login, $clave, $permisos) {
     // insertamos al usuario
-    $sql = "INSERT INTO usuario ( idtrabajador, cargo, login, password) VALUES ('$trabajador', '$cargo', '$login', '$clave')";
+    $sql = "INSERT INTO usuario ( idtrabajador, cargo, login, password,user_created) VALUES ('$trabajador', '$cargo', '$login', '$clave','" . $_SESSION['idusuario'] . "')";
     $data_user = ejecutarConsulta_retornarID($sql);
 
-    if ($data_user['status']) {
-      // marcamos al trabajador como usuario
-      $sql2 = "UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";
-      ejecutarConsulta($sql2);
+    if ($data_user['status'] == false){return $data_user; }
 
-      $num_elementos = 0; $sw = "";
+    //add registro en nuestra bitacora
+    $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('usuario','" . $data_user['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql2);
 
-      if ( !empty($permisos) ) {
+    if ( $bitacora['status'] == false) {return $bitacora; }
 
-        while ($num_elementos < count($permisos)) {
-          
-          $idusuarionew = $data_user['data'];
+    // marcamos al trabajador como usuario
+    $sql3 = "UPDATE trabajador SET estado_usuario='1', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$trabajador';";
+    ejecutarConsulta($sql3);
 
-          $sql_detalle = "INSERT INTO usuario_permiso(idusuario, idpermiso) VALUES('$idusuarionew', '$permisos[$num_elementos]')";
+    $num_elementos = 0; $sw = "";
 
-          $sw = ejecutarConsulta($sql_detalle);  
-          $num_elementos++;
-        }
-        return $sw;
-      }else{
-        return $data_user;
+    if ( !empty($permisos) ) {
+
+      while ($num_elementos < count($permisos)) {
+        
+        $idusuarionew = $data_user['data'];
+
+        $sql_detalle = "INSERT INTO usuario_permiso(idusuario, idpermiso) VALUES('$idusuarionew', '$permisos[$num_elementos]')";
+
+        $sw = ejecutarConsulta_retornarID($sql_detalle);  
+
+        if ( $sw['status'] == false) {return $sw; }
+
+        //add registro en nuestra bitacora
+        $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('usuario_permiso','" .  $sw['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
+        $bitacora = ejecutarConsulta($sql2);
+
+        if ( $bitacora['status'] == false) {return $bitacora; }
+
+        $num_elementos++;
+
       }
-    } else {
+
+      return $sw;
+
+    }else{
+
       return $data_user;
+
     }
+
   }
 
   //Implementamos un método para editar registros
   public function editar($idusuario, $trabajador_old, $trabajador, $cargo, $login, $clave, $permisos) {
     $update_user = '[]';
+
     if (!empty($trabajador)) {
 
-      $sql = "UPDATE usuario SET idtrabajador='$trabajador', cargo='$cargo', login='$login', password='$clave' WHERE idusuario='$idusuario'";
+      $sql = "UPDATE usuario SET idtrabajador='$trabajador', cargo='$cargo', login='$login', password='$clave', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idusuario='$idusuario'";
       $update_user = ejecutarConsulta($sql);
       
-      if ( $update_user['status'] ) {
-        // desmarcamos al trabajador old como usuario
-        $sql3 = "UPDATE trabajador SET estado_usuario='0' WHERE idtrabajador='$trabajador_old';";
-        ejecutarConsulta($sql3);
-        // marcamos al trabajador new como usuario
-        $sql4 = "UPDATE trabajador SET estado_usuario='1' WHERE idtrabajador='$trabajador';";
-        ejecutarConsulta($sql4);
-      } else {
-        return $update_user;
-      }      
+      if ( $update_user['status']== false ) { return $update_user; }   
+
+      // desmarcamos al trabajador old como usuario
+      $sql3 = "UPDATE trabajador SET estado_usuario='0', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$trabajador_old';";
+      $old= ejecutarConsulta($sql3);
+      if ( $old['status'] == false) {return $old; }
+
+      //add registro en nuestra bitacora
+      $sql3_1 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','" . $trabajador_old . "','Cambio de estado_usuario new','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql3_1);
+      if ( $bitacora['status'] == false) {return $bitacora; }  
+
+      // marcamos al trabajador new como usuario
+      $sql4 = "UPDATE trabajador SET estado_usuario='1', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$trabajador';";
+      $new=ejecutarConsulta($sql4);
+      if ( $new['status'] == false) {return $new; }  
+
+      //add registro en nuestra bitacora
+      $sql4_1 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','" . $trabajador . "','Cambio de estado_usuario new','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql4_1);
+      if ( $bitacora['status'] == false) {return $bitacora; }  
+
       
     } else {
-      $sql = "UPDATE usuario SET idtrabajador='$trabajador_old', cargo='$cargo', login='$login', password='$clave' WHERE idusuario='$idusuario'";
+      $sql = "UPDATE usuario SET 
+      idtrabajador='$trabajador_old', cargo='$cargo', login='$login', password='$clave', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idusuario='$idusuario'";
       $update_user = ejecutarConsulta($sql);
 
       if ($update_user['status']) { } else {
@@ -97,21 +130,21 @@ class Usuario
 
   //Implementamos un método para desactivar categorías
   public function desactivar($idusuario) {
-    $sql = "UPDATE usuario SET estado='0' WHERE idusuario='$idusuario'";
+    $sql = "UPDATE usuario SET estado='0', user_trash= '" . $_SESSION['idusuario'] . "' WHERE idusuario='$idusuario'";
 
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para activar :: !!sin usar ::
   public function activar($idusuario) {
-    $sql = "UPDATE usuario SET estado='1' WHERE idusuario='$idusuario'";
+    $sql = "UPDATE usuario SET estado='1', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idusuario='$idusuario'";
 
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para eliminar usuario
   public function eliminar($idusuario) {
-    $sql = "UPDATE usuario SET estado_delete='0' WHERE idusuario='$idusuario'";
+    $sql = "UPDATE usuario SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idusuario='$idusuario'";
 
     return ejecutarConsulta($sql);
   }

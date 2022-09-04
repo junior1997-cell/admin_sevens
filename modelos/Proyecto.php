@@ -4,26 +4,26 @@ require "../config/Conexion_v2.php";
 
 class Proyecto
 {
+
   //Implementamos nuestro constructor
   public function __construct()
   {
   }
-
+  // $id_sesion= $_SESSION['idusuario'];
   //Implementamos un método para insertar registros
   public function insertar( $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero  ) {
     $doc7 = "";
     $doc8 = "";
+    $id_sesion= $_SESSION['idusuario'];
     $calendario_error = "No hay feriados, agregue alguno";
 
     // prepoaramos la consulta del proyecto
-    $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero) 
-		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero');";
+    $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
+		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero', '" . $_SESSION['idusuario'] . "');";
 
     // ejecutamos la consulta, Insertamos el registro de proyecto
     $id_proyect = ejecutarConsulta_retornarID($sql);
-    if ($id_proyect['status'] == false) {
-      return $id_proyect;
-    }
+    if ($id_proyect['status'] == false) { return $id_proyect; }
     // creamos la pensión: desayuno almuerzo y cena
     // $sql_pension = "INSERT INTO pension(idproyecto, tipo_pension, precio_variable)
     // VALUES ('$id_proyect','Desayuno','0'), ('$id_proyect','Almuerzo','0'), ('$id_proyect','Cena','0')";
@@ -71,7 +71,9 @@ class Proyecto
 			fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', dias_habiles='$dias_habiles',
 			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3',
 			doc4_presupuesto = '$doc4', doc5_analisis_costos_unitarios = '$doc5', doc6_insumos = '$doc6', 
-			fecha_pago_obrero = '$fecha_pago_obrero', fecha_valorizacion = '$fecha_valorizacion', permanente_pago_obrero = '$permanente_pago_obrero'
+			fecha_pago_obrero = '$fecha_pago_obrero', fecha_valorizacion = '$fecha_valorizacion', 
+      permanente_pago_obrero = '$permanente_pago_obrero',
+      user_updated= '" . $_SESSION['idusuario'] . "'
 		WHERE idproyecto='$idproyecto'";
 
     return ejecutarConsulta($sql);
@@ -93,7 +95,7 @@ class Proyecto
 
   //Implementamos un método para terminar proyecto
   public function terminar_proyecto($idproyecto)  {
-    $sql = "UPDATE proyecto SET estado='0' WHERE idproyecto='$idproyecto'";
+    $sql = "UPDATE proyecto SET estado='0',  WHERE idproyecto='$idproyecto'";
 
     return ejecutarConsulta($sql);
   }
