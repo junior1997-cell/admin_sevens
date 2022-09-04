@@ -71,6 +71,11 @@ class Usuario
       $update_user = ejecutarConsulta($sql);
       
       if ( $update_user['status']== false ) { return $update_user; }   
+      
+      //add registro en nuestra bitacora
+      $sql3_1 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','" . $trabajador_old . "','Cambio de estado_usuario new','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql3_1);
+      if ( $bitacora['status'] == false) {return $bitacora; }  
 
       // desmarcamos al trabajador old como usuario
       $sql3 = "UPDATE trabajador SET estado_usuario='0', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$trabajador_old';";
