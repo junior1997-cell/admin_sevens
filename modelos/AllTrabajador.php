@@ -16,26 +16,37 @@
       FROM trabajador as t, tipo_trabajador as tip, ocupacion o
       WHERE t.idtipo_trabajador = tip.idtipo_trabajador and t.idocupacion = o.idocupacion and numero_documento = '$num_documento';";
       $existe = ejecutarConsultaArray($sql_0);
+
       if ($existe['status'] == false) { return $existe;}
       
       if ( empty($existe['data']) ) {
-        $sql="INSERT INTO trabajador ( nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, idtipo_trabajador , idocupacion, ruc, cv_documentado, cv_no_documentado)
-        VALUES ( '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3', '$tipo', '$ocupacion', '$ruc', '$cv_documentado', '$cv_nodocumentado')";
+
+        $sql="INSERT INTO trabajador ( nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, idtipo_trabajador , idocupacion, ruc, cv_documentado, cv_no_documentado,user_created)
+        VALUES ( '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3', '$tipo', '$ocupacion', '$ruc', '$cv_documentado', '$cv_nodocumentado','" . $_SESSION['idusuario'] . "')";
         $new_trabajador = ejecutarConsulta_retornarID($sql);
+
         if ($new_trabajador['status'] == false) { return $new_trabajador;}
+
+        //add registro en nuestra bitacora
+        $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','".$new_trabajador['data']."','Registro Nuevo Trabajador','" . $_SESSION['idusuario'] . "')";
+        $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
         
         $num_elementos = 0;
         while ($num_elementos < count($banco)) {
           $id = $new_trabajador['data'];
           $sql_detalle = "";
           if ($num_elementos == $banco_seleccionado) {
-            $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado) VALUES ('$id','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '1')";
+            $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado,user_created) VALUES ('$id','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '1','" . $_SESSION['idusuario'] . "')";
           } else {
-            $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado) VALUES ('$id','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '0')";
+            $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado,user_created) VALUES ('$id','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '0','" . $_SESSION['idusuario'] . "')";
           }          
           
-          $banco_new =  ejecutarConsulta($sql_detalle);
+          $banco_new =  ejecutarConsulta_retornarID($sql_detalle);
           if ($banco_new['status'] == false) { return  $banco_new;}
+
+          //add registro en nuestra bitacora
+          $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('cuenta_banco_trabajador','".$banco_new['data']."','Registrando cuenta bancaria trabajador','" . $_SESSION['idusuario'] . "')";
+          $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
 
           $num_elementos = $num_elementos + 1;
         }
@@ -66,10 +77,15 @@
     public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
       $sql="UPDATE trabajador SET nombres='$nombre', tipo_documento='$tipo_documento', numero_documento='$num_documento', fecha_nacimiento='$nacimiento', edad='$edad',  titular_cuenta='$titular_cuenta',direccion='$direccion', 
       telefono='$telefono', email='$email', imagen_perfil ='$imagen1', imagen_dni_anverso ='$imagen2', imagen_dni_reverso ='$imagen3',
-      idtipo_trabajador ='$tipo', idocupacion='$ocupacion', ruc='$ruc', cv_documentado='$cv_documentado', cv_no_documentado='$cv_nodocumentado'
+      idtipo_trabajador ='$tipo', idocupacion='$ocupacion', ruc='$ruc', cv_documentado='$cv_documentado', 
+      cv_no_documentado='$cv_nodocumentado', user_updated= '" . $_SESSION['idusuario'] . "'
       WHERE idtrabajador='$idtrabajador'";	      
       $trabajdor = ejecutarConsulta($sql);
       if ($trabajdor['status'] == false) { return  $trabajdor;}
+
+      //add registro en nuestra bitacora
+      $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','".$idtrabajador."','Editamos el registro Trabajador','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
       
       $sql2 = "DELETE FROM cuenta_banco_trabajador WHERE idtrabajador='$idtrabajador';";
       $delete = ejecutarConsulta($sql2);
@@ -79,13 +95,17 @@
       while ($num_elementos < count($banco)) {         
         $sql_detalle = "";
         if ($num_elementos == $banco_seleccionado) {
-          $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado) VALUES ('$idtrabajador','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '1')";
+          $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado,user_created) VALUES ('$idtrabajador','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '1','" . $_SESSION['idusuario'] . "')";
         } else {
-          $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado) VALUES ('$idtrabajador','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '0')";
+          $sql_detalle = "INSERT INTO cuenta_banco_trabajador( idtrabajador, idbancos, cuenta_bancaria, cci, banco_seleccionado,user_created) VALUES ('$idtrabajador','$banco[$num_elementos]', '$cta_bancaria[$num_elementos]',  '$cci[$num_elementos]', '0','" . $_SESSION['idusuario'] . "')";
         }          
         
-        $banco_new =  ejecutarConsulta($sql_detalle);
+        $banco_new =  ejecutarConsulta_retornarID($sql_detalle);
         if ($banco_new['status'] == false) { return  $banco_new;}
+
+        //add registro en nuestra bitacora
+        $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('cuenta_banco_trabajador','".$banco_new['data']."','Registrando cuenta bancaria trabajador en la sección editar','" . $_SESSION['idusuario'] . "')";
+        $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
 
         $num_elementos = $num_elementos + 1;
       }
@@ -93,28 +113,52 @@
       return $banco_new;      
     }
 
-    //Implementamos un método para desactivar categorías
+    //Implementamos un método para desactivar 
     public function desactivar($idtrabajador, $descripcion) {
-      $sql="UPDATE trabajador SET estado='0', descripcion_expulsion = '$descripcion' WHERE idtrabajador='$idtrabajador'";
-      return ejecutarConsulta($sql);
+      $sql="UPDATE trabajador SET estado='0', descripcion_expulsion = '$descripcion',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$idtrabajador'";
+      $desactivar =  ejecutarConsulta($sql);
+
+      if ( $desactivar['status'] == false) {return $desactivar; }  
+
+      //add registro en nuestra bitacora
+      $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','.$idtrabajador.','Desativar el registro Trabajador','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+      return $desactivar;
     }
 
-    //Implementamos un método para desactivar categorías
+    //Implementamos un método para desactivar 
     public function desactivar_1($idtrabajador) {
-      $sql="UPDATE trabajador SET estado='0' WHERE idtrabajador='$idtrabajador'";
+      $sql="UPDATE trabajador SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$idtrabajador'";
       return ejecutarConsulta($sql);
     }
 
-    //Implementamos un método para activar categorías
+    //Implementamos un método para activar 
     public function activar($idtrabajador) {
-      $sql="UPDATE trabajador SET estado='1' WHERE idtrabajador='$idtrabajador'";
-      return ejecutarConsulta($sql);
+      $sql="UPDATE trabajador SET estado='1',user_updated= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$idtrabajador'";
+      $activar =  ejecutarConsulta($sql);
+      
+      if ( $activar['status'] == false) {return $activar; }  
+
+      //add registro en nuestra bitacora
+      $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','.$idtrabajador.','Habilitar el registro Trabajador','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+      return $activar;
     }
 
-    //Implementamos un método para activar categorías
+    //Implementamos un método para activar 
     public function eliminar($idtrabajador) {
-      $sql="UPDATE trabajador SET estado_delete='0' WHERE idtrabajador='$idtrabajador'";
-      return ejecutarConsulta($sql);
+      $sql="UPDATE trabajador SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador='$idtrabajador'";
+      $eliminar =  ejecutarConsulta($sql);
+      
+      if ( $eliminar['status'] == false) {return $eliminar; }  
+
+      //add registro en nuestra bitacora
+      $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','.$idtrabajador.','Eliminar registro Trabajador','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+      return $eliminar;
     }
 
     //Implementar un método para mostrar los datos de un registro a modificar

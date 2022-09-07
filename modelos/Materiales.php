@@ -21,9 +21,18 @@ class Materiales
     if ($buscando['status'] == false) { return $buscando; }
 
     if ( empty($buscando['data']) ) {
-      $sql = "INSERT INTO producto (idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total) 
-      VALUES ('$idcategoria', '$idgrupo', '$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$precio_igv','$precio_sin_igv','$unidad_medida','$color','$total_precio')";
-      return ejecutarConsulta($sql);
+      $sql = "INSERT INTO producto (idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total,user_created) 
+      VALUES ('$idcategoria', '$idgrupo', '$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$precio_igv','$precio_sin_igv','$unidad_medida','$color','$total_precio','" . $_SESSION['idusuario'] . "')";
+     
+      $intertar =  ejecutarConsulta_retornarID($sql); 
+      if ($intertar['status'] == false) {  return $intertar; } 
+
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','".$intertar['data']."','Nuevo producto registrado','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
+      return $intertar;
+
     } else {
       $info_repetida = ''; 
 
@@ -46,7 +55,7 @@ class Materiales
   //Implementamos un método para editar registros
   public function editar($idproducto, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $precio_igv, $precio_sin_igv, $unidad_medida, $color, $total_precio)
   {
-    //var_dump($idproducto,$nombre,$marca,$precio_unitario,$descripcion,$imagen1,$ficha_tecnica,$estado_igv,$monto_igv,$precio_real,$unid_medida,$total_precio);die();
+   
     $sql = "UPDATE producto SET 
 		idcategoria_insumos_af = '$idcategoria',
     idtipo_tierra_concreto ='$idgrupo',
@@ -63,16 +72,34 @@ class Materiales
 		precio_sin_igv='$precio_sin_igv',
 		idunidad_medida='$unidad_medida',
 		idcolor='$color',
-		precio_total='$total_precio'
+		precio_total='$total_precio',
+    user_updated= '" . $_SESSION['idusuario'] . "'
+
 		WHERE idproducto='$idproducto'";
-    return ejecutarConsulta($sql);
+
+    $editar =  ejecutarConsulta($sql);
+    if ( $editar['status'] == false) {return $editar; } 
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','$idproducto','Producto editado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+    return $editar;
   }
 
   //Implementamos un método para desactivar categorías
   public function desactivar($idproducto)
   {
-    $sql = "UPDATE producto SET estado='0' WHERE idproducto ='$idproducto'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE producto SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idproducto ='$idproducto'";
+    $desactivar= ejecutarConsulta($sql);
+
+    if ($desactivar['status'] == false) {  return $desactivar; }
+    
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','".$idproducto."','Producto desactivado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+    
+    return $desactivar;
   }
 
   //Implementamos un método para activar categorías
@@ -85,8 +112,15 @@ class Materiales
   //Implementamos un método para activar categorías
   public function eliminar($idproducto)
   {
-    $sql = "UPDATE producto SET estado_delete='0' WHERE idproducto ='$idproducto'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE producto SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idproducto ='$idproducto'";
+    $eliminar =  ejecutarConsulta($sql);
+    if ( $eliminar['status'] == false) {return $eliminar; }  
+    
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','$idproducto','Producto Eliminado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+    
+    return $eliminar;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar

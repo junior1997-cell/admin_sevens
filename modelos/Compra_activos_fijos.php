@@ -25,14 +25,18 @@ class Compra_activos_fijos
     cafg.fecha_compra, cafg.tipo_comprobante, cafg.serie_comprobante, cafg.glosa, cafg.total, cafg.estado, cafg.estado_delete 
     FROM compra_af_general as cafg, proveedor as p 
     WHERE cafg.idproveedor = p.idproveedor AND p.ruc ='$ruc' AND cafg.tipo_comprobante ='$tipo_comprobante' AND cafg.serie_comprobante = '$serie_comprobante'";
-    $compra_existe = ejecutarConsultaArray($sql_2);
-    if ($compra_existe['status'] == false) { return  $compra_existe;}
+    $compra_existe = ejecutarConsultaArray($sql_2); if ($compra_existe['status'] == false) { return  $compra_existe;}
 
     if (empty($compra_existe['data']) || $tipo_comprobante == 'Ninguno') {
-      $sql_3 = "INSERT INTO compra_af_general(idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, subtotal, igv, total, tipo_gravada)
-      VALUES ('$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$subtotal_compra', '$igv_compra', '$total_compra', '$tipo_gravada')";      
-      $idcompra_af_generalnew = ejecutarConsulta_retornarID($sql_3);
-      if ($idcompra_af_generalnew['status'] == false) { return  $idcompra_af_generalnew;}
+
+      $sql_3 = "INSERT INTO compra_af_general(idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, subtotal, igv, total, tipo_gravada, user_created)
+      VALUES ('$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$subtotal_compra', '$igv_compra', '$total_compra', '$tipo_gravada','" . $_SESSION['idusuario'] . "')";      
+      $idcompra_af_generalnew = ejecutarConsulta_retornarID($sql_3); if ($idcompra_af_generalnew['status'] == false) { return  $idcompra_af_generalnew;}
+
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_af_general','".$idcompra_af_generalnew['data']."','Nueva compra de activo fijo registrada','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
 
       $num_elementos = 0;
       $sw = true;     
@@ -41,10 +45,15 @@ class Compra_activos_fijos
 
         $subtotal_activo_g = (floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos])) - $descuento[$num_elementos];
 
-        $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general, idproducto, unidad_medida, color, ficha_tecnica_producto, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal) 
-        VALUES ('".$idcompra_af_generalnew['data']."','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$ficha_tecnica_producto[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_activo_g')";
-        $sw = ejecutarConsulta($sql_detalle);
-        if ($sw['status'] == false) {    return $sw ; }
+        $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general, idproducto, unidad_medida, color, ficha_tecnica_producto, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, user_created) 
+        VALUES ('".$idcompra_af_generalnew['data']."','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$ficha_tecnica_producto[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_activo_g','" . $_SESSION['idusuario'] . "')";
+        $sw = ejecutarConsulta_retornarID($sql_detalle); if ($sw['status'] == false) {    return $sw ; }
+
+
+        //add registro en nuestra bitacora
+        $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('detalle_compra_af_g','".$sw['data']."','Detalle de la compra de activo fijo num registro ".$idcompra_af_generalnew['data']."','" . $_SESSION['idusuario'] . "')";
+        $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
 
         $num_elementos = $num_elementos + 1;
       }  
@@ -77,15 +86,18 @@ class Compra_activos_fijos
     if ( !empty($idcompra_af_general) ) {
       //Eliminamos todos los permisos asignados para volverlos a registrar
       $sqldel = "DELETE FROM detalle_compra_af_g WHERE idcompra_af_general='$idcompra_af_general';";
-      $delete = ejecutarConsulta($sqldel);
-      if ( $delete['status'] == false ) { return $delete; }
+      $delete = ejecutarConsulta($sqldel); if ( $delete['status'] == false ) { return $delete; }
 
       $sql = "UPDATE compra_af_general SET idproveedor='$idproveedor', fecha_compra='$fecha_compra', tipo_comprobante='$tipo_comprobante',
       serie_comprobante='$serie_comprobante', val_igv = '$val_igv', subtotal='$subtotal_compra', igv='$igv_compra', total='$total_compra', 
-      tipo_gravada = '$tipo_gravada', descripcion='$descripcion', glosa = '$glosa'
+      tipo_gravada = '$tipo_gravada', descripcion='$descripcion', glosa = '$glosa',user_updated= '" . $_SESSION['idusuario'] . "'
       WHERE idcompra_af_general = '$idcompra_af_general'";
-      $compra = ejecutarConsulta($sql);
-      if ($compra['status'] == false ) { return $compra; }
+      $compra = ejecutarConsulta($sql); if ($compra['status'] == false ) { return $compra; }
+
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_af_general','$idcompra_af_general','Compra activo fijo editada','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+
 
       $num_elementos = 0;
 
@@ -95,11 +107,16 @@ class Compra_activos_fijos
 
         $sql_detalle = "INSERT INTO detalle_compra_af_g(idcompra_af_general, idproducto, unidad_medida, color, ficha_tecnica_producto, cantidad, precio_sin_igv, igv, precio_con_igv, descuento,subtotal) 
         VALUES ('$idcompra_af_general','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$ficha_tecnica_producto[$num_elementos]','$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_activo_g')";
-        $detalle_compra = ejecutarConsulta($sql_detalle);
+        $detalle_compra = ejecutarConsulta_retornarID($sql_detalle); if ($detalle_compra['status'] == false) { return $detalle_compra ; }
 
-        if ($detalle_compra['status'] == false) { return $detalle_compra ; }
+
+        //add registro en nuestra bitacora
+        $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('detalle_compra_af_g','".$detalle_compra['data']."','Detalle de la compra de activo fijo num registro ".$idcompra_af_general."','" . $_SESSION['idusuario'] . "')";
+        $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
 
         $num_elementos = $num_elementos + 1;
+
       }
 
       return $detalle_compra;      
@@ -149,14 +166,29 @@ class Compra_activos_fijos
 
   //Implementamos un método para desactivar categorías
   public function anular_compra($idcompra_af_general) {
-    $sql = "UPDATE compra_af_general SET estado='0' WHERE idcompra_af_general='$idcompra_af_general'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE compra_af_general SET estado='0' ,user_trash= '" . $_SESSION['idusuario'] . "' WHERE idcompra_af_general='$idcompra_af_general'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_af_general','".$idcompra_af_general."','Compra activo general desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   //Implementamos un método para eliminar compra activos fijos
   public function eliminar_compra($idcompra_af_general) {
-    $sql = "UPDATE compra_af_general SET estado_delete='0' WHERE idcompra_af_general='$idcompra_af_general'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE compra_af_general SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idcompra_af_general='$idcompra_af_general'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_af_general','$idcompra_af_general','Compra activo general Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   //Implementar un método para listar los registros
@@ -274,8 +306,14 @@ class Compra_activos_fijos
 
   public function editar_comprobante_af_g($idcompra_af_general, $doc_comprobante) {
     //var_dump($idcompra_af_general,$doc_comprobante);die();
-    $sql = "UPDATE compra_af_general SET comprobante='$doc_comprobante' WHERE idcompra_af_general ='$idcompra_af_general'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE compra_af_general SET comprobante='$doc_comprobante' ,user_updated= '" . $_SESSION['idusuario'] . "' WHERE idcompra_af_general ='$idcompra_af_general'";
+    $edit= ejecutarConsulta($sql); if ($edit['status'] == false) {  return $edit; }
+
+    //add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_af_general','$idcompra_af_general','Actulización del comprobante','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+    return $edit;
+
   }
 
   // obtebnemos los DOCS para eliminar
@@ -461,10 +499,17 @@ class Compra_activos_fijos
 
   public function insertar_pago($idcompra_af_general_p, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1) {
     $sql = "INSERT INTO pago_af_general(idcompra_af_general,beneficiario,forma_pago,tipo_pago,cuenta_destino,idbancos,
-    titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,imagen) 
+    titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,imagen, user_created) 
     VALUES('$idcompra_af_general_p', '$beneficiario_pago', '$forma_pago', '$tipo_pago', '$cuenta_destino_pago', '$banco_pago',
-    '$titular_cuenta_pago', '$fecha_pago', '$monto_pago', '$numero_op_pago', '$descripcion_pago', '$imagen1')";
-    return ejecutarConsulta($sql);
+    '$titular_cuenta_pago', '$fecha_pago', '$monto_pago', '$numero_op_pago', '$descripcion_pago', '$imagen1','" . $_SESSION['idusuario'] . "')";
+		$insertar =  ejecutarConsulta_retornarID($sql); 
+		if ($insertar['status'] == false) {  return $insertar; } 
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_af_general','".$insertar['data']."','Nuevo pago a la compra de activos fijo con id  ".$idcompra_af_general_p."','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+    return $insertar;
   }
 
   //Implementamos un método para editar registros
@@ -481,9 +526,15 @@ class Compra_activos_fijos
         monto='$monto_pago',
         numero_operacion='$numero_op_pago',
         descripcion='$descripcion_pago',
-        imagen='$imagen1'
+        imagen='$imagen1',
+        user_updated= '" . $_SESSION['idusuario'] . "'
         WHERE idpago_af_general='$idpago_af_general'";
-    return ejecutarConsulta($sql);
+        $editar =  ejecutarConsulta($sql);
+        if ( $editar['status'] == false) {return $editar; }
+    		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_af_general','$idpago_af_general','Pago editado a la compra de activos fijo con id ".$idcompra_af_general_p."','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+    return $editar; 
   }
 
   //Listar pagos-normal
@@ -511,15 +562,30 @@ class Compra_activos_fijos
   //Implementamos un método para desactivar categorías
   public function desactivar_pagos($idcompra_af_general) {
     //var_dump($idpago_compras);die();
-    $sql = "UPDATE pago_af_general SET estado='0' WHERE idpago_af_general ='$idcompra_af_general'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE pago_af_general SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idpago_af_general ='$idcompra_af_general'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_af_general','".$idcompra_af_general."','Pago compra activo fijo general desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   //Implementamos un método para desactivar categorías
   public function eliminar_pagos($idcompra_af_general) {
     //var_dump($idpago_compras);die();
-    $sql = "UPDATE pago_af_general SET estado_delete='0' WHERE idpago_af_general ='$idcompra_af_general'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE pago_af_general SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idpago_af_general ='$idcompra_af_general'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_af_general','$idcompra_af_general','Pago compra activo fijo general Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   //Mostrar datos para editar Pago servicio.

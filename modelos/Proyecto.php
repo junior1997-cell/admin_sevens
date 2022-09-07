@@ -9,34 +9,34 @@ class Proyecto
   public function __construct()
   {
   }
-  // $id_sesion= $_SESSION['idusuario'];
+
   //Implementamos un método para insertar registros
   public function insertar( $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero  ) {
     $doc7 = "";
     $doc8 = "";
-    $id_sesion= $_SESSION['idusuario'];
     $calendario_error = "No hay feriados, agregue alguno";
 
     // prepoaramos la consulta del proyecto
     $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
 		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero', '" . $_SESSION['idusuario'] . "');";
 
-    // ejecutamos la consulta, Insertamos el registro de proyecto
     $id_proyect = ejecutarConsulta_retornarID($sql);
+
     if ($id_proyect['status'] == false) { return $id_proyect; }
-    // creamos la pensión: desayuno almuerzo y cena
-    // $sql_pension = "INSERT INTO pension(idproyecto, tipo_pension, precio_variable)
-    // VALUES ('$id_proyect','Desayuno','0'), ('$id_proyect','Almuerzo','0'), ('$id_proyect','Cena','0')";
-    // ejecutarConsulta($sql_pension);
+
+    //add registro en nuestra bitacora
+    $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','" . $id_proyect['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
+    $bitacora1 = ejecutarConsulta($sql2);
+
+    if ( $bitacora1['status'] == false) {return $bitacora1; }
 
     // extraemos todas fechas
     $sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
     $proyecto = ejecutarConsultaArray($sql2);
-    if ($proyecto['status'] == false) {
-      return $proyecto;
-    }
+    if ($proyecto['status'] == false) {return $proyecto;}
 
-    if (!empty($proyecto['id_tabla'])) {
+    if (!empty($proyecto['data'])) {
+
       $id_proyect = $id_proyect['id_tabla'];
 
       // insertamos las fechas al nuevo proyecto
@@ -47,17 +47,26 @@ class Proyecto
         $background_color = $key['background_color'];
         $text_color = $key['text_color'];
 
-        $sql3 = "INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
-				VALUES ('$id_proyect', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
-        $calendario_proyect = ejecutarConsulta($sql3);
+        $sql3 = "INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color,user_created)
+				VALUES ('$id_proyect', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color','" . $_SESSION['idusuario'] . "')";
+        $calendario_proyect = ejecutarConsulta_retornarID($sql3);
 
-        if ($calendario_proyect['status'] == false) {
-          return $calendario_proyect;
-        }
+        if ($calendario_proyect['status'] == false) {return $calendario_proyect;}
+
+        //add registro en nuestra bitacora
+        $sql3_1 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario_por_proyecto','" . $calendario_proyect['data'] . "','Registramos la fechas de feriadod al nuevo proyecto','" . $_SESSION['idusuario'] . "')";
+        $bitacora3_1 = ejecutarConsulta($sql3_1);
+        
+        if ( $bitacora3_1['status'] == false) {return $bitacora3_1; }
+
       }
+
       return $calendario_proyect;
+
     } else {
+
       return $proyecto;
+
     }
 
     // $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
@@ -76,35 +85,83 @@ class Proyecto
       user_updated= '" . $_SESSION['idusuario'] . "'
 		WHERE idproyecto='$idproyecto'";
 
-    return ejecutarConsulta($sql);
+    $edit =  ejecutarConsulta($sql);
+    if ( $edit['status'] == false) {return $edit; }
+
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','$idproyecto','Editamos registro proyecto','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql);
+    
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $edit;
   }
 
   //Implementamos un método para editar EDITAR EL DOC VALORIZACIONES
   public function editar_valorizacion($idproyecto, $doc7)  {
-    $sql = "UPDATE proyecto SET excel_valorizaciones = '$doc7' WHERE idproyecto = '$idproyecto'";
+    $sql = "UPDATE proyecto SET excel_valorizaciones = '$doc7', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idproyecto = '$idproyecto'";
 
-    return ejecutarConsulta($sql);
+    $edit= ejecutarConsulta($sql);
+    if ( $edit['status'] == false) {return $edit; }
+
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','$idproyecto','Editamos registro proyecto DOC VALORIZACIONES','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql);
+    
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $edit;
+
   }
 
   //Implementamos un método para empezar proyecto
   public function empezar_proyecto($idproyecto)  {
-    $sql = "UPDATE proyecto SET estado='1' WHERE idproyecto='$idproyecto'";
+    $sql = "UPDATE proyecto SET estado='1', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idproyecto='$idproyecto'";
 
-    return ejecutarConsulta($sql);
+    $empesar_p= ejecutarConsulta($sql);
+    if ( $empesar_p['status'] == false) {return $empesar_p; }
+
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','$idproyecto','Empezar proyecto','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql);
+    
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $empesar_p;
+
   }
 
   //Implementamos un método para terminar proyecto
   public function terminar_proyecto($idproyecto)  {
-    $sql = "UPDATE proyecto SET estado='0',  WHERE idproyecto='$idproyecto'";
+    $sql = "UPDATE proyecto SET estado='0', user_updated= '" . $_SESSION['idusuario'] . "'  WHERE idproyecto='$idproyecto'";
 
-    return ejecutarConsulta($sql);
+    $terminar_p = ejecutarConsulta($sql);
+
+    if ( $terminar_p['status'] == false) {return $terminar_p; }
+
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','$idproyecto','Terminar proyecto','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql);
+    
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $bitacora;
+
   }
 
   //Implementamos un método para reniciar proyecto
   public function reiniciar_proyecto($idproyecto)  {
-    $sql = "UPDATE proyecto SET estado='2' WHERE idproyecto='$idproyecto'";
+    $sql = "UPDATE proyecto SET estado='2', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idproyecto='$idproyecto'";
 
-    return ejecutarConsulta($sql);
+    $terminar_p = ejecutarConsulta($sql);
+    
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','$idproyecto','Reniciar proyecto','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql);
+    
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $terminar_p;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
@@ -255,6 +312,7 @@ class Proyecto
 
     return $respuestas;
   }
+  
 }
 
 ?>

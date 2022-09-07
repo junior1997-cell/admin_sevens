@@ -14,22 +14,44 @@ Class Categoria_af
 	public function insertar($nombre)
 	{
 		//var_dump($nombre);die();
-		$sql="INSERT INTO `categoria_insumos_af`(`nombre`) VALUES ('$nombre')";
-		return ejecutarConsulta($sql);
+		$sql="INSERT INTO `categoria_insumos_af`(`nombre`, user_created) VALUES ('$nombre','" . $_SESSION['idusuario'] . "')";
+		$insertar =  ejecutarConsulta_retornarID($sql); 
+		if ($insertar['status'] == false) {  return $insertar; } 
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('categoria_insumos_af','".$insertar['data']."','Nueva categoría de insumos registrada','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $insertar;
 	}
 
 	//Implementamos un método para editar registros
 	public function editar($idcategoria_insumos_af,$nombre)
 	{
-		$sql="UPDATE categoria_insumos_af SET nombre='$nombre' WHERE idcategoria_insumos_af='$idcategoria_insumos_af'";
-		return ejecutarConsulta($sql);
+		$sql="UPDATE categoria_insumos_af SET nombre='$nombre',user_updated= '" . $_SESSION['idusuario'] . "' WHERE idcategoria_insumos_af='$idcategoria_insumos_af'";
+		$editar =  ejecutarConsulta($sql);
+		if ( $editar['status'] == false) {return $editar; } 
+	
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('categoria_insumos_af','$idcategoria_insumos_af','Categoría de insumos editada','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+	
+		return $editar;
 	}
 
 	//Implementamos un método para desactivar categoria_insumos_af
 	public function desactivar($idcategoria_insumos_af)
 	{
-		$sql="UPDATE categoria_insumos_af SET estado='0' WHERE idcategoria_insumos_af='$idcategoria_insumos_af'";
-		return ejecutarConsulta($sql);
+		$sql="UPDATE categoria_insumos_af SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idcategoria_insumos_af='$idcategoria_insumos_af'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('categoria_insumos_af','".$idcategoria_insumos_af."','Categoría de insumos desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
 	}
 
 	//Implementamos un método para activar categoria_insumos_af
@@ -42,8 +64,15 @@ Class Categoria_af
 	//Implementamos un método para eliminar
 	public function delete($idcategoria_insumos_af)
 	{
-		$sql="UPDATE categoria_insumos_af SET estado_delete='0' WHERE idcategoria_insumos_af='$idcategoria_insumos_af'";
-		return ejecutarConsulta($sql);
+		$sql="UPDATE categoria_insumos_af SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idcategoria_insumos_af='$idcategoria_insumos_af'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','$idcategoria_insumos_af','Categoría de insumos Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar

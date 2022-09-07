@@ -20,9 +20,15 @@ class Otra_factura
 		if ($prov['status'] == false) { return  $prov;}
 
     if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
-      $sql = "INSERT INTO otra_factura (idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada) 
-		  VALUES ('$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada')";
-      return ejecutarConsulta($sql);
+      $sql = "INSERT INTO otra_factura (idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada, user_created) 
+		  VALUES ('$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada','" . $_SESSION['idusuario'] . "')";
+      $insertar =  ejecutarConsulta_retornarID($sql); 
+      if ($insertar['status'] == false) {  return $insertar; } 
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','".$insertar['data']."','Nueva otra factura registrada','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+      return $insertar;
     } else {
       $info_repetida = ''; 
 
@@ -58,24 +64,47 @@ class Otra_factura
     `descripcion`       ='$descripcion',
     `glosa`             ='$glosa',
     `comprobante`       ='$comprobante',
-    `tipo_gravada`      ='$tipo_gravada'
+    `tipo_gravada`      ='$tipo_gravada',
+    user_updated= '" . $_SESSION['idusuario'] . "'
 
 		WHERE idotra_factura='$idotra_factura'";
-    return ejecutarConsulta($sql);
+    $editar= ejecutarConsulta($sql);
+
+		if ($editar['status'] == false) {  return $editar; }
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','$idotra_factura','Otra factura editada','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $editar;
   }
 
   //Implementamos un método para desactivar categorías
   public function desactivar($idotra_factura)
   {
-    $sql = "UPDATE otra_factura SET estado='0' WHERE idotra_factura ='$idotra_factura'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE otra_factura SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idotra_factura ='$idotra_factura'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','".$idotra_factura."','Otra factura desactivada','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   //Implementamos un método para desactivar categorías
   public function eliminar($idotra_factura)
   {
-    $sql = "UPDATE otra_factura SET estado_delete='0' WHERE idotra_factura ='$idotra_factura'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE otra_factura SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idotra_factura ='$idotra_factura'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','$idotra_factura','Otra factura Eliminada','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar

@@ -17,10 +17,15 @@ class AllProveedor
     if ($existe['status'] == false) {  return $existe; }
 
     if (empty($existe['data'])) {
-      $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta)
-      VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta')";
+      $sql = "INSERT INTO proveedor (idbancos, razon_social, tipo_documento, ruc, direccion, telefono, cuenta_bancaria, cci, cuenta_detracciones, titular_cuenta,user_created)
+      VALUES ('$banco', '$nombre', '$tipo_documento', '$num_documento', '$direccion', '$telefono', '$c_bancaria', '$cci', '$c_detracciones', '$titular_cuenta','" . $_SESSION['idusuario'] . "')";
       $sw =  ejecutarConsulta_retornarID($sql);     
       if ($sw['status'] == false) {  return $sw; } 
+
+      //add registro en nuestra bitacora
+      $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proveedor','".$sw['data']."','Nuevo proveedor registrado','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }   
+
     } else{
 
       $info_repetida = ''; 
@@ -47,10 +52,14 @@ class AllProveedor
 
     $sql = "UPDATE proveedor SET idbancos='$banco',	razon_social='$nombre',	tipo_documento='$tipo_documento', ruc='$num_documento',
 		direccion='$direccion',	telefono='$telefono',	cuenta_bancaria='$c_bancaria', cci='$cci', cuenta_detracciones='$c_detracciones',
-		titular_cuenta='$titular_cuenta' WHERE idproveedor='$idproveedor'";
+		titular_cuenta='$titular_cuenta', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idproveedor='$idproveedor'";
 
     $edit_proveedor = ejecutarConsulta_retornarID($sql);
     if ($edit_proveedor['status'] == false) {  return $edit_proveedor; }
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proveedor','$idproveedor','Proveedor editado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
 
     return $sw = array( 'status' => true, 'message' => 'solio oka', 'data' => $idproveedor, 'id_tabla' => $idproveedor );
   }
@@ -58,8 +67,16 @@ class AllProveedor
   //Implementamos un método para desactivar categorías
   public function desactivar($idproveedor)
   {
-    $sql = "UPDATE proveedor SET estado='0' WHERE idproveedor='$idproveedor'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE proveedor SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idproveedor='$idproveedor'";
+    $desactivar= ejecutarConsulta($sql);
+
+    if ($desactivar['status'] == false) {  return $desactivar; }
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proveedor','".$idproveedor."','Proveedor desactivado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
+    return $desactivar;
   }
 
   //Implementamos un método para activar categorías
@@ -72,8 +89,16 @@ class AllProveedor
   //Implementamos un método para eliminar
   public function eliminar($idproveedor)
   {
-    $sql = "UPDATE proveedor SET estado_delete='0' WHERE idproveedor='$idproveedor'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE proveedor SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idproveedor='$idproveedor'";
+    $eliminar =  ejecutarConsulta($sql);
+      
+    if ( $eliminar['status'] == false) {return $eliminar; }  
+
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proveedor','$idproveedor','Provedor Eliminado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+    return $eliminar;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar

@@ -1141,14 +1141,27 @@ class Resumenfacturas
     $id_user_vb = $_SESSION["idusuario"]; $nombre_user_vb = $_SESSION["nombre"]; $imagen_user_vb = $_SESSION["imagen"];
 
     if ($accion == 'agregar') {
-      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb_rf = '$id_user_vb', nombre_user_vb_rf = '$nombre_user_vb', 
+      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb_rf = '$id_user_vb', nombre_user_vb_rf = '$nombre_user_vb',user_updated= '" . $_SESSION['idusuario'] . "', 
       imagen_user_vb_rf = '$imagen_user_vb', estado_user_vb_rf = '1'
       WHERE $nombre_id_tabla ='$id_tabla' ";
-      return ejecutarConsulta($sql);
+
+      $visto_b =  ejecutarConsulta($sql); 
+      if ($visto_b['status'] == false) {  return $visto_b; } 
+      		//add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','$id_tabla','agregar visto bueno para la factura".$id_tabla."','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+      return $visto_b;
+
+
     } else if ($accion == 'quitar') {
-      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb_rf = '', nombre_user_vb_rf = '', imagen_user_vb_rf ='', estado_user_vb_rf = '0'
+      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb_rf = '', nombre_user_vb_rf = '', imagen_user_vb_rf ='', estado_user_vb_rf = '0',user_updated= '" . $_SESSION['idusuario'] . "'
       WHERE $nombre_id_tabla ='$id_tabla'";
-      return ejecutarConsulta($sql);
+      $visto_b =  ejecutarConsulta($sql); 
+      if ($visto_b['status'] == false) {  return $visto_b; } 
+      		//add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','$id_tabla','Quitar visto bueno para la factura".$id_tabla."','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+      return $visto_b;
     } 
   }
 
@@ -1275,8 +1288,15 @@ class Resumenfacturas
   // ════════════════════════════════════════ ACCIONES ════════════════════════════════════════
   // eliminar permanente
   public function eliminar_permanente($nombre_tabla, $nombre_id_tabla, $id_tabla) {
-    $sql = "UPDATE $nombre_tabla SET estado_delete='0' WHERE $nombre_id_tabla ='$id_tabla'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE $nombre_tabla SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE $nombre_id_tabla ='$id_tabla'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','$id_tabla','Factura eliminada desde el modulo de resumen de facturas','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   // ════════════════════════════════════════ S E L E C T 2   -   P R O V E E D O R ════════════════════════════════════════

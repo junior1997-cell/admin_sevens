@@ -13,20 +13,43 @@ Class Color
 	//Implementamos un método para insertar registros
 	public function insertar($nombre, $hexadecimal) {
 		//var_dump($nombre);die();
-		$sql="INSERT INTO color(nombre_color, hexadecimal)VALUES('$nombre', '$hexadecimal' )";
-		return ejecutarConsulta($sql);
+		$sql="INSERT INTO color(nombre_color, hexadecimal, user_created)VALUES('$nombre', '$hexadecimal','" . $_SESSION['idusuario'] . "' )";
+
+		$intertar =  ejecutarConsulta_retornarID($sql); 
+		if ($intertar['status'] == false) {  return $intertar; } 
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('color','".$intertar['data']."','Nuevo color registrado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $intertar;
 	}
 
 	//Implementamos un método para editar registros
 	public function editar($idcolor, $nombre, $hexadecimal) {
-		$sql="UPDATE color SET nombre_color='$nombre', hexadecimal ='$hexadecimal' WHERE idcolor='$idcolor'";
-		return ejecutarConsulta($sql);
+		$sql="UPDATE color SET nombre_color='$nombre', hexadecimal ='$hexadecimal',user_updated= '" . $_SESSION['idusuario'] . "' WHERE idcolor='$idcolor'";
+		$editar =  ejecutarConsulta($sql);
+		if ( $editar['status'] == false) {return $editar; } 
+	
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('color','$idcolor','Color editado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+	
+		return $editar;
 	}
 
 	//Implementamos un método para desactivar color
 	public function desactivar($idcolor) {
-		$sql="UPDATE color SET estado='0' WHERE idcolor='$idcolor'";
-		return ejecutarConsulta($sql);
+		$sql="UPDATE color SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idcolor='$idcolor'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('Color','".$idcolor."','Color desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
 	}
 
 	//Implementamos un método para activar color
@@ -37,8 +60,15 @@ Class Color
 
 	//Implementamos un método para eliminar color
 	public function eliminar($idcolor) {
-		$sql="UPDATE color SET estado_delete='0' WHERE idcolor='$idcolor'";
-		return ejecutarConsulta($sql);
+		$sql="UPDATE color SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idcolor='$idcolor'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('color','$idcolor','Color Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
 	}
 
 	//Implementar un método para mostrar los datos de un registro a modificar

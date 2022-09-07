@@ -1133,18 +1133,34 @@ class Papelera
     return $data;
   }
 
-  //Desactivar DEPOSITO
+  //Desactivar 
   public function recuperar($nombre_tabla, $nombre_id_tabla, $id_tabla)
   {
-    $sql = "UPDATE $nombre_tabla SET estado='1' WHERE $nombre_id_tabla ='$id_tabla'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE $nombre_tabla SET estado='1',user_updated= '" . $_SESSION['idusuario'] . "' WHERE $nombre_id_tabla ='$id_tabla'";
+
+		$recuperar= ejecutarConsulta($sql);
+
+		if ($recuperar['status'] == false) {  return $recuperar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','".$id_tabla."','Factura recuperada desde papelera','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $recuperar;
   }
 
-  //Activar DEPOSITO
+  //eliminar
   public function eliminar_permanente($nombre_tabla, $nombre_id_tabla, $id_tabla)
   {
-    $sql = "UPDATE $nombre_tabla SET estado_delete='0' WHERE $nombre_id_tabla ='$id_tabla'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE $nombre_tabla SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE $nombre_id_tabla ='$id_tabla'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','$id_tabla','Factura eliminada desde papelera','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 }
 

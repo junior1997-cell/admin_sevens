@@ -12,60 +12,84 @@
     //Implementamos un método para insertar registros
     public function insertar( $titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color) {
         
-      $sql="INSERT INTO calendario ( titulo, descripcion, fecha_feriado, fecha_invertida, background_color, text_color)
-      VALUES ( '$titulo', '$descripcion', '$fecha_feriado', '$fecha_invertida', '$background_color', '$text_color')";
-      $all_calendario = ejecutarConsulta($sql);
+      $sql="INSERT INTO calendario ( titulo, descripcion, fecha_feriado, fecha_invertida, background_color, text_color, user_created)
+      VALUES ( '$titulo', '$descripcion', '$fecha_feriado', '$fecha_invertida', '$background_color', '$text_color','" . $_SESSION['idusuario'] . "')";
 
-      if ($all_calendario['status']) {
-        $sql2 = "SELECT idproyecto FROM calendario_por_proyecto GROUP BY idproyecto;";
-        $proyecto = ejecutarConsultaArray($sql2);
-        
-        if ($proyecto['status']) {
-          $sw = "";
-          foreach ($proyecto['data'] as $indice => $key) {
-            $idproyecto = $key['idproyecto'];
-            $sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color)
-            VALUES ('$idproyecto', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color')";
-            $sw = ejecutarConsulta($sql3);
+      $intertar =  ejecutarConsulta_retornarID($sql); if ($intertar['status'] == false) {  return $intertar; } 
 
-            if ($sw['status'] == false) { return $sw; }            
-          }
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario','".$intertar['data']."','Nuevo registro calendario','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
 
-          return $sw;
-        } else {
-          return $proyecto;
-        }
+      $sql2 = "SELECT idproyecto FROM calendario_por_proyecto GROUP BY idproyecto;";
+      $proyecto = ejecutarConsultaArray($sql2);
+      
+      if ($proyecto['status']== false){return $proyecto; }
 
-      } else {
-        return $all_calendario;
-      }  
+      $sw = "";
+      foreach ($proyecto['data'] as $indice => $key) {
+        $idproyecto = $key['idproyecto'];
+        $sql3="INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color, user_created)
+        VALUES ('$idproyecto', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color','" . $_SESSION['idusuario'] . "')";
+
+        $sw =  ejecutarConsulta_retornarID($sql3); if ($sw['status'] == false) {  return $sw; } 
+
+        //add registro en nuestra bitacora
+        $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario_por_proyecto','".$sw['data']."','Nuevo registro en la secc de allcalendario para calendario por proyecto','" . $_SESSION['idusuario'] . "')";
+        $bitacora_c = ejecutarConsulta($sql_bit); if ( $bitacora_c['status'] == false) {return $bitacora_c; }             
+      }
+
+      return $sw;
+
     }
 
     //Implementamos un método para editar registros
     public function editar($idcalendario, $titulo, $descripcion, $fecha_feriado, $fecha_invertida, $background_color, $text_color)
     {
       $sql="UPDATE calendario SET titulo = '$titulo', descripcion = '$descripcion', fecha_feriado = '$fecha_feriado', 
-      fecha_invertida= '$fecha_invertida', background_color = '$background_color', text_color = '$text_color'
+      fecha_invertida= '$fecha_invertida', background_color = '$background_color', text_color = '$text_color',user_updated= '" . $_SESSION['idusuario'] . "'
       WHERE idcalendario='$idcalendario'";	     
 
-      return ejecutarConsulta($sql);
+      $editar =  ejecutarConsulta($sql);
+      if ( $editar['status'] == false) {return $editar; } 
+  
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario','$idcalendario','Calendario editado','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+  
+      return $editar;
       
     }
 
     //Implementamos un método para desactivar categorías
     public function desactivar($idcalendario)
     {
-      $sql="UPDATE calendario SET estado='0' WHERE idcalendario='$idcalendario'";
+      $sql="UPDATE calendario SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idcalendario='$idcalendario'";
 
-      return ejecutarConsulta($sql);
+      $desactivar= ejecutarConsulta($sql);
+
+      if ($desactivar['status'] == false) {  return $desactivar; }
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario','".$idcalendario."','fecha calendario desactivado','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+      
+      return $desactivar;
     }
 
     //Implementamos un método para activar categorías
     public function activar($idcalendario)
     {
-      $sql="UPDATE calendario SET estado='1' WHERE idcalendario='$idcalendario'";
+      $sql="UPDATE calendario SET estado='1',user_updated= '" . $_SESSION['idusuario'] . "' WHERE idcalendario='$idcalendario'";
+      $activar= ejecutarConsulta($sql);
 
-      return ejecutarConsulta($sql);
+      if ($activar['status'] == false) {  return $activar; }
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario','".$idcalendario."','fecha calendario recuperada','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+      
+      return $activar;
     } 
 
     //Implementar un método para listar los registros
