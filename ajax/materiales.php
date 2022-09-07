@@ -154,7 +154,7 @@
                 "2" =>
                   '<div class="user-block">
                     <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg->nombre).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
-                    <span class="username"><p style="margin-bottom: 0px !important;">' . $reg->nombre . '</p></span>
+                    <span class="username"><p class="mb-0" >' . decodeCadenaHtml($reg->nombre) . '</p></span>
                     <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
                   </div>',
                 "3" => $reg->tipo_tierra_concreto,

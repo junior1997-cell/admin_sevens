@@ -19,10 +19,11 @@
 
       $valorizacion = new Valorizacion();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima'); $date_now = date("d-m-Y h.i.s A");
 
-      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';   
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>'; 
+
+      $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idvalorizacion = isset($_POST["idvalorizacion"])? limpiarCadena($_POST["idvalorizacion"]):"";
@@ -78,8 +79,7 @@
 
                 $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
-                if ($doc1_ant != "") {
-
+                if ( validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200 ) {
                   unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                 }
               }
@@ -96,8 +96,7 @@
 
                   $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
-                  if ($doc1_ant != "") {
-
+                  if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200) {
                     unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                   }
                 }
@@ -114,8 +113,7 @@
 
                     $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
-                    if ($doc1_ant != "") {
-
+                    if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200) {
                       unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                     }
                   }
@@ -132,8 +130,7 @@
 
                       $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
-                      if ($doc1_ant != "") {
-
+                      if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200) {
                         unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                       }
                     }
@@ -150,8 +147,7 @@
 
                         $doc1_ant = $datos_f1['data']->fetch_object()->doc_p;
 
-                        if ($doc1_ant != "") {
-
+                        if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200) {
                           unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                         }
                       }
@@ -184,7 +180,7 @@
   
                 $doc1_ant = $datos_f1['data']->fetch_object()->doc_valorizacion;
   
-                if ($doc1_ant != "") {
+                if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200) {
   
                   unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
                 }

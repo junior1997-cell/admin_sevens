@@ -4,26 +4,38 @@ require "../config/Conexion_v2.php";
 
 class Valorizacion
 {
+  
   //Implementamos nuestro constructor
   public function __construct()
   {
   }
-
+  
   //Editamos el DOC1 del proyecto
   public function editar_proyecto($idproyecto, $doc, $columna) {
-    //var_dump($idproyecto, $doc, $columna, '1111');die();
 
-    $sql = "UPDATE proyecto SET $columna = '$doc' WHERE idproyecto = '$idproyecto'";
+    $sql = "UPDATE proyecto SET $columna = '$doc', user_updated= '".$_SESSION['idusuario']."' WHERE idproyecto = '$idproyecto'";
+    $update_columna = ejecutarConsulta($sql);
 
-    return ejecutarConsulta($sql);
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto', '$idproyecto', 'Actualizar la columna: $columna', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b);
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $update_columna;
   }
 
   //Editamos el DOC1 del proyecto
   public function insertar_valorizacion($idproyecto, $indice, $nombre, $fecha_inicio, $fecha_fin, $numero_q_s, $doc) {
-    $sql = "INSERT INTO valorizacion ( idproyecto,indice, nombre, fecha_inicio, fecha_fin, numero_q_s, doc_valorizacion ) 
-		VALUES ('$idproyecto', '$indice', '$nombre', '$fecha_inicio', '$fecha_fin', '$numero_q_s', '$doc')";
+    $sql = "INSERT INTO valorizacion ( idproyecto,indice, nombre, fecha_inicio, fecha_fin, numero_q_s, doc_valorizacion, user_created ) 
+		VALUES ('$idproyecto', '$indice', '$nombre', '$fecha_inicio', '$fecha_fin', '$numero_q_s', '$doc', '".$_SESSION['idusuario']."')";
+    $new_valorizacion = ejecutarConsulta_retornarID($sql);
 
-    return ejecutarConsulta($sql);
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('valorizacion', '".$new_valorizacion['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b);
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $new_valorizacion;
   }
 
   //Implementamos un método para editar registros
@@ -35,10 +47,17 @@ class Valorizacion
 		fecha_inicio = '$fecha_inicio',
 		fecha_fin = '$fecha_fin' , 
 		numero_q_s = '$numero_q_s', 
-		doc_valorizacion = '$doc'
+		doc_valorizacion = '$doc',
+    user_updated = '".$_SESSION['idusuario']."'
 		WHERE idvalorizacion = '$idvalorizacion'";
+    $new_val =  ejecutarConsulta($sql);
 
-    return ejecutarConsulta($sql);
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('valorizacion', '".$idvalorizacion."', 'Crear registro', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b);
+    if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $new_val;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
@@ -186,14 +205,27 @@ class Valorizacion
 
   //Implementamos un método para desactivar
   public function desactivar($nombre_tabla, $nombre_columna, $idtabla) {
-    $sql = "UPDATE $nombre_tabla SET estado='0' WHERE $nombre_columna ='$idtabla'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE $nombre_tabla SET estado='0', user_trash = '".$_SESSION['idusuario']."' WHERE $nombre_columna ='$idtabla'";
+    $desactivar = ejecutarConsulta($sql); if ( $desactivar['status'] == false) {return $desactivar; }
+
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla', '".$idtabla."', 'Desactivar', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b);  if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $desactivar; 
   }
 
   //Implementamos un método para elimnar
   public function eliminar($nombre_tabla, $nombre_columna, $idtabla) {
-    $sql = "UPDATE $nombre_tabla SET estado_delete='0' WHERE $nombre_columna ='$idtabla'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE $nombre_tabla SET estado_delete='0', user_delete = '".$_SESSION['idusuario']."' WHERE $nombre_columna ='$idtabla'";
+    $eliminar = ejecutarConsulta($sql);
+    if ( $eliminar['status'] == false) {return $eliminar; }
+
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla', '".$idtabla."', 'Eliminar', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $eliminar; 
   }
   //---------------------------------------------------
   // obtebnemos los DOCS para eliminar
@@ -208,7 +240,7 @@ class Valorizacion
     return ejecutarConsulta($sql);
   }
 
-  //--------------------------------R ES U E M E N _Q_S --------------------------------
+  // =============================== R E S U M E N   Q S ======================================
 
   public function insertar_editar_resumen_q_s($array_val, $idproyecto) {
 
@@ -230,16 +262,25 @@ class Valorizacion
       if ($buscando['status'] == false) { return $buscando; }
 
       if ( empty($buscando['data']) ) {
-        $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, monto_programado, monto_valorizado, monto_gastado) 
-        VALUES ('$idproyecto','$numero_q_s','$fecha_inicial','$fecha_final','$monto_programado','$monto_valorizado','0')";
-        $insertando = ejecutarConsulta($sql_2); 
+        $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, monto_programado, monto_valorizado, monto_gastado, user_created) 
+        VALUES ('$idproyecto','$numero_q_s','$fecha_inicial','$fecha_final','$monto_programado','$monto_valorizado', '0', '".$_SESSION['idusuario']."')";
+        $insertando = ejecutarConsulta_retornarID($sql_2); 
         if ($insertando['status'] == false) { return $insertando; }
+
+        //B I T A C O R A -------
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+        $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+
       } else {         
         $sql_3 = "UPDATE resumen_q_s_valorizacion SET idproyecto='$idproyecto', numero_q_s='$numero_q_s', fecha_inicio='$fecha_inicial',
-        fecha_fin='$fecha_final', monto_programado='$monto_programado', monto_valorizado='$monto_valorizado', monto_gastado='0' 
+        fecha_fin='$fecha_final', monto_programado='$monto_programado', monto_valorizado='$monto_valorizado', monto_gastado='0', user_updated='".$_SESSION['idusuario']."'
         WHERE numero_q_s='$numero_q_s'";
         $editando =  ejecutarConsulta($sql_3); 
         if ($editando['status'] == false) { return $editando; }
+
+        //B I T A C O R A -------
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$numero_q_s."', 'Editar registro', '".$_SESSION['idusuario']."')";
+        $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
       } 
     }    
     return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => [], ];

@@ -414,7 +414,7 @@
                                     </tr>
                                     <tr> 
                                       <th class="pt-1 pb-1 font-weight-normal" ></th> 
-                                      <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th> 
+                                      <th class="pt-1 pb-1 font-weight-normal text-center celda-b-r-2px">(garantía)</th> 
                                       <th class="pt-1 pb-1 font-weight-normal"><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_programado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>                                        
                                       <th class="pt-1 pb-1 font-weight-normal text-center total_porcent_programado_5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                       <th class="pt-1 pb-1 font-weight-normal celda-b-r-2px"></th>

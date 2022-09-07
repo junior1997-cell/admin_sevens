@@ -175,7 +175,7 @@ function guardaryeditar(e) {
 
           Swal.fire("Correcto!", "Documento guardado correctamente", "success");	
           limpiar();
-          tabla_principal.ajax.reload(null, false);
+          if (tabla_principal) { tabla_principal.ajax.reload(null, false); } 
           mostrar_form_table(2);
           fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'));
           $("#modal-agregar-valorizacion").modal("hide");
@@ -303,7 +303,7 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     `<b class="text-danger">${nombre_eliminar}</b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla_principal.ajax.reload(null, false) },
+    function(){ if (tabla_principal) { tabla_principal.ajax.reload(null, false); } },
     false, 
     false, 
     false,
@@ -1615,8 +1615,8 @@ function export_excel_valorizacion() {
   $tabla = document.querySelector("#tbla_export_excel_valorizacion");
   let tableExport = new TableExport($tabla, {
     exportButtons: false, // No queremos botones
-    filename: "Detalle comprobante", //Nombre del archivo de Excel
-    sheetname: "detalle factura", //Título de la hoja
+    filename: "Detalle valorizacion", //Nombre del archivo de Excel
+    sheetname: "detalle", //Título de la hoja
   });
   let datos = tableExport.getExportData(); console.log(datos);
   let preferenciasDocumento = datos.tbla_export_excel_valorizacion.xlsx;
