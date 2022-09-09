@@ -387,7 +387,7 @@ window.onload = function () {
 
 // Formato de miles
 function formato_miles(num) {
-  if (num == 0) return "0.00";
+  if (num == 0 || num == null) return "0.00";
   if (!num || num == "NaN") return "-";
   if (num == "Infinity") return "&#x221e;";
   num = num.toString().replace(/\$|\,/g, "");

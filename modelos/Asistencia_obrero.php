@@ -302,7 +302,7 @@ class Asistencia_obrero
     $update_pago = ejecutarConsulta($sql);
     if ( $update_pago['status'] == false) {return $update_pago; }
 
-    $accion = ($estado_envio_contador == '1' ? 'Envio pago contador' : 'Quitar envio pago contador') ;
+    $accion = ($estado_envio_contador == '1' ? 'Envio pago contador' : 'Anular envio pago contador') ;
     //B I T A C O R A -------
     $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$idresumen_q_s_asistencia."', '$accion', '".$_SESSION['idusuario']."')";
     $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
@@ -323,7 +323,7 @@ class Asistencia_obrero
       $sw = ejecutarConsulta($sql);
       if ($sw['status'] == false) {  return $sw; }
 
-      $accion = ($estado_envio_contador == '1' ? 'Envio pago contador' : 'Quitar envio pago contador') ;
+      $accion = ($estado_envio_contador == '1' ? 'Envio pago contador - Multiple' : 'Anular envio pago contador - Multiple') ;
       //B I T A C O R A -------
       $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$idresumen_q_s_asistencia."', '$accion', '".$_SESSION['idusuario']."')";
       $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
@@ -381,8 +381,9 @@ class Asistencia_obrero
       $insert_resumen = ejecutarConsulta_retornarID($sql_4);
       if ( $insert_resumen['status'] == false) {return $insert_resumen; }
 
+      $accion = ($estado_sabatical_manual == '1' ? 'Agregar' : 'Quitar' );
       //B I T A C O R A -------
-      $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$insert_resumen['data']."', 'Crear sabatical $numero_sabado manual', '".$_SESSION['idusuario']."')";
+      $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$insert_resumen['data']."', '$accion sabatical $numero_sabado manual', '".$_SESSION['idusuario']."')";
       $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
       
       return $insert_resumen;
@@ -448,12 +449,12 @@ class Asistencia_obrero
       $update_resumen = ejecutarConsulta($sql_6);
       if ( $update_resumen['status'] == false) {return $update_resumen; }
 
+      $accion = ($estado_sabatical_manual == '1' ? 'Agregar' : 'Quitar' );
       //B I T A C O R A -------
-      $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$update_resumen."', 'Editar sabatical $numero_sabado manual', '".$_SESSION['idusuario']."')";
+      $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$idresumen_q_s_asistencia."', '$accion sabatical $numero_sabado manual', '".$_SESSION['idusuario']."')";
       $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
 
       return $update_resumen; 
-
     }     
   }
 
@@ -522,8 +523,10 @@ class Asistencia_obrero
           $retorno = ejecutarConsulta_retornarID($sql_4);
           if ($retorno['status'] == false) {  return $retorno; }
 
+          $accion = ($estado_sabatical_manual == '1' ? 'Agregar' : 'Quitar' );
+
           //B I T A C O R A -------
-          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$retorno['data']."', 'Crear sabatical $numero_sabado manual', '".$_SESSION['idusuario']."')";
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$retorno['data']."', '$accion sabatical $numero_sabado manual - multiple', '".$_SESSION['idusuario']."')";
           $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
         } else {
           $sql_5 = "SELECT sabatical, total_dias_asistidos, total_hn, pago_parcial_hn, pago_quincenal FROM resumen_q_s_asistencia WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
@@ -585,9 +588,10 @@ class Asistencia_obrero
           WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
           $retorno = ejecutarConsulta($sql_6);
           if ($retorno['status'] == false) {  return $retorno; }
-
+          
+          $accion = ($estado_sabatical_manual == '1' ? 'Agregar' : 'Quitar' );
           //B I T A C O R A -------
-          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$idresumen_q_s_asistencia."', 'Crear sabatical $numero_sabado manual', '".$_SESSION['idusuario']."')";
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$idresumen_q_s_asistencia."', '$accion sabatical $numero_sabado manual - multiple', '".$_SESSION['idusuario']."')";
           $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
         }
       }
@@ -644,7 +648,7 @@ class Asistencia_obrero
     if ( $activar['status'] == false) {return $activar; }
 
     //B I T A C O R A -------
-    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '".$idasistencia_trabajador."', 'Recuperar', '".$_SESSION['idusuario']."')";
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '".$idasistencia_trabajador."', 'Recuperar de papelera', '".$_SESSION['idusuario']."')";
     $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
 
     return $activar;
@@ -713,7 +717,7 @@ class Asistencia_obrero
     $activar = ejecutarConsulta($sql);
 
     //B I T A C O R A -------
-    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$id."', 'Recuperar', '".$_SESSION['idusuario']."')";
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$id."', 'Recuperar de papelera', '".$_SESSION['idusuario']."')";
     $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
 
     return $activar;
@@ -735,15 +739,21 @@ class Asistencia_obrero
 
   public function editar_detalle_adicionales($idresumen_q_s_asistencia, $idtrabajador_por_proyecto, $fecha_registro, $detalle_adicional) {
     $sql = "UPDATE resumen_q_s_asistencia 
-		SET  idtrabajador_por_proyecto='$idtrabajador_por_proyecto', fecha_q_s_inicio='$fecha_registro', descripcion_descuento = '$detalle_adicional'
+		SET  idtrabajador_por_proyecto='$idtrabajador_por_proyecto', fecha_q_s_inicio='$fecha_registro', descripcion_descuento = '$detalle_adicional', user_updated = '".$_SESSION['idusuario']."'
 		WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
-    return ejecutarConsulta($sql);
+    $editar = ejecutarConsulta($sql);
+    if ( $editar['status'] == false) {return $editar; }
+
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$idresumen_q_s_asistencia."', 'Editar descripción adicional descuento', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $editar;
   }
 
   public function descripcion_adicional_descuento($id_adicional) {
     $sql = "SELECT descripcion_descuento FROM resumen_q_s_asistencia WHERE idresumen_q_s_asistencia = '$id_adicional';";
-
-    return ejecutarConsultaSimpleFila($sql);
+    return ejecutarConsultaSimpleFila($sql);    
   }
 
   // :::::::::::::::::::::::::::::::::::: S E C C I O N   F E C H A S   A C T I V I D A D ::::::::::::::::::::::::::::::::::::::
@@ -757,13 +767,17 @@ class Asistencia_obrero
   }
 
   public function editar_fechas_actividad($id_proyecto_f, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad) {
-    $sql = "UPDATE proyecto SET 
-		fecha_inicio_actividad='$fecha_inicio_actividad',
-		fecha_fin_actividad= '$fecha_fin_actividad',
-		plazo_actividad = '$plazo_actividad'
+    $sql = "UPDATE proyecto SET fecha_inicio_actividad='$fecha_inicio_actividad', fecha_fin_actividad= '$fecha_fin_actividad',
+		plazo_actividad = '$plazo_actividad', user_updated = '".$_SESSION['idusuario']."'
 		WHERE idproyecto = '$id_proyecto_f'";
+    $fecha = ejecutarConsulta($sql);
+    if ( $fecha['status'] == false) {return $fecha; }
 
-    return ejecutarConsulta($sql);
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto', '".$id_proyecto_f."', 'Editar fechas de actividad', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+
+    return $fecha;
   }
 
   // :::::::::::::::::::::::::::::::::::: S E C C I O N   O B T E N E R   I M G ::::::::::::::::::::::::::::::::::::::

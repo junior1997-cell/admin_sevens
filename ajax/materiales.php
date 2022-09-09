@@ -151,23 +151,24 @@
                 ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg->idproducto .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'. 
                 ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idproducto.')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>' : 
                 '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idproducto . ')"><i class="fa fa-pencil-alt"></i></button>',
-                "2" =>
+                "2" => $reg->idproducto,
+                "3" =>
                   '<div class="user-block">
                     <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg->nombre).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                     <span class="username"><p class="mb-0" >' . decodeCadenaHtml($reg->nombre) . '</p></span>
                     <span class="description">' . substr($reg->descripcion, 0, 30) . '...</span>
                   </div>',
-                "3" => $reg->tipo_tierra_concreto,
-                "4" => $reg->nombre_medida,
-                "5" => $reg->marca,
-                "6" => number_format($reg->precio_unitario, 2, '.', ''),
-                "7" => number_format($reg->precio_sin_igv, 2, '.', ''),
-                "8" => number_format($monto_igv, 2, '.', ','),
-                "9" => number_format($reg->precio_total, 2, '.', ''),
-                "10" => $ficha_tecnica . $toltip,                
-                "11" => $reg->nombre,
-                "12" => $reg->nombre_color,
-                "13" => $reg->descripcion,
+                "4" => $reg->tipo_tierra_concreto,
+                "5" => $reg->nombre_medida,
+                "6" => $reg->marca,
+                "7" => number_format($reg->precio_unitario, 2, '.', ''),
+                "8" => number_format($reg->precio_sin_igv, 2, '.', ''),
+                "9" => number_format($monto_igv, 2, '.', ','),
+                "10" => number_format($reg->precio_total, 2, '.', ''),
+                "11" => $ficha_tecnica . $toltip,                
+                "12" => $reg->nombre,
+                "13" => $reg->nombre_color,
+                "14" => $reg->descripcion,
               ];
             }
   

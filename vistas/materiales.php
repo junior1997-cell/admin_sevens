@@ -68,6 +68,7 @@
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
+                                <th class="">Code</th>
                                 <th>Nombre</th>
                                 <th>Grupo</th>
                                 <th>Unidad</th>
@@ -87,6 +88,7 @@
                               <tr>
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
+                                <th class="">Code</th>
                                 <th>Nombre</th>
                                 <th>Grupo</th>
                                 <th>Unidad</th>
@@ -136,8 +138,12 @@
                               <!-- id categoria_insumos_af -->
                               <input type="hidden" name="idcategoria_insumos_af" id="idcategoria_insumos_af" value="1"/>
 
+                              <input type="hidden" id="modelo" name="modelo" />
+                              <input type="hidden" id="serie" name="serie" />
+                              <input type="hidden" id="color" name="color" value="1" />
+
                               <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
@@ -145,7 +151,7 @@
                               </div>
 
                               <!-- Categoria -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="idtipo_tierra_concreto">Grupo <sup class="text-danger">(unico*)</sup></label>
                                   <select name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" class="form-control select2" style="width: 100%;"> 
@@ -154,20 +160,20 @@
                               </div>
 
                               <!-- Modelo -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <!-- <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="modelo">Modelo</label>
                                   <input class="form-control" type="text" id="modelo" name="modelo" placeholder="Modelo." />
                                 </div>
-                              </div>
+                              </div> -->
 
                               <!-- Serie -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <!-- <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="serie">Serie </label>
                                   <input class="form-control" type="text" id="serie" name="serie" placeholder="Serie." />
                                 </div>
-                              </div>
+                              </div> -->
 
                               <!--Marca-->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-6">
@@ -178,13 +184,12 @@
                               </div>
 
                               <!-- Color -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <!-- <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="color">Color <sup class="text-danger">(unico*)</sup></label>
                                   <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
-                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
-                              </div>
+                              </div> -->
 
                               <!-- Unnidad de medida  -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6">
