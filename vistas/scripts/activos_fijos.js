@@ -13,7 +13,7 @@ function init() {
   tabla_principal('todos');
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
-  lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
+  //lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unid_medida', null);
   lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af', null);
 
@@ -21,7 +21,7 @@ function init() {
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-activos-fijos").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+  //$("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unid_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
   $("#categoria_insumos_af").select2({ theme: "bootstrap4", placeholder: "Seleccinar una categoria", allowClear: true, });
 
@@ -93,7 +93,7 @@ function limpiar() {
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
 
-  $("#unid_medida").val(4).trigger("change");
+  $("#unid_medida").val("").trigger("change");
   $("#color").val(1).trigger("change");
   $("#categoria_insumos_af").val("").trigger("change");
 
@@ -145,9 +145,9 @@ function tabla_principal(id_categoria) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,10,11,12,3,4,5,6,7,13], } },      
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,11,12,13,4,5,6,7,8,9,14], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,11,12,13,4,5,6,7,8,9,14], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,11,12,13,4,5,6,7,8,9,14], } },      
     ],
     ajax: {
       url: `../ajax/activos_fijos.php?op=tabla_principal&id_categoria=${id_categoria}`,
@@ -160,14 +160,15 @@ function tabla_principal(id_categoria) {
     createdRow: function (row, data, ixdex) {         
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); } 
-      // columna: #
+      // columna: op
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
-      // columna: pago total
-      if (data[3] != '') { $("td", row).eq(3).addClass('text-center'); }       
-      if (data[4] != '') { $("td", row).eq(4).addClass('text-right  text-nowrap'); } 
-      if (data[5] != '') { $("td", row).eq(5).addClass('text-right  text-nowrap'); } 
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-right  text-nowrap'); }
+      // columna: code
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: pago total       
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-right  text-nowrap'); } 
       if (data[7] != '') { $("td", row).eq(7).addClass('text-right  text-nowrap'); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right  text-nowrap'); }
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right  text-nowrap'); } 
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -178,8 +179,8 @@ function tabla_principal(id_categoria) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [10,11,12,13], visible: false, searchable: false, },
-      { targets: [4,5,6,7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [11,12,13,14], visible: false, searchable: false, },
+      { targets: [6,7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 }
@@ -268,9 +269,6 @@ function mostrar(idproducto) {
   $("#cargando-2-fomulario").show();
 
   $("#modal-agregar-activos-fijos").modal("show");
-
-  $("#unid_medida").val("").trigger("change");
-  $("#color").val("").trigger("change");
 
   $.post("../ajax/activos_fijos.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
     
@@ -480,39 +478,24 @@ function ver_perfil(file, nombre) {
 }
 
 //Función para desactivar registros
-function eliminar(idproducto) {
+function eliminar(idproducto, nombre) {
   //----------------------------
-  Swal.fire({
 
-    title: "!Elija una opción¡",
-    html: "En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!",
-    icon: "warning",
-    showCancelButton: true,
-    showDenyButton: true,
-    confirmButtonColor: "#17a2b8",
-    denyButtonColor: "#d33",
-    cancelButtonColor: "#6c757d",    
-    confirmButtonText: `<i class="fas fa-times"></i> Papelera`,
-    denyButtonText: `<i class="fas fa-skull-crossbones"></i> Eliminar`,
+  crud_eliminar_papelera(
+    "../ajax/activos_fijos.php?op=desactivar",
+    "../ajax/activos_fijos.php?op=eliminar", 
+    idproducto, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tabla.ajax.reload(null, false) },
+    false, 
+    false, 
+    false,
+    false
+  );
 
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-    //op=desactivar
-      $.post("../ajax/activos_fijos.php?op=desactivar", { idproducto: idproducto }, function (e) {
-        Swal.fire("Desactivado!", "Tu registro ha sido desactivado.", "success");
-
-        tabla.ajax.reload(null, false);
-      }).fail( function(e) { ver_errores(e); } );
-    }else if (result.isDenied) {
-    //op=eliminar
-      $.post("../ajax/activos_fijos.php?op=eliminar", { idproducto: idproducto }, function (e) {
-        Swal.fire("Eliminado!", "Tu registro ha sido Eliminado.", "success");
-
-        tabla.ajax.reload(null, false);
-      }).fail( function(e) { ver_errores(e); } );
-    }
-  });
 }
 
 function precio_con_igv() {
@@ -579,7 +562,7 @@ init();
 $(function () {
 
   $('#unid_medida').on('change', function() { $(this).trigger('blur'); });
-  $('#color').on('change', function() { $(this).trigger('blur'); });
+  //$('#color').on('change', function() { $(this).trigger('blur'); });
   $('#categoria_insumos_af').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-materiales-activos-fijos").validate({
@@ -624,7 +607,7 @@ $(function () {
   });
 
   $('#unid_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  //$('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $('#categoria_insumos_af').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 

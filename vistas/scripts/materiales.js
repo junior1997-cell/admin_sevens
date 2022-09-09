@@ -12,7 +12,7 @@ function init() {
   tbla_principal();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
-  lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
+  //lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida', null);
   lista_select2("../ajax/ajax_general.php?op=select2TierraConcreto", '#idtipo_tierra_concreto', null);
 
@@ -20,7 +20,7 @@ function init() {
   $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+  //$("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unidad_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
   $("#idtipo_tierra_concreto").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
 
@@ -119,9 +119,9 @@ function tbla_principal() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,3,4,5,6,7,8,13], } },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,12,13,4,5,6,7,8,9,14], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,12,13,4,5,6,7,8,9,14], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,12,13,4,5,6,7,8,9,14], } },
     ],
     ajax: {
       url: "../ajax/materiales.php?op=tbla_principal",
@@ -136,14 +136,16 @@ function tbla_principal() {
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: opciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
+      // columna: code
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-center"); }
       // columna: precio unitario
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-nowrap"); }
-      // columna: precio sin igv
       if (data[7] != '') { $("td", row).eq(7).addClass("text-nowrap"); }
-      // columna: monto igv
+      // columna: precio sin igv
       if (data[8] != '') { $("td", row).eq(8).addClass("text-nowrap"); }
-      // columna: precio total
+      // columna: monto igv
       if (data[9] != '') { $("td", row).eq(9).addClass("text-nowrap"); }
+      // columna: precio total
+      if (data[10] != '') { $("td", row).eq(10).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -154,8 +156,8 @@ function tbla_principal() {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11,12,13], visible: false, searchable: false, },  
-      { targets: [6,7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [12,13,14], visible: false, searchable: false, },  
+      { targets: [7,8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 }
@@ -537,7 +539,7 @@ init();
 $(function () {   
 
   $('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
-  $('#color').on('change', function() { $(this).trigger('blur'); });
+  //$('#color').on('change', function() { $(this).trigger('blur'); });
   $('#idtipo_tierra_concreto').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-materiales").validate({
@@ -580,7 +582,7 @@ $(function () {
   });
 
   $('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  //$('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $('#idtipo_tierra_concreto').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 

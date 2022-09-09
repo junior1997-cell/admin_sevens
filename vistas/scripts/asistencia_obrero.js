@@ -10,6 +10,8 @@ var f1_r = 0, f2_r = 0, i_r = 0, cant_dias_asistencia_r = 0; var estado_editar_a
 
 var idtrabajador_por_proyecto_r = 0;
 
+var array_btn_fechas = [];
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -218,25 +220,25 @@ function tbla_principal(nube_idproyecto) {
 }
 
 function listar_botones_q_s(nube_idproyecto) {
-
+  array_btn_fechas =[];
   $('#lista_quincenas').html('<div class="my-3" ><i class="fas fa-spinner fa-pulse fa-2x"></i>&nbsp;&nbsp;&nbsp;Cargando...</div>');
 
   //Listar quincenas(botones)
   $.post("../ajax/asistencia_obrero.php?op=listarquincenas_botones", { nube_idproyecto: nube_idproyecto }, function (e, status) {
 
-    e =JSON.parse(e); //console.log(e);
+    e =JSON.parse(e); console.log(e);
 
     if (e.status == true) {
       // validamos la existencia de DATOS
-      if ( e.data.length === 0 ) {
-        $('#lista_quincenas').html(`<div class="alert alert-danger alert-dismissible">
+      if ( e.data == null ) {
+        $('#lista_quincenas').html(`<div class="alert alert-danger alert-dismissible w-450px">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
           <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
-          No has definido las de fechas del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividades.
+          Lo mas probable es que no hayas selecionado un proyecto. <br>Clic en el <span class="bg-color-8eff27 p-1 rounded-lg text-dark"> <i class="fa-solid fa-screwdriver-wrench"></i> boton verde</span> para seleccionar alguno.
         </div>`);        
       } else {
-        if (e.data.fecha_inicio == '0000-00-00' || e.data.fecha_inicio == null || e.data.fecha_fin == '0000-00-00' || e.data.fecha_fin == null) {
-          $('#lista_quincenas').html(`<div class="alert alert-danger alert-dismissible">
+        if (e.data.fecha_inicio == '0000-00-00' || e.data.fecha_inicio == null || e.data.fecha_inicio == '' || e.data.fecha_fin == '0000-00-00' || e.data.fecha_fin == null || e.data.fecha_fin == '') {
+          $('#lista_quincenas').html(`<div class="alert alert-danger alert-dismissible w-450px">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
             <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
             No has definido las de fechas del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividades.
@@ -268,7 +270,8 @@ function listar_botones_q_s(nube_idproyecto) {
               }           
 
               $('#lista_quincenas').append(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="datos_quincena('${fecha_inicio}', '${fecha}', '${i}', 14);"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`)
-              
+              array_btn_fechas.push({'num_q_s': cont, 'f_inicial': fecha_inicio, 'f_final': fecha, });
+
               fecha_i =sumaFecha(1,fecha);
 
               i++;
@@ -298,6 +301,8 @@ function listar_botones_q_s(nube_idproyecto) {
 
                 $('#lista_quincenas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="datos_quincena('${fecha_i}', '${fecha_f}', '${i}', 7);"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`)
                 
+                array_btn_fechas.push({'num_q_s': cont, 'f_inicial': fecha_i, 'f_final': fecha_f, });
+
                 if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
 
                 fecha = sumaFecha(1,fecha_f);
@@ -1355,7 +1360,7 @@ function guardar_fechas_asistencia() {
   show_hide_span_input(2);
 
   if (array_datos_asistencia.length === 0) {
-    toastr_error('Sin datos!', ' No hay datos para guardar', 7000);    
+    toastr_error('Sin datos!', ' No hay datos para guardar', 700);    
   } else {
 
     // abrimos el modal cargando
@@ -2107,7 +2112,7 @@ function ver_asistencias_individual(idtrabajador_por_proyecto, fecha_inicio_proy
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5','pdf', "colvis"],
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf', "colvis"],
     ajax:{
       url: '../ajax/asistencia_obrero.php?op=listar_asis_individual&idtrabajadorproyecto='+idtrabajador_por_proyecto,
       type : "get",
@@ -2335,7 +2340,7 @@ function tabla_qs_individual(idtrabajador_por_proyecto) {
 
     e =JSON.parse(e); console.log(e);
     if (e.status == true) {
-      if (e.data.length === 0) {
+      if (e.data == null) {
         $(".suma_qs_dias_asistidos").html(`0.00`);
         $(".suma_qs_adicional").html(`S/ 0.00`);
         $(".suma_qs_sabatical").html(`0.00`);
@@ -2347,8 +2352,7 @@ function tabla_qs_individual(idtrabajador_por_proyecto) {
         $(".suma_qs_dias_asistidos").html(`<b>${formato_miles(e.data.total_dias_asistidos)}</b> `);
         $(".suma_qs_adicional").html(`S/ <b>${formato_miles(e.data.adicional_descuento)}</b> `);
         $(".suma_qs_sabatical").html(`<b>${formato_miles(e.data.sabatical)}</b> `);
-        $(".suma_qs_pago_quincenal").html(`S/ <b>${formato_miles(e.data.pago_quincenal)}</b> `);
-        
+        $(".suma_qs_pago_quincenal").html(`S/ <b>${formato_miles(e.data.pago_quincenal)}</b> `);        
       }
     } else {
       ver_errores(e);
@@ -2472,6 +2476,8 @@ function guardar_y_editar_fechas_actividades(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-fechas-actividades")[0]);
 
+  console.log(array_btn_fechas);
+  // data: { formData, 'fechas': array_btn_fechas },
   $.ajax({
     url: "../ajax/asistencia_obrero.php?op=guardar_y_editar_fechas_actividad",
     type: "POST",
