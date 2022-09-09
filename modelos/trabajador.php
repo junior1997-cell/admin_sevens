@@ -20,10 +20,16 @@ class Trabajador
     $buscando = ejecutarConsultaArray($sql_1);
 
     if (empty($buscando['data'])) {
-      $sql_2 = "INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin, cantidad_dias)
-      VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin', '$cantidad_dias')";
+      $sql_2 = "INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, idcargo_trabajador, desempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin, cantidad_dias, user_created)
+      VALUES ('$idproyecto', '$trabajador', '$cargo', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin', '$cantidad_dias','" . $_SESSION['idusuario'] . "')";
+      $insertar =  ejecutarConsulta_retornarID($sql_2); if ($insertar['status'] == false) {  return $insertar; } 
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador_por_proyecto','".$insertar['data']."','Nuevo trabajador al proyecto: ".$idproyecto."','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+      
+      return $insertar;
 
-      return ejecutarConsulta($sql_2);
     } else {
       $info_repetida = ''; 
 
@@ -48,16 +54,31 @@ class Trabajador
   public function editar($idtrabajador_por_proyecto, $trabajador, $cargo, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, $fecha_inicio, $fecha_fin, $cantidad_dias)
   {
     $sql = "UPDATE trabajador_por_proyecto SET  idtrabajador='$trabajador',  idcargo_trabajador ='$cargo', desempenio='$desempenio', 
-		sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario', sueldo_hora='$sueldo_hora', fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin', cantidad_dias='$cantidad_dias'
+		sueldo_mensual='$sueldo_mensual', sueldo_diario='$sueldo_diario', sueldo_hora='$sueldo_hora', fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin', cantidad_dias='$cantidad_dias',user_updated= '" . $_SESSION['idusuario'] . "'
 		WHERE idtrabajador_por_proyecto='$idtrabajador_por_proyecto'";
 
-    return ejecutarConsulta($sql);
+    $editar =  ejecutarConsulta($sql); if ($editar['status'] == false) {  return $editar; } 
+
+ 		//add registro en nuestra bitacora
+     $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador_por_proyecto','$idtrabajador_por_proyecto','Editar trabajador de proyecto','" . $_SESSION['idusuario'] . "')";
+     $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }     
+
+    return $editar;
   }
 
   //Implementamos un método para desactivar categorías
   public function desactivar($idtrabajador) {
-    $sql = "UPDATE trabajador_por_proyecto SET estado='0' WHERE idtrabajador_por_proyecto='$idtrabajador'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE trabajador_por_proyecto SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idtrabajador_por_proyecto='$idtrabajador'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador_por_proyecto','".$idtrabajador."','Trabajador de proyecto desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
+
   }
 
   //Implementamos un método para activar categorías

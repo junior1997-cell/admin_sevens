@@ -81,9 +81,16 @@ class ServicioMaquina
 
   public function insertar($idproyecto, $maquinaria, $fecha_inicio, $fecha_fin, $horometro_inicial, $horometro_final, $horas, $costo_unitario, $costo_adicional, $costo_parcial, $unidad_m, $dias, $mes, $descripcion, $cantidad)
   {
-    $sql = "INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas, costo_adicional, costo_parcial, costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso,descripcion,cantidad ) 
-		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final', '$horas', '$costo_adicional', '$costo_parcial', '$costo_unitario', '$fecha_inicio', '$fecha_fin', '$unidad_m', '$dias','$mes','$descripcion','$cantidad')";
-    return ejecutarConsulta($sql);
+    $sql = "INSERT INTO servicio (idproyecto,idmaquinaria,horometro_inicial,horometro_final,horas, costo_adicional, costo_parcial, costo_unitario,fecha_entrega,fecha_recojo,unidad_medida,dias_uso,meses_uso,descripcion,cantidad, user_created ) 
+		VALUES ('$idproyecto','$maquinaria','$horometro_inicial','$horometro_final', '$horas', '$costo_adicional', '$costo_parcial', '$costo_unitario', '$fecha_inicio', '$fecha_fin', '$unidad_m', '$dias','$mes','$descripcion','$cantidad','" . $_SESSION['idusuario'] . "')";
+		$insertar =  ejecutarConsulta_retornarID($sql); 
+		if ($insertar['status'] == false) {  return $insertar; } 
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('servicio','".$insertar['data']."','Nuevo registro de servicio maquina','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
+    return $insertar;
   }
 
   //Implementamos un método para editar registros
@@ -104,9 +111,19 @@ class ServicioMaquina
 		unidad_medida='$unidad_m',
 		dias_uso='$dias',
 		meses_uso='$mes',
-		descripcion='$descripcion'
-		 WHERE idservicio ='$idservicio'";
-    return ejecutarConsulta($sql);
+		descripcion='$descripcion',
+    user_updated= '" . $_SESSION['idusuario'] . "'
+		WHERE idservicio ='$idservicio'";
+
+    $editar= ejecutarConsulta($sql);
+
+    if ($editar['status'] == false) {  return $editar; }
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('servicio','$idservicio','Servicio maquina editado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+    return $editar;
   }
 
   //ver detallete por maquina $_GET["idmaquinaria"], $_GET["idproyecto"],$_GET["fecha_i"],$_GET["fecha_f"],$_GET["proveedor"],$_GET["comprobante"]
@@ -154,8 +171,16 @@ class ServicioMaquina
   //Implementamos un método para desactivar categorías
   public function desactivar($idservicio)
   {
-    $sql = "UPDATE servicio SET estado='0' WHERE idservicio ='$idservicio'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE servicio SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idservicio ='$idservicio'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('servicio','".$idservicio."','Servicio maquina desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   //Implementamos un método para activar categorías
@@ -168,8 +193,15 @@ class ServicioMaquina
   //Implementamos un método para desactivar categorías
   public function eliminar($idservicio)
   {
-    $sql = "UPDATE servicio SET estado_delete='0' WHERE idservicio ='$idservicio'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE servicio SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idservicio ='$idservicio'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('servicio','$idservicio','Servicio maquina Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
@@ -215,9 +247,16 @@ class ServicioMaquina
 
     if (empty($prov['data']) || $forma_pago =='Efectivo') {
 
-      $sql = "INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria,imagen) 
-      VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago','$imagen1')";
-      return ejecutarConsulta($sql);
+      $sql = "INSERT INTO pago_servicio (idproyecto,beneficiario,forma_pago,tipo_pago,cuenta_destino,id_banco,titular_cuenta,fecha_pago,monto,numero_operacion,descripcion,id_maquinaria,imagen, user_created) 
+      VALUES ('$idproyecto_pago','$beneficiario_pago','$forma_pago','$tipo_pago','$cuenta_destino_pago','$banco_pago','$titular_cuenta_pago','$fecha_pago','$monto_pago','$numero_op_pago','$descripcion_pago','$id_maquinaria_pago','$imagen1','" . $_SESSION['idusuario'] . "')";
+      $insertar =  ejecutarConsulta_retornarID($sql); 
+      if ($insertar['status'] == false) {  return $insertar; } 
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_servicio','".$insertar['data']."','Nuevo Pago servicio registrado','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
+      return $insertar;
 
     } else {
       $info_repetida = '';
@@ -255,9 +294,18 @@ class ServicioMaquina
 		numero_operacion='$numero_op_pago',
 		descripcion='$descripcion_pago',
 		imagen='$imagen1',
-		id_maquinaria='$id_maquinaria_pago'
+		id_maquinaria='$id_maquinaria_pago',
+    user_updated= '" . $_SESSION['idusuario'] . "'
 		WHERE idpago_servicio='$idpago_servicio'";
-    return ejecutarConsulta($sql);
+    $editar= ejecutarConsulta($sql);
+
+    if ($editar['status'] == false) {  return $editar; }
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_servicio','$idpago_servicio','Pago servicio editado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+    return $editar;
   }
 
   public function listar_pagos($idmaquinaria, $idproyecto, $tipopago,$fecha_1,$fecha_2)
@@ -283,8 +331,16 @@ class ServicioMaquina
 
   public function desactivar_pagos($idpago_servicio)
   {
-    $sql = "UPDATE pago_servicio SET estado='0' WHERE idpago_servicio ='$idpago_servicio'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE pago_servicio SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idpago_servicio ='$idpago_servicio'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_servicio','".$idpago_servicio."','Pago servicio desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   public function activar_pagos($idpago_servicio)
@@ -296,8 +352,15 @@ class ServicioMaquina
   public function eliminar_pagos($idpago_servicio)
   {
 
-    $sql = "UPDATE pago_servicio SET estado_delete='0' WHERE idpago_servicio ='$idpago_servicio'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE pago_servicio SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idpago_servicio ='$idpago_servicio'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_servicio','$idpago_servicio','Pago servicio Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   public function mostrar_pagos($idpago_servicio)
@@ -375,9 +438,16 @@ class ServicioMaquina
     if (empty($prov['data'])) {
 
 
-      $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota) 
-      VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv', '$val_igv', '$tipo_gravada','$nota')";
-      return ejecutarConsulta($sql);
+      $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota, user_created) 
+      VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv', '$val_igv', '$tipo_gravada','$nota','" . $_SESSION['idusuario'] . "')";
+      $insertar =  ejecutarConsulta_retornarID($sql); 
+      if ($insertar['status'] == false) {  return $insertar; } 
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('factura','".$insertar['data']."','Nueva factura de servicio maquina registrada','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
+      return $insertar;
 
     } else {
       $info_repetida = '';
@@ -419,10 +489,18 @@ class ServicioMaquina
 		val_igv='$val_igv',
 		tipo_gravada='$tipo_gravada',
 		nota='$nota',
-		imagen='$imagen2'
+		imagen='$imagen2',
+    user_updated= '" . $_SESSION['idusuario'] . "'
 		WHERE idfactura ='$idfactura'";
-    return ejecutarConsulta($sql);
-    //return $vaa;
+    $editar= ejecutarConsulta($sql);
+
+    if ($editar['status'] == false) {  return $editar; }
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('factura','$idfactura','Factura de servicio maquina editada','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+    return $editar;
   }
 
   //Listar
@@ -454,8 +532,16 @@ class ServicioMaquina
   public function desactivar_factura($idfactura)
   {
 
-    $sql = "UPDATE factura SET estado='0' WHERE idfactura='$idfactura'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE factura SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idfactura='$idfactura'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('factura','".$idfactura."','Factura de servicio maquina desactivada','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   //Implementamos un método para desactivar categorías
@@ -469,8 +555,15 @@ class ServicioMaquina
   //Implementamos un método para eliminar 
   public function eliminar_factura($idfactura)
   {
-    $sql = "UPDATE factura SET estado_delete='0' WHERE idfactura='$idfactura'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE factura SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idfactura='$idfactura'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('factura','$idfactura','Factura de servicio maquina Eliminada','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   public function total_monto_f($idmaquinaria, $idproyecto,$fecha_1,$fecha_2)

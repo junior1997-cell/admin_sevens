@@ -12,8 +12,7 @@ class Sub_contrato
   //Implementamos un método para insertar registros
   public function insertar($idproyecto, $idproveedor, $ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante, $tipo_gravada)
   {
-    $sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, sc.fecha_subcontrato, sc.forma_de_pago, sc.tipo_comprobante, 
-    sc.numero_comprobante,  sc.estado, sc.estado_delete
+    $sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, sc.fecha_subcontrato, sc.forma_de_pago, sc.tipo_comprobante, sc.numero_comprobante,  sc.estado, sc.estado_delete
     FROM subcontrato as sc, proveedor as p
     WHERE sc.idproveedor = p.idproveedor and sc.idproyecto ='$idproyecto' and p.ruc ='$ruc_proveedor' and sc.tipo_comprobante ='$tipo_comprobante' and sc.numero_comprobante ='$numero_comprobante';";
     $prov = ejecutarConsultaArray($sql_1);
@@ -21,9 +20,16 @@ class Sub_contrato
 
     if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
 
-      $sql = "INSERT INTO subcontrato(idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_subcontrato, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante,tipo_gravada) 
-      VALUES ('$idproyecto', '$idproveedor', '$tipo_comprobante', '$numero_comprobante', '$forma_de_pago', '$fecha_subcontrato', '$val_igv', '$subtotal', '$igv', '$costo_parcial', '$descripcion','SUB CONTRATO','$comprobante','$tipo_gravada')";
-      return ejecutarConsulta($sql);
+      $sql = "INSERT INTO subcontrato(idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_subcontrato, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante,tipo_gravada, user_created ) 
+      VALUES ('$idproyecto', '$idproveedor', '$tipo_comprobante', '$numero_comprobante', '$forma_de_pago', '$fecha_subcontrato', '$val_igv', '$subtotal', '$igv', '$costo_parcial', '$descripcion','SUB CONTRATO','$comprobante','$tipo_gravada','" . $_SESSION['idusuario'] . "')";
+      $insertar =  ejecutarConsulta_retornarID($sql); 
+      if ($insertar['status'] == false) {  return $insertar; } 
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('subcontrato','".$insertar['data']."','Nuevo sub contrato registrado','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
+     return $insertar;
 
     } else {
     	$info_repetida = '';
@@ -60,14 +66,32 @@ class Sub_contrato
 		costo_parcial='$costo_parcial',
 		descripcion='$descripcion',
 		comprobante='$comprobante',
-		tipo_gravada='$tipo_gravada' WHERE idsubcontrato='$idsubcontrato'";
-    return ejecutarConsulta($sql);
+		tipo_gravada='$tipo_gravada',
+    user_updated= '" . $_SESSION['idusuario'] . "' 
+    WHERE idsubcontrato='$idsubcontrato'";
+    $editar= ejecutarConsulta($sql);
+
+    if ($editar['status'] == false) {  return $editar; }
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('subcontrato','$idsubcontrato','Sub contrato editado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+    return $editar; 
   }
 
   //Implementamos un método para desactivar categorías
   public function desactivar($idsubcontrato) {
-    $sql = "UPDATE subcontrato SET estado='0' WHERE idsubcontrato ='$idsubcontrato'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE subcontrato SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idsubcontrato ='$idsubcontrato'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('subcontrato','".$idsubcontrato."','Sub contrato desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   //Implementamos un método para activar categorías
@@ -78,8 +102,15 @@ class Sub_contrato
 
   //Implementamos un método para desactivar categorías
   public function eliminar($idsubcontrato) {
-    $sql = "UPDATE subcontrato SET estado_delete='0' WHERE idsubcontrato ='$idsubcontrato'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE subcontrato SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idsubcontrato ='$idsubcontrato'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('subcontrato','$idsubcontrato','Sub contrato Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
@@ -223,9 +254,16 @@ class Sub_contrato
   }
 
   public function insertar_pago($idsubcontrato_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1)  {
-    $sql = "INSERT INTO pago_subcontrato( idsubcontrato, idbancos, forma_pago, tipo_pago, beneficiario, cuenta_destino, titular_cuenta, fecha_pago, numero_operacion, monto, descripcion, comprobante) 
-		VALUES ('$idsubcontrato_pago','$banco_pago','$forma_pago','$tipo_pago','$beneficiario_pago','$cuenta_destino_pago','$titular_cuenta_pago','$fecha_pago','$numero_op_pago','$monto_pago','$descripcion_pago','$imagen1')";
-    return ejecutarConsulta($sql);
+    $sql = "INSERT INTO pago_subcontrato( idsubcontrato, idbancos, forma_pago, tipo_pago, beneficiario, cuenta_destino, titular_cuenta, fecha_pago, numero_operacion, monto, descripcion, comprobante, user_created) 
+		VALUES ('$idsubcontrato_pago','$banco_pago','$forma_pago','$tipo_pago','$beneficiario_pago','$cuenta_destino_pago','$titular_cuenta_pago','$fecha_pago','$numero_op_pago','$monto_pago','$descripcion_pago','$imagen1','" . $_SESSION['idusuario'] . "')";
+		$insertar =  ejecutarConsulta_retornarID($sql); 
+		if ($insertar['status'] == false) {  return $insertar; } 
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_subcontrato','".$insertar['data']."','Nuevo pago sub contrato registrado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+
+    return $insertar;
   }
 
   public function editar_pago( $idpago_subcontrato, $idsubcontrato_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 ) {
@@ -241,10 +279,18 @@ class Sub_contrato
     numero_operacion ='$numero_op_pago',
     monto            ='$monto_pago',
     descripcion      ='$descripcion_pago',
-    comprobante      ='$imagen1'
+    comprobante      ='$imagen1',
+    user_updated= '" . $_SESSION['idusuario'] . "'
     WHERE idpago_subcontrato='$idpago_subcontrato'";
+    $editar= ejecutarConsulta($sql);
 
-    return ejecutarConsulta($sql);
+    if ($editar['status'] == false) {  return $editar; }
+
+    //add registro en nuestra bitacora
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_subcontrato','$idpago_subcontrato','Pago sub contrato editado','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+    return $editar;  
   }
 
   public function listar_pagos($idsubcontrato, $tipo)  {
@@ -257,8 +303,16 @@ class Sub_contrato
   //------------------
 
   public function desactivar_pagos($idpago_subcontrato)  {
-    $sql = "UPDATE pago_subcontrato SET estado='0' WHERE idpago_subcontrato ='$idpago_subcontrato'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE pago_subcontrato SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idpago_subcontrato ='$idpago_subcontrato'";
+		$desactivar= ejecutarConsulta($sql);
+
+		if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_subcontrato','".$idpago_subcontrato."','Pago sub contrato desactivado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
   }
 
   public function activar_pagos($idpago_subcontrato)  {
@@ -267,8 +321,15 @@ class Sub_contrato
   }
 
   public function eliminar_pagos($idpago_subcontrato)  {
-    $sql = "UPDATE pago_subcontrato SET estado_delete='0' WHERE idpago_subcontrato ='$idpago_subcontrato'";
-    return ejecutarConsulta($sql);
+    $sql = "UPDATE pago_subcontrato SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idpago_subcontrato ='$idpago_subcontrato'";
+		$eliminar =  ejecutarConsulta($sql);
+		if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_subcontrato','$idpago_subcontrato','Pago sub contrato Eliminado','" . $_SESSION['idusuario'] . "')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
   }
 
   public function mostrar_pagos($idpago_subcontrato)  {

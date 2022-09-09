@@ -86,6 +86,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th>  
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -94,7 +95,7 @@
                                   <th>Compra</th> 
                                   <th>Precio promedio</th> 
                                   <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
+                                  <th>Suma Total</th> 
                                 </tr>
                               </thead>
                               <tbody>                         
@@ -104,6 +105,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th> 
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>

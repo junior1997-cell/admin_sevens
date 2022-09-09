@@ -75,6 +75,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th>  
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -95,6 +96,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th>  
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -130,6 +132,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th> 
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -150,6 +153,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th> 
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -185,6 +189,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th> 
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -205,6 +210,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th> 
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -241,6 +247,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th> 
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
@@ -261,6 +268,7 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Op</th>
+                                  <th>Code</th> 
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>

@@ -150,9 +150,9 @@ function tbla_principal_maquinaria(id_proyecto) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [ 
-      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
-      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
     ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_maquinaria&id_proyecto='+id_proyecto,
@@ -168,17 +168,17 @@ function tbla_principal_maquinaria(id_proyecto) {
       // columna: op
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap");  }
       // columna: UM
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+      // columna: Compra
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[11] != '') { $("td", row).eq(11).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -190,9 +190,9 @@ function tbla_principal_maquinaria(id_proyecto) {
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
       // { "targets": [ 3 ], "visible": false, "searchable": false }, 
-      { "targets": [ 11 ], "visible": false, "searchable": false },
       { "targets": [ 12 ], "visible": false, "searchable": false },
-      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { "targets": [ 13 ], "visible": false, "searchable": false },
+      { targets: [9,10,11], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
 
@@ -231,9 +231,9 @@ function tbla_principal_equipo(id_proyecto) {
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [ 
-      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
-      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
     ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_equipo&id_proyecto='+id_proyecto,
@@ -247,19 +247,19 @@ function tbla_principal_equipo(id_proyecto) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: op
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap");  }
       // columna: UM
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+      // columna: Compra
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[11] != '') { $("td", row).eq(11).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -271,9 +271,9 @@ function tbla_principal_equipo(id_proyecto) {
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
       // { "targets": [ 3 ], "visible": false, "searchable": false }, 
-      { "targets": [ 11 ], "visible": false, "searchable": false },
       { "targets": [ 12 ], "visible": false, "searchable": false },
-      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { "targets": [ 13 ], "visible": false, "searchable": false },
+      { targets: [9,10,11], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
 
@@ -312,9 +312,9 @@ function tbla_principal_herramienta(id_proyecto) {
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [ 
-      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
-      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
     ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_herramienta&id_proyecto='+id_proyecto,
@@ -328,19 +328,19 @@ function tbla_principal_herramienta(id_proyecto) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: op
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap");  }
       // columna: UM
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+      // columna: Compra
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[11] != '') { $("td", row).eq(11).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -351,10 +351,10 @@ function tbla_principal_herramienta(id_proyecto) {
 		iDisplayLength: 10,//Paginación
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      // { "targets": [ 3 ], "visible": false, "searchable": false },
-      { "targets": [ 11 ], "visible": false, "searchable": false },
+      // { "targets": [ 3 ], "visible": false, "searchable": false }, 
       { "targets": [ 12 ], "visible": false, "searchable": false },
-      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { "targets": [ 13 ], "visible": false, "searchable": false },
+      { targets: [9,10,11], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
 
@@ -393,9 +393,9 @@ function tbla_principal_oficina(id_proyecto) {
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [ 
-      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }  }, 
-      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], } }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,11,12,3,4,5,6,8,9,10], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,12,13,4,5,6,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
     ],
 		ajax:	{
       url: '../ajax/resumen_activos_fijos.php?op=tbla_principal_oficina&id_proyecto='+id_proyecto,
@@ -409,19 +409,19 @@ function tbla_principal_oficina(id_proyecto) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: op
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap");  }
       // columna: UM
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
-      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
-      // columna: Compra
+      // columna: Cantidad
       if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+      // columna: Compra
+      if (data[8] != '') { $("td", row).eq(8).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
-      // columna: Precio actual
       if (data[9] != '') { $("td", row).eq(9).addClass("text-right"); }
-      // columna: Suma Total
+      // columna: Precio actual
       if (data[10] != '') { $("td", row).eq(10).addClass("text-right"); }
+      // columna: Suma Total
+      if (data[11] != '') { $("td", row).eq(11).addClass("text-right"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -430,11 +430,12 @@ function tbla_principal_oficina(id_proyecto) {
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
-	  //"order": [[ 0, "desc" ]]//Ordenar (columna,orden)
+	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
     columnDefs:[ 
-      { "targets": [ 11 ], "visible": false, "searchable": false },
+      // { "targets": [ 3 ], "visible": false, "searchable": false }, 
       { "targets": [ 12 ], "visible": false, "searchable": false },
-      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { "targets": [ 13 ], "visible": false, "searchable": false },
+      { targets: [9,10,11], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ]
 	}).DataTable();
 

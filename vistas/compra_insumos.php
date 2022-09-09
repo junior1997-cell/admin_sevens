@@ -1221,10 +1221,17 @@
                                 <!-- idproducto -->
                                 <input type="hidden" name="idproducto_p" id="idproducto_p" />  
                                 <!-- cont registro -->
-                                <input type="hidden" name="cont" id="cont" />                                
+                                <input type="hidden" name="cont" id="cont" />  
+                                <!-- serie -->
+                                <input class="form-control" type="hidden" id="serie_p" name="serie_p" placeholder="Serie." />
+                                <!-- modelo -->
+                                <input class="form-control" type="hidden" id="modelo_p" name="modelo_p" placeholder="Modelo." />
+                                <!-- color -->
+                                <input type="hidden" name="color_p" id="color_p" value="1">
+
 
                                 <!-- Nombre -->
-                                <div class="col-lg-12">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-8">
                                   <div class="form-group">
                                     <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
                                     <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto."  />
@@ -1232,7 +1239,7 @@
                                 </div>
 
                                 <!-- Categoria -->
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
                                     <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
                                     <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;" onchange="grupo_no_select();"> 
@@ -1250,20 +1257,20 @@
                                 </div>
 
                                 <!-- Modelo -->
-                                <div class="col-lg-6">
+                                <!-- <div class="col-lg-6">
                                   <div class="form-group">
                                     <label for="modelo_p">Modelo <sup class="text-danger">*</sup> </label>
                                     <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
                                   </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Serie -->
-                                <div class="col-lg-6">
+                                <!-- <div class="col-lg-6">
                                   <div class="form-group">
                                     <label for="serie_p">Serie </label>
-                                    <input class="form-control" type="text" id="serie_p" name="serie_p" placeholder="Serie." />
+                                    <input class="form-control" type="hidden" id="serie_p" name="serie_p" placeholder="Serie." />
                                   </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Marca -->
                                 <div class="col-lg-6">
@@ -1274,12 +1281,12 @@
                                 </div>
 
                                 <!-- Color -->
-                                <div class="col-lg-6">
+                                <!-- <div class="col-lg-6 hidden">
                                   <div class="form-group">
                                     <label for="color_p">Color <sup class="text-danger">(unico*)</sup></label>
                                     <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
-                                </div>
+                                </div> -->
                                 
                                 <!-- Unnidad-->
                                 <div class="col-lg-6" id="content-t-unidad">
