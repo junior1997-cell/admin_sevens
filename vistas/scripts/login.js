@@ -30,7 +30,7 @@ $("#frmAcceso").on('submit',function(e) {
 })
 
 function validar_response(e) {
-    if (e.status){
+    if (e.status == true){
         if (e.data == null ) {
             $(document).Toasts('create', {
                 class: 'bg-danger',

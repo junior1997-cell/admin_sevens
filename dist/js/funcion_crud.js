@@ -457,9 +457,26 @@ function ver_errores(e) {
     console.group("Error"); console.warn('Error BD -------------'); console.log(e); console.groupEnd();
     Swal.fire(`Error en la Base de Datos 😅!`, `Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, "error");
   
+  }else if (e.status == 'mantenimiento') {
+    console.group("Error"); console.warn('Mantenimiento -------------'); console.log(e); console.groupEnd();
+    sw_error('En Mantenimiento!', `${e.message} <br> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, 5000);  
+    Swal.fire({
+      title: `En Mantenimiento!`, 
+      html: `<h5>${e.message}</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, 
+      iconHtml: '<img src="../dist/svg/mantenimiento.svg" width="150">',
+    });
+  }else if (e.status == 'es_sabado') {
+    console.group("Error"); console.warn('Es sabado -------------'); console.log(e); console.groupEnd();
+    //sw_error('Es Sábado!', `${e.message} <br> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, 5000);
+    Swal.fire({
+      title: `Es Sábado!`, 
+      html: `<h5>${e.message}</h5> Contacte al <b>Ing. de Sistemas</b> 📞 <br> <i><a href="tel:+51921305769" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-305-769</a></i> ─ <i><a href="tel:+51921487276" data-toggle="tooltip" data-original-title="Llamar al Ing. de Sistemas.">921-487-276</a></i>`, 
+      iconHtml: '<img src="../dist/svg/Jesus-Christ.svg" width="100">',
+    });
+
   }else if (e.status == 'duplicado') {
     console.group("Error"); console.warn('Duplicado Error BD -------------'); console.log(e); console.groupEnd();
-    Swal.fire(`Estos datos ya existen 😅!`, e.data, "error");   
+    Swal.fire(`Estos datos ya existen 😅!`, e.data, "error");  
 
   }else if (e.status == 'login') {
     console.warn('--- Tu sesion se ha terminado!!');
