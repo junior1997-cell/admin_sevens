@@ -7,6 +7,7 @@ $estado = "mantenimiento";
 $message = "Estamos en mantenimiento, esperemos su comprension";
 $estado = "es_sabado";
 
+// if (false) {  
 if (!function_exists('ejecutarConsulta')) {  
 
   function ejecutarConsulta($sql) {    

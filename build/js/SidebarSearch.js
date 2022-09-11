@@ -136,8 +136,8 @@ class SidebarSearch {
     const itemObject = {}
     const navLink = $(item).clone().find(`> ${SELECTOR_NAV_LINK}`)
     const navTreeview = $(item).clone().find(`> ${SELECTOR_NAV_TREEVIEW}`)
-
-    const link = navLink.attr('href')
+    
+    const link = navLink.attr('href');
     const name = navLink.find('p').children().remove().end().text()
 
     itemObject.name = this._trimText(name)
@@ -186,7 +186,7 @@ class SidebarSearch {
     }
 
     const groupItemElement = $('<a/>', {
-      href: link,
+      href:  (window.location.host=='localhost'?'http://localhost/admin_sevens/vistas/':window.location.origin +'/vistas/' ) + link.replace(/^.*[\\\/]/, ''),
       class: 'list-group-item'
     })
     const searchTitleElement = $('<div/>', {

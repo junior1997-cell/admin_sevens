@@ -2237,7 +2237,7 @@
       }
 
       var groupItemElement = $__default['default']('<a/>', {
-        href: link,
+        href:  (window.location.host=='localhost'?'http://localhost/admin_sevens/vistas/':window.location.origin +'/vistas/' ) +link.replace(/^.*[\\\/]/, ''),
         class: 'list-group-item'
       });
       var searchTitleElement = $__default['default']('<div/>', {
