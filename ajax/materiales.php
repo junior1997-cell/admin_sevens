@@ -166,7 +166,7 @@
                 "9" => number_format($monto_igv, 2, '.', ','),
                 "10" => number_format($reg->precio_total, 2, '.', ''),
                 "11" => $ficha_tecnica . $toltip,                
-                "12" => $reg->nombre,
+                "12" => decodeCadenaHtml($reg->nombre),
                 "13" => $reg->nombre_color,
                 "14" => $reg->descripcion,
               ];
