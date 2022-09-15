@@ -1027,7 +1027,7 @@ function limpiar_materiales() {
   $("#nombre_p").val("");
   $("#modelo_p").val("");
   $("#serie_p").val("");
-  $("#marca_p").val("");
+  $("#marca_p").val("1");
   $("#descripcion_p").val("");
   $("#idtipo_tierra_concreto").val("").trigger("change");
 

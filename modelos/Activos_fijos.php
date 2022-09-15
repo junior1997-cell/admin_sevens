@@ -12,7 +12,7 @@ class Activos_fijos
   //Implementamos un método para insertar registros
   public function insertar($unidad_medida, $color, $idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $estado_igv, $precio_unitario, $precio_igv, $precio_sin_igv, $precio_total, $ficha_tecnica, $descripcion, $imagen)
   {
-    $sql = "SELECT p.nombre, p.modelo , p.serie, p.marca, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
+    $sql = "SELECT p.nombre, p.modelo , p.serie, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
     um.nombre_medida, p.estado, p.estado_delete, ciaf.nombre as nombre_categoria
 		FROM producto p, unidad_medida as um, color as c, categoria_insumos_af as ciaf 
     WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af AND p.idcategoria_insumos_af = '$idcategoria' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unidad_medida';";
@@ -20,7 +20,7 @@ class Activos_fijos
 
     if ($buscando['status']) {
       if ( empty($buscando['data']) ) {
-        $sql = "INSERT INTO producto(idunidad_medida, idcolor, idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, marca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, precio_total, ficha_tecnica, descripcion, imagen, user_created) 
+        $sql = "INSERT INTO producto(idunidad_medida, idcolor, idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, idmarca, estado_igv, precio_unitario, precio_igv, precio_sin_igv, precio_total, ficha_tecnica, descripcion, imagen, user_created) 
         VALUES ('$unidad_medida', '$color', '$idcategoria', '$idgrupo', '$nombre', '$modelo', '$serie', '$marca', '$estado_igv', '$precio_unitario', '$precio_igv', '$precio_sin_igv', '$precio_total', '$ficha_tecnica', '$descripcion', '$imagen','" . $_SESSION['idusuario'] . "')";
 
         $intertar =  ejecutarConsulta_retornarID($sql); 
@@ -67,7 +67,7 @@ class Activos_fijos
 		nombre = '$nombre',
 		modelo = '$modelo',
 		serie = '$serie',
-		marca = '$marca',
+		idmarca = '$marca',
 		estado_igv = '$estado_igv',
 		precio_unitario='$precio_unitario',
 		precio_igv = '$precio_igv',
@@ -127,11 +127,11 @@ class Activos_fijos
   public function mostrar($idproducto) {
     $data = [];
 
-    $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca, p.estado_igv, 
+    $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.idmarca,m.nombre_marca AS nombre_marca, p.estado_igv, 
     p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.created_at,
     um.nombre_medida, c.nombre_color, ciaf.nombre AS categoria, p.idtipo_tierra_concreto, ttc.nombre as tipo_tierra_concreto
-		FROM producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf, tipo_tierra_concreto as ttc
-    WHERE p.idunidad_medida = um.idunidad_medida AND p.idcolor = c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af 
+		FROM producto AS p,marca as m, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf, tipo_tierra_concreto as ttc
+    WHERE p.idunidad_medida = um.idunidad_medida AND p.idmarca= m.idmarca AND p.idcolor = c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af 
     AND ttc.idtipo_tierra_concreto = p.idtipo_tierra_concreto AND p.idproducto = '$idproducto'";
     $activos = ejecutarConsultaSimpleFila($sql);
 
@@ -149,7 +149,8 @@ class Activos_fijos
         'nombre'          => decodeCadenaHtml($activos['data']['nombre']),
         'modelo'          => decodeCadenaHtml($activos['data']['modelo']),
         'serie'           => decodeCadenaHtml($activos['data']['serie']),
-        'marca'           => decodeCadenaHtml($activos['data']['marca']),
+        'marca'           => decodeCadenaHtml($activos['data']['idmarca']),
+        'nombre_marca'    => decodeCadenaHtml($activos['data']['nombre_marca']),
         'estado_igv'      => (empty($activos['data']['estado_igv']) ? 0 :  $activos['data']['estado_igv']),
         'precio_unitario' => (empty($activos['data']['precio_unitario']) ? 0 : $activos['data']['precio_unitario']),
         'precio_igv'      => (empty($activos['data']['precio_igv']) ? 0 : $activos['data']['precio_igv']),
@@ -179,12 +180,13 @@ class Activos_fijos
       $tipo_categoria = "AND p.idcategoria_insumos_af = '$id_categoria'";
     }
     
-    $sql = "SELECT
+    $sql = "
+    SELECT
 		p.idproducto AS idproducto,
 		p.idunidad_medida AS idunidad_medida,
 		p.idcolor AS idcolor,
-		p.nombre AS nombre,
-		p.marca AS marca,
+    p.nombre AS nombre,
+		m.nombre_marca AS marca,
 		ciaf.nombre AS categoria,
 		p.descripcion AS descripcion,
 		p.imagen AS imagen,
@@ -197,9 +199,9 @@ class Activos_fijos
 		p.estado AS estado,
 		c.nombre_color AS nombre_color,
 		um.nombre_medida AS nombre_medida
-		FROM producto p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
-		WHERE um.idunidad_medida=p.idunidad_medida  AND c.idcolor=p.idcolor AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af
-    $tipo_categoria AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC";
+		FROM producto p,marca as m, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+		WHERE um.idunidad_medida=p.idunidad_medida AND p.idmarca= m.idmarca AND c.idcolor=p.idcolor AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
+    $tipo_categoria AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC;";
     return ejecutarConsulta($sql);
   }
 

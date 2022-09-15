@@ -204,21 +204,21 @@
                                 </div>
                               </div> -->
 
-                              <!-- Marca -->
+                              <!-- Marca
                               <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="marca">Marca </label>
                                   <input class="form-control" type="text" id="marca" name="marca" placeholder="Marca de activo." />
                                 </div>
-                              </div>
-
-                              <!-- Color -->
-                              <!-- <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="color">Color <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="color" id="color" class="form-control select2" style="width: 100%;"> </select>
-                                </div>
                               </div> -->
+
+                              <!-- Marca -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="marca">Marca <sup class="text-danger">(unico*)</sup></label>
+                                  <select name="marca" id="marca" class="form-control select2" style="width: 100%;"> </select>
+                                </div>
+                              </div>
                               
                               <!-- Unnidad de medida-->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6" >

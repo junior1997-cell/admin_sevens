@@ -12,7 +12,7 @@ class Materiales
   //Implementamos un método para insertar registros
   public function insertar($idcategoria, $idgrupo, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $precio_igv, $precio_sin_igv, $unidad_medida, $color, $total_precio)
   {
-    $sql = "SELECT p.nombre, p.modelo , p.serie, p.marca, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
+    $sql = "SELECT p.nombre, p.modelo , p.serie, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
     um.nombre_medida, p.estado, p.estado_delete, p.idtipo_tierra_concreto, ttc.nombre as tipo_tierra_concreto
 		FROM producto p, unidad_medida as um, color as c, tipo_tierra_concreto as ttc
     WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor AND ttc.idtipo_tierra_concreto = p.idtipo_tierra_concreto 
@@ -21,7 +21,7 @@ class Materiales
     if ($buscando['status'] == false) { return $buscando; }
 
     if ( empty($buscando['data']) ) {
-      $sql = "INSERT INTO producto (idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, marca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total,user_created) 
+      $sql = "INSERT INTO producto (idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, idmarca, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total,user_created) 
       VALUES ('$idcategoria', '$idgrupo', '$nombre', '$modelo', '$serie', '$marca','$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$precio_igv','$precio_sin_igv','$unidad_medida','$color','$total_precio','" . $_SESSION['idusuario'] . "')";
      
       $intertar =  ejecutarConsulta_retornarID($sql); 
@@ -62,7 +62,7 @@ class Materiales
 		nombre='$nombre', 
     modelo = '$modelo', 
     serie = '$serie',
-		marca='$marca', 
+		idmarca='$marca', 
 		precio_unitario='$precio_unitario', 
 		descripcion='$descripcion', 
 		imagen='$imagen1',
@@ -128,11 +128,11 @@ class Materiales
   {
     $data = Array();
 
-    $sql = "SELECT p.idproducto, p.idunidad_medida,	p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie,	p.marca,
+    $sql = "SELECT p.idproducto, p.idunidad_medida,	p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie,	p.idmarca,m.nombre_marca AS nombre_marca,
 		p.descripcion, p.imagen, p.estado_igv, p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total,
 		p.ficha_tecnica, p.estado, c.nombre_color, um.nombre_medida, p.idtipo_tierra_concreto, ttc.nombre as tipo_tierra_concreto
-		FROM producto p, unidad_medida as um, color as c, tipo_tierra_concreto as ttc
-		WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor AND ttc.idtipo_tierra_concreto = p.idtipo_tierra_concreto
+		FROM producto p,marca as m, unidad_medida as um, color as c, tipo_tierra_concreto as ttc
+		WHERE um.idunidad_medida=p.idunidad_medida AND p.idmarca= m.idmarca AND c.idcolor=p.idcolor AND ttc.idtipo_tierra_concreto = p.idtipo_tierra_concreto
     AND p.idproducto ='$idproducto'";
 
     $producto = ejecutarConsultaSimpleFila($sql);
@@ -148,7 +148,8 @@ class Materiales
         'nombre'          => ( empty($producto['data']['nombre']) ? '' :decodeCadenaHtml($producto['data']['nombre'])),
         'modelo'          => ( empty($producto['data']['modelo']) ? '' :decodeCadenaHtml($producto['data']['modelo'])),
         'serie'           => ( empty($producto['data']['serie']) ? '' :decodeCadenaHtml($producto['data']['serie'])),
-        'marca'           => ( empty($producto['data']['marca']) ? '' : decodeCadenaHtml($producto['data']['marca'])),                
+        'marca'           => ( empty($producto['data']['idmarca']) ? '' : decodeCadenaHtml($producto['data']['idmarca'])),   
+        'nombre_marca'    => decodeCadenaHtml($producto['data']['nombre_marca']),
         'estado_igv'      => ( empty($producto['data']['estado_igv']) ? '' : $producto['data']['estado_igv']),
         'precio_unitario' => ( empty($producto['data']['precio_unitario']) ? 0 : number_format($producto['data']['precio_unitario'], 2, '.',',') ),
         'precio_igv'      => ( empty($producto['data']['precio_igv']) ? 0 :  number_format($producto['data']['precio_igv'], 2, '.',',') ),

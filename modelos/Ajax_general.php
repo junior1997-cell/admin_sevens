@@ -186,6 +186,13 @@
       return ejecutarConsultaArray($sql3);
     }
 
+    /* ══════════════════════════════════════ M A R C A S   D E   A C T I V O S ════════════════════════════ */
+
+    public function marcas_activos() {
+      $sql = "SELECT idmarca, nombre_marca FROM marca WHERE estado=1 and estado_delete=1;";
+      return ejecutarConsulta($sql);
+    }
+
   }
 
 ?>

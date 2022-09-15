@@ -141,9 +141,10 @@
                               <input type="hidden" id="modelo" name="modelo" />
                               <input type="hidden" id="serie" name="serie" />
                               <input type="hidden" id="color" name="color" value="1" />
+                              <input type="hidden" id="marca" name="marca" value="1" />
 
                               <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                              <div class="col-12 col-sm-12 col-md-8 col-lg-8">
                                 <div class="form-group">
                                   <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
@@ -151,7 +152,7 @@
                               </div>
 
                               <!-- Categoria -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                                 <div class="form-group">
                                   <label for="idtipo_tierra_concreto">Grupo <sup class="text-danger">(unico*)</sup></label>
                                   <select name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" class="form-control select2" style="width: 100%;"> 
@@ -176,12 +177,12 @@
                               </div> -->
 
                               <!--Marca-->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                              <!-- <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="marca">Marca</label>
                                   <input type="text" name="marca" class="form-control" id="marca" placeholder="Marca" />
                                 </div>
-                              </div>
+                              </div> -->
 
                               <!-- Color -->
                               <!-- <div class="col-12 col-sm-6 col-md-6 col-lg-6">

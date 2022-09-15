@@ -81,7 +81,7 @@ function init() {
   
   // ══════════════════════════════════════ INITIALIZE SELECT2 - MATERIAL ══════════════════════════════════════
 
-  $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+  $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar Clasificación", allowClear: true, });
 
   // $("#color_p").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
 
@@ -2099,7 +2099,7 @@ function limpiar_materiales() {
   $("#nombre_p").val("");
   $("#modelo_p").val("");
   $("#serie_p").val("");
-  $("#marca_p").val("");
+  $("#marca_p").val("1");
   $("#descripcion_p").val("");
 
   $("#precio_unitario_p").val("");

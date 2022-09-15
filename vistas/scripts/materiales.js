@@ -79,7 +79,7 @@ function limpiar_form_material() {
   $("#nombre_material").val("");
   $("#modelo").val("");
   $("#serie").val("");
-  $("#marca").val("");
+  $("#marca").val("1");
   $("#descripcion_material").val("");
 
   $("#precio_unitario").val("");
@@ -388,7 +388,7 @@ function verdatos(idproducto){
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Marca</th>
-                    <td>${e.data.marca}</td>
+                    <td>${e.data.nombre_marca}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Con IGV</th>

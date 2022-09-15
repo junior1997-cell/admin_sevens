@@ -736,6 +736,31 @@
         }
       break;
 
+      /* ══════════════════════════════════════ M A R C A S   D E   A C T I V O S ════════════════════════════ */
+      case 'select2marcas_activos': 
+    
+        $rspta = $ajax_general->marcas_activos(); $cont = 1; $data = "";
+        
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) { 
+            $data .= '<option value="' . $value['idmarca'] . '" title="'.$value['nombre_marca'].'" >' . $value['nombre_marca'] .'</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
+
       default: 
         $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
       break;
