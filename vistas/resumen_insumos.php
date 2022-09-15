@@ -555,7 +555,7 @@
                               <input type="hidden" name="cont" id="cont" />                              
 
                               <!-- Nombre -->
-                              <div class="col-lg-12 class_pading">
+                              <div class="col-sm-12 col-md-6 col-lg-8 class_pading">
                                 <div class="form-group">
                                   <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
@@ -563,7 +563,7 @@
                               </div>
 
                               <!-- Categoria -->
-                              <div class="col-lg-6">
+                              <div class="col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
                                   <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;" onchange="grupo_no_select();"> 
@@ -580,7 +580,7 @@
                               </div>
 
                               <!-- Modelo -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 d-none">
                                 <div class="form-group">
                                   <label for="modelo_p">Modelo </label>
                                   <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
@@ -588,7 +588,7 @@
                               </div>
 
                               <!-- Serie -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 d-none">
                                 <div class="form-group">
                                   <label for="serie_p">Serie </label>
                                   <input class="form-control" type="text" id="serie_p" name="serie_p" placeholder="Serie." />
@@ -596,7 +596,7 @@
                               </div>
 
                               <!-- Marca -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6" >
                                 <div class="form-group">
                                   <label for="marca_p">Marca </label>
                                   <input class="form-control" type="text" id="marca_p" name="marca_p" placeholder="Marca de activo." />
@@ -604,7 +604,7 @@
                               </div>
 
                               <!-- Color -->
-                              <div class="col-lg-6">
+                              <div class="col-lg-6 d-none">
                                 <div class="form-group">
                                   <label for="color_p">Color <sup class="text-danger">(unico*)</sup></label>
                                   <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
