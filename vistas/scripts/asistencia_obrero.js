@@ -2477,13 +2477,25 @@ function guardar_y_editar_fechas_actividades(e) {
   var formData = new FormData($("#form-fechas-actividades")[0]);
 
   console.log(array_btn_fechas);
-  // data: { formData, 'fechas': array_btn_fechas },
+
+  var id_proyecto_f           = $('#id_proyecto_f').val();
+  var fecha_inicio_actividad  = $('#fecha_inicio_actividad').val();
+  var fecha_fin_actividad     = $('#fecha_fin_actividad').val();
+  var plazo_actividad         = $('#plazo_actividad').val();
+
   $.ajax({
     url: "../ajax/asistencia_obrero.php?op=guardar_y_editar_fechas_actividad",
     type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
+    //data: formData,
+    data: {
+      'id_proyecto_f':          id_proyecto_f, 
+      'fecha_inicio_actividad': fecha_inicio_actividad, 
+      'fecha_fin_actividad':    fecha_fin_actividad, 
+      'plazo_actividad':        plazo_actividad, 
+      'fechas':                 JSON.stringify(array_btn_fechas) 
+    },
+    //contentType: 'application/json; charset=utf-8',
+    //processData: false,
     success: function (e) {
       try {
         e = JSON.parse(e);  console.log(e);

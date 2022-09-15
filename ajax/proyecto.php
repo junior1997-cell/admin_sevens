@@ -17,8 +17,9 @@
 
       $proyecto = new Proyecto();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima'); $date_now = date("d-m-Y h.i.s A");
+
+      $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
@@ -184,8 +185,7 @@
 
               $doc1_ant = $datos_f1['data']['doc1_contrato_obra'];
 
-              if ($doc1_ant != "") {
-
+              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200) {
                 unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
               }
             }
@@ -196,8 +196,7 @@
 
               $doc2_ant = $datos_f2['data']['doc2_entrega_terreno'];
 
-              if ($doc2_ant != "") {
-
+              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc2_ant)  == 200) {
                 unlink("../dist/docs/valorizacion/documento/" . $doc2_ant);
               }
             }
@@ -208,8 +207,7 @@
 
               $doc3_ant = $datos_f3['data']['doc3_inicio_obra'];
 
-              if ($doc3_ant != "") {
-
+              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc3_ant)  == 200) {
                 unlink("../dist/docs/valorizacion/documento/" . $doc3_ant);
               }
             }
@@ -220,8 +218,7 @@
 
               $doc4_ant = $datos_f4['data']['doc4_presupuesto'];
 
-              if ($doc4_ant != "") {
-
+              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc4_ant)  == 200) {
                 unlink("../dist/docs/valorizacion/documento/" . $doc4_ant);
               }
             }
@@ -232,8 +229,7 @@
 
               $doc5_ant = $datos_f5['data']['doc5_analisis_costos_unitarios'];
 
-              if ($doc5_ant != "") {
-
+              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc5_ant)  == 200) {
                 unlink("../dist/docs/valorizacion/documento/" . $doc5_ant);
               }
             }
@@ -244,8 +240,7 @@
 
               $doc6_ant = $datos_f6['data']['doc6_insumos'];
 
-              if ($doc6_ant != "") {
-
+              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc6_ant)  == 200) {
                 unlink("../dist/docs/valorizacion/documento/" . $doc6_ant);
               }
             }

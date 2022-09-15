@@ -9,7 +9,10 @@ function init(){
 
   tablero(); 
   box_proyecto();
+  // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
+  lista_select2("../ajax/ajax_general.php?op=select2EmpresaACargo", '#empresa_acargo', null);
 
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) { $("#submit-form-proyecto").submit(); });   
 
   // mostramos las fechas feriadas
@@ -35,7 +38,8 @@ function init(){
 
   }).fail( function(e) { ver_errores(e); } );
 
-  //Initialize Select2 Elements
+   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+
   $('#fecha_pago_obrero').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true });
   $('#fecha_valorizacion').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true});
   $('#empresa_acargo').select2({ templateResult: template_sleect2_empresa, placeholder: "Empresa a cargo", allowClear: false});
@@ -49,6 +53,14 @@ $('.click-btn-fecha-inicio').on('click', function (e) {$('#fecha_inicio').focus(
 
 init();
 
+function template_sleect2_empresa (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/svg/${state.title}`: '../dist/svg/user_default.svg'; 
+  var onerror = `onerror="this.src='../dist/svg/user_default.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
 
 function validar_permanent() { if ($("#fecha_pago_obrero").select2('val') == null) {  $("#definiendo").prop('checked', false); } }
 
@@ -268,12 +280,12 @@ function guardaryeditar(e) {
       try {
         e = JSON.parse(e);  //console.log(e);  
         if (e) {
-
+          
           tabla.ajax.reload(null, false);	
 
           Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	      
           
-          limpiar(); tablero();
+          limpiar(); tablero(); box_proyecto();
 
           $("#modal-agregar-proyecto").modal("hide");        
           
@@ -756,7 +768,7 @@ function mostrar(idproyecto) {
 
   $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (data, status) {
 
-    data = JSON.parse(data);  //console.log(data);   
+    data = JSON.parse(data);  console.log(data);   
 
     if (data.status) {
       $("#cargando-1-fomulario").show();
@@ -774,7 +786,7 @@ function mostrar(idproyecto) {
       $("#plazo").val(data.data.plazo); 
       $("#costo").val(formato_miles(data.data.costo)); 
       $("#garantia").val(data.data.garantia); 
-      $("#empresa_acargo").val(data.data.empresa_acargo).trigger("change");
+      $("#empresa_acargo").val(data.data.idempresa_a_cargo).trigger("change");
       $("#fecha_pago_obrero").val(data.data.fecha_pago_obrero).trigger("change");
       $("#fecha_valorizacion").val(data.data.fecha_valorizacion).trigger("change");
       
@@ -1009,7 +1021,7 @@ function mostrar_detalle(idproyecto) {
                   </tr>
                   <tr data-widget="expandable-table" aria-expanded="false">
                     <th>Empresa a cargo</th>
-                    <td>${data.data.empresa_acargo}</td>
+                    <td><img src="../dist/svg/${data.data.ec_logo}" class="mr-2 w-25px" /> ${data.data.ec_razon_social} - ${data.data.ec_tipo_documento} ${data.data.ec_numero_documento}</td>
                   </tr>
                 </tbody>
               </table>       
@@ -1492,15 +1504,6 @@ function cuentaSabado(fi, ff){
 
  return cuentaFinde;
 }
-
-function template_sleect2_empresa (state) {
-  //console.log(state);
-  if (!state.id) { return state.text; }
-  var baseUrl = state.title != '' ? `../dist/svg/${state.title}`: '../dist/svg/user_default.svg'; 
-  var onerror = `onerror="this.src='../dist/svg/user_default.svg';"`;
-  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
-  return $state;
-};
 
 // input decimal letra
 $(function() {

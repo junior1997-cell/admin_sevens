@@ -15,8 +15,11 @@
 
       $otra_factura = new Otra_factura();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");
+
+      $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       $idotra_factura   = isset($_POST["idotra_factura"]) ? limpiarCadena($_POST["idotra_factura"]) : "";      
       $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
@@ -32,6 +35,8 @@
       $descripcion      = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
       $glosa            = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
       $tipo_gravada     = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";
+
+      $empresa_acargo   = isset($_POST["empresa_acargo"]) ? limpiarCadena($_POST["empresa_acargo"]) : "";
 
       $foto2 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
       
@@ -57,7 +62,7 @@
       
           if (empty($idotra_factura)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $otra_factura->insertar($idproveedor, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
+            $rspta = $otra_factura->insertar($idproveedor, $empresa_acargo, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
             
             echo json_encode($rspta, true) ;
       
@@ -69,10 +74,10 @@
       
               $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
       
-              if ($ficha1_ant != "") {  unlink("../dist/docs/otra_factura/comprobante/" . $ficha1_ant); }
+              if (validar_url_completo($scheme_host. "dist/docs/otra_factura/comprobante/" . $ficha1_ant)  == 200) {  unlink("../dist/docs/otra_factura/comprobante/" . $ficha1_ant); }
             }
       
-            $rspta = $otra_factura->editar($idotra_factura, $idproveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
+            $rspta = $otra_factura->editar($idotra_factura, $idproveedor, $empresa_acargo, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
             //var_dump($idotra_factura,$idproveedor);
             echo json_encode($rspta, true) ;
           }
@@ -104,7 +109,7 @@
       
       
         case 'tbla_principal':
-          $rspta = $otra_factura->tbla_principal($_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
+          $rspta = $otra_factura->tbla_principal($_GET["empresa_a_cargo"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = []; $cont = 1;
 
@@ -112,9 +117,7 @@
             while ($reg = $rspta['data']->fetch_object()) {
               // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_otro_gasto/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
         
-              $comprobante = empty($reg->comprobante) ? ( '<center> <i class="fas fa-file-invoice-dollar fa-2x text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i></center>') : ( '<center><i class="fas fa-file-invoice-dollar fa-2x cursor-pointer text-blue" onclick="modal_comprobante(\'' . $reg->comprobante . '\', \''.$reg->fecha_emision.'\''. ')" data-toggle="tooltip" data-original-title="Ver Baucher"></i></center>');
-               
-              $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+              $comprobante = empty($reg->comprobante) ? ( '<center> <i class="fas fa-file-invoice-dollar fa-2x text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i></center>') : ( '<center><i class="fas fa-file-invoice-dollar fa-2x cursor-pointer text-blue" onclick="modal_comprobante(\'' . $reg->comprobante . '\', \''.$reg->fecha_emision.'\''. ')" data-toggle="tooltip" data-original-title="Ver Baucher"></i></center>');              
   
               $data[] = [
                 "0" => $cont++,
@@ -130,9 +133,9 @@
                     <span class="username ml-0" > <p class="text-primary m-b-02rem" >' . $reg->tipo_comprobante . '</p> </span>
                     <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
                   </div>',
-                "6" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
-                "7" =>'S/ '. number_format($reg->igv, 2, '.', ','),
-                "8" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
+                "6" => $reg->subtotal,
+                "7" => $reg->igv,
+                "8" => $reg->costo_parcial,
                 "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "10" => $comprobante . $toltip,
                 "11" => $reg->glosa,

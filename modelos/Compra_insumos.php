@@ -634,8 +634,7 @@ class Compra_insumos
     if ($factura_compras == false) {  return $factura_compras; }
 
     return $retorno = ['status'=>true, 'message'=>'todo oka', 'data'=>['comprobante'=>$comprobantes['data'],'factura_compras'=>$factura_compras['data'],], ];
-  }
-
+  }  
 }
 
 ?>
