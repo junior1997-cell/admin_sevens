@@ -512,9 +512,9 @@
                                   <div class="form-group">
                                     <label for="empresa_acargo">Empresa a cargo <small class="text-orange d-none d-lg-inline-block">("Seven's Ingenieros")</small></label>
                                     <select class="form-control select2 select2-purple" name="empresa_acargo" id="empresa_acargo" data-dropdown-css-class="select2-purple" style="width: 100%;">
-                                      <option selected value="Seven's Ingenieros SAC" title="logo-icono.svg">Seven's Ingenieros SAC</option>
-                                      <option value="Consorcio Seven's Ingenieros SAC" title="logo-icono-plomo.svg">Consorcio Seven's Ingenieros SAC</option>
-                                      <option value="Ninguno" title="emogi-carita-feliz.svg">Ninguno</option>
+                                      <!-- <option selected value="Seven's Ingenieros SAC" title="logo-icono.svg">Seven's Ingenieros SAC</option> -->
+                                      <!-- <option value="Consorcio Seven's Ingenieros SAC" title="logo-icono-plomo.svg">Consorcio Seven's Ingenieros SAC</option> -->
+                                      <!-- <option value="Ninguno" title="emogi-carita-feliz.svg">Ninguno</option> -->
                                     </select>                                     
                                   </div>
                                 </div>

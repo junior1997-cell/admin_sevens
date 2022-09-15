@@ -180,6 +180,12 @@
       return ejecutarConsulta($sql);
     }
 
+    /* ══════════════════════════════════════ E M P R E S A   A   C A R G O ══════════════════════════════════════ */
+    public function select2_empresa_a_cargo() {
+      $sql3 = "SELECT idempresa_a_cargo as id, razon_social as nombre, tipo_documento, numero_documento, logo FROM empresa_a_cargo WHERE estado ='1' AND estado_delete ='1' AND idempresa_a_cargo > 1 ;";
+      return ejecutarConsultaArray($sql3);
+    }
+
   }
 
 ?>

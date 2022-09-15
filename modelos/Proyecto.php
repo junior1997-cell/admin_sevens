@@ -17,7 +17,7 @@ class Proyecto
     $calendario_error = "No hay feriados, agregue alguno";
 
     // prepoaramos la consulta del proyecto
-    $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, empresa_acargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
+    $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, idempresa_a_cargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
 		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero', '" . $_SESSION['idusuario'] . "');";
 
     $id_proyect = ejecutarConsulta_retornarID($sql);
@@ -76,7 +76,7 @@ class Proyecto
   public function editar(  $idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero  ) {
     $sql = "UPDATE proyecto SET tipo_documento = '$tipo_documento', numero_documento = '$numero_documento', 
 			empresa = '$empresa', nombre_proyecto = '$nombre_proyecto', nombre_codigo = '$nombre_codigo',  ubicacion = '$ubicacion',
-			actividad_trabajo = '$actividad_trabajo', empresa_acargo = '$empresa_acargo', costo = '$costo',  garantia = '$garantia',  
+			actividad_trabajo = '$actividad_trabajo', idempresa_a_cargo = '$empresa_acargo', costo = '$costo',  garantia = '$garantia',  
 			fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', dias_habiles='$dias_habiles',
 			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3',
 			doc4_presupuesto = '$doc4', doc5_analisis_costos_unitarios = '$doc5', doc6_insumos = '$doc6', 
@@ -166,7 +166,14 @@ class Proyecto
 
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idproyecto)  {
-    $sql = "SELECT * FROM proyecto WHERE idproyecto='$idproyecto'";
+    $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, p.nombre_proyecto, p.nombre_codigo, p.ubicacion, p.
+    actividad_trabajo, p.empresa_acargo, p.costo, p.garantia, p.fecha_inicio_actividad, p.fecha_fin_actividad, p.plazo_actividad, p.fecha_inicio, p.fecha_fin, p.
+    plazo, p.dias_habiles, p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra, p.doc4_presupuesto, p.doc5_analisis_costos_unitarios, p.
+    doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, p.feriado_domingo, p.fecha_pago_obrero, p.
+    fecha_valorizacion, p.permanente_pago_obrero, p.estado, 
+    ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento as ec_numero_documento, ec.logo as ec_logo
+    FROM proyecto as p, empresa_a_cargo as ec
+    WHERE  p.idempresa_a_cargo = ec.idempresa_a_cargo AND p.idproyecto ='$idproyecto'";
 
     return ejecutarConsultaSimpleFila($sql);
   }

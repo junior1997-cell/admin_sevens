@@ -551,19 +551,19 @@
 
           foreach ($rspta['data'] as $key => $reg) { 
            $data .= '<option value=' . $reg['idmaquinaria'] . '>' . $reg['nombre'] . ' : ' . $reg['codigo_maquina'] . ' -> ' . $reg['nombre_proveedor'] . '</option>';
-         }
-         $retorno = array(
+          }
+          $retorno = array(
            'status' => true, 
            'message' => 'Salió todo ok', 
            'data' => $data, 
-         );
+          );
  
          echo json_encode($retorno, true);
 
-       } else {
+        } else {
 
          echo json_encode($rspta, true); 
-       }
+        }
       break;
 
       /* ══════════════════════════════════════ C O M P R A   D E   I N S U M O ════════════════════════════ */
@@ -709,6 +709,31 @@
         $retorno = ['status' => true, 'message' => 'todo oka', 'data' => $inputs . $tabla_detalle ,];
         echo json_encode( $retorno, true );
 
+      break;
+
+      /* ══════════════════════════════════════ E M P R E S A   A   C A R G O ══════════════════════════════════════ */
+      case 'select2EmpresaACargo': 
+    
+        $rspta = $ajax_general->select2_empresa_a_cargo(); $cont = 1; $data = "";
+        
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) { 
+            $data .= '<option value="' . $value['id'] . '" title="'.$value['logo'].'" >' . $value['nombre'] . ' - ' . $value['numero_documento'].'</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => '<option value="1" title="emogi-carita-feliz.svg" >NINGUNO</option>'.$data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
       break;
 
       default: 

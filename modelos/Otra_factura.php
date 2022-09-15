@@ -10,7 +10,7 @@ class Otra_factura
   }
   //$idotra_factura,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
-  public function insertar($idproveedor, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
+  public function insertar($idproveedor, $empresa_acargo, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
   {
     $sql_1 = "SELECT  p.razon_social, p.tipo_documento, p.ruc, of.tipo_comprobante, of.numero_comprobante, of.fecha_emision, 
     of.costo_parcial, of.forma_de_pago, of.estado, of.estado_delete
@@ -20,8 +20,8 @@ class Otra_factura
 		if ($prov['status'] == false) { return  $prov;}
 
     if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
-      $sql = "INSERT INTO otra_factura (idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada, user_created) 
-		  VALUES ('$idproveedor', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada','" . $_SESSION['idusuario'] . "')";
+      $sql = "INSERT INTO otra_factura (idproveedor, idempresa_a_cargo, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada, user_created) 
+		  VALUES ('$idproveedor', '$empresa_acargo', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada','" . $_SESSION['idusuario'] . "')";
       $insertar =  ejecutarConsulta_retornarID($sql); 
       if ($insertar['status'] == false) {  return $insertar; } 
       
@@ -49,23 +49,24 @@ class Otra_factura
   }
 
   //Implementamos un método para editar registros
-  public function editar($idotra_factura, $idproveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
+  public function editar($idotra_factura, $idproveedor, $empresa_acargo, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
   {
     $sql = "UPDATE otra_factura SET 
-    `idproveedor`       ='$idproveedor',
-    `tipo_comprobante`  ='$tipo_comprobante',
-    `numero_comprobante`='$nro_comprobante',
-    `forma_de_pago`     ='$forma_pago',
-    `fecha_emision`     ='$fecha_emision',
-    `val_igv`           ='$val_igv',
-    `subtotal`          ='$subtotal',
-    `igv`               ='$igv',
-    `costo_parcial`     ='$precio_parcial',
-    `descripcion`       ='$descripcion',
-    `glosa`             ='$glosa',
-    `comprobante`       ='$comprobante',
-    `tipo_gravada`      ='$tipo_gravada',
-    user_updated= '" . $_SESSION['idusuario'] . "'
+    idproveedor       ='$idproveedor',
+    idempresa_a_cargo ='$empresa_acargo',
+    tipo_comprobante  ='$tipo_comprobante',
+    numero_comprobante='$nro_comprobante',
+    forma_de_pago     ='$forma_pago',
+    fecha_emision     ='$fecha_emision',
+    val_igv           ='$val_igv',
+    subtotal          ='$subtotal',
+    igv               ='$igv',
+    costo_parcial     ='$precio_parcial',
+    descripcion       ='$descripcion',
+    glosa             ='$glosa',
+    comprobante       ='$comprobante',
+    tipo_gravada      ='$tipo_gravada',
+    user_updated      = '" . $_SESSION['idusuario'] . "'
 
 		WHERE idotra_factura='$idotra_factura'";
     $editar= ejecutarConsulta($sql);
@@ -110,16 +111,20 @@ class Otra_factura
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idotra_factura)
   {
-    $sql = "SELECT*FROM otra_factura   
-		WHERE idotra_factura ='$idotra_factura'";
+    $sql = "SELECT of.idotra_factura, of.idproveedor, of.idempresa_a_cargo, of.tipo_comprobante, of.numero_comprobante, of.forma_de_pago, of.fecha_emision, 
+    of.val_igv, of.subtotal, of.igv, of.costo_parcial, of.descripcion, of.glosa, of.comprobante, of.tipo_gravada, of.estado, of.estado_delete,
+    ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento ec_numero_documento, ec.logo as ec_logo
+    FROM otra_factura AS of, empresa_a_cargo AS ec
+    WHERE of.idempresa_a_cargo = ec.idempresa_a_cargo AND of.idotra_factura ='$idotra_factura'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
   //Implementar un método para listar los registros
-  public function tbla_principal( $fecha_1,$fecha_2,$id_proveedor,$comprobante)
-  {
+  public function tbla_principal($empresa_a_cargo, $fecha_1,$fecha_2,$id_proveedor,$comprobante) {
   
-    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+    $filtro_empresa_a_cargo = ""; $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+
+    if (empty($empresa_a_cargo) ) {  $filtro_empresa_a_cargo = ""; } else { $filtro_empresa_a_cargo = "AND of.idempresa_a_cargo = '$empresa_a_cargo'"; }
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
       $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
@@ -128,36 +133,29 @@ class Otra_factura
     }else if (!empty($fecha_2)) {        
       $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
     }   
+
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND of.idproveedor = '$id_proveedor'"; }
 
     if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }  
 
     $sql = "SELECT of.idotra_factura,of.idproveedor,of.tipo_comprobante,of.numero_comprobante,of.forma_de_pago,of.fecha_emision,of.subtotal,of.igv,of.costo_parcial,of.descripcion,of.glosa,of.comprobante,of.estado,p.razon_social  
-    FROM otra_factura as of, proveedor as p WHERE of.estado=1 AND of.estado_delete=1 AND of.idproveedor=p.idproveedor  $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY idotra_factura DESC";
+    FROM otra_factura as of, proveedor as p WHERE of.estado=1 AND of.estado_delete=1 AND of.idproveedor=p.idproveedor $filtro_empresa_a_cargo $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY idotra_factura DESC";
     return ejecutarConsulta($sql);
 
   }
 
-  //Seleccionar un comprobante
-  public function ObtnerCompr($idotra_factura)
-  {
-    $sql = "SELECT comprobante FROM otra_factura WHERE idotra_factura='$idotra_factura'";
-    return ejecutarConsulta($sql);
-  }
   //total
-  public function total()
-  {
+  public function total() {
     $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otra_factura WHERE estado=1 AND estado_delete='1'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
-  //Select2 Proveedor
-	public function select2_proveedor()
-	{
-    $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE  estado=1 AND estado_delete=1";
+  //Seleccionar un comprobante
+  public function ObtnerCompr($idotra_factura) {
+    $sql = "SELECT comprobante FROM otra_factura WHERE idotra_factura='$idotra_factura'";
     return ejecutarConsulta($sql);
-	}
-	
+  }
+  	
 }
 
 ?>

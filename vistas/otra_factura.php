@@ -66,6 +66,16 @@
                           <!-- filtros -->
                           <div class="filtros-inputs row mb-4">
 
+                            <!-- filtro por: comprobante -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <!-- <label for="filtros" >Tipo comprobante </label> -->
+                                <select id="filtro_empresa_a_cargo" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                                  
+                                </select>
+                              </div>                              
+                            </div>
+
                             <!-- filtro por: fecha inicial -->
                             <div class="col-12 col-sm-6 col-md-6 col-lg-2">    
                               <div class="form-group">
@@ -93,7 +103,7 @@
                             </div>
 
                             <!-- filtro por: proveedor -->
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                               <div class="form-group">
                                 <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
                                 <select id="filtro_proveedor" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
@@ -112,8 +122,7 @@
                                   <option value="Factura">Factura</option>
                                   <option value="Nota de venta">Nota de venta</option>
                                 </select>
-                              </div>
-                              
+                              </div>                              
                             </div>
                           </div>
 
@@ -150,7 +159,7 @@
                                 <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
                                 <th>Subtotal</th>
                                 <th>IGV</th>
-                                <th class="text-nowrap" id="total_monto"></th>
+                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span id="total_monto">0.00</span></div></th>
                                 <th>Descripción</th>
                                 <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
                                 <th>Glosa</th>
@@ -208,6 +217,27 @@
                                   </a>
                                 </div>
                               </div>
+
+                              <!-- Empresa a cargo -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="empresa_acargo">Empresa a cargo <small class="text-orange d-none d-lg-inline-block">("Seven's Ingenieros")</small></label>
+                                  <select class="form-control select2" name="empresa_acargo" id="empresa_acargo" style="width: 100%;">
+                                    <!-- <option selected value="Seven's Ingenieros SAC" title="logo-icono.svg">Seven's Ingenieros SAC</option> -->
+                                    <!-- <option value="Consorcio Seven's Ingenieros SAC" title="logo-icono-plomo.svg">Consorcio Seven's Ingenieros SAC</option> -->
+                                    <!-- <option value="Ninguno" title="emogi-carita-feliz.svg">Ninguno</option> -->
+                                  </select>                                     
+                                </div>
+                              </div>
+
+                                <!-- Fecha 1  -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_emision">Fecha Emisión <sup class="text-danger">*</sup></label>
+                                  <input type="date" name="fecha_emision" class="form-control" id="fecha_emision" />
+                                </div>
+                              </div>
+
                               <!--forma pago-->
                               <div class="col-lg-6">
                                 <div class="form-group">
@@ -232,7 +262,7 @@
                                 </div>
                               </div>
                               <!-- Glosa-->
-                              <div class="col-lg-4" id="content-t-comprob">
+                              <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">
                                   <label for="glosa">Selecc. Glosa</label>
                                   <select name="glosa" id="glosa" class="form-control select2" placeholder="Seleccinar">
@@ -256,32 +286,25 @@
                                 </div>
                               </div>
                               <!-- Código-->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label  for="nro_comprobante"> <span class="nro_comprobante">Núm. comprobante</span> <sup class="text-danger">(único*)</sup> </label>
                                   <input type="text" name="nro_comprobante" id="nro_comprobante" class="form-control" placeholder="Código" />
                                 </div>
                               </div>
-
-                              <!-- Fecha 1  -->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="fecha_emision">Fecha Emisión <sup class="text-danger">*</sup></label>
-                                  <input type="date" name="fecha_emision" class="form-control" id="fecha_emision" />
-                                </div>
-                              </div>
+                              
                               <!-- Sub total -->
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="subtotal">Sub total <small class="text-danger tipo_gravada text-lowercase"></small></label>
-                                  <input class="form-control" type="number" id="subtotal" name="subtotal" placeholder="Sub total" readonly />                                   
+                                  <input class="form-control" type="text" id="subtotal" name="subtotal" placeholder="Sub total" readonly />                                   
                                 </div>
                               </div>
                               <!-- IGV -->
                               <div class="col-lg-3">
                                 <div class="form-group">
                                   <label for="igv">IGV</label>
-                                  <input class="form-control igv" type="number" id="igv" name="igv" placeholder="IGV" readonly />
+                                  <input class="form-control igv" type="text" id="igv" name="igv" placeholder="IGV" readonly />
                                 </div>
                               </div>
                               <!-- valor IGV -->
@@ -296,7 +319,7 @@
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="precio_parcial">Monto total <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Parcial" />                                  
+                                  <input type="text" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Parcial" />                                  
                                 </div>
                               </div>
 
