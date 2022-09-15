@@ -391,7 +391,7 @@ function l_m(){
   
 }
 
-function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final) {
+function abrir_proyecto(idproyecto, ec_razon_social, nombre_proyecto, fecha_inicial, fecha_final) {
 
   if ($("#foo" ).hasClass('className')) { $( "#foo" ).removeClass( 'className'); } else { $( "#foo" ).addClass( 'className'); }
 
@@ -405,6 +405,7 @@ function abrir_proyecto(idproyecto, nombre_proyecto, fecha_inicial, fecha_final)
   localStorage.setItem('nube_fecha_inicial_proyecto', fecha_inicial);
   localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
   localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
+  localStorage.setItem('nube_empresa_a_cargo', ec_razon_social);
 
   // mostramos el nombre en el NAV
   $("#ver-proyecto").html(`<i class="fas fa-tools"></i> <p class="d-inline-block hide-max-width-1080px">Proyecto:</p> ${nombre_proyecto}`);

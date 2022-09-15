@@ -1,7 +1,7 @@
 var tabla_principal;
 var tabla_visto_bueno;
 
-var nube_idproyecto_r = '', fecha_1_r="", fecha_2_r="", id_proveedor_r="", comprobante_r="", modulo_r = 'todos';
+var nube_idproyecto_r = '', empresa_a_cargo_r ='', fecha_1_r="", fecha_2_r="", id_proveedor_r="", comprobante_r="", modulo_r = 'todos';
 
 var zip = new JSZip();
 
@@ -12,25 +12,40 @@ function init() {
   
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════ 
   $.get("../ajax/resumen_facturas.php?op=select2Proveedor", function (r) { $("#proveedor_filtro").html(r); $(".cargando_proveedor").html('Proveedor'); });
+  lista_select2("../ajax/ajax_general.php?op=select2EmpresaACargo", '#filtro_empresa_a_cargo', null);
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════ 
+  $("#filtro_empresa_a_cargo").select2({ templateResult: template_sleect2_empresa, theme: "bootstrap4", placeholder: "Selecione empresa", allowClear: true, });
   $("#proveedor_filtro").select2({ theme: "bootstrap4", placeholder: "Selecionar proveedor", allowClear: true, });
   $("#tipo_comprobante_filtro").select2({ theme: "bootstrap4", placeholder: "Selecionar comprobante", allowClear: true, });
   
   // Formato para telefono
   $("[data-mask]").inputmask();  
   
-  filtros();
+  //filtros();
 } 
 
+function template_sleect2_empresa (state) {
+  //console.log(state);
+  if (!state.id) { return state.text; }
+  var baseUrl = state.title != '' ? `../dist/svg/${state.title}`: '../dist/svg/user_default.svg'; 
+  var onerror = `onerror="this.src='../dist/svg/user_default.svg';"`;
+  var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
+  return $state;
+};
+
 //Función Listar - tabla compras
-function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante, modulo = 'todos') {
+function tbla_principal(nube_idproyecto, empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante, modulo = 'todos') {
 
-  nube_idproyecto_r = nube_idproyecto; fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor; comprobante_r=comprobante; modulo_r = modulo;
+  $('.btn-zip').addClass('disabled');
 
-  $('.total-subtotal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-total').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  nube_idproyecto_r = nube_idproyecto; empresa_a_cargo_r =empresa_a_cargo; fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor; comprobante_r=comprobante; modulo_r = modulo;
+
+  $('.total-subtotal').html('0.00');
+  $('.total-igv').html('0.00');
+  $('.total-total').html('0.00');
+
+  var total_subtotal = 0, total_igv = 0, total = 0;
 
   var name_export = `Resumen de facturas Sevens ${moment().format('DD-MM-YYYY')}`;
 
@@ -51,7 +66,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       "colvis"
     ],
     ajax:	{
-      url: `../ajax/resumen_facturas.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&visto_bueno='0'&modulo=${modulo}`,
+      url: `../ajax/resumen_facturas.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&empresa_a_cargo=${empresa_a_cargo}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&visto_bueno='0'&modulo=${modulo}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -62,11 +77,11 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }   
       // columna: sub total
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $(".total-subtotal").html(formato_miles( total_subtotal += parseFloat(data[8]) )); }
       // columna: igv
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); $(".total-igv").html(formato_miles( total_igv += parseFloat(data[9]) )); }  
       // columna: total
-      if (data[10] != '') { $("td", row).eq(10).addClass('text-right');  }      
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total").html(formato_miles( total += parseFloat(data[10]) )); }      
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -78,12 +93,17 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
       //{ targets: [11], visible: false, searchable: false, }, 
     ]
   }).DataTable();
   
   $( tabla_principal ).ready(function() {
-    sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante, modulo);
+    //sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante, modulo);
+    $('.cargando').hide();
+    $('.btn-zip').removeClass('disabled');
+    var elementsArray = document.getElementById("reload-all");
+    elementsArray.style.display = 'none';
   });
   
 }
@@ -111,13 +131,14 @@ function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comproba
 
 // ══════════════════════════════════════  SECCION - VISTO BUENO  ══════════════════════════════════════ 
 
-
 //Función Listar - tabla compras
-function tbla_principal_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante, modulo = 'todos') {
+function tbla_principal_visto_bueno(nube_idproyecto, empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante, modulo = 'todos') {
+  $('.btn-zip').addClass('disabled');
+  $('.total-subtotal-visto-bueno').html('0.00');
+  $('.total-igv-visto-bueno').html('0.00');
+  $('.total-total-visto-bueno').html('0.00');
 
-  $('.total-subtotal-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-igv-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-total-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  var total_subtotal = 0, total_igv = 0, total = 0;
 
   var name_export = `Resumen de facturas Sevens ${moment().format('DD-MM-YYYY')}`;
 
@@ -138,7 +159,7 @@ function tbla_principal_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_provee
       "colvis"
     ],
     ajax:	{
-      url: `../ajax/resumen_facturas.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&visto_bueno='1'&modulo=${modulo}`,
+      url: `../ajax/resumen_facturas.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&empresa_a_cargo=${empresa_a_cargo}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&visto_bueno='1'&modulo=${modulo}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -149,11 +170,11 @@ function tbla_principal_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_provee
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }   
       // columna: sub total
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $(".total-subtotal-visto-bueno").html(formato_miles( total_subtotal += parseFloat(data[8]) )); }
       // columna: igv
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); $(".total-igv-visto-bueno").html(formato_miles( total_igv += parseFloat(data[9]) )); }  
       // columna: total
-      if (data[10] != '') { $("td", row).eq(10).addClass('text-right');  }      
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total-visto-bueno").html(formato_miles( total += parseFloat(data[10]) )); }     
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -170,7 +191,9 @@ function tbla_principal_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_provee
   }).DataTable();
   
   $( tabla_principal ).ready(function() {
-    sumas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante, modulo);
+    //sumas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante, modulo);
+    $('.cargando_visto_bueno').hide();
+    $('.btn-zip').removeClass('disabled');
   });
   
 }
@@ -182,9 +205,10 @@ function sumas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveed
     e = JSON.parse(e);  console.log(e); 
 
     if (e.status == true) {
-      $('.total-total-visto-bueno').html(`S/ ${formato_miles(parseFloat(e.data.total))}`);
+      
       $('.total-subtotal-visto-bueno').html(`S/ ${formato_miles(parseFloat(e.data.subtotal))}`);
       $('.total-igv-visto-bueno').html(`S/ ${formato_miles(parseFloat(e.data.igv))}`);
+      $('.total-total-visto-bueno').html(`S/ ${formato_miles(parseFloat(e.data.total))}`);
 
       $('.cargando_visto_bueno').hide();
       $('.btn-zip').removeClass('disabled');
@@ -251,7 +275,7 @@ function modal_comprobante(comprobante, fecha, tipo_comprobante, serie_comproban
     
     if ( UrlExists(host) == 200 ) {
       nombre_download = `${format_d_m_a(fecha)} ─ ${tipo_comprobante} - ${serie_comprobante}`;
-      data_comprobante =  `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"> ${doc_view_extencion(comprobante, carpeta, subcarpeta, width='100%' )} </div>`;
+      data_comprobante =  `<div class="col-md-12 mt-2 text-center"><i>${nombre_download}.${extrae_extencion(comprobante)}</i></div> <div class="col-md-12 mt-2"> ${doc_view_extencion(comprobante, carpeta, subcarpeta, width='100%', '450' )} </div>`;
       url = `../${ruta}${comprobante}`;    
 
       $(".ver-comprobante").html(`<div class="row" >
@@ -325,15 +349,20 @@ function cargando_search() {
   $('.cargando_visto_bueno').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ...`);
 }
 
-function filtros() {  
-
+function filtros(prova) {  
+  console.log(prova);
+  var empresa_a_cargo = $("#filtro_empresa_a_cargo").select2('val');
   var fecha_1       = $("#fecha_filtro_1").val();
   var fecha_2       = $("#fecha_filtro_2").val();  
   var id_proveedor  = $("#proveedor_filtro").select2('val');
   var comprobante   = $("#tipo_comprobante_filtro").select2('val');   
   
+  var nombre_empresa_a_cargo= $('#filtro_empresa_a_cargo').find(':selected').text();
   var nombre_proveedor = $('#proveedor_filtro').find(':selected').text();
   var nombre_comprobante = ' ─ ' + $('#tipo_comprobante_filtro').find(':selected').text();
+
+  // filtro de empresa a cargo
+  if (empresa_a_cargo == '' || empresa_a_cargo == null || empresa_a_cargo == 0 ) { empresa_a_cargo = ""; nombre_empresa_a_cargo = "" }
 
   // filtro de fechas
   if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; }
@@ -345,12 +374,45 @@ function filtros() {
   // filtro de trabajdor
   if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
 
-  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
-  $('.cargando_visto_bueno').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
-  console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_empresa_a_cargo} ${nombre_proveedor} ${nombre_comprobante}...`);
+  $('.cargando_visto_bueno').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_empresa_a_cargo} ${nombre_proveedor} ${nombre_comprobante}...`);
+  // console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
-  tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante, modulo_r);
-  tbla_principal_visto_bueno(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante, modulo_r);
+  tbla_principal(localStorage.getItem("nube_idproyecto"), empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante, modulo_r);
+  tbla_principal_visto_bueno(localStorage.getItem("nube_idproyecto"), empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante, modulo_r);
+}
+
+function select_modulo(modulo) {  
+  console.log(modulo);
+  var empresa_a_cargo = $("#filtro_empresa_a_cargo").select2('val');
+  var fecha_1       = $("#fecha_filtro_1").val();
+  var fecha_2       = $("#fecha_filtro_2").val();  
+  var id_proveedor  = $("#proveedor_filtro").select2('val');
+  var comprobante   = $("#tipo_comprobante_filtro").select2('val');   
+  
+  var nombre_empresa_a_cargo= $('#filtro_empresa_a_cargo').find(':selected').text();
+  var nombre_proveedor = $('#proveedor_filtro').find(':selected').text();
+  var nombre_comprobante = ' ─ ' + $('#tipo_comprobante_filtro').find(':selected').text();
+
+  // filtro de empresa a cargo
+  if (empresa_a_cargo == '' || empresa_a_cargo == null || empresa_a_cargo == 0 ) { empresa_a_cargo = ""; nombre_empresa_a_cargo = "" }
+
+  // filtro de fechas
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; }
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; }  
+
+  // filtro de proveedor
+  if (id_proveedor == '' || id_proveedor == '0' || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
+
+  // filtro de trabajdor
+  if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
+
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_empresa_a_cargo} ${nombre_proveedor} ${nombre_comprobante}...`);
+  $('.cargando_visto_bueno').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_empresa_a_cargo} ${nombre_proveedor} ${nombre_comprobante}...`);
+  // console.log(fecha_1, fecha_2, id_proveedor, comprobante);
+
+  tbla_principal(localStorage.getItem("nube_idproyecto"), empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante, modulo);
+  tbla_principal_visto_bueno(localStorage.getItem("nube_idproyecto"), empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante, modulo);
 }
 
 // ══════════════════════════════════════  SECCION - DOWNLOAD  ══════════════════════════════════════ 

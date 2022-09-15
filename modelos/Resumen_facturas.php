@@ -9,13 +9,14 @@ class Resumenfacturas
   {
   }
 
-  public function facturas_compras($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $visto_bueno, $modulo) {
+  public function facturas_compras($idproyecto, $empresa_a_cargo, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $visto_bueno, $modulo) {
 
     $data = Array(); $data_comprobante = Array(); $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
-    $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
-    $host       = $_SERVER['HTTP_HOST'];
-    $estado_vb  = (empty($visto_bueno) ? "estado_user_vb_rf IN ('0','1')" : "estado_user_vb_rf =$visto_bueno" );
+    $scheme_host      =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+    $host             = $_SERVER['HTTP_HOST'];
+    $estado_vb        = (empty($visto_bueno) ? "estado_user_vb_rf IN ('0','1')" : "estado_user_vb_rf =$visto_bueno" );
+    $idempresa_a_cargo= (empty($empresa_a_cargo) ? "idempresa_a_cargo >= '1'" : "idempresa_a_cargo = '$empresa_a_cargo'" );
 
     // FACTURAS - COMPRAS ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
     if ($modulo == 'todos' || $modulo == 'compra_insumo') {      
@@ -31,9 +32,9 @@ class Resumenfacturas
       $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante,	cpp.serie_comprobante, cpp.descripcion, 
       cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, p.tipo_documento, p.ruc, cpp.glosa, cpp.tipo_gravada, cpp.comprobante,
       cpp.id_user_vb_rf, cpp.nombre_user_vb_rf, cpp.imagen_user_vb_rf, cpp.estado_user_vb_rf
-      FROM compra_por_proyecto as cpp, proveedor as p 
-      WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.$estado_vb
-      $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
+      FROM compra_por_proyecto as cpp, proyecto AS pry, proveedor as p 
+      WHERE cpp.idproveedor=p.idproveedor and pry.idproyecto = cpp.idproyecto AND cpp.estado = '1' AND cpp.estado_delete = '1' 
+      and pry.$idempresa_a_cargo AND cpp.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
       $compra = ejecutarConsultaArray($sql);
 
       if ($compra['status'] == false) { return $compra; }
@@ -105,7 +106,7 @@ class Resumenfacturas
       f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-      AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND f.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
+      AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' and p.$idempresa_a_cargo AND f.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
       ORDER BY f.fecha_emision DESC;";
       $maquinaria_equipo =  ejecutarConsultaArray($sql2);
 
@@ -173,7 +174,7 @@ class Resumenfacturas
       f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-      AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' AND f.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
+      AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' and p.$idempresa_a_cargo AND f.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
       ORDER BY f.fecha_emision DESC;";
       $maquinaria_equipo =  ejecutarConsultaArray($sql2);
 
@@ -240,9 +241,9 @@ class Resumenfacturas
       s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.tipo_gravada, s.comprobante, p.razon_social, p.tipo_documento, 
       p.ruc, s.id_user_vb, s.nombre_user_vb, s.imagen_user_vb, s.estado_user_vb,
       s.id_user_vb_rf, s.nombre_user_vb_rf, s.imagen_user_vb_rf, s.estado_user_vb_rf    
-      FROM subcontrato AS s, proveedor as p
-      WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.$estado_vb
-      $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
+      FROM subcontrato AS s, proveedor as p, proyecto AS pry
+      WHERE s.idproveedor = p.idproveedor and pry.idproyecto = s.idproyecto and s.estado = '1' AND s.estado_delete = '1' 
+      and pry.$idempresa_a_cargo AND s.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
       $sub_contrato =  ejecutarConsultaArray($sql3);
 
       if ($sub_contrato['status'] == false) { return $sub_contrato; }
@@ -309,7 +310,8 @@ class Resumenfacturas
       ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc,
       ps.id_user_vb_rf, ps.nombre_user_vb_rf, ps.imagen_user_vb_rf, ps.estado_user_vb_rf
       FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
-      WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
+      WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1' 
+      and p.$idempresa_a_cargo AND ps.$estado_vb
       $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY ps.fecha_p_s DESC;";
       $planilla_seguro =  ejecutarConsultaArray($sql3);
 
@@ -365,17 +367,18 @@ class Resumenfacturas
 
     if ($modulo == 'todos' || $modulo == 'otro_gasto') {      
     
-      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND fecha_g BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) {  $filtro_fecha = "AND fecha_g = '$fecha_1'";  }else if (!empty($fecha_2)) { $filtro_fecha = "AND fecha_g = '$fecha_2'"; }    
+      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND og.fecha_g BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) {  $filtro_fecha = "AND og.fecha_g = '$fecha_1'";  }else if (!empty($fecha_2)) { $filtro_fecha = "AND og.fecha_g = '$fecha_2'"; }    
 
-      if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+      if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND og.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND og.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND og.tipo_comprobante = '$comprobante'"; }
 
-      $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, ruc, tipo_comprobante, numero_comprobante, fecha_g, 
-      costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada,
-      id_user_vb_rf, nombre_user_vb_rf, imagen_user_vb_rf, estado_user_vb_rf
-      FROM otro_gasto 
-      WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
+      $sql3 = "SELECT og.idproyecto, og.idotro_gasto, og.razon_social, og.ruc, og.tipo_comprobante, og.numero_comprobante, og.fecha_g, 
+      og.costo_parcial, og.subtotal, og.igv, og.glosa, og.comprobante, og.tipo_gravada,
+      og.id_user_vb_rf, og.nombre_user_vb_rf, og.imagen_user_vb_rf, og.estado_user_vb_rf
+      FROM otro_gasto as og, proyecto AS pry 
+      WHERE pry.idproyecto = og.idproyecto and og.estado = '1' AND og.estado_delete = '1'
+      and pry.$idempresa_a_cargo AND og.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY og.fecha_g DESC;";
       $otro_gasto =  ejecutarConsultaArray($sql3);
 
       if ($otro_gasto['status'] == false) { return $otro_gasto; }
@@ -439,8 +442,9 @@ class Resumenfacturas
       $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, p.tipo_documento, p.ruc, t.tipo_comprobante, t.numero_comprobante, 
       t.fecha_viaje, t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada,
       t.id_user_vb_rf, t.nombre_user_vb_rf, t.imagen_user_vb_rf, t.estado_user_vb_rf
-      FROM transporte AS t, proveedor AS p
-      WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND t.$estado_vb 
+      FROM transporte AS t, proveedor AS p, proyecto AS pry 
+      WHERE t.idproveedor = p.idproveedor and pry.idproyecto = t.idproyecto AND t.estado = '1' AND t.estado_delete = '1' 
+      and pry.$idempresa_a_cargo AND t.$estado_vb 
       $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY t.fecha_viaje DESC;";
       $transporte =  ejecutarConsultaArray($sql4);
 
@@ -496,18 +500,19 @@ class Resumenfacturas
 
     if ($modulo == 'todos' || $modulo == 'hospedaje') {     
     
-      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND fecha_comprobante BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND fecha_comprobante = '$fecha_1'";  }else if (!empty($fecha_2)) { $filtro_fecha = "AND fecha_comprobante = '$fecha_2'";  }    
+      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND h.fecha_comprobante BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND h.fecha_comprobante = '$fecha_1'";  }else if (!empty($fecha_2)) { $filtro_fecha = "AND h.fecha_comprobante = '$fecha_2'";  }    
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND  tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND h.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND h.tipo_comprobante = '$comprobante'"; }
 
-      $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, ruc, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
-      precio_parcial, glosa, comprobante, tipo_gravada,
-      id_user_vb_rf, nombre_user_vb_rf, imagen_user_vb_rf, estado_user_vb_rf
-      FROM hospedaje 
-      WHERE estado = '1' AND estado_delete = '1' AND $estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
-      ORDER BY fecha_comprobante DESC;";
+      $sql5 = "SELECT h.idhospedaje, h.idproyecto, h.razon_social, h.ruc, h.fecha_comprobante, h.tipo_comprobante, h.numero_comprobante, h.subtotal, h.igv, 
+      precio_parcial, h.glosa, h.comprobante, h.tipo_gravada,
+      id_user_vb_rf, h.nombre_user_vb_rf, h.imagen_user_vb_rf, h.estado_user_vb_rf
+      FROM hospedaje as h, proyecto AS pry 
+      WHERE pry.idproyecto = h.idproyecto and h.estado = '1' AND h.estado_delete = '1' 
+      and pry.$idempresa_a_cargo AND h.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
+      ORDER BY h.fecha_comprobante DESC;";
       $hospedaje =  ejecutarConsultaArray($sql5);
 
       if ($hospedaje['status'] == false) { return $hospedaje; }
@@ -572,8 +577,9 @@ class Resumenfacturas
       dp.val_igv, dp.precio_parcial, dp.forma_pago, dp.tipo_comprobante, dp.fecha_emision, dp.tipo_gravada, dp.glosa, dp.numero_comprobante, dp.descripcion, 
       dp.comprobante, dp.id_user_vb, dp.nombre_user_vb, dp.imagen_user_vb, dp.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc, p.idproyecto,
       dp.id_user_vb_rf, dp.nombre_user_vb_rf, dp.imagen_user_vb_rf, dp.estado_user_vb_rf
-      FROM detalle_pension as dp, pension as p, proveedor as prov
-      WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND dp.estado = '1' AND dp.estado_delete = '1' AND dp.$estado_vb
+      FROM detalle_pension as dp, pension as p, proveedor as prov, proyecto AS pry 
+      WHERE dp.idpension = p.idpension and pry.idproyecto = p.idproyecto AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND dp.estado = '1' AND dp.estado_delete = '1' 
+      and pry.$idempresa_a_cargo AND dp.$estado_vb
       $filtro_proveedor $filtro_comprobante $filtro_fecha
       ORDER BY dp.fecha_emision DESC;";
       $factura_pension =  ejecutarConsultaArray($sql6);
@@ -639,9 +645,10 @@ class Resumenfacturas
       $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social, fb.ruc, 
       fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante, fb.tipo_gravada,
       fb.id_user_vb_rf, fb.nombre_user_vb_rf, fb.imagen_user_vb_rf, fb.estado_user_vb_rf
-      FROM factura_break as fb, semana_break as sb
-      WHERE  fb.idsemana_break = sb.idsemana_break  
-      AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' AND fb.$estado_vb
+      FROM factura_break as fb, semana_break as sb, proyecto AS pry 
+      WHERE  fb.idsemana_break = sb.idsemana_break  and  pry.idproyecto = sb.idproyecto
+      AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' 
+      and pry.$idempresa_a_cargo AND fb.$estado_vb
       $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fb.fecha_emision DESC;";
       $factura_break =  ejecutarConsultaArray($sql7);
 
@@ -697,18 +704,19 @@ class Resumenfacturas
 
     if ($modulo == 'todos' || $modulo == 'comida_extra') {      
     
-      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND fecha_comida BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND fecha_comida = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND fecha_comida = '$fecha_2'"; }    
+      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND ce.fecha_comida BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND ce.fecha_comida = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND ce.fecha_comida = '$fecha_2'"; }    
 
-      if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
+      if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ce.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND ce.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND ce.tipo_comprobante = '$comprobante'"; }
 
-      $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, ruc,
-      costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada,
-      id_user_vb_rf, nombre_user_vb_rf, imagen_user_vb_rf, estado_user_vb_rf
-      FROM comida_extra
-      WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
-      ORDER BY fecha_comida DESC;";
+      $sql8 = "SELECT ce.idproyecto, ce.idcomida_extra, ce.fecha_comida, ce.tipo_comprobante, ce.numero_comprobante, ce.razon_social, ce.ruc,
+      ce.costo_parcial, ce.subtotal, ce.igv, ce.glosa, ce.comprobante, ce.tipo_gravada,
+      ce.id_user_vb_rf, ce.nombre_user_vb_rf, ce.imagen_user_vb_rf, ce.estado_user_vb_rf
+      FROM comida_extra as ce, proyecto AS pry 
+      WHERE pry.idproyecto = ce.idproyecto and ce.estado = '1' AND ce.estado_delete = '1' 
+      and pry.$idempresa_a_cargo AND ce.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
+      ORDER BY ce.fecha_comida DESC;";
       $comida_extra =  ejecutarConsultaArray($sql8);
 
       if ($comida_extra['status'] == false) { return $comida_extra; }
@@ -772,8 +780,9 @@ class Resumenfacturas
       $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, p.tipo_documento, p.ruc,
       of.costo_parcial, of.subtotal, of.igv, of.glosa, of.comprobante , of.tipo_gravada,
       of.id_user_vb_rf, of.nombre_user_vb_rf, of.imagen_user_vb_rf, of.estado_user_vb_rf
-      FROM otra_factura AS of, proveedor p
-      WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' AND of.$estado_vb
+      FROM otra_factura AS of, proveedor p, empresa_a_cargo as ec
+      WHERE of.idempresa_a_cargo = ec.idempresa_a_cargo and of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' 
+      and ec.$idempresa_a_cargo AND of.$estado_vb
       $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY of.fecha_emision DESC;";
       $otra_factura =  ejecutarConsultaArray($sql9);
 

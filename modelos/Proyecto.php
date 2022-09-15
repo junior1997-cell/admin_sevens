@@ -188,7 +188,15 @@ class Proyecto
     $sql_estado = "";
     if ($estado == 3) { $sql_estado = "p.estado >= 0 "; } else { $sql_estado = "p.estado = '$estado'"; }
 
-    $sql = "SELECT * FROM proyecto as p WHERE $sql_estado ORDER BY p.idproyecto DESC;";
+    $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, p.nombre_proyecto, p.nombre_codigo, 
+    p.ubicacion, p.actividad_trabajo, p.empresa_acargo, p.costo, p.garantia, p.fecha_inicio_actividad, p.fecha_fin_actividad, p.plazo_actividad, 
+    p.fecha_inicio, p.fecha_fin, p.plazo, p.dias_habiles, p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra, p.doc4_presupuesto, 
+    p.doc5_analisis_costos_unitarios, p.doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, 
+    p.feriado_domingo, p.fecha_pago_obrero, p.fecha_valorizacion, p.permanente_pago_obrero, p.estado, p.estado_delete, p.created_at, 
+    p.updated_at, p.user_trash, p.user_delete, p.user_created, p.user_updated, 
+    ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento as ec_numero_documento, ec.logo as ec_logo
+    FROM proyecto as p, empresa_a_cargo as ec
+    WHERE p.idempresa_a_cargo = ec.idempresa_a_cargo and $sql_estado ORDER BY p.idproyecto DESC;";
     return ejecutarConsulta($sql);
   }
 

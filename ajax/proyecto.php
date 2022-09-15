@@ -322,7 +322,7 @@
               $ubicacion = cortar_string($value['ubicacion'], 20, '...');  
               $nombre_proyecto = cortar_string($value['nombre_proyecto'], 20, '...'); 
                 
-              $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\'';
+              $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['ec_razon_social'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\'';
   
               $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
   
@@ -405,7 +405,7 @@
   
               $empresa = cortar_string($value['empresa'], 20, '...');  
                   
-              $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\'';
+              $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['ec_razon_social'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\'';
   
               $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
   

@@ -44,6 +44,8 @@ function init() {
   // Formato para telefono
   $("[data-mask]").inputmask();
 
+  $('.empresa_a_cargo_form').html(`("${localStorage.getItem('nube_empresa_a_cargo')}")`);
+
   no_select_tomorrow("#fecha_emision");
 }
 
@@ -839,7 +841,7 @@ function filtros() {
   // filtro de trabajdor
   if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
 
-  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${empresa_a_cargo} ${nombre_proveedor} ${nombre_comprobante}...`);
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_empresa_a_cargo} ${nombre_proveedor} ${nombre_comprobante}...`);
   //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
   tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante);

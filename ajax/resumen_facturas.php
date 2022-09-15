@@ -25,7 +25,7 @@
 
         case 'listar_facturas_compras':
           
-          $rspta = $resumen_factura->facturas_compras($_GET['id_proyecto'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'], $_GET['visto_bueno'], $_GET['modulo'] );
+          $rspta = $resumen_factura->facturas_compras($_GET['id_proyecto'], $_GET['empresa_a_cargo'], $_GET['fecha_1'], $_GET['fecha_2'], $_GET['id_proveedor'], $_GET['comprobante'], $_GET['visto_bueno'], $_GET['modulo'] );
           // echo json_encode($rspta);
           //Vamos a declarar un array
           $data = []; $cont = 1;       
@@ -55,9 +55,9 @@
                 "5" => $value['serie_comprobante'],
                 "6" => $value['ruc'],
                 "7" => '<div class="w-150px recorte-text text-bold text-primary" data-toggle="tooltip" data-original-title="'. $value['proveedor'] .'">'. $value['proveedor'] .'</div>',                
-                "8" => number_format($value['subtotal'], 2, ".", ","),
-                "9" => number_format($value['igv'], 2, ".", ","),
-                "10" => number_format($value['total'], 2, ".", ",") ,
+                "8" => $value['subtotal'],
+                "9" => $value['igv'],
+                "10" => $value['total'],
                 "11" => $value['glosa'],
                 "12" => $value['tipo_gravada'],
                 "13" => $documento.$toltip,
@@ -87,7 +87,7 @@
 
         case 'data_comprobantes':                  
 
-          $rspta = $resumen_factura->facturas_compras($_POST['id_proyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'], $_POST['visto_bueno'], $_POST['modulo'] );
+          $rspta = $resumen_factura->facturas_compras($_POST['id_proyecto'], $_GET['empresa_a_cargo'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'], $_POST['visto_bueno'], $_POST['modulo'] );
           
           echo json_encode($rspta, true);
 
