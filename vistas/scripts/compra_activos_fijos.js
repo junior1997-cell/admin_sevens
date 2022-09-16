@@ -21,6 +21,7 @@ function init() {
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════ 
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2marcas_activos", '#marca_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);
@@ -60,6 +61,7 @@ function init() {
   // ══════════════════════════════════════ SELECT2 - MATERIAL ══════════════════════════════════════
 
   $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });  
+  $("#marca_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar marca", allowClear: true, });
 
   $("#color_p").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
 
@@ -1529,7 +1531,8 @@ function limpiar_materiales() {
   $("#nombre_p").val("");
   $("#modelo_p").val("");
   $("#serie_p").val("");
-  $("#marca_p").val("");
+  // $("#marca_p").val("");
+  $("#marca_p").val("").trigger("change");
   $("#descripcion_p").val("");
 
   $("#precio_unitario_p").val("");
@@ -1662,7 +1665,7 @@ function mostrar_material(idproducto, cont) {
       $("#nombre_p").val(e.data.nombre);
       $("#modelo_p").val(e.data.modelo);
       $("#serie_p").val(e.data.serie);
-      $("#marca_p").val(e.data.marca);
+      $("#marca_p").val(e.data.marca).trigger("change");  
       $("#descripcion_p").val(e.data.descripcion);
 
       $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
@@ -1818,6 +1821,7 @@ $(function () {
   $("#categoria_insumos_af_p").on('change', function() { $(this).trigger('blur'); });
   $("#color_p").on('change', function() { $(this).trigger('blur'); });
   $("#unidad_medida_p").on('change', function() { $(this).trigger('blur'); });
+  $('#marca_p').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-compra-activos-f").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -1994,7 +1998,8 @@ $(function () {
       categoria_insumos_af_p: { required: true },
       nombre_p:         { required: true, minlength:3, maxlength:200},      
       color_p:          { required: true },
-      unidad_medida_p:    { required: true },
+      marca_p:            { required: true },
+      unidad_medida_p:  { required: true },
       precio_unitario_p:{ required: true },
       descripcion_p:    { minlength: 3 },
     },
@@ -2002,6 +2007,7 @@ $(function () {
       categoria_insumos_af_p: { required: "Campo requerido.", },
       nombre_p:         { required: "Campo requerido.", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },      
       color_p:          { required: "Campo requerido." },
+      marca_p:          { required: "Campo requerido" },
       unidad_medida_p:    { required: "Campo requerido." },
       precio_unitario_p:{ required: "Campo requerido.", },      
       descripcion_p:    { minlength: "Minimo 3 caracteres" },
@@ -2038,6 +2044,8 @@ $(function () {
   $("#categoria_insumos_af_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#color_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#marca_p').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

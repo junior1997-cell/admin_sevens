@@ -787,7 +787,8 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="marca_p">Marca </label>
-                                  <input class="form-control" type="text" id="marca_p" name="marca_p" placeholder="Marca de activo." />
+                                  <!-- <input class="form-control" type="text" id="marca_p" name="marca_p" placeholder="Marca de activo." /> -->
+                                  <select name="marca_p" id="marca_p" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
 

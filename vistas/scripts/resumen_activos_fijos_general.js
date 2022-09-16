@@ -35,6 +35,9 @@ function init(){
 
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
 
+  lista_select2("../ajax/ajax_general.php?op=select2marcas_activos", '#marca_p', null);
+
+
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
@@ -64,6 +67,9 @@ function init(){
   $("#color_p").select2({templateResult: templateColor, theme: "bootstrap4",  placeholder: "Seleccinar color", allowClear: true, });
 
   $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
+  
+  $("#marca_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar marca", allowClear: true, });
+  
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -564,7 +570,7 @@ function tbla_materiales(op) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: `../ajax/ajax_general.php?op=tbla${op}`,
+      url: `../ajax/ajax_general.php?op=tblaInsumosYActivosFijos`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -587,7 +593,7 @@ function limpiar_materiales() {
   $("#nombre_p").val("");
   $("#modelo_p").val("");
   $("#serie_p").val("");
-  $("#marca_p").val("");
+  $("#marca_p").val("").trigger("change");
   $("#descripcion_p").val("");
 
   $("#precio_unitario_p").val("");
@@ -703,7 +709,7 @@ function mostrar_material(idproducto, cont) {
       $("#nombre_p").val(e.data.nombre);
       $("#modelo_p").val(e.data.modelo);
       $("#serie_p").val(e.data.serie);
-      $("#marca_p").val(e.data.marca);
+      $("#marca_p").val(e.data.marca).trigger("change");
       $("#descripcion_p").val(e.data.descripcion);
 
       $('#precio_unitario_p').val(parseFloat(e.data.precio_unitario).toFixed(2));
@@ -838,7 +844,7 @@ function mostrar_detalle_material(idproducto) {
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Marca</th>
-                    <td>${e.data.marca}</td>
+                    <td>${e.data.nombre_marca}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Con IGV</th>
@@ -1847,6 +1853,7 @@ $(function () {
   $("#categoria_insumos_af_p").on('change', function() { $(this).trigger('blur'); });
   $("#color_p").on('change', function() { $(this).trigger('blur'); });
   $("#unidad_medida_p").on('change', function() { $(this).trigger('blur'); });
+  $('#marca_p').on('change', function() { $(this).trigger('blur'); });
 
   // validando form compras 
   $("#form-compras").validate({
@@ -1946,6 +1953,7 @@ $(function () {
       categoria_insumos_af_p: { required: true },
       color_p: { required: true },
       unidad_medida_p: { required: true },
+      marca_p: { required: true },
       modelo_p: { minlength: 3 },  
       precio_unitario_p: { required: true },
       descripcion_p: { minlength: 3 },
@@ -1955,6 +1963,7 @@ $(function () {
       categoria_insumos_af_p: { required: "Campo requerido", },
       color_p: { required: "Campo requerido" },
       unidad_medida_p: { required: "Campo requerido" },
+      marca_p: { required: "Campo requerido" },
       modelo_p: { minlength: "Minimo 3 caracteres", },
       precio_unitario_p: { required: "Ingresar precio compra", },      
       descripcion_p: { minlength: "Minimo 3 caracteres" },
@@ -1989,6 +1998,7 @@ $(function () {
   $("#categoria_insumos_af_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#color_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#marca_p').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
 });
 
