@@ -478,6 +478,71 @@
                   </section>
                   <!-- /.content -->
                 </div>
+
+                <!-- TBLA - MARCA -->
+                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                  <!-- Content Header (Page header) -->
+                  <section class="content-header">
+                    <div class="container-fluid">
+                      <div class="row mb-2">
+                        <div class="col-sm-6">
+                          <h1>Marcas</h1>
+                        </div>
+                        <div class="col-sm-6">
+                          <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">Marcas</li>
+                          </ol>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /.container-fluid -->
+                  </section>
+
+                  <!-- Main content -->
+
+                  <!-- Main content -->
+                  <section class="content">
+                    <div class="container-fluid">
+                      <div class="card card-primary card-outline">
+                        <div class="card-header">
+                          <h3 class="card-title">
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-marca" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            Admnistrar tus marcas.
+                          </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                          <table id="tabla-marca" class="table table-bordered table-striped display" style="width: 100% !important;">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="">Acciones</th>
+                                <th>Nombre</th>
+                                <th>Hexadecimal</th>
+                                <th>Estado</th>
+                              </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="text-center">#</th>
+                                <th class="">Acciones</th>
+                                <th>Nombre</th>
+                                <th>Hexadecimal</th>
+                                <th>Estado</th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                        <!-- /.card-body -->
+                      </div>
+                      <!-- /.card -->
+                    </div>
+                    <!-- /.container-fluid -->
+                  </section>
+                  <!-- /.content -->
+                </div>
               </div>
 
               <!-- MODAL - BANCOS -->
@@ -974,20 +1039,86 @@
                 </div>
               </div>
 
-              <!-- MODAL - VER PERFIL INSUMO-->
+              <!-- MODAL - VER PERFIL BANCO-->
               <div class="modal fade" id="modal-ver-perfil-banco">
                 <div class="modal-dialog modal-dialog-centered modal-md">
                   <div class="modal-content bg-color-0202022e shadow-none border-0">
                     <div class="modal-header">
-                      <h4 class="modal-title text-white foto-banco">Foto Insumo</h4>
+                      <h4 class="modal-title text-white foto-banco">Foto Banco</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
                       </button>
                     </div>
                     <div class="modal-body"> 
                       <div id="perfil-banco" class="class-style">
-                        <!-- vemos los datos del trabajador -->
+                        <!-- vemos la foto del banco -->
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- MODAL - MARCA -->
+              <div class="modal fade" id="modal-agregar-marca">
+                <div class="modal-dialog modal-dialog-scrollable modal-md">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Agregar Marca</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-danger" aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+
+                    <div class="modal-body">
+                      <!-- form start -->
+                      <form id="form-marca" name="form-marca" method="POST" autocomplete="off">
+                        <div class="card-body">
+                          <div class="row" id="cargando-13-fomulario">
+                            <!-- id banco -->
+                            <input type="hidden" name="idmarca" id="idmarca" />
+
+                            <!-- Nombre -->
+                            <div class="col-lg-12 class_pading">
+                              <div class="form-group">
+                                <label for="nombre_marca">Nombre</label>
+                                <input type="text" name="nombre_marca" class="form-control" id="nombre_marca" placeholder="Nombre del marca." />
+                              </div>
+                            </div>   
+
+                            <!-- descripcion -->
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                              <div class="form-group">
+                                <label for="descripcion_marca">Descripción </label> <br />
+                                <textarea name="descripcion_marca" id="descripcion_marca" class="form-control" rows="2"></textarea>
+                              </div>
+                            </div>
+
+                            <!-- barprogress -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                              <div class="progress" id="barra_progress_marca_div">
+                                <div id="barra_progress_marca" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  0%
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="row" id="cargando-14-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /.card-body -->
+                        <button type="submit" style="display: none;" id="submit-form-marca">Submit</button>
+                      </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_marca">Guardar Cambios</button>
                     </div>
                   </div>
                 </div>
@@ -1014,6 +1145,7 @@
         <script type="text/javascript" src="scripts/tipo.js"></script>
         <script type="text/javascript" src="scripts/cargo.js"></script>
         <script type="text/javascript" src="scripts/categoria_af.js"></script>
+        <script type="text/javascript" src="scripts/marca.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

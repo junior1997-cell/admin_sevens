@@ -1004,7 +1004,7 @@ function tbla_materiales() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [],
     ajax: {
-      url: "../ajax/resumen_insumos.php?op=listarMaterialescompra",
+      url: "../ajax/ajax_general.php?op=tblaInsumosYActivosFijos",
       type: "get",
       dataType: "json",
       error: function (e) {

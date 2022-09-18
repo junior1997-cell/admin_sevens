@@ -855,7 +855,7 @@
                               <th>Clasificación</th>
                               <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
                               <th>Descripción</th>
-                              <th data-toggle="tooltip" data-original-title="Ficha Técnica" >F.T.</th>
+                              <th data-toggle="tooltip" data-original-title="Ficha Técnica" >Code</th>
                             </thead>
                             <tbody></tbody>
                           </table>

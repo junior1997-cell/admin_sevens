@@ -394,8 +394,8 @@
               '</div>',
               "2" => $reg->categoria,
               "3" => number_format($reg->precio_con_igv, 2, '.', ','),
-              "4" => '<textarea class="form-control textarea_datatable" cols="30" rows="1">' . $reg->descripcion . '</textarea>',
-              "5" => $ficha_tecnica . $toltip,
+              "4" => '<textarea class="form-control textarea_datatable" readonly cols="30" rows="1">' . $reg->descripcion . '</textarea>' . $toltip ,
+              "5" => $reg->idproducto ,
             ];
           }
   
@@ -443,8 +443,8 @@
               '</div>',
               "2" => $reg->categoria,
               "3" => number_format($reg->precio_con_igv, 2, '.', ','),
-              "4" => '<textarea class="form-control textarea_datatable" cols="30" rows="1">' . $reg->descripcion . '</textarea>',
-              "5" => $ficha_tecnica . $toltip,
+              "4" => '<textarea class="form-control textarea_datatable" readonly cols="30" rows="1">' . $reg->descripcion . '</textarea>' . $toltip ,
+              "5" => $reg->idproducto ,
             ];
           }
   
@@ -495,8 +495,8 @@
               '</div>',
               "2" => $reg->categoria,
               "3" => number_format($reg->precio_con_igv, 2, '.', ','),
-              "4" => '<textarea class="form-control textarea_datatable" cols="30" rows="1">' . $reg->descripcion . '</textarea>',
-              "5" => $ficha_tecnica . $toltip,
+              "4" => '<textarea class="form-control textarea_datatable" readonly cols="30" rows="1">' . $reg->descripcion . '</textarea>' . $toltip ,
+              "5" => $reg->idproducto ,
             ];
           }
   
