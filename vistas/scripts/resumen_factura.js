@@ -186,6 +186,7 @@ function tbla_principal_visto_bueno(nube_idproyecto, empresa_a_cargo, fecha_1, f
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
       //{ targets: [11], visible: false, searchable: false, }, 
     ]
   }).DataTable();
@@ -1644,16 +1645,6 @@ function detalle_otro_ingreso(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
   $("#modal-ver-compras").modal("show");
 }
 
-function detalle_otra_factura(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-  
-  $("#print_pdf_compra").addClass('disabled').hide();
-  $("#excel_compra").addClass('disabled').hide();
-  $(".nombre-title-detalle-modal").html('Detalle - Otra Factura');
-  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
-  $("#modal-ver-compras").modal("show");
-}
 
 function detalle_pago_administrador(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
@@ -1925,6 +1916,118 @@ function detalle_pago_obrero(id_tabla, name_tabla, name_id_tabla, id_tabla, acci
   }).fail( function(e) { ver_errores(e); } );
 }
 
+function detalle_otra_factura(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Otra Factura');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_facturas.php?op=detalle_otra_factura", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      if (e.data.comprobante == '' || e.data.comprobante == null ) {
+        comprobante='No hay Comprobante';
+        btn_comprobante='';
+      } else {
+        comprobante =  doc_view_extencion(e.data.comprobante, 'otra_factura', 'comprobante', '100%');        
+        btn_comprobante=`
+        <div class="row">
+          <div class="col-6"">
+            <a type="button" class="btn btn-info btn-block btn-xs" target="_blank" href="../dist/docs/otra_factura/comprobante/${e.data.comprobante}"> <i class="fas fa-expand"></i></a>
+          </div>
+          <div class="col-6"">
+            <a type="button" class="btn btn-warning btn-block btn-xs" href="../dist/docs/otra_factura/comprobante/${e.data.comprobante}" download="${e.data.tipo_comprobante}-${e.data.numero_comprobante} - ${removeCaracterEspecial(e.data.razon_social)}"> <i class="fas fa-download"></i></a>
+          </div>
+        </div>`;
+      }     
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th> 
+                  <td><span class="text-primary">${e.data.razon_social}</span> <br> <b>Ruc</b>: ${e.data.ruc}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Forma de pago:</th> 
+                  <td>${e.data.forma_de_pago}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo comprobante:</th>
+                  <td>${e.data.tipo_comprobante} - ${e.data.numero_comprobante}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha emisión:</th>
+                  <td>${ format_d_m_a(e.data.fecha_emision)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Valor IGV</th>
+                  <td>${ e.data.val_igv}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Subtotal</th>
+                  <td>${formato_miles(e.data.subtotal)}</td>
+                </tr>  
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>IGV</th>
+                  <td>${formato_miles(e.data.igv)}</td>
+                </tr>            
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Total</th>
+                  <td>${formato_miles(e.data.costo_parcial)}</td>
+                </tr>                                         
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Glosa</th>
+                  <td>${e.data.glosa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Tipo gravada</th>
+                  <td>${e.data.tipo_gravada}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td>${e.data.descripcion}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Comprobante</th>
+                  <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+      $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
+      $('.jq_image_zoom').zoom({ on:'grab' });
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
 
 function eliminar_permanente(nombre_tabla, nombre_id_tabla, id_tabla, nombre) { 
 

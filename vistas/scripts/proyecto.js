@@ -767,43 +767,43 @@ function mostrar(idproyecto) {
 
   $("#modal-agregar-proyecto").modal("show")
 
-  $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (data, status) {
+  $.post("../ajax/proyecto.php?op=mostrar", { idproyecto: idproyecto }, function (e, status) {
 
-    data = JSON.parse(data);  console.log(data);   
+    e = JSON.parse(e);  console.log(e);   
 
-    if (data.status) {
+    if (e.status == true) {
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
       
-      $("#idproyecto").val(data.data.idproyecto);  
-      $("#tipo_documento option[value='"+data.data.tipo_documento+"']").attr("selected", true);
-      $("#num_documento").val(data.data.numero_documento); 
-      $("#empresa").val(data.data.empresa); 
-      $("#nombre_proyecto").val(data.data.nombre_proyecto); $("#nombre_codigo").val(data.data.nombre_codigo);
-      $("#ubicacion").val(data.data.ubicacion); 
-      $("#actividad_trabajo").val(data.data.actividad_trabajo);  
+      $("#idproyecto").val(e.data.idproyecto);  
+      $("#tipo_documento option[value='"+e.data.tipo_documento+"']").attr("selected", true);
+      $("#num_documento").val(e.data.numero_documento); 
+      $("#empresa").val(e.data.empresa); 
+      $("#nombre_proyecto").val(e.data.nombre_proyecto); $("#nombre_codigo").val(e.data.nombre_codigo);
+      $("#ubicacion").val(e.data.ubicacion); 
+      $("#actividad_trabajo").val(e.data.actividad_trabajo);  
         
-      $("#dias_habiles").val(parseInt( data.data.dias_habiles));     
-      $("#plazo").val(data.data.plazo); 
-      $("#costo").val(formato_miles(data.data.costo)); 
-      $("#garantia").val(data.data.garantia); 
-      $("#empresa_acargo").val(data.data.idempresa_a_cargo).trigger("change");
-      $("#fecha_pago_obrero").val(data.data.fecha_pago_obrero).trigger("change");
-      $("#fecha_valorizacion").val(data.data.fecha_valorizacion).trigger("change");
+      $("#dias_habiles").val(parseInt( e.data.dias_habiles));     
+      $("#plazo").val(e.data.plazo); 
+      $("#costo").val(formato_miles(e.data.costo)); 
+      $("#garantia").val(e.data.garantia); 
+      $("#empresa_acargo").val(e.data.idempresa_a_cargo).trigger("change");
+      $("#fecha_pago_obrero").val(e.data.fecha_pago_obrero).trigger("change");
+      $("#fecha_valorizacion").val(e.data.fecha_valorizacion).trigger("change");
       
-      // console.log(format_d_m_a(data.fecha_inicio));
-      $("#fecha_inicio").datepicker("setDate" ,format_d_m_a(data.data.fecha_inicio));
-      $("#fecha_fin").val(format_d_m_a(data.data.fecha_fin));
+      // console.log(format_d_m_a(e.fecha_inicio));
+      $("#fecha_inicio").datepicker("setDate" ,format_d_m_a(e.data.fecha_inicio));
+      $("#fecha_fin").val(format_d_m_a(e.data.fecha_fin));
 
-      $("#fecha_inicio_actividad").val(format_d_m_a(data.data.fecha_inicio_actividad));  
-      $("#fecha_fin_actividad").val(format_d_m_a(data.data.fecha_fin_actividad));
-      $('#plazo_actividad').val(data.data.plazo_actividad); 
-      $('.plazo_actividad').html(data.data.plazo_actividad);
+      $("#fecha_inicio_actividad").val(format_d_m_a(e.data.fecha_inicio_actividad));  
+      $("#fecha_fin_actividad").val(format_d_m_a(e.data.fecha_fin_actividad));
+      $('#plazo_actividad').val(e.data.plazo_actividad); 
+      $('.plazo_actividad').html(e.data.plazo_actividad);
 
-      if (data.data.permanente_pago_obrero == '1') {      
+      if (e.data.permanente_pago_obrero == '1') {      
         $(".show_hide_select_1").hide(); 
         $(".show_hide_select_2").show();
-        $(".show_hide_select_2").html(`<label for="">Pago de obreros <sup class="text-danger">*</sup></label> <span class="form-control" > ${data.data.fecha_pago_obrero} </span>`);
+        $(".show_hide_select_2").html(`<label for="">Pago de obreros <sup class="text-danger">*</sup></label> <span class="form-control" > ${e.data.fecha_pago_obrero} </span>`);
   
         $('.show_hide_switch_1').hide();
         $('.show_hide_switch_2').show();
@@ -819,135 +819,82 @@ function mostrar(idproyecto) {
         $("#definiendo").prop('checked', false);       
       }
   
-      $("#permanente_pago_obrero").val(data.data.permanente_pago_obrero);
+      $("#permanente_pago_obrero").val(e.data.permanente_pago_obrero);
       
       //validamoos DOC-1
-      if (data.data.doc1_contrato_obra != ""  ) {
-  
-        $("#doc_old_1").val(data.data.doc1_contrato_obra); 
-  
-        $("#doc1_nombre").html('Contrato de obra.' + extrae_extencion(data.data.doc1_contrato_obra));     
-  
-        // cargamos la imagen adecuada par el archivo
-        var doc_html = doc_view_extencion(data.data.doc1_contrato_obra, 'valorizacion', 'documento', '100%', '210');
-  
-        $("#doc1_ver").html(doc_html);
-        
-      } else {
-  
-        $("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-  
-        $("#doc1_nombre").html('');
-  
+      if (e.data.doc1_contrato_obra == "" || e.data.doc1_contrato_obra == null  ) {  
+        $("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#doc1_nombre").html('');  
         $("#doc_old_1").val(""); 
+      } else { 
+        $("#doc_old_1").val(e.data.doc1_contrato_obra);   
+        $("#doc1_nombre").html('Contrato de obra.' + extrae_extencion(e.data.doc1_contrato_obra));  
+        // cargamos la imagen adecuada par el archivo  
+        $("#doc1_ver").html(doc_view_extencion(e.data.doc1_contrato_obra, 'valorizacion', 'documento', '100%', '210'));        
       }
   
       //validamoos DOC-2
-      if (data.doc2_entrega_terreno != "" ) {
-  
-        $("#doc_old_2").val(data.data.doc2_entrega_terreno);
-  
-        $("#doc2_nombre").html('Entrega de terreno.' + extrae_extencion(data.data.doc2_entrega_terreno) );
-  
-        // cargamos la imagen adecuada par el archivo
-        var doc_html = doc_view_extencion(data.data.doc2_entrega_terreno, 'valorizacion', 'documento', '100%', '210');
-  
-        $("#doc2_ver").html(doc_html);
-         
-      } else {
-  
-        $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-  
-        $("#doc2_nombre").html('');
-  
+      if (e.data.doc2_entrega_terreno == "" || e.data.doc2_entrega_terreno == null ) {  
+        $("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#doc2_nombre").html('');  
         $("#doc_old_2").val("");
+      } else {
+        $("#doc_old_2").val(e.data.doc2_entrega_terreno);  
+        $("#doc2_nombre").html('Entrega de terreno.' + extrae_extencion(e.data.doc2_entrega_terreno) );  
+        // cargamos la imagen adecuada par el archivo  
+        $("#doc2_ver").html(doc_view_extencion(e.data.doc2_entrega_terreno, 'valorizacion', 'documento', '100%', '210'));  
       }
   
       //validamoos DOC-3
-      if (data.doc3_inicio_obra != "" ) {
-  
-        $("#doc_old_3").val(data.data.doc3_inicio_obra);
-  
-        $("#doc3_nombre").html('Inicio de obra.' + extrae_extencion(data.data.doc3_inicio_obra));
-  
-        // cargamos la imagen adecuada par el archivo
-        var doc_html = doc_view_extencion(data.data.doc3_inicio_obra, 'valorizacion', 'documento', '100%', '210');
-  
-        $("#doc3_ver").html(doc_html);
-         
-      } else {
-  
-        $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-  
-        $("#do3_nombre").html('');
-  
+      if (e.data.doc3_inicio_obra == "" || e.data.doc3_inicio_obra == null ) {  
+        $("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#do3_nombre").html('');  
         $("#doc_old_3").val("");
+      } else {  
+        $("#doc_old_3").val(e.data.doc3_inicio_obra);  
+        $("#doc3_nombre").html('Inicio de obra.' + extrae_extencion(e.data.doc3_inicio_obra));  
+        // cargamos la imagen adecuada par el archivo
+        $("#doc3_ver").html(doc_view_extencion(e.data.doc3_inicio_obra, 'valorizacion', 'documento', '100%', '210'));                 
       }
   
       //validamoos DOC-4
-      if (data.data.doc4_presupuesto != "" ) {
-  
-        $("#doc_old_4").val(data.data.doc4_presupuesto);
-  
-        $("#doc4_nombre").html('Presupuesto.' + extrae_extencion(data.data.doc4_presupuesto));
-  
-        // cargamos la imagen adecuada par el archivo
-        var doc_html = doc_view_extencion(data.data.doc4_presupuesto, 'valorizacion', 'documento', '100%', '210');
-  
-        $("#doc4_ver").html(doc_html);
-        
+      if (e.data.doc4_presupuesto == "" || e.data.doc4_presupuesto == null ) {  
+        $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#doc4_nombre").html('');  
+        $("#doc_old_4").val("");        
       } else {
-  
-        $("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-  
-        $("#doc4_nombre").html('');
-  
-        $("#doc_old_4").val("");
+        $("#doc_old_4").val(e.data.doc4_presupuesto);  
+        $("#doc4_nombre").html('Presupuesto.' + extrae_extencion(e.data.doc4_presupuesto));  
+        // cargamos la imagen adecuada par el archivo
+        var doc_html = doc_view_extencion(e.data.doc4_presupuesto, 'valorizacion', 'documento', '100%', '210');  
+        $("#doc4_ver").html(doc_html);        
       }
   
       //validamoos DOC-5
-      if (data.data.doc5_analisis_costos_unitarios != "" ) {
-  
-        $("#doc_old_5").val(data.data.doc5_analisis_costos_unitarios);
-  
-        $("#doc5_nombre").html('Analisis de costos unitarios.' + extrae_extencion(data.data.doc5_analisis_costos_unitarios));
-  
-        // cargamos la imagen adecuada par el archivo
-        var doc_html = doc_view_extencion(data.data.doc5_analisis_costos_unitarios, 'valorizacion', 'documento', '100%', '210');
-  
-        $("#doc5_ver").html(doc_html);
-  
-      } else {
-  
-        $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-  
-        $("#doc5_nombre").html('');
-  
+      if (e.data.doc5_analisis_costos_unitarios == "" || e.data.doc5_analisis_costos_unitarios == null ) {  
+        $("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#doc5_nombre").html('');  
         $("#doc_old_5").val("");
+      } else {  
+        $("#doc_old_5").val(e.data.doc5_analisis_costos_unitarios);  
+        $("#doc5_nombre").html('Analisis de costos unitarios.' + extrae_extencion(e.data.doc5_analisis_costos_unitarios));  
+        // cargamos la imagen adecuada par el archivo
+        $("#doc5_ver").html(doc_view_extencion(e.data.doc5_analisis_costos_unitarios, 'valorizacion', 'documento', '100%', '210'));        
       }
   
       //validamoos DOC-6
-      if (data.data.doc6_insumos != "" ) {
-  
-        $("#doc_old_6").val(data.data.doc6_insumos);
-  
-        $("#doc6_nombre").html('Insumos.' + extrae_extencion(data.data.doc6_insumos));
-  
-        // cargamos la imagen adecuada par el archivo
-        var doc_html = doc_view_extencion(data.data.doc6_insumos, 'valorizacion', 'documento', '100%', '210');
-  
-        $("#doc6_ver").html(doc_html);
-        
-      } else {
-  
-        $("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');
-  
-        $("#doc6_nombre").html('');
-  
+      if (e.data.doc6_insumos == "" || e.data.doc6_insumos == null ) {  
+        $("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#doc6_nombre").html('');  
         $("#doc_old_6").val("");
+      } else {  
+        $("#doc_old_6").val(e.data.doc6_insumos);  
+        $("#doc6_nombre").html('Insumos.' + extrae_extencion(e.data.doc6_insumos));  
+        // cargamos la imagen adecuada par el archivo  
+        $("#doc6_ver").html(doc_view_extencion(e.data.doc6_insumos, 'valorizacion', 'documento', '100%', '210')); 
       }
     } else {
-      ver_errores(data);
+      ver_errores(e);
     }
 
   }).fail( function(e) { ver_errores(e); } );

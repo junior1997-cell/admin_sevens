@@ -266,6 +266,7 @@
                                     <option value="EPPS">EPPS</option>
                                     <option value="DONACIONES">DONACIONES</option>
                                     <option value="SERVICIOS DE PROYECTOS">SERVICIOS DE PROYECTOS</option>
+                                    <option value="OPERACIONES ESTRUCTURADAS">OPERACIONES ESTRUCTURADAS</option>
                                     <option value="OTROS">OTROS</option>
                                     
                                   </select>

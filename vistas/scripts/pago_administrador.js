@@ -17,7 +17,7 @@ function init() {
 
   $("#lPagosAdministrador").addClass("active");
   
-  sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
+  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
   // efectuamos SUBMIT  registro de: PAGOS POR MES
   $("#guardar_registro").on("click", function (e) { $("#submit-form-pagos-x-mes").submit(); });
@@ -125,6 +125,14 @@ function sumas_totales_tabla_principal(id_proyecto) {
 function listar_tbla_principal(nube_idproyecto) {  
 
   var total_pago_acumulado_hoy = 0, pago_total_x_proyecto = 0, saldo_total = 0;
+  var sueldo = 0, deposito = 0;
+
+  $('.pago_total_tbla_principal').html(`0.00`);
+  $('.pago_hoy_total_tbla_principal').html(`0.00`);
+  $('.saldo_total_tbla_principal').html(`0.00`);
+
+  $('.sueldo_total_tbla_principal').html(`0.00`);
+  $('.deposito_total_tbla_principal').html(`0.00`);
 
   tabla_principal=$('#tabla-principal').dataTable({
     //"responsive": true,
@@ -146,39 +154,18 @@ function listar_tbla_principal(nube_idproyecto) {
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != '') {  $("td", row).eq(0).css('text-center'); }  
-      // columna: sueldo mensual
+      // columna: cantidad de dias
       if (data[5] != '') { $("td", row).eq(5).addClass('text-center');  }
       // columna: sueldo mensual
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); $('.sueldo_total_tbla_principal').html( formato_miles(sueldo += parseFloat(data[6])) ); }
       // columna: pago total
-      if (data[7] != '') {
-        $("td", row).eq(7).addClass('text-right');
-        // acumulamos el PAGO TOTAL
-        var split = data[7].split(' '); //console.log(split);
-        var quitar_format_mil = quitar_formato_miles( split[1]); //console.log(quitar_format_mil);
-        pago_total_x_proyecto += parseFloat(quitar_format_mil);
-        $('.pago_total_tbla_principal').html(`<span>S/</span> <b>${formato_miles(pago_total_x_proyecto)}</b>`);
-      }
-
+      if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); $('.pago_total_tbla_principal').html( formato_miles(pago_total_x_proyecto += parseFloat(data[7])) ); }
       // columna: pago acumuldo       
-      if (data[8] != '') {
-        $("td", row).eq(8).addClass('text-right');
-        // acumulamos el PAGO acumulado hasta hoy
-        var split = data[8].split(' '); //console.log(split);
-        var quitar_format_mil = quitar_formato_miles( split[1]); //console.log(quitar_format_mil);
-        total_pago_acumulado_hoy += parseFloat(quitar_format_mil);
-        $('.pago_hoy_total_tbla_principal').html(`<span>S/</span> <b>${formato_miles(total_pago_acumulado_hoy)}</b>`);
-      }
-
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $('.pago_hoy_total_tbla_principal').html( formato_miles(total_pago_acumulado_hoy += parseFloat(data[8])) ); }
+      // columna: deposito       
+      if (data[18] != '') { $("td", row).eq(8).addClass('text-nowrap'); $('.deposito_total_tbla_principal').html( formato_miles(deposito += parseFloat(data[18])) ); }
       // columna: saldo
-      if (data[10] != '') {
-        $("td", row).eq(10).addClass('text-right');
-        // acumulamos el SALDO
-        var split = data[10].split(' '); //console.log(split);
-        var quitar_format_mil = quitar_formato_miles( split[1]); //console.log(quitar_format_mil);
-        saldo_total += parseFloat(quitar_format_mil);
-        $('.saldo_total_tbla_principal').html(`<span>S/</span> <b>${formato_miles(saldo_total)}</b>`);
-      }
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $('.saldo_total_tbla_principal').html( formato_miles( saldo_total += parseFloat( data[10])) ); }
 
       // Validamos la comlumna: "Anterior pago"
       if (data[11] == "En espera...") {
@@ -216,6 +203,9 @@ function listar_tbla_principal(nube_idproyecto) {
       }
       
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api = this.api(); $( api.column( 18 ).footer() ).html( api.column( 18 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat( b); }, 0 ) );
+    },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -226,13 +216,10 @@ function listar_tbla_principal(nube_idproyecto) {
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
       //{ targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [13,14,15,16,17,18], visible: false, searchable: false, },    
+      { targets: [13,14,15,16,17,18], visible: false, searchable: false, },  
+      { targets: [5,6,7,8,10,18], render: $.fn.dataTable.render.number(',', '.', 2) },  
     ],
-  }).DataTable();
-
-  
-
-  
+  }).DataTable();  
 }
 
 //Función Listar - tabla recibo por honorario
@@ -657,8 +644,8 @@ function guardar_y_editar_pagos_x_mes(e) {
           $('#idfechas_mes_pagos_administrador_pxm').val(datos.id_tabla);
           reload_table_pagos_x_mes(datos.id_tabla);        
 
-          // tabla_principal.ajax.reload(null, false);     
-          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));    
+          //tabla_principal.ajax.reload(null, false);  
+          listar_tbla_principal(localStorage.getItem('nube_idproyecto'));   
 
           Swal.fire("Correcto!", "Pago guardado correctamente", "success");	      
           
@@ -762,7 +749,9 @@ function desactivar_pago_x_mes(id) {
       $.post("../ajax/pago_administrador.php?op=desactivar_pago_x_mes", { 'idpagos_x_mes_administrador': id }, function (e) {
 
         if (e == "ok") {
-          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto')); 
+          //tabla_principal.ajax.reload(null, false);
+          listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+
           reload_table_pagos_x_mes(id_fechas_mes);
           Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
         } else {
@@ -790,7 +779,9 @@ function activar_pago_x_mes(id) {
       $.post("../ajax/pago_administrador.php?op=activar_pago_x_mes", { 'idpagos_x_mes_administrador': id }, function (e) {
 
         if (e == "ok") {
-          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto')); 
+          //tabla_principal.ajax.reload(null, false);
+          listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
+
           reload_table_pagos_x_mes(id_fechas_mes);
           Swal.fire("ReActivado!", "Tu registro ha sido ReActivado.", "success");
         } else {
@@ -891,7 +882,8 @@ function guardar_y_editar_recibos_x_honorarios(e) {
 
         detalle_fechas_mes_trabajador(id_tabajador_x_proyecto_r, nombre_trabajador_r, fecha_inicial_r, fecha_hoy_r, fecha_final_r, sueldo_mensual_r, cuenta_bancaria_r, cant_dias_trabajando_r);
 
-        sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
+        //tabla_principal.ajax.reload(null, false);
+        listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
         Swal.fire("Correcto!", "Recibo por honorario guardado correctamente", "success");	      
          

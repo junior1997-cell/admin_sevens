@@ -80,7 +80,7 @@
 
           $count_dia = ""; $fecha_inicio = ""; $fecha_fin = "";         
            
-          foreach (json_decode($rspta, true) as $key => $value) {
+          foreach ($rspta as $key => $value) {
 
             $deshabilitado = ""; $btn_depositos = ""; $ultimo_mes_pago = ""; $siguiente_mes_pago = ""; 
             $pago_acumulado_hasta_hoy = 0; $pago_total = 0;
@@ -137,29 +137,29 @@
                 <span class="description">'. $value['tipo'].' / '.$value['cargo'] .' </span>
               </div>',
               "2"=> $fecha_inicio_nombre,
-              "3"=>$date_actual,
-              "4"=>$fecha_fin_nombre,
-              "5"=>$count_dia,
+              "3"=> $date_actual,
+              "4"=> $fecha_fin_nombre,
+              "5"=> $count_dia,
               
-              "6"=>'S/ ' . number_format($value['sueldo_mensual'], 2, '.', ',') ,
-              "7" =>'S/ ' . number_format( $pago_total , 2, '.', ',') ,
-              "8"=>'S/ '. number_format($pago_acumulado_hasta_hoy, 2, '.', ',') ,
+              "6"=> $value['sueldo_mensual'] ,
+              "7"=> $pago_total  ,
+              "8"=> $pago_acumulado_hasta_hoy ,
               "9" =>'<div class="formato-numero-conta"> 
                 <button class="btn btn-info '.$btn_depositos.' btn-sm mr-1" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')">
                   <i class="far fa-eye"></i> Detalle
                 </button> 
                 <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/ '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
               </div>',
-              "10"=>'S/ ' . number_format($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito']), 2, '.', ',') ,
-              "11"=>$ultimo_mes_pago,
-              "12"=>$siguiente_mes_pago,  
+              "10"=> ($pago_acumulado_hasta_hoy - floatval($value['cantidad_deposito'])),
+              "11"=> $ultimo_mes_pago,
+              "12"=> $siguiente_mes_pago,  
 
-              "13"=>$value['nombres'],              
-              "14"=>$value['tipo_documento'],
-              "15"=>$value['numero_documento'],
-              "16"=>$value['tipo'],
-              "17"=>$value['cargo'],
-              "18"=>number_format($value['cantidad_deposito'], 2, '.', ','),
+              "13"=> $value['nombres'],              
+              "14"=> $value['tipo_documento'],
+              "15"=> $value['numero_documento'],
+              "16"=> $value['tipo'],
+              "17"=> $value['cargo'],
+              "18"=> $value['cantidad_deposito'],
             );
           }
 

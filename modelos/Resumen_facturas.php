@@ -1294,6 +1294,18 @@ class Resumenfacturas
     return ejecutarConsultaSimpleFila($sql);
   }
 
+  // detalle_pago_administrador
+  public function detalle_otra_factura($id) {
+    $sql = "SELECT of.idotra_factura, of.idproveedor, of.idempresa_a_cargo, of.tipo_comprobante, of.numero_comprobante, of.forma_de_pago, 
+    of.fecha_emision, of.val_igv, of.subtotal, of.igv, of.costo_parcial, of.descripcion, of.glosa, of.comprobante, of.tipo_gravada, 
+    of.estado, of.estado_delete, 
+    of.id_user_vb, of.nombre_user_vb, of.imagen_user_vb, of.estado_user_vb,
+    prov.razon_social, prov.tipo_documento, prov.ruc
+    FROM otra_factura as of, proveedor as prov  
+    WHERE of.idproveedor = prov.idproveedor AND of.idotra_factura =  '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
   // ════════════════════════════════════════ ACCIONES ════════════════════════════════════════
   // eliminar permanente
   public function eliminar_permanente($nombre_tabla, $nombre_id_tabla, $id_tabla) {

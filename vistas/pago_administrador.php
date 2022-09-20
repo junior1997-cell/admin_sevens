@@ -126,11 +126,11 @@
                                   <th class="text-center text-gray">Hoy</th>
                                   <th class="text-center text-gray">Fecha <br> culminacion</th>
                                   <th class="text-center text-gray">Tiempo <br> trabajado (dias)</th>                                                                
-                                  <th class="text-nowrap text-dark-0 pr-2"> <div class="formato-numero-conta sueldo_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </div></th>
-                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta pago_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </div></th>                                
-                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta pago_hoy_total_tbla_principal"> S/ <i class="fas fa-spinner fa-pulse fa-sm"></i> </div></th>
-                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta deposito_total_tbla_principal"> S/<i class="fas fa-spinner fa-pulse fa-sm"></i> </div></th>                                
-                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta saldo_total_tbla_principal"> S/<i class="fas fa-spinner fa-pulse fa-sm"></i> </div></th>  
+                                  <th class="text-nowrap text-dark-0 pr-2"> <div class="formato-numero-conta "> <span>S/</span><span class="sueldo_total_tbla_principal">0.00</span> </div></th>
+                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta "> <span>S/</span><span class="pago_total_tbla_principal">0.00</span> </div></th>                                
+                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta "> <span>S/</span><span class="pago_hoy_total_tbla_principal">0.00</span> </div></th>
+                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta "> <span>S/</span><span class="deposito_total_tbla_principal">0.00</span> </div></th>                                
+                                  <th class="text-nowrap text-dark-0 pr-2"><div class="formato-numero-conta "> <span>S/</span><span class="saldo_total_tbla_principal">0.00</span> </div></th>  
                                   <th class="text-center text-gray">Último <br> pago</th>
                                   <th class="text-center text-gray">Siguiente <br> pago</th>
 

@@ -103,7 +103,7 @@ class PagoAdministrador
       }
     }
 
-    return json_encode($data, true);
+    return $data;
   }
 
   // Obtenemos los totales

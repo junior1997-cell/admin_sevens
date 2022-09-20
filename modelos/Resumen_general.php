@@ -7,7 +7,7 @@ class Resumen_general
   //Implementamos nuestro constructor
   public function __construct() { }
 
-  // TABLA
+  // TABLA - COMPRAS DE INSUMOS
   public function tabla_compras($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor) {
 
     $Arraycompras = [];   $filtro_proveedor = ""; $filtro_fecha = "";
@@ -63,7 +63,7 @@ class Resumen_general
     return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=>$Arraycompras ] ;
   }
 
-  // TABLA
+  // TABLA - MAQUINAS Y EQUIPOS
   public function tabla_maquinaria_y_equipo($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor, $tipo)  {
 
     $serv_maquinaria = [];  $pago_total = 0; $filtro_proveedor = ""; $filtro_fecha = "";    
@@ -159,7 +159,119 @@ class Resumen_general
     return ejecutarConsulta($sql);
   }
 
-  // TABLA
+  // TABLA - SUB CONTRATO
+  public function tabla_sub_contrato($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {
+
+    $list_subcontrato= Array();  $filtro_fecha = "";   $filtro_proveedor = "";
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND s.idproveedor = '$id_proveedor'";
+    }
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else if (!empty($fecha_filtro_1)) {      
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_filtro_1'";
+    }else if (!empty($fecha_filtro_2)) {        
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_filtro_2'";            
+    }
+
+    $sql = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
+    s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, p.razon_social, p.tipo_documento, p.ruc
+    FROM subcontrato AS s, proveedor as p
+    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.idproyecto='$idproyecto' $filtro_proveedor $filtro_fecha 
+		ORDER BY s.fecha_subcontrato DESC";
+    $sub_contrato = ejecutarConsultaArray($sql);
+    if ($sub_contrato['status'] == false) {  return $sub_contrato;}
+
+    if (!empty($sub_contrato['data'])) {			
+			foreach ($sub_contrato['data'] as $key => $value) {
+
+				$id=$value['idsubcontrato'];
+
+				$sql_2="SELECT SUM(monto) as total_deposito FROM pago_subcontrato WHERE idsubcontrato='$id' AND estado='1' AND  estado_delete='1';";
+				$total_deposito= ejecutarConsultaSimpleFila($sql_2);
+        if ($total_deposito['status'] == false) {  return $total_deposito;}
+
+				$list_subcontrato[]= array(
+
+					"idsubcontrato"      => $value['idsubcontrato'],
+					"idproyecto"     	 => $value['idproyecto'],
+					"idproveedor"        => $value['idproveedor'],
+					"tipo_comprobante"   => $value['tipo_comprobante'],
+					"forma_de_pago"      => $value['forma_de_pago'],
+					"numero_comprobante" => $value['numero_comprobante'],
+					"fecha_subcontrato"  => $value['fecha_subcontrato'],
+					"subtotal"           => empty($value['subtotal']) ? 0 : $value['subtotal']  ,
+					"igv"                => empty($value['igv']) ? 0 : $value['igv']  ,
+					"costo_parcial"      => empty($value['costo_parcial']) ? 0 : $value['costo_parcial']  ,
+					"descripcion"        => $value['descripcion'],
+					"comprobante"        => $value['comprobante'],
+          "razon_social"        => $value['razon_social'],
+
+					"total_deposito"     => ($retVal_2 = empty($total_deposito['data']) ? 0 : ($retVal_3 = empty($total_deposito['data']['total_deposito']) ? 0 : $total_deposito['data']['total_deposito'])),
+
+				);	
+				
+			}
+		}
+
+    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=>$list_subcontrato];
+    
+  }
+
+  // TABLA - PLANILLA SEGURO
+  public function tabla_planilla_seguro($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {
+
+    $filtro_fecha = "";  $filtro_proveedor = "";
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND ps.idproveedor = '$id_proveedor'";
+    }
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND ps.fecha_p_s BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else if (!empty($fecha_filtro_1)) {      
+      $filtro_fecha = "AND ps.fecha_p_s = '$fecha_filtro_1'";
+    }else if (!empty($fecha_filtro_2)) {        
+      $filtro_fecha = "AND ps.fecha_p_s = '$fecha_filtro_2'";
+    }
+
+    $sql = "SELECT ps.idplanilla_seguro, ps.idproyecto, ps.idproveedor, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
+    ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.glosa, ps.comprobante, ps.estado,
+    prov.razon_social, prov.tipo_documento, prov.ruc
+    FROM planilla_seguro as ps, proyecto p, proveedor as prov
+    WHERE ps.idproyecto = p.idproyecto AND ps.idproveedor = prov.idproveedor AND ps.estado = '1' AND ps.estado_delete = '1' 
+    AND ps.idproyecto = '$idproyecto' $filtro_proveedor $filtro_fecha
+		ORDER BY ps.fecha_p_s DESC";
+    return ejecutarConsultaArray($sql);
+  }
+
+  // TABLA - OTROS GASTOS
+  public function tabla_otros_gastos($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
+
+    $filtro_fecha = "";   
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND og.fecha_g BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else if (!empty($fecha_filtro_1)) {      
+      $filtro_fecha = "AND og.fecha_g = '$fecha_filtro_1'";
+    }else if (!empty($fecha_filtro_2)) {        
+      $filtro_fecha = "AND og.fecha_g = '$fecha_filtro_2'";
+    }
+
+    $sql = "SELECT og.idotro_gasto, og.idproyecto,  og.fecha_g, og.costo_parcial, og.descripcion, og.comprobante, og.estado
+    FROM otro_gasto AS og, proyecto AS p
+    WHERE og.idproyecto = p.idproyecto AND og.idproyecto = '$idproyecto' AND og.estado = '1' AND og.estado_delete = '1' $filtro_fecha
+		ORDER BY og.fecha_g DESC";
+    return ejecutarConsultaArray($sql);
+  }
+
+  // TABLA - TRANSPORTES
   public function tabla_transportes($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
 
     $filtro_fecha = "";   
@@ -183,7 +295,7 @@ class Resumen_general
     return ejecutarConsultaArray($sql);
   }
 
-  // TABLA
+  // TABLA - HOSPEDAJES
   public function tabla_hospedajes($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
 
     $filtro_fecha = "";   
@@ -207,31 +319,48 @@ class Resumen_general
     return ejecutarConsultaArray($sql);
   }
 
-  // TABLA
-  public function tabla_comidas_extras($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
+  // TABLA - PENSIONES
+  public function tabla_pensiones($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {
+    $filtro_proveedor = ""; $filtro_fecha = "";   
 
-    $filtro_fecha = "";   
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND pen.idproveedor = '$id_proveedor'";
+    }
 
     if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
-      $filtro_fecha = "AND ce.fecha_comida BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
-    } else {
-      if (!empty($fecha_filtro_1)) {
-        $filtro_fecha = "AND ce.fecha_comida = '$fecha_filtro_1'";
-      }else{
-        if (!empty($fecha_filtro_2)) {
-          $filtro_fecha = "AND ce.fecha_comida = '$fecha_filtro_2'";
-        }     
-      }      
+      $filtro_fecha = "AND dp.fecha_emision BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else if (!empty($fecha_filtro_1)) {      
+      $filtro_fecha = "AND dp.fecha_emision = '$fecha_filtro_1'";
+    }else if (!empty($fecha_filtro_2)) {        
+      $filtro_fecha = "AND dp.fecha_emision = '$fecha_filtro_2'";
     }
-    
-    $sql = "SELECT ce.idcomida_extra, ce.idproyecto, ce.fecha_comida, ce.descripcion, ce.costo_parcial, ce.comprobante 
-		FROM comida_extra as ce, proyecto as p 
-		WHERE ce.estado='1' AND ce.estado_delete='1' AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto' $filtro_fecha
-    ORDER BY ce.fecha_comida DESC";
-    return ejecutarConsultaArray($sql);
+
+    $sql = "SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_inicial, dp.fecha_final, dp.cantidad_persona, dp.subtotal, dp.igv, dp.val_igv, 
+    dp.precio_parcial, dp.forma_pago, dp.tipo_comprobante, dp.fecha_emision, dp.tipo_gravada, dp.glosa, dp.numero_comprobante, dp.descripcion, 
+    dp.comprobante, dp.estado, dp.estado_delete,
+    prov.razon_social, prov.tipo_documento, prov.ruc
+    FROM detalle_pension AS dp, pension as pen, proyecto as p, proveedor as prov
+    WHERE dp.idpension = pen.idpension AND pen.idproyecto = p.idproyecto AND pen.idproveedor = prov.idproveedor 
+    AND dp.estado = '1' AND dp.estado_delete = '1'
+		AND pen.idproyecto='$idproyecto' $filtro_proveedor $filtro_fecha 
+    ORDER BY dp.fecha_emision DESC";
+    return ejecutarConsultaArray($sql);     
   }
 
-  // TABLA
+  // DETALLE
+  public function ver_detalle_x_servicio($idpension)  {
+    $sql = "SELECT * FROM detalle_pension WHERE  idpension ='$idpension' AND estado='1' AND  estado_delete='1' ORDER BY fecha_inicial DESC";
+    return ejecutarConsulta($sql);
+  }
+  // DETALLE
+  public function listar_comprobantes_pension($idpension)  {
+    $sql = "SELECT * FROM detalle_pension	WHERE idpension  ='$idpension'";
+    return ejecutarConsulta($sql);
+  }
+
+  // TABLA - BREACKS
   public function tabla_breaks($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
 
     $filtro_fecha = "";   
@@ -262,58 +391,31 @@ class Resumen_general
     return ejecutarConsulta($sql);
   }
 
-  // TABLA
-  public function tabla_pensiones($idproyecto, $id_proveedor)  {
-    $serv_pension = [];   $filtro_proveedor = "";
+  // TABLA - COMIDA EXTRA
+  public function tabla_comidas_extras($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
 
-    if (empty($id_proveedor) || $id_proveedor == 0) {
-      $filtro_proveedor = "";
+    $filtro_fecha = "";   
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND ce.fecha_comida BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
     } else {
-      $filtro_proveedor = "AND p.idproveedor = '$id_proveedor'";
+      if (!empty($fecha_filtro_1)) {
+        $filtro_fecha = "AND ce.fecha_comida = '$fecha_filtro_1'";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND ce.fecha_comida = '$fecha_filtro_2'";
+        }     
+      }      
     }
-
-    $sql = "SELECT p.idpension, p.idproyecto, p.idproveedor, pr_v.razon_social, pr_v.direccion, p.estado
-		FROM pension as p, proyecto as py, proveedor as pr_v
-		WHERE p.estado='1' AND p.estado_delete='1' AND p.idproyecto='$idproyecto' AND p.idproyecto=py.idproyecto AND p.idproveedor=pr_v.idproveedor 
-		$filtro_proveedor";
-    $pension = ejecutarConsultaArray($sql);
-    if ($pension['status'] == false) {  return $pension;}
-
-    if (!empty($pension['data'])) {
-      foreach ($pension['data'] as $key => $value) {
-        $idpension = $value['idpension'];
-
-        $sql_2 = "SELECT  SUM(precio_parcial) as gasto_pension FROM detalle_pension WHERE estado='1' AND estado_delete='1' AND idpension='$idpension'";
-        $gasto_pension = ejecutarConsultaSimpleFila($sql_2);
-        if ($gasto_pension['status'] == false) {  return $gasto_pension;}     
-
-        $serv_pension[] = [
-          "idpension" => $value['idpension'],
-          "idproyecto" => $value['idproyecto'],
-          "idproveedor" => $value['idproveedor'],
-          "proveedor" => $value['razon_social'],
-          "direccion" => $value['direccion'],
-
-          "monto_total_pension" => (empty($gasto_pension['data']) ? 0 : (empty($gasto_pension['data']['gasto_pension']) ? 0 : $gasto_pension['data']['gasto_pension']) ),
-          "deposito" =>  (empty($gasto_pension['data']) ? 0 : (empty($gasto_pension['data']['gasto_pension']) ? 0 : $gasto_pension['data']['gasto_pension']) )
-        ];
-      }
-    }
-
-    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $serv_pension];
+    
+    $sql = "SELECT ce.idcomida_extra, ce.idproyecto, ce.fecha_comida, ce.descripcion, ce.costo_parcial, ce.comprobante 
+		FROM comida_extra as ce, proyecto as p 
+		WHERE ce.estado='1' AND ce.estado_delete='1' AND ce.idproyecto=p.idproyecto AND ce.idproyecto='$idproyecto' $filtro_fecha
+    ORDER BY ce.fecha_comida DESC";
+    return ejecutarConsultaArray($sql);
   }
 
-  public function ver_detalle_x_servicio($idpension)  {
-    $sql = "SELECT * FROM detalle_pension WHERE  idpension ='$idpension' AND estado='1' AND  estado_delete='1' ORDER BY fecha_inicial DESC";
-    return ejecutarConsulta($sql);
-  }
-
-  public function listar_comprobantes_pension($idpension)  {
-    $sql = "SELECT * FROM detalle_pension	WHERE idpension  ='$idpension'";
-    return ejecutarConsulta($sql);
-  }
-
-  // TABLA
+  // TABLA - PAGO ADMINSTRADOR
   public function tabla_administrativo($idproyecto, $id_trabajador)  {
     $administrativo = [];
     $m_total_x_meses = 0;
@@ -380,7 +482,7 @@ class Resumen_general
 
     return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=>$administrativo];
   }
-
+  // DETALLE
   public function r_detalle_trab_administrativo($idtrabajador_por_proyecto)  {
     $detalle_pagos_adm = [];
     $monto_total = 0;
@@ -415,7 +517,7 @@ class Resumen_general
     return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $detalle_pagos_adm];
   }  
 
-  // TABLA
+  // TABLA - PAGO OBRERO
   public function tabla_obrero($idproyecto, $id_trabajador)  {
 
     $obrero = Array();
@@ -519,97 +621,6 @@ class Resumen_general
     }
 
     return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $data];
-  }
-
-  // TABLA
-  public function tabla_otros_gastos($idproyecto, $fecha_filtro_1, $fecha_filtro_2)  {
-
-    $filtro_fecha = "";   
-
-    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
-      $filtro_fecha = "AND og.fecha_g BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
-    } else {
-      if (!empty($fecha_filtro_1)) {
-        $filtro_fecha = "AND og.fecha_g = '$fecha_filtro_1'";
-      }else{
-        if (!empty($fecha_filtro_2)) {
-          $filtro_fecha = "AND og.fecha_g = '$fecha_filtro_2'";
-        }     
-      }      
-    }
-
-    $sql = "SELECT og.idotro_gasto, og.idproyecto,  og.fecha_g, og.costo_parcial, og.descripcion, og.comprobante, og.estado
-    FROM otro_gasto AS og, proyecto AS p
-    WHERE og.idproyecto = p.idproyecto AND og.idproyecto = '$idproyecto' AND og.estado = '1' AND og.estado_delete = '1' $filtro_fecha
-		ORDER BY og.fecha_g DESC";
-    return ejecutarConsultaArray($sql);
-  }
-
-  // TABLA
-  public function tabla_sub_contrato($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {
-
-    $list_subcontrato= Array();  $filtro_fecha = "";   $filtro_proveedor = "";
-
-    if (empty($id_proveedor) || $id_proveedor == 0) {
-      $filtro_proveedor = "";
-    } else {
-      $filtro_proveedor = "AND s.idproveedor = '$id_proveedor'";
-    }
-
-    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
-      $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
-    } else {
-      if (!empty($fecha_filtro_1)) {
-        $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_filtro_1'";
-      }else{
-        if (!empty($fecha_filtro_2)) {
-          $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_filtro_2'";
-        }     
-      }      
-    }
-
-    $sql = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
-    s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, p.razon_social, p.tipo_documento, p.ruc
-    FROM subcontrato AS s, proveedor as p
-    WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.idproyecto='$idproyecto' $filtro_proveedor $filtro_fecha 
-		ORDER BY s.fecha_subcontrato DESC";
-    $sub_contrato = ejecutarConsultaArray($sql);
-    if ($sub_contrato['status'] == false) {  return $sub_contrato;}
-
-    if (!empty($sub_contrato['data'])) {			
-			foreach ($sub_contrato['data'] as $key => $value) {
-
-				$id=$value['idsubcontrato'];
-
-				$sql_2="SELECT SUM(monto) as total_deposito FROM pago_subcontrato WHERE idsubcontrato='$id' AND estado='1' AND  estado_delete='1';";
-				$total_deposito= ejecutarConsultaSimpleFila($sql_2);
-        if ($total_deposito['status'] == false) {  return $total_deposito;}
-
-				$list_subcontrato[]= array(
-
-					"idsubcontrato"      => $value['idsubcontrato'],
-					"idproyecto"     	 => $value['idproyecto'],
-					"idproveedor"        => $value['idproveedor'],
-					"tipo_comprobante"   => $value['tipo_comprobante'],
-					"forma_de_pago"      => $value['forma_de_pago'],
-					"numero_comprobante" => $value['numero_comprobante'],
-					"fecha_subcontrato"  => $value['fecha_subcontrato'],
-					"subtotal"           => empty($value['subtotal']) ? 0 : $value['subtotal']  ,
-					"igv"                => empty($value['igv']) ? 0 : $value['igv']  ,
-					"costo_parcial"      => empty($value['costo_parcial']) ? 0 : $value['costo_parcial']  ,
-					"descripcion"        => $value['descripcion'],
-					"comprobante"        => $value['comprobante'],
-          "razon_social"        => $value['razon_social'],
-
-					"total_deposito"     => ($retVal_2 = empty($total_deposito['data']) ? 0 : ($retVal_3 = empty($total_deposito['data']['total_deposito']) ? 0 : $total_deposito['data']['total_deposito'])),
-
-				);	
-				
-			}
-		}
-
-    return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=>$list_subcontrato];
-    
   }
 
   // SELECT2

@@ -11,25 +11,27 @@ var tabla_9 = $("#tabla9_per_adm").DataTable();
 var tabla_10 = $("#tabla10_per_obr").DataTable();
 var tabla_11 = $("#tabla11_otros_gastos").DataTable();
 var tabla_12 = $("#tabla12_sub_contrato").DataTable();
+var tabla_13 = $("#tabla13_planilla_seguro").DataTable();
 
 var tabla_20 = $("#tabla20_all_sumas").DataTable();
 
-var monto_compras = 0, pago_compras = 0, saldo_compras = 0;
-var monto_serv_maq = 0, pago_serv_maq = 0, saldo_serv_maq = 0;
-var monto_serv_equi = 0, pago_serv_equi = 0, saldo_serv_equi = 0;
-var monto_transp = 0, pago_transp = 0, saldo_transp = 0;
-var monto_hosped = 0, pago_hosped = 0, saldo_hosped = 0;
-var monto_cextra = 0, pago_cextra = 0, saldo_cextra = 0;
-var monto_break = 0, pago_break = 0, saldo_break = 0;
-var monto_pension = 0, pago_pension = 0, saldo_pension = 0;
-var monto_adm = 0, pago_adm = 0, saldo_adm = 0;
-var monto_obrero = 0, pago_obrero = 0, saldo_obrero = 0;
-var monto_otros_gastos = 0, pago_otros_gastos = 0, saldo_otros_gastos = 0;
-var monto_sub_contrato = 0, pago_sub_contrato = 0, saldo_sub_contrato = 0;
+var monto_compras         = 0, pago_compras         = 0, saldo_compras          = 0;
+var monto_serv_maq        = 0, pago_serv_maq        = 0, saldo_serv_maq         = 0;
+var monto_serv_equi       = 0, pago_serv_equi       = 0, saldo_serv_equi        = 0;
+var monto_transp          = 0, pago_transp          = 0, saldo_transp           = 0;
+var monto_hosped          = 0, pago_hosped          = 0, saldo_hosped           = 0;
+var monto_cextra          = 0, pago_cextra          = 0, saldo_cextra           = 0;
+var monto_break           = 0, pago_break           = 0, saldo_break            = 0;
+var monto_pension         = 0, pago_pension         = 0, saldo_pension          = 0;
+var monto_adm             = 0, pago_adm             = 0, saldo_adm              = 0;
+var monto_obrero          = 0, pago_obrero          = 0, saldo_obrero           = 0;
+var monto_otros_gastos    = 0, pago_otros_gastos    = 0, saldo_otros_gastos     = 0;
+var monto_sub_contrato    = 0, pago_sub_contrato    = 0, saldo_sub_contrato     = 0;
+var monto_planilla_seguro = 0, pago_planilla_seguro = 0, saldo_planilla_seguro  = 0;
 
-var monto_all = 0;
-var deposito_all = 0;
-var saldo_all = 0;
+var monto_all     = 0;
+var deposito_all  = 0;
+var saldo_all     = 0;
 
 $( ".export_all_table" ).click(function() { $('#tabla1_compras').tableExport({type:'excel'}); });
 
@@ -123,14 +125,10 @@ function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
           var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");             
           }
         }
       },
@@ -142,10 +140,14 @@ function tbla_compras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
     }).DataTable();
     
     $('.cargando-compras').removeClass('bg-danger').addClass('backgff9100').html('Compras de Insumos');
-    console.log(monto_compras, pago_compras, saldo_compras);
+    //console.log(monto_compras, pago_compras, saldo_compras);
 
     tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   }).fail( function(e) { ver_errores(e); } );
@@ -209,14 +211,10 @@ function tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
           var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {             
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-success");             
           }
         }
       },
@@ -228,6 +226,10 @@ function tbla_maquinaria(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
     }).DataTable();
 
     $('.cargando-maquinas').removeClass('bg-danger').addClass('backgff9100').html('Servicios-Maquinaria');
@@ -295,14 +297,10 @@ function tbla_equipos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
           var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");            
           }
         }
       },
@@ -314,10 +312,276 @@ function tbla_equipos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador,
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
     }).DataTable();
 
     $('.cargando-equipos').removeClass('bg-danger').addClass('backgff9100').html('Servicios-Equipo');
 
+    tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
+  }).fail( function(e) { ver_errores(e); } );
+  
+}
+
+// TABLA - SUB CONTRATO - -------------------------------------------------------
+function tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_sub_contrato", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
+    
+    e = JSON.parse(e); //console.log(e);   
+
+    $("#monto_sub_contrato").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $("#pago_sub_contrato").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $("#saldo_sub_contrato").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_sub_contrato = e.data.t_monto.toFixed(2); 
+    pago_sub_contrato = e.data.t_pagos.toFixed(2); 
+    saldo_sub_contrato = e.data.t_saldo.toFixed(2);
+
+    // acumulamos las sumas totales
+    $(".monto_sub_contrato_all").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $(".pago_sub_contrato_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $(".saldo_sub_contrato_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(e.data.t_monto);
+    deposito_all += parseFloat(e.data.t_pagos);
+    saldo_all += parseFloat(e.data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    tabla_12.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#sub_contrato').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_12 = $("#tabla12_sub_contrato").dataTable({
+      responsive: true,
+      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: e.data.datatable,
+      createdRow: function (row, data, ixdex) {          
+
+        // columna: #
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
+        // columna: fecha
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
+        // columna: detalle
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
+        // columna: montos
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right");  }          
+        // columna: depositos  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");             
+          }
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
+    }).DataTable();
+
+    $('.cargando-sub-contrato').removeClass('bg-danger').addClass('backgff9100').html('Sub Contrato');
+
+    tbla_planilla_seguro(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
+  }).fail( function(e) { ver_errores(e); } );
+  
+}
+
+// TABLA - PLANILLA SEGURO - -------------------------------------------------------
+function tbla_planilla_seguro(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_planilla_seguro", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
+    
+    e = JSON.parse(e); //console.log(data);   
+
+    $("#monto_planilla_seguro").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $("#pago_planilla_seguro").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $("#saldo_planilla_seguro").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_planilla_seguro = e.data.t_monto.toFixed(2); 
+    pago_planilla_seguro = e.data.t_pagos.toFixed(2); 
+    saldo_planilla_seguro = e.data.t_saldo.toFixed(2);
+
+    // acumulamos las sumas totales
+    $(".monto_planilla_seguro_all").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $(".pago_planilla_seguro_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $(".saldo_planilla_seguro_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(e.data.t_monto);
+    deposito_all += parseFloat(e.data.t_pagos);
+    saldo_all += parseFloat(e.data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    tabla_13.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#planilla_seguro').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_13 = $("#tabla13_planilla_seguro").dataTable({
+      responsive: true,
+      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: e.data.datatable,
+      createdRow: function (row, data, ixdex) { 
+        // columna: #
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
+        // columna: fecha
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
+        // columna: detalle
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
+        // columna: montos
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }        
+        // columna: depositos  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");            
+          }
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
+    }).DataTable();
+
+    $('.cargando-planilla-seguro').removeClass('bg-danger').addClass('backgff9100').html('Planilla Seguro');
+    
+    tbla_otros_gastos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
+  }).fail( function(e) { ver_errores(e); } );
+  
+}
+
+// TABLA - OTROS GASTOS - -------------------------------------------------------
+function tbla_otros_gastos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_otros_gastos", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
+    
+    e = JSON.parse(e); //console.log(data);   
+
+    $("#monto_otros_gastos").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $("#pago_otros_gastos").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $("#saldo_otros_gastos").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_otros_gastos = e.data.t_monto.toFixed(2); 
+    pago_otros_gastos = e.data.t_pagos.toFixed(2); 
+    saldo_otros_gastos = e.data.t_saldo.toFixed(2);
+
+    // acumulamos las sumas totales
+    $(".monto_otros_gastos_all").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $(".pago_otros_gastos_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $(".saldo_otros_gastos_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(e.data.t_monto);
+    deposito_all += parseFloat(e.data.t_pagos);
+    saldo_all += parseFloat(e.data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    tabla_11.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#otros_gastos').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_11 = $("#tabla11_otros_gastos").dataTable({
+      responsive: true,
+      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: e.data.datatable,
+      createdRow: function (row, data, ixdex) { 
+        // columna: #
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
+        // columna: fecha
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
+        // columna: detalle
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
+        // columna: montos
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }        
+        // columna: depositos  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
+  
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");            
+          }
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
+    }).DataTable();
+
+    $('.cargando-otros-gastos').removeClass('bg-danger').addClass('backgff9100').html('Otros Gastos');
+    
     tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   }).fail( function(e) { ver_errores(e); } );
   
@@ -380,14 +644,10 @@ function tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaja
           var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-success");             
           }
         }
       },
@@ -399,6 +659,10 @@ function tbla_transportes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaja
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
     }).DataTable();
 
     $('.cargando-transporte').removeClass('bg-danger').addClass('backgff9100').html('Transporte');
@@ -466,14 +730,10 @@ function tbla_hospedajes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
           var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {             
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-success");            
           }
         }
       },
@@ -485,49 +745,53 @@ function tbla_hospedajes(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajad
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
     }).DataTable();
 
     $('.cargando-hospedaje').removeClass('bg-danger').addClass('backgff9100').html('Hospedaje');
 
-    tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
+    tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
 
   }).fail( function(e) { ver_errores(e); } );
   
 }
 
-// TABLA - COMIDAS EXTRAS - ----------------------------------------------------
-function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+// TABLA - PENSIONES - -----------------------------------------------------------
+function tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
    
-  $.post("../ajax/resumen_general.php?op=tbla_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
+  $.post("../ajax/resumen_general.php?op=tbla_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
     
     e = JSON.parse(e); //console.log(data);    
 
-    $("#monto_cextra").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $("#pago_cextra").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $("#saldo_cextra").html(formato_miles(e.data.t_saldo.toFixed(2)));
+    $("#monto_pension").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $("#pago_pension").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $("#saldo_pension").html(formato_miles(e.data.t_saldo.toFixed(2)));
 
-    monto_cextra = e.data.t_monto.toFixed(2); 
-    pago_cextra = e.data.t_pagos.toFixed(2); 
-    saldo_cextra = e.data.t_saldo.toFixed(2);
+    monto_pension = e.data.t_monto.toFixed(2); 
+    pago_pension = e.data.t_pagos.toFixed(2); 
+    saldo_pension = e.data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
-    $(".monto_cextra_all").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $(".pago_cextra_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $(".saldo_cextra_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
+    $(".monto_pension_all").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $(".pago_pension_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $(".saldo_pension_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
 
     monto_all += parseFloat(e.data.t_monto);
     deposito_all += parseFloat(e.data.t_pagos);
     saldo_all += parseFloat(e.data.t_saldo);
 
-    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
-    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
-    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+    $("#monto_all").html(monto_all.toFixed(2));
+    $("#deposito_all").html(deposito_all.toFixed(2));
+    $("#saldo_all").html(saldo_all.toFixed(2));
 
-    tabla_6.destroy(); // Destruye las tablas de datos en el contexto actual.
+    tabla_8.destroy(); // Destruye las tablas de datos en el contexto actual.
 
-    $('#comida_extra').empty(); // Vacía en caso de que las columnas cambien
+    $('#pension').empty(); // Vacía en caso de que las columnas cambien
 
-    tabla_6 = $("#tabla6_comidas_ex").dataTable({
+    tabla_8 = $("#tabla8_pension").dataTable({
       responsive: true,
       lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
@@ -535,31 +799,28 @@ function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) { 
+      createdRow: function (row, data, ixdex) {
         // columna: #
         if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
         if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }  
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
         // columna: montos
         if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }         
         // columna: depositos  
-        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); } 
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }   
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);          
+          var numero = quitar_formato_miles(data[7]);
+          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-success");            
           }
         }
       },
@@ -571,9 +832,13 @@ function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
     }).DataTable();
 
-    $('.cargando-comida-extra').removeClass('bg-danger').addClass('backgff9100').html('Comidas extras');
+    $('.cargando-pension').removeClass('bg-danger').addClass('backgff9100').html('Pensión');
 
     tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   }).fail( function(e) { ver_errores(e); } );
@@ -637,14 +902,10 @@ function tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
           var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {             
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {           
+            $("td", row).eq(7).addClass("text-right bg-success");            
           }
         }
       },
@@ -660,45 +921,45 @@ function tbla_breaks(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
 
     $('.cargando-breaks').removeClass('bg-danger').addClass('backgff9100').html('Breaks');
 
-    tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
+    tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
 
   }).fail( function(e) { ver_errores(e); } );
    
 }
 
-// TABLA - PENSIONES - -----------------------------------------------------------
-function tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+// TABLA - COMIDAS EXTRAS - ----------------------------------------------------
+function tbla_comidas_extras(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
    
-  $.post("../ajax/resumen_general.php?op=tbla_pensiones", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
+  $.post("../ajax/resumen_general.php?op=tbla_comidas_extras", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
     
     e = JSON.parse(e); //console.log(data);    
 
-    $("#monto_pension").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $("#pago_pension").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $("#saldo_pension").html(formato_miles(e.data.t_saldo.toFixed(2)));
+    $("#monto_cextra").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $("#pago_cextra").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $("#saldo_cextra").html(formato_miles(e.data.t_saldo.toFixed(2)));
 
-    monto_pension = e.data.t_monto.toFixed(2); 
-    pago_pension = e.data.t_pagos.toFixed(2); 
-    saldo_pension = e.data.t_saldo.toFixed(2);
+    monto_cextra = e.data.t_monto.toFixed(2); 
+    pago_cextra = e.data.t_pagos.toFixed(2); 
+    saldo_cextra = e.data.t_saldo.toFixed(2);
 
     // acumulamos las sumas totales
-    $(".monto_pension_all").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $(".pago_pension_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $(".saldo_pension_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
+    $(".monto_cextra_all").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $(".pago_cextra_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $(".saldo_cextra_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
 
     monto_all += parseFloat(e.data.t_monto);
     deposito_all += parseFloat(e.data.t_pagos);
     saldo_all += parseFloat(e.data.t_saldo);
 
-    $("#monto_all").html(monto_all.toFixed(2));
-    $("#deposito_all").html(deposito_all.toFixed(2));
-    $("#saldo_all").html(saldo_all.toFixed(2));
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
 
-    tabla_8.destroy(); // Destruye las tablas de datos en el contexto actual.
+    tabla_6.destroy(); // Destruye las tablas de datos en el contexto actual.
 
-    $('#pension').empty(); // Vacía en caso de que las columnas cambien
+    $('#comida_extra').empty(); // Vacía en caso de que las columnas cambien
 
-    tabla_8 = $("#tabla8_pension").dataTable({
+    tabla_6 = $("#tabla6_comidas_ex").dataTable({
       responsive: true,
       lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
       aProcessing: true, //Activamos el procesamiento del datatables
@@ -706,48 +967,27 @@ function tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajado
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) { 
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }  
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }         
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); } 
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
+          var numero = quitar_formato_miles(data[7]);          
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");            
           }
         }
       },
@@ -759,9 +999,13 @@ function tbla_pensiones(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajado
       bDestroy: true,
       iDisplayLength: 5, //Paginación
       order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
     }).DataTable();
 
-    $('.cargando-pension').removeClass('bg-danger').addClass('backgff9100').html('Pensión');
+    $('.cargando-comida-extra').removeClass('bg-danger').addClass('backgff9100').html('Comidas extras');
 
     tbla_administrativo(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   }).fail( function(e) { ver_errores(e); } );
@@ -809,33 +1053,17 @@ function tbla_administrativo(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) {
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }        
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }  
         // columna: saldos
         if (data[7] != '') {
           $("td", row).eq(7).addClass("text-right");
@@ -843,14 +1071,10 @@ function tbla_administrativo(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trab
           
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");            
           }
         }
       },
@@ -913,32 +1137,17 @@ function tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
       dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
       buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
       data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
+      createdRow: function (row, data, ixdex) { 
         // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
         // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
         // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); }  
         // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }         
         // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
   
         // columna: saldos
         if (data[7] != '') {
@@ -947,14 +1156,10 @@ function tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
           
           if ( parseFloat(numero) < 0 ) {
             $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
+          }else if ( parseFloat(numero) > 0 ) {             
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");
           }
         }
       },
@@ -970,206 +1175,16 @@ function tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
 
     $('.cargando-obrero').removeClass('bg-danger').addClass('backgff9100').html('Personal Obrero');
 
-    tbla_otros_gastos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
-
-  }).fail( function(e) { ver_errores(e); } );
-   
-}
-
-// TABLA - OTROS GASTOS - -------------------------------------------------------
-function tbla_otros_gastos(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
-   
-  $.post("../ajax/resumen_general.php?op=tbla_otros_gastos", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
-    
-    e = JSON.parse(e); //console.log(data);   
-
-    $("#monto_otros_gastos").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $("#pago_otros_gastos").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $("#saldo_otros_gastos").html(formato_miles(e.data.t_saldo.toFixed(2)));
-
-    monto_otros_gastos = e.data.t_monto.toFixed(2); 
-    pago_otros_gastos = e.data.t_pagos.toFixed(2); 
-    saldo_otros_gastos = e.data.t_saldo.toFixed(2);
-
-    // acumulamos las sumas totales
-    $(".monto_otros_gastos_all").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $(".pago_otros_gastos_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $(".saldo_otros_gastos_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
-
-    monto_all += parseFloat(e.data.t_monto);
-    deposito_all += parseFloat(e.data.t_pagos);
-    saldo_all += parseFloat(e.data.t_saldo);
-
-    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
-    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
-    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
-
-    tabla_11.destroy(); // Destruye las tablas de datos en el contexto actual.
-
-    $('#otros_gastos').empty(); // Vacía en caso de que las columnas cambien
-
-    tabla_11 = $("#tabla11_otros_gastos").dataTable({
-      responsive: true,
-      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-      data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
-        // columna: #
-        if (data[0] != '') {
-          $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap");         
-        }
-
-        // columna: fecha
-        if (data[2] != '') {
-          $("td", row).eq(2).addClass("text-nowrap");         
-        } 
-
-        // columna: detalle
-        if (data[4] != '') {
-          $("td", row).eq(4).addClass("text-center");         
-        }  
-
-        // columna: montos
-        if (data[5] != '') {
-          $("td", row).eq(5).addClass("text-right");         
-        }   
-        
-        // columna: depositos  
-        if (data[6] != '') {
-          $("td", row).eq(6).addClass("text-right");
-        }              
-  
-        // columna: saldos
-        if (data[7] != '') {
-          $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
-          if ( parseFloat(numero) < 0 ) {
-            $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
-          }
-        }
-      },
-      language: {
-        lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "asc"]], //Ordenar (columna,orden)
-    }).DataTable();
-
-    $('.cargando-otros-gastos').removeClass('bg-danger').addClass('backgff9100').html('Otros Gastos');
-    
-    tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
-  }).fail( function(e) { ver_errores(e); } );
-  
-}
-
-// TABLA - SUB CONTRATO - -------------------------------------------------------
-function tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
-   
-  $.post("../ajax/resumen_general.php?op=tbla_sub_contrato", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
-    
-    e = JSON.parse(e); //console.log(e);   
-
-    $("#monto_sub_contrato").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $("#pago_sub_contrato").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $("#saldo_sub_contrato").html(formato_miles(e.data.t_saldo.toFixed(2)));
-
-    monto_sub_contrato = e.data.t_monto.toFixed(2); 
-    pago_sub_contrato = e.data.t_pagos.toFixed(2); 
-    saldo_sub_contrato = e.data.t_saldo.toFixed(2);
-
-    // acumulamos las sumas totales
-    $(".monto_sub_contrato_all").html(formato_miles(e.data.t_monto.toFixed(2)));
-    $(".pago_sub_contrato_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
-    $(".saldo_sub_contrato_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
-
-    monto_all += parseFloat(e.data.t_monto);
-    deposito_all += parseFloat(e.data.t_pagos);
-    saldo_all += parseFloat(e.data.t_saldo);
-
-    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
-    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
-    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
-
-    tabla_12.destroy(); // Destruye las tablas de datos en el contexto actual.
-
-    $('#sub_contrato').empty(); // Vacía en caso de que las columnas cambien
-
-    tabla_12 = $("#tabla12_sub_contrato").dataTable({
-      responsive: true,
-      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
-      data: e.data.datatable,
-      createdRow: function (row, data, ixdex) {          
-
-        // columna: #
-        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
-        // columna: fecha
-        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
-        // columna: detalle
-        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
-        // columna: montos
-        if (data[5] != '') { $("td", row).eq(5).addClass("text-right");  }          
-        // columna: depositos  
-        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }              
-  
-        // columna: saldos
-        if (data[7] != '') {
-          $("td", row).eq(7).addClass("text-right");
-          var numero = quitar_formato_miles(data[7]);
-          
-          if ( parseFloat(numero) < 0 ) {
-            $("td", row).eq(7).addClass("text-right bg-danger");
-          }else{              
-            if ( parseFloat(numero) > 0 ) {
-              $("td", row).eq(7).addClass("text-right bg-warning");
-            } else {
-              if ( parseFloat(numero) == 0 ) {
-                $("td", row).eq(7).addClass("text-right bg-success");
-              }
-            }
-          }
-        }
-      },
-      language: {
-        lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-      },
-      bDestroy: true,
-      iDisplayLength: 5, //Paginación
-      order: [[0, "asc"]], //Ordenar (columna,orden)
-    }).DataTable();
-
-    $('.cargando-sub-contrato').removeClass('bg-danger').addClass('backgff9100').html('Sub Contrato');
-
     table_all_sumas();
+
   }).fail( function(e) { ver_errores(e); } );
-  
+   
 }
 
 // TABLA - RESUMEN TOTAL - -------------------------------------------------------
 function table_all_sumas() {
   $('.cargando-sumas').removeClass('backgff9100').addClass('bg-danger').html('Sumas totales - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  console.log(monto_all ,  deposito_all   ,saldo_all );        
+  //console.log(monto_all ,  deposito_all   ,saldo_all );        
    
   var insert_table = [    
     {
@@ -1195,67 +1210,74 @@ function table_all_sumas() {
     },
     {
       '0': '4', '1': '--', '2': '--', '3': '--',
-      '4': 'Transporte',
-      '5': formato_miles(monto_transp),
-      '6': formato_miles(pago_transp),
-      '7': formato_miles(saldo_transp),
+      '4': 'Sub Contrato',
+      '5': formato_miles(monto_sub_contrato),
+      '6': formato_miles(pago_sub_contrato),
+      '7': formato_miles(saldo_sub_contrato),
     },
     {
       '0': '5', '1': '--', '2': '--', '3': '--',
-      '4': 'Hospedaje',
-      '5': formato_miles(monto_hosped),
-      '6': formato_miles(pago_hosped),
-      '7': formato_miles(saldo_hosped),
+      '4': 'Planilla Seguro',
+      '5': formato_miles(monto_planilla_seguro),
+      '6': formato_miles(pago_planilla_seguro),
+      '7': formato_miles(saldo_planilla_seguro),
     },
     {
       '0': '6', '1': '--', '2': '--', '3': '--',
-      '4': 'Comidas extras',
-      '5': formato_miles(monto_cextra),
-      '6': formato_miles(pago_cextra),
-      '7': formato_miles(saldo_cextra),
-    },
-    {
-      '0': '7', '1': '--', '2': '--', '3': '--',
-      '4': 'Breaks',
-      '5': formato_miles(monto_break),
-      '6': formato_miles(pago_break),
-      '7': formato_miles(saldo_break),
-    },
-    {
-      '0': '8', '1': '--', '2': '--', '3': '--',
-      '4': 'Pensión',
-      '5': formato_miles(monto_pension),
-      '6': formato_miles(pago_pension),
-      '7': formato_miles(saldo_pension),
-    },
-    {
-      '0': '9', '1': '--', '2': '--', '3': '--',
-      '4': 'Personal Administrativo',
-      '5': formato_miles(monto_adm),
-      '6': formato_miles(pago_adm),
-      '7': formato_miles(saldo_adm),
-    },
-    {
-      '0': '10', '1': '--', '2': '--', '3': '--',
-      '4': 'Personal Obrero',
-      '5': formato_miles(monto_obrero),
-      '6': formato_miles(pago_obrero),
-      '7': formato_miles(saldo_obrero),
-    },
-    {
-      '0': '11', '1': '--', '2': '--', '3': '--',
       '4': 'Otros Gastos',
       '5': formato_miles(monto_otros_gastos),
       '6': formato_miles(pago_otros_gastos),
       '7': formato_miles(saldo_otros_gastos),
     },
     {
-      '0': '12', '1': '--', '2': '--', '3': '--',
-      '4': 'Sub Contrato',
-      '5': formato_miles(monto_sub_contrato),
-      '6': formato_miles(pago_sub_contrato),
-      '7': formato_miles(saldo_sub_contrato),
+      '0': '7', '1': '--', '2': '--', '3': '--',
+      '4': 'Transporte',
+      '5': formato_miles(monto_transp),
+      '6': formato_miles(pago_transp),
+      '7': formato_miles(saldo_transp),
     },
+    {
+      '0': '8', '1': '--', '2': '--', '3': '--',
+      '4': 'Hospedaje',
+      '5': formato_miles(monto_hosped),
+      '6': formato_miles(pago_hosped),
+      '7': formato_miles(saldo_hosped),
+    },
+    {
+      '0': '9', '1': '--', '2': '--', '3': '--',
+      '4': 'Pensión',
+      '5': formato_miles(monto_pension),
+      '6': formato_miles(pago_pension),
+      '7': formato_miles(saldo_pension),
+    },
+    {
+      '0': '10', '1': '--', '2': '--', '3': '--',
+      '4': 'Breaks',
+      '5': formato_miles(monto_break),
+      '6': formato_miles(pago_break),
+      '7': formato_miles(saldo_break),
+    },
+    {
+      '0': '11', '1': '--', '2': '--', '3': '--',
+      '4': 'Comidas extras',
+      '5': formato_miles(monto_cextra),
+      '6': formato_miles(pago_cextra),
+      '7': formato_miles(saldo_cextra),
+    },    
+    {
+      '0': '12', '1': '--', '2': '--', '3': '--',
+      '4': 'Personal Administrativo',
+      '5': formato_miles(monto_adm),
+      '6': formato_miles(pago_adm),
+      '7': formato_miles(saldo_adm),
+    },
+    {
+      '0': '13', '1': '--', '2': '--', '3': '--',
+      '4': 'Personal Obrero',
+      '5': formato_miles(monto_obrero),
+      '6': formato_miles(pago_obrero),
+      '7': formato_miles(saldo_obrero),
+    },      
   ];
 
   tabla_20.destroy(); // Destruye las tablas de datos en el contexto actual.
@@ -1360,16 +1382,12 @@ function table_all_sumas() {
         // console.log(numero_saldo);
         if ( parseFloat(numero_saldo) < 0 ) {
           $("td", row).eq(7).addClass("text-right bg-danger");
-        }else{              
-          if ( parseFloat(numero_saldo) > 0 ) {
-            $("td", row).eq(7).addClass("text-right bg-warning");
-          } else {            
-            if ( parseFloat(numero_saldo) == 0 && numero_deposito > 0) {
-              $("td", row).eq(7).addClass("text-right bg-success");
-            }else{
-              $("td", row).eq(7).removeClass("bg-success");
-            }
-          }
+        }else if ( parseFloat(numero_saldo) > 0 ) {           
+          $("td", row).eq(7).addClass("text-right bg-warning");
+        } else if ( parseFloat(numero_saldo) == 0 && numero_deposito > 0) {            
+          $("td", row).eq(7).addClass("text-right bg-success");
+        }else{
+          $("td", row).eq(7).removeClass("bg-success");          
         }
       }
     },

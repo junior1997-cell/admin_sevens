@@ -49,7 +49,7 @@ function listar_btn_q_s(nube_idproyecto) {
 
   $.post("../ajax/chart_valorizacion.php?op=listar_btn_q_s", { nube_idproyecto: nube_idproyecto }, function (e, status) {
 
-    e =JSON.parse(e); //console.log(e);
+    e =JSON.parse(e); console.log(e);
 
     // VALIDAMOS LAS FECHAS DE QUINCENA
     if (e.data) {     
@@ -57,7 +57,7 @@ function listar_btn_q_s(nube_idproyecto) {
       if (e.data.fecha_valorizacion == "quincenal") {
 
         $(".h1-titulo").html("Reportes Valorización - <b>Quincenal</b>");
-        $("#valorizacion_filtro").append(`<option value="0" >Todos</option>`);
+        $("#valorizacion_filtro").append(`<option value="0" >Todos ─ ${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</option>`);
 
         var fechas_btn = fechas_valorizacion_quincena(e.data.fecha_inicio, e.data.fecha_fin); 
         //console.log(fechas_btn);  
@@ -76,7 +76,7 @@ function listar_btn_q_s(nube_idproyecto) {
         if (e.data.fecha_valorizacion == "mensual") {
 
           $(".h1-titulo").html("Reportes Valorización - <b>Mensual</b>");
-          $("#valorizacion_filtro").append(`<option value="0" >Todos</option>`);
+          $("#valorizacion_filtro").append(`<option value="0" >Todos ─ ${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</option>`);
 
           var fechas_btn = fechas_valorizacion_mensual(e.data.fecha_inicio, e.data.fecha_fin); 
           //console.log(fechas_btn);  
@@ -95,7 +95,7 @@ function listar_btn_q_s(nube_idproyecto) {
           if (e.data.fecha_valorizacion == "al finalizar") {
 
             $(".h1-titulo").html("Reportes Valorización - <b>Al finalizar</b>");
-            $("#valorizacion_filtro").append(`<option value="0" >Todos</option>`);
+            $("#valorizacion_filtro").append(`<option value="0" >Todos ─ ${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</option>`);
 
             $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
             $("#valorizacion_filtro").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Val ${i+1} ─ ${format_d_m_a(fecha_ii)} - ${format_d_m_a(fecha_ff)}</option>`);

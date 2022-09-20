@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Resumen General</title>
+        <title>Resumen General | Admin Sevens</title>
 
         <?php $title = "Resumen General"; require 'head.php'; ?>
           
@@ -205,6 +205,105 @@
 
                               <br />
 
+                              <!-- Sub Contrato -->
+                              <table id="tabla12_sub_contrato" class="display" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="8" class="cargando-sub-contrato text-center w-300px clas_pading backgff9100">Sub Contrato</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center clas_pading">#</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
+                                    <th class="text-center clas_pading">FECHA</th>
+                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                    <th class="text-center clas_pading">DETALLE</th>
+                                    <th class="text-center clas_pading">MONTOS</th>
+                                    <th class="text-center clas_pading">PAGOS</th>
+                                    <th class="text-center clas_pading">SALDOS</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody id="sub_contrato"></tbody>                                 
+
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="4" class="clas_pading"></th>
+                                    <th class="clas_pading text-right">Total</th>
+                                    <th class="clas_pading text-right" id="monto_sub_contrato"></th>
+                                    <th class="clas_pading text-right" id="pago_sub_contrato"></th>
+                                    <th class="clas_pading text-right" id="saldo_sub_contrato"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+
+                              <br />
+
+                              <!-- Planilla Seguro -->
+                              <table id="tabla13_planilla_seguro" class="display" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="8" class="cargando-planilla-seguro text-center w-300px clas_pading backgff9100">Planilla Seguro</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center clas_pading">#</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
+                                    <th class="text-center clas_pading">FECHA</th>
+                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                    <th class="text-center clas_pading">DETALLE</th>
+                                    <th class="text-center clas_pading">MONTOS</th>
+                                    <th class="text-center clas_pading">PAGOS</th>
+                                    <th class="text-center clas_pading">SALDOS</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody id="planilla_seguro"></tbody>                                 
+
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="4" class="clas_pading"></th>
+                                    <th class="clas_pading text-right">Total</th>
+                                    <th class="clas_pading text-right" id="monto_planilla_seguro"></th>
+                                    <th class="clas_pading text-right" id="pago_planilla_seguro"></th>
+                                    <th class="clas_pading text-right" id="saldo_planilla_seguro"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+
+                              <br>
+
+                              <!-- Otros Gastos -->
+                              <table id="tabla11_otros_gastos" class="display" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="8" class="cargando-otros-gastos text-center w-300px clas_pading backgff9100">Otros Gastos</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center clas_pading">#</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
+                                    <th class="text-center clas_pading">FECHA</th>
+                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                    <th class="text-center clas_pading">DETALLE</th>
+                                    <th class="text-center clas_pading">MONTOS</th>
+                                    <th class="text-center clas_pading">PAGOS</th>
+                                    <th class="text-center clas_pading">SALDOS</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody id="otros_gastos"></tbody>                                 
+
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="4" class="clas_pading"></th>
+                                    <th class="clas_pading text-right">Total</th>
+                                    <th class="clas_pading text-right" id="monto_otros_gastos"></th>
+                                    <th class="clas_pading text-right" id="pago_otros_gastos"></th>
+                                    <th class="clas_pading text-right" id="saldo_otros_gastos"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+
+                              <br>
+
                               <!--Transporte-->
                               <table id="tabla4_transporte" class="display" style="width: 100%;">
                                 <thead>
@@ -271,11 +370,11 @@
 
                               <br />
 
-                              <!--Comidas extras-->
-                              <table id="tabla6_comidas_ex" class="display" style="width: 100%;">
+                              <!--Pensión-->
+                              <table id="tabla8_pension" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-comida-extra text-center w-300px clas_pading backgff9100">Comidas extras</th>
+                                    <th colspan="8" class="cargando-pension text-center w-300px clas_pading backgff9100">Pensión</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
@@ -289,15 +388,15 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="comida_extra"></tbody>
+                                <tbody id="pension"></tbody>
  
                                 <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
-                                    <th class="clas_pading text-right" id="monto_cextra"></th>
-                                    <th class="clas_pading text-right" id="pago_cextra"></th>
-                                    <th class="clas_pading text-right" id="saldo_cextra"></th>
+                                    <th class="clas_pading text-right" id="monto_pension"></th>
+                                    <th class="clas_pading text-right" id="pago_pension"></th>
+                                    <th class="clas_pading text-right" id="saldo_pension"></th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -337,11 +436,11 @@
 
                               <br />
 
-                              <!--Pensión-->
-                              <table id="tabla8_pension" class="display" style="width: 100%;">
+                              <!--Comidas extras-->
+                              <table id="tabla6_comidas_ex" class="display" style="width: 100%;">
                                 <thead>
                                   <tr>
-                                    <th colspan="8" class="cargando-pension text-center w-300px clas_pading backgff9100">Pensión</th>
+                                    <th colspan="8" class="cargando-comida-extra text-center w-300px clas_pading backgff9100">Comidas extras</th>
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
@@ -355,15 +454,15 @@
                                   </tr>
                                 </thead>
 
-                                <tbody id="pension"></tbody>
+                                <tbody id="comida_extra"></tbody>
  
                                 <tfoot>
                                   <tr>
                                     <th colspan="4" class="clas_pading"></th>
                                     <th class="clas_pading text-right">Total</th>
-                                    <th class="clas_pading text-right" id="monto_pension"></th>
-                                    <th class="clas_pading text-right" id="pago_pension"></th>
-                                    <th class="clas_pading text-right" id="saldo_pension"></th>
+                                    <th class="clas_pading text-right" id="monto_cextra"></th>
+                                    <th class="clas_pading text-right" id="pago_cextra"></th>
+                                    <th class="clas_pading text-right" id="saldo_cextra"></th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -434,73 +533,7 @@
                                 </tfoot>
                               </table>
 
-                              <br>
-
-                              <!-- Otros Gastos -->
-                              <table id="tabla11_otros_gastos" class="display" style="width: 100%;">
-                                <thead>
-                                  <tr>
-                                    <th colspan="8" class="cargando-otros-gastos text-center w-300px clas_pading backgff9100">Otros Gastos</th>
-                                  </tr>
-                                  <tr>
-                                    <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
-                                    <th class="text-center clas_pading">FECHA</th>
-                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
-                                    <th class="text-center clas_pading">DETALLE</th>
-                                    <th class="text-center clas_pading">MONTOS</th>
-                                    <th class="text-center clas_pading">PAGOS</th>
-                                    <th class="text-center clas_pading">SALDOS</th>
-                                  </tr>
-                                </thead>
-
-                                <tbody id="otros_gastos"></tbody>                                 
-
-                                <tfoot>
-                                  <tr>
-                                    <th colspan="4" class="clas_pading"></th>
-                                    <th class="clas_pading text-right">Total</th>
-                                    <th class="clas_pading text-right" id="monto_otros_gastos"></th>
-                                    <th class="clas_pading text-right" id="pago_otros_gastos"></th>
-                                    <th class="clas_pading text-right" id="saldo_otros_gastos"></th>
-                                  </tr>
-                                </tfoot>
-                              </table>
-
-                              <br>
-
-                              <!-- Sub Contrato -->
-                              <table id="tabla12_sub_contrato" class="display" style="width: 100%;">
-                                <thead>
-                                  <tr>
-                                    <th colspan="8" class="cargando-sub-contrato text-center w-300px clas_pading backgff9100">Sub Contrato</th>
-                                  </tr>
-                                  <tr>
-                                    <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
-                                    <th class="text-center clas_pading">FECHA</th>
-                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
-                                    <th class="text-center clas_pading">DETALLE</th>
-                                    <th class="text-center clas_pading">MONTOS</th>
-                                    <th class="text-center clas_pading">PAGOS</th>
-                                    <th class="text-center clas_pading">SALDOS</th>
-                                  </tr>
-                                </thead>
-
-                                <tbody id="sub_contrato"></tbody>                                 
-
-                                <tfoot>
-                                  <tr>
-                                    <th colspan="4" class="clas_pading"></th>
-                                    <th class="clas_pading text-right">Total</th>
-                                    <th class="clas_pading text-right" id="monto_sub_contrato"></th>
-                                    <th class="clas_pading text-right" id="pago_sub_contrato"></th>
-                                    <th class="clas_pading text-right" id="saldo_sub_contrato"></th>
-                                  </tr>
-                                </tfoot>
-                              </table>
-
-                              <br />
+                              <br>                               
 
                               <!--SUMAS TOTALES-->
                               <table id="tabla20_all_sumas" class="display" style="width: 100%;">

@@ -346,6 +346,12 @@
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;
+
+        case 'detalle_otra_factura':
+          $rspta = $resumen_factura->detalle_otra_factura($_POST['id_tabla']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break;
         
         // ════════════════════════════════════════ ACCIONES ════════════════════════════════════════
         case 'eliminar_comprobante':

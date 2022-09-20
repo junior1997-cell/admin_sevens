@@ -563,7 +563,7 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
                                   <div class="row text-center">
                                     <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                      <label for="cip" class="control-label" > Acta de contrato de obra </label>
+                                      <label for="cip" class="control-label" > Contrato de obra </label>
                                     </div>
                                     <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
                                       <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i">
