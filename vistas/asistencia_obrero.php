@@ -14,7 +14,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title>Admin Sevens | Asistencia Obrero</title>
+        <title>Asistencia Obrero | Admin Sevens</title>
 
         <?php $title = "Asistencia Obrero"; require 'head.php'; ?>
 

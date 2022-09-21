@@ -96,10 +96,10 @@ class Otro_gasto
   }
 
   //Implementar un método para listar los registros
-  public function listar($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante)
+  public function listar($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $glosa)
   {
       
-    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; $filtro_proveedor_1="";
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; $filtro_glosa="";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
       $filtro_fecha = "AND fecha_g BETWEEN '$fecha_1' AND '$fecha_2'";
@@ -109,32 +109,21 @@ class Otro_gasto
       $filtro_fecha = "AND fecha_g = '$fecha_2'";
     }  
 
-    if ( empty($id_proveedor)) {
-      $filtro_proveedor = "";
-    } else if ( $id_proveedor=='vacio' ) { 
-      $filtro_proveedor = "AND ruc IN ('',NULL)";
-    } else { 
-      $filtro_proveedor = "AND ruc = '$id_proveedor'"; 
-    }
+    if ( empty($id_proveedor)) { $filtro_proveedor = ""; } else if ( $id_proveedor=='vacio' ) { $filtro_proveedor = "AND ruc IN ('',NULL)"; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; } 
+    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
+    if ( empty($glosa) ) { } else { $filtro_glosa = "AND glosa = '$glosa'"; } 
 
-    $sql = "SELECT*FROM otro_gasto WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' $filtro_proveedor $filtro_fecha $filtro_comprobante  ORDER BY idotro_gasto DESC";
-    return ejecutarConsulta($sql);
-  }
-
-  //Seleccionar un comprobante
-  public function ficha_tec($idotro_gasto)
-  {
-    $sql = "SELECT comprobante FROM otro_gasto WHERE idotro_gasto='$idotro_gasto'";
+    $sql = "SELECT*FROM otro_gasto 
+    WHERE idproyecto='$idproyecto' AND estado_delete='1' AND estado='1' $filtro_proveedor $filtro_comprobante $filtro_glosa $filtro_fecha
+    ORDER BY idotro_gasto DESC";
     return ejecutarConsulta($sql);
   }
 
   //total
-  public function total($idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante)
-  {
+  public function total($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $glosa) {
       
-    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; $filtro_glosa="";
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
       $filtro_fecha = "AND fecha_g BETWEEN '$fecha_1' AND '$fecha_2'";
@@ -144,18 +133,19 @@ class Otro_gasto
       $filtro_fecha = "AND fecha_g = '$fecha_2'";
     }   
 
-    if (empty($id_proveedor)) {
-      $filtro_proveedor = "";
-    } else if ( $id_proveedor=='vacio' ) { 
-      $filtro_proveedor = "AND ruc IN ('',NULL)";
-    } else { 
-      $filtro_proveedor = "AND ruc = '$id_proveedor'"; 
-    }
+    if (empty($id_proveedor)) { $filtro_proveedor = ""; } else if ( $id_proveedor=='vacio' ) { $filtro_proveedor = "AND ruc IN ('',NULL)"; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
     if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; } 
+    if ( empty($glosa) ) { } else { $filtro_glosa = "AND glosa = '$glosa'"; } 
 
-    $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otro_gasto WHERE idproyecto='$idproyecto' $filtro_proveedor $filtro_fecha $filtro_comprobante  AND estado=1 AND estado_delete='1'";
+    $sql = "SELECT SUM(costo_parcial) as precio_parcial FROM otro_gasto WHERE idproyecto='$idproyecto' $filtro_proveedor $filtro_comprobante $filtro_glosa $filtro_fecha  AND estado=1 AND estado_delete='1'";
     return ejecutarConsultaSimpleFila($sql);
+  }
+
+  //Seleccionar un comprobante
+  public function ficha_tec($idotro_gasto) {
+    $sql = "SELECT comprobante FROM otro_gasto WHERE idotro_gasto='$idotro_gasto'";
+    return ejecutarConsulta($sql);
   }
 
   //seelect2  - proveedores

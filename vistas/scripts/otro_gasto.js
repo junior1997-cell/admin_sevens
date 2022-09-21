@@ -1,5 +1,5 @@
 var tabla;
-var fecha_1_r="", fecha_2_r="", id_proveedor_r="", comprobante_r="";
+var fecha_1_r="", fecha_2_r="", id_proveedor_r="", comprobante_r="", glosa_r="";
 //Función que se ejecuta al inicio
 function init() {
   //Activamos el "aside"
@@ -20,32 +20,17 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
   $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
   $("#filtro_proveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
+  $("#filtro_glosa").select2({ theme: "bootstrap4", placeholder: "Selecione glosa", allowClear: true, });
 
   // Inicializar - Date picker  
   $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
-  //Initialize Select2 tipo_viajero
-  $("#tipo_comprobante").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar tipo comprobante",
-    allowClear: true,
-  });
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Seleccinar tipo comprobante", allowClear: true, });
+  $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar forma de pago", allowClear: true, });
+  $("#glosa").select2({ theme: "bootstrap4", placeholder: "Seleccinar glosa", allowClear: true, });
 
-  //Initialize Select2 tipo_viajero
-  $("#forma_pago").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar forma de pago",
-    allowClear: true,
-  });
-
-  //Initialize Select2 glosa
-  $("#glosa").select2({
-    theme: "bootstrap4",
-    placeholder: "Seleccinar glosa",
-    allowClear: true,
-  });
-  $("#glosa").val("null").trigger("change");
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
@@ -234,60 +219,86 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 }
 
 //Función Listar
-function listar(fecha_1, fecha_2, id_proveedor, comprobante) { 
+function listar(fecha_1, fecha_2, id_proveedor, comprobante, glosa) { 
 
-    fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor, comprobante_r=comprobante;
-    // fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r
+  fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor; comprobante_r=comprobante; glosa_r = glosa;
 
-    var idproyecto = localStorage.getItem("nube_idproyecto");
-    tabla = $("#tabla-otro_gasto")
-    .dataTable({
-      responsive: true,
-      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-      aProcessing: true, //Activamos el procesamiento del datatables
-      aServerSide: true, //Paginación y filtrado realizados por el servidor
-      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-      buttons: [
-        { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,12,11,13,14,15,3,6,7,8,16,17,9], } }, 
-        { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,12,11,13,14,15,3,6,7,8,16,17,9], } }, 
-        { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,12,11,13,14,15,3,6,7,8,16,17,9], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
-        {extend: "colvis"} ,
-      ],
-      ajax: {
-        url: `../ajax/otro_gasto.php?op=listar&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
-        type: "get",
-        dataType: "json",
-        error: function (e) {
-          console.log(e.responseText);
-        },
+  var idproyecto = localStorage.getItem("nube_idproyecto");
+
+  // $("#total_monto").html("0.00");
+  // var total = 0;
+
+  tabla = $("#tabla-otro_gasto").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,12,11,13,14,15,3,6,7,8,16,17,9], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,12,11,13,14,15,3,6,7,8,16,17,9], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,12,11,13,14,15,3,6,7,8,16,17,9], }, orientation: 'landscape', pageSize: 'LEGAL',  }, 
+      {extend: "colvis"} ,
+    ],
+    ajax: {
+      url: `../ajax/otro_gasto.php?op=listar&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&glosa=${glosa}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
       },
-      createdRow: function (row, data, ixdex) {
-        // columna: #
-        if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
-        // columna: sub total
-        if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap");  }
-        // columna: sub total
-        if (data[5] != "") { $("td", row).eq(5).addClass("text-nowrap text-right"); }
-        // columna: igv
-        if (data[6] != "") { $("td", row).eq(6).addClass("text-nowrap text-right"); }
-        // columna: total
-        if (data[7] != "") { $("td", row).eq(7).addClass("text-nowrap text-right"); }
-      },
-      language: {
-        lengthMenu: "Mostrar: _MENU_ registros",
-        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-      },
-      bDestroy: true,
-      iDisplayLength: 10, //Paginación
-      order: [[0, "asc"]], //Ordenar (columna,orden)
-      columnDefs: [
-        { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-        { targets: [11,12,13,14,15,16,17 ], visible: false, searchable: false, }, 
-      ],
-    }).DataTable();
-  total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
+      // columna: op
+      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap");  }
+      // columna: fecha
+      if (data[5] != "") { $("td", row).eq(5).addClass("text-nowrap text-center"); }
+      // columna: sub total
+      if (data[6] != "") { $("td", row).eq(6).addClass("text-nowrap"); }
+      // columna: igv
+      if (data[7] != "") { $("td", row).eq(7).addClass("text-nowrap"); }
+      // columna: total
+      if (data[7] != "") { $("td", row).eq(7).addClass("text-nowrap"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [11,12,13,14,15,16,17 ], visible: false, searchable: false, }, 
+      { targets: [6,7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
+    ],
+  }).DataTable();
+
+  total(fecha_1, fecha_2, id_proveedor, comprobante, glosa);
+
   $(tabla).ready(function () {  $('.cargando').hide(); });
+}
+
+function total(fecha_1, fecha_2, id_proveedor, comprobante, glosa) {
+
+  var idproyecto = localStorage.getItem("nube_idproyecto");
+
+  $("#total_monto").html("");
+
+  $.post("../ajax/otro_gasto.php?op=total", { 'idproyecto': idproyecto, 'fecha_1':fecha_1, 'fecha_2':fecha_2, 'id_proveedor':id_proveedor, 'comprobante': comprobante, 'glosa': glosa }, function (e, status) {
+    e = JSON.parse(e); console.log(e); 
+    if (e.status == true) {
+
+      $("#total_monto").html(formato_miles(e.data.precio_parcial));
+
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 //ver ficha tecnica
@@ -321,7 +332,6 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-
     success: function (e) {
       try {
         e = JSON.parse(e);  console.log(e); 
@@ -518,24 +528,6 @@ function ver_datos(idotro_gasto) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r) {
-
-  var idproyecto = localStorage.getItem("nube_idproyecto");
-
-  $("#total_monto").html("");
-
-  $.post("../ajax/otro_gasto.php?op=total", { idproyecto: idproyecto, fecha_1:fecha_1_r, fecha_2:fecha_2_r, id_proveedor:id_proveedor_r, comprobante:comprobante_r }, function (e, status) {
-    e = JSON.parse(e); console.log(e); 
-    if (e.status == true) {
-
-      $("#total_monto").html("S/ " + formato_miles(e.data.precio_parcial));
-
-    } else {
-      ver_errores(e);
-    }
-  }).fail( function(e) { ver_errores(e); } );
-}
-
 function eliminar(idotro_gasto, tipo, numero) {
 
   crud_eliminar_papelera(
@@ -552,18 +544,12 @@ function eliminar(idotro_gasto, tipo, numero) {
     false,
     false
   );
-
 }
 
 
 init();
 
-$(function () {
-  $.validator.setDefaults({
-    submitHandler: function (e) {
-      guardaryeditar(e);
-    },
-  });
+$(function () {  
 
   // Aplicando la validacion del select cada vez que cambie
 
@@ -595,7 +581,6 @@ $(function () {
 
     errorPlacement: function (error, element) {
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
@@ -605,6 +590,10 @@ $(function () {
 
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    
+    submitHandler: function (e) {
+      guardaryeditar(e);
     },
   });
 
@@ -630,9 +619,11 @@ function filtros() {
   var fecha_2       = $("#filtro_fecha_fin").val();  
   var id_proveedor  = $("#filtro_proveedor").select2('val');
   var comprobante   = $("#filtro_tipo_comprobante").select2('val');   
+  var glosa         = $("#filtro_glosa").select2('val');   
   
-  var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
-  var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+  var nombre_proveedor    = $('#filtro_proveedor').find(':selected').text();
+  var nombre_comprobante  = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+  var nombre_glosa        = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
 
   // filtro de fechas
   if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
@@ -641,13 +632,16 @@ function filtros() {
   // filtro de proveedor
   if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }
 
-  // filtro de trabajdor
+  // filtro de comprobante
   if (comprobante == '' || comprobante == null || comprobante == 0 ) { comprobante = ""; nombre_comprobante = "" }
 
-  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
+  // filtro de glosa
+  if (glosa == '' || glosa == null || glosa == 0 ) { glosa = ""; nombre_glosa = "" }
+
+  $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante} ${glosa}...`);
   //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
-  listar(fecha_1, fecha_2, id_proveedor, comprobante);
+  listar(fecha_1, fecha_2, id_proveedor, comprobante, glosa);
 }
 
 function extrae_ruc() {

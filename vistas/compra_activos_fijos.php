@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Compras de Activos Fijos</title>
+        <title>Compras de Activos Fijos | Admin Sevens</title>
         
         <?php $title = "Compras de Activos Fijos"; require 'head.php'; ?>
 

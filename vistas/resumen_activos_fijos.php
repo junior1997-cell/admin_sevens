@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Resumen Activos Fijos</title>       
+        <title>Resumen Activos Fijos | Admin Sevens</title>       
 
         <?php $title = "Resumen de Activos Fijos";  require 'head.php';  ?>
 

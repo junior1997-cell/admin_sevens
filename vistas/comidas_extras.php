@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Comidas Extras</title>
+        <title>Comidas Extras | Admin Sevens</title>
 
         <?php $title = "Comidas Extras"; require 'head.php'; ?>    
 

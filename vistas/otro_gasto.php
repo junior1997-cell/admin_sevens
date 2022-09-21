@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Otros Gastos</title>
+        <title>Otros Gastos | Admin Sevens</title>
         
         <?php $title = "Otros Gastos"; require 'head.php'; ?>
           
@@ -93,7 +93,7 @@
                             </div>
 
                             <!-- filtro por: proveedor -->
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                               <div class="form-group">
                                 <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
                                 <select id="filtro_proveedor" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
@@ -112,8 +112,37 @@
                                   <option value="Factura">Factura</option>
                                   <option value="Nota de venta">Nota de venta</option>
                                 </select>
-                              </div>
-                              
+                              </div>                              
+                            </div>
+
+                            <!-- filtro por: glosa -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
+                              <div class="form-group">
+                                <!-- <label for="filtros" >Tipo comprobante </label> -->
+                                <select id="filtro_glosa" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                                  <option value="0">Todos</option>
+                                  <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
+                                  <option value="COMBUSTIBLE">COMBUSTIBLE</option>
+                                  <option value="MATERIAL">MATERIAL</option>
+                                  <option value="PLOTEO">PLOTEO</option>
+                                  <option value="AGUA">AGUA</option>
+                                  <option value="COMPRAS">COMPRAS</option>
+                                  <option value="SIERRA Y EXAGONALES">SIERRA Y EXAGONALES</option>
+                                  <option value="HERRAMIENTAS">HERRAMIENTAS</option>
+                                  <option value="ACERO Y CEMENTO">ACERO Y CEMENTO</option>
+                                  <option value="ESTACIONAMIENTO">ESTACIONAMIENTO</option>
+                                  <option value="PERSONALES">PERSONALES</option>
+                                  <option value="PASAJE">PASAJE</option>
+                                  <option value="EPPS">EPPS</option>
+                                  <option value="DONACIONES">DONACIONES</option>
+                                  <option value="SERVICIOS DE PROYECTOS">SERVICIOS DE PROYECTOS</option>
+                                  <option value="OPERACIONES ESTRUCTURADAS">OPERACIONES ESTRUCTURADAS</option>
+                                  <option value="ITF.">ITF.</option>
+                                  <option value="COMISIÓN">COMISIÓN</option>
+                                  <option value="TRÁMITES LEGALES">TRÁMITES LEGALES</option>
+                                  <option value="OTROS">OTROS</option>
+                                </select>
+                              </div>                              
                             </div>
                           </div>
 
@@ -133,7 +162,8 @@
                                 <th>IGV</th>
                                 <th>Monto Total</th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
+
                                 <th>R.U.C</th>
                                 <th>Razón social</th>
                                 <th>Dirección</th>
@@ -154,9 +184,10 @@
                                 <th>Fecha</th>
                                 <th>Subtotal</th>
                                 <th>IGV</th>
-                                <th class="text-nowrap" id="total_monto"></th>
+                                <th class="text-nowrap px-2" ><div class="formato-numero-conta"> <span>S/</span><span id="total_monto">0.00</span></div></th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
+
                                 <th>R.U.C</th>
                                 <th>Razón social</th>
                                 <th>Dirección</th>
@@ -267,6 +298,9 @@
                                     <option value="DONACIONES">DONACIONES</option>
                                     <option value="SERVICIOS DE PROYECTOS">SERVICIOS DE PROYECTOS</option>
                                     <option value="OPERACIONES ESTRUCTURADAS">OPERACIONES ESTRUCTURADAS</option>
+                                    <option value="ITF.">ITF.</option>
+                                    <option value="COMISIÓN">COMISIÓN</option>
+                                    <option value="TRÁMITES LEGALES">TRÁMITES LEGALES</option>
                                     <option value="OTROS">OTROS</option>
                                     
                                   </select>

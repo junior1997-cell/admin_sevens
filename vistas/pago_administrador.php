@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Pagos de Administradores</title>
+        <title>Pagos de Administradores | Admin Sevens</title>
 
         <?php $title = "Pagos de Administradores"; require 'head.php'; ?>
         

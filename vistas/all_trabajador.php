@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | All Trabajadores</title>
+        <title>All Trabajadores | Admin Sevens</title>
 
         <?php $title = "All Trabajadores"; require 'head.php'; ?>
 

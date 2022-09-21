@@ -14,10 +14,10 @@
       require_once "../modelos/Otro_gasto.php";
 
       $otro_gasto = new Otro_gasto();
-
             
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");   
+      date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");   
+      $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
       
       $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idotro_gasto = isset($_POST["idotro_gasto"]) ? limpiarCadena($_POST["idotro_gasto"]) : "";      
@@ -119,52 +119,39 @@
         break;
       
         case 'listar':
-          $rspta = $otro_gasto->listar($_GET["idproyecto"],$_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
+          $rspta = $otro_gasto->listar($_GET["idproyecto"],$_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"] , $_GET["glosa"]);
           //Vamos a declarar un array
           $data = [];
-          $comprobante = '';
+          
           $cont = 1;
           if ($rspta['status']) {
             while ($reg = $rspta['data']->fetch_object()) {
 
-              empty($reg->comprobante)
-                ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
-                : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" .(empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante). "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-              if (strlen($reg->descripcion) >= 20) {
-                $descripcion = substr($reg->descripcion, 0, 20) . '...';
-              } else {
-                $descripcion = $reg->descripcion;
-              }
-              $tool = '"tooltip"';
-              $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+              $comprobante = empty($reg->comprobante)
+                ? ( '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
+                : ( '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" .(empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante). "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+              
               $data[] = [
                 "0" => $cont++,
                 "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotro_gasto . ')"><i class="fas fa-pencil-alt"></i></button>' .
                     ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotro_gasto . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante). "'". ')"><i class="fas fa-skull-crossbones"></i> </button>'.
                     ' <button class="btn btn-info btn-sm" onclick="ver_datos(' . $reg->idotro_gasto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
                 "2" =>'<div class="user-block">
-                  <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .
-                  ((empty($reg->razon_social)) ? 'Sin Razón social' : $reg->razon_social ) .
-                  '</p> </span>
-                    <span class="description" style="margin-left: 0px !important;">N° ' .
-                  (empty($reg->ruc) ? "Sin Ruc" : $reg->ruc) .
-                  '</span>         
-                  </div>',
+                  <span class="username ml-0" > <p class="text-primary m-b-02rem" >' . ((empty($reg->razon_social)) ? 'Sin Razón social' : $reg->razon_social ) . '</p> </span>
+                  <span class="description ml-0" >N° ' . (empty($reg->ruc) ? "Sin Ruc" : $reg->ruc) . '</span>         
+                </div>',
                 "3" => $reg->forma_de_pago,
                 "4" =>'<div class="user-block">
-                    <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' .
-                  $reg->tipo_comprobante .
-                  '</p> </span>
-                    <span class="description" style="margin-left: 0px !important;">N° ' .
-                  (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) .
-                  '</span>         
+                    <span class="username ml-0" > <p class="text-primary m-b-02rem" >' . $reg->tipo_comprobante . '</p> </span>
+                    <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
                   </div>',
                 "5" => $reg->fecha_g,
-                "6" =>'S/ '. number_format($reg->subtotal, 2, '.', ','),
-                "7" =>'S/ '. number_format($reg->igv, 2, '.', ','),
-                "8" =>'S/ '. number_format($reg->costo_parcial, 2, '.', ','),
+                "6" => $reg->subtotal,
+                "7" => $reg->igv,
+                "8" => $reg->costo_parcial,
                 "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "10" => $comprobante. $toltip,
+
                 "11"=>$reg->ruc,
                 "12"=>$reg->razon_social,
                 "13"=>$reg->direccion,
@@ -189,7 +176,7 @@
       
         case 'total':
           // $idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante
-          $rspta = $otro_gasto->total($_POST['idproyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante']);
+          $rspta = $otro_gasto->total($_POST['idproyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'], $_POST['glosa'] );
           //Codificar el resultado utilizando json
           echo json_encode($rspta,true);
       

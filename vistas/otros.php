@@ -13,7 +13,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Otros</title>
+        <title>Otros | Admin Sevens</title>
 
         <?php $title = "Otros"; require 'head.php'; ?>
 

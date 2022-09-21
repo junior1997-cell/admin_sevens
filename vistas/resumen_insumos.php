@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Resumen Insumos</title>       
+        <title>Resumen Insumos | Admin Sevens</title>       
 
         <?php $title = "Resumen Insumos"; require 'head.php';  ?>
 

@@ -11,7 +11,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Prestamos</title>
+        <title>Prestamos | Admin Sevens</title>
 
         <?php $title = "Prestamos"; require 'head.php'; ?>
         

@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Admin Sevens | Planos y otros</title>
+        <title>Planos y otros | Admin Sevens</title>
 
         <?php $title = "Planillas y seguros"; require 'head.php'; ?>
 
