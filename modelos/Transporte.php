@@ -133,7 +133,7 @@ Class Transporte
 
 		$sql="SELECT t.idtransporte, t.idproyecto, t.idproveedor, t.tipo_comprobante, t.numero_comprobante, t.forma_de_pago, 
 		t.fecha_viaje, t.tipo_viajero, t.tipo_ruta, t.ruta, t.cantidad, t.precio_unitario, t.subtotal, t.igv, t.precio_parcial, 
-		t.descripcion, t.val_igv, t.tipo_gravada, t.glosa, t.estado, t.estado_delete, p.razon_social,p.tipo_documento,p.ruc,p.direccion 
+		t.descripcion, t.comprobante, t.val_igv, t.tipo_gravada, t.glosa, t.estado, t.estado_delete, p.razon_social,p.tipo_documento,p.ruc,p.direccion 
 		FROM transporte as t, proveedor as p
 		WHERE t.idproveedor = p.idproveedor AND t.idproyecto='$idproyecto' AND t.estado='1' AND  t.estado_delete='1' $filtro_proveedor $filtro_fecha $filtro_comprobante  ORDER BY t.fecha_viaje DESC;";
 		return ejecutarConsulta($sql);		

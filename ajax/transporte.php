@@ -15,8 +15,9 @@
 
       $transporte = new Transporte();
       
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");   
+      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");   
+
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
@@ -155,22 +156,17 @@
           $rspta = $transporte->listar($_GET["idproyecto"],$_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = [];
-          $comprobante = '';
           $cont = 1;
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             while ($reg = $rspta['data']->fetch_object()) {
               // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/docs/transporte/comprobante/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
 
-                empty($reg->comprobante)
-                  ? ($comprobante = '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
-                  : ($comprobante = '<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . $reg->numero_comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
+              $comprobante = empty($reg->comprobante)
+                  ? ( '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>')
+                  : ('<div><center><a type="btn btn-danger" class=""  href="#" onclick="modal_comprobante(' . "'" . $reg->comprobante . "'" . ',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . $reg->numero_comprobante . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
                 
                 if (strlen($reg->descripcion) >= 20) { $descripcion = substr($reg->descripcion, 0, 20) . '...'; } else { $descripcion = $reg->descripcion; }
-
-               $tool = '"tooltip"';
-
-               $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
                 $data[] = [
                 "0" => $cont++,
@@ -182,10 +178,10 @@
                             <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>' . $reg->tipo_comprobante . '</p> </span>
                             <span class="description" style="margin-left: 0px !important;">N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
                         </div>',
-                "4" => date("d/m/Y", strtotime($reg->fecha_viaje)),
-                "5" => 'S/ ' . number_format($reg->subtotal, 2, '.', ','),
-                "6" => 'S/ ' . number_format($reg->igv, 2, '.', ','),
-                "7" => 'S/ ' . number_format($reg->precio_parcial, 2, '.', ','),
+                "4" => $reg->fecha_viaje,
+                "5" => $reg->subtotal,
+                "6" => $reg->igv,
+                "7" => $reg->precio_parcial,
                 "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "9" => $comprobante.''. $toltip,
                 "10" => $reg->tipo_viajero,

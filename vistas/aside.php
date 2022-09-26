@@ -393,7 +393,16 @@
                 <p>Sub Contrato </p>
               </a>
             </li>
-            <?php  }  ?>            
+            <?php  }  ?>      
+            
+            <?php if ($_SESSION['subcontrato']==1) {  ?>  
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="mano_de_obra.php" class="nav-link pl-2" id="lManodeObra">
+                <i class="nav-icon fa-solid fa-person-digging"></i>
+                <p>Mano de Obra </p>
+              </a>
+            </li>
+            <?php  }  ?>     
             
             <?php if ($_SESSION['planilla_seguro']==1) {  ?>
               <!-- PLANILLAS Y SEGUROS -->       
