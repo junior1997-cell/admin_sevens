@@ -15,8 +15,6 @@ function init() {
   //Activamos el "aside"
   $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
 
-  $("#bloc_Compras").addClass("menu-open");
-
   $("#mLogisticaAdquisiciones").addClass("active");
 
   $("#lSubContrato").addClass("active bg-primary");
