@@ -660,6 +660,77 @@
 
         break;
 
+        // TABLA - MANO DE OBRA
+        case 'tbla_mano_de_obra':
+
+          $data = Array(); $datatable = Array();
+
+          $deuda = $_POST['deuda'];
+
+          $t_monto = 0;
+          $t_pagos = 0;
+          $t_saldo = 0;   
+          $saldo_x_fila = 0;
+
+          $rspta = $resumen_general->tabla_mano_de_obra($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2'], $_POST['id_proveedor']);
+          //echo json_encode($rspta, true);
+          foreach ($rspta['data'] as $key => $value) {
+
+            $saldo_x_fila = 0;           
+            
+            $comprobante = '<a> <i class="far fa-times-circle"  style="font-size: 23px;"></i></a>';            
+
+            if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+              $datatable[] = array(
+                '0' => $key+1, 
+                '1' => $value['razon_social'], 
+                '2' => $value['fecha_deposito'],
+                '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$value['descripcion'].'</textarea>',
+                '4' => $comprobante,
+                '5' => number_format($value['monto'], 2, '.', ',' ),
+                '6' => number_format($value['monto'], 2, '.', ',' ),
+                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+              );
+    
+              $t_monto += floatval($value['monto']);
+              $t_pagos += floatval($value['monto']);
+              $t_saldo += floatval($saldo_x_fila);
+            } else {
+              if ($deuda == 'sindeuda') {
+                $datatable[] = array(
+                  '0' => $key+1, 
+                  '1' => $value['razon_social'], 
+                  '2' => $value['fecha_deposito'],
+                  '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$value['descripcion'].'</textarea>',
+                  '4' => $comprobante,
+                  '5' => number_format($value['monto'], 2, '.', ',' ),
+                  '6' => number_format($value['monto'], 2, '.', ',' ),
+                  '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                );
+      
+                $t_monto += floatval($value['monto']);
+                $t_pagos += floatval($value['monto']);
+                $t_saldo += floatval($saldo_x_fila);
+              }
+            }                  
+          }
+
+          $data = array(
+            'status' => true,
+            'menssage' => 'todo oka psss',
+            'data' =>[
+              't_monto' => $t_monto, 
+              't_pagos' => $t_pagos,
+              't_saldo' => $t_saldo,
+              'datatable' => $datatable
+            ]
+          );
+
+          //Codificar el resultado utilizando json
+          echo json_encode($data, true);
+
+        break;
+
         // TABLA - PANILLA SEGURO
         case 'tbla_planilla_seguro':
 

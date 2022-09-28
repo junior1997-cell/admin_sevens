@@ -59,9 +59,9 @@
                 "5" => $value['modulo'],
                 "6" => $value['glosa'],
                 "7" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',                
-                "8" => number_format($value['subtotal'], 2, ".", ","),
-                "9" => number_format($value['igv'], 2, ".", ","),
-                "10" => number_format($value['total'], 2, ".", ","),
+                "8" => $value['subtotal'],
+                "9" => $value['igv'],
+                "10" => $value['total'],
                 "11" => $documento.$toltip,
                 "12" => $value['estado_user_vb'],                
               ];
@@ -292,6 +292,12 @@
 
         case 'detalle_sub_contrato':
           $rspta = $resumen_gasto->detalle_sub_contrato($_POST['id_tabla']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break;
+
+        case 'detalle_mano_de_obra':
+          $rspta = $resumen_gasto->detalle_mano_de_obra($_POST['id_tabla']);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;

@@ -222,6 +222,35 @@ class Resumen_general
     
   }
 
+  // TABLA - MANO DE OBRA
+  public function tabla_mano_de_obra($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {
+
+    $list_subcontrato= Array();  $filtro_fecha = "";   $filtro_proveedor = "";
+
+    if (empty($id_proveedor) || $id_proveedor == 0) {
+      $filtro_proveedor = "";
+    } else {
+      $filtro_proveedor = "AND mdo.idproveedor = '$id_proveedor'";
+    }
+
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND mdo.fecha_deposito BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+    } else if (!empty($fecha_filtro_1)) {      
+      $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_filtro_1'";
+    }else if (!empty($fecha_filtro_2)) {        
+      $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_filtro_2'";            
+    }
+
+    $sql = "SELECT mdo.idmano_de_obra, mdo.idproyecto, mdo.idproveedor, mdo.fecha_inicial, mdo.fecha_final, mdo.fecha_deposito, mdo.tipo_comprobante, 
+    mdo.numero_comprobante, mdo.monto, mdo.glosa, mdo.tipo_gravada, mdo.descripcion, mdo.id_user_vb, mdo.nombre_user_vb, mdo.imagen_user_vb, mdo.estado_user_vb,
+    p.razon_social, p.tipo_documento, p.ruc
+    FROM mano_de_obra AS mdo, proveedor as p
+    WHERE mdo.idproveedor = p.idproveedor and mdo.estado = '1' AND mdo.estado_delete = '1' AND mdo.idproyecto='$idproyecto' $filtro_proveedor $filtro_fecha 
+		ORDER BY mdo.fecha_deposito DESC";
+    return ejecutarConsultaArray($sql);
+    
+  }
+
   // TABLA - PLANILLA SEGURO
   public function tabla_planilla_seguro($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {
 

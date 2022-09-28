@@ -124,6 +124,7 @@
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center"><i class="fas fa-cogs"></i></th>
+                                  <th class="text-center">Fecha</th>
                                   <th>Proveedor</th>
                                   <th class="text-center">Fecha Inicial</th>
                                   <th class="text-center">Fecha Final</th>
@@ -135,11 +136,12 @@
                                   <th>Num. Doc.</th>
                                 </tr>
                               </thead>
-                              <tbody></tbody>
+                              <tbody></tbody> 
                               <tfoot>
                                 <tr>
                                   <th class="text-center">#</th>
                                   <th class="text-center"><i class="fas fa-cogs"></i></th>
+                                  <th class="text-center">Fecha</th>
                                   <th>Proveedor</th>
                                   <th class="text-center">Fecha Inicial</th>
                                   <th class="text-center">Fecha Final</th>
@@ -211,8 +213,16 @@
                                 </div>
                               </div>
 
+                              <!-- Fecha deposito -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_deposito">Fecha deposito <sup class="text-danger">*</sup></label>
+                                  <input class="form-control" type="date" id="fecha_deposito" name="fecha_deposito" />
+                                </div>
+                              </div>
+
                               <!-- Monto-->
-                              <div class="col-7 col-sm-7 col-md-8 col-lg-12">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="form-group">
                                   <label for="monto">Monto <sup class="text-danger">*</sup></label>
                                   <input type="text" name="monto" class="form-control" id="monto" placeholder="Monto" />

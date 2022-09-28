@@ -238,6 +238,39 @@
 
                               <br />
 
+                              <!-- Mano de Obra -->
+                              <table id="tabla14_mano_de_obra" class="display" style="width: 100%;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="8" class="cargando-mano-de-obra text-center w-300px clas_pading backgff9100">Mano de Obra</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center clas_pading">#</th>
+                                    <th class="text-center w-300px clas_pading">PROVEEDOR</th>
+                                    <th class="text-center clas_pading">FECHA</th>
+                                    <th class="text-center clas_pading">DESCRIPCIÓN</th>
+                                    <th class="text-center clas_pading">DETALLE</th>
+                                    <th class="text-center clas_pading">MONTOS</th>
+                                    <th class="text-center clas_pading">PAGOS</th>
+                                    <th class="text-center clas_pading">SALDOS</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody id="mano_de_obra"></tbody>                                 
+
+                                <tfoot>
+                                  <tr>
+                                    <th colspan="4" class="clas_pading"></th>
+                                    <th class="clas_pading text-right">Total</th>
+                                    <th class="clas_pading text-right" id="monto_mano_de_obra"></th>
+                                    <th class="clas_pading text-right" id="pago_mano_de_obra"></th>
+                                    <th class="clas_pading text-right" id="saldo_mano_de_obra"></th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+
+                              <br />
+
                               <!-- Planilla Seguro -->
                               <table id="tabla13_planilla_seguro" class="display" style="width: 100%;">
                                 <thead>
@@ -673,6 +706,16 @@
                                     <td class="text-right monto_sub_contrato_all">0.00</td>
                                     <td class="text-right pago_sub_contrato_all">0.00</td>
                                     <td class="text-right saldo_sub_contrato_all">0.00</td>
+                                  </tr>
+                                  <tr>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>--</td>
+                                    <td>Mano de Obra</td>
+                                    <td class="text-right monto_mano_de_obra_all">0.00</td>
+                                    <td class="text-right pago_mano_de_obra_all">0.00</td>
+                                    <td class="text-right saldo_mano_de_obra_all">0.00</td>
                                   </tr>
                                 </tbody>
 

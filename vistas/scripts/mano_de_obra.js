@@ -17,7 +17,8 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
 
 
-  tbla_principal( localStorage.getItem('nube_idproyecto'), fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r); 
+  // tbla_principal( localStorage.getItem('nube_idproyecto'), fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r); 
+  //filtros();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
@@ -67,11 +68,12 @@ function doc1_eliminar() {
 // .....:::::::::::::::::::::::::::::::::::::  P E N S I O N  :::::::::::::::::::::::::::::::::::::::..
 function limpiar_form_mdo() {
   $(".name-modal-header").html('Agregar Mano de Obra')
-  $("#idpension").val("");
-  $("#p_desayuno").val("");
-  $("#p_almuerzo").val("");
-  $("#p_cena").val("");
-  $("#descripcion_pension").val("");
+  $("#idmano_de_obra").val("");
+  $("#fecha_inicial").val("");
+  $("#fecha_final").val("");
+  $("#fecha_deposito").val("");
+  $("#monto").val("");
+  $("#descripcion").val("");
   $("#idproveedor").val("null").trigger("change"); 
 
   // Limpiamos las validaciones
@@ -145,8 +147,8 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,7,8,9,3,4,5,6], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,7,8,9,3,4,5,6], } }, 
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,8,9,10,4,5,6,7], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,8,9,10,4,5,6,7], } }, 
       { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,7,8,9,3,4,5,6], } } ,
     ],
     ajax:{
@@ -160,9 +162,9 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center text-nowrap');  }
-      if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
+      if (data[2] != '') { $("td", row).eq(2).addClass('text-center text-nowrap'); }
       if (data[4] != '') {$("td", row).eq(4).addClass('text-center text-nowrap');} 
-      if (data[5] != '') {$("td", row).eq(5).addClass('text-nowrap');}  
+      if (data[5] != '') {$("td", row).eq(5).addClass('text-center text-nowrap');}  
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -173,9 +175,9 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
-      { targets: [3,4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [7,8,9], visible: false, searchable: false, },    
+      { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [2,4,5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [8,9,10], visible: false, searchable: false, },    
     ],
   }).DataTable();
 
@@ -208,8 +210,9 @@ function mostrar_editar_mdo(idmano_de_obra) {
       $("#idproveedor").val(e.data.idproveedor).trigger("change"); 
       $("#idproyecto").val(e.data.idproyecto);
       $("#idmano_de_obra").val(e.data.idmano_de_obra);
-      $("#fecha_inicial").val(e.data.fecha_inicial);
+      $("#fecha_inicial").val(e.data.fecha_inicial).trigger("change");
       $("#fecha_final").val(e.data.fecha_final);
+      $("#fecha_deposito").val(e.data.fecha_deposito);
       $("#monto").val(e.data.monto);
       $("#descripcion").val(e.data.descripcion);
 
@@ -254,15 +257,19 @@ function ver_detalle_mdo(idmano_de_obra){
                 </tr>     
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Fecha Inicial</th>
-                  <td>${e.data.fecha_inicial}</td>
+                  <td>${format_d_m_a(e.data.fecha_inicial)}</td>
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Fecha Final</th>
-                    <td>${e.data.fecha_final}</td>
+                    <td>${format_d_m_a(e.data.fecha_final)}</td>
+                </tr>        
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha Desposito</th>
+                    <td>${format_d_m_a(e.data.fecha_deposito)}</td>
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Monto</th>
-                  <td>${e.data.monto}</td>
+                  <td>${formato_miles(e.data.monto)}</td>
                 </tr>             
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Descripción</th>
@@ -283,6 +290,25 @@ function ver_detalle_mdo(idmano_de_obra){
   }).fail( function(e) { ver_errores(e); } );
 }
 
+//Función para desactivar registros
+function eliminar(idmano_de_obra, nombre) {
+
+  crud_eliminar_papelera(
+    "../ajax/mano_de_obra.php?op=desactivar",
+    "../ajax/mano_de_obra.php?op=eliminar", 
+    idmano_de_obra, 
+    "!Elija una opción¡", 
+    `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
+    function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
+    function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
+    function(){ tbla_principal( nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r); },
+    false, 
+    false, 
+    false,
+    false
+  );
+}
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -298,12 +324,14 @@ $(function () {
       idproveedor:  { required: true},
       fecha_inicial:{ required: true},
       fecha_final:  { required: true},
+      fecha_deposito:{ required: true},
       monto:        { required: true},
     },
     messages: {
       idproveedor:  { required: "Campo requerido", },
       fecha_inicial:{ required: "Campo requerido",},
       fecha_final:  { required: "Campo requerido",},
+      fecha_deposito:{ required: "Campo requerido"},
       monto:        { required: "Campo requerido",},
     },
         
@@ -361,7 +389,7 @@ function filtros() {
   $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_proveedor} ${nombre_comprobante}...`);
   //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
-  tbla_principal(nube_idproyecto_r, fecha_1, fecha_2, id_proveedor, comprobante);
+  tbla_principal(localStorage.getItem('nube_idproyecto'), fecha_1, fecha_2, id_proveedor, comprobante);
 }
 
 function restrigir_fecha_input() {  restrigir_fecha_ant("#fecha_final",$("#fecha_inicial").val());}

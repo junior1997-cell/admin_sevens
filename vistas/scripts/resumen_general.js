@@ -12,6 +12,7 @@ var tabla_10 = $("#tabla10_per_obr").DataTable();
 var tabla_11 = $("#tabla11_otros_gastos").DataTable();
 var tabla_12 = $("#tabla12_sub_contrato").DataTable();
 var tabla_13 = $("#tabla13_planilla_seguro").DataTable();
+var tabla_14 = $("#tabla14_mano_de_obra").DataTable();
 
 var tabla_20 = $("#tabla20_all_sumas").DataTable();
 
@@ -28,6 +29,7 @@ var monto_obrero          = 0, pago_obrero          = 0, saldo_obrero           
 var monto_otros_gastos    = 0, pago_otros_gastos    = 0, saldo_otros_gastos     = 0;
 var monto_sub_contrato    = 0, pago_sub_contrato    = 0, saldo_sub_contrato     = 0;
 var monto_planilla_seguro = 0, pago_planilla_seguro = 0, saldo_planilla_seguro  = 0;
+var monto_mano_de_obra    = 0, pago_mano_de_obra    = 0, saldo_mano_de_obra     = 0;
 
 var monto_all     = 0;
 var deposito_all  = 0;
@@ -407,6 +409,92 @@ function tbla_sub_contrato(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabaj
     }).DataTable();
 
     $('.cargando-sub-contrato').removeClass('bg-danger').addClass('backgff9100').html('Sub Contrato');
+
+    tbla_mano_de_obra(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
+  }).fail( function(e) { ver_errores(e); } );
+  
+}
+
+// TABLA - MANO DE OBRA - -------------------------------------------------------
+function tbla_mano_de_obra(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda) {
+   
+  $.post("../ajax/resumen_general.php?op=tbla_mano_de_obra", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_proveedor':id_proveedor, 'deuda':deuda }, function (e, status) {
+    
+    e = JSON.parse(e); //console.log(e);   
+
+    $("#monto_mano_de_obra").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $("#pago_mano_de_obra").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $("#saldo_mano_de_obra").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_mano_de_obra = e.data.t_monto.toFixed(2); 
+    pago_mano_de_obra = e.data.t_pagos.toFixed(2); 
+    saldo_mano_de_obra = e.data.t_saldo.toFixed(2);
+
+    // acumulamos las sumas totales
+    $(".monto_mano_de_obra_all").html(formato_miles(e.data.t_monto.toFixed(2)));
+    $(".pago_mano_de_obra_all").html(formato_miles(e.data.t_pagos.toFixed(2)));
+    $(".saldo_mano_de_obra_all").html(formato_miles(e.data.t_saldo.toFixed(2)));
+
+    monto_all += parseFloat(e.data.t_monto);
+    deposito_all += parseFloat(e.data.t_pagos);
+    saldo_all += parseFloat(e.data.t_saldo);
+
+    $("#monto_all").html(formato_miles(monto_all.toFixed(2)));
+    $("#deposito_all").html(formato_miles(deposito_all.toFixed(2)));
+    $("#saldo_all").html(formato_miles(saldo_all.toFixed(2)));
+
+    tabla_14.destroy(); // Destruye las tablas de datos en el contexto actual.
+
+    $('#mano_de_obra').empty(); // Vacía en caso de que las columnas cambien
+
+    tabla_14 = $("#tabla14_mano_de_obra").dataTable({
+      responsive: true,
+      lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+      aProcessing: true, //Activamos el procesamiento del datatables
+      aServerSide: true, //Paginación y filtrado realizados por el servidor
+      dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+      buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }],
+      data: e.data.datatable,
+      createdRow: function (row, data, ixdex) {
+        // columna: #
+        if (data[0] != '') { $("td", row).eq(0).addClass("w-px-35 text-center text-nowrap"); }
+        // columna: fecha
+        if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); } 
+        // columna: detalle
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-center"); } 
+        // columna: montos
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right");  }          
+        // columna: depositos  
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-right"); }   
+        // columna: saldos
+        if (data[7] != '') {
+          $("td", row).eq(7).addClass("text-right");
+          var numero = quitar_formato_miles(data[7]);
+          
+          if ( parseFloat(numero) < 0 ) {
+            $("td", row).eq(7).addClass("text-right bg-danger");
+          }else if ( parseFloat(numero) > 0 ) {            
+            $("td", row).eq(7).addClass("text-right bg-warning");
+          } else if ( parseFloat(numero) == 0 ) {              
+            $("td", row).eq(7).addClass("text-right bg-success");             
+          }
+        }
+      },
+      language: {
+        lengthMenu: "Mostrar: _MENU_ registros",
+        buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+        sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      },
+      bDestroy: true,
+      iDisplayLength: 5, //Paginación
+      order: [[0, "asc"]], //Ordenar (columna,orden)
+      columnDefs: [ 
+        { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+        //{ targets: [12], visible: false, searchable: false },
+      ],
+    }).DataTable();
+
+    $('.cargando-mano-de-obra').removeClass('bg-danger').addClass('backgff9100').html('Mano de Obra');
 
     tbla_planilla_seguro(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, id_proveedor, deuda);
   }).fail( function(e) { ver_errores(e); } );
@@ -1217,62 +1305,69 @@ function table_all_sumas() {
     },
     {
       '0': '5', '1': '--', '2': '--', '3': '--',
+      '4': 'Mano de Obra',
+      '5': formato_miles(monto_mano_de_obra),
+      '6': formato_miles(pago_mano_de_obra),
+      '7': formato_miles(saldo_mano_de_obra),
+    },
+    {
+      '0': '6', '1': '--', '2': '--', '3': '--',
       '4': 'Planilla Seguro',
       '5': formato_miles(monto_planilla_seguro),
       '6': formato_miles(pago_planilla_seguro),
       '7': formato_miles(saldo_planilla_seguro),
     },
     {
-      '0': '6', '1': '--', '2': '--', '3': '--',
+      '0': '7', '1': '--', '2': '--', '3': '--',
       '4': 'Otros Gastos',
       '5': formato_miles(monto_otros_gastos),
       '6': formato_miles(pago_otros_gastos),
       '7': formato_miles(saldo_otros_gastos),
     },
     {
-      '0': '7', '1': '--', '2': '--', '3': '--',
+      '0': '8', '1': '--', '2': '--', '3': '--',
       '4': 'Transporte',
       '5': formato_miles(monto_transp),
       '6': formato_miles(pago_transp),
       '7': formato_miles(saldo_transp),
     },
     {
-      '0': '8', '1': '--', '2': '--', '3': '--',
+      '0': '9', '1': '--', '2': '--', '3': '--',
       '4': 'Hospedaje',
       '5': formato_miles(monto_hosped),
       '6': formato_miles(pago_hosped),
       '7': formato_miles(saldo_hosped),
     },
     {
-      '0': '9', '1': '--', '2': '--', '3': '--',
+      '0': '10', '1': '--', '2': '--', '3': '--',
       '4': 'Pensión',
       '5': formato_miles(monto_pension),
       '6': formato_miles(pago_pension),
       '7': formato_miles(saldo_pension),
     },
     {
-      '0': '10', '1': '--', '2': '--', '3': '--',
+      '0': '11', '1': '--', '2': '--', '3': '--',
       '4': 'Breaks',
       '5': formato_miles(monto_break),
       '6': formato_miles(pago_break),
       '7': formato_miles(saldo_break),
     },
     {
-      '0': '11', '1': '--', '2': '--', '3': '--',
+      '0': '12', '1': '--', '2': '--', '3': '--',
       '4': 'Comidas extras',
       '5': formato_miles(monto_cextra),
       '6': formato_miles(pago_cextra),
       '7': formato_miles(saldo_cextra),
     },    
     {
-      '0': '12', '1': '--', '2': '--', '3': '--',
+      '0': '13', '1': '--', '2': '--', '3': '--',
       '4': 'Personal Administrativo',
       '5': formato_miles(monto_adm),
       '6': formato_miles(pago_adm),
       '7': formato_miles(saldo_adm),
     },
     {
-      '0': '13', '1': '--', '2': '--', '3': '--',
+      '0': '14', '1': '--', '2': '--', '3': '--',
       '4': 'Personal Obrero',
       '5': formato_miles(monto_obrero),
       '6': formato_miles(pago_obrero),
@@ -1367,6 +1462,12 @@ function table_all_sumas() {
           $("td", row).eq(6).removeClass('text-right pago_sub_contrato_all').addClass('text-right pago_sub_contrato_all');
           $("td", row).eq(7).removeClass('text-right saldo_sub_contrato_all').addClass('text-right saldo_sub_contrato_all');    
         }
+
+        if (data[4] == 'Mano de Obra') {
+          $("td", row).eq(5).removeClass('text-right monto_mano_de_obra_all').addClass('text-right monto_mano_de_obra_all');
+          $("td", row).eq(6).removeClass('text-right pago_mano_de_obra_all').addClass('text-right pago_mano_de_obra_all');
+          $("td", row).eq(7).removeClass('text-right saldo_mano_de_obra_all').addClass('text-right saldo_mano_de_obra_all');    
+        }
       }  
 
       // columna: montos
@@ -1452,6 +1553,8 @@ function filtros() {
   $('.cargando-otros-gastos').removeClass('backgff9100').addClass('bg-danger').html('Otros Gastos - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
   
   $('.cargando-sub-contrato').removeClass('backgff9100').addClass('bg-danger').html('Sub Contrato - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
+
+  $('.cargando-mano-de-obra').removeClass('backgff9100').addClass('bg-danger').html('Mano de Obra - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   $('.cargando-sumas').removeClass('backgff9100').addClass('bg-danger').html('Sumas totales - calculando <i class="fas fa-spinner fa-pulse fa-sm"></i>');
 

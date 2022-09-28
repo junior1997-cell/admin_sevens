@@ -318,15 +318,6 @@
       echo json_encode($retorno);
     }  
   } 
-
-  function quitar_formato_miles($number) {
-
-    $sin_format = 0;
-
-    if ( !empty($number) ) { $sin_format = floatval(str_replace(",", "", $number)); }
-    
-    return $sin_format;
-  }
   
   ob_end_flush();
 ?>

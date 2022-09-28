@@ -333,14 +333,10 @@ class ResumenGasto
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
       $filtro_fecha = "AND s.fecha_subcontrato BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else {
-      if (!empty($fecha_1)) {
-        $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_1'";
-      }else{
-        if (!empty($fecha_2)) {
-          $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_2'";
-        }     
-      }      
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND s.fecha_subcontrato = '$fecha_2'";           
     }    
 
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
@@ -395,6 +391,75 @@ class ResumenGasto
               "subcarpeta"        => 'comprobante_subcontrato',
               "host"              => $host,
               "ruta_file"         => $scheme_host.'dist/docs/sub_contrato/comprobante_subcontrato/'.$value['comprobante'],
+            );
+          }          
+        }
+      }
+    }
+
+    // FACTURAS - MANO DE OBRA ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
+
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND mdo.fecha_deposito BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {      
+      $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_1'";
+    }else if (!empty($fecha_2)) {        
+      $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_2'";           
+    }    
+
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
+
+    if ( empty($comprobante) ) { } else {
+      $filtro_comprobante = "AND mdo.tipo_comprobante = '$comprobante'"; 
+    }
+    
+    $sql3 = "SELECT mdo.idmano_de_obra, mdo.idproyecto, mdo.idproveedor, mdo.fecha_inicial, mdo.fecha_final, mdo.fecha_deposito, mdo.tipo_comprobante, 
+    mdo.numero_comprobante, mdo.monto, mdo.glosa, mdo.tipo_gravada, mdo.descripcion, mdo.id_user_vb, mdo.nombre_user_vb, mdo.imagen_user_vb, mdo.estado_user_vb,
+    p.razon_social, p.tipo_documento, p.ruc
+    FROM mano_de_obra AS mdo, proveedor as p
+    WHERE mdo.idproveedor = p.idproveedor  and mdo.estado = '1' AND mdo.estado_delete = '1' AND mdo.$estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY mdo.fecha_deposito DESC;";
+    $mano_de_obra =  ejecutarConsultaArray($sql3);
+
+    if ($mano_de_obra['status'] == false) { return $mano_de_obra; }
+
+    if (!empty($mano_de_obra['data'])) {
+      foreach ($mano_de_obra['data'] as $key => $value) {
+        $data[] = array(
+        	"idproyecto"        => $value['idproyecto'],
+          "idtabla"           => $value['idmano_de_obra'],
+          "bd_nombre_tabla"   => 'mano_de_obra',
+          "bd_nombre_id_tabla"=> 'idmano_de_obra',
+          "fecha"             => $value['fecha_deposito'],
+          "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' :$value['tipo_comprobante'] ) ,
+          "serie_comprobante" => $value['numero_comprobante'],
+          "proveedor"         => $value['razon_social'],
+          "total"             => $value['monto'],
+          "igv"               => 0,
+          "subtotal"          => $value['monto'],
+          "glosa"             => $value['glosa'],
+          "tipo_gravada"      => $value['tipo_gravada'],
+          "comprobante"       => '',
+          "carpeta"           => 'mano_de_obra',
+          "subcarpeta"        => 'comprobante',
+          "ruta"              => 'dist/docs/mano_de_obra/comprobante/',
+          "modulo"            => 'MANO DE OBRA',
+          "id_user_vb"        => $value['id_user_vb'],
+          "nombre_user_vb"    => $value['nombre_user_vb'],
+          "imagen_user_vb"    => $value['imagen_user_vb'],
+          "estado_user_vb"    => $value['estado_user_vb'],
+          "detalle"           => false,
+          "comprobante_multiple" => false,
+          "cant_comprobante" => 0,
+        );
+        if (!empty($value['comprobante'])) {
+          if ( validar_url( $scheme_host, 'dist/docs/mano_de_obra/comprobante/', $value['comprobante']) ) {
+            $data_comprobante[] = array(
+              "comprobante"       => $value['comprobante'],
+              "carpeta"           => 'mano_de_obra',
+              "subcarpeta"        => 'comprobante',
+              "host"              => $host,
+              "ruta_file"         => $scheme_host.'dist/docs/mano_de_obra/comprobante/'.$value['comprobante'],
             );
           }          
         }
@@ -1840,11 +1905,24 @@ class ResumenGasto
       $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb = '$id_user_vb', nombre_user_vb = '$nombre_user_vb', 
       imagen_user_vb = '$imagen_user_vb', estado_user_vb = '1'
       WHERE $nombre_id_tabla ='$id_tabla' ";
-      return ejecutarConsulta($sql);
+      $agregar = ejecutarConsulta($sql); if ( $agregar['status'] == false) {return $agregar; } 
+
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','".$id_tabla."','Agregar Visto bueno','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+      return $agregar;
+
     } else if ($accion == 'quitar') {
       $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb = '', nombre_user_vb = '', imagen_user_vb ='', estado_user_vb = '0'
       WHERE $nombre_id_tabla ='$id_tabla'";
-      return ejecutarConsulta($sql);
+      $quitar = ejecutarConsulta($sql); if ( $quitar['status'] == false) {return $quitar; } 
+
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','".$id_tabla."','Quitar Visto bueno','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+
+      return $quitar;
     } 
   }
 
@@ -1875,6 +1953,15 @@ class ResumenGasto
     s.val_igv, s.subtotal, s.igv, s.costo_parcial as total, s.descripcion, s.glosa, s.comprobante    
     FROM subcontrato AS s, proveedor as p
     WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.idsubcontrato = '$id';";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
+  // detalle_sub_contrato
+  public function detalle_mano_de_obra($id) {
+    $sql = "SELECT mdo.idmano_de_obra, mdo.idproyecto, mdo.idproveedor, mdo.fecha_inicial, mdo.fecha_final, mdo.fecha_deposito, mdo.monto, mdo.descripcion, 
+    p.razon_social, p.tipo_documento, p.ruc 
+    FROM mano_de_obra as mdo, proveedor as p
+    WHERE mdo.idproveedor = p.idproveedor and idmano_de_obra = '$id';";
     return ejecutarConsultaSimpleFila($sql);
   }
 
@@ -1972,7 +2059,14 @@ class ResumenGasto
   // eliminar permanente
   public function eliminar_permanente($nombre_tabla, $nombre_id_tabla, $id_tabla) {
     $sql = "UPDATE $nombre_tabla SET estado_delete='0' WHERE $nombre_id_tabla ='$id_tabla'";
-    return ejecutarConsulta($sql);
+    $eliminar =  ejecutarConsulta($sql);
+    if ( $eliminar['status'] == false) {return $eliminar; }  
+
+    //add registro en nuestra bitacora
+    $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('$nombre_tabla','$id_tabla','Eliminado $nombre_tabla','" . $_SESSION['idusuario'] . "')";
+    $bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+    return $eliminar;
   }
   
 }

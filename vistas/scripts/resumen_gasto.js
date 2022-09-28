@@ -29,9 +29,11 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
 
   nube_idproyecto_r=nube_idproyecto; fecha_1_r=fecha_1; fecha_2_r=fecha_2; id_proveedor_r=id_proveedor; comprobante_r=comprobante;
 
-  $('.total-subtotal').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-igv').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-total').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.total-subtotal').html('0.00');
+  $('.total-igv').html('0.00');
+  $('.total-total').html('0.00');
+
+  var total_subtotal = 0, total_igv = 0, total = 0;
 
   tabla_principal = $('#tabla-principal').dataTable({
     responsive: true,
@@ -52,11 +54,11 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
       // columna: sub total
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $(".total-subtotal").html(formato_miles( total_subtotal += parseFloat(data[8]) )); }
       // columna: igv
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); $(".total-igv").html(formato_miles( total_igv += parseFloat(data[9]) )); }  
       // columna: total
-      if (data[10] != '') { $("td", row).eq(10).addClass('text-right');  }
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total").html(formato_miles( total += parseFloat(data[10]) )); }
       // columna: 4
       if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
@@ -71,11 +73,14 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [12], visible: false, searchable: false },
+      { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
     ],
   }).DataTable();
   
   $( tabla_principal ).ready(function() {
-    sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
+    //sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
+    $('.cargando').hide();
+    $('.btn-zip').removeClass('disabled');
   });
   
 }
@@ -102,9 +107,11 @@ function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comproba
 //Función Listar - tabla compras
 function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
    
-  $('.total-subtotal-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-igv-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
-  $('.total-total-visto-bueno').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
+  $('.total-subtotal-visto-bueno').html('0.00');
+  $('.total-igv-visto-bueno').html('0.00');
+  $('.total-total-visto-bueno').html('0.00');
+
+  var total_subtotal = 0, total_igv = 0, total = 0;
 
   tabla_visto_bueno = $('#tabla-visto-bueno').dataTable({
     responsive: true,
@@ -125,11 +132,11 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
       // columna: sub total
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $(".total-subtotal-visto-bueno").html(formato_miles( total_subtotal += parseFloat(data[8]) )); }
       // columna: igv
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); $(".total-igv-visto-bueno").html(formato_miles( total_igv += parseFloat(data[9]) )); }  
       // columna: total
-      if (data[10] != '') { $("td", row).eq(10).addClass('text-right');  }
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total-visto-bueno").html(formato_miles( total += parseFloat(data[10]) )); }
       // columna: 4
       if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
@@ -144,11 +151,14 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [12], visible: false, searchable: false },
+      { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
     ],
   }).DataTable();
   
   $( tabla_principal ).ready(function() {
-    sumas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
+    //umas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
+    $('.cargando').hide();
+    $('.btn-zip').removeClass('disabled');
   });
   
 }
@@ -716,6 +726,83 @@ function detalle_sub_contrato(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Comprobante</th>
                   <td> ${comprobante} <br>${btn_comprobante}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    
+      $(".detalle_de_modulo").html(retorno_html);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+
+      $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
+      $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
+      $('.jq_image_zoom').zoom({ on:'grab' });
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function detalle_mano_de_obra(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+  $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
+  (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
+
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+  
+  $("#print_pdf_compra").addClass('disabled').hide();
+  $("#excel_compra").addClass('disabled').hide();
+  $(".nombre-title-detalle-modal").html('Detalle - Sub Contrato');
+  $('#modal-ver-compras .modal-dialog').addClass('modal-md').removeClass('modal-xl');
+  $("#modal-ver-compras").modal("show");
+
+  var comprobante=''; var btn_comprobante = '';
+
+  $.post("../ajax/resumen_gasto.php?op=detalle_mano_de_obra", { 'id_tabla': id_tabla }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    
+    if (e.status == true) {        
+
+      var retorno_html=`                                                                            
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-hover table-bordered">        
+              <tbody>                          
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor</th>
+                  <td> ${e.data.razon_social}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>${e.data.tipo_documento}</th>
+                  <td>${e.data.ruc}</td>
+                </tr>     
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha Inicial</th>
+                  <td>${format_d_m_a(e.data.fecha_inicial)}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha Final</th>
+                    <td>${format_d_m_a(e.data.fecha_final)}</td>
+                </tr>        
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Fecha Desposito</th>
+                    <td>${format_d_m_a(e.data.fecha_deposito)}</td>
+                </tr>                
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Monto</th>
+                  <td>${formato_miles(e.data.monto)}</td>
+                </tr>             
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Descripción</th>
+                  <td><textarea cols="30" rows="2" class="textarea_datatable" readonly="">${e.data.descripcion}</textarea></td>
                 </tr>
               </tbody>
             </table>
