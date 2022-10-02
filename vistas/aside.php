@@ -503,10 +503,10 @@
             <?php if ($_SESSION['fierro']==1) {  ?>
             <!-- CONCRETO -->       
             <li class="nav-item ver-otros-modulos-1">
-              <a href="concreto_valorizacion.php" class="nav-link pl-2" id="lConcretoValorizacion">
+              <a href="valorizacion_concreto.php" class="nav-link pl-2" id="lConcretoValorizacion">
                 <!-- <i class="nav-icon fas fa-dumpster"></i> -->
                 <img src="../dist/svg/concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                <p>Concreto</p>
+                <p>Valorización concreto</p>
               </a>
             </li>
             <?php  }  ?>

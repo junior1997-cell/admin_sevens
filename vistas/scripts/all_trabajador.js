@@ -935,3 +935,21 @@ function sueld_mensual(){
 
   $("#sueldo_hora").val(sueldo_horas);
 }
+//calcular edad
+function calcular_edad() {
+  
+    var fecha = new Date($('#fecha_nacimiento').val());
+  
+    var hoy = new Date();
+  
+    var edad = hoy.getFullYear() - fecha.getFullYear();
+  
+    var m = hoy.getMonth() - fecha.getMonth();
+  
+    if (m < 0 || (m === 0 && hoy.getDate() < fecha.getDate())) {
+  
+      edad--;
+    }
+  
+    $('#edad').val(edad);
+}
