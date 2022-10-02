@@ -62,8 +62,8 @@ class Mano_de_obra
 
     if (empty($val_compr['data'])) {
     
-      $sql = "INSERT INTO mano_de_obra( idproyecto, idproveedor, fecha_inicial, fecha_final, fecha_deposito, monto, descripcion)
-      VALUES ('$idproyecto','$idproveedor','$fecha_inicial','$fecha_final', '$fecha_deposito','$monto','$descripcion')";
+      $sql = "INSERT INTO mano_de_obra( idproyecto, idproveedor, fecha_inicial, fecha_final, fecha_deposito, monto, descripcion, user_created)
+      VALUES ('$idproyecto','$idproveedor','$fecha_inicial','$fecha_final', '$fecha_deposito', '$monto', '$descripcion', '" . $_SESSION['idusuario'] . "')";
       $insert =  ejecutarConsulta_retornarID($sql);
 
       //add registro en nuestra bitacora
@@ -92,7 +92,7 @@ class Mano_de_obra
 
   public function editar_mdo($idmano_de_obra, $idproyecto, $idproveedor, $fecha_inicial, $fecha_final, $fecha_deposito, $monto, $descripcion) {
     $sql = "UPDATE mano_de_obra SET idproyecto='$idproyecto',idproveedor='$idproveedor',fecha_inicial='$fecha_inicial',
-    fecha_final='$fecha_final', fecha_deposito='$fecha_deposito', monto='$monto',descripcion='$descripcion' 
+    fecha_final='$fecha_final', fecha_deposito='$fecha_deposito', monto='$monto',descripcion='$descripcion', user_updated= '" . $_SESSION['idusuario'] . "' 
     WHERE idmano_de_obra ='$idmano_de_obra'";
     $edita = ejecutarConsulta($sql);
 
@@ -137,7 +137,7 @@ class Mano_de_obra
   //Implementamos un método para activar categorías
   public function eliminar($idmano_de_obra)
   {
-    $sql = "UPDATE mano_de_obra SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idmano_de_obra ='$idmano_de_obra'";
+    $sql = "UPDATE mano_de_obra SET estado_delete='0', user_delete= '" . $_SESSION['idusuario'] . "' WHERE idmano_de_obra ='$idmano_de_obra'";
     $eliminar =  ejecutarConsulta($sql);
     if ( $eliminar['status'] == false) {return $eliminar; }  
     

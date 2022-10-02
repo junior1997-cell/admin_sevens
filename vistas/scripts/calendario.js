@@ -16,11 +16,7 @@ function init() {
   $("#eliminar_registro").on("click", function (e) { desactivar()  });
 
   //Initialize Select2 Elements
-  $("#background_color").select2({
-    theme: "bootstrap4",
-    placeholder: "Selecione tipo",
-    allowClear: true,
-  });
+  $("#background_color").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
 
   $("#background_color").val("#FF0000").trigger("change");
 }
@@ -59,317 +55,326 @@ function listar(idproyecto) {
   $("#custom-tabs-four-home").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
 
   // Detalle de dias Proyecto
-  $.post("../ajax/calendario.php?op=detalle_dias_proyecto", { idproyecto: idproyecto },  function (data, status) {
+  $.post("../ajax/calendario.php?op=detalle_dias_proyecto", { idproyecto: idproyecto },  function (e, status) {
 
-    data = JSON.parse(data); //console.log(data);  
+    e = JSON.parse(e); console.log(e);  
 
     var dia_c = ''; var dia_l = ''; var dia_t = ''; var fecha_p = ''; var count = 0;
 
-    if (data) {
-      // Validamos data 1
-      if (data.data2.length === 0) { dia_c = 'fechas no definas'; dia_l = 'fechas no definas'; } else {
+    if (e.status == true) {
+      if (e.data) {
+        // Validamos data 1
+        if (e.data.data2.length === 0) { dia_c = 'fechas no definas'; dia_l = 'fechas no definas'; } else {
 
-        let fecha_inicio = new Date(data.data2.fecha_inicio); let fecha_fin = new Date(data.data2.fecha_fin); 
+          let fecha_inicio = new Date(e.data.data2.fecha_inicio); let fecha_fin = new Date(e.data.data2.fecha_fin); 
 
-        dia_c = parseInt(data.data2.plazo);  fecha_p = format_d_m_a(data.data2.fecha_inicio) +' - ' + format_d_m_a(data.data2.fecha_fin);
+          dia_c = parseInt(e.data.data2.plazo);  fecha_p = format_d_m_a(e.data.data2.fecha_inicio) +' - ' + format_d_m_a(e.data.data2.fecha_fin);
 
-        // validamos data 2
-        if (data.data1.length === 0) { dia_l = 'sin feriados'; dia_t = 'sin feriados'; } else {
+          // validamos data 2
+          if (e.data.data1.length === 0) { dia_l = 'sin feriados'; dia_t = 'sin feriados'; } else {
 
-          $.each(data.data1, function (index, value) {
+            $.each(e.data.data1, function (index, value) {
 
-            let fecha_feriado = new Date(value.fecha_feriado);
+              let fecha_feriado = new Date(value.fecha_feriado);
 
-            if ( fecha_feriado.getTime() >= fecha_inicio.getTime() && fecha_feriado.getTime() <= fecha_fin.getTime()) {
-              count++;
-            } 
-          });
-          // console.log('total: ' + count);
-          dia_l = parseInt(data.data2.plazo) - parseInt(count);
+              if ( fecha_feriado.getTime() >= fecha_inicio.getTime() && fecha_feriado.getTime() <= fecha_fin.getTime()) {
+                count++;
+              } 
+            });
+            // console.log('total: ' + count);
+            dia_l = parseInt(e.data.data2.plazo) - parseInt(count);
 
-          // var dia_t = parseInt(data.data1.cant_feriados);
+            // var dia_t = parseInt(e.data.data1.cant_feriados);
+          }
         }
-      }
 
-      $("#custom-tabs-four-home").html(
-        '<div class="card-body table-responsive p-0">'+
-          '<table class="table table-hover text-nowrap">'+
-            '<thead>'+
-              '<tr>'+
-                '<th>Detalle</th>'+
-                '<th>Cant. Dias</th>' +                                      
-              '</tr>'+
-            '</thead>'+
-            '<tbody>'+ 
-              '<tr>'+
-                '<td>Fecha proyecto</td>'+
-                '<td>'+ fecha_p +'</td>'+                                            
-              '</tr>'+                                      
-              '<tr>'+
-                '<td>Dias calendario</td>'+
-                '<td>'+ dia_c +'</td>'+                                            
-              '</tr>'+
-              '<tr>'+
-                '<td>Dias laborables</td>'+
-                '<td>'+ dia_l +'</td>'   +                                         
-              '</tr>' +
-              '<tr>'+
-                '<td>Feriado proyecto</td>'+
-                '<td>'+ count +'</td>'   +                                         
-              '</tr>' +  
-              '<tr> <td> </td> <td> </td> </tr>' +                                        
-            '</tbody>'+
-          '</table>'+
-        '</div>'
-      );
-      
+        $("#custom-tabs-four-home").html(
+          '<div class="card-body table-responsive p-0">'+
+            '<table class="table table-hover text-nowrap">'+
+              '<thead>'+
+                '<tr>'+
+                  '<th>Detalle</th>'+
+                  '<th>Cant. Dias</th>' +                                      
+                '</tr>'+
+              '</thead>'+
+              '<tbody>'+ 
+                '<tr>'+
+                  '<td>Fecha proyecto</td>'+
+                  '<td>'+ fecha_p +'</td>'+                                            
+                '</tr>'+                                      
+                '<tr>'+
+                  '<td>Dias calendario</td>'+
+                  '<td>'+ dia_c +'</td>'+                                            
+                '</tr>'+
+                '<tr>'+
+                  '<td>Dias laborables</td>'+
+                  '<td>'+ dia_l +'</td>'   +                                         
+                '</tr>' +
+                '<tr>'+
+                  '<td>Feriado proyecto</td>'+
+                  '<td>'+ count +'</td>'   +                                         
+                '</tr>' +  
+                '<tr> <td> </td> <td> </td> </tr>' +                                        
+              '</tbody>'+
+            '</table>'+
+          '</div>'
+        );
+        
+      } else {
+        $("#custom-tabs-four-home").html(
+          '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
+            '<div class="info-box-content">  '   +                                    
+              '<span class="info-box-number">Las fechas de tu proyecto no estan bien definidas</span>'+
+            '</div>'+
+            '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
+              '<i class="far fa-grin-alt"></i>'+
+            '</span>'+
+          '</div>'
+        );       
+      }
     } else {
-      $("#custom-tabs-four-home").html(
-        '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
-          '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number">Las fechas de tu proyecto no estan bien definidas</span>'+
-          '</div>'+
-          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
-            '<i class="far fa-grin-alt"></i>'+
-          '</span>'+
-        '</div>'
-      );       
+      ver_errores(e);
     }
+    
   });
 
   // Domingo no laborable
-  $.post("../ajax/calendario.php?op=estado_domingo", { idproyecto: idproyecto },  function (data, status) {
+  $.post("../ajax/calendario.php?op=estado_domingo", { idproyecto: idproyecto },  function (e, status) {
 
-    data = JSON.parse(data);  //console.log(data);
+    e = JSON.parse(e);  //console.log(e);
 
-    localStorage.setItem('estado_domingo', data.feriado_domingo);
+    if (e.status == true) {
+      localStorage.setItem('estado_domingo', e.data.feriado_domingo);
+      if (e.data.feriado_domingo == "true") {
 
-    if (data.feriado_domingo == "true") {
+        $(".fc-day-sun").addClass("fc-day-disabled") 
 
-      $(".fc-day-sun").addClass("fc-day-disabled") 
+        $("#my-domingo").prop("checked", true);
+        
+      } else {
 
-      $("#my-domingo").prop("checked", true);
-      
+        $("#my-domingo").prop("checked", false);
+
+        $(".fc-day-sun").removeClass("fc-day-disabled")
+      }    
     } else {
-
-      $("#my-domingo").prop("checked", false);
-
-      $(".fc-day-sun").removeClass("fc-day-disabled")
-    }    
-     
+      ver_errores(e);
+    }     
   });   
 
   // calendario
-  $.post("../ajax/calendario.php?op=listar-calendario", { idproyecto: idproyecto },  function (data, status) {
+  $.post("../ajax/calendario.php?op=listar-calendario", { idproyecto: idproyecto },  function (e, status) {
 
-    data = JSON.parse(data);  //console.log(data); 
+    e = JSON.parse(e);  //console.log(e); 
 
-    $("#external-events").html('');
+    if (e.status == true) {
 
-    if (data.data1.length != 0) {
+      $("#external-events").html('');
 
-      $.each(data.data1, function (index, value) {
-             
-        $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+'</div>');
+      if (e.data.data1.length != 0) {
+
+        $.each(e.data.data1, function (index, value) {
+              
+          $("#external-events").append('<div class="external-event" style="background: '+value.backgroundColor+' !important; color: '+value.textColor+' !important;">'+value.title+'</div>');
+        });
+
+      } else {
+
+        $("#external-events").html('<div class="external-event bg-info">No hay fechas disponibles</div>');
+      }      
+      
+      //initialize the calendar
+      var date = new Date()
+
+      var d    = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+
+      var Calendar = FullCalendar.Calendar;
+
+      var Draggable = FullCalendar.Draggable;        
+      
+      var calendarEl = document.getElementById('calendar');
+
+      // initialize the external events     
+
+      calendar = new Calendar(calendarEl, {
+
+        timeZone: 'local',
+          
+        headerToolbar: {  left: 'prev,next today', center: 'title', right: 'listYear,dayGridMonth' },
+
+        themeSystem: 'bootstrap',
+        
+        events: e.data.data1,
+        
+        // Se ejecuta cuando no hay eventos
+        dateClick: function(info) {
+          
+          $('#idcalendario').val("");
+
+          $('#idproyecto').val(localStorage.getItem('nube_idproyecto'));
+
+          $('#fecha_feriado').val(info.dateStr);
+
+          $('#text_color').val('#ffffff');
+
+          $('#fecha_select').html(info.dateStr);
+
+          $('#titulo').val('Feriado');
+
+          $("#background_color").val("#FF0000").trigger("change");
+
+          $('#descripcion').val('');
+
+          $('#eliminar_registro').hide(); $('#guardar_registro').show();
+
+          $('#modal-agregar-calendario').modal('show');
+          
+        },
+
+        // Se ejecuta cuando hay un evento
+        eventClick: function(info) {
+
+          date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
+
+          if (dt < 10) { dt = '0' + dt; }
+
+          if (month < 10) { month = '0' + month; }
+          
+          //console.log(info.event);
+
+          $('#idcalendario').val(info.event.id);
+
+          if (info.event.extendedProps.idproyecto) {
+
+            $('#idproyecto').val(info.event.extendedProps.idproyecto);
+
+            $('#eliminar_registro').show(); $('#guardar_registro').show();
+
+          } else {
+
+            $('#eliminar_registro').hide(); $('#guardar_registro').hide();
+          }
+          
+
+          $('#fecha_feriado').val(year+'-' + month + '-'+dt);
+
+          $('#text_color').val(info.event.textColor);
+
+          $('#fecha_select').html(year+'-' + month + '-'+dt);
+
+          $('#titulo').val(info.event.title);
+
+          $("#background_color").val(info.event.backgroundColor).trigger("change");
+
+          $('#descripcion').val(info.event.extendedProps.descripcion);
+
+          $('#modal-agregar-calendario').modal('show');
+        },       
+            
+      //hiddenDays:[6],       
+        
+        editable  : true,
+
+        //validRange: { start: e.data.data2.fecha_inicio,  end: e.data.data2.fecha_fin },
+        //droppable : true, // this allows things to be dropped onto the calendar !!!
+
+        eventDrop : function(info) {
+
+          date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
+
+          if (dt < 10) { dt = '0' + dt; }
+
+          if (month < 10) { month = '0' + month; }
+          
+          $('#eliminar_registro').show();
+
+          $('#idcalendario').val(info.event.id);
+
+          $('#fecha_feriado').val(year+'-' + month + '-'+dt);
+
+          $('#text_color').val(info.event.textColor);
+
+          $('#fecha_select').html(year+'-' + month + '-'+dt);
+
+          $('#titulo').val(info.event.title);
+
+          $("#background_color").val(info.event.backgroundColor).trigger("change");
+
+          $('#descripcion').val(info.event.extendedProps.descripcion);
+
+          if (info.event.extendedProps.idproyecto) {
+
+            $('#idproyecto').val(info.event.extendedProps.idproyecto);
+
+            $("#submit-form-calendario").submit();
+
+          } else {
+
+            Swal.fire("Usted no puede mover!", 'Para editar esta fecha, usted nesecita ir a Fechas Globales', "error");
+            
+            info.revert();
+          }
+          
+        },
+
+        // eventResize: function(info) {
+        //   alert(info.event.title + " end is now " + info.event.end.toISOString());
+      
+        //   if (!confirm("is this okay?")) {
+        //     info.revert();
+        //   }
+        // }
+        
       });
 
+      calendar.setOption('locale', 'es');
+
+      if (e.data.data2.length != 0) { 
+        calendar.changeView('dayGridMonth', e.data.data2.fecha_inicio);       
+      } 
+      
+      calendar.render(); 
     } else {
-
-      $("#external-events").html('<div class="external-event bg-info">No hay fechas disponibles</div>');
-    }      
-    
-    //initialize the calendar
-    var date = new Date()
-
-    var d    = date.getDate(), m = date.getMonth(), y = date.getFullYear();
-
-    var Calendar = FullCalendar.Calendar;
-
-    var Draggable = FullCalendar.Draggable;        
-    
-    var calendarEl = document.getElementById('calendar');
-
-    // initialize the external events     
-
-    calendar = new Calendar(calendarEl, {
-
-      timeZone: 'local',
-        
-      headerToolbar: {  left: 'prev,next today', center: 'title', right: 'listYear,dayGridMonth' },
-
-      themeSystem: 'bootstrap',
-      
-      events: data.data1,
-       
-      // Se ejecuta cuando no hay eventos
-      dateClick: function(info) {
-        
-        $('#idcalendario').val("");
-
-        $('#idproyecto').val(localStorage.getItem('nube_idproyecto'));
-
-        $('#fecha_feriado').val(info.dateStr);
-
-        $('#text_color').val('#ffffff');
-
-        $('#fecha_select').html(info.dateStr);
-
-        $('#titulo').val('Feriado');
-
-        $("#background_color").val("#FF0000").trigger("change");
-
-        $('#descripcion').val('');
-
-        $('#eliminar_registro').hide(); $('#guardar_registro').show();
-
-        $('#modal-agregar-calendario').modal('show');
-        
-      },
-
-      // Se ejecuta cuando hay un evento
-      eventClick: function(info) {
-
-        date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
-
-        if (dt < 10) { dt = '0' + dt; }
-
-        if (month < 10) { month = '0' + month; }
-        
-         //console.log(info.event);
-
-        $('#idcalendario').val(info.event.id);
-
-        if (info.event.extendedProps.idproyecto) {
-
-          $('#idproyecto').val(info.event.extendedProps.idproyecto);
-
-          $('#eliminar_registro').show(); $('#guardar_registro').show();
-
-        } else {
-
-          $('#eliminar_registro').hide(); $('#guardar_registro').hide();
-        }
-        
-
-        $('#fecha_feriado').val(year+'-' + month + '-'+dt);
-
-        $('#text_color').val(info.event.textColor);
-
-        $('#fecha_select').html(year+'-' + month + '-'+dt);
-
-        $('#titulo').val(info.event.title);
-
-        $("#background_color").val(info.event.backgroundColor).trigger("change");
-
-        $('#descripcion').val(info.event.extendedProps.descripcion);
-
-        $('#modal-agregar-calendario').modal('show');
-      },       
-          
-    //hiddenDays:[6],       
-      
-      editable  : true,
-
-      //validRange: { start: data.data2.fecha_inicio,  end: data.data2.fecha_fin },
-      //droppable : true, // this allows things to be dropped onto the calendar !!!
-
-      eventDrop : function(info) {
-
-        date = new Date(info.event.start);  year = date.getFullYear();   month = date.getMonth()+1;  dt = date.getDate();
-
-        if (dt < 10) { dt = '0' + dt; }
-
-        if (month < 10) { month = '0' + month; }
-        
-        $('#eliminar_registro').show();
-
-        $('#idcalendario').val(info.event.id);
-
-        $('#fecha_feriado').val(year+'-' + month + '-'+dt);
-
-        $('#text_color').val(info.event.textColor);
-
-        $('#fecha_select').html(year+'-' + month + '-'+dt);
-
-        $('#titulo').val(info.event.title);
-
-        $("#background_color").val(info.event.backgroundColor).trigger("change");
-
-        $('#descripcion').val(info.event.extendedProps.descripcion);
-
-        if (info.event.extendedProps.idproyecto) {
-
-          $('#idproyecto').val(info.event.extendedProps.idproyecto);
-
-          $("#submit-form-calendario").submit();
-
-        } else {
-
-          Swal.fire("Usted no puede mover!", 'Para editar esta fecha, usted nesecita ir a Fechas Globales', "error");
-          
-          info.revert();
-        }
-        
-      },
-
-      // eventResize: function(info) {
-      //   alert(info.event.title + " end is now " + info.event.end.toISOString());
-    
-      //   if (!confirm("is this okay?")) {
-      //     info.revert();
-      //   }
-      // }
-      
-    });
-
-    calendar.setOption('locale', 'es');
-
-    if (data.data2.length != 0) { 
-      calendar.changeView('dayGridMonth', data.data2.fecha_inicio);       
-    } 
-    
-    calendar.render(); 
-     
+      ver_errores(e);
+    }     
   });
 
   // fechas eliminadas
   $("#external-events-eliminados").html('<div class="text-center"> <i class="fas fa-spinner fa-pulse fa-2x"></i></div>');
 
-  $.post("../ajax/calendario.php?op=listar-calendario-e", { idproyecto: idproyecto },  function (data, status) {
+  $.post("../ajax/calendario.php?op=listar-calendario-e", { idproyecto: idproyecto },  function (e, status) {
 
-    data = JSON.parse(data);  //console.log(data); 
-
-    $("#external-events-eliminados").html('');
-
-    if (data.length != 0) {
-
-      $.each(data, function (index, value) {
-              
-        $("#external-events-eliminados").append(
-        '<div class="info-box shadow-lg" style="min-height: 10px !important; ">'+
-          '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number" >' + value.title+ '</span>'+
-          '</div>'+
-          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important; background-color: '+value.backgroundColor+' !important;" onclick="activar('+value.id+')">'+
-            '<i class="fas fa-check" style="color: '+value.textColor+' !important;"></i>'+
-          '</span>'+
-        '</div>'
+    e = JSON.parse(e);  //console.log(e); 
+    if (e.status == true) {
+      $("#external-events-eliminados").html('');
+      if (e.data.length != 0) {
+        $.each(e.data, function (index, value) {                
+          $("#external-events-eliminados").append(
+          '<div class="info-box shadow-lg" style="min-height: 10px !important; ">'+
+            '<div class="info-box-content">  '   +                                    
+              '<span class="info-box-number" >' + value.title+ '</span>'+
+            '</div>'+
+            '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important; cursor: pointer !important; background-color: '+value.backgroundColor+' !important;" onclick="activar('+value.id+')">'+
+              '<i class="fas fa-check" style="color: '+value.textColor+' !important;"></i>'+
+            '</span>'+
+          '</div>'
+          );
+        });        
+      } else {
+        $("#external-events-eliminados").html(
+          '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
+            '<div class="info-box-content">  '   +                                    
+              '<span class="info-box-number">No hay fechas eliminadas </span>'+
+            '</div>'+
+            '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
+              '<i class="far fa-grin-alt"></i>'+
+            '</span>'+
+          '</div>'
         );
-      });
-      
+      }
     } else {
-
-      $("#external-events-eliminados").html(
-        '<div class="info-box shadow-lg" style="min-height: 10px !important;">'+
-          '<div class="info-box-content">  '   +                                    
-            '<span class="info-box-number">No hay fechas eliminadas </span>'+
-          '</div>'+
-          '<span class="info-box-icon bg-success" style="font-size: 0.8rem !important;" >'+
-            '<i class="far fa-grin-alt"></i>'+
-          '</span>'+
-        '</div>'
-      );
-    }
+      ver_errores(e);
+    }    
   }); 
 }
 
@@ -384,21 +389,40 @@ function guardaryeditar(e) {
     data: formData,
     contentType: false,
     processData: false,
-
-    success: function (datos) {
-             
-      if (datos == 'ok') {	
-
-        Swal.fire("Correcto!", "Fecha guardado correctamente", "success");			 
-
-	      listar(localStorage.getItem('nube_idproyecto'));  $("#modal-agregar-calendario").modal("hide"); limpiar();        
-
-			}else{
-
-        Swal.fire("Error!", datos, "error");
-
-			}
+    success: function (e) {
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Fecha guardado correctamente", "success");
+	        listar(localStorage.getItem('nube_idproyecto'));  $("#modal-agregar-calendario").modal("hide"); limpiar();
+        } else {
+          ver_errores(e);
+        }        
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener( "progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total) * 100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({ width: percentComplete + "%" });
+          $("#barra_progress").text(percentComplete.toFixed(2) + " %");
+        }
+      }, false );
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress").css({ width: "0%",  });
+      $("#barra_progress").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress").css({ width: "0%", });
+      $("#barra_progress").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -416,14 +440,15 @@ function desactivar() {
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
-
     if (result.isConfirmed) {
-
       $.post("../ajax/calendario.php?op=desactivar", { idcalendario: idcalendario }, function (e) {
-
-        Swal.fire("Eliminado!", "Tu Fecha a sido eliminado.", "success");
-    
-        listar(localStorage.getItem('nube_idproyecto')); $("#modal-agregar-calendario").modal("hide"); limpiar();    
+        e = JSON.parse(e);
+        if (e.status == true) {
+          Swal.fire("Eliminado!", "Tu Fecha a sido eliminado.", "success");    
+          listar(localStorage.getItem('nube_idproyecto')); $("#modal-agregar-calendario").modal("hide"); limpiar(); 
+        } else {
+          ver_errores(e);
+        }           
       });      
     }
   });   
@@ -442,12 +467,14 @@ function activar(idcalendario) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/calendario.php?op=activar", { idcalendario: idcalendario }, function (e) {
-
-        Swal.fire("Activado!", "Tu Fecha ha sido activado.", "success");
-
-        listar(localStorage.getItem('nube_idproyecto')); 
-      });
-      
+        e = JSON.parse(e);
+        if (e.status == true) {
+          Swal.fire("Activado!", "Tu Fecha ha sido activado.", "success");
+          listar(localStorage.getItem('nube_idproyecto')); 
+        } else {
+          ver_errores(e);
+        }        
+      });     
     }
   });      
 }
@@ -455,57 +482,34 @@ function activar(idcalendario) {
 // Validacion FORM
 $(function () {
 
-  $.validator.setDefaults({
-
-    submitHandler: function (e) {
-
-      guardaryeditar(e);
-
-    },
-  });
-
   $("#form-calendario").validate({
     rules: {
-      titulo: { required: true, minlength: 3, maxlength: 30 },
+      titulo:           { required: true, minlength: 3, maxlength: 30 },
       background_color: { required: true,  },
-      descripcion: { minlength: 6 },
+      descripcion:      { minlength: 6 },
     },
     messages: {
-
-      titulo: {
-        required: "Este campo es requerido",
-        minlength: "El titulo debe tener MÍNIMO 6 caracteres.",
-        maxlength: "El titulo debe tener como MÁXIMO 30 caracteres.", 
-      },
-
-      background_color: {
-        required: "Este campo es requerido",        
-      },
-
-      descripcion: {
-        minlength: "La descripcion debe tener MÍNIMO 4 caracteres.",
-      },
-
+      titulo:           { required: "Campo requerido", minlength: "MÍNIMO 6 caracteres.",  maxlength: "como MÁXIMO 30 caracteres.", },
+      background_color: { required: "Campo requerido", },
+      descripcion:      { minlength: "MÍNIMO 4 caracteres.", },
     },
         
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
       $(element).removeClass("is-invalid").addClass("is-valid");
-
+    },
+    submitHandler: function (e) {
+      guardaryeditar(e);
     },
   });
 });
@@ -513,8 +517,6 @@ $(function () {
 function invertColor(hex, bw) {
   if (hex == "#FF0000" || hex == "#FFF700" || hex == '#28A745') {
     
-  
-    console.log(hex);
     if (hex.indexOf('#') === 0) {
       hex = hex.slice(1);
     }
@@ -552,10 +554,13 @@ $("#my-domingo").on('click ', function(e){
     $(".fc-day-sun").addClass("fc-day-disabled")  
 
     $.post("../ajax/calendario.php?op=activar_domingo", { idproyecto: localStorage.getItem('nube_idproyecto') }, function (e) {      
-
-      Swal.fire("Activado!", "Tu DOMINGO no es laborable.", "success");      
-
-      listar(localStorage.getItem('nube_idproyecto')); 
+      e = JSON.parse(e);
+      if (e.status == true) {
+        Swal.fire("Activado!", "Tu DOMINGO no es laborable.", "success");
+        listar(localStorage.getItem('nube_idproyecto')); 
+      } else {
+        ver_errores(e);
+      }      
     });
     
   }else{
@@ -563,10 +568,13 @@ $("#my-domingo").on('click ', function(e){
     $(".fc-day-sun").removeClass("fc-day-disabled") 
 
     $.post("../ajax/calendario.php?op=desactivar_domingo", { idproyecto: localStorage.getItem('nube_idproyecto') }, function (e) {
-      
-      Swal.fire("Desactivado!", "Tu DOMINGO es laborable", "success");
-
-      listar(localStorage.getItem('nube_idproyecto')); 
+      e = JSON.parse(e);
+      if (e.status == true) {
+        Swal.fire("Desactivado!", "Tu DOMINGO es laborable", "success");
+        listar(localStorage.getItem('nube_idproyecto')); 
+      } else {
+        ver_errores(e);
+      }      
     });    
   }
 });

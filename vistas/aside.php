@@ -91,7 +91,7 @@
               <p>
                 Recursos
                 <i class="fas fa-angle-left right"></i>
-                <span class="badge badge-info right">6</span>
+                <span class="badge badge-info right">7</span>
               </p>
             </a>
             <ul class="nav nav-treeview ">
@@ -121,16 +121,53 @@
                 <a href="materiales.php" class="nav-link" id="lAllMateriales">
                   
                 <img src="../dist/svg/palana-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                  <p>Insumos</p>
+                  <p>All-Insumos</p>
                 </a>
-              </li>
-              <!-- Activos fijos -->
-              <li class="nav-item ">
-                <a href="activos_fijos.php" class="nav-link" id="lActivosfijos">
-                <i class="nav-icon fas fa-truck-pickup"></i>
-                  <p>Activos fijos</p>
+              </li>              
+
+              <!-- Contable -->
+              <li class="nav-item  b-radio-3px" id="bloc_ActivoFijo">
+                <a href="#" class="nav-link pl-2" id="mActivoFijo">
+                  <i class="nav-icon fas fa-project-diagram"></i>
+                  <p>
+                    All-Activos fijos
+                    <i class="fas fa-angle-left right"></i>
+                    <span class="badge badge-info right">3</span>
+                  </p>
                 </a>
-              </li>
+                <ul class="nav nav-treeview ">  
+                    
+                  <!-- Activos fijos -->
+                  <li class="nav-item ">
+                    <a href="activos_fijos.php" class="nav-link" id="lActivosfijos">
+                    <i class="nav-icon fas fa-truck-pickup"></i>
+                      <p>Activos fijos</p>
+                    </a>
+                  </li>
+                    
+                  <?php if ($_SESSION['compra_activo_fijo']==1) {  ?>
+                    <!-- ALL ACTIVOS FIJOS -->
+                    <li class="nav-item">
+                      <a href="compra_activos_fijos.php" class="nav-link pl-2" id="mAllactivos_fijos">
+                        <i class="nav-icon fas fa-hand-holding-usd"></i>
+                        <p>Compras de activos fijos</p>
+                      </a>
+                    </li>
+                  <?php  }  ?>
+
+                  <?php if ($_SESSION['resumen_activo_fijo_general']==1) {  ?>
+                    <!-- RESUMEN ACTIVOS FIJOS GENERAL-->
+                    <li class="nav-item">
+                      <a href="resumen_activos_fijos_general.php" class="nav-link pl-2" id="mResumenActivosFijosGeneral">
+                        <i class="nav-icon fas fa-tasks"></i>
+                        <p>Resumen activos fijos</p>
+                      </a>
+                    </li>
+                  <?php  }  ?>
+
+                </ul>
+              </li>       
+
               <!-- Calendario de la empresa -->
               <li class="nav-item ">
                 <a href="all_calendario.php" class="nav-link" id="lAllCalendario">
@@ -147,54 +184,49 @@
               </li>
             </ul>
           </li>
-        <?php  }  ?>
+        <?php  }  ?>        
 
-        <?php if ($_SESSION['compra_activo_fijo']==1) {  ?>
-          <!-- ALL ACTIVOS FIJOS -->
-          <li class="nav-item">
-            <a href="compra_activos_fijos.php" class="nav-link pl-2" id="mAllactivos_fijos">
-              <i class="nav-icon fas fa-hand-holding-usd"></i>
-              <p>Compras de activos fijos</p>
-            </a>
-          </li>
-        <?php  }  ?>
+        <!-- Contable -->
+        <li class="nav-item  b-radio-3px" id="bloc_Contable">
+          <a href="#" class="nav-link pl-2" id="mContable">
+            <i class="nav-icon fa-solid fa-calculator"></i>
+            <p>
+              Contable
+              <i class="fas fa-angle-left right"></i> 
+              <span class="badge badge-info right">3</span>
+            </p>
+          </a>
+          <ul class="nav nav-treeview ">  
+              
+              <?php if ($_SESSION['otra_factura']==1) {  ?>
+                <li class="nav-item">
+                  <a href="otra_factura.php" class="nav-link pl-2" id="lOtraFactura">
+                    <i class="nav-icon fas fa-receipt"></i>
+                    <p>Otras Facturas</p>
+                  </a>
+                </li>
+              <?php  }  ?>
+              
+              <?php if ($_SESSION['resumen_factura']==1) {  ?>
+                <li class="nav-item">
+                  <a href="resumen_factura.php" class="nav-link pl-2" id="lResumenFacura">            
+                    <i class="nav-icon fas fa-poll"></i>
+                    <p>Resumen de Facturas</p>
+                  </a>
+                </li>
+              <?php  }  ?>
 
-        <?php if ($_SESSION['resumen_activo_fijo_general']==1) {  ?>
-          <!-- RESUMEN ACTIVOS FIJOS GENERAL-->
-          <li class="nav-item">
-            <a href="resumen_activos_fijos_general.php" class="nav-link pl-2" id="mResumenActivosFijosGeneral">
-              <i class="nav-icon fas fa-tasks"></i>
-              <p>Resumen activos fijos</p>
-            </a>
-          </li>
-        <?php  }  ?>
+              <?php if ($_SESSION['resumen_recibo_por_honorario']==1) {  ?>
+                <li class="nav-item">
+                  <a href="resumen_rh.php" class="nav-link pl-2" id="lResumenRH">            
+                    <i class="nav-icon fas fa-poll"></i>
+                    <p>Resumen de RH</p>
+                  </a>
+                </li>
+              <?php  }  ?>
 
-        <?php if ($_SESSION['otra_factura']==1) {  ?>
-          <li class="nav-item">
-            <a href="otra_factura.php" class="nav-link pl-2" id="lOtraFactura">
-              <i class="nav-icon fas fa-receipt"></i>
-              <p>Otras Facturas</p>
-            </a>
-          </li>
-        <?php  }  ?>
-        
-        <?php if ($_SESSION['resumen_factura']==1) {  ?>
-          <li class="nav-item">
-            <a href="resumen_factura.php" class="nav-link pl-2" id="lResumenFacura">            
-              <i class="nav-icon fas fa-poll"></i>
-              <p>Resumen de Facturas</p>
-            </a>
-          </li>
-        <?php  }  ?>
-
-        <?php if ($_SESSION['resumen_recibo_por_honorario']==1) {  ?>
-          <li class="nav-item">
-            <a href="resumen_rh.php" class="nav-link pl-2" id="lResumenRH">            
-              <i class="nav-icon fas fa-poll"></i>
-              <p>Resumen de RH</p>
-            </a>
-          </li>
-        <?php  }  ?>
+            </ul>
+        </li>        
         
         <?php if ($_SESSION['papelera']==1) {  ?>
           <li class="nav-item">
@@ -213,99 +245,7 @@
           <i class="fas fa-spinner fa-pulse "></i>
             <p>Cargando...</p>
           </a>
-        </li>
-
-        <!-- <li class="nav-header bg-color-2c2c2c">TÉCNICO</li>  -->
-         
-        <li class="nav-item ver-otros-modulos-1" id="bloc_Tecnico">
-          <a href="#" class="nav-link bg-color-2c2c2c" id="mTecnico" style="padding-left: 7px;">
-            <i class="nav-icon far fa-circle"></i>
-            <p class="font-size-14px">TÉCNICO <i class="fas fa-angle-left right"></i><span class="badge badge-info right">4</span></p>
-          </a>
-          <ul class="nav nav-treeview">
-            <?php if ($_SESSION['valorizacion']==1) {  ?>
-              <!-- VALORIZACIONES -->
-              <li class="nav-item ver-otros-modulos-1">
-                <a href="valorizacion.php" class="nav-link pl-2" id="lValorizacion">
-                  <i class="nav-icon far fa-file-alt"></i>
-                  <p>Valorizaciones </p>
-                </a>
-              </li>
-            <?php  }  ?>
-            
-            <?php if ($_SESSION['grafico_valorizacion']==1) {  ?>
-            <!-- graficos insumos -->
-            <li class="nav-item ">
-              <a href="chart_valorizacion.php" class="nav-link pl-2" id="lChartValorizacion">
-                <i class="nav-icon fas fa-chart-line"></i> <p>Gráficos</p>
-              </a>
-            </li> 
-            <?php  }  ?>
-
-            <?php if ($_SESSION['asistencia_obrero']==1) {  ?>
-              <!-- REGISTRO DE ASISTENCIA -->
-              <li class="nav-item ver-otros-modulos-1">
-                <a href="asistencia_obrero.php" class="nav-link pl-2" id="lAsistencia">
-                  <i class="fas fa-clipboard-list nav-icon"></i>
-                  <p>Asistencia del obrero </p>
-                </a>
-              </li>
-            <?php  }  ?>
-
-            <?php if ($_SESSION['calendario']==1) {  ?>
-              <!-- CALENDARIO -->       
-              <li class="nav-item ver-otros-modulos-1">
-                <a href="calendario.php" class="nav-link pl-2" id="lCalendario">
-                  <i class="nav-icon far fa-calendar-alt"></i>
-                  <p>Calendario </p>
-                </a>
-              </li>
-            <?php  }  ?>
-
-            <?php if ($_SESSION['plano_otro']==1) {  ?>
-              <!-- PLANOS Y OTROS -->       
-              <li class="nav-item ver-otros-modulos-1">
-                <a href="plano_otro.php" class="nav-link pl-2" id="lPlanoOtro">
-                  <i class="nav-icon fas fa-map-marked-alt"></i>
-                  <p>Planos y otros </p>
-                </a>
-              </li>
-            <?php  }  ?>
-
-            <?php if ($_SESSION['movimiento_tierras']==1) {  ?>
-            <!-- MOVIMIENTO DE TIERRA -->       
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="movimiento_tierra.php" class="nav-link pl-2" id="lMovientoTierras">
-                <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
-                <i class="nav-icon fas fa-dumpster"></i>
-                <p>Movimiento de Tierras</p>
-              </a>
-            </li>
-            <?php  }  ?>
-
-            <?php if ($_SESSION['concreto_agregado']==1) {  ?>
-            <!-- CONCRETO, CEMENTO Y AGREGADO -->       
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="concreto_agregado.php" class="nav-link pl-2" id="lConcretoAgregado">
-                <!-- <i class="nav-icon fas fa-dumpster"></i> -->
-                <img src="../dist/svg/concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                <p>Concreto y Agregado</p>
-              </a>
-            </li>
-            <?php  }  ?>
-
-            <?php if ($_SESSION['fierro']==1) {  ?>
-            <!-- FIERROS -->       
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="fierro.php" class="nav-link pl-2" id="lFierro">
-                <!-- <i class="nav-icon fas fa-dumpster"></i> -->
-                <img src="../dist/svg/fierro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                <p>Fierros</p>
-              </a>
-            </li>
-            <?php  }  ?>
-          </ul>
-        </li>        
+        </li>                
 
         <!-- <li class="nav-header bg-color-2c2c2c">LOGÍSTICA Y ADQUISICIONES</li> -->
         
@@ -333,7 +273,7 @@
               <li class="nav-item ver-otros-modulos-1 b-radio-3px" id="bloc_Compras">
                 <a href="#" class="nav-link pl-2" id="mCompra">
                   <i class="fas fa-shopping-cart nav-icon"></i>
-                  <p>Compras <i class="fas fa-angle-left right"></i> <span class="badge badge-info right">3</span></p>
+                  <p>Compras <i class="fas fa-angle-left right"></i> <span class="badge badge-info right">4</span></p>
                 </a>
                 <ul class="nav nav-treeview">
                   <!-- Compras del proyecto -->
@@ -425,15 +365,7 @@
               </li>
             <?php  }  ?>
 
-            <?php if ($_SESSION['resumen_general']==1) {  ?>
-              <!-- OTROS SERVICIOS -->       
-              <li class="nav-item ver-otros-modulos-1">
-                <a href="resumen_general.php" class="nav-link pl-2" id="lresumen_general">                  
-                  <i class="nav-icon fas fa-list-ul"></i>
-                  <p>Resumen general </p>
-                </a>
-              </li>
-            <?php  }  ?>
+            
             
             <?php if ($_SESSION['viatico']==1) {  ?>
               <!-- BIÁTICOS -->
@@ -487,8 +419,111 @@
                 </ul>
               </li>
             <?php  }  ?>
+
+            <?php if ($_SESSION['resumen_general']==1) {  ?>
+              <!-- OTROS SERVICIOS -->       
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="resumen_general.php" class="nav-link pl-2" id="lresumen_general">                  
+                  <i class="nav-icon fas fa-list-ul"></i>
+                  <p>Resumen general </p>
+                </a>
+              </li>
+            <?php  }  ?>
+
           </ul>
-        </li>        
+        </li>       
+        
+        <!-- <li class="nav-header bg-color-2c2c2c">TÉCNICO</li>  -->
+         
+        <li class="nav-item ver-otros-modulos-1" id="bloc_Tecnico">
+          <a href="#" class="nav-link bg-color-2c2c2c" id="mTecnico" style="padding-left: 7px;">
+            <i class="nav-icon far fa-circle"></i>
+            <p class="font-size-14px">TÉCNICO <i class="fas fa-angle-left right"></i><span class="badge badge-info right">8</span></p>
+          </a>
+          <ul class="nav nav-treeview">
+            <?php if ($_SESSION['valorizacion']==1) {  ?>
+              <!-- VALORIZACIONES -->
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="valorizacion.php" class="nav-link pl-2" id="lValorizacion">
+                  <i class="nav-icon far fa-file-alt"></i>
+                  <p>Valorizaciones </p>
+                </a>
+              </li>
+            <?php  }  ?>
+            
+            <?php if ($_SESSION['grafico_valorizacion']==1) {  ?>
+            <!-- graficos insumos -->
+            <li class="nav-item ">
+              <a href="chart_valorizacion.php" class="nav-link pl-2" id="lChartValorizacion">
+                <i class="nav-icon fas fa-chart-line"></i> <p>Gráficos</p>
+              </a>
+            </li> 
+            <?php  }  ?>
+
+            <?php if ($_SESSION['asistencia_obrero']==1) {  ?>
+              <!-- REGISTRO DE ASISTENCIA -->
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="asistencia_obrero.php" class="nav-link pl-2" id="lAsistencia">
+                  <i class="fas fa-clipboard-list nav-icon"></i>
+                  <p>Asistencia del obrero </p>
+                </a>
+              </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['calendario']==1) {  ?>
+              <!-- CALENDARIO -->       
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="calendario.php" class="nav-link pl-2" id="lCalendario">
+                  <i class="nav-icon far fa-calendar-alt"></i>
+                  <p>Calendario </p>
+                </a>
+              </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['plano_otro']==1) {  ?>
+              <!-- PLANOS Y OTROS -->       
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="plano_otro.php" class="nav-link pl-2" id="lPlanoOtro">
+                  <i class="nav-icon fas fa-map-marked-alt"></i>
+                  <p>Planos y otros </p>
+                </a>
+              </li>
+            <?php  }  ?>            
+
+            <?php if ($_SESSION['concreto_agregado']==1) {  ?>
+            <!-- CONCRETO, CEMENTO Y AGREGADO -->       
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="concreto_agregado.php" class="nav-link pl-2" id="lConcretoAgregado">
+                <i class="nav-icon fas fa-project-diagram"></i>
+                <p>Clasificación de grupo</p>
+              </a>
+            </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['fierro']==1) {  ?>
+            <!-- CONCRETO -->       
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="concreto_valorizacion.php" class="nav-link pl-2" id="lConcreto">
+                <!-- <i class="nav-icon fas fa-dumpster"></i> -->
+                <img src="../dist/svg/concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+                <p>Concreto</p>
+              </a>
+            </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['fierro']==1) {  ?>
+            <!-- FIERROS -->       
+            <li class="nav-item ver-otros-modulos-1">
+              <a href="fierro_valorizacion.php" class="nav-link pl-2" id="lFierro">
+                <!-- <i class="nav-icon fas fa-dumpster"></i> -->
+                <img src="../dist/svg/fierro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+                <p>Fierros</p>
+              </a>
+            </li>
+            <?php  }  ?> 
+            
+          </ul>
+        </li>
 
         <!-- <li class="nav-header bg-color-2c2c2c">CONTABLE Y FINANCIERO</li> -->
          

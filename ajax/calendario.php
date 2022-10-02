@@ -25,8 +25,7 @@
       $text_color	      = isset($_POST["text_color"])? limpiarCadena($_POST["text_color"]):"";
       $titulo		        = isset($_POST["titulo"])? limpiarCadena($_POST["titulo"]):"";
       $background_color = isset($_POST["background_color"])? limpiarCadena($_POST["background_color"]):"";
-      $descripcion	  	= isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";
-      
+      $descripcion	  	= isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]):"";      
 
       switch ($_GET["op"]) {
 
@@ -36,14 +35,14 @@
 
             $rspta=$calendario->insertar($idproyecto, $titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
             
-            echo $rspta ? "ok" : "No se pudieron registrar todos los datos";
+            echo json_encode( $rspta, true);
   
           }else {
 
             // editamos un trabajador existente
             $rspta=$calendario->editar($idcalendario, $idproyecto, $titulo, $descripcion, $fecha_feriado, $background_color, $text_color);
             
-            echo $rspta ? "ok" : "Fecha no se pudo actualizar";
+            echo json_encode( $rspta, true);
           }            
 
         break;
@@ -52,7 +51,7 @@
 
           $rspta=$calendario->desactivar($idcalendario);
 
- 				  echo $rspta ? "Usuario Desactivado" : "calendario no se puede desactivar";
+          echo json_encode( $rspta, true);
 
         break;
 
@@ -60,7 +59,7 @@
 
           $rspta=$calendario->activar($idcalendario);
 
- 				  echo $rspta ? "Usuario activado" : "calendario no se puede activar";
+          echo json_encode( $rspta, true);
 
         break; 
         
@@ -68,7 +67,7 @@
 
           $rspta=$calendario->desactivar_domingo($idproyecto);
 
- 				  echo $rspta ? "Domingo Desactivado" : "Domingo no se puede desactivar";
+          echo json_encode( $rspta, true);
 
         break;
 
@@ -76,7 +75,7 @@
 
           $rspta=$calendario->activar_domingo($idproyecto);
 
- 				  echo $rspta ? "Domingo activado" : "Domingo no se puede activar";
+ 				  echo json_encode( $rspta, true);
 
         break;
 

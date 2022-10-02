@@ -233,6 +233,15 @@
                                 </div>
                               </div>
 
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="barra_progress_div">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
+
                             </div>
 
                             <div class="row" id="cargando-2-fomulario" style="display: none;">
@@ -278,10 +287,24 @@
 
         <!-- jquery-validation -->
         <script src="../plugins/jquery-validation/jquery.validate.min.js"></script>
-        <script src="../plugins/jquery-validation/additional-methods.min.js"></script>    
+        <script src="../plugins/jquery-validation/additional-methods.min.js"></script> 
+        
+        <!-- DataTables  & Plugins -->
+        <script src="../plugins/datatables2/jquery.dataTables.min.js"></script>    
+        <script src="../plugins/datatables2/dataTables.buttons.min.js"></script>
+        <script src="../plugins/datatables2/buttons.html5.min.js"></script>
+        <script src="../plugins/datatables2/buttons.colVis.min.js"></script>
+        <script src="../plugins/datatables2/jszip.min.js"></script>
+        <script src="../plugins/datatables2/pdfmake.min.js"></script>
+        <script src="../plugins/datatables2/vfs_fonts.js"></script>
+        <script src="../plugins/datatables2/datetime.js"></script>
+        <!-- Responsive datatable -->
+        <script src="../plugins/datatables2/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="../plugins/datatables2/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
         <!-- AdminLTE App -->
         <script src="../dist/js/adminlte.min.js"></script>
+
         <!-- fullCalendar 2.2.5 -->
         <script src="../plugins/moment/moment.min.js"></script>
         <script src="../plugins/fullcalendar/main.js"></script>
@@ -301,6 +324,11 @@
         <script src="../dist/js/sesion.js"></script> 
 
         <script type="text/javascript" src="scripts/calendario.js"></script>
+
+        <!-- Funciones Crud -->
+        <script type="text/javascript" src="../dist/js/funcion_crud.js"></script>
+        <!-- Funciones Generales -->
+        <script type="text/javascript" src="../dist/js/funcion_general.js"></script>
 
         <?php require 'go_to.php'; ?>
 
