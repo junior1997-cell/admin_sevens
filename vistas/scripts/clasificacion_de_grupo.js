@@ -90,11 +90,11 @@ function tbla_principal_item(id_proyecto) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4], }, title: 'Grupos - Concreto y Agregado' },      
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], }, title: 'Grupos - Concreto y Agregado' },      
     ],
     ajax: {
-      url: `../ajax/concreto_agregado.php?op=tbla_principal_grupo&id_proyecto=${id_proyecto}`,
+      url: `../ajax/clasificacion_de_grupo.php?op=tbla_principal_grupo&id_proyecto=${id_proyecto}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -120,7 +120,7 @@ function tbla_principal_item(id_proyecto) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [5], visible: false, searchable: false, },  
+      //{ targets: [5], visible: false, searchable: false, },  
     ],
   }).DataTable();
 }
@@ -131,7 +131,7 @@ function guardar_y_editar_items(e) {
   var formData = new FormData($("#form-items")[0]);
 
   $.ajax({
-    url: "../ajax/concreto_agregado.php?op=guardar_y_editar_grupo",
+    url: "../ajax/clasificacion_de_grupo.php?op=guardar_y_editar_grupo",
     type: "POST",
     data: formData,
     contentType: false,
@@ -187,7 +187,7 @@ function mostrar_item(idtipo_tierra) {
 
   $("#modal-agregar-items").modal("show");
 
-  $.post("../ajax/concreto_agregado.php?op=mostrar_grupo", { 'idtipo_tierra': idtipo_tierra }, function (e, status) {
+  $.post("../ajax/clasificacion_de_grupo.php?op=mostrar_grupo", { 'idtipo_tierra': idtipo_tierra }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
@@ -222,7 +222,7 @@ function verdatos_item(idproducto){
 
   $("#modal-ver-insumo").modal("show");
 
-  $.post("../ajax/concreto_agregado.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
+  $.post("../ajax/clasificacion_de_grupo.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
 
     e = JSON.parse(e);  //console.log(e); 
     
@@ -346,8 +346,8 @@ function verdatos_item(idproducto){
 function eliminar_item(idproducto, nombre) {
 
   crud_eliminar_papelera(
-    "../ajax/concreto_agregado.php?op=desactivar_grupo",
-    "../ajax/concreto_agregado.php?op=eliminar_grupo", 
+    "../ajax/clasificacion_de_grupo.php?op=desactivar_grupo",
+    "../ajax/clasificacion_de_grupo.php?op=eliminar_grupo", 
     idproducto, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
@@ -367,7 +367,7 @@ function lista_de_items(idproyecto) {
 
   $(".lista-items").html(`<li class="nav-item"><a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a></li>`); 
 
-  $.post("../ajax/concreto_agregado.php?op=lista_de_grupo", { 'idproyecto': idproyecto }, function (e, status) {
+  $.post("../ajax/clasificacion_de_grupo.php?op=lista_de_grupo", { 'idproyecto': idproyecto }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
     // e.data.idtipo_tierra
@@ -420,10 +420,7 @@ function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_bombeado, n
 
   id_proyecto_r = id_proyecto; idtipo_tierra_r = idtipo_tierra; columna_bombeado_r = columna_bombeado;  nombre_item_r = nombre_item; 
   fecha_1_r = fecha_1; fecha_2_r = fecha_2; id_proveedor_r = id_proveedor; comprobante_r = comprobante;
-  
-  var bombeado_columna = columna_bombeado=='1' ?  { targets: [7], visible: true, searchable: true, }: { targets: [7], visible: false, searchable: false, } ;
-  var bombeado_export = columna_bombeado=='1' ?  [0,2,3,4,5,6,7,8,9,10]: [0,2,3,4,5,6,8,9,10] ;
-  
+    
   $('.modal-title-detalle-items').html(nombre_item);
   $("#idtipo_tierra_c").val(idtipo_tierra);
 
@@ -444,12 +441,12 @@ function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_bombeado, n
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: bombeado_export, }, title: removeCaracterEspecial(nombre_item), }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: bombeado_export, }, title: removeCaracterEspecial(nombre_item), }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: bombeado_export, }, title: removeCaracterEspecial(nombre_item), orientation: 'landscape', pageSize: 'LEGAL', },       
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9,10], }, title: removeCaracterEspecial(nombre_item), }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9,10], }, title: removeCaracterEspecial(nombre_item), }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3,4,5,6,7,8,9,10], }, title: removeCaracterEspecial(nombre_item), orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
-      url: `../ajax/concreto_agregado.php?op=tbla_principal_concreto&id_proyecto=${id_proyecto}&idtipo_tierra=${idtipo_tierra}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
+      url: `../ajax/clasificacion_de_grupo.php?op=tbla_principal_concreto&id_proyecto=${id_proyecto}&idtipo_tierra=${idtipo_tierra}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -463,14 +460,12 @@ function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_bombeado, n
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
       // columna: cantidad 
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); $(".total_concreto_cantidad").html( formato_miles( cantidad += parseFloat(data[5]) ) ); }
-      // columna: subtotal
-      if (data[6] != '') { $(".total_concreto_subtotal").html(formato_miles( subtotal += parseFloat(data[6]) ) ); }
-      // columna: bombeado
-      if (data[7] != '') { $(".total_concreto_bombeado").html(formato_miles( bombeado += parseFloat(data[7]) ) ); }
+      // columna: precio
+      //if (data[6] != '') { $(".total_concreto_subtotal").html(formato_miles( subtotal += parseFloat(data[6]) ) ); }
       // columna: descuento
-      if (data[8] != '') { $(".total_concreto_descuento").html(formato_miles( descuento += parseFloat(data[8]) )); }
-      // columna: total compra
-      if (data[9] != '') { $(".total_concreto").html(formato_miles( total_compra += parseFloat(data[9]) )); }      
+      if (data[7] != '') { $(".total_concreto_descuento").html(formato_miles( descuento += parseFloat(data[7]) ) ); }
+      // columna: subtotal
+      if (data[8] != '') { $(".total_concreto_subtotal").html(formato_miles( subtotal += parseFloat(data[8]) )); }   
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -481,10 +476,9 @@ function tbla_principal_concreto(id_proyecto, idtipo_tierra, columna_bombeado, n
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      bombeado_columna,
       { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [6,7,8, 9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
-
+      { targets: [6,7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
     ],
   }).DataTable();
 
@@ -503,7 +497,7 @@ function total_concreto(id_proyecto, idtipo_tierra, fecha_1, fecha_2, id_proveed
   // $(".total_precio_unitario_concreto").html('<i class="fas fa-spinner fa-pulse"></i>');      
   // $(".total_concreto").html('<i class="fas fa-spinner fa-pulse"></i>');  
 
-  $.post("../ajax/concreto_agregado.php?op=total_concreto", { 'id_proyecto':id_proyecto, 'idtipo_tierra': idtipo_tierra,'fecha_1': fecha_1,'fecha_2': fecha_2,'id_proveedor': id_proveedor,'comprobante': comprobante }, function (e, status) {
+  $.post("../ajax/clasificacion_de_grupo.php?op=total_concreto", { 'id_proyecto':id_proyecto, 'idtipo_tierra': idtipo_tierra,'fecha_1': fecha_1,'fecha_2': fecha_2,'id_proveedor': id_proveedor,'comprobante': comprobante }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
@@ -528,7 +522,7 @@ function guardar_y_editar_concreto(e) {
   var formData = new FormData($("#form-concreto")[0]);
 
   $.ajax({
-    url: "../ajax/concreto_agregado.php?op=guardar_y_editar_concreto",
+    url: "../ajax/clasificacion_de_grupo.php?op=guardar_y_editar_concreto",
     type: "POST",
     data: formData,
     contentType: false,
@@ -581,7 +575,7 @@ function mostrar_concreto(idconcreto_agregado) {
 
   $("#modal-agregar-concreto").modal("show");
 
-  $.post("../ajax/concreto_agregado.php?op=mostrar_grupo", { 'idconcreto_agregado': idconcreto_agregado }, function (e, status) {
+  $.post("../ajax/clasificacion_de_grupo.php?op=mostrar_grupo", { 'idconcreto_agregado': idconcreto_agregado }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 
@@ -622,8 +616,8 @@ function calcular_total() {
 function eliminar_concreto(idproducto, nombre) {
 
   crud_eliminar_papelera(
-    "../ajax/concreto_agregado.php?op=desactivar_concreto",
-    "../ajax/concreto_agregado.php?op=eliminar_concreto", 
+    "../ajax/clasificacion_de_grupo.php?op=desactivar_concreto",
+    "../ajax/clasificacion_de_grupo.php?op=eliminar_concreto", 
     idproducto, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
@@ -656,7 +650,7 @@ function modal_ficha_tec(ficha_tecnica) {
   $(".tooltip").removeClass("show").addClass("hidde");
 }
 
-function ver_detalle_compras(idcompra_proyecto) {
+function ver_detalle_compras(idcompra_proyecto, id_insumo) {
 
   $("#cargando-5-fomulario").hide();
   $("#cargando-6-fomulario").show();
@@ -666,10 +660,10 @@ function ver_detalle_compras(idcompra_proyecto) {
   $(".tooltip").remove();
   $("#modal-ver-compras").modal("show");
 
-  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_insumo&id_compra=${idcompra_proyecto}`, function (r) {
-    r = JSON.parse(r);
-    if (r.status == true) {
-      $(".detalle_de_compra").html(r.data); 
+  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_insumo&id_compra=${idcompra_proyecto}&id_insumo=${id_insumo}`, function (e) {
+    e = JSON.parse(e);
+    if (e.status == true) {
+      $(".detalle_de_compra").html(e.data); 
       $("#cargando-5-fomulario").show();
       $("#cargando-6-fomulario").hide();
 
@@ -722,7 +716,7 @@ function tbla_comprobantes_compras(id_compra, num_orden) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [ ],
     ajax: {
-      url: `../ajax/concreto_agregado.php?op=tbla_comprobantes_compra&id_compra=${id_compra}&num_orden=${num_orden}`,
+      url: `../ajax/clasificacion_de_grupo.php?op=tbla_comprobantes_compra&id_compra=${id_compra}&num_orden=${num_orden}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -772,7 +766,7 @@ function tbla_principal_resumen(idproyecto) {
       { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,1,2,3,4,5,6], }, orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
-      url: `../ajax/concreto_agregado.php?op=tbla_principal_resumen&idproyecto=${idproyecto}`,
+      url: `../ajax/clasificacion_de_grupo.php?op=tbla_principal_resumen&idproyecto=${idproyecto}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -816,7 +810,7 @@ function total_concreto_resumen(idproyecto) {
   $(".total_precio_unitario_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');      
   $(".total_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');  
 
-  $.post("../ajax/concreto_agregado.php?op=total_resumen", { 'idproyecto': idproyecto }, function (e, status) {
+  $.post("../ajax/clasificacion_de_grupo.php?op=total_resumen", { 'idproyecto': idproyecto }, function (e, status) {
     
     e = JSON.parse(e); console.log(e);
 

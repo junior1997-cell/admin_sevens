@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion_v2.php";
 
-class ConcretoAgregado
+class Clasificacion_de_grupo
 {
   //Implementamos nuestro constructor
   public function __construct()
@@ -124,9 +124,9 @@ class ConcretoAgregado
     $sql_1="SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, 
     cpp.total as total_compra, cpp.estado as estado_compra,
     prov.razon_social, prov.tipo_documento, prov.ruc
-    FROM compra_por_proyecto as cpp, detalle_compra as dc, producto as p, proveedor as prov
-    WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = p.idproducto AND cpp.idproveedor = prov.idproveedor
-    AND p.idtipo_tierra_concreto = '$idtipo_tierra' AND cpp.idproyecto = '$id_proyecto' AND cpp.estado ='1' AND cpp.estado_delete = '1' 
+    FROM compra_por_proyecto as cpp, detalle_compra as dc,  proveedor as prov
+    WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND  cpp.idproveedor = prov.idproveedor
+     AND cpp.idproyecto = '$id_proyecto' AND cpp.estado ='1' AND cpp.estado_delete = '1' 
     $filtro_proveedor $filtro_fecha GROUP BY cpp.idcompra_proyecto ORDER BY cpp.fecha_compra DESC;";	
 		$compra = ejecutarConsultaArray($sql_1);	
 
@@ -139,56 +139,37 @@ class ConcretoAgregado
       $sql_2="SELECT 	dc.idproducto, p.nombre as nombre_producto, dc.cantidad, dc.precio_sin_igv, dc.igv, dc.precio_con_igv,
       dc.descuento, dc.subtotal, dc.unidad_medida, dc.color,  dc.ficha_tecnica_producto, p.imagen
       FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c
-      WHERE dc.idproducto=p.idproducto AND p.idcolor = c.idcolor 
-      AND p.idunidad_medida = um.idunidad_medida AND dc.idcompra_proyecto='$idcompra_proyecto';";	
+      WHERE dc.idproducto=p.idproducto AND p.idcolor = c.idcolor AND p.idunidad_medida = um.idunidad_medida 
+      AND p.idtipo_tierra_concreto = '$idtipo_tierra' AND dc.idcompra_proyecto='$idcompra_proyecto';";	
       $detalle_compra = ejecutarConsultaArray($sql_2);	
       if ($detalle_compra['status'] == false) { return $detalle_compra; }
+      
+      foreach ($detalle_compra['data'] as $key => $val) {        
 
-      $estado_bombeado = '';
-      $precio_bombeado = 0; $precio_sin_bombeado = 0;
-      $descuento = 0; $cantidad_sin_bombeado = 0;
-      $html_producto = ''; $precio_producto = 0;
-      $cont_producto = 0;
-      foreach ($detalle_compra['data'] as $key => $val) {
-        if ($val['nombre_producto'] == 'SERVICIO BOMBEADO') {
-          $estado_bombeado         = 'SI';
-          $precio_bombeado        += floatval($val['subtotal']);
-        } else {
-          $cont_producto++;
-          $estado_bombeado         = 'NO';
-          $precio_sin_bombeado    += floatval($val['subtotal']);
-          $cantidad_sin_bombeado  += floatval($val['cantidad']);
-          $html_producto          .=  (count($detalle_compra['data']) > 2 ? '<p class="mb-0"><b class="mr-1">-</b>'.$val['nombre_producto'].'</p>' : $val['nombre_producto']);
-          $precio_producto         =  floatval($val['precio_con_igv']);
-        }   
-        $descuento += floatval($val['descuento']);
-      }
+        $sql_3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+        $cant_comprobantes = ejecutarConsultaSimpleFila($sql_3);
+        if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
 
-      $sql_3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
-      $cant_comprobantes = ejecutarConsultaSimpleFila($sql_3);
-      if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
-    
-      $data[] = [
-        'idproyecto'            => $value['idproyecto'],
-        'idcompra_proyecto'     => $value['idcompra_proyecto'],
-        'fecha_compra'          => $value['fecha_compra'],
-        'nombre_dia'            => nombre_dia_semana($value['fecha_compra']),        
-        'nombre_producto'       => $html_producto,        
-        'tipo_comprobante'      => $value['tipo_comprobante'],
-        'serie_comprobante'     => $value['serie_comprobante'],
-        'cantidad_sin_bombeado' => $cantidad_sin_bombeado,
-        'precio_con_igv'        => $precio_producto,
-        'descuento'             => $descuento,
-        'subtotal_sin_bombeado' => $precio_sin_bombeado,
-        'subtotal_bombeado'     => $precio_bombeado,
-        'estado_bombeado'       => $estado_bombeado,
-        'total_compra'          => $value['total_compra'],
-        'proveedor'             => $value['razon_social'],
-        'tipo_documento'        => $value['tipo_documento'],
-        'ruc'                   => $value['ruc'],
-        'estado_compra'         => $value['estado_compra'],    
-        'cant_comprobantes'     => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
-      ];
+        $data[] = [
+          'idproyecto'            => $value['idproyecto'],
+          'idcompra_proyecto'     => $value['idcompra_proyecto'],
+          'idproducto'            => $val['idproducto'],
+          'fecha_compra'          => $value['fecha_compra'],
+          'nombre_dia'            => nombre_dia_semana($value['fecha_compra']),        
+          'nombre_producto'       => $val['nombre_producto'],        
+          'tipo_comprobante'      => $value['tipo_comprobante'],
+          'serie_comprobante'     => $value['serie_comprobante'],
+          'cantidad'              => floatval($val['cantidad']),
+          'precio_con_igv'        => floatval($val['precio_con_igv']),
+          'descuento'             => floatval($val['descuento']),
+          'subtotal'              => floatval($val['subtotal']),
+          'proveedor'             => $value['razon_social'],
+          'tipo_documento'        => $value['tipo_documento'],
+          'ruc'                   => $value['ruc'],
+          'estado_compra'         => $value['estado_compra'],    
+          'cant_comprobantes'     => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
+        ];
+      }      
     }
   
     return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data, 'affected_rows' =>$compra['affected_rows'],  ] ;

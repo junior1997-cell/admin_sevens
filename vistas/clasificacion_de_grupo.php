@@ -13,8 +13,8 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Concreto y Agregado | Admin Sevens</title>
-        <?php $title = "Concreto y Agregado"; require 'head.php';  ?>       
+        <title>Clasificacion de grupo | Admin Sevens</title>
+        <?php $title = "Clasificación de grupo"; require 'head.php';  ?>       
 
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
@@ -37,12 +37,12 @@
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1><img src="../dist/svg/negro-concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 41px !important;" > Concreto y Agregado</h1>
+                      <h1><i class="nav-icon fas fa-project-diagram"></i> Clasificación de grupo</h1>
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Concreto</li>
+                        <li class="breadcrumb-item active">Grupo</li>
                       </ol>
                     </div>
                   </div>
@@ -187,11 +187,10 @@
                                                 <th>Descipcion</th>
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
-                                                <th class="text-center">Cantidad</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Subtotal</th>                                                
-                                                <th >Bombeado</th>
+                                                <th class="text-center">Cant.</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio</th> 
                                                 <th >Descuento</th>
-                                                <th >Precio Total</th>
+                                                <th >Subtotal</th>
                                                 <th >Provedor</th>
                                                 <th >CFDI</th>
                                               </tr>
@@ -205,10 +204,9 @@
                                                 <th data-toggle="tooltip" data-original-title="Día de Semana">Dia</th>
                                                 <th>Fecha</th>
                                                 <th class="text-nowrap px-2 text-center" ><span class="total_concreto_cantidad">0.00</span></th>
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_subtotal">0.00</span></div></th>
-                                                <th ><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_bombeado">0.00</span></div></th>
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_descuento">0.00</span></div></th>                                                
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto">0.00</span></div></th>
+                                                <th class="text-nowrap px-2">Precio</th>
+                                                <th ><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_descuento">0.00</span></div></th>
+                                                <th ><div class="formato-numero-conta"> <span>S/</span><span class="total_concreto_subtotal">0.00</span></div></th>
                                                 <th >Provedor</th>
                                                 <th >CFDI</th>
                                               </tr>
@@ -261,7 +259,7 @@
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th>
+                                <!-- <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th> -->
                                 <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
                                 <th >Estado</th>
                                                         
@@ -273,7 +271,7 @@
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th>
+                                <!-- <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th> -->
                                 <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
                                 <th >Estado</th>                                  
                               </tr>
@@ -321,14 +319,14 @@
                               </div>
 
                               <!-- Columna Calidad -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">                              
                                   <div class="custom-control custom-switch custom-switch-on-success">
                                     <input type="checkbox" class="custom-control-input" name="columna_servicio_bombeado" id="columna_servicio_bombeado" value="1">
                                     <label class="custom-control-label cursor-pointer" for="columna_servicio_bombeado">Columna Serv. de Bombeado</label>
                                   </div>                               
                                 </div>
-                              </div>
+                              </div> -->
                               
                               <!-- Columna Descipcion --> 
                               <!-- <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -633,7 +631,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>         
 
-        <script type="text/javascript" src="scripts/concreto_agregado.js"></script>
+        <script type="text/javascript" src="scripts/clasificacion_de_grupo.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>               
 

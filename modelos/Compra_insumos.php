@@ -318,18 +318,18 @@ class Compra_insumos
   public function ver_detalle_compra($id_compra) {
 
     $sql = "SELECT 
-		dp.idproducto as idproducto,
-		dp.ficha_tecnica_producto  as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,
-		dp.cantidad ,
-    dp.unidad_medida, dp.color,
-		dp.precio_sin_igv ,
-    dp.igv ,
-    dp.precio_con_igv ,
-		dp.descuento ,
-    dp.subtotal ,
+		dc.idproducto,
+		dc.ficha_tecnica_producto  as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,
+		dc.cantidad ,
+    dc.unidad_medida, dc.color,
+		dc.precio_sin_igv ,
+    dc.igv ,
+    dc.precio_con_igv ,
+		dc.descuento ,
+    dc.subtotal ,
 		p.nombre as nombre, p.imagen, um.abreviacion
-		FROM detalle_compra  dp, producto as p, unidad_medida as um
-		WHERE p.idunidad_medida = um.idunidad_medida AND idcompra_proyecto='$id_compra' AND  dp.idproducto=p.idproducto";
+		FROM detalle_compra  dc, producto as p, unidad_medida as um
+		WHERE p.idunidad_medida = um.idunidad_medida AND dc.idproducto=p.idproducto AND idcompra_proyecto='$id_compra' ";
 
     return ejecutarConsulta($sql);
   }
