@@ -493,7 +493,7 @@
             <?php if ($_SESSION['concreto_agregado']==1) {  ?>
             <!-- CONCRETO, CEMENTO Y AGREGADO -->       
             <li class="nav-item ver-otros-modulos-1">
-              <a href="concreto_agregado.php" class="nav-link pl-2" id="lConcretoAgregado">
+              <a href="clasificacion_de_grupo.php" class="nav-link pl-2" id="lConcretoAgregado">
                 <i class="nav-icon fas fa-project-diagram"></i>
                 <p>Clasificación de grupo</p>
               </a>
@@ -514,7 +514,7 @@
             <?php if ($_SESSION['fierro']==1) {  ?>
             <!-- FIERROS -->       
             <li class="nav-item ver-otros-modulos-1">
-              <a href="fierro_valorizacion.php" class="nav-link pl-2" id="lFierroValorizacion">
+              <a href="valorizacion_fierro.php" class="nav-link pl-2" id="lFierroValorizacion">
                 <!-- <i class="nav-icon fas fa-dumpster"></i> -->
                 <img src="../dist/svg/fierro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                 <p>Fierros</p>

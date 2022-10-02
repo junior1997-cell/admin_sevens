@@ -569,9 +569,12 @@
       /* ══════════════════════════════════════ C O M P R A   D E   I N S U M O ════════════════════════════ */
 
       case 'detalle_compra_de_insumo':
-        
-        $rspta = $compra_insumos->ver_compra($_GET['id_compra']);
-        $rspta2 = $compra_insumos->ver_detalle_compra($_GET['id_compra']);
+
+        $id_insumo  = isset($_GET["id_insumo"]) ? limpiarCadena($_GET["id_insumo"]) : "";
+        $class_resaltar_insumo = ( empty($id_insumo) ? "" : "bg-warning") ;
+
+        $rspta      = $compra_insumos->ver_compra($_GET['id_compra']);
+        $rspta2     = $compra_insumos->ver_detalle_compra($_GET['id_compra']);
 
         $subtotal = 0;    $ficha = ''; 
 
@@ -629,25 +632,27 @@
 
         while ($reg = $rspta2['data']->fetch_object()) {
 
-          empty($reg->ficha_tecnica) ? ($ficha = '<i class="fa-regular fa-file-pdf fa-2x text-gray-50"></i>') : ($ficha = '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
+          $bg_resaltar = ($id_insumo == $reg->idproducto? $class_resaltar_insumo : "" );
+          empty($reg->ficha_tecnica) ? ($ficha = '<i class="fa-regular fa-file-pdf fa-2x '. $bg_resaltar.' text-gray-50"></i>') : ($ficha = '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
           $img_product = 'dist/docs/material/img_perfil/'. (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen );
-          $tbody .= '<tr class="filas">
+
+          $tbody .= '<tr class="filas ">
             <td class="text-center p-6px">' . $cont++ . '</td>
             <td class="text-center p-6px">' . $ficha . '</td>
             <td class="text-left p-6px">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../'.$img_product.'" alt="user image" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
-                <span class="username"><p class="mb-0 ">' . $reg->nombre . '</p></span>
-                <span class="description"><b>Color: </b>' . $reg->color . '</span>
+                <img class="profile-user-img img-responsive img-circle cursor-pointer '. $bg_resaltar.'" src="../'.$img_product.'" alt="user image" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
+                <span class="username"><p class="mb-0 '. $bg_resaltar.'">' . $reg->nombre . '</p></span>
+                <span class="description '. $bg_resaltar.'"><b>Color: </b>' . $reg->color . '</span>
               </div>
             </td>
-            <td class="text-left p-6px">' . $reg->unidad_medida . '</td>
-            <td class="text-center p-6px">' . $reg->cantidad . '</td>		
-            <td class="text-right p-6px">' . number_format($reg->precio_sin_igv, 2, '.',',') . '</td>
-            <td class="text-right p-6px">' . number_format($reg->igv, 2, '.',',') . '</td>
-            <td class="text-right p-6px">' . number_format($reg->precio_con_igv, 2, '.',',') . '</td>
-            <td class="text-right p-6px">' . number_format($reg->descuento, 2, '.',',') . '</td>
-            <td class="text-right p-6px">' . number_format($reg->subtotal, 2, '.',',') .'</td>
+            <td class="text-left p-6px"> <span class="'. $bg_resaltar.'">' . $reg->unidad_medida . '</span></td>
+            <td class="text-center p-6px"><span class="'. $bg_resaltar.'">' . $reg->cantidad . '</span></td>		
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->precio_sin_igv, 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->igv, 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->precio_con_igv, 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->descuento, 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->subtotal, 2, '.',',') .'</span></td>
           </tr>';
         }         
 
