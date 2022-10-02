@@ -503,7 +503,7 @@
             <?php if ($_SESSION['fierro']==1) {  ?>
             <!-- CONCRETO -->       
             <li class="nav-item ver-otros-modulos-1">
-              <a href="concreto_valorizacion.php" class="nav-link pl-2" id="lConcreto">
+              <a href="concreto_valorizacion.php" class="nav-link pl-2" id="lConcretoValorizacion">
                 <!-- <i class="nav-icon fas fa-dumpster"></i> -->
                 <img src="../dist/svg/concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                 <p>Concreto</p>
@@ -514,7 +514,7 @@
             <?php if ($_SESSION['fierro']==1) {  ?>
             <!-- FIERROS -->       
             <li class="nav-item ver-otros-modulos-1">
-              <a href="fierro_valorizacion.php" class="nav-link pl-2" id="lFierro">
+              <a href="fierro_valorizacion.php" class="nav-link pl-2" id="lFierroValorizacion">
                 <!-- <i class="nav-icon fas fa-dumpster"></i> -->
                 <img src="../dist/svg/fierro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                 <p>Fierros</p>
