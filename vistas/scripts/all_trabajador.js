@@ -939,6 +939,7 @@ function sueld_mensual(){
 function calcular_edad() {
   
     var fecha = new Date($('#fecha_nacimiento').val());
+    console.log(fecha);
   
     var hoy = new Date();
   
