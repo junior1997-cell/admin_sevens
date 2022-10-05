@@ -48,30 +48,38 @@ function doc7_eliminar() {
 
 function mostrar_form_table(estados) {
   if (estados=='1') {
-    $("#btn-editar").show();
-    $("#btn-guardar").hide();
-
-    // $('#tab-seleccione').hide(); 
-    $('#tab-contenido').hide(); 
-    $('#tab-info').show();
-    $('#card-regresar').hide();
+    $(".div-todos-los-docs").show();
+    $(".div-docs-por-valorizacion").hide();
   } else if (estados=='2') {
-    $("#btn-editar").hide();
-    $("#btn-guardar").hide();
-
-    // $('#tab-seleccione').show(); 
-    $('#tab-contenido').show(); 
-    $('#tab-info').show();
-    $('#card-regresar').show();      
+    $(".div-todos-los-docs").hide();
+    $(".div-docs-por-valorizacion").show();  
   }
 }
+
+//limpiar
+function limpiar_val_concreto() {
+  $("#idvalorizacion").val("");
+  $("#nombre_val_concreto").val("");
+
+  $("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+  $("#doc7_nombre").html('');
+  $("#doc_old_7").val(""); 
+  $("#doc7").val(""); 
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
+
 
 // ver las echas de quincenas
 function ver_quincenas(nube_idproyecto) {
 
   $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>'); //console.log(nube_idproyecto);
 
-  $.post("../ajax/valorizacion_valorizacion.php?op=listarquincenas", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
+  $.post("../ajax/valorizacion_concreto.php?op=listarquincenas", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
 
     e =JSON.parse(e); console.log(e);    
 
@@ -87,7 +95,7 @@ function ver_quincenas(nube_idproyecto) {
         console.log(fechas_btn);  
 
         fechas_btn.forEach((key, indice) => {
-          $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm"  onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
+          $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm"  onclick="buscar_documento('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
           array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(key.fecha_inicio), 'fecha_fin':format_a_m_d(key.fecha_fin), 'num_q_s': key.num_q_s, });
           cant_valorizaciones = key.num_q_s;
           // pintar_boton_selecionado(key.num_q_s);
@@ -106,7 +114,7 @@ function ver_quincenas(nube_idproyecto) {
           //console.log(fechas_btn);  
 
           fechas_btn.forEach((key, indice) => {
-            $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm"  onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
+            $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm"  onclick="buscar_documento('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
             array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(key.fecha_inicio), 'fecha_fin':format_a_m_d(key.fecha_fin), 'num_q_s': key.num_q_s, });
             cant_valorizaciones = key.num_q_s;
           });
@@ -117,7 +125,7 @@ function ver_quincenas(nube_idproyecto) {
 
             $(".h1-titulo").html("Valorización - Al finalizar");
 
-            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
+            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="buscar_documento('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
             $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
             array_fechas_q_s.push({'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
             cant_valorizaciones = i+1;
@@ -154,7 +162,7 @@ function guardaryeditar(e) {
   var formData = new FormData($("#form-valorizacion")[0]);
 
   $.ajax({
-    url: "../ajax/valorizacion_valorizacion.php?op=guardaryeditar",
+    url: "../ajax/valorizacion_concreto.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -167,7 +175,8 @@ function guardaryeditar(e) {
           Swal.fire("Correcto!", "Documento guardado correctamente", "success");	
           if (tabla_principal) { tabla_principal.ajax.reload(null, false); } 
           mostrar_form_table(2);
-          fecha_quincena(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'));
+          limpiar_val_concreto();
+          buscar_documento(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'));
           $("#modal-agregar-valorizacion").modal("hide");
 
         }else{
@@ -285,8 +294,8 @@ function editar(idtabla, indice, nombre, doc, fecha_i, fecha_f, numero_q_s) {
 
 function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
   crud_eliminar_papelera(
-    `../ajax/valorizacion_valorizacion.php?op=desactivar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`,
-    `../ajax/valorizacion_valorizacion.php?op=eliminar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`, 
+    `../ajax/valorizacion_concreto.php?op=desactivar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`,
+    `../ajax/valorizacion_concreto.php?op=eliminar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`, 
     idtabla, 
     "!Elija una opción¡", 
     `<b class="text-danger">${nombre_eliminar}</b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
@@ -310,11 +319,11 @@ $(function () {
   $("#form-valorizacion").validate({
 
     rules: {
-      nombre: { required: true },
+      nombre_val_concreto: { required: true },
     },
 
     messages: {
-      nombre: {  required: "Por favor selecione un tipo de documento", },       
+      nombre_val_concreto: {  required: "Por favor ingrese un hombre", },       
     },
         
     errorElement: "span",
@@ -388,12 +397,31 @@ $(function () {
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
-function fecha_quincena(fecha_inicio,fecha_fin,num_q_s) { 
+function buscar_documento(fecha_inicio,fecha_fin,num_q_s) { 
 
-  console.log(fecha_inicio,fecha_fin,num_q_s);
   $("#numero_q_s").val(num_q_s);
   $("#fecha_inicio").val(fecha_inicio);
   $("#fecha_fin").val(fecha_fin);
+
+  $('.icon-resumen-cargando').html('<i class="fas fa-spinner fa-pulse fa-md"></i>');
+
+  let nube_idproyecto = localStorage.getItem('nube_idproyecto');
+
+  var respuestadoc5_2 = false;
+  mostrar_form_table(2);
+
+  // validamos el id para pintar el boton
+  pintar_boton_selecionado(num_q_s);
+
+  // traemos loa documentos por fechas de la quincena
+  $.post("../ajax/valorizacion_concreto.php?op=mostrar-docs-quincena", { nube_idproyecto: nube_idproyecto, fecha_i: fecha_inicio, fecha_f: fecha_fin }, function (e, status) {
+
+    e =JSON.parse(e); console.log(e);  
+    
+
+  }).fail( function(e) { ver_errores(e); } );
+
+
  }
 
 function pintar_boton_selecionado(i) {

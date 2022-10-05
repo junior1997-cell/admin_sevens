@@ -60,10 +60,10 @@
                     <div class="col-12">
                       <div class="card card-primary card-outline">
                         <div class="card-header" > 
-                          <!-- Guardar -->
-                          <h3 class="card-title mr-3" id="btn-guardar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_y_editar_resumen_q_s_valorizacion();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
-                          </h3>   
+                          <!-- regresar -->
+                          <h3 class="card-title mr-3" >
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();" ><i class="fa-regular fa-rectangle-list"></i> <span class="d-none d-sm-inline-block">Todos</span> </button>
+                          </h3>  
                           <!-- listar quincenas -->
                           <div id="lista_quincenas" class="row-horizon disenio-scroll" >
                             <i class="fas fa-spinner fa-pulse fa-2x"></i>
@@ -72,12 +72,70 @@
                         <!-- /.card-header -->
                         <div class="card-body">                          
                           <div class="row">
+
+                            <div class="col-lg-12 col-xl-12 div-todos-los-docs">
+                              <div class="mailbox-attachments clearfix text-center row">
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
+                                  <li >                    
+                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
+                                    <div class="mailbox-attachment-info">
+                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                          
+                                        </span>
+                                    </div>
+                                  </li>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
+                                  <li >                    
+                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
+                                    <div class="mailbox-attachment-info">
+                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                          
+                                        </span>
+                                    </div>
+                                  </li>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
+                                  <li >                    
+                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
+                                    <div class="mailbox-attachment-info">
+                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                          
+                                        </span>
+                                    </div>
+                                  </li>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
+                                  <li >                    
+                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
+                                    <div class="mailbox-attachment-info">
+                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
+                                        <span class="mailbox-attachment-size clearfix mt-1">
+                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                          
+                                        </span>
+                                    </div>
+                                  </li>
+                                </div>
+                              </div>
+                              
+                            </div>
                             <!-- tab info resumen valorizaciones -->
-                            <div class="col-lg-12 col-xl-12" id="tab-contenido">
+                            <div class="col-lg-12 col-xl-12 div-docs-por-valorizacion" id="tab-contenido" style="display: none;">
                               <div class="tab-pane text-left" id="tabs-1" role="tabpanel" aria-labelledby="tabs-1-tab">
                                 <div class="row mb-1" id="documento1">
                                   <div class="col-12 col-lg-6 mx-auto shadow">
-                                    <a class="btn btn-success  btn-block btn-xs" type="button" data-toggle="modal" data-target="#modal-agregar-valorizacion">
+                                    <a class="btn btn-success  btn-block btn-xs" type="button" data-toggle="modal" data-target="#modal-agregar-valorizacion" onclick="limpiar_val_concreto();">
                                       <i class="fas fa-file-upload"></i> Subir
                                     </a>
                                   </div>
@@ -86,11 +144,12 @@
                                       <i class="fas fa-download"></i> Descargar
                                     </a>
                                   </div>   
-                                  <div class="col-12 col-lg-12 shadow"> <br>
-                                  <h3 class="mb-6 text-center"> Visualizasion del Documento.</h3>         
-
-                                    <div>doc aqui</div>
-                                  </div>                     
+                                  <div class="col-12 col-lg-12 "> <br>
+                                   <h3 class="mb-6 text-center"> Visualizasion del Documento.</h3>         
+                                  </div>  
+                                  <div class="col-lg-12 shadow"> 
+                                    <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> 
+                                  </div>                   
                                 </div>
                               </div>
                             </div>
@@ -125,10 +184,6 @@
                             <input type="hidden" name="idproyecto" id="idproyecto" />
                             <!-- id valorizacion -->
                             <input type="hidden" name="idvalorizacion" id="idvalorizacion" />
-                            <!-- indice -->
-                            <!-- <input type="hidden" name="indice" id="indice" /> -->
-                            <!-- nombre -->
-                            <!-- <input type="hidden" name="nombre" id="nombre" /> -->
                             <!-- fecha inicio -->
                             <input type="hidden" name="fecha_inicio" id="fecha_inicio" />
                             <!-- fecha fin -->
@@ -138,6 +193,13 @@
 
                             <!-- Doc Valorizaciones -->
                             <div class="col-md-12 col-lg-12">
+                              <!--nombre_val_concreto-->
+                              <div class="col-lg-12 class_pading">
+                                <div class="form-group">
+                                  <label for="nombre_val_concreto">Nombre Documento <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="nombre_val_concreto" class="form-control" id="nombre_val_concreto" placeholder="Nombre"/>
+                                </div>
+                              </div>
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                   <label for="cip" class="control-label">Documento </label>
@@ -236,7 +298,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
-        <script type="text/javascript" src="scripts/valorizacion_valorizacion.js"></script>
+        <script type="text/javascript" src="scripts/valorizacion_concreto.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
 

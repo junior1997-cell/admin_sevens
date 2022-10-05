@@ -937,4 +937,26 @@ function sueld_mensual(){
 
   $("#sueldo_hora").val(sueldo_horas);
 }
+<<<<<<< HEAD
 
+=======
+//calcular edad
+function calcular_edad() {
+  
+    var fecha = new Date($('#fecha_nacimiento').val());
+    console.log(fecha);
+  
+    var hoy = new Date();
+  
+    var edad = hoy.getFullYear() - fecha.getFullYear();
+  
+    var m = hoy.getMonth() - fecha.getMonth();
+  
+    if (m < 0 || (m === 0 && hoy.getDate() < fecha.getDate())) {
+  
+      edad--;
+    }
+  
+    $('#edad').val(edad);
+}
+>>>>>>> 005ec55f1e998ef33a0da8db44e46f4912920655
