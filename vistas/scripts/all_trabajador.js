@@ -24,7 +24,10 @@ function init() {
   $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
 
-  no_select_tomorrow('#nacimiento');
+  //no_select_tomorrow('#nacimiento');
+
+  $('#nacimiento').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  $('#nacimiento').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
   // Formato para telefono
   $("[data-mask]").inputmask();
@@ -517,11 +520,13 @@ function mostrar(idtrabajador) {
       $("#telefono").val(e.data.trabajador.telefono);
       $("#email").val(e.data.trabajador.email);
       $("#nacimiento").val(e.data.trabajador.fecha_nacimiento);      
-      $("#tipo").val(e.data.trabajador.idtipo_trabajador).trigger("change");
-      $("#ocupacion").val(e.data.trabajador.idocupacion).trigger("change");
+      $("#tipo").val(e.data.trabajador.idtipo_trabajador).trigger("change");      
       $("#titular_cuenta").val(e.data.trabajador.titular_cuenta);
       $("#idtrabajador").val(e.data.trabajador.idtrabajador);
       $("#ruc").val(e.data.trabajador.ruc);         
+
+      $("#ocupacion").val(e.data.detalle_ocupacion).trigger('change');
+      console.log(e.data.detalle_ocupacion);
       
       e.data.bancos.forEach(function(valor, index){ 
         
@@ -536,9 +541,8 @@ function mostrar(idtrabajador) {
           $(`.cci_${index}`).val(valor.cci);
           $(`#banco_${index}`).val(valor.idbancos).trigger("change");
           if (valor.banco_seleccionado == '1') { $(`#banco_seleccionado_${index}`).prop('checked', true); } 
-          console.log('editar - banco: ' + valor.idbancos + ' index: '+ index + ' select: '+ valor.banco_seleccionado);
-        }
-        
+          //console.log('editar - banco: ' + valor.idbancos + ' index: '+ index + ' select: '+ valor.banco_seleccionado);
+        }       
          
       }); 
       

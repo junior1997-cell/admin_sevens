@@ -125,8 +125,8 @@ class Trabajador
     tp.desempenio, tp.sueldo_mensual, tp.sueldo_diario, tp.sueldo_hora, tp.fecha_inicio, tp.fecha_fin, tp.estado, tp.idtrabajador_por_proyecto, 
 		ct.nombre as cargo, ct.idtipo_trabjador, tt.nombre as nombre_tipo
 		FROM trabajador_por_proyecto as tp, trabajador as t, proyecto AS p, cargo_trabajador as ct, tipo_trabajador as tt
-		WHERE tp.idproyecto = p.idproyecto AND tp.idproyecto = '$nube_idproyecto'   AND tp.idtrabajador = t.idtrabajador AND 
-		ct.idcargo_trabajador=tp.idcargo_trabajador AND tt.idtipo_trabajador=ct.idtipo_trabjador AND tp.estado='$estado' AND tp.estado_delete='1' ORDER BY t.nombres ASC";
+		WHERE tp.idproyecto = p.idproyecto AND tp.idtrabajador = t.idtrabajador AND ct.idcargo_trabajador=tp.idcargo_trabajador 
+    AND tt.idtipo_trabajador=ct.idtipo_trabjador AND tp.idproyecto = '$nube_idproyecto' AND tp.estado='$estado' AND tp.estado_delete='1' ORDER BY t.nombres ASC";
     $trabajdor = ejecutarConsultaArray($sql);
     if ($trabajdor['status'] == false) { return  $trabajdor;}
 

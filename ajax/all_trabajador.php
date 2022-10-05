@@ -42,7 +42,7 @@
       $cci_format      	= isset($_POST["cci"])? $_POST["cci"]:"";
       $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
       $tipo	          	= isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
-      $ocupacion	      = isset($_POST["ocupacion"])? limpiarCadena($_POST["ocupacion"]):"";
+      $ocupacion	      = isset($_POST["ocupacion"])? $_POST["ocupacion"]:"";
       $ruc	          	= isset($_POST["ruc"])? limpiarCadena($_POST["ruc"]):"";
 
       $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
@@ -235,7 +235,7 @@
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                   </div>',
                 "3"=> $value['nombre_tipo'],
-                "4"=> $value['nombre_ocupacion'],
+                "4"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['detalle_ocupacion'].'</div>',
                 "5"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
                 "6"=>format_d_m_a($value['fecha_nacimiento']).'<b>: </b>'. '<b>'.calculaedad($value['fecha_nacimiento']).'</b>' ,
                 "7"=> '<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] .' <br> <b>CCI: </b>'.$value['cci'],
@@ -284,7 +284,7 @@
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .'<br>'.format_d_m_a($value['fecha_nacimiento']).' : '.$value['edad'].' años</span>
                   </div>',
                 "3"=> '<div class="center-vertical">'. $value['nombre_tipo'] .'</div>',
-                "4"=> $value['nombre_ocupacion'],
+                "4"=> $value['detalle_ocupacion'],
                 "5"=> '<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
                 "6"=> $value['descripcion_expulsion'] ,
                 "7"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>':

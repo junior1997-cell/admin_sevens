@@ -249,6 +249,19 @@
                                 </div>
                               </div>
 
+                              <!-- FECHA NACIMIENTO -->
+                              <div class="col-lg-12">
+                                <div class="form-group">
+                                  <label for="">Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
+                                  <div class="input-group date "  data-target-input="nearest">
+                                    <input type="text" class="form-control" id="fecha_inicio_actividad" name="fecha_inicio_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();"  />
+                                    <div class="input-group-append click-btn-fecha-inicio-actividad cursor-pointer" for="fecha_inicio_actividad" >
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                  </div>                                 
+                                </div>
+                              </div>
+
                               <!-- edad -->
                               <div class="col-12 col-sm-2 col-md-6 col-lg-1">
                                 <div class="form-group">
@@ -321,7 +334,7 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="ocupacion">Ocupación</label>
-                                  <select name="ocupacion" id="ocupacion" class="form-control select2" style="width: 100%;"> </select>
+                                  <select name="ocupacion[]" id="ocupacion" class="form-control select2"  multiple="multiple" style="width: 100%;"> </select>
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
                               </div>

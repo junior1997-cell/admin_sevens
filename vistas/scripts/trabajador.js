@@ -1,6 +1,4 @@
 var tabla, tabla_secundaria;
-var editando=false;
-var editando2=false;
 
 //Función que se ejecuta al inicio
 function init() {  
@@ -52,42 +50,40 @@ function templateTrabajador(state) {
 };
 
 //captura id del trabajador
-function capture_idtrabajador() {
-  console.log('editando2: ' + editando2);
-  if (editando2==false) {
-    var idtrabajador= $("#trabajador").select2("val");
-    if (idtrabajador == null || idtrabajador == '' ) {  }else{
-
-      $("#tipo_trabajador").val("null").trigger("change");
-        
-      $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
-
-        e = JSON.parse(e);  console.log(e);   
-        $("#tipo_trabajador").val(e.data.idtipo_trabajador).trigger("change");
-        $("#ocupacion").val(e.data.nombre_ocupacion);   
-
-      }).fail( function(e) { ver_errores(e); } );
-    }
-  }
+function capture_idtrabajador() { 
   
+  var idtrabajador= $("#trabajador").select2("val");
+  if (idtrabajador == null || idtrabajador == '' ) {  }else{
+
+    $("#tipo_trabajador").val("null").trigger("change");
+      
+    $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
+
+      e = JSON.parse(e);  console.log(e);   
+      if (e.status == true) {
+        $("#tipo_trabajador").val(e.data.idtipo_trabajador).trigger("change");
+        $("#ocupacion").val(e.data.nombre_ocupacion);
+      } else {
+        ver_errores(e);
+      }
+    }).fail( function(e) { ver_errores(e); } );
+  }  
 }
 
 //captura id del tipo
-function captura_idtipo() {
-  console.log('editando: ' + editando);
-  if (editando==false) {
+function captura_idtipo(id_cargo = '', id_tipo) {
+  console.log('entre al: captura_idtipo');
+  if (id_cargo == '' || id_cargo == null) {
     var idtipo= $("#tipo_trabajador").select2("val");
     if (idtipo != null || idtipo != ' ' ) {
       lista_select2(`../ajax/ajax_general.php?op=select2CargoTrabajdorId&idtipo=${idtipo}`, '#cargo', null);
-    }
+    }  
+  } else {
+    $("#tipo_trabajador").val(id_tipo).trigger("change");
+    lista_select2(`../ajax/ajax_general.php?op=select2CargoTrabajdorId&idtipo=${idtipo}`, '#cargo', id_cargo);    
   }
-  
 }
 
-function estado_editar(estado) {
-  editando=estado;
-  editando2=estado;  
-}
 
 function sueld_mensual(){
 
@@ -110,7 +106,6 @@ function show_hide_form(flag) {
 	if (flag == 1)	{		
 		$("#mostrar-tabla").show();
     $("#mostrar-form").hide();
-    editando=false; editando2=false;
 	}	else	{
     // formulario		    
 		$("#mostrar-tabla").hide();
@@ -118,41 +113,7 @@ function show_hide_form(flag) {
 	}
 }
 
-function disable_cargo() {
-  $('#cargo option[value="Operario"]').prop('disabled',true);
-  $('#cargo option[value="Oficial"]').prop('disabled',true);
-  $('#cargo option[value="Peón"]').prop('disabled',true);
 
-  $('#cargo option[value="Ingeniero Residente"]').prop('disabled',true);
-  $('#cargo option[value="Asitente Técnico"]').prop('disabled',true);
-  $('#cargo option[value="Asistente Administrativo"]').prop('disabled',true);
-  $('#cargo option[value="Almacenero"]').prop('disabled',true);
-
-  if ($("#tipo_trabajador").select2("val") == "Técnico") {    
-    $('#cargo option[value="Operario"]').prop('disabled',true);
-    $('#cargo option[value="Oficial"]').prop('disabled',true);
-    $('#cargo option[value="Peón"]').prop('disabled',true);
-
-    $('#cargo option[value="Ingeniero Residente"]').prop('disabled',false);
-    $('#cargo option[value="Asitente Técnico"]').prop('disabled',false);
-    $('#cargo option[value="Asistente Administrativo"]').prop('disabled',false);
-    $('#cargo option[value="Almacenero"]').prop('disabled',false);      
-
-  } else {
-
-    if ($("#tipo_trabajador").select2("val") == "Obrero") {      
-
-      $('#cargo option[value="Operario"]').prop('disabled',false);
-      $('#cargo option[value="Oficial"]').prop('disabled',false);
-      $('#cargo option[value="Peón"]').prop('disabled',false);
-
-      $('#cargo option[value="Ingeniero Residente"]').prop('disabled',true);
-      $('#cargo option[value="Asitente Técnico"]').prop('disabled',true);
-      $('#cargo option[value="Asistente Administrativo"]').prop('disabled',true);
-      $('#cargo option[value="Almacenero"]').prop('disabled',true);
-    }
-  }   
-}
 
 //Función limpiar
 function limpiar() {  
@@ -292,7 +253,7 @@ function guardaryeditar(e) {
       } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }       
 
       $("#guardar_registro_trabajador").html('Guardar Cambios').removeClass('disabled');
-      editando=false; editando2=false;
+      
     },
     xhr: function () {
       var xhr = new window.XMLHttpRequest();
@@ -315,7 +276,7 @@ function guardaryeditar(e) {
       $("#barra_progress_trabajador").css({ width: "0%", });
       $("#barra_progress_trabajador").text("0%").removeClass('progress-bar-striped progress-bar-animated');
     },
-    error: function (jqXhr) { ver_errores(jqXhr); editando=false; editando2=false; },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -444,7 +405,6 @@ function verdatos(idtrabajador){
 }
 
 function mostrar(idtrabajador,idtipo) {
-  estado_editar(true); 
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
@@ -461,12 +421,11 @@ function mostrar(idtrabajador,idtipo) {
     $("#cargando-2-fomulario").hide();
 
     $("#idtrabajador_por_proyecto").val(e.data.idtrabajador_por_proyecto);
-    $("#trabajador").val(e.data.idtrabajador).trigger("change");
-
-    $("#tipo_trabajador").val(e.data.idtipo_trabajador).trigger("change");
+    $("#trabajador").val(e.data.idtrabajador).trigger("change");    
     $("#ocupacion").val(e.data.nombre_ocupacion);
-    //$("#cargo").val(e.data.idcargo_trabajador).trigger("change");
-    lista_select2(`../ajax/ajax_general.php?op=select2CargoTrabajdorId&idtipo=${idtipo}`, '#cargo', e.data.idcargo_trabajador);
+    
+    captura_idtipo(e.data.idcargo_trabajador, e.data.idtipo_trabajador);     
+    
     $("#desempenio").val(e.data.desempenio);
   
     $("#sueldo_mensual").val(e.data.sueldo_mensual);   
@@ -547,6 +506,8 @@ function calcular_dias_trabajo() {
 
 init();
 
+// .....::::::::::::::::::::::::::::::::::::: F O R M    V A L I D A T E  :::::::::::::::::::::::::::::::::::::::..
+
 $(function () {
 
   $("#trabajador").on('change', function() { $(this).trigger('blur'); });
@@ -604,3 +565,41 @@ $(function () {
   $("#tipo_trabajador").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#cargo").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
+
+// .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
+
+function disable_cargo() {
+  $('#cargo option[value="Operario"]').prop('disabled',true);
+  $('#cargo option[value="Oficial"]').prop('disabled',true);
+  $('#cargo option[value="Peón"]').prop('disabled',true);
+
+  $('#cargo option[value="Ingeniero Residente"]').prop('disabled',true);
+  $('#cargo option[value="Asitente Técnico"]').prop('disabled',true);
+  $('#cargo option[value="Asistente Administrativo"]').prop('disabled',true);
+  $('#cargo option[value="Almacenero"]').prop('disabled',true);
+
+  if ($("#tipo_trabajador").select2("val") == "Técnico") {    
+    $('#cargo option[value="Operario"]').prop('disabled',true);
+    $('#cargo option[value="Oficial"]').prop('disabled',true);
+    $('#cargo option[value="Peón"]').prop('disabled',true);
+
+    $('#cargo option[value="Ingeniero Residente"]').prop('disabled',false);
+    $('#cargo option[value="Asitente Técnico"]').prop('disabled',false);
+    $('#cargo option[value="Asistente Administrativo"]').prop('disabled',false);
+    $('#cargo option[value="Almacenero"]').prop('disabled',false);      
+
+  } else {
+
+    if ($("#tipo_trabajador").select2("val") == "Obrero") {      
+
+      $('#cargo option[value="Operario"]').prop('disabled',false);
+      $('#cargo option[value="Oficial"]').prop('disabled',false);
+      $('#cargo option[value="Peón"]').prop('disabled',false);
+
+      $('#cargo option[value="Ingeniero Residente"]').prop('disabled',true);
+      $('#cargo option[value="Asitente Técnico"]').prop('disabled',true);
+      $('#cargo option[value="Asistente Administrativo"]').prop('disabled',true);
+      $('#cargo option[value="Almacenero"]').prop('disabled',true);
+    }
+  }   
+}

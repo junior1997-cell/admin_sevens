@@ -12,7 +12,7 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Trabajadores | Admin Sevens</title>
+        <title>Trabajadores por Proyecto | Admin Sevens</title>
 
         <?php $title = "Trabajadores"; require 'head.php'; ?>
 
@@ -55,7 +55,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(2); estado_editar(false);"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(2);"><i class="fas fa-user-plus"></i> Agregar</button>
                             Administra de manera eficiente a los trabajdores
                           </h3>
                         </div>
