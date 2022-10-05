@@ -20,9 +20,9 @@ function init() {
   $("#idproyecto_q_s").val(localStorage.getItem('nube_idproyecto'));
   
   ver_quincenas(localStorage.getItem('nube_idproyecto'));  
+  todos_los_docs();
 
-  $("#guardar_registro").on("click", function (e) {  $("#submit-form-valorizacion").submit(); });
-  $("#guardar_registro_resumen_valorizacion").on("click", function (e) {  $("#submit-form-resumen-valorizacion").submit(); });
+  $("#guardar_registro").on("click", function (e) {  $("#submit-form-fierro").submit(); });
 
   //Initialize Select2 Elements
   $("#numero_q_s_resumen").select2({ theme: "bootstrap4", placeholder: "Selecione Valorizacion", allowClear: true, });
@@ -32,17 +32,17 @@ function init() {
 
 }
 
-$("#doc7_i").click(function() {  $('#doc7').trigger('click'); });
-$("#doc7").change(function(e) {  addImageApplication(e,$("#doc7").attr("id")) });
+$("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
+$("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) });
 
 // Eliminamos el doc 6
-function doc7_eliminar() {
+function doc1_eliminar() {
 
-	$("#doc7").val("");
+	$("#doc1").val("");
 
-	$("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+	$("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
-	$("#doc7_nombre").html("");
+	$("#doc1_nombre").html("");
 }
 
 function mostrar_form_table(estados) {
@@ -60,7 +60,7 @@ function ver_quincenas(nube_idproyecto) {
 
   $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>'); //console.log(nube_idproyecto);
 
-  $.post("../ajax/valorizacion.php?op=listarquincenas", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
+  $.post("../ajax/valorizacion_fierro.php?op=listarquincenas", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
 
     e =JSON.parse(e); console.log(e);    
 
@@ -79,9 +79,8 @@ function ver_quincenas(nube_idproyecto) {
           $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="buscar_documento('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
           array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(key.fecha_inicio), 'fecha_fin':format_a_m_d(key.fecha_fin), 'num_q_s': key.num_q_s, });
           cant_valorizaciones = key.num_q_s;
-        });
+        });        
         
-        tbla_resumen_q_s(nube_idproyecto);
       } else {
 
         if (e.data.fecha_valorizacion == "mensual") {
@@ -97,7 +96,7 @@ function ver_quincenas(nube_idproyecto) {
             cant_valorizaciones = key.num_q_s;
           });
 
-          tbla_resumen_q_s(nube_idproyecto);
+          
         } else {
 
           if (e.data.fecha_valorizacion == "al finalizar") {
@@ -108,8 +107,7 @@ function ver_quincenas(nube_idproyecto) {
             $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
             array_fechas_q_s.push({'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
             cant_valorizaciones = i+1;
-
-            tbla_resumen_q_s(nube_idproyecto);
+            
           } else {
             $('#lista_quincenas').html(`<div class="info-box shadow-lg w-600px"> 
               <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
@@ -136,11 +134,13 @@ function ver_quincenas(nube_idproyecto) {
 }
 
 //Función limpiar
-function limpiar() {
-  $("#doc7_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-  $("#doc7_nombre").html('');
-  $("#doc_old_7").val(""); 
-  $("#doc7").val(""); 
+function limpiar_form_fierro() {
+  $("#nombre_doc").val("");
+
+  $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+  $("#doc1_nombre").html('');
+  $("#doc_old_1").val(""); 
+  $("#doc1").val(""); 
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -149,12 +149,12 @@ function limpiar() {
 }
 
 //Función para guardar o editar
-function guardaryeditar(e) {
+function guardar_y_editar_fierro(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-valorizacion")[0]);
+  var formData = new FormData($("#form-fierro")[0]);
 
   $.ajax({
-    url: "../ajax/valorizacion.php?op=guardaryeditar",
+    url: "../ajax/valorizacion_fierro.php?op=guardar_y_editar_fierro",
     type: "POST",
     data: formData,
     contentType: false,
@@ -163,12 +163,11 @@ function guardaryeditar(e) {
       try {
         e = JSON.parse(e);
         if (e.status == true) {	
-
-          Swal.fire("Correcto!", "Documento guardado correctamente", "success");	
-          limpiar();
+          limpiar_form_fierro();
+          Swal.fire("Correcto!", "Documento guardado correctamente", "success");          
           mostrar_form_table(2);
-          buscar_documento(localStorage.getItem('fecha_i'), localStorage.getItem('fecha_f'), localStorage.getItem('i'));
-          $("#modal-agregar-valorizacion").modal("hide");
+          buscar_documento(fecha_i_r, fecha_f_r, i_r);
+          $("#modal-agregar-editar-doc").modal("hide");
 
         }else{
           ver_errores(e);
@@ -199,6 +198,83 @@ function guardaryeditar(e) {
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
+}
+
+// captura las fechas de quincenas y trae los datos
+function buscar_documento(fecha_i, fecha_f, i) {
+
+  fecha_i_r = fecha_i, fecha_f_r = fecha_f; i_r = i;
+
+  $('.div-doc-val').html(`<div class="col-12 text-center "> <i class="fas fa-spinner fa-pulse fa-6x"></i><br /> <br /> <h4>Cargando...</h4> </div>`);
+
+  let nube_idproyecto = localStorage.getItem('nube_idproyecto');
+
+  mostrar_form_table(2); 
+  limpiar_form_fierro()
+  
+  // validamos el id para pintar el boton
+  pintar_btn_selecionado(i);
+
+  $("#fecha_inicial").val(fecha_i);
+  $("#fecha_final").val(fecha_f);  //console.log(fecha_i, fecha_f, i);
+  $("#numero_valorizacion").val(i);  
+
+  // traemos loa documentos por fechas de la quincena
+  $.post("../ajax/valorizacion_fierro.php?op=mostrar-docs-quincena", { 'nube_idproyecto': nube_idproyecto, 'fecha_i': fecha_i, 'fecha_f': fecha_f, 'numero_q_s': i }, function (e, status) {
+
+    e =JSON.parse(e); console.log(e);  
+    
+    if (e.status == true) {
+      var doc_url = "", disabed_dowload = "disabled", disable_ver = "disabled", doc_name = "";
+      if (e.data == null) {
+        $('#div-doc-val').html("vacio");
+      }else{
+        $("#nombre_doc").val(e.data.nombre_doc);
+        $("#doc_old_1").val(e.data.documento);
+        $("#idfierro_por_valorizacion").val(e.data.idfierro_por_valorizacion);
+        if (e.data.documento == null || e.data.documento == "") {
+          $('#div-doc-val').html("vacio");
+          disable_ver = "disabled";
+          disabed_dowload = "disabled";
+        } else {
+          if (extrae_extencion(e.data.documento) == "pdf") {
+            $('#div-doc-val').html(doc_view_extencion(e.data.documento,'valorizacion_fierro','documento', '100%', '500')); 
+            doc_url = `../dist/docs/valorizacion_fierro/documento/${e.data.documento}`;
+            doc_name = removeCaracterEspecial(e.data.nombre_doc);
+            disable_ver = "";
+            disabed_dowload = "";
+          } else {
+            host = window.location.host == 'localhost'? `http://localhost/admin_sevens/` : `${window.location.origin}/` ;
+            if (UrlExists(`${host}dist/docs/valorizacion_fierro/documento/${e.data.documento}`) == 200) {
+              $('#div-doc-val').html("");           
+              $("#div-doc-val").excelPreview({'doc_excel': `../dist/docs/valorizacion_fierro/documento/${e.data.documento}`});
+              doc_url = `../dist/docs/valorizacion_fierro/documento/${e.data.documento}`;
+              doc_name = removeCaracterEspecial(e.data.nombre_doc);
+              disable_ver = "disabled";
+              disabed_dowload = "";
+            }else{
+              $('#div-doc-val').html("vacio");
+              disable_ver = "disabled";
+              disabed_dowload = "disabled";
+            }         
+          }          
+        }
+      }
+      
+
+      $('.div-btn-doc').html(`<div class="col-lg-4"> 
+        <a  class="btn btn-success  btn-block btn-xs" type="button" data-toggle="modal" data-target="#modal-agregar-editar-doc"> <i class="fas fa-file-upload"></i> Subir </a> 
+      </div> 
+      <div class="col-lg-4"> 
+        <a  class="btn btn-warning  btn-block btn-xs ${disabed_dowload}" type="button" href="${doc_url}" download="${doc_name}" > <i class="fas fa-download"></i> Descargar </a> 
+      </div> 
+      <div class="col-lg-4 mb-4"> 
+        <a  class="btn btn-info  btn-block btn-xs ${disable_ver}" href="${doc_url}" type="button" > <i class="fas fa-expand"></i> Ver completo </a> 
+      </div>`);
+    } else {
+      ver_errores(e);
+    }  
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function modal_comprobante(doc_valorizacion, indice, nombre, numero_q_s,) {
@@ -257,32 +333,10 @@ function modal_comprobante(doc_valorizacion, indice, nombre, numero_q_s,) {
   }
 }
 
-function editar(idtabla, indice, nombre, doc, fecha_i, fecha_f, numero_q_s) {
-  limpiar();
-  $('#title-modal-1').html(indice+' '+nombre);
-
- // $("#idproyecto").val();
-  $("#idvalorizacion").val(idtabla);
-  $("#indice").val(indice);
-  $("#nombre").val(nombre);
-  $("#fecha_inicio").val(fecha_i);
-  $("#fecha_fin").val(fecha_f);
-  $("#numero_q_s").val(numero_q_s);
-
-  $("#modal-agregar-valorizacion").modal('show'); 
-
-  if (doc != "") {
-
-    $("#doc_old_7").val(doc);    
-    // cargamos la imagen adecuada par el archivo
-    $("#doc7_ver").html(doc_view_extencion(doc, 'valorizacion', 'documento', '100%', '210'));    
-  }
-}
-
 function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
   crud_eliminar_papelera(
-    `../ajax/valorizacion.php?op=desactivar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`,
-    `../ajax/valorizacion.php?op=eliminar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`, 
+    `../ajax/valorizacion_fierro.php?op=desactivar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`,
+    `../ajax/valorizacion_fierro.php?op=eliminar&nombre_tabla=${nombre_tabla}&nombre_columna=${nombre_columna}`, 
     idtabla, 
     "!Elija una opción¡", 
     `<b class="text-danger">${nombre_eliminar}</b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
@@ -295,6 +349,39 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
     false
   );
 }
+
+function todos_los_docs() {
+  $.post("../ajax/valorizacion_fierro.php?op=todos_los_docs", { 'nube_idproyecto': localStorage.getItem('nube_idproyecto') }, function (e, status, ) {   
+    e =JSON.parse(e); console.log(e);  
+    if (e.status == true) {
+      var html_docs = "";
+      e.data.forEach((val, key) => {
+        var doc_url = `../dist/docs/valorizacion_fierro/documento/${val.documento}`;
+        var icon = doc_view_icon(val.documento);
+        html_docs = html_docs.concat(
+          `<div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
+            <li >                    
+              <span class="mailbox-attachment-icon ">${icon}</span>
+              <div class="mailbox-attachment-info">
+                <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> ${val.nombre_doc}.${extrae_extencion(val.documento)}</a> <br>
+                <span class="font-size-12px">Valorizacion ${val.numero_valorizacion}</span>
+                <span class="mailbox-attachment-size clearfix mt-1">
+                  <a href="${doc_url}" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                  <a href="${doc_url}" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                  
+                </span>
+              </div>
+            </li>
+          </div>`
+        );
+
+      });
+      $('#all-docs-valorizacion').html(html_docs);
+    } else {
+      ver_errores(e);
+    }
+  });
+}
   
 init();
 
@@ -302,14 +389,14 @@ init();
 
 $(function () {  
 
-  $("#form-valorizacion").validate({
+  $("#form-fierro").validate({
 
     rules: {
-      nombre: { required: true },
+      nombre_doc: { required: true },
     },
 
     messages: {
-      nombre: {  required: "Por favor selecione un tipo de documento", },       
+      nombre_doc: {  required: "Campo requerido.", },       
     },
         
     errorElement: "span",
@@ -329,7 +416,7 @@ $(function () {
 
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardaryeditar(e);
+      guardar_y_editar_fierro(e);
     },
 
   });
@@ -384,33 +471,7 @@ $(function () {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-// captura las fechas de quincenas y trae los datos
-function buscar_documento(fecha_i, fecha_f, i) {
 
-  fecha_i_r = fecha_i, fecha_f_r = fecha_f; i_r = i;
-
-  $('.icon-resumen-cargando').html('<i class="fas fa-spinner fa-pulse fa-md"></i>');
-
-  let nube_idproyecto = localStorage.getItem('nube_idproyecto');
-
-  var respuestadoc5_2 = false;
-  mostrar_form_table(2);
- 
-  $("#fecha_inicio").val(fecha_i);
-  $("#fecha_fin").val(fecha_f);  //console.log(fecha_i, fecha_f, i);
-  $("#numero_q_s").val(cont_valor);
-
-  // validamos el id para pintar el boton
-  pintar_btn_selecionado(i);
-
-  // traemos loa documentos por fechas de la quincena
-  $.post("../ajax/valorizacion.php?op=mostrar-docs-quincena", { nube_idproyecto: nube_idproyecto, fecha_i: fecha_i, fecha_f: fecha_f }, function (e, status) {
-
-    e =JSON.parse(e); console.log(e);  
-    
-
-  }).fail( function(e) { ver_errores(e); } );
-}
 
 
 function cantDiasEnUnMes(mes, año) {
