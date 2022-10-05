@@ -244,7 +244,7 @@
                               <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
                                   <label for="fecha_nacimiento">Fecha Nacimiento</label>
-                                  <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento','#p_edad','#edad');" onchange="calcular_edad('#nacimiento','#p_edad','#edad');" />
+                                  <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento','#edad','#p_edad');" onchange="calcular_edad('#nacimiento','#edad','#p_edad');" />
                                   <input type="hidden" name="edad" id="edad" />
                                 </div>
                               </div>

@@ -24,6 +24,8 @@ function init() {
   $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
 
+  no_select_tomorrow('#nacimiento');
+
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
@@ -579,7 +581,7 @@ function mostrar(idtrabajador) {
         $("#doc_old_5").val("");
       }
 
-      calcular_edad('#nacimiento','#p_edad','#edad');
+      calcular_edad('#nacimiento','#edad','#p_edad');
 
        
 
@@ -935,21 +937,4 @@ function sueld_mensual(){
 
   $("#sueldo_hora").val(sueldo_horas);
 }
-//calcular edad
-function calcular_edad() {
-  
-    var fecha = new Date($('#fecha_nacimiento').val());
-  
-    var hoy = new Date();
-  
-    var edad = hoy.getFullYear() - fecha.getFullYear();
-  
-    var m = hoy.getMonth() - fecha.getMonth();
-  
-    if (m < 0 || (m === 0 && hoy.getDate() < fecha.getDate())) {
-  
-      edad--;
-    }
-  
-    $('#edad').val(edad);
-}
+

@@ -402,12 +402,12 @@
                           <p>Pensión</p>
                         </a>
                       </li>
-                      <li class="nav-item">
+                      <!-- <li class="nav-item">
                         <a href="break.php" class="nav-link" id="lBreak" >
                           <i class="fas fa-hamburger nav-icon"></i>
                           <p>Break</p>
                         </a>
-                      </li>
+                      </li> -->
                       <li class="nav-item">
                         <a href="comidas_extras.php" class="nav-link" id="lComidasExtras" >
                           <i class="fas fa-drumstick-bite nav-icon"></i>
