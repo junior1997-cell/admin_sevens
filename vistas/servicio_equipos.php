@@ -70,42 +70,6 @@
                               </button>
                             </div>
                           </div>
-                          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: aliceblue;">
-                            <div class="text-slid-box">
-                              <div id="offer-box" class="contenedor">
-                                <div><b>Leyenda-pago</b></div>
-                                <ul class="offer-box cls-ul">
-                                  <li>
-                                    <span class="text-center badge badge-danger">Pago sin iniciar </span>
-                                  </li>
-                                  <li>
-                                    <span class="text-center badge badge-warning">Pago en proceso </span>
-                                  </li>
-                                  <li>
-                                    <span class="text-center badge badge-success">Pago completo</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn" style="background-color: #f0f8ff7d;">
-                            <div class="text-slid-box">
-                              <div id="offer-box" class="contenedorr">
-                                <div><b>Leyenda-saldos</b></div>
-                                <ul class="offer-box clss-ul">
-                                  <li>
-                                    <span class="text-center badge badge-warning">Pago nulo o pago en proceso </span>
-                                  </li>
-                                  <li>
-                                    <span class="text-center badge badge-success">Pago Completo </span>
-                                  </li>
-                                  <li>
-                                    <span class="text-center badge badge-danger">Pago excedido</span>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
                         </div>
                           <!-- filtros -->
                         <div class="card-body filtros-inputs row pt-3 pb-0">
@@ -173,10 +137,7 @@
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
                                 <th data-toggle="tooltip" data-original-title="Costo Parcial">C. Parcial</th>
-                                <th>Añadir pago</th>
-                                <th>Saldo</th>
                                 <th>Facturas</th>
-                                <th>Estado</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -189,10 +150,7 @@
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
                                 <th data-toggle="tooltip" data-original-title="Costo Parcial">C. Parcial</th>
-                                <th>Añadir pago</th>
-                                <th>Saldo</th>
                                 <th>Facturas</th>
-                                <th>Estado</th>
                               </tr>
                             </tfoot>
                           </table>

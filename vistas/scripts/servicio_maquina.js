@@ -172,7 +172,11 @@ function listar(nube_idproyecto) {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6], } }, {extend: "colvis"} ,   
+       "colvis"],
     ajax: {
       url: "../ajax/servicio_maquina.php?op=listar&nube_idproyecto=" + nube_idproyecto,
       type: "get",
@@ -186,19 +190,6 @@ function listar(nube_idproyecto) {
       if (data[6] != '') {
         $("td", row).eq(6).addClass('text-nowrap text-right');
       }
-      if (data[8] != "") {
-
-        var num = parseFloat(quitar_formato_miles(data[8])); console.log(num);
-
-        if (num > 0) {
-          $("td", row).eq(8).addClass('bg-warning text-right');
-        } else if (num == 0) {
-          $("td", row).eq(8).addClass('bg-success text-right');            
-        } else if (num < 0) {
-          $("td", row).eq(8).addClass('bg-danger text-right');
-        }
-      }
-
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",

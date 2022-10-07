@@ -86,44 +86,6 @@
                                   </h3>
                                 </div>
                               </div>
-                              <!-- Leyecnda pagos -->
-                              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn leyecnda_pagos" style="background-color: aliceblue;">
-                                <div class="text-slid-box">
-                                  <div id="offer-box" class="contenedor">
-                                    <div> <b>Leyenda-pago</b> </div>
-                                    <ul class="offer-box cls-ul">
-                                      <li>
-                                        <span class="text-center badge badge-danger" >Pago sin iniciar </span> 
-                                      </li>
-                                      <li>
-                                        <span class="text-center badge badge-warning" >Pago en proceso </span>
-                                      </li>
-                                      <li>
-                                        <span class="text-center badge badge-success" >Pago completo</span>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- Leyecnda saldos -->
-                              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 hiddenn leyecnda_saldos" style="background-color: #f0f8ff7d;">
-                                <div class="text-slid-box">
-                                  <div id="offer-box" class="contenedorr">
-                                    <div> <b>Leyenda-saldos</b> </div>
-                                    <ul class="offer-box clss-ul">
-                                      <li>
-                                        <span class="text-center badge badge-warning " >Pago nulo o pago en proceso </span> 
-                                      </li>
-                                      <li>
-                                        <span class="text-center badge badge-success" >Pago Completo </span>
-                                      </li>
-                                      <li>
-                                        <span class="text-center badge badge-danger" >Pago excedido</span>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -203,9 +165,6 @@
                                   <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                   <th data-toggle="tooltip" data-original-title="Detraccion">Detrac.</th>
                                   <th>Total</th>
-                                  <th>Añadir pago</th>
-                                  <th>Deposito</th>
-                                  <th>Saldo</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">CFDI.</th>
                                   <th>Descripción</th>
                                   <th> <button class="btn btn-info btn-sm btn-descarga-multiple" onclick="download_multimple();" data-toggle="tooltip" data-original-title="Descarga múltiple" ><i class="fas fa-cloud-download-alt"></i></button> </th>
@@ -221,9 +180,6 @@
                                   <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                   <th>Detrac.</th>
                                   <th>Total</th>
-                                  <th>Añadir pago</th>
-                                  <th>Deposito</th>
-                                  <th>Saldo</th>
                                   <th>CFDI.</th>
                                   <th>Descripción</th>
                                   <th>Estado</th>

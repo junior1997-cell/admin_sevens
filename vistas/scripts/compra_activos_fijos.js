@@ -276,7 +276,9 @@ function tbla_principal() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,10,11,12,13,14,15,6,14,15,16,17,18], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,10,11,12,13,14,15,6,14,15,16,17,18], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,10,11,12,13,14,15,6,14,15,16,17,18], } }, {extend: "colvis"} ,      
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,8,9,10,11,12,13,6,14], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,8,9,10,11,12,13,6,14], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,8,9,10,11,12,13,6,14], } }, {extend: "colvis"} ,      
     ],
     ajax: {
       url: "../ajax/compra_activos_fijos.php?op=tbla_compra_activos_fijos",
@@ -295,17 +297,6 @@ function tbla_principal() {
       if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
       // columna: #
       if (data[6] != '') { $("td", row).eq(6).addClass("text-nowrap text-right"); }
-      //console.log(data);
-      if (quitar_formato_miles(data[8]) > 0) {
-        // $("td", row).eq(8).css({ "background-color": "#ffc107", color: "black", });
-        $("td", row).eq(8).addClass("text-nowrap bg-warning text-right");
-      } else if (quitar_formato_miles(data[8]) == 0) {
-        //$("td", row).eq(8).css({ "background-color": "#28a745", color: "white", });
-        $("td", row).eq(8).addClass("text-nowrap bg-success text-right");
-      } else {
-        //$("td", row).eq(8).css({ "background-color": "#ff5252", color: "white", });
-        $("td", row).eq(8).addClass("text-nowrap bg-danger text-right");
-      }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -317,7 +308,7 @@ function tbla_principal() {
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [      
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      { targets: [10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
+      { targets: [8,9,10,11,12,13,14], visible: false, searchable: false, },
     ],
   }).DataTable();
 

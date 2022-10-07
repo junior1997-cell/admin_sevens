@@ -166,9 +166,9 @@ function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,10,11,12,13,2,14,15,16,17,6,18,8,19,20,5], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,10,11,12,13,2,14,15,16,17,6,18,8,19,20,5], } }, 
-      { extend: 'pdfHtml5', footer: true,  exportOptions: { columns: [0,3,10,11,12,13,2,14,15,16,17,6,18,8,19,20,5], }, orientation: 'landscape', pageSize: 'LEGAL', }, 
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,8,9,10,11,2,12,13,14,15,6,16,8,17,18,5], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,8,9,10,11,2,12,13,14,15,6,16,8,17,18,5], } }, 
+      { extend: 'pdfHtml5', footer: true,  exportOptions: { columns: [0,3,8,9,10,11,2,12,13,14,15,6,16,8,17,18,5], }, orientation: 'landscape', pageSize: 'LEGAL', }, 
     ],
     ajax:{
       url: `../ajax/sub_contrato.php?op=tabla_principal&idproyecto=${idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
@@ -189,16 +189,6 @@ function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante
       if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right');  }
       // columna: total
       if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right');  }
-      if (data[8] != "") {
-        var num = parseFloat(quitar_formato_miles(data[8])); //console.log(num);
-        if (num > 0) {
-          $("td", row).eq(8).addClass('bg-warning text-right');
-        } else if (num == 0) {
-          $("td", row).eq(8).addClass('bg-success text-right');            
-        } else if (num < 0) {
-          $("td", row).eq(8).addClass('bg-danger text-right');
-        }
-      }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -210,7 +200,7 @@ function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs:[      
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [10,11,12,13,14,15,16,17,18,19,20], visible: false, searchable: false, },
+      { targets: [8,9,10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
       { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
@@ -231,8 +221,8 @@ function total(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
       // $(".total_subtotal").html(formato_miles(e.data.total_subtotal));
       // $(".total_igv").html(formato_miles(e.data.total_igv));
       $(".total_gasto").html(formato_miles(e.data.total_gasto));
-      $(".total_deposito").html(formato_miles(e.data.total_deposito));
-      $(".total_saldo").html(formato_miles(e.data.total_gasto - e.data.total_deposito));
+      // $(".total_deposito").html(formato_miles(e.data.total_deposito));
+      // $(".total_saldo").html(formato_miles(e.data.total_gasto - e.data.total_deposito));
       $('.cargando').hide();
     } else {
       ver_errores(e);

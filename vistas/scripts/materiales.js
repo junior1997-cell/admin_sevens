@@ -12,17 +12,15 @@ function init() {
   tbla_principal();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
-  //lista_select2("../ajax/ajax_general.php?op=select2Color", '#color', null);
+  lista_select2("../ajax/ajax_general.php?op=select2marcas_activos", '#marcas', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida', null);
-  lista_select2("../ajax/ajax_general.php?op=select2TierraConcreto", '#idtipo_tierra_concreto', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  //$("#color").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
+  $("#marcas").select2();
   $("#unidad_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
-  $("#idtipo_tierra_concreto").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
 
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
   $('#precio_unitario').number( true, 2 );
@@ -35,12 +33,12 @@ function init() {
   $("[data-mask]").inputmask();
 }
 
-function templateColor (state) {
-  if (!state.id) { return state.text; }
-  var color_bg = state.title != '' ? `${state.title}`: '#ffffff00';   
-  var $state = $(`<span ><b style="background-color: ${color_bg}; color: ${color_bg};" class="mr-2"><i class="fas fa-square"></i><i class="fas fa-square"></i></b>${state.text}</span>`);
-  return $state;
-}
+// function templateColor (state) {
+//   if (!state.id) { return state.text; }
+//   var color_bg = state.title != '' ? `${state.title}`: '#ffffff00';   
+//   var $state = $(`<span ><b style="background-color: ${color_bg}; color: ${color_bg};" class="mr-2"><i class="fas fa-square"></i><i class="fas fa-square"></i></b>${state.text}</span>`);
+//   return $state;
+// }
 
 // abrimos el navegador de archivos
 // iamgend e perfil
@@ -79,7 +77,7 @@ function limpiar_form_material() {
   $("#nombre_material").val("");
   $("#modelo").val("");
   $("#serie").val("");
-  $("#marca").val("1");
+  $("#marcas").val("null").trigger("change");
   $("#descripcion_material").val("");
 
   $("#precio_unitario").val("");
@@ -98,7 +96,6 @@ function limpiar_form_material() {
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
 
-  $("#idtipo_tierra_concreto").val("").trigger("change");
   $("#unidad_medida").val("null").trigger("change");
   $("#color").val("1").trigger("change");
   $("#my-switch_igv").prop("checked", true);
@@ -114,14 +111,14 @@ function limpiar_form_material() {
 function tbla_principal() {
   tabla = $("#tabla-materiales").dataTable({
     responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    lengthMenu: [[ -1, 10, 25, 50, 100, 200, 500], ["Todos", 10, 25, 50, 100, 200, 500 ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,12,13,4,5,6,7,8,9,14], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,12,13,4,5,6,7,8,9,14], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,12,13,4,5,6,7,8,9,14], } },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,8,4,10,9], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,8,4,10,9], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,8,4,10,9], } },
     ],
     ajax: {
       url: "../ajax/materiales.php?op=tbla_principal",
@@ -137,15 +134,12 @@ function tbla_principal() {
       // columna: opciones
       if (data[1] != '') { $("td", row).eq(1).addClass("text-center text-nowrap"); }
       // columna: code
-      if (data[2] != '') { $("td", row).eq(2).addClass("text-center"); }
-      // columna: precio unitario
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-nowrap"); }
-      // columna: precio sin igv
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-nowrap"); }
-      // columna: monto igv
-      if (data[9] != '') { $("td", row).eq(9).addClass("text-nowrap"); }
-      // columna: precio total
-      if (data[10] != '') { $("td", row).eq(10).addClass("text-nowrap"); }
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: code
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      // columna: code
+      if (data[4] != '') { $("td", row).eq(4).addClass("text-nowrap"); }
+
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -153,12 +147,12 @@ function tbla_principal() {
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
-    iDisplayLength: 10, //Paginación
+    iDisplayLength: 25, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [12], visible: false, searchable: true, },  
-      { targets: [13,14], visible: false, searchable: false, },  
-      { targets: [7,8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, }, 
+      { targets: [8,9,10], visible: false, searchable: false, },  
+      // { targets: [7,8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 }
@@ -239,7 +233,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idproducto) {
-  limpiar_form_material(); //console.log(idproducto);
+  // limpiar_form_material(); //console.log(idproducto);|
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
@@ -255,7 +249,7 @@ function mostrar(idproducto) {
       $("#nombre_material").val(e.data.nombre);
       $("#modelo").val(e.data.modelo);
       $("#serie").val(e.data.serie);
-      $("#marca").val(e.data.marca);            
+      $("#marcas").val(e.data.detalle_marca).trigger("change");            
       $("#descripcion_material").val(e.data.descripcion);
 
       $("#precio_unitario").val(e.data.precio_unitario);
@@ -263,8 +257,7 @@ function mostrar(idproducto) {
       $("#precio_sin_igv").val(e.data.precio_sin_igv);    
       $("#precio_igv").val(e.data.precio_igv);
       $("#precio_con_igv").val(e.data.precio_total);          
-      
-      $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto).trigger("change");
+
       $("#unidad_medida").val(e.data.idunidad_medida).trigger("change");
       $("#color").val(e.data.idcolor).trigger("change");
 
@@ -319,7 +312,7 @@ function verdatos(idproducto){
 
   $.post("../ajax/materiales.php?op=mostrar", { 'idproducto': idproducto }, function (e, status) {
 
-    e = JSON.parse(e);  //console.log(e); 
+    e = JSON.parse(e);  console.log(e); 
     
     if (e.status) {     
     
@@ -365,6 +358,12 @@ function verdatos(idproducto){
 
       }     
 
+      var marca =""; cont=0;
+      e.data.marcas.forEach((valor, index) => {
+        cont=cont+1;
+        marca = marca.concat( `<span class="username">${cont } ${valor}</span> </br>`);
+      });
+
       var retorno_html=`                                                                            
       <div class="col-12">
         <div class="card">
@@ -374,50 +373,15 @@ function verdatos(idproducto){
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}</th>
                   <td> <b>Nombre: </b> ${e.data.nombre}</td>
-                </tr>                
+                </tr>      
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <td> <b>Color: </b> ${e.data.nombre_color}</td>
-                </tr>
+                  <td> <b>U.M: </b> ${e.data.nombre_medida}</td>
+                </tr>                          
+                   
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Grupo</th>
-                  <td>${e.data.tipo_tierra_concreto}</td>
-                </tr>     
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>U.M.</th>
-                  <td>${e.data.nombre_medida}</td>
-                </tr>                
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Marca</th>
-                    <td>${e.data.nombre_marca}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Con IGV</th>
-                  <td>${(e.data.estado_igv==1? '<div class="myestilo-switch ml-2"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" checked disabled /><label for="my-switch-igv-2"></label></div></div>' : '<div class="myestilo-switch ml-3"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" disabled/><label for="my-switch-igv-2"></label></div></div>')}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Precio  </th>
-                  <td>${e.data.precio_unitario}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Sub Total</th>
-                  <td>${e.data.precio_sin_igv}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>IGV</th>
-                  <td>${e.data.precio_igv}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Total </th>
-                  <td>${e.data.precio_total}</td>
-                </tr> 
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Modelo</th>
-                  <td>${e.data.modelo}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Serie</th>
-                  <td>${e.data.serie}</td>
-                </tr>               
+                  <th>Marcas</th>
+                  <td>${marca}</td>
+                </tr>         
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Descripción</th>
                   <td><textarea cols="30" rows="2" class="textarea_datatable" readonly="">${e.data.descripcion}</textarea></td>
@@ -540,8 +504,6 @@ init();
 $(function () {   
 
   $('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
-  //$('#color').on('change', function() { $(this).trigger('blur'); });
-  $('#idtipo_tierra_concreto').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-materiales").validate({
     rules: {
@@ -550,7 +512,6 @@ $(function () {
       unidad_medida:        { required: true },
       color:                { required: true },
       precio_unitario:      { required: true },
-      idtipo_tierra_concreto:{ required: true },
     },
     messages: {
       nombre_material:      { required: "Campo requerido.", },
@@ -558,7 +519,6 @@ $(function () {
       unidad_medida:        { required: "Campo requerido.", },
       color:                { required: "Campo requerido.", },
       precio_unitario:      { required: "Campo requerido.", },
-      idtipo_tierra_concreto:{ required: "Campo requerido.", },
     },
 
     errorElement: "span",
@@ -583,8 +543,7 @@ $(function () {
   });
 
   $('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  //$('#color').rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $('#idtipo_tierra_concreto').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

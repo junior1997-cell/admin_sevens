@@ -184,24 +184,20 @@
                 "4"=>'<span ><b class="text-primary">'.$reg['tipo_comprobante'].'</b>'. (empty($reg['numero_comprobante'])?"":' - '.$reg['numero_comprobante'] ).'</span>',                
                 "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',                
                 "6"=> $reg['costo_parcial'],
-                "7"=>'<div class="text-nowrap formato-numero-conta"> 
-                    <button class="btn btn-' . $c . ' btn-xs" onclick="listar_pagos(' .$reg['idsubcontrato']. ' , '.$reg['costo_parcial'].' , '.$reg['total_deposito'].')"><i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . '</button> ' .
-                    ' <button style="font-size: 14px;" class="btn btn-' . $c . ' btn-xs">' . number_format($reg['total_deposito'], 2, '.', ',') . '</button> 
-                  </div>',
-                "8"=>number_format($saldo, 2, '.', ','),
-                "9"=>$comprobante . $toltip,
 
-                "10"=> $reg['tipo_documento'],
-                "11"=> $reg['ruc'],
-                "12"=> $reg['tipo_comprobante'],
-                "13"=> $reg['numero_comprobante'],
-                "14"=> $reg['forma_de_pago'],
-                "15"=> number_format($reg['subtotal'], 2, '.', ','),
-                "16"=> number_format($reg['igv'], 2, '.', ','),
-                "17"=> $reg['val_igv'],
-                "18"=> number_format($reg['total_deposito'], 2, '.', ','),
-                "19"=> $reg['tipo_gravada'],
-                "20"=> $reg['glosa'],
+                "7"=>$comprobante . $toltip,
+
+                "8"=> $reg['tipo_documento'],
+                "9"=> $reg['ruc'],
+                "10"=> $reg['tipo_comprobante'],
+                "11"=> $reg['numero_comprobante'],
+                "12"=> $reg['forma_de_pago'],
+                "13"=> number_format($reg['subtotal'], 2, '.', ','),
+                "14"=> number_format($reg['igv'], 2, '.', ','),
+                "15"=> $reg['val_igv'],
+                "16"=> number_format($reg['total_deposito'], 2, '.', ','),
+                "17"=> $reg['tipo_gravada'],
+                "18"=> $reg['glosa'],
               );
 
             }

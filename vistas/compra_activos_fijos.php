@@ -137,8 +137,6 @@
                                   <th>Proveedor</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                   <th>Total</th>
-                                  <th>Añadir pago</th>
-                                  <th>Saldo</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
                                   <th>Proyecto</th>
                                   <th>Proveedor</th>
@@ -146,8 +144,6 @@
                                   <th>Serie comprobante</th>
                                   <th>Subtotal</th>
                                   <th>IGV</th>
-                                  <th>Depósito</th>
-                                  <th>Saldo</th>
                                   <th>Glosa</th>
                                 </tr>
                               </thead>
@@ -161,8 +157,6 @@
                                   <th>Proveedor</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
                                   <th>Total</th>
-                                  <th>Añadir pago</th>
-                                  <th>Saldo</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">Comprob</th>
                                   <th>Proyecto</th>
                                   <th>Proveedor</th>
@@ -170,8 +164,6 @@
                                   <th>Serie comprobante</th>
                                   <th>Subtotal</th>
                                   <th>IGV</th>
-                                  <th>Depósito</th>
-                                  <th>Saldo</th>
                                   <th>Glosa</th>
                                 </tr>
                               </tfoot>

@@ -342,12 +342,12 @@ if (!isset($_SESSION["nombre"])) {
               "4" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',
               "5" => empty($reg['estado_detraccion']) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
               "6" => $reg['total'],
-              "7" => $list_segun_estado_detracc,
-              "8" => number_format($reg['total_pago_compras'], 2, '.', ','),
-              "9" => number_format($saldo, 2, '.', ','),
-              "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.$reg['razon_social'].'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
-              "11" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg['descripcion'].'</textarea>',
-              "12" => '<div class="custom-control custom-checkbox">
+              // "7" => $list_segun_estado_detracc,
+              // "8" => number_format($reg['total_pago_compras'], 2, '.', ','),
+              // "9" => number_format($saldo, 2, '.', ','),
+              "7" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.$reg['razon_social'].'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+              "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg['descripcion'].'</textarea>',
+              "9" => '<div class="custom-control custom-checkbox">
                         <input class="custom-control-input custom-control-input-danger custom-control-input-outline check_add_doc " '.$clss_disabled.' type="checkbox" id="check_descarga_'.$reg['idcompra_proyecto'].'" onchange="add_remove_comprobante( '.$reg['idcompra_proyecto'].', \''.$reg['comprobante'].'\', \'' .encodeCadenaHtml('<b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\')">
                         <label for="check_descarga_'.$reg['idcompra_proyecto'].'" class="custom-control-label check_add_doc cursor-pointer"></label> '.
                         '<i class="cargando_check m-r-10px hidden fas fa-spinner fa-pulse"></i>'.

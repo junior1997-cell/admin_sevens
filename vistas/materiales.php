@@ -69,18 +69,14 @@
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th class="">Code</th>
-                                <th>Nombre</th>
-                                <th>Grupo</th>
-                                <th>Unidad</th>
+                                <th>Producto</th>
+                                <th>UM</th>
                                 <th>Marca</th>
-                                <th data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                <th data-toggle="tooltip" data-original-title="Sub total">Subtotal</th>
-                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>                                
-                                <th>Nombre</th>
-                                <th>Color</th>
-                                <th>Descripción</th>
+                                <th>Precio Promedio</th>
+                                <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
+                                <th >Nombre</th>
+                                <th >Descripción</th>
+                                <th >Marcas</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -89,18 +85,14 @@
                                 <th class="text-center">#</th>
                                 <th class="">Acciones</th>
                                 <th class="">Code</th>
-                                <th>Nombre</th>
-                                <th>Grupo</th>
-                                <th>Unidad</th>
+                                <th>Producto</th>
+                                <th>UM</th>
                                 <th>Marca</th>
-                                <th data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
-                                <th data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                <th data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                <th data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
-                                <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>                                
-                                <th>Nombre</th>
-                                <th>Color</th>
-                                <th>Descripción</th>
+                                <th>Precio Promedio</th>
+                                <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
+                                <th >Nombre</th>
+                                <th >Descripción</th>
+                                <th >Marcas</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -141,22 +133,13 @@
                               <input type="hidden" id="modelo" name="modelo" />
                               <input type="hidden" id="serie" name="serie" />
                               <input type="hidden" id="color" name="color" value="1" />
-                              <input type="hidden" id="marca" name="marca" value="1" />
+                              <!-- <input type="hidden" id="marca" name="marca" value="1" /> -->
 
                               <!-- Nombre -->
                               <div class="col-12 col-sm-12 col-md-8 col-lg-8">
                                 <div class="form-group">
                                   <label for="nombre_material">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_material" class="form-control" id="nombre_material" placeholder="Nombre del Insumo." />
-                                </div>
-                              </div>
-
-                              <!-- Categoria -->
-                              <div class="col-12 col-sm-12 col-md-4 col-lg-4">
-                                <div class="form-group">
-                                  <label for="idtipo_tierra_concreto">Grupo <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" class="form-control select2" style="width: 100%;"> 
-                                  </select>
                                 </div>
                               </div>
 
@@ -193,15 +176,24 @@
                               </div> -->
 
                               <!-- Unnidad de medida  -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                                 <div class="form-group">
                                   <label for="Unidad-medida">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                   <select name="unidad_medida" id="unidad_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
+                              <!-- select2 multiple marca-->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                  <label for="marcas">Marca <sup class="text-danger">(unico*)</sup></label>
+                                  <div class="select2-purple">
+                                    <select name="marcas[]" id="marcas" class="form-control select2" multiple="multiple" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione" style="width: 100%;"> </select>
+                                  </div>
+                                </div>
+                              </div>
 
                               <!--Precio U-->
-                              <div class="col-7 col-sm-7 col-md-8 col-lg-4">
+                              <div class="col-7 col-sm-7 col-md-8 col-lg-4 hidden">
                                 <div class="form-group">
                                   <label for="precio_unitario">Precio <sup class="text-danger">*</sup></label>
                                   <input type="text" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Unitario." />
@@ -209,7 +201,7 @@
                               </div>
 
                               <!-- Rounded switch -->
-                              <div class="col-5 col-sm-5 col-md-4 col-lg-2">
+                              <div class="col-5 col-sm-5 col-md-4 col-lg-2 hidden">
                                 <div class="form-group">
                                   <label for="" class="labelswitch">Sin o Con (Igv)</label>
                                   <div id="switch_igv">
@@ -225,7 +217,7 @@
                               </div>
 
                               <!--Sub Total-->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 hidden">
                                 <div class="form-group">
                                   <label for="precio_sin_igv">Sub Total <sup class="text-danger">*</sup></label>
                                   <input type="text" class="form-control" id="precio_sin_igv" name="precio_sin_igv" placeholder="Subtotal." readonly />                                   
@@ -233,7 +225,7 @@
                               </div>
 
                               <!--IGV-->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 hidden">
                                 <div class="form-group">
                                   <label for="precio_igv">IGV <sup class="text-danger">*</sup></label>
                                   <input type="text" class="form-control" id="precio_igv" name="precio_igv" placeholder="IGV" readonly />                                 
@@ -241,7 +233,7 @@
                               </div>
 
                               <!--Total-->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 hidden">
                                 <div class="form-group">
                                   <label for="precio_con_igv">Total <sup class="text-danger">*</sup></label>
                                   <input type="text" class="form-control" id="precio_con_igv" name="precio_con_igv" placeholder="Precio real." readonly />
@@ -408,6 +400,13 @@
         <!-- /.content-wrapper -->
 
         <?php  require 'script.php'; ?>        
+
+
+        <script>
+          $(document).ready(function() {
+              $('.js-example-basic-multiple').select2();
+          });
+        </script>
 
         <script type="text/javascript" src="scripts/materiales.js"></script>
 

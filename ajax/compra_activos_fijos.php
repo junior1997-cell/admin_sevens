@@ -294,26 +294,15 @@
                 '</div>',
                 "5" => '<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',
                 "6" => number_format($reg['total'], 2, '.', ','),
-                "7" => empty($reg['idproyecto']) ? '<div class="text-center text-nowrap">'.
-                  '<button class="btn btn-' . $c . ' btn-xs m-t-2px" onclick="tbla_pagos_activo_fijo(' . $reg['idtabla'] . ', ' . $reg['total'] . ', ' . floatval($reg['deposito']) .', \''.encodeCadenaHtml($reg['razon_social']) .'\')"> <i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . '</button>' . 
-                  ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format(floatval($reg['deposito']), 2, '.', ',') . '</button>'.
-                '</div>' : 
-                '<div class="text-center text-nowrap">'.
-                  '<button class="btn btn-' . $c . ' btn-xs m-t-2px" disabled onclick="tbla_pagos_insumos(' . $reg['idtabla'] . ',' . $reg['total'] . ',' . floatval($reg['deposito']) . ')"><i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . '</button>' . 
-                  ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm" disabled>' . number_format(floatval($reg['deposito']), 2, '.', ',') . '</button>'.
-                '</div>',
-                "8" => number_format($saldo, 2, '.', ','),
-                "9" => (empty($reg['idproyecto']) ? '<center><button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compra_activo_fijo(' . $reg['idtabla'] . ', \'' . $reg['imagen_comprobante'] . '\')" '.$tooltip_comprobante.' ><i class="fas fa-file-invoice fa-lg"></i></button></center>' : 
+                "7" => (empty($reg['idproyecto']) ? '<center><button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compra_activo_fijo(' . $reg['idtabla'] . ', \'' . $reg['imagen_comprobante'] . '\')" '.$tooltip_comprobante.' ><i class="fas fa-file-invoice fa-lg"></i></button></center>' : 
                 '<center><button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compra_insumo(' . $reg['idtabla'] . ', \'' . $reg['imagen_comprobante'] . '\')"  '.$tooltip_comprobante.' ><i class="fas fa-file-invoice fa-lg"></i></button></center>').$toltip,
-                "10" => (empty($reg['idproyecto']) ? 'General' : $reg['codigo_proyecto']),
-                "11" => $reg['razon_social'],
-                "12" => $reg['tipo_comprobante'],
-                "13" => $reg['serie_comprobante'],
-                "14" => number_format($reg['subtotal'], 2, '.', ','),
-                "15" => number_format($reg['igv'], 2, '.', ','),
-                "16" => number_format(floatval($reg['deposito']), 2, '.', ','),
-                "17" => number_format($saldo, 2, '.', ','),
-                "18" => $reg['glosa'],
+                "8" => (empty($reg['idproyecto']) ? 'General' : $reg['codigo_proyecto']),
+                "9" => $reg['razon_social'],
+                "10" => $reg['tipo_comprobante'],
+                "11" => $reg['serie_comprobante'],
+                "12" => number_format($reg['subtotal'], 2, '.', ','),
+                "13" => number_format($reg['igv'], 2, '.', ','),
+                "14" => $reg['glosa'],
               ];
               
             }

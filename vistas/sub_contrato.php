@@ -138,8 +138,6 @@
                                       <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>                                      
                                       <th>Descripción </th>                                      
                                       <th>Total </th>
-                                      <th>Añadir Pago </th>
-                                      <th>Saldo </th>
                                       <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
                                       
                                       <th>Tipo Doc.</th>
@@ -165,11 +163,8 @@
                                       <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>                                      
                                       <th>Descripción </th>                                      
                                       <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_gasto">0.00</span></div></th>
-                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_deposito">0.00</span></div></th>
-                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_saldo">0.00</span></div></th>
                                       <th>CFDI.</th>    
-                                      
-                                      
+                                                                            
                                       <th>Tipo Doc.</th>
                                       <th>Num. Doc.</th>
                                       <th>Comprobante</th>

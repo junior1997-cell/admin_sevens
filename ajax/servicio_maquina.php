@@ -149,16 +149,16 @@
                 "4" => $reg['unidad_medida'],
                 "5" => $reg['cantidad_veces'],
                 "6" =>'S/ '. number_format($reg['costo_parcial'], 2, '.', ','),
-                "7" =>'<div class="text-center text-nowrap"> 
-                        <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos .'); mostrar_form_table(3); show_hide_filtro();"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
-                        '<button style="font-size: 14px;" class="btn btn-' .$c .' btn-xs">' .number_format($reg['total_pagos'], 2, '.', ',') .'</button> 
-                      </div>',
-                "8" => number_format($reg['saldo'], 2, '.', ','),
-                "9" =>'<div class="text-center text-nowrap">
+                // "7" =>'<div class="text-center text-nowrap"> 
+                //         <button class="btn btn-' .$c .' btn-xs" onclick="listar_pagos(' .$verdatos .'); mostrar_form_table(3); show_hide_filtro();"><i class="fas fa-' .$icon .' nav-icon"></i> ' .$nombre .'</button> ' .
+                //         '<button style="font-size: 14px;" class="btn btn-' .$c .' btn-xs">' .number_format($reg['total_pagos'], 2, '.', ',') .'</button> 
+                //       </div>',
+                // "8" => number_format($reg['saldo'], 2, '.', ','),
+                "7" =>'<div class="text-center text-nowrap">
                         <button class="btn btn-' .$cc .' btn-sm" onclick="listar_facturas(' .$unidad_medida .'); mostrar_form_table(4); show_hide_filtro();"><i class="fas fa-file-invoice fa-lg btn-' .$cc .' nav-icon"></i></button> ' .
                         ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($reg['total_comprob_fact'], 2, '.', ',') . '</button> 
                       </div>',
-                "10" => $estado,
+                // "8" => $estado,
 
               ];
             }
