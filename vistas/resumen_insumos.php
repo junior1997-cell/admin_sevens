@@ -549,126 +549,55 @@
 
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_p" id="idproducto_p" /> 
-                              <!-- <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">                            -->
+                              <input type="hidden" name="categoria_insumos_af_p" id="categoria_insumos_af_p" value="1">   
+                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">
+                              <input type="hidden" name="color_p" id="color_p" value="1">
+                              
+                              <input type="hidden" name="precio_unitario_p" id="precio_unitario_p" value="1">
+                              <input type="hidden" name="precio_sin_igv_p" id="precio_sin_igv_p" value="1">
+                              <input type="hidden" name="precio_igv_p" id="precio_igv_p" value="1">
+                              <input type="hidden" name="precio_igv_p" id="precio_igv_p" value="1">
+                              <input type="hidden" name="precio_total_p" id="precio_total_p" />
 
                               <!-- cont registro -->
                               <input type="hidden" name="cont" id="cont" />                              
 
                               <!-- Nombre -->
-                              <div class="col-sm-12 col-md-12 col-lg-12 class_pading">
+                              <div class="col-sm-12 col-md-12 col-lg-8 ">
                                 <div class="form-group">
                                   <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
                                 </div>
                               </div>
-
-                              <!-- Categoria -->
-                              <div class="col-sm-6 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;" onchange="grupo_no_select();"> 
-                                  </select>
-                                </div>
-                              </div>
-                              <!-- Grupo -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="idtipo_tierra_concreto">Grupo <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" class="form-control select2" style="width: 100%;"> 
-                                  </select>
-                                </div>
-                              </div>
-
-                              <!-- Modelo -->
-                              <div class="col-lg-6 d-none">
-                                <div class="form-group">
-                                  <label for="modelo_p">Modelo </label>
-                                  <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
-                                </div>
-                              </div>
-
-                              <!-- Serie -->
-                              <div class="col-lg-6 d-none">
-                                <div class="form-group">
-                                  <label for="serie_p">Serie </label>
-                                  <input class="form-control" type="text" id="serie_p" name="serie_p" placeholder="Serie." />
-                                </div>
-                              </div>
-
-                              <!-- Marca -->
-                              <div class="col-lg-6 d-none" >
-                                <div class="form-group">
-                                  <label for="marca_p">Marca </label>
-                                  <input class="form-control" type="text" id="marca_p" name="marca_p" value="1" placeholder="Marca de activo." />
-                                </div>
-                              </div>
-
-                              <!-- Color -->
-                              <div class="col-lg-6 d-none">
-                                <div class="form-group">
-                                  <label for="color_p">Color <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
-                                </div>
-                              </div>
                               
                               <!-- Unnidad-->
-                              <div class="col-lg-6 " id="content-t-unidad">
+                              <div class="col-lg-4 ">
                                 <div class="form-group">
                                   <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                   <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
 
-                              <!--Precio U-->
-                              <div class="col-lg-4 class_pading">
+                              <!-- Unnidad-->
+                              <div class="col-lg-4 ">
                                 <div class="form-group">
-                                  <label for="precio_unitario_p">Precio <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
+                                  <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
+                                  <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
                               </div>
 
-                              <!-- Rounded switch -->
-                              <div class="col-lg-2 class_pading">
+                              <!-- Unnidad-->
+                              <div class="col-lg-12 ">
                                 <div class="form-group">
-                                  <label for="" class="labelswitch">Sin o Con (Igv)</label>
-                                  <div id="switch_igv">
-                                    <div class="switch-holder myestilo-switch">
-                                      <div class="switch-toggle">
-                                        <input type="checkbox" id="my-switch_igv" checked />
-                                        <label for="my-switch_igv"></label>
-                                      </div>
-                                    </div>
+                                  <label for="marca_p">Marca <sup class="text-danger">(unico*)</sup></label>
+                                  <div class="select2-purple">
+                                    <select name="marca_p[]" id="marca_p" class="form-control select2" multiple="multiple" data-dropdown-css-class="select2-purple" style="width: 100%;"> </select>
                                   </div>
-                                  <input type="hidden" name="estado_igv_p" id="estado_igv_p" />
-                                </div>
-                              </div>
-
-                              <!--Sub Total subtotal igv total-->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="precio_sin_igv_p">Sub Total</label>
-                                  <input type="number" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                </div>
-                              </div>
-
-                              <!--IGV-->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="precio_igv_p">IGV</label>
-                                  <input type="number" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                </div>
-                              </div>
-
-                              <!--Total-->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="precio_total_p">Total</label>
-                                  <input type="number" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
                                 </div>
                               </div>
 
                               <!--Descripcion-->
-                              <div class="col-lg-12 class_pading">
+                              <div class="col-lg-12 ">
                                 <div class="form-group">
                                   <label for="descripcion_p">Descripción </label> <br />
                                   <textarea name="descripcion_p" id="descripcion_p" class="form-control" rows="2"></textarea>
@@ -860,6 +789,65 @@
                   </div>
                 </div>
 
+                <!-- MODAL - AGREGAR GRUPOS -->                 
+                <div class="modal fade" id="modal-agregar-grupos">
+                  <div class="modal-dialog modal-dialog-scrollable modal-sm">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Asignar Grupos</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-grupos" name="form-grupos" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-7-fomulario">
+
+                              <!-- idproducto -->
+                              <input type="hidden" name="idproducto_g" id="idproducto_g" />
+
+                              <!-- Grupo -->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                  <label for="idclasificacion_grupo_g">Grupo <sup class="text-danger">(unico*)</sup></label>
+                                  <select name="idclasificacion_grupo_g" id="idclasificacion_grupo_g" class="form-control select2" style="width: 100%;"> 
+                                  </select>
+                                </div>
+                              </div>
+
+                              <!-- barprogress --> 
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="barra_progress_grupos_div">
+                                  <div id="barra_progress_grupos" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+
+                            <div class="row" id="cargando-8-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-grupos">Submit</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_grupos();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_grupos">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 
               </section>

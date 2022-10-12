@@ -141,7 +141,9 @@ function listar_tbla_principal(nube_idproyecto) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,13,14,15,16,17,2,3,4,5,6,7,8,18,10,11,12], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,13,14,15,16,17,2,3,4,5,6,7,8,18,10,11,12], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,13,14,15,16,17,2,3,4,5,6,7,8,18,10,11,12], } } ,            
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,13,14,15,16,17,2,3,4,5,6,7,8,18,10,11,12], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,13,14,15,16,17,2,3,4,5,6,7,8,18,10,11,12], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,13,14,15,16,17,2,3,4,5,6,7,8,18,10,11,12], } } ,            
     ],
     ajax:{
       url: '../ajax/pago_administrador.php?op=listar_tbla_principal&nube_idproyecto='+nube_idproyecto,
@@ -162,7 +164,7 @@ function listar_tbla_principal(nube_idproyecto) {
       if (data[7] != '') { $("td", row).eq(7).addClass('text-right'); $('.pago_total_tbla_principal').html( formato_miles(pago_total_x_proyecto += parseFloat(data[7])) ); }
       // columna: pago acumuldo       
       if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $('.pago_hoy_total_tbla_principal').html( formato_miles(total_pago_acumulado_hoy += parseFloat(data[8])) ); }
-      // columna: deposito       
+      // columna: deposito      
       if (data[18] != '') { $("td", row).eq(8).addClass('text-nowrap'); $('.deposito_total_tbla_principal').html( formato_miles(deposito += parseFloat(data[18])) ); }
       // columna: saldo
       if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $('.saldo_total_tbla_principal').html( formato_miles( saldo_total += parseFloat( data[10])) ); }
@@ -635,10 +637,10 @@ function guardar_y_editar_pagos_x_mes(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
+    success: function (e) {
       try {
-        datos = JSON.parse(datos); console.log(datos);
-        if (datos.estado) {
+        e = JSON.parse(e); console.log(e);
+        if (e.estado) {
 
           // tabla_ingreso_pagos.ajax.reload(null, false); 
           $('#idfechas_mes_pagos_administrador_pxm').val(datos.id_tabla);

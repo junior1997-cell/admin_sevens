@@ -1,35 +1,67 @@
-<?php 
+<?php
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion_v2.php";
 
-Class ResumenInsumos
+class ResumenInsumos
 {
-	//Implementamos nuestro constructor
-	public function __construct()
-	{
+  //Implementamos nuestro constructor
+  public function __construct()
+  {
+  }
 
-	}
+  //Implementar un método para listar los registros
+  public function tbla_principal($idproyecto) {
 
-	
-	//Implementar un método para listar los registros
-	public function tbla_principal($idproyecto){
-
-		$sql="SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida, 
-		c.nombre_color, pr.nombre AS nombre_producto, pr.modelo, pr.marca, ttc.nombre as grupo, pr.imagen, pr.precio_total AS precio_actual, 
+    $resumen_producto = [];
+    $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida, 
+		pr.nombre AS nombre_producto, pr.modelo, pr.marca, cg.idclasificacion_grupo, cg.nombre as grupo,  pr.imagen, pr.precio_total AS precio_actual,
 		SUM(dc.cantidad) AS cantidad_total, SUM(dc.precio_con_igv) AS precio_con_igv, SUM(dc.descuento) AS descuento_total, 
 		SUM(dc.subtotal) precio_total , COUNT(dc.idproducto) AS count_productos, AVG(dc.precio_con_igv) AS promedio_precio
-		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr,tipo_tierra_concreto AS ttc,
-        unidad_medida AS um, color AS c WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
-        AND dc.idproducto = pr.idproducto AND um.idunidad_medida  = pr.idunidad_medida  AND c.idcolor = pr.idcolor  
-        AND cpp.idproyecto = '$idproyecto' AND pr.idtipo_tierra_concreto=ttc.idtipo_tierra_concreto AND pr.idcategoria_insumos_af = '1' 
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, clasificacion_grupo AS cg,
+        unidad_medida AS um 
+		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
+        AND dc.idproducto = pr.idproducto AND um.idunidad_medida  = pr.idunidad_medida 
+        AND cpp.idproyecto = '$idproyecto' AND dc.idclasificacion_grupo = cg.idclasificacion_grupo AND pr.idcategoria_insumos_af = '1' 
         AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";
 
-		return ejecutarConsulta($sql);		
-	}
+    $producto = ejecutarConsultaArray($sql); if ($producto['status'] == false) { return $producto; }
 
-	public function tbla_facturas($idproyecto, $idproducto)	{
+    foreach ($producto['data'] as $key => $value) {
+      $id = $value['idproducto']; 
+      $sql_2 = "SELECT m.nombre_marca FROM  detalle_marca as dm, marca as m WHERE  dm.idmarca = m.idmarca AND dm.idproducto = '$id'";
+      $marcas = ejecutarConsultaArray($sql_2); if ($marcas['status'] == false) { return $marcas; }
+      $html_marca = "";
+      foreach ($marcas['data'] as $key => $value2) { $html_marca .=  '<li >'.$value2['nombre_marca'].'. </li>'; }
 
-		$sql="SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
+      $resumen_producto[] = [
+        'idproyecto'        => $value['idproyecto'],
+        'idcompra_proyecto' => $value['idcompra_proyecto'],
+        'iddetalle_compra'  => $value['iddetalle_compra'],
+        'idproducto'        => $value['idproducto'],
+        'nombre_medida'     => $value['nombre_medida'],
+        'nombre_producto'   => $value['nombre_producto'],
+        'modelo'            => $value['modelo'],
+        'marca'             => $value['marca'],
+        'idclasificacion_grupo'=> $value['idclasificacion_grupo'],
+        'grupo'             => $value['grupo'],
+        'imagen'            => $value['imagen'],
+        'precio_actual'     => $value['precio_actual'],
+        'cantidad_total'    => $value['cantidad_total'],
+        'precio_con_igv'    => $value['precio_con_igv'],
+        'descuento_total'   => $value['descuento_total'],
+        'precio_total'      => $value['precio_total'],
+        'count_productos'   => $value['count_productos'],
+        'promedio_precio'   => $value['promedio_precio'],
+        
+        'html_marca'        =>'<ol class="pl-3">'.$html_marca. '</ol>'
+      ];
+    }
+    return $retorno = ['status' => true, 'data' => $resumen_producto, 'message' => 'todo bien'];
+  }
+
+  public function tbla_facturas($idproyecto, $idproducto)
+  {
+    $sql = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
 		pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
 		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
@@ -37,17 +69,15 @@ Class ResumenInsumos
 		AND dc.idproducto = pr.idproducto AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1'
 		AND cpp.idproveedor = prov.idproveedor AND dc.idproducto = '$idproducto' 
 		ORDER BY cpp.fecha_compra DESC;";
-				// return ejecutarConsulta($sql);	
-		$compra = ejecutarConsultaArray($sql);	
-		if ($compra['status'] == false) { return $compra; }
+    // return ejecutarConsulta($sql);
+    $compra = ejecutarConsultaArray($sql); if ($compra['status'] == false) { return $compra; }
 
     foreach ($compra['data'] as $key => $value) {
       $idcompra_proyecto = $value['idcompra_proyecto'];
-    
+
       $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
-      $cant_comprobantes = ejecutarConsultaSimpleFila($sql3);
-      if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
-    
+      $cant_comprobantes = ejecutarConsultaSimpleFila($sql3); if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
+
       $data[] = [
         'idproyecto' => $value['idproyecto'],
         'idcompra_proyecto' => $value['idcompra_proyecto'],
@@ -61,39 +91,37 @@ Class ResumenInsumos
         'descuento' => $value['descuento'],
         'subtotal' => $value['subtotal'],
         'proveedor' => $value['proveedor'],
-        'cant_comprobantes' => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
+        'cant_comprobantes' => empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']),
       ];
     }
-  
-    return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data, 'affected_rows' =>$compra['affected_rows'],  ] ;
 
-	}
+    return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => $data, 'affected_rows' => $compra['affected_rows']];
+  }
 
-	public function sumas_factura_x_material($idproyecto, $idproducto)	{
-
-		$sql="SELECT  SUM(dc.cantidad) AS cantidad, AVG(dc.precio_con_igv) AS precio_promedio, SUM(dc.descuento) AS descuento, SUM(dc.subtotal) AS subtotal
+  public function sumas_factura_x_material($idproyecto, $idproducto)
+  {
+    $sql = "SELECT  SUM(dc.cantidad) AS cantidad, AVG(dc.precio_con_igv) AS precio_promedio, SUM(dc.descuento) AS descuento, SUM(dc.subtotal) AS subtotal
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
 		AND dc.idproducto = pr.idproducto AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1'
 		AND cpp.idproveedor = prov.idproveedor AND dc.idproducto = '$idproducto' 
 		ORDER BY cpp.fecha_compra DESC;";
 
-		return ejecutarConsultaSimpleFila($sql);		
-	}
+    return ejecutarConsultaSimpleFila($sql);
+  }
 
-	public function suma_total_compras($idproyecto)	{
-
-		$sql = "SELECT SUM( dc.subtotal ) AS suma_total_compras, SUM( dc.cantidad ) AS suma_total_productos
+  public function suma_total_compras($idproyecto)
+  {
+    $sql = "SELECT SUM( dc.subtotal ) AS suma_total_compras, SUM( dc.cantidad ) AS suma_total_productos
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto 
 		AND pr.idcategoria_insumos_af = '1' AND cpp.idproyecto ='$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1';";
-		return ejecutarConsultaSimpleFila($sql);
-	}
+    return ejecutarConsultaSimpleFila($sql);
+  }
 
-	
-
-	public function listar_productos() {
-    	$sql = "SELECT
+  public function listar_productos()
+  {
+    $sql = "SELECT
             p.idproducto AS idproducto,
             p.idunidad_medida AS idunidad_medida,
             p.idcolor AS idcolor,
@@ -116,16 +144,22 @@ Class ResumenInsumos
 		AND p.estado = '1' AND p.estado_delete = '1'
         ORDER BY p.nombre ASC";
 
-    	return ejecutarConsulta($sql);
-  	}
+    return ejecutarConsulta($sql);
+  }
 
-	//Seleccionar 
-	public function obtenerImgPerfilProducto($idproducto)
-	{
-	  $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
-	  return ejecutarConsulta($sql);
-	}
+  //Seleccionar
+  public function obtenerImgPerfilProducto($idproducto)
+  {
+    $sql = "SELECT imagen FROM producto WHERE idproducto='$idproducto'";
+    return ejecutarConsulta($sql);
+  }
 
+  //Seleccionar
+  public function actualizar_grupo($idproducto, $idgrupo)
+  {
+    $sql = "UPDATE detalle_compra SET idclasificacion_grupo='$idgrupo' WHERE idproducto = '$idproducto'";
+    return ejecutarConsulta($sql);
+  }
 }
 
 ?>

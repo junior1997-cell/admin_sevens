@@ -17,10 +17,10 @@ class PagoAdministrador
 
     $sql_1 = "SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento, t.imagen_perfil, t.telefono,
 		tpp.desempenio, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.idtrabajador_por_proyecto, tpp.estado, 
-		tpp.fecha_inicio, tpp.fecha_fin, tpp.cantidad_dias, tpp.cantidad_dias, ct.nombre AS cargo, tt.nombre AS tipo
-		FROM trabajador_por_proyecto as tpp, cargo_trabajador AS ct, tipo_trabajador AS tt, trabajador as t, proyecto AS p
+		tpp.fecha_inicio, tpp.fecha_fin, tpp.cantidad_dias, tpp.cantidad_dias, o.nombre_ocupacion, tt.nombre AS tipo
+		FROM trabajador_por_proyecto as tpp, ocupacion AS o, tipo_trabajador AS tt, trabajador as t, proyecto AS p
 		WHERE tpp.idproyecto = p.idproyecto AND tpp.idproyecto = '$nube_idproyecto'   AND tpp.idtrabajador = t.idtrabajador
-    AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador AND tt.nombre != 'Obrero' ORDER BY t.nombres ASC ;";
+    AND tpp.idocupacion = o.idocupacion AND tpp.idtipo_trabajador = tt.idtipo_trabajador AND tt.nombre != 'Obrero' ORDER BY t.nombres ASC ;";
     $trabajador = ejecutarConsultaArray($sql_1);
 
     if (!empty($trabajador)) {
@@ -32,10 +32,8 @@ class PagoAdministrador
 				WHERE fmpg.idtrabajador_por_proyecto = '$id_trabajdor' AND fmpg.idfechas_mes_pagos_administrador = pxma.idfechas_mes_pagos_administrador AND pxma.estado = '1';";
 
         $depositos = ejecutarConsultaSimpleFila($sql_2);
-        $cant_depo = 0;
-        if (!empty($depositos)) {
-          $cant_depo = $depositos['deposito_por_trabajdor'];
-        }
+        $cant_depo = empty($depositos) ? 0 : (empty($depositos['deposito_por_trabajdor']) ? 0 : $depositos['deposito_por_trabajdor']) ;
+         
 
         $sql_3 = "SELECT idfechas_mes_pagos_administrador, idtrabajador_por_proyecto, fecha_inicial, fecha_final, nombre_mes, cant_dias_mes, cant_dias_laborables, sueldo_mensual, monto_x_mes, numero_comprobante, recibos_x_honorarios, estado
 				FROM fechas_mes_pagos_administrador WHERE idtrabajador_por_proyecto = '$id_trabajdor' ;";
@@ -89,7 +87,7 @@ class PagoAdministrador
           'fecha_fin' => $value['fecha_fin'],
           'cantidad_dias' => $value['cantidad_dias'],
           'cantidad_dias' => $value['cantidad_dias'],
-          'cargo' => $value['cargo'],
+          'nombre_ocupacion' => $value['nombre_ocupacion'],
           'tipo' => $value['tipo'],
 
           'banco'           => (empty($bancos) ? "": $bancos['banco']), 
@@ -110,12 +108,13 @@ class PagoAdministrador
   public function mostrar_total_tbla_principal($id) {
     $sql_1 = "SELECT  SUM(pxma.monto) AS monto_total_depositado_x_proyecto
 		FROM trabajador_por_proyecto AS tpp, fechas_mes_pagos_administrador AS fmpa, pagos_x_mes_administrador AS pxma
-		WHERE tpp.idproyecto = '$id' AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND fmpa.idfechas_mes_pagos_administrador = pxma.idfechas_mes_pagos_administrador AND pxma.estado = '1';";
+		WHERE tpp.idproyecto = '$id' AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 
+    AND fmpa.idfechas_mes_pagos_administrador = pxma.idfechas_mes_pagos_administrador AND pxma.estado = '1';";
     $monto_1 = ejecutarConsultaSimpleFila($sql_1);
 
     $sql_1 = "SELECT SUM(tpp.sueldo_mensual) AS sueldo_mesual_x_proyecto
-		FROM trabajador_por_proyecto AS tpp,  cargo_trabajador AS ct, tipo_trabajador AS tt
-        WHERE tpp.idproyecto = '$id' AND  tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador AND tt.nombre != 'Obrero';";
+		FROM trabajador_por_proyecto AS tpp,  ocupacion AS o, tipo_trabajador AS tt
+        WHERE tpp.idproyecto = '$id' AND  tpp.idocupacion = o.idocupacion AND tpp.idtipo_trabajador = tt.idtipo_trabajador AND tt.nombre != 'Obrero';";
     $monto_2 = ejecutarConsultaSimpleFila($sql_1);
 
     $data = [

@@ -21,7 +21,7 @@ function init() {
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════ 
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
-  lista_select2("../ajax/ajax_general.php?op=select2marcas_activos", '#marca_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marca_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);

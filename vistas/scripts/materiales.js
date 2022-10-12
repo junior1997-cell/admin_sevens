@@ -12,7 +12,7 @@ function init() {
   tbla_principal();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
-  lista_select2("../ajax/ajax_general.php?op=select2marcas_activos", '#marcas', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marcas', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════

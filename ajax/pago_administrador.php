@@ -134,7 +134,7 @@
                 <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username"><p class="text-primary m-b-02rem" >'. $value['nombres'] .'</p></span>
                 <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
-                <span class="description">'. $value['tipo'].' / '.$value['cargo'] .' </span>
+                <span class="description">'. $value['tipo'].' / '.$value['nombre_ocupacion'] .' </span>
               </div>',
               "2"=> $fecha_inicio_nombre,
               "3"=> $date_actual,
@@ -158,7 +158,7 @@
               "14"=> $value['tipo_documento'],
               "15"=> $value['numero_documento'],
               "16"=> $value['tipo'],
-              "17"=> $value['cargo'],
+              "17"=> $value['nombre_ocupacion'],
               "18"=> $value['cantidad_deposito'],
             );
           }

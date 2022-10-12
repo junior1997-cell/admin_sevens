@@ -13,7 +13,7 @@ function init() {
   tabla_principal('todos');
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
-  lista_select2("../ajax/ajax_general.php?op=select2marcas_activos", '#marca', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marca', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unid_medida', null);
   lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af', null);
 

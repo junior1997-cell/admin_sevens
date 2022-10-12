@@ -26,16 +26,15 @@ function init(){
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
-  lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
-  lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);
-  lista_select2("../ajax/ajax_general.php?op=select2TierraConcreto", '#idtipo_tierra_concreto', null);
-
+  lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marca_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2ClasificacionGrupo", '#idclasificacion_grupo_g', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });
+  $("#guardar_registro_grupos").on("click", function (e) {  $("#submit-form-grupos").submit(); });
 
   // ═══════════════════ SELECT2 - COMPRAS ═══════════════════
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione trabajador", allowClear: true, });
@@ -47,10 +46,10 @@ function init(){
   $("#banco_prov").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
 
   // ═══════════════════ SELECT2 - MATERIAL ═══════════════════
-  $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
-  $("#color_p").select2({ templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
   $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
-  $("#idtipo_tierra_concreto").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
+  $("#marca_p").select2({placeholder: "Seleccinar una Grupo", allowClear: true, });
+
+  $("#idclasificacion_grupo_g").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
 
 
   // Formato para telefono
@@ -159,7 +158,7 @@ function tbla_principal(id_proyecto) {
 	  buttons: [ 
       { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,9,10,11], }  }, 
       { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,9,10,11], } }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }, "colvis"
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }
     ],
 		ajax:	{
       url: '../ajax/resumen_insumos.php?op=tbla_principal&id_proyecto='+id_proyecto,
@@ -942,8 +941,6 @@ $("#my-switch_detracc").on("click ", function (e) {
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPROBANTES FACTURAS ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
-
 function comprobante_compras(idcompra_proyecto,num_orden, num_comprobante,fecha) {
   // limpiar_form_comprobante();
   tbla_comprobantes_compras(idcompra_proyecto, num_orden);
@@ -953,7 +950,6 @@ function comprobante_compras(idcompra_proyecto,num_orden, num_comprobante,fecha)
   $('.titulo-comprobante-compra').html(`Comprobante: <b>${num_orden}. ${num_comprobante} - ${fecha}</b>`);
   $("#modal-tabla-comprobantes-compra").modal("show"); 
 }
-
 
 function tbla_comprobantes_compras(id_compra, num_orden) {
   tabla_comprobantes = $("#tabla-comprobantes-compra").dataTable({
@@ -1427,6 +1423,63 @@ function actualizar_producto() {
   
   modificarSubtotales();
 }
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR GRUPOS ::::::::::::::::::::::::::::::::::::::::::::::::::::
+function agregar_grupos(id_producto, id_grupo) {
+  $("#idproducto_g").val(id_producto).trigger('change');
+  $("#idclasificacion_grupo_g").val(id_grupo).trigger('change');
+  $('#modal-agregar-grupos').modal('show');
+}
+
+//Función para guardar o editar
+function guardar_grupos(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-grupos")[0]);
+
+  $.ajax({
+    url: "../ajax/resumen_insumos.php?op=actualizar_grupo",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Grupo guardado correctamente", "success");   
+          if (tabla_principal) { tabla_principal.ajax.reload(null, false); }  
+          $("#modal-agregar-grupos").modal("hide");
+        } else {
+         ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+
+      $("#guardar_registro_grupos").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_grupos").css({"width": percentComplete+'%'});
+          $("#barra_progress_grupos").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_grupos").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_grupos").css({ width: "0%",  });
+      $("#barra_progress_grupos").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_grupos").css({ width: "0%", });
+      $("#barra_progress_grupos").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR PROVEEDOR ::::::::::::::::::::::::::::::::::::::::::::::::::::
 //Función limpiar
 function limpiar_form_proveedor() {
@@ -1548,11 +1601,9 @@ $(function () {
   $("#glosa").on('change', function() { $(this).trigger('blur'); });
   $("#tipo_comprobante").on('change', function() { $(this).trigger('blur'); });
   $("#banco_prov").on('change', function() { $(this).trigger('blur'); });
-  $("#categoria_insumos_af_p").on('change', function() { $(this).trigger('blur'); });
-  $("#color_p").on('change', function() { $(this).trigger('blur'); });
   $("#unidad_medida_p").on('change', function() { $(this).trigger('blur'); });
-  $("#idtipo_tierra_concreto").on('change', function() { $(this).trigger('blur'); });
-
+  $("#idclasificacion_grupo_g").on('change', function() { $(this).trigger('blur'); });
+  $("#marca_p").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-compras").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -1648,23 +1699,15 @@ $(function () {
   $("#form-materiales").validate({
     rules: {
       nombre_p:         { required: true, minlength:3, maxlength:200},
-      categoria_insumos_af_p: { required: true },
-      color_p:          { required: true },
-      unidad_medida_p:    { required: true },
-      precio_unitario_p:{ required: true },
+      unidad_medida_p:  { required: true },
       descripcion_p:    { minlength: 3 },
-      idtipo_tierra_concreto:  { required: true },
-
+      marca_p:          { required: true },
     },
     messages: {
       nombre_p:         { required: "Campo requerido", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
-      categoria_insumos_af_p: { required: "Campo requerido", },
-      color_p:          { required: "Campo requerido" },
       unidad_medida_p:  { required: "Campo requerido" },
-      precio_unitario_p:{ required: "Ingresar precio compra", },      
       descripcion_p:    { minlength: "Minimo 3 caracteres" },
-      idtipo_tierra_concreto:  { required: "Campo requerido", },
-
+      marca_p:          { required: "Campo requerido", },
     },
 
     errorElement: "span",
@@ -1689,15 +1732,43 @@ $(function () {
     },
   });
 
+  $("#form-grupos").validate({
+    rules: {
+      idclasificacion_grupo_g: { required: true },
+    },
+    messages: {
+      idclasificacion_grupo_g: { required: "Campo requerido", },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_grupos(e);
+    },
+  });
+
   // Aplicando la validacion del select cada vez que cambie
   $("#idproveedor").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#glosa").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#tipo_comprobante").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#banco_prov").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $("#categoria_insumos_af_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $("#color_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $("#idtipo_tierra_concreto").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#idclasificacion_grupo_g").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#marca_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
 });
 

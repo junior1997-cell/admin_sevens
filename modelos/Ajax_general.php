@@ -147,6 +147,13 @@
       return ejecutarConsulta($sql);
     }
 
+    /* ══════════════════════════════════════ C L A S I F I C A C I O N   D E   G R U P O ══════════════════════════════════════ */
+
+    public function select2_clasificacion_grupo() {
+      $sql = "SELECT idclasificacion_grupo as id, nombre, descripcion FROM clasificacion_grupo  WHERE estado='1' AND estado_delete = '1' AND idclasificacion_grupo > 1  ORDER BY nombre ASC;";
+      return ejecutarConsulta($sql);
+    }
+
     /* ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════ */
     public function tblaActivosFijos() {
       $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
@@ -194,9 +201,9 @@
       return ejecutarConsultaArray($sql3);
     }
 
-    /* ══════════════════════════════════════ M A R C A S   D E   A C T I V O S ════════════════════════════ */
+    /* ══════════════════════════════════════ M A R C A S  ════════════════════════════ */
 
-    public function marcas_activos() {
+    public function marcas() {
       $sql = "SELECT idmarca, nombre_marca FROM marca WHERE estado=1 and estado_delete=1;";
       return ejecutarConsulta($sql);
     }

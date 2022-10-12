@@ -388,6 +388,32 @@
         }
       break;
 
+      /* ══════════════════════════════════════ CLASIFICACION DE GRUPO ══════════════════════════════════════ */
+      case 'select2ClasificacionGrupo': 
+    
+        $rspta = $ajax_general->select2_clasificacion_grupo(); $cont = 1; $data = "";
+
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {  
+
+            $data .= '<option value=' . $value['id'] . '>' . $value['nombre'] .'</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => '<option value="1" title="insumo" >USO GENRAL</option>'.$data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
+
       /* ══════════════════════════════════════ P R O D U C T O ══════════════════════════════════════ */
       case 'tblaActivosFijos':
           
@@ -767,10 +793,10 @@
         }
       break;
 
-      /* ══════════════════════════════════════ M A R C A S   D E   A C T I V O S ════════════════════════════ */
-      case 'select2marcas_activos': 
+      /* ══════════════════════════════════════ M A R C A S  ════════════════════════════ */
+      case 'select2Marcas': 
     
-        $rspta = $ajax_general->marcas_activos(); $cont = 1; $data = "";
+        $rspta = $ajax_general->marcas(); $cont = 1; $data = "";
         
         if ($rspta['status'] == true) {
 
