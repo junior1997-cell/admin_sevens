@@ -13,15 +13,11 @@
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Valorización concreto | Admin Sevens</title>
+        <title>Valorización | Admin Sevens</title>
 
         <?php $title = "Valorización"; require 'head.php'; ?>
-
-        <style>
-          .nav-link.active { border-color: #1e5b99 transparent #145aa1 #1b5691 !important; }
-          .nav-tabs.flex-column { border-bottom: 0; border-right: 1px solid #32679d; }
-        </style>
-
+        <link rel="stylesheet" href="../plugins/bootstrap-table/dist/bootstrap-table.min.css">
+        <!-- <link rel="stylesheet" href="../plugins/excel-preview/css/excel-preview.css"> -->
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -39,13 +35,16 @@
               <section class="content-header">
                 <div class="container-fluid">
                   <div class="row mb-2">
-                    <div class="col-sm-6"> 
-                      <h1 > <span class="h1-titulo">Valorización concreto</span> </h1>                  
+                    <div class="col-sm-6">
+                      <h1 >
+                        <span class="h1-titulo">Valorización</span>                         
+                      </h1> 
+                      
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="valorizacion.php">Home</a></li>
-                        <li class="breadcrumb-item active">Valorización Concreto</li>
+                        <li class="breadcrumb-item active">Valorización</li>
                       </ol>
                     </div>
                   </div>
@@ -59,100 +58,38 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="card card-primary card-outline">
-                        <div class="card-header" > 
-                          <!-- regresar -->
+                        <div class="card-header" >                           
+                          <!-- vertodos -->
                           <h3 class="card-title mr-3" >
-                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();" ><i class="fa-regular fa-rectangle-list"></i> <span class="d-none d-sm-inline-block">Todos</span> </button>
-                          </h3>  
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1); despintar_btn_select(); todos_los_docs();" ><i class="fa-regular fa-rectangle-list"></i> <span class="d-none d-sm-inline-block">Todos</span> </button>
+                          </h3>
+
                           <!-- listar quincenas -->
                           <div id="lista_quincenas" class="row-horizon disenio-scroll" >
                             <i class="fas fa-spinner fa-pulse fa-2x"></i>
                           </div>  
+
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">                          
-                          <div class="row">
-
-                            <div class="col-lg-12 col-xl-12 div-todos-los-docs">
-                              <div class="mailbox-attachments clearfix text-center row">
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
-                                  <li >                    
-                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
-                                    <div class="mailbox-attachment-info">
-                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
-                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
-                                          
-                                        </span>
-                                    </div>
-                                  </li>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
-                                  <li >                    
-                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
-                                    <div class="mailbox-attachment-info">
-                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
-                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
-                                          
-                                        </span>
-                                    </div>
-                                  </li>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
-                                  <li >                    
-                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
-                                    <div class="mailbox-attachment-info">
-                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
-                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
-                                          
-                                        </span>
-                                    </div>
-                                  </li>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-6 col-lg-2" >     
-                                  <li >                    
-                                    <span class="mailbox-attachment-icon name_icon_1"><i class="far fa-file-pdf"></i></span>
-                                    <div class="mailbox-attachment-info">
-                                      <a href="#" class="mailbox-attachment-name name_doc_1"><i class="fas fa-paperclip"></i> Acta-de-contrato-de-obra</a>
-                                        <span class="mailbox-attachment-size clearfix mt-1">
-                                          <a href="#" class="btn btn-default btn-sm download_doc_1" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
-                                          <a href="#" class="btn btn-default btn-sm ver_doc_1" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
-                                          
-                                        </span>
-                                    </div>
-                                  </li>
-                                </div>
+                          <div class="row">   
+                            <div class="col-12 div-todos-los-docs">
+                              <div class="mailbox-attachments clearfix text-center row" id="all-docs-valorizacion">
+                                <!-- todos los docs -->
                               </div>
                               
                             </div>
-                            <!-- tab info resumen valorizaciones -->
-                            <div class="col-lg-12 col-xl-12 div-docs-por-valorizacion" id="tab-contenido" style="display: none;">
-                              <div class="tab-pane text-left" id="tabs-1" role="tabpanel" aria-labelledby="tabs-1-tab">
-                                <div class="row mb-1" id="documento1">
-                                  <div class="col-12 col-lg-6 mx-auto shadow">
-                                    <a class="btn btn-success  btn-block btn-xs" type="button" data-toggle="modal" data-target="#modal-agregar-valorizacion" onclick="limpiar_val_concreto();">
-                                      <i class="fas fa-file-upload"></i> Subir
-                                    </a>
-                                  </div>
-                                  <div class="col-12 col-lg-6 mx-auto shadow">
-                                    <a class="btn btn-warning  btn-block btn-xs" type="button" href="../dist/docs/valorizacion/documento/08-08-2022 04.48.22 PM 16165999530229.pdf" download="1 Copia del contrato -  MISION TARAPOTO - Val2 - 2-10-2022">
-                                      <i class="fas fa-download"></i> Descargar
-                                    </a>
-                                  </div>   
-                                  <div class="col-12 col-lg-12 "> <br>
-                                   <h3 class="mb-6 text-center"> Visualizasion del Documento.</h3>         
-                                  </div>  
-                                  <div class="col-lg-12 shadow"> 
-                                    <div class="embed-responsive disenio-scroll" style="padding-bottom:90%" > No hay documento para mostrar </div> 
-                                  </div>                   
-                                </div>
+
+                            <div class="col-12 div-docs-por-valorizacion" style="display: none;">
+                              
+                              <div class="row div-btn-doc" >
+                                <div class="col-12 text-center ">                                   
+                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br /> <br /> <h4>Cargando...</h4>                                   
+                                </div>                                
                               </div>
-                            </div>
+                              <div class="" id="div-doc-val"></div>
+                            </div>                            
+                                   
                           </div>
                         </div>
                         <!-- /.card-body -->
@@ -166,11 +103,11 @@
                 <!-- /.container-fluid -->
 
                 <!-- Modal agregar valorizacion -->
-                <div class="modal fade" id="modal-agregar-valorizacion">
+                <div class="modal fade" id="modal-agregar-editar-doc">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title" id="title-modal-1">Agregar Valorizacion concreto</h4>
+                        <h4 class="modal-title" id="title-modal-1">Agregar Doc</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -178,45 +115,45 @@
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-valorizacion" name="form-valorizacion" method="POST">
+                        <form id="form-fierro" name="form-fierro" method="POST">
                           <div class="row" id="cargando-1-fomulario">
                             <!-- id proyecto -->
                             <input type="hidden" name="idproyecto" id="idproyecto" />
                             <!-- id valorizacion -->
-                            <input type="hidden" name="idvalorizacion" id="idvalorizacion" />
+                            <input type="hidden" name="idconcreto_por_valorizacion" id="idconcreto_por_valorizacion" />                            
                             <!-- fecha inicio -->
-                            <input type="hidden" name="fecha_inicio" id="fecha_inicio" />
+                            <input type="hidden" name="fecha_inicial" id="fecha_inicial" />
                             <!-- fecha fin -->
-                            <input type="hidden" name="fecha_fin" id="fecha_fin" />
+                            <input type="hidden" name="fecha_final" id="fecha_final" />
                             <!-- fecha numero_q_s -->
-                            <input type="hidden" name="numero_q_s" id="numero_q_s" />
+                            <input type="hidden" name="numero_valorizacion" id="numero_valorizacion" />
+
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label for="codigo">Nombre doc </label>
+                                <input type="text" name="nombre_doc" id="nombre_doc" class="form-control" placeholder="Código" />
+                              </div>
+                            </div>
 
                             <!-- Doc Valorizaciones -->
                             <div class="col-md-12 col-lg-12">
-                              <!--nombre_val_concreto-->
-                              <div class="col-lg-12 class_pading">
-                                <div class="form-group">
-                                  <label for="nombre_val_concreto">Nombre Documento <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="nombre_val_concreto" class="form-control" id="nombre_val_concreto" placeholder="Nombre"/>
-                                </div>
-                              </div>
                               <div class="row text-center">
                                 <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
                                   <label for="cip" class="control-label">Documento </label>
                                 </div>
                                 <div class="col-6 col-md-6 text-center">
-                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc7_i"><i class="fas fa-file-upload"></i> Subir.</button>
-                                  <input type="hidden" id="doc_old_7" name="doc_old_7" />
-                                  <input style="display: none;" id="doc7" type="file" name="doc7" accept=".xlsx, .xlsm, .xls, .csv, .pdf, .doc, .docx" class="docpdf" />
-                                </div>
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc1_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                  <input type="hidden" id="doc_old_1" name="doc_old_1" />
+                                  <input style="display: none;" id="doc1" type="file" name="doc1" accept=".xlsx, .xlsm, .xls, .csv, .pdf" class="docpdf" />
+                                </div> 
                                 <div class="col-6 col-md-6 text-center">
-                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(7, 'valorizacion', 'documento');"><i class="fa fa-eye"></i> Doc.</button>
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(1, 'valorizacion', 'documento');"><i class="fa fa-eye"></i> Doc.</button>
                                 </div>
                               </div>
-                              <div id="doc7_ver" class="text-center mt-4">
+                              <div id="doc1_ver" class="text-center mt-4">
                                 <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" />
                               </div>
-                              <div class="text-center" id="doc7_nombre"><!-- aqui va el nombre del pdf --></div>
+                              <div class="text-center" id="doc1_nombre"><!-- aqui va el nombre del pdf --></div>
                             </div>
 
                             <!-- barprogress -->
@@ -237,7 +174,7 @@
                             </div>
                           </div>
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-valorizacion">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-fierro">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
@@ -247,6 +184,25 @@
                     </div>
                   </div>
                 </div>
+
+                <!--Modal-ver-comprobante-->
+                <div class="modal fade" id="modal-ver-comprobante">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-bold nombre_documento">Documentos valorización</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">  
+
+                        <div class="row" id="ver-documento"> </div>            
+                          
+                      </div>
+                    </div>
+                  </div>
+                </div>                
 
                 <!-- MODAL - cargando -->
                 <div class="modal fade" id="modal-cargando" data-keyboard="false" data-backdrop="static">
@@ -297,6 +253,12 @@
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
+        
+        <!-- EXCEL PREVIEW -->
+        <script src="../plugins/bootstrap-table/dist/bootstrap-table.min.js" type="text/javascript"></script>
+	      <script src="../plugins/bootstrap-table/dist/locale/bootstrap-table-es-MX.min.js" type="text/javascript"></script>
+        <script src="../plugins/excel-preview/js/src/util.js" type="text/javascript" ></script>
+	      <script src="../plugins/excel-preview/js/src/excel-preview.js" type="text/javascript" ></script>
 
         <script type="text/javascript" src="scripts/valorizacion_concreto.js"></script>
 

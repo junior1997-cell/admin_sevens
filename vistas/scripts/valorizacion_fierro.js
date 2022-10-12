@@ -14,7 +14,7 @@ function init() {
 
   $("#mTecnico").addClass("active");
 
-  $("#lValorizacion").addClass("active bg-primary");
+  $("#lFierroValorizacion").addClass("active bg-primary");
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
   $("#idproyecto_q_s").val(localStorage.getItem('nube_idproyecto'));
@@ -222,7 +222,7 @@ function buscar_documento(fecha_i, fecha_f, i) {
   // traemos loa documentos por fechas de la quincena
   $.post("../ajax/valorizacion_fierro.php?op=mostrar-docs-quincena", { 'nube_idproyecto': nube_idproyecto, 'fecha_i': fecha_i, 'fecha_f': fecha_f, 'numero_q_s': i }, function (e, status) {
 
-    e =JSON.parse(e); console.log(e);  
+    e =JSON.parse(e); console.log('holi'); console.log(e);  
     
     if (e.status == true) {
       var doc_url = "", disabed_dowload = "disabled", disable_ver = "disabled", doc_name = "";

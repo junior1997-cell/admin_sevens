@@ -26,96 +26,74 @@
       $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
       $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
-      $idvalorizacion = isset($_POST["idvalorizacion"])? limpiarCadena($_POST["idvalorizacion"]):"";
-      $nombre_val_concreto = isset($_POST["nombre_val_concreto"])? limpiarCadena($_POST["nombre_val_concreto"]):"";
-      $fecha_inicio	  = isset($_POST["fecha_inicio"])? limpiarCadena($_POST["fecha_inicio"]):"";
-      $fecha_fin	    = isset($_POST["fecha_fin"])? limpiarCadena($_POST["fecha_fin"]):"";
-      $numero_q_s	    = isset($_POST["numero_q_s"])? limpiarCadena($_POST["numero_q_s"]):"";
+      $idvalorizacion = isset($_POST["idconcreto_por_valorizacion"])? limpiarCadena($_POST["idconcreto_por_valorizacion"]):"";
+      $nombre_val_concreto = isset($_POST["nombre_doc"])? limpiarCadena($_POST["nombre_doc"]):"";
+      $fecha_inicio	  = isset($_POST["fecha_inicial"])? limpiarCadena($_POST["fecha_inicial"]):"";
+      $fecha_fin	    = isset($_POST["fecha_final"])? limpiarCadena($_POST["fecha_final"]):"";
+      $numero_q_s	    = isset($_POST["numero_valorizacion"])? limpiarCadena($_POST["numero_valorizacion"]):"";
 
-      $doc_old_7		  = isset($_POST["doc_old_7"])? limpiarCadena($_POST["doc_old_7"]):"";
-      $doc7		        = isset($_POST["doc7"])? limpiarCadena($_POST["doc7"]):"";
+      $doc_old_7		  = isset($_POST["doc_old_1"])? limpiarCadena($_POST["doc_old_1"]):"";
+      $doc1		        = isset($_POST["doc1"])? limpiarCadena($_POST["doc1"]):"";
 
-
+      // $idproyecto,$nombre_val_concreto, $fecha_inicio, $fecha_fin, $numero_q_s, $doc
       switch ($_GET["op"]) {
 
-        case 'guardaryeditar':
+        case 'guardar_y_editar_fierro':
+          
+          // ficha técnica
+          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
 
-          // doc
-          if (!file_exists($_FILES['doc7']['tmp_name']) || !is_uploaded_file($_FILES['doc7']['tmp_name'])) {
+            $doc_concreto = $_POST["doc_old_1"];
 
-						$doc =$_POST["doc_old_7"]; $flat_doc1 = false;
+            $flat_doc1 = false;
 
-					} else {
+          } else {
 
-						$ext1 = explode(".", $_FILES["doc7"]["name"]); $flat_doc1 = true;						
+            $ext1 = explode(".", $_FILES["doc1"]["name"]);
 
-            $doc  = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $flat_doc1 = true;
 
-            move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/docs/valorizacion_concreto/documento/" . $doc ); 
-						
-					}
+            $doc_concreto = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
 
-          // REGISTRAMOS EN VALORIZACIONES ::::::::::::
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/valorizacion_concreto/documento/" . $doc_concreto);
+          }
 
-          if (empty($idvalorizacion)){
-            // Registramos docs en valorización4
-            $rspta=$valorizacion_concreto->insertar_valorizacion($idproyecto,$nombre_val_concreto, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
+          if (empty($idvalorizacion)) {
             
-            echo json_encode($rspta, true) ;
+            $rspta = $valorizacion_concreto->insertar($idproyecto,$nombre_val_concreto, $fecha_inicio, $fecha_fin, $numero_q_s, $doc_concreto);
             
-          }else {
+            echo json_encode( $rspta, true);
 
-            // validamos si existe EL DOC para eliminarlo
+          } else {
+
+            // validamos si existe LA IMG para eliminarlo
             if ($flat_doc1 == true) {
 
-              $datos_f1 = $valorizacion_concreto->obtenerDocV($idvalorizacion);
-
-              $doc1_ant = $datos_f1['data']->fetch_object()->doc_valorizacion;
-
-              if (validar_url_completo($scheme_host. "dist/docs/valorizacion_concreto/documento/" . $doc1_ant)  == 200) {
-
-                unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
+              $doc_bd = $valorizacion_concreto->optener_doc_para_eliminar($idvalorizacion);
+              $doc_concreto_delete = $doc_bd['data']['documento'];
+              
+              if ( validar_url_completo($scheme_host. "dist/docs/valorizacion_concreto/documento/" . $doc_concreto_delete)  == 200) {
+                unlink("../dist/docs/valorizacion_concreto/documento/" . $doc_concreto_delete);
               }
             }
-
-            // editamos un trabajador existente
-            $rspta=$valorizacion_concreto->editar_valorizacion($idproyecto, $idvalorizacion, $nombre_val_concreto, $fecha_inicio, $fecha_fin, $numero_q_s, $doc);
+             
+            $rspta = $valorizacion_concreto->editar($idvalorizacion,$idproyecto,$nombre_val_concreto, $fecha_inicio, $fecha_fin, $numero_q_s, $doc_concreto);
             
-            echo json_encode($rspta, true) ;              
+            echo json_encode( $rspta, true) ;
           }
-                   
-
-        break; 
-
-        case 'desactivar':
-
-          $rspta=$valorizacion_concreto->desactivar( $_GET['nombre_tabla'], $_GET['nombre_columna'], $_GET['id_tabla']);
-          echo json_encode($rspta, true) ;
-
         break;
 
-        case 'eliminar':
+        case 'mostrar-docs-quincena':          
 
-          $rspta=$valorizacion_concreto->eliminar($_GET['nombre_tabla'], $_GET['nombre_columna'], $_GET['id_tabla']);
-          echo json_encode($rspta, true) ;
-	
-        break;
-            
-
-        case 'mostrar':
-
-          $rspta=$valorizacion_concreto->mostrar($idtrabajador);
+          $rspta = $valorizacion_concreto->mostrar_docs_quincena($_POST["nube_idproyecto"], $_POST["fecha_i"], $_POST["fecha_f"], $_POST["numero_q_s"] );
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true) ;
 
         break;
 
-        case 'mostrar-docs-quincena':
+        case 'todos_los_docs':          
 
-          $nube_idproyecto = $_POST["nube_idproyecto"]; $fecha_i = $_POST["fecha_i"]; $fecha_f = $_POST["fecha_f"];
-          // $nube_idproyecto = 1; $fecha_i = '2021-10-22'; $fecha_f = '2021-11-19';
-
-          $rspta = $valorizacion_concreto->ver_detalle_quincena($fecha_i, $fecha_f, $nube_idproyecto );
+          $rspta = $valorizacion_concreto->todos_los_docs($_POST["nube_idproyecto"] );
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true) ;
 
