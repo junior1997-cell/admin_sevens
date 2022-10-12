@@ -241,21 +241,21 @@
                               </div>
 
                               <!-- fecha de nacimiento -->
-                              <div class="col-12 col-sm-10 col-md-6 col-lg-3">
+                              <!-- <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
-                                  <label for="fecha_nacimiento">Fecha Nacimiento</label>
+                                  <label for="nacimiento">Fecha Nacimiento</label>
                                   <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento','#edad','#p_edad');" onchange="calcular_edad('#nacimiento','#edad','#p_edad');" />
-                                  <input type="hidden" name="edad" id="edad" />
+                                  
                                 </div>
-                              </div>
+                              </div> --> 
 
                               <!-- FECHA NACIMIENTO -->
-                              <div class="col-lg-12">
+                              <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
-                                  <label for="">Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
-                                  <div class="input-group date "  data-target-input="nearest">
-                                    <input type="text" class="form-control" id="fecha_inicio_actividad" name="fecha_inicio_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();"  />
-                                    <div class="input-group-append click-btn-fecha-inicio-actividad cursor-pointer" for="fecha_inicio_actividad" >
+                                  <label for="">Nacimiento: <sup class="text-danger">*</sup></label>
+                                  <div class="input-group date"  data-target-input="nearest">
+                                    <input type="text" class="form-control" id="nacimiento" name="nacimiento" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_edad('#nacimiento','#edad','#p_edad');"  />
+                                    <div class="input-group-append click-btn-nacimiento cursor-pointer" for="nacimiento" >
                                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
                                   </div>                                 
@@ -267,6 +267,7 @@
                                 <div class="form-group">
                                   <label for="edad">Edad</label>
                                   <p id="p_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
+                                  <input type="hidden" name="edad" id="edad" />
                                 </div>
                               </div>
 

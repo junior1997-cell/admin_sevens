@@ -26,12 +26,14 @@ function init() {
 
   //no_select_tomorrow('#nacimiento');
 
-  $('#nacimiento').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
-  $('#nacimiento').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
-
+  //$('#nacimiento').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
+  $('#nacimiento').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, endDate: moment().format('DD/MM/YYYY'), clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
+
+// click input group para habilitar: datepiker
+$('.click-btn-nacimiento').on('click', function (e) {$('#nacimiento').focus().select(); });
 
 init();
 
@@ -170,7 +172,9 @@ function tbla_principal() {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
     ],
     ajax:{
       url: '../ajax/all_trabajador.php?op=tbla_principal',
@@ -315,7 +319,7 @@ function verdatos(idtrabajador){
 
   $.post("../ajax/all_trabajador.php?op=verdatos", { idtrabajador: idtrabajador }, function (e, status) {
 
-    e = JSON.parse(e);  //console.log(e); 
+    e = JSON.parse(e);  console.log(e); 
     
     if (e.status == true) {
       
@@ -454,11 +458,19 @@ function verdatos(idtrabajador){
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Teléfono</th>
-                  <td>${e.data.trabajador.telefono}</td>
+                  <td><a href="tel:+51${quitar_guion(e.data.trabajador.telefono)}">${e.data.trabajador.telefono}</a></td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Fecha Nac.</th>
-                  <td>${e.data.trabajador.fecha_nacimiento}</td>
+                  <td>${e.data.trabajador.fecha_nacimiento}: <b>${e.data.trabajador.edad == 0 || e.data.trabajador.edad == '' || e.data.trabajador.edad == null ? '-': e.data.trabajador.edad + ' años'}</b></td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                <th>Tipo </th>
+                <td>${e.data.trabajador.nombre_tipo_trabajador}</td>
+              </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Ocupación</th>
+                  <td>${e.data.html_ocupacion}</td>
                 </tr>
                 
                 <tr data-widget="expandable-table" aria-expanded="false">
@@ -519,7 +531,7 @@ function mostrar(idtrabajador) {
       $("#direccion").val(e.data.trabajador.direccion);
       $("#telefono").val(e.data.trabajador.telefono);
       $("#email").val(e.data.trabajador.email);
-      $("#nacimiento").val(e.data.trabajador.fecha_nacimiento);      
+      $("#nacimiento").datepicker("setDate" , format_d_m_a(e.data.trabajador.fecha_nacimiento));      
       $("#tipo").val(e.data.trabajador.idtipo_trabajador).trigger("change");      
       $("#titular_cuenta").val(e.data.trabajador.titular_cuenta);
       $("#idtrabajador").val(e.data.trabajador.idtrabajador);
@@ -849,7 +861,6 @@ $(function () {
       direccion:      { minlength: 5, maxlength: 70 },
       telefono:       { minlength: 8 },
       tipo_trabajador:{ required: true},
-      cargo:          { required: true},
       cta_bancaria:   { minlength: 10,},
       banco_0:      { required: true},
       banco_seleccionado:{ required: true},
@@ -865,7 +876,6 @@ $(function () {
       direccion:      { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 70 caracteres.", },
       telefono:       { minlength: "MÍNIMO 8 caracteres.", },
       tipo_trabajador:{ required: "Campo requerido.", },
-      cargo:          { required: "Campo requerido.", },
       cta_bancaria:   { minlength: "MÍNIMO 10 caracteres.", },
       tipo:           { required: "Campo requerido.", },
       ocupacion:      { required: "Campo requerido.", },

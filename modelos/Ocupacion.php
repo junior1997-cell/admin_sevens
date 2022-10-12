@@ -84,7 +84,7 @@ Class Ocupacion
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql="SELECT * FROM ocupacion 	WHERE estado=1  AND estado_delete=1  ORDER BY nombre_ocupacion ASC";
+		$sql="SELECT * FROM ocupacion 	WHERE idocupacion > 1 and  estado=1  AND estado_delete=1  ORDER BY nombre_ocupacion ASC";
 		return ejecutarConsulta($sql);		
 	}
 

@@ -167,7 +167,9 @@ function tbla_principal(nube_idproyecto) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], }  } , {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], } }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,13,3,4,5,6,8,9,10], }  } ,      
     ],
     ajax:{
       url: '../ajax/asistencia_obrero.php?op=tbla_principal&nube_idproyecto='+nube_idproyecto,
@@ -945,7 +947,7 @@ function datos_quincena(f1, f2, i, cant_dias_asistencia) {
           'sueldo_hora':value.sueldo_hora
         });
         
-        var tabla_bloc_HN_trabaj_2 =  `<td rowspan="2" class="center-vertical">${value.nombres}</td> <td rowspan="2" class="center-vertical">${value.cargo} <br> ${(value.estado_trabajador==1?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>')} </td>`;       
+        var tabla_bloc_HN_trabaj_2 =  `<td rowspan="2" class="center-vertical">${value.nombres}</td> <td rowspan="2" class="center-vertical">${value.nombre_ocupacion} <br> ${(value.estado_trabajador==1?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>')} </td>`;       
 
         var tabla_bloc_HN_total_hora_4 =  `<td class="text-center center-vertical"> 
           <span  class="total_HN_${value.idtrabajador_por_proyecto}">${horas_nomr_total}</span> 

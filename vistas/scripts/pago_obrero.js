@@ -960,7 +960,7 @@ function trabajador_deuda_q_s(f1, f2, i, cant_dias_asistencia) {
               <div class="user-block">
                 <img class="img-circle" src="../dist/docs/all_trabajador/perfil/${key.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'">
                 <span class="username"><p class="text-primary m-b-02rem" >${key.trabajador}</p></span>
-                <span class="description text-left" >${key.tipo_trabajador} / ${key.cargo_trabajador} ─ ${key.tipo_documento}: ${key.numero_documento} </span>                  
+                <span class="description text-left" >${key.tipo_trabajador} / ${key.nombre_ocupacion} ─ ${key.tipo_documento}: ${key.numero_documento} </span>                  
               </div>
             </td>
             <td class="pt-1 pb-1">${key.banco}</td>

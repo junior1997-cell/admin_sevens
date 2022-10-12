@@ -336,6 +336,32 @@
         }
       break;
 
+      /* ══════════════════════════════════════ O C U P A C I O N ══════════════════════════════════════ */
+      case 'select2OcupacionPorTrabajdor': 
+    
+        $rspta = $ajax_general->select2_ocupacion_por_trabajdor($_GET["id_trabajador"]); $cont = 1; $data = "";
+
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {  
+
+            $data .= '<option value="'.$value['idocupacion'].'" idtrabajador="'.$value['idtrabajador'].'">' . $value['nombre_ocupacion'] .'</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
+
       /* ══════════════════════════════════════ T I P O   T I E R R A   C O N C R E T O ══════════════════════════════════════ */
       case 'select2TierraConcreto': 
     
