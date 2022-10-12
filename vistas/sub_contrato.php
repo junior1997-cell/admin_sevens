@@ -135,8 +135,9 @@
                                       <th class="">Acciones</th>                                                    
                                       <th>Fecha</th>
                                       <th>Proveedor</th>
-                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>                                      
-                                      <th>Descripción </th>                                      
+                                      <th>Descripción </th>   
+                                      <th>Clasificación </th>   
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>
                                       <th>Total </th>
                                       <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>
                                       
@@ -160,8 +161,9 @@
                                       <th class="">Acciones</th>                                      
                                       <th>Fecha</th>
                                       <th>Proveedor</th>
-                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>                                      
-                                      <th>Descripción </th>                                      
+                                      <th>Descripción </th>
+                                      <th>Clasificación </th>  
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">Tipo comprob</th>  
                                       <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="total_gasto">0.00</span></div></th>
                                       <th>CFDI.</th>    
                                                                             
@@ -327,7 +329,7 @@
                                 <div class="col-lg-4">
                                   <div class="form-group">
                                   <label for="idclasificacion_grupo">Grupo <sup class="text-danger">(único*)</sup></label>
-                                  <select name="idclasificacion_grupo" id="idclasificacion_grupo" class="form-control select2" style="width: 100%;"> </select>
+                                  <select name="idclasificacion_grupo " id="idclasificacion_grupo " class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>                 
 

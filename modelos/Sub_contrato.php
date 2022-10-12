@@ -152,9 +152,9 @@ class Sub_contrato
 
     $sql_1 = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, s.fecha_subcontrato, 
     s.val_igv, s.tipo_gravada, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, s.estado, p.razon_social, 
-    p.tipo_documento, p.ruc 
-    FROM subcontrato as s, proveedor as p
-    WHERE s.idproveedor = p.idproveedor AND s.idproyecto='$idproyecto' AND s.estado='1' AND  s.estado_delete='1' $filtro_proveedor $filtro_comprobante $filtro_fecha
+    p.tipo_documento, p.ruc, cg.nombre as clasificacion_grupo
+    FROM subcontrato as s, proveedor as p, clasificacion_grupo as cg
+    WHERE s.idproveedor = p.idproveedor AND s.idproyecto='$idproyecto' AND s.idclasificacion_grupo = cg.idclasificacion_grupo AND s.estado='1' AND  s.estado_delete='1' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY s.fecha_subcontrato DESC";
     $subcontrato = ejecutarConsultaArray($sql_1);
     if ($subcontrato['status'] == false) {  return $subcontrato; }
@@ -188,6 +188,7 @@ class Sub_contrato
           "proveedor"           => $value['razon_social'],
           "tipo_documento"      => $value['tipo_documento'],
           "ruc"                 => $value['ruc'],
+          "clasificacion_grupo"                 => $value['clasificacion_grupo'],
 
           "total_deposito" => (empty($deposito['data']) ? 0 : ( empty($deposito['data']['total_deposito']) ? 0 : $deposito['data']['total_deposito'])),
         ];

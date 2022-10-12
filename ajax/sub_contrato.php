@@ -182,23 +182,26 @@
                   ' <button class="btn btn-info btn-sm" onclick="ver_datos('.$reg['idsubcontrato'].')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="far fa-eye"></i></button>',
                 "2"=> $reg['fecha_subcontrato'], 
                 "3"=> '<div class="w-150px recorte-text" data-toggle="tooltip" data-original-title="'. $reg['proveedor'] .'">'. $reg['proveedor'] .'</div>' ,
-                "4"=>'<span ><b class="text-primary">'.$reg['tipo_comprobante'].'</b>'. (empty($reg['numero_comprobante'])?"":' - '.$reg['numero_comprobante'] ).'</span>',                
-                "5"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',                
-                "6"=> $reg['costo_parcial'],
+                "4"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>', 
+                "5"=> $reg['clasificacion_grupo'],
 
-                "7"=>$comprobante . $toltip,
+                "6"=>'<span ><b class="text-primary">'.$reg['tipo_comprobante'].'</b>'. (empty($reg['numero_comprobante'])?"":' - '.$reg['numero_comprobante'] ).'</span>',                
+              
+                "7"=> $reg['costo_parcial'],
 
-                "8"=> $reg['tipo_documento'],
-                "9"=> $reg['ruc'],
-                "10"=> $reg['tipo_comprobante'],
-                "11"=> $reg['numero_comprobante'],
-                "12"=> $reg['forma_de_pago'],
-                "13"=> number_format($reg['subtotal'], 2, '.', ','),
-                "14"=> number_format($reg['igv'], 2, '.', ','),
-                "15"=> $reg['val_igv'],
-                "16"=> number_format($reg['total_deposito'], 2, '.', ','),
-                "17"=> $reg['tipo_gravada'],
-                "18"=> $reg['glosa'],
+                "8"=>$comprobante . $toltip,
+
+                "9"=> $reg['tipo_documento'],
+                "10"=> $reg['ruc'],
+                "11"=> $reg['tipo_comprobante'],
+                "12"=> $reg['numero_comprobante'],
+                "13"=> $reg['forma_de_pago'],
+                "14"=> number_format($reg['subtotal'], 2, '.', ','),
+                "15"=> number_format($reg['igv'], 2, '.', ','),
+                "16"=> $reg['val_igv'],
+                "17"=> number_format($reg['total_deposito'], 2, '.', ','),
+                "18"=> $reg['tipo_gravada'],
+                "19"=> $reg['glosa'],
               );
 
             }

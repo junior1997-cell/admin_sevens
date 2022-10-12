@@ -189,11 +189,11 @@ function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante
       // columna: op
       if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap");  }
       // columna: sub total
-      if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap text-right');  }
+      if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-center');  }
       // columna: igv
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-nowrap text-right');  }
-      // columna: total
       if (data[7] != '') { $("td", row).eq(7).addClass('text-nowrap text-right');  }
+      // columna: total
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-nowrap text-right');  }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -205,8 +205,8 @@ function tabla_principal(idproyecto, fecha_1, fecha_2, id_proveedor, comprobante
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs:[      
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [8,9,10,11,12,13,14,15,16,17,18], visible: false, searchable: false, },
-      { targets: [6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [9,10,11,12,13,14,15,16,17,18,19], visible: false, searchable: false, },
+      { targets: [7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 
