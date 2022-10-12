@@ -10,7 +10,7 @@ class Sub_contrato
   }
 
   //Implementamos un método para insertar registros
-  public function insertar($idproyecto, $idproveedor, $ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante, $tipo_gravada)
+  public function insertar($idproyecto, $idproveedor,$idclasificacion_grupo, $ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante, $tipo_gravada)
   {
     $sql_1 = "SELECT p.razon_social, p.tipo_documento, p.ruc, sc.fecha_subcontrato, sc.forma_de_pago, sc.tipo_comprobante, sc.numero_comprobante,  sc.estado, sc.estado_delete
     FROM subcontrato as sc, proveedor as p
@@ -20,8 +20,8 @@ class Sub_contrato
 
     if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
 
-      $sql = "INSERT INTO subcontrato(idproyecto, idproveedor, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_subcontrato, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante,tipo_gravada, user_created ) 
-      VALUES ('$idproyecto', '$idproveedor', '$tipo_comprobante', '$numero_comprobante', '$forma_de_pago', '$fecha_subcontrato', '$val_igv', '$subtotal', '$igv', '$costo_parcial', '$descripcion','SUB CONTRATO','$comprobante','$tipo_gravada','" . $_SESSION['idusuario'] . "')";
+      $sql = "INSERT INTO subcontrato(idproyecto, idproveedor,idclasificacion_grupo, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_subcontrato, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante,tipo_gravada, user_created ) 
+      VALUES ('$idproyecto', '$idproveedor','$idclasificacion_grupo', '$tipo_comprobante', '$numero_comprobante', '$forma_de_pago', '$fecha_subcontrato', '$val_igv', '$subtotal', '$igv', '$costo_parcial', '$descripcion','SUB CONTRATO','$comprobante','$tipo_gravada','" . $_SESSION['idusuario'] . "')";
       $insertar =  ejecutarConsulta_retornarID($sql); 
       if ($insertar['status'] == false) {  return $insertar; } 
       
@@ -51,11 +51,12 @@ class Sub_contrato
   }
 
   //Implementamos un método para editar registros
-  public function editar($idsubcontrato, $idproyecto, $idproveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante, $tipo_gravada)  {
+  public function editar($idsubcontrato, $idproyecto, $idproveedor,$idclasificacion_grupo, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante, $tipo_gravada)  {
     $sql = "UPDATE subcontrato SET 
 		idsubcontrato='$idsubcontrato',
 		idproyecto='$idproyecto',
 		idproveedor='$idproveedor',
+		idclasificacion_grupo ='$idclasificacion_grupo',
 		tipo_comprobante='$tipo_comprobante',
 		numero_comprobante='$numero_comprobante',
 		forma_de_pago='$forma_de_pago',

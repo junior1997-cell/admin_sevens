@@ -25,6 +25,7 @@ function init() {
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2ClasificacionGrupo", '#idclasificacion_grupo', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
 
@@ -34,6 +35,9 @@ function init() {
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - SUBCONTRATO ══════════════════════════════════════
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Seleccinar un proveedor", allowClear: true, });
+  // ══════════════════════════════════════ INITIALIZE SELECT2 - CLASIFICACIÓN GRUPO ══════════════════════════════
+
+  $("#idclasificacion_grupo").select2({ theme: "bootstrap4", placeholder: "Grupo clasificisión", allowClear: true, });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - PAGOS ══════════════════════════════════════
   $("#forma_de_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar forma de pago", allowClear: true, });
@@ -146,6 +150,7 @@ function limpiar() {
   $('#doc1_nombre').html("");
 
   $("#idproveedor").val("null").trigger("change");
+  $("#idclasificacion_grupo").val("null").trigger("change");
   $("#tipo_comprobante").val("null").trigger("change");
   $("#forma_de_pago").val("null").trigger("change");
 
@@ -314,6 +319,7 @@ function mostrar(idsubcontrato) {
     if (e.status == true) {
       $("#idproyecto").val(e.data.idproyecto).trigger("change"); 
       $("#idproveedor").val(e.data.idproveedor).trigger("change"); 
+      $("#idclasificacion_grupo").val(e.data.idclasificacion_grupo).trigger("change"); 
       $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change"); 
       $("#forma_de_pago").val(e.data.forma_de_pago).trigger("change");
 
@@ -1082,12 +1088,14 @@ $(function () {
 
   // Aplicando la validacion del select cada vez que cambie
   $("#idproveedor").on("change", function () { $(this).trigger("blur"); });
+  $("#idclasificacion_grupo").on("change", function () { $(this).trigger("blur"); });
   $("#forma_de_pago").on("change", function () { $(this).trigger("blur"); });
   $("#tipo_comprobante").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-agregar-sub-contrato").validate({
     rules: {
       idproveedor: { required: true },
+      idclasificacion_grupo: { required: true },
       forma_de_pago: { required: true },
       tipo_comprobante: { required: true },
       fecha_subcontrato: { required: true },
@@ -1096,6 +1104,9 @@ $(function () {
     },
     messages: {
       idproveedor: {
+        required: "Por favor un proveedor", 
+      },
+      idclasificacion_grupo: {
         required: "Por favor un proveedor", 
       },
       forma_de_pago: {
@@ -1188,6 +1199,7 @@ $(function () {
 
   //agregando la validacion del select  ya que no tiene un atributo name el plugin
   $("#idproveedor").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $("#idclasificacion_grupo").rules("add", { required: true, messages: { required: "Campo requerido" } });
   $("#forma_de_pago").rules("add", { required: true, messages: { required: "Campo requerido" } });
   $("#tipo_comprobante").rules("add", { required: true, messages: { required: "Campo requerido" } });
 

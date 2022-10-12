@@ -22,6 +22,7 @@
 
 			$idproyecto          = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";	
 			$idproveedor         = isset($_POST["idproveedor"])? limpiarCadena($_POST["idproveedor"]):"";	
+			$idclasificacion_grupo = isset($_POST["idclasificacion_grupo"])? limpiarCadena($_POST["idclasificacion_grupo"]):"";	
 			$ruc_proveedor         = isset($_POST["ruc_proveedor"])? limpiarCadena($_POST["ruc_proveedor"]):"";	
 			$idsubcontrato       = isset($_POST["idsubcontrato"])? limpiarCadena($_POST["idsubcontrato"]):"";	
 			$fecha_subcontrato   = isset($_POST["fecha_subcontrato"])? limpiarCadena($_POST["fecha_subcontrato"]):"";
@@ -79,7 +80,7 @@
 
           if (empty($idsubcontrato)){
             //var_dump($idproyecto,$idproveedor);
-            $rspta=$sub_contrato->insertar($idproyecto, $idproveedor,$ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);
+            $rspta=$sub_contrato->insertar($idproyecto, $idproveedor,$idclasificacion_grupo,$ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);
             echo json_encode($rspta, true);
           }
           else {
@@ -91,7 +92,7 @@
               if ($ficha1_ant != "") { unlink("../dist/docs/sub_contrato/comprobante_subcontrato/" . $ficha1_ant);  }
             }
 
-            $rspta=$sub_contrato->editar($idsubcontrato, $idproyecto, $idproveedor,$tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);            
+            $rspta=$sub_contrato->editar($idsubcontrato, $idproyecto, $idproveedor,$idclasificacion_grupo,$tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);            
             echo json_encode($rspta, true);
           }
 				
