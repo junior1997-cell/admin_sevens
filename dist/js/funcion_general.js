@@ -510,10 +510,8 @@ function replace_punto_a_guion(string) {
 
 function quitar_guion(str) {
 
-  if (str == '' || str == null ) {
-    return "-";
-  } else {
-    return str.replace("-", "");
+  if (str == '' || str == null ) { return ""; } else {
+    return str.replace(/\-/g, "");
   }  
 }
 function recorte_text(str='', cant = 10) {
@@ -1283,19 +1281,10 @@ function calcular_edad(input_fecha_nacimiento='', input_edad, span_edad='') {
 
   if (fechaUsuario) {         
   
-    //El siguiente fragmento de codigo lo uso para igualar la fecha de nacimiento con la fecha de hoy del usuario
-    let d = new Date(),    month = '' + (d.getMonth() + 1),    day = '' + d.getDate(),   year = d.getFullYear();
-    
-    if (month.length < 2) 
-      month = '0' + month;
-    if (day.length < 2) 
-      day = '0' + day;
-    d=[year, month, day].join('-')
-
     /*------------*/
-    var hoy = new Date(d);//fecha del sistema con el mismo formato que "fechaUsuario"
+    var hoy = new Date(moment().format('YYYY-MM-DD'));//fecha del sistema con el mismo formato que "fechaUsuario"
 
-    var cumpleanos = new Date(fechaUsuario);
+    var cumpleanos = new Date(format_a_m_d(fechaUsuario));
     
     //Calculamos años
     var edad = hoy.getFullYear() - cumpleanos.getFullYear();

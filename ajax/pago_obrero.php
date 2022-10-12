@@ -83,7 +83,7 @@
                 "1"=>'<div class="user-block">
                   <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['nombres_trabajador'] .'</p></span>
-                  <span class="description">'. $value['nombre_tipo'].' / '.$value['nombre_cargo'] .' ─ '. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>                  
+                  <span class="description">'. $value['nombre_tipo'].' / '.$value['nombre_ocupacion'] .' ─ '. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>                  
                 </div>',                
                 "2"=>$value['banco'],
                 "3"=>$value['cuenta_bancaria'],            
@@ -105,7 +105,7 @@
 
                 "14"=>$value['nombres_trabajador'], 
                 "15"=>$value['nombre_tipo'], 
-                "16"=>$value['nombre_cargo'],   
+                "16"=>$value['nombre_ocupacion'],   
                 "17"=>$value['tipo_documento'],
                 "18"=>$value['numero_documento'],
                 "19"=>$value['total_hn'],

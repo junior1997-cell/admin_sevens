@@ -44,15 +44,7 @@ ob_start();
 
           echo json_encode($rspta, true);        
           
-        break;        
-
-        case 'mostrar_editar':
-
-          $rspta=$asistencia_obrero->mostrar($idasistencia_trabajador);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta, true);
-
-        break;        
+        break;  
 
         case 'ver_datos_quincena':
           
@@ -105,7 +97,7 @@ ob_start();
                 <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen'] .'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username" ><p class="text-primary mb-0" >
                   <b class="text-dark-0"  >'. 
-                    $value['cargo'] .' - <span class="font-size-14px text-muted font-weight-normal" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
+                    $value['desempenio'] .' - <span class="font-size-14px text-muted font-weight-normal" >'. $value['tipo_doc'] .': '. $value['num_doc'] .' </span>
                   </b> <br>'. $value['nombre'] .'</p>
                 </span>                
               </div>',              
@@ -117,7 +109,7 @@ ob_start();
               "8"=> '<center>' . $value['total_sabatical'] . '</center>',
               "9"=> 'S/ ' . number_format($value['adicional_descuento'], 2, '.', ','),
               "10"=> 'S/ ' . number_format($value['pago_quincenal'], 2, '.', ',') ,
-              "11"=> $value['cargo'] ,
+              "11"=> $value['desempenio'] ,
               "12"=> $value['nombre'] ,
               "13"=> $value['tipo_doc'] .': '. $value['num_doc'] ,
             );

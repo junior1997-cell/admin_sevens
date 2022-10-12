@@ -14,14 +14,14 @@ class PagoObrero
     $data = [];
 
     $sql_1 = "SELECT t.idtrabajador, t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento,
-		tt.nombre AS nombre_tipo, ct.nombre AS nombre_cargo, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   
+		tt.nombre AS nombre_tipo, o.nombre_ocupacion, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   
 		SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, SUM(rqsa.total_dias_asistidos) AS total_dias_asistidos, SUM(rqsa.sabatical) AS sabatical, 
 		SUM(rqsa.sabatical_manual_1) AS sabatical_manual_1, SUM(rqsa.sabatical_manual_2) AS sabatical_manual_2, SUM(rqsa.pago_parcial_hn) AS pago_parcial_hn, 
 		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, SUM(rqsa.adicional_descuento) AS adicional_descuento,  SUM(rqsa.pago_quincenal) AS pago_quincenal, 
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
-		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, cargo_trabajador AS ct
+		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, ocupacion AS o
 		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 	AND tpp.idtrabajador = t.idtrabajador  
-    AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador  
+    AND tpp.idocupacion = o.idocupacion AND tpp.idtipo_trabajador = tt.idtipo_trabajador  
 		AND p.idproyecto = tpp.idproyecto AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' 
 		AND tpp.idproyecto = '$nube_idproyecto'  
 		GROUP BY rqsa.idtrabajador_por_proyecto ORDER BY t.nombres;";
@@ -61,7 +61,7 @@ class PagoObrero
         'cci'             => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
 
         'nombre_tipo' => $value['nombre_tipo'],
-        'nombre_cargo' => $value['nombre_cargo'],
+        'nombre_ocupacion' => $value['nombre_ocupacion'],
         'idtrabajador_por_proyecto' => $value['idtrabajador_por_proyecto'],
         'fecha_inicio' => $value['fecha_inicio'],
         'fecha_fin' => $value['fecha_fin'],
@@ -262,10 +262,10 @@ class PagoObrero
     $sql = "SELECT  rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto,  rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
     rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, 
     rqsa.pago_quincenal, rqsa.numero_comprobante, rqsa.recibos_x_honorarios, t.idtrabajador, t.nombres as trabajador, t.tipo_documento, t.numero_documento, t.imagen_perfil, 
-     ct.nombre as cargo_trabajador, tt.nombre as tipo_trabajador
-    FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador as t, cargo_trabajador AS ct, tipo_trabajador as tt
+     o.nombre_ocupacion , tt.nombre as tipo_trabajador
+    FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador as t, ocupacion AS o, tipo_trabajador as tt
     WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador  
-    AND tpp.idcargo_trabajador = ct.idcargo_trabajador AND ct.idtipo_trabjador = tt.idtipo_trabajador
+    AND tpp.idocupacion = o.idocupacion AND tpp.idtipo_trabajador = tt.idtipo_trabajador
     AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND rqsa.estado_envio_contador = '1' 
     AND rqsa.numero_q_s = '$num_quincena' AND tpp.idproyecto ='$nube_idproyecto' ORDER BY t.nombres ASC";
     $trabajador = ejecutarConsultaArray($sql);
@@ -314,7 +314,7 @@ class PagoObrero
           'cuenta_bancaria' => (empty($bancos['data']) ? "" : $bancos['data']['cuenta_bancaria']), 
           'cci'             => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
 
-          'cargo_trabajador' => $trabajador['cargo_trabajador'],
+          'nombre_ocupacion' => $trabajador['nombre_ocupacion'],
           'tipo_trabajador' => $trabajador['tipo_trabajador'],
 
           'deposito' => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : $depositos['data']['deposito'])),

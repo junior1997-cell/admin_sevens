@@ -19,8 +19,7 @@
 
       $trabajador = new AllTrabajador();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
 
       $imagen_error = "this.src='../dist/svg/user_default.svg'";
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
@@ -132,7 +131,7 @@
 
           if (empty($idtrabajador)){
             
-            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d($nacimiento), $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo json_encode($rspta, true);
   
@@ -173,7 +172,7 @@
             }
 
             // editamos un trabajador existente
-            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad, $email, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d( $nacimiento), $edad, $email, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo json_encode($rspta, true);
           }            
@@ -237,14 +236,14 @@
                 "3"=> $value['nombre_tipo'],
                 "4"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['detalle_ocupacion'].'</div>',
                 "5"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
-                "6"=>format_d_m_a($value['fecha_nacimiento']).'<b>: </b>'. '<b>'.calculaedad($value['fecha_nacimiento']).'</b>' ,
+                "6"=>format_d_m_a($value['fecha_nacimiento']).'<b>: </b>'. '<b>'.$value['edad'].'</b>' ,
                 "7"=> '<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] .' <br> <b>CCI: </b>'.$value['cci'],
                 "8"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>': '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
                 "9"=> $value['trabajador'],
                 "10"=> $value['tipo_documento'],
                 "11"=> $value['numero_documento'],
                 "12"=> format_d_m_a($value['fecha_nacimiento']),
-                "13"=>calculaedad($value['fecha_nacimiento']),
+                "13"=>$value['edad'],
                 "14"=> $value['banco'],
                 "15"=> $value['cuenta_bancaria'],
                 "16"=> $value['cci'],
@@ -284,7 +283,7 @@
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .'<br>'.format_d_m_a($value['fecha_nacimiento']).' : '.$value['edad'].' años</span>
                   </div>',
                 "3"=> '<div class="center-vertical">'. $value['nombre_tipo'] .'</div>',
-                "4"=> $value['detalle_ocupacion'],
+                "4"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['detalle_ocupacion'].'</div>',
                 "5"=> '<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
                 "6"=> $value['descripcion_expulsion'] ,
                 "7"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>':
@@ -293,7 +292,7 @@
                 "9"=> $value['tipo_documento'],
                 "10"=> $value['numero_documento'],
                 "11"=> format_d_m_a($value['fecha_nacimiento']),
-                "12"=>calculaedad($value['fecha_nacimiento']),
+                "12"=>$value['edad'],
                 "13"=> $value['banco'],
                 "14"=> $value['cuenta_bancaria'],
                 "15"=> $value['cci'],

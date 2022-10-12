@@ -132,6 +132,14 @@
       return ejecutarConsulta($sql);
     }
 
+    /* ══════════════════════════════════════ O C U P A C I O N ══════════════════════════════════════ */
+
+    public function select2_ocupacion_por_trabajdor($id_trabajador) {
+      $sql = "SELECT doc.idtrabajador, doc.idocupacion, o.nombre_ocupacion FROM detalle_ocupacion as doc, ocupacion as o 
+      WHERE doc.idocupacion = o.idocupacion AND doc.idtrabajador = '$id_trabajador';";
+      return ejecutarConsulta($sql);
+    }
+
     /* ══════════════════════════════════════ T I P O   T I E R R A   C O N C R E T O ══════════════════════════════════════ */
 
     public function select2_tierra_concreto() {

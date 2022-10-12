@@ -68,25 +68,43 @@
                                 <tr>
                                   <th class="">#</th>
                                   <th class="">Aciones</th>
-                                  <th>Nombres</th>
-                                  <th>Fechas-Trabajo</th>
-                                  <th>Cuenta bancaria</th>
-                                  <th>Sueldo mensual</th>
-                                  <th>Tipo / cargo</th>
-                                  <th>Estado</th>
+                                  <th>Nombre Completo</th>
+                                  <th>Fechas</th>
+                                  <th>Celular</th>
+                                  <th>Correo</th>
+                                  <th>Nacimiento</th>
+                                  <th>Tipo</th>
+                                  <th>Desempeño</th>
+                                  <th>Cuenta</th> 
+
+                                  <th>Nombre Completo</th>
+                                  <th>DNI</th>
+                                  <th>Fecha inicial</th>
+                                  <th>Fecha final</th>
+                                  <th>Banco</th>
+                                  <th>Cta. Bancaria</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
                               <tfoot>
                                 <tr>
-                                <th class="">#</th>
-                                  <th>Aciones</th>
-                                  <th>Nombres</th>
-                                  <th>Fechas-Trabajo</th>
-                                  <th>Cuenta bancaria</th>
-                                  <th>Sueldo mensual</th>
-                                  <th>Tipo / cargo</th>
-                                  <th>Estado</th>
+                                  <th class="">#</th>
+                                  <th class="">Aciones</th>
+                                  <th>Nombre Completo</th>
+                                  <th>Fechas</th>
+                                  <th>Celular</th>
+                                  <th>Correo</th>
+                                  <th>Nacimiento</th>
+                                  <th>Ocupación</th>
+                                  <th>Desempeño</th>
+                                  <th>Cuenta</th> 
+
+                                  <th>Nombre Completo</th>
+                                  <th>DNI</th>
+                                  <th>Fecha inicial</th>
+                                  <th>Fecha final</th>
+                                  <th>Banco</th>
+                                  <th>Cta. Bancaria</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -98,25 +116,43 @@
                                   <tr>
                                     <th class="">#</th>
                                     <th class="">Aciones</th>
-                                    <th>Nombres</th>
-                                    <th>Fechas-Trabajo</th>
-                                    <th>Cuenta bancaria</th>
-                                    <th>Sueldo mensual</th>
-                                    <th>Tipo / cargo</th>
-                                    <th>Estado</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Fechas</th>
+                                    <th>Celular</th>
+                                    <th>Correo</th>
+                                    <th>Nacimiento</th>
+                                    <th>Ocupación</th>
+                                    <th>Desempeño</th>
+                                    <th>Cuenta</th> 
+
+                                    <th>Nombre Completo</th>
+                                    <th>DNI</th>
+                                    <th>Fecha inicial</th>
+                                    <th>Fecha final</th>
+                                    <th>Banco</th>
+                                    <th>Cta. Bancaria</th>
                                   </tr>
                                 </thead>
                                 <tbody></tbody>
                                 <tfoot>
                                   <tr>
-                                  <th class="">#</th>
-                                    <th>Aciones</th>
-                                    <th>Nombres</th>
-                                    <th>Fechas-Trabajo</th>
-                                    <th>Cuenta bancaria</th>
-                                    <th>Sueldo mensual</th>
-                                    <th>Tipo / cargo</th>
-                                    <th>Estado</th>
+                                    <th class="">#</th>
+                                    <th class="">Aciones</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Fechas</th>
+                                    <th>Celular</th>
+                                    <th>Correo</th>
+                                    <th>Nacimiento</th>
+                                    <th>Ocupación</th>
+                                    <th>Desempeño</th>
+                                    <th>Cuenta</th> 
+
+                                    <th>Nombre Completo</th>
+                                    <th>DNI</th>
+                                    <th>Fecha inicial</th>
+                                    <th>Fecha final</th>
+                                    <th>Banco</th>
+                                    <th>Cta. Bancaria</th>
                                   </tr>
                                 </tfoot>
                               </table>
@@ -138,41 +174,57 @@
                                   <div class="col-lg-4"> 
                                     <div class="form-group">
                                       <label for="trabajador" id="trabajador_c">Trabajador <sup class="text-danger">(unico*)</sup></label>                               
-                                      <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_idtrabajador();"   >                                    
+                                      <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_idtrabajador(false);">                                    
                                       </select>
-                                      <input type="hidden" name="trabajador_old" id="trabajador_old" />
-                                      <!-- <small id="trabajador_validar" class="text-danger" style="display: none;">Por favor selecione un trabajador</small>   -->
                                     </div>                                                        
+                                  </div>                                  
+
+                                  <!-- ADD TRABAJADOR -->
+                                  <div class="col-lg-1">
+                                    <div class="form-group">
+                                    <label for="Add" class="d-none d-sm-inline-block text-break" style="color: white;">.</label> <br class="d-none d-sm-inline-block">
+                                      <a data-toggle="modal" href="#modal-agregar-all-trabajador" >
+                                        <button type="button" class="btn btn-success p-x-6px" data-toggle="tooltip" data-original-title="Agregar Trabajador" onclick="limpiar_form_all_trabajador();">
+                                          <i class="fa fa-user-plus" aria-hidden="true"></i>
+                                        </button>
+                                      </a>
+                                      <button type="button" class="btn btn-warning p-x-6px btn-editar-trabajador" data-toggle="tooltip" data-original-title="Editar:" onclick="mostrar_editar_trabajador();">
+                                        <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+                                      </button>
+                                    </div>
                                   </div>
 
                                   <!-- Tipo trabajador -->
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label for="tipo_trabajador">Tipo Trabajador</label>                               
-                                      <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" onchange="captura_idtipo();">                                    
+                                      <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" >                                    
                                       </select>
                                     </div>  
                                   </div>
+
                                   <!-- Tipo Ocupación -->
-                                  <div class="col-lg-3">
+                                  <div class="col-lg-5">
                                     <div class="form-group">
-                                      <label for="ocupacion">Ocupación</label>                                   
-                                      <input type="text" id="ocupacion" class="form-control" disabled>
+                                      <label for="ocupacion">Ocupación</label>  <br>                                 
+                                      <!-- <input type="text" id="ocupacion" class="form-control" disabled> -->
+                                      <textarea id="ocupacion" disabled  rows="1" class="form-control"></textarea>
                                     </div>
                                   </div>
                                   <!-- cargo -->
-                                  <div class="col-lg-3">
+                                  <!-- <div class="col-lg-3">
                                     <div class="form-group">
                                       <label for="cargo">Cargo</label>
                                       <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  > 
                                       </select>
                                     </div>
-                                  </div>
+                                  </div> -->
                                   <!-- Desempeño -->
                                   <div class="col-lg-6">
                                     <div class="form-group">
                                       <label for="desempeño">Desempeño</label>
-                                      <input type="text" name="desempenio" class="form-control" id="desempenio" placeholder="Desempeño" />
+                                      <select name="desempenio" id="desempenio" class="form-control select2" style="width: 100%;"  > 
+                                      </select>
                                     </div>
                                   </div>                              
                                   
@@ -308,6 +360,302 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Modal agregar trabajador -->
+                <div class="modal fade" id="modal-agregar-all-trabajador">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title modal-title-all-trabajador">Agregar All-Trabajador</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form id="form-all-trabajador" name="form-all-trabajador" method="POST">
+                          <div class="card-body">
+                            <div class="row" id="cargando-3-fomulario">
+                              <!-- id trabajador -->
+                              <input type="hidden" name="all_idtrabajador" id="all_idtrabajador" />
+
+                              <!-- Tipo de documento -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="tipo_documento_all">Tipo de documento</label>
+                                  <select name="tipo_documento_all" id="tipo_documento_all" class="form-control" placeholder="Tipo de documento">
+                                    <option selected value="DNI">DNI</option>
+                                    <option value="RUC">RUC</option>
+                                    <option value="CEDULA">CEDULA</option>
+                                    <option value="OTRO">OTRO</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <!-- N° de documento -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="num_documento_all">N° de documento <sup class="text-danger">(unico*)</sup></label>
+                                  <div class="input-group">
+                                    <input type="number" name="num_documento_all" class="form-control" id="num_documento_all" placeholder="N° de documento" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_all');">
+                                      <span class="input-group-text" style="cursor: pointer;">
+                                        <i class="fas fa-search text-primary" id="search_all"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge_all" style="display: none;"></i>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Nombre -->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-4">
+                                <div class="form-group">
+                                  <label for="nombre_all">Nombre y Apellidos/Razon Social</label>
+                                  <input type="text" name="nombre_all" class="form-control" id="nombre_all" placeholder="Nombres y apellidos" />
+                                </div>
+                              </div>
+
+                              <!-- Correo electronico -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="all_email">Correo electrónico</label>
+                                  <input type="all_email" name="all_email" class="form-control" id="all_email" placeholder="Correo electrónico" onkeyup="convert_minuscula(this);" />
+                                </div>
+                              </div>
+                              
+                              <!-- Telefono -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="all_telefono">Teléfono</label>
+                                  <input type="text" name="all_telefono" id="all_telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+51 999 999 999']" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- fecha de nacimiento -->
+                              <!-- <div class="col-12 col-sm-10 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="nacimiento">Fecha Nacimiento</label>
+                                  <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento','#edad','#p_edad');" onchange="calcular_edad('#nacimiento','#edad','#p_edad');" />
+                                  
+                                </div>
+                              </div> --> 
+
+                              <!-- FECHA NACIMIENTO -->
+                              <div class="col-12 col-sm-10 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="">Nacimiento: <sup class="text-danger">*</sup></label>
+                                  <div class="input-group date"  data-target-input="nearest">
+                                    <input type="text" class="form-control" id="nacimiento" name="nacimiento" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_edad('#nacimiento','#edad','#p_edad');"  />
+                                    <div class="input-group-append click-btn-nacimiento cursor-pointer" for="nacimiento" >
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                  </div>                                 
+                                </div>
+                              </div>
+
+                              <!-- edad -->
+                              <div class="col-12 col-sm-2 col-md-6 col-lg-1">
+                                <div class="form-group">
+                                  <label for="edad">Edad</label>
+                                  <p id="p_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
+                                  <input type="hidden" name="edad" id="edad" />
+                                </div>
+                              </div>
+
+                              <!-- banco -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="banco_0">Banco</label>
+                                  <select name="banco_0" id="banco_0" class="form-control select2 banco_0" style="width: 100%;" onchange="formato_banco(0);">
+                                    <!-- Aqui listamos los bancos -->
+                                  </select>
+                                  <input type="hidden" name="banco_array[]" id="banco_array_0">
+                                </div>
+                              </div>
+
+                              <!-- Cuenta bancaria -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="cta_bancaria" class="0_chargue-format-1">Cuenta Bancaria</label>
+                                  <input type="text" name="cta_bancaria[]" class="form-control cta_bancaria_0" id="cta_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+                                </div>
+                              </div>
+
+                              <!-- CCI -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="cci" class="0_chargue-format-2">CCI</label>
+                                  <input type="text" name="cci[]" class="form-control cci_0" id="cci" placeholder="CCI" data-inputmask="" data-mask />
+                                </div>
+                              </div> 
+
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1">
+                                <div class="form-group mb-2">
+                                  <div class="custom-control custom-radio ">
+                                    <input class="custom-control-input custom-control-input-danger" type="radio" id="banco_seleccionado_0" name="banco_seleccionado" value="0" checked>
+                                    <label for="banco_seleccionado_0" class="custom-control-label">Usar</label>
+                                  </div>
+                                </div>
+                                <button type="button" class="btn bg-gradient-success btn-sm" onclick="add_bancos();" data-toggle="tooltip" data-original-title="Agregar neva fila"><i class="fas fa-plus"></i></button>
+
+                              </div>
+
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                                <div class="row" id="lista_bancos"> </div>
+                              </div>
+                              
+
+                              <!-- Titular de la cuenta -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="titular_cuenta_all">Titular de la cuenta</label>
+                                  <input type="text" name="titular_cuenta_all" class="form-control" id="titular_cuenta_all" placeholder="Titular de la cuenta" />
+                                </div>
+                              </div>
+
+                              <!-- tipo -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="all_tipo">Tipo</label>
+                                  <select name="all_tipo" id="all_tipo" class="form-control select2" style="width: 100%;"> </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                </div>
+                              </div>
+
+                              <!-- ocupacion -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="all_ocupacion">Ocupación</label>
+                                  <select name="all_ocupacion[]" id="all_ocupacion" class="form-control select2"  multiple="multiple" style="width: 100%;"> </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                </div>
+                              </div>
+
+                              <!-- Ruc -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="all_ruc">Ruc</label>
+                                  <input type="number" name="all_ruc" class="form-control" id="all_ruc" placeholder="Ingrese número de ruc" />
+                                </div>
+                              </div>
+
+                              <!-- Direccion -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                                <div class="form-group">
+                                  <label for="direccion_all">Dirección</label>
+                                  <input type="text" name="direccion_all" class="form-control" id="direccion_all" placeholder="Dirección" />
+                                </div>
+                              </div>
+
+                              <!-- imagen perfil -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto1">Foto de perfil</label> <br />
+                                <img onerror="this.src='../dist/img/default/img_defecto.png';" src="../dist/img/default/img_defecto.png" class="img-thumbnail" id="foto1_i" style="cursor: pointer !important;" width="auto" />
+                                <input style="display: none;" type="file" name="foto1" id="foto1" accept="image/*" />
+                                <input type="hidden" name="foto1_actual" id="foto1_actual" />
+                                <div class="text-center" id="foto1_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                              </div>
+
+                              <!-- imagen dni anverso -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto2">DNI anverso</label> <br />
+                                <img onerror="this.src='../dist/img/default/dni_anverso.webp';" src="../dist/img/default/dni_anverso.webp" class="img-thumbnail" id="foto2_i" style="cursor: pointer !important;" width="auto" />
+                                <input style="display: none;" type="file" name="foto2" id="foto2" accept="image/*" />
+                                <input type="hidden" name="foto2_actual" id="foto2_actual" />
+                                <div class="text-center" id="foto2_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                              </div>
+
+                              <!-- imagen dni reverso -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="col-lg-12 borde-arriba-naranja mt-2 mb-2"></div>
+                                <label for="foto3">DNI reverso</label> <br />
+                                <img onerror="this.src='../dist/img/default/dni_reverso.webp';" src="../dist/img/default/dni_reverso.webp" class="img-thumbnail" id="foto3_i" style="cursor: pointer !important;" width="auto" />
+                                <input style="display: none;" type="file" name="foto3" id="foto3" accept="image/*" />
+                                <input type="hidden" name="foto3_actual" id="foto3_actual" />
+                                <div class="text-center" id="foto3_nombre"><!-- aqui va el nombre de la FOTO --></div>
+                              </div>
+
+                              <!-- Pdf 4 -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mt-2">
+                                <!-- linea divisoria -->
+                                <div class="col-lg-12 borde-arriba-naranja mt-2"></div>
+                                <div class="row">
+                                  <div class="col-md-12 p-t-15px p-b-5px" >
+                                    <label for="Presupuesto" class="control-label">CV Documentado</label>
+                                  </div>
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc4_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                    <input type="hidden" id="doc_old_4" name="doc_old_4" />
+                                    <input style="display: none;" id="doc4" type="file" name="doc4" accept=".pdf, .docx, .doc" class="docpdf" />
+                                  </div>
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(4, 'all_trabajador', 'cv_documentado');"><i class="fa fa-eye"></i> PDF.</button>
+                                  </div>
+                                </div>
+                                <div id="doc4_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" />
+                                </div>
+                                <div class="text-center" id="doc4_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- Pdf 5 -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mt-2">
+                                <!-- linea divisoria -->
+                                <div class="col-lg-12 borde-arriba-naranja mt-2"></div> 
+                                <div class="row">
+                                  <div class="col-md-12 p-t-15px p-b-5px">
+                                    <label for="analisis-de-costos-unitarios" class="control-label"> CV No Documentado</label>
+                                  </div>
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                    <button type="button" class="btn btn-success btn-block btn-xs" id="doc5_i"><i class="fas fa-file-upload"></i> Subir.</button>
+                                    <input type="hidden" id="doc_old_5" name="doc_old_5" />
+                                    <input style="display: none;" id="doc5" type="file" name="doc5" accept=".pdf, .docx, .doc" class="docpdf" />
+                                  </div>
+                                  <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                    <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(5, 'all_trabajador', 'cv_no_documentado');"><i class="fa fa-eye"></i> PDF.</button>
+                                  </div>
+                                </div>
+                                <div id="doc5_ver" class="text-center mt-4">
+                                  <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" />
+                                </div>
+                                <div class="text-center" id="doc5_nombre"><!-- aqui va el nombre del pdf --></div>
+                              </div>
+
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="div_barra_progress">
+                                  <div id="barra_progress" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div> 
+
+                            </div>
+
+                            <div class="row" id="cargando-4-fomulario" style="display: none;">
+                              <div class="col-lg-12 text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                <br />
+                                <h4>Cargando...</h4>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- /.card-body -->
+                          <button type="submit" style="display: none;" id="submit-form-all-trabajador">Submit</button>
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" onclick="limpiar_form_all_trabajador();" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_all_trabajador">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </section>
               <!-- /.content -->
             </div>

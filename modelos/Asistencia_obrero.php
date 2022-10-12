@@ -94,25 +94,17 @@ class Asistencia_obrero
     return $retorno;
   }
 
-  //Implementar un método para mostrar los datos de un registro a modificar
-  public function mostrar($idasistencia_trabajador) {
-    $sql = "SELECT tp.idtrabajador_por_proyecto, t.nombres , t.tipo_documento as documento, t.numero_documento, tp.cargo, t.imagen_perfil, atr.fecha_asistencia, atr.horas_normal_dia, atr.horas_extras_dia 
-		FROM trabajador AS t, trabajador_por_proyecto AS tp, asistencia_trabajador AS atr 
-		WHERE t.idtrabajador = tp.idtrabajador AND tp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto AND atr.idasistencia_trabajador = '$idasistencia_trabajador';";
-    return ejecutarConsultaSimpleFila($sql);
-  }
-
   //Implementar un método para listar asistencia
   public function tbla_principal($nube_idproyecto) {
     $data_array = Array();
     $sql = "SELECT atr.idtrabajador_por_proyecto, t.idtrabajador AS idtrabajador, t.nombres AS nombre, t.tipo_documento as tipo_doc, 
 		t.numero_documento AS num_doc, t.imagen_perfil AS imagen, tpp.sueldo_hora, tpp.sueldo_mensual, tpp.sueldo_diario,
 		SUM(atr.horas_normal_dia) AS total_horas_normal, SUM(atr.horas_extras_dia) AS total_horas_extras, 
-		atr.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, c.nombre AS cargo
-		FROM trabajador AS t, trabajador_por_proyecto AS tpp, cargo_trabajador AS c, asistencia_trabajador AS atr,  proyecto AS p
+		atr.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, tp.nombre AS tipo_trabajador, o.nombre_ocupacion as desempenio
+		FROM trabajador AS t, trabajador_por_proyecto AS tpp, tipo_trabajador AS tp, ocupacion as o, asistencia_trabajador AS atr,  proyecto AS p
 		WHERE t.idtrabajador = tpp.idtrabajador AND tpp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto 
-		AND tpp.idproyecto = p.idproyecto AND tpp.idcargo_trabajador = c.idcargo_trabajador AND atr.estado = '1' AND atr.estado_delete = '1' 
-		AND tpp.idproyecto = '$nube_idproyecto' 
+		AND tpp.idproyecto = p.idproyecto AND tpp.idtipo_trabajador = tp.idtipo_trabajador AND tpp.idocupacion = o.idocupacion
+    AND atr.estado = '1' AND atr.estado_delete = '1' AND tpp.idproyecto = '$nube_idproyecto' 
 		GROUP BY tpp.idtrabajador_por_proyecto ORDER BY t.nombres ASC;";
     $agrupar_trabajdor = ejecutarConsultaArray($sql);
 
@@ -140,7 +132,8 @@ class Asistencia_obrero
         'total_horas_extras' => empty($sab['data']) ? 0 : (empty($sab['data']['total_he']) ? 0 : floatval($sab['data']['total_he'])),
         'estado' => $value['estado'],
         'fecha_inicio_proyect' => $value['fecha_inicio_proyect'],
-        'cargo' => $value['cargo'],
+        'tipo_trabajador' => $value['tipo_trabajador'],
+        'desempenio' => $value['desempenio'],
         'total_sabatical' => empty($sab['data']) ? 0 : (empty($sab['data']['total_sabatical']) ? 0 : floatval($sab['data']['total_sabatical'])),
         'pago_quincenal' => empty($sab['data']) ? 0 : (empty($sab['data']['pago_quincenal']) ? 0 : floatval($sab['data']['pago_quincenal'])),
         'adicional_descuento' => empty($sab['data']) ? 0 : (empty($sab['data']['adicional_descuento']) ? 0 : floatval($sab['data']['adicional_descuento'])),
@@ -168,17 +161,12 @@ class Asistencia_obrero
 
   //ver detalle quincena
   public function ver_detalle_quincena($f1, $f2, $nube_idproyect) {
-    // sql por siacaso - luego lo borro si no lo nescito
-    // $sql="SELECT t.idtrabajador as idtrabajador, t.nombres as nombres, t.tipo_documento as tipo_doc, t.numero_documento as num_doc, tpp.cargo as cargo , t.imagen_perfil as imagen_perfil, tpp.sueldo_hora as sueldo_hora, tpp.sueldo_diario as sueldo_diario, tpp.sueldo_mensual as sueldo_mensual, SUM(atr.horas_normal_dia) as horas_normal_dia, SUM(atr.horas_extras_dia) as horas_extras_dia, SUM(atr.sabatical) as total_sabatical, atr.estado as estado, p.fecha_inicio as fecha_inicio_proyect FROM asistencia_trabajador as atr, trabajador_por_proyecto AS tpp, trabajador as t, proyecto as p
-    // WHERE atr.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND tpp.estado=1 AND tpp.idproyecto='$nube_idproyect' AND tpp.idproyecto=p.idproyecto
-    // AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2'
-    // GROUP BY atr.idtrabajador_por_proyecto;";
 
     // extraemos todos lo trabajadores del proyecto
-    $sql2 = "SELECT tpp.idtrabajador_por_proyecto, ct.nombre as cargo, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
+    $sql2 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
     t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado
-		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, cargo_trabajador AS ct
-		WHERE tpp.idtrabajador = t.idtrabajador  AND ct.idcargo_trabajador = tpp.idcargo_trabajador AND ct.idtipo_trabjador = tp.idtipo_trabajador 
+		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
+		WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = tpp.idocupacion AND tpp.idtipo_trabajador = tp.idtipo_trabajador 
 		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY t.nombres ASC ;";
     $trabajador = ejecutarConsultaArray($sql2);
     if ($trabajador['status'] == false) {  return $trabajador; }
@@ -249,7 +237,7 @@ class Asistencia_obrero
 
       $data[] = [
         "idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
-        "cargo" => $key['cargo'],
+        "nombre_ocupacion" => $key['nombre_ocupacion'],
         "tipo_trabajador" => $key['tipo_trabajador'],
         "nombres" => $key['nombres'],
         "tipo_documento" => $key['tipo_documento'],

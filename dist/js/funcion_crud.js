@@ -31,7 +31,7 @@ function crud_listar_tabla(url, nombre_modulo) {
   return tabla;
 }
 
-function lista_select2(url, nombre_input, id_tabla) {
+function lista_select2(url, nombre_input, id_tabla, callback_true = false) {
 
   $.get(url, function (e, status) {
 
@@ -47,6 +47,8 @@ function lista_select2(url, nombre_input, id_tabla) {
         } else {
           $(nombre_input).val(id_tabla).trigger("change");  
         }
+
+        if (callback_true) { callback_true(); }
 
       } else {
         ver_errores(e);

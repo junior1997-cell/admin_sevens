@@ -91,8 +91,7 @@
       }
 
       #eliminar
-      $sql ="DELETE FROM cuenta_banco_trabajador WHERE idtrabajador= '$idtrabajador'";
-      
+      $sql ="DELETE FROM cuenta_banco_trabajador WHERE idtrabajador= '$idtrabajador'";      
 
       //add registro en nuestra bitacora
       $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador','".$idtrabajador."','Editamos el registro Trabajador','" . $_SESSION['idusuario'] . "')";
@@ -120,7 +119,9 @@
         $num_elementos = $num_elementos + 1;
       }
 
-      return $banco_new;      
+      $sw = array( 'status' => true, 'message' => 'todo oka', 'data' => $idtrabajador, 'id_tabla' => $idtrabajador );
+
+      return $sw;      
     }
 
     //Implementamos un método para desactivar 
@@ -198,26 +199,35 @@
 
     //Implementar un método para mostrar los datos de un registro a modificar
     public function verdatos($idtrabajador) {
-      $sql="SELECT t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, 
+      $sql="SELECT t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad,
       t.titular_cuenta, t.direccion, t.telefono, t.email, t.imagen_perfil as imagen_perfil, t.imagen_dni_anverso, t.cv_documentado, 
-      t.cv_no_documentado, t.imagen_dni_reverso as imagen_dni_reverso
-      FROM trabajador as t WHERE t.idtrabajador='$idtrabajador' ";
-      $trabajador = ejecutarConsultaSimpleFila($sql);
-      if ($trabajador['status'] == false) { return  $trabajador;}
+      t.cv_no_documentado, t.imagen_dni_reverso as imagen_dni_reverso, tt.nombre as nombre_tipo_trabajador
+      FROM trabajador as t, tipo_trabajador as tt WHERE t.idtipo_trabajador = tt.idtipo_trabajador and t.idtrabajador='$idtrabajador' ";
+      $trabajador = ejecutarConsultaSimpleFila($sql); if ($trabajador['status'] == false) { return  $trabajador;}
 
       $sql2 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
       FROM cuenta_banco_trabajador as cbt, bancos as b
       WHERE cbt.idbancos = b.idbancos AND cbt.idtrabajador='$idtrabajador' ORDER BY cbt.idcuenta_banco_trabajador ASC ;";
-      $bancos = ejecutarConsultaArray($sql2);
-      if ($bancos['status'] == false) { return  $bancos;}
+      $bancos = ejecutarConsultaArray($sql2);  if ($bancos['status'] == false) { return  $bancos;}
 
       $sql3 = "SELECT doc.iddetalle_ocupacion, doc.idtrabajador, doc.idocupacion, o.nombre_ocupacion 
       FROM detalle_ocupacion as doc, trabajador as t, ocupacion as o  
       WHERE doc.idtrabajador = t.idtrabajador AND doc.idocupacion = o.idocupacion AND t.idtrabajador = '$idtrabajador';";
-      $detalle_ocupacion = ejecutarConsultaArray($sql3);
-      if ($detalle_ocupacion['status'] == false) { return  $detalle_ocupacion;}
+      $detalle_ocupacion = ejecutarConsultaArray($sql3);    if ($detalle_ocupacion['status'] == false) { return  $detalle_ocupacion;}
 
-      return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>['trabajador'=>$trabajador['data'], 'bancos'=>$bancos['data'], 'detalle_ocupacion'=>$detalle_ocupacion['data']]];
+      $html_ocupacion = "";
+      foreach ($detalle_ocupacion['data'] as $key => $value2) {
+        $html_ocupacion .=  '<li >'.$value2['nombre_ocupacion'].'</li>';
+      }
+
+      return $retorno=['status'=>true, 'message'=>'todo oka ps', 
+        'data'=>[
+          'trabajador'=>$trabajador['data'], 
+          'bancos'=>$bancos['data'], 
+          'detalle_ocupacion'=>$detalle_ocupacion['data'], 
+          'html_ocupacion'=> '<ol>'. $html_ocupacion . '</ol>'
+        ]
+      ];
     }
 
     //Implementar un método para listar los registros
@@ -241,12 +251,11 @@
         $sql3 = "SELECT doc.iddetalle_ocupacion, doc.idtrabajador, doc.idocupacion, o.nombre_ocupacion 
         FROM detalle_ocupacion as doc, trabajador as t, ocupacion as o  
         WHERE doc.idtrabajador = t.idtrabajador AND doc.idocupacion = o.idocupacion AND t.idtrabajador = '$id';";
-        $detalle_ocupacion = ejecutarConsultaArray($sql3);
-        if ($detalle_ocupacion['status'] == false) { return  $detalle_ocupacion;}
+        $detalle_ocupacion = ejecutarConsultaArray($sql3); if ($detalle_ocupacion['status'] == false) { return  $detalle_ocupacion;}
 
         $html_ocupacion = "";
         foreach ($detalle_ocupacion['data'] as $key => $value2) {
-          $html_ocupacion .=  '<li >'.$value2['nombre_ocupacion'].'</li>';
+          $html_ocupacion .=  '<li >'.$value2['nombre_ocupacion'].'. </li>';
         }
 
         $data[] = array(
