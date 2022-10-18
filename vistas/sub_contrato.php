@@ -328,8 +328,8 @@
                                 <!-- grupo -->
                                 <div class="col-lg-4">
                                   <div class="form-group">
-                                  <label for="idclasificacion_grupo">Grupo <sup class="text-danger">(único*)</sup></label>
-                                  <select name="idclasificacion_grupo " id="idclasificacion_grupo " class="form-control select2" style="width: 100%;"> </select>
+                                    <label for="idclasificacion_grupo">Grupo <sup class="text-danger">(único*)</sup></label>
+                                    <select name="idclasificacion_grupo" id="idclasificacion_grupo" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>                 
 

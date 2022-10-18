@@ -171,7 +171,7 @@
                                   <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />
 
                                   <!-- Trabajador -->
-                                  <div class="col-lg-4"> 
+                                  <div class="col-lg-5"> 
                                     <div class="form-group">
                                       <label for="trabajador" id="trabajador_c">Trabajador <sup class="text-danger">(unico*)</sup></label>                               
                                       <select name="trabajador" id="trabajador" class="form-control select2" style="width: 100%;" onchange="capture_idtrabajador(false);">                                    
@@ -195,30 +195,21 @@
                                   </div>
 
                                   <!-- Tipo trabajador -->
-                                  <div class="col-lg-2">
+                                  <div class="col-lg-3">
                                     <div class="form-group">
-                                      <label for="tipo_trabajador">Tipo Trabajador</label>                               
-                                      <select name="tipo_trabajador" id="tipo_trabajador" class="form-control select2" style="width: 100%;" >                                    
-                                      </select>
+                                      <label for="tipo_trabajador">Tipo Trabajador</label>       
+                                      <span class="form-control-mejorado" id="tipo_trabajador"></span>
                                     </div>  
                                   </div>
 
                                   <!-- Tipo Ocupación -->
-                                  <div class="col-lg-5">
+                                  <div class="col-lg-3">
                                     <div class="form-group">
                                       <label for="ocupacion">Ocupación</label>  <br>                                 
-                                      <!-- <input type="text" id="ocupacion" class="form-control" disabled> -->
-                                      <textarea id="ocupacion" disabled  rows="1" class="form-control"></textarea>
+                                      <span class="form-control-mejorado" id="ocupacion"></span>
                                     </div>
                                   </div>
-                                  <!-- cargo -->
-                                  <!-- <div class="col-lg-3">
-                                    <div class="form-group">
-                                      <label for="cargo">Cargo</label>
-                                      <select name="cargo" id="cargo" class="form-control select2" style="width: 100%;"  > 
-                                      </select>
-                                    </div>
-                                  </div> -->
+                                  
                                   <!-- Desempeño -->
                                   <div class="col-lg-6">
                                     <div class="form-group">
@@ -255,7 +246,7 @@
                                     <div class="form-group">
                                       <label>Fecha Inicio:</label>
                                       <div class="input-group date"  data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo();"  />
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo();" autocomplete="off" />
                                         <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
                                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -322,7 +313,7 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- Modal agregar trabajador -->
+                <!-- MODAL - agregar trabajador -->
                 <div class="modal fade" id="modal-agregar-trabajador">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
@@ -341,7 +332,7 @@
                   </div>
                 </div>
 
-                <!--Modal ver trabajador-->
+                <!-- MODAL - ver trabajador-->
                 <div class="modal fade" id="modal-ver-trabajador">
                   <div class="modal-dialog modal-dialog-scrollable modal-xm">
                     <div class="modal-content">
@@ -361,7 +352,7 @@
                   </div>
                 </div>
 
-                <!-- Modal agregar trabajador -->
+                <!-- MODAL - agregar trabajador -->
                 <div class="modal fade" id="modal-agregar-all-trabajador">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
@@ -378,7 +369,7 @@
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
                               <!-- id trabajador -->
-                              <input type="hidden" name="all_idtrabajador" id="all_idtrabajador" />
+                              <input type="hidden" name="idtrabajador_all" id="idtrabajador_all" />
 
                               <!-- Tipo de documento -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
@@ -420,35 +411,26 @@
                               <!-- Correo electronico -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="all_email">Correo electrónico</label>
-                                  <input type="all_email" name="all_email" class="form-control" id="all_email" placeholder="Correo electrónico" onkeyup="convert_minuscula(this);" />
+                                  <label for="email_all">Correo electrónico</label>
+                                  <input type="email" name="email_all" class="form-control" id="email_all" placeholder="Correo electrónico" onkeyup="convert_minuscula(this);" />
                                 </div>
                               </div>
                               
                               <!-- Telefono -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="all_telefono">Teléfono</label>
-                                  <input type="text" name="all_telefono" id="all_telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+51 999 999 999']" data-mask />
+                                  <label for="telefono_all">Teléfono</label>
+                                  <input type="text" name="telefono_all" id="telefono_all" class="form-control" data-inputmask="'mask': ['999-999-999', '+51 999 999 999']" data-mask />
                                 </div>
-                              </div>
-
-                              <!-- fecha de nacimiento -->
-                              <!-- <div class="col-12 col-sm-10 col-md-6 col-lg-3">
-                                <div class="form-group">
-                                  <label for="nacimiento">Fecha Nacimiento</label>
-                                  <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento','#edad','#p_edad');" onchange="calcular_edad('#nacimiento','#edad','#p_edad');" />
-                                  
-                                </div>
-                              </div> --> 
+                              </div>                              
 
                               <!-- FECHA NACIMIENTO -->
                               <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
                                   <label for="">Nacimiento: <sup class="text-danger">*</sup></label>
                                   <div class="input-group date"  data-target-input="nearest">
-                                    <input type="text" class="form-control" id="nacimiento" name="nacimiento" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_edad('#nacimiento','#edad','#p_edad');"  />
-                                    <div class="input-group-append click-btn-nacimiento cursor-pointer" for="nacimiento" >
+                                    <input type="text" class="form-control" id="nacimiento_all" name="nacimiento_all" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_edad('#nacimiento_all','#input_edad','#span_edad');"  />
+                                    <div class="input-group-append click-btn-nacimiento_all cursor-pointer" for="nacimiento_all" >
                                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
                                   </div>                                 
@@ -459,8 +441,8 @@
                               <div class="col-12 col-sm-2 col-md-6 col-lg-1">
                                 <div class="form-group">
                                   <label for="edad">Edad</label>
-                                  <p id="p_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
-                                  <input type="hidden" name="edad" id="edad" />
+                                  <p id="span_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
+                                  <input type="hidden" name="input_edad" id="input_edad" />
                                 </div>
                               </div>
 
@@ -518,8 +500,8 @@
                               <!-- tipo -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="all_tipo">Tipo</label>
-                                  <select name="all_tipo" id="all_tipo" class="form-control select2" style="width: 100%;"> </select>
+                                  <label for="tipo_all">Tipo</label>
+                                  <select name="tipo_all" id="tipo_all" class="form-control select2" style="width: 100%;"> </select>
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
                               </div>
@@ -527,8 +509,17 @@
                               <!-- ocupacion -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="all_ocupacion">Ocupación</label>
-                                  <select name="all_ocupacion[]" id="all_ocupacion" class="form-control select2"  multiple="multiple" style="width: 100%;"> </select>
+                                  <label for="ocupacion_all">Ocupación</label>
+                                  <select name="ocupacion_all" id="ocupacion_all" class="form-control select2"  style="width: 100%;"> </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                </div>
+                              </div>
+
+                              <!-- ocupacion -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-8">
+                                <div class="form-group">
+                                  <label for="desempenio_all">Desempeño</label>
+                                  <select name="desempenio_all[]" id="desempenio_all" class="form-control select2"  multiple="multiple" style="width: 100%;"> </select>
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
                               </div>
@@ -536,13 +527,13 @@
                               <!-- Ruc -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="all_ruc">Ruc</label>
-                                  <input type="number" name="all_ruc" class="form-control" id="all_ruc" placeholder="Ingrese número de ruc" />
+                                  <label for="ruc_all">Ruc</label>
+                                  <input type="number" name="ruc_all" class="form-control" id="ruc_all" placeholder="Ingrese número de ruc" />
                                 </div>
                               </div>
 
                               <!-- Direccion -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="direccion_all">Dirección</label>
                                   <input type="text" name="direccion_all" class="form-control" id="direccion_all" placeholder="Dirección" />

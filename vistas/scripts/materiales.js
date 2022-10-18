@@ -19,7 +19,7 @@ function init() {
   $("#guardar_registro").on("click", function (e) { $("#submit-form-materiales").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#marcas").select2();
+  $("#marcas").select2({placeholder: "Seleccionar marcas", });
   $("#unidad_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
 
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
@@ -72,19 +72,23 @@ function limpiar_form_material() {
 
   $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
 
-  //Mostramos los Materiales
-  $("#idproducto").val("");
-  $("#nombre_material").val("");
+  // no usados
+  $("#precio_unitario").val("0");
+  $("#precio_sin_igv").val("0");
+  $("#precio_igv").val("0");
+  $("#precio_total").val("0");
+  $("#color").val(1);
   $("#modelo").val("");
   $("#serie").val("");
-  $("#marcas").val("null").trigger("change");
-  $("#descripcion_material").val("");
+  $("#estado_igv").val("1");
+  $("#categoria_insumos_af").val("1");
 
-  $("#precio_unitario").val("");
-  $("#estado_igv").val("");  
-  $("#precio_sin_igv").val("");
-  $("#precio_igv").val("");
-  $("#precio_con_igv").val("");
+  //input usados
+  $("#idproducto").val("");  
+  $("#nombre").val("");    
+  $("#unidad_medida").val("").trigger("change");  
+  $("#marcas").val("").trigger("change");  
+  $("#descripcion").val("");
 
   $("#imagen1_i").attr("src", "../dist/img/default/img_defecto_materiales.png");
   $("#imagen1").val("");
@@ -94,12 +98,7 @@ function limpiar_form_material() {
   $("#doc_old_2").val("");
   $("#doc2").val("");  
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc2_nombre').html("");
-
-  $("#unidad_medida").val("null").trigger("change");
-  $("#color").val("1").trigger("change");
-  $("#my-switch_igv").prop("checked", true);
-  $("#estado_igv").val("1");
+  $('#doc2_nombre').html(""); 
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -116,9 +115,9 @@ function tbla_principal() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,8,4,10,9], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,8,4,10,9], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,8,4,10,9], } },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,8,4,10,6,9], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,8,4,10,6,9], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,8,4,10,6,9], } },
     ],
     ajax: {
       url: "../ajax/materiales.php?op=tbla_principal",
@@ -233,7 +232,7 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idproducto) {
-  // limpiar_form_material(); //console.log(idproducto);|
+  limpiar_form_material(); 
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
@@ -244,30 +243,24 @@ function mostrar(idproducto) {
     
     e = JSON.parse(e); console.log(e);
 
-    if (e.status) {
-      $("#idproducto").val(e.data.idproducto);
-      $("#nombre_material").val(e.data.nombre);
+    if (e.status == true) {
+      // input no usados
       $("#modelo").val(e.data.modelo);
       $("#serie").val(e.data.serie);
-      $("#marcas").val(e.data.detalle_marca).trigger("change");            
-      $("#descripcion_material").val(e.data.descripcion);
-
-      $("#precio_unitario").val(e.data.precio_unitario);
-      
-      $("#precio_sin_igv").val(e.data.precio_sin_igv);    
+      $('#precio_unitario').val(e.data.precio_unitario);      
+      $("#precio_sin_igv").val(e.data.precio_sin_igv);
       $("#precio_igv").val(e.data.precio_igv);
-      $("#precio_con_igv").val(e.data.precio_total);          
+      $("#precio_total").val(e.data.precio_total);
+      $("#color").val(e.data.idcolor);  
+      $("#estado_igv").val(e.data.estado_igv);     
+      $("#categoria_insumos_af").val(e.data.idcategoria_insumos_af); 
 
+      // input usados
+      $("#idproducto").val(e.data.idproducto);
+      $("#nombre").val(e.data.nombre); 
       $("#unidad_medida").val(e.data.idunidad_medida).trigger("change");
-      $("#color").val(e.data.idcolor).trigger("change");
-
-      if (e.data.estado_igv == "1") {
-        $("#my-switch_igv").prop("checked", true);
-        $("#estado_igv").val(1);
-      } else {
-        $("#my-switch_igv").prop("checked", false);
-        $("#estado_igv").val(0);
-      }     
+      $("#marcas").val(e.data.id_marca).trigger("change");  
+      $("#descripcion").val(e.data.descripcion);  
        
       if (e.data.imagen != "") {
         $("#imagen1_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);  
@@ -438,65 +431,6 @@ $("#precio_igv").on("keyup change", function(e) { desglosar_precio(); });
 $("#precio_con_igv").on("keyup change", function(e) { desglosar_precio(); });
 
 
-function desglosar_precio() {
-  var precio_ingresado =  $("#precio_unitario").val()=='' ? 0 : parseFloat($("#precio_unitario").val());
-
-  var input_precio_con_igv = 0;
-  var igv = 0;
-  var input_precio_sin_igv = 0;
-
-  if ($("#my-switch_igv").is(":checked")) {
-    input_precio_sin_igv = precio_ingresado / 1.18;
-    igv = precio_ingresado - input_precio_sin_igv;
-    input_precio_con_igv = precio_ingresado;
-    
-    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));    
-    $("#precio_igv").val(redondearExp(igv, 2));    
-    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
-
-    $("#estado_igv").val("1");
-  } else {
-    input_precio_con_igv = precio_ingresado * 1.18;
-    igv = input_precio_con_igv - parseFloat(precio_ingresado);
-    input_precio_sin_igv = precio_ingresado;
-    
-    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));    
-    $("#precio_igv").val(redondearExp(igv, 2));     
-    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
-
-    $("#estado_igv").val("0");
-  }
-}
-
-$("#my-switch_igv").on("click", function (e) {
-  var precio_ingresado =  $("#precio_unitario").val()=='' ? 0 : parseFloat($("#precio_unitario").val());
-  var input_precio_con_igv = 0;
-  var igv = 0;
-  var input_precio_sin_igv = 0;
-
-  if ($("#my-switch_igv").is(":checked")) {
-    input_precio_sin_igv = precio_ingresado / 1.18;
-    igv = precio_ingresado - input_precio_sin_igv;
-    input_precio_con_igv = precio_ingresado;
-    
-    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));    
-    $("#precio_igv").val(redondearExp(igv, 2));    
-    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
-
-    $("#estado_igv").val("1");
-  } else {
-    input_precio_con_igv = precio_ingresado * 1.18;
-    igv = input_precio_con_igv - precio_ingresado;
-    input_precio_sin_igv = precio_ingresado;
-    
-    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));   
-    $("#precio_igv").val(redondearExp(igv, 2));    
-    $("#precio_con_igv").val(redondearExp(input_precio_con_igv, 2));
-
-    $("#estado_igv").val("0");
-  }
-});
-
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -507,18 +441,16 @@ $(function () {
 
   $("#form-materiales").validate({
     rules: {
-      nombre_material:      { required: true },
-      descripcion_material: { minlength: 4 },
-      unidad_medida:        { required: true },
-      color:                { required: true },
-      precio_unitario:      { required: true },
+      nombre:         { required: true, minlength:3, maxlength:200},
+      unidad_medida:  { required: true },
+      marca:          { required: true },
+      descripcion:    { minlength: 4 },
     },
     messages: {
-      nombre_material:      { required: "Campo requerido.", },
-      descripcion_material: { minlength: "MINIMO 4 caracteres." },
-      unidad_medida:        { required: "Campo requerido.", },
-      color:                { required: "Campo requerido.", },
-      precio_unitario:      { required: "Campo requerido.", },
+      nombre:         { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
+      unidad_medida:  { required: "Campo requerido" },
+      marca:          { required: "Campo requerido" },    
+      descripcion:    { minlength: "Minimo 4 caracteres" },
     },
 
     errorElement: "span",

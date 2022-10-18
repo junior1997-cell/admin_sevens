@@ -72,13 +72,26 @@
     }
 
     public function select2_cargo_trabajador_id($id_tipo) {
-      $sql = "SELECT * FROM cargo_trabajador WHERE idtipo_trabjador='$id_tipo' AND estado='1' AND estado_delete = '1' ORDER BY nombre ASC";
+      $sql = "SELECT * FROM cargo_trabajador WHERE idtipo_trabajador='$id_tipo' AND estado='1' AND estado_delete = '1' ORDER BY nombre ASC";
       return ejecutarConsulta($sql);
     }
 
     public function select2_ocupacion_trabajador()  {
-      $sql="SELECT idocupacion AS id, nombre_ocupacion AS nombre FROM ocupacion where estado = '1' AND estado_delete = '1' ORDER BY nombre_ocupacion ASC;";
-		return ejecutarConsulta($sql);
+      $sql="SELECT idocupacion AS id, nombre_ocupacion AS nombre FROM ocupacion where idocupacion > 1 and estado = '1' AND estado_delete = '1' ORDER BY nombre_ocupacion ASC;";
+		  return ejecutarConsulta($sql);
+    }    
+
+    /* ══════════════════════════════════════  D E S E M P E Ñ O ══════════════════════════════════════ */
+
+    public function select2_desempenio_trabajador()  {
+      $sql="SELECT iddesempenio AS id, nombre_desempenio AS nombre FROM desempenio where iddesempenio > 1 and estado = '1' AND estado_delete = '1' ORDER BY nombre_desempenio ASC;";
+		  return ejecutarConsulta($sql);
+    }
+
+    public function select2_desempenio_por_trabajdor($id_trabajador) {
+      $sql = "SELECT doc.idtrabajador, doc.iddesempenio, d.nombre_desempenio FROM detalle_desempenio as doc, desempenio as d 
+      WHERE doc.iddesempenio = d.iddesempenio AND doc.idtrabajador = '$id_trabajador';";
+      return ejecutarConsulta($sql);
     }
     
 
@@ -132,13 +145,7 @@
       return ejecutarConsulta($sql);
     }
 
-    /* ══════════════════════════════════════ O C U P A C I O N ══════════════════════════════════════ */
-
-    public function select2_ocupacion_por_trabajdor($id_trabajador) {
-      $sql = "SELECT doc.idtrabajador, doc.idocupacion, o.nombre_ocupacion FROM detalle_ocupacion as doc, ocupacion as o 
-      WHERE doc.idocupacion = o.idocupacion AND doc.idtrabajador = '$id_trabajador';";
-      return ejecutarConsulta($sql);
-    }
+    
 
     /* ══════════════════════════════════════ T I P O   T I E R R A   C O N C R E T O ══════════════════════════════════════ */
 
@@ -156,36 +163,90 @@
 
     /* ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════ */
     public function tblaActivosFijos() {
-      $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
-      p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color, 
+      $data = [];
+      $sql = "SELECT p.idproducto, p.nombre, p.descripcion, p.imagen, p.ficha_tecnica, um.nombre_medida, 
       ciaf.nombre AS categoria
-      FROM producto as p, unidad_medida as um, color as c, categoria_insumos_af AS ciaf
-      WHERE p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND p.idcategoria_insumos_af!='1' AND 
-      p.estado='1' AND p.estado_delete='1'
+      FROM producto as p, unidad_medida as um, categoria_insumos_af AS ciaf
+      WHERE p.idunidad_medida= um.idunidad_medida  AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND 
+      p.estado='1' AND p.estado_delete='1' and p.idcategoria_insumos_af != '1'
       ORDER BY p.nombre ASC;";
-      return ejecutarConsulta($sql);
+      $producto = ejecutarConsulta($sql); if ($producto['status'] == false){ return $producto; }
+
+      foreach ($producto['data'] as $key => $value) {
+        $id = $value['idproducto'];     
+        $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
+        $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
+  
+        $data[] = Array(
+          'idproducto'    =>  $value['idproducto'],
+          'nombre'        => ( empty($value['nombre']) ? '' : decodeCadenaHtml($value['nombre'])),           
+          'descripcion'   =>  $value['descripcion'],
+          'imagen'        =>  $value['imagen'],
+          'ficha_tecnica' =>  $value['ficha_tecnica'],
+          'nombre_medida' =>  $value['nombre_medida'],
+          'categoria'     =>  $value['categoria'],
+          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ),                  
+        );  
+      }
+      return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];      
     }
 
     public function tblaInsumos() {
-      $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
-      p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color, 
+      $data = [];
+      $sql = "SELECT p.idproducto, p.nombre, p.descripcion, p.imagen, p.ficha_tecnica, um.nombre_medida, 
       ciaf.nombre AS categoria
-      FROM producto as p, unidad_medida as um, color as c, categoria_insumos_af AS ciaf
-      WHERE p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND p.idcategoria_insumos_af='1' AND 
-      p.estado='1' AND p.estado_delete='1'
+      FROM producto as p, unidad_medida as um, categoria_insumos_af AS ciaf
+      WHERE p.idunidad_medida= um.idunidad_medida  AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND 
+      p.estado='1' AND p.estado_delete='1' and p.idcategoria_insumos_af = '1'
       ORDER BY p.nombre ASC;";
-      return ejecutarConsulta($sql);
+      $producto = ejecutarConsulta($sql); if ($producto['status'] == false){ return $producto; }
+
+      foreach ($producto['data'] as $key => $value) {
+        $id = $value['idproducto'];     
+        $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
+        $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
+  
+        $data[] = Array(
+          'idproducto'    =>  $value['idproducto'],
+          'nombre'        => ( empty($value['nombre']) ? '' : decodeCadenaHtml($value['nombre'])),           
+          'descripcion'   =>  $value['descripcion'],
+          'imagen'        =>  $value['imagen'],
+          'ficha_tecnica' =>  $value['ficha_tecnica'],
+          'nombre_medida' =>  $value['nombre_medida'],
+          'categoria'     =>  $value['categoria'],
+          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ),                  
+        );  
+      }
+      return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];      
     }
 
     public function tblaInsumosYActivosFijos() {
-      $sql = "SELECT p.idproducto,p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie, p.marca,p.precio_unitario, p.precio_igv as igv, 
-      p.precio_sin_igv, p.precio_total as precio_con_igv, p.ficha_tecnica, p.descripcion, p.imagen, um.nombre_medida, c.nombre_color, 
+      $data = [];
+      $sql = "SELECT p.idproducto, p.nombre, p.descripcion, p.imagen, p.ficha_tecnica, um.nombre_medida, 
       ciaf.nombre AS categoria
-      FROM producto as p, unidad_medida as um, color as c, categoria_insumos_af AS ciaf
-      WHERE p.idunidad_medida= um.idunidad_medida AND p.idcolor=c.idcolor AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND 
+      FROM producto as p, unidad_medida as um, categoria_insumos_af AS ciaf
+      WHERE p.idunidad_medida= um.idunidad_medida  AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND 
       p.estado='1' AND p.estado_delete='1'
       ORDER BY p.nombre ASC;";
-      return ejecutarConsulta($sql);
+      $producto = ejecutarConsulta($sql); if ($producto['status'] == false){ return $producto; }
+
+      foreach ($producto['data'] as $key => $value) {
+        $id = $value['idproducto'];     
+        $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
+        $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
+  
+        $data[] = Array(
+          'idproducto'    =>  $value['idproducto'],
+          'nombre'        => ( empty($value['nombre']) ? '' : decodeCadenaHtml($value['nombre'])),           
+          'descripcion'   =>  $value['descripcion'],
+          'imagen'        =>  $value['imagen'],
+          'ficha_tecnica' =>  $value['ficha_tecnica'],
+          'nombre_medida' =>  $value['nombre_medida'],
+          'categoria'     =>  $value['categoria'],
+          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ),                  
+        );  
+      }
+      return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];      
     }
     /* ══════════════════════════════════════ S E R V i C I O S  M A Q U I N A RI A ════════════════════════════ */
 

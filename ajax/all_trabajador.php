@@ -41,7 +41,8 @@
       $cci_format      	= isset($_POST["cci"])? $_POST["cci"]:"";
       $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
       $tipo	          	= isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
-      $ocupacion	      = isset($_POST["ocupacion"])? $_POST["ocupacion"]:"";
+      $ocupacion	      = isset($_POST["ocupacion"])? limpiarCadena($_POST["ocupacion"]):"";
+
       $ruc	          	= isset($_POST["ruc"])? limpiarCadena($_POST["ruc"]):"";
 
       $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
@@ -131,7 +132,8 @@
 
           if (empty($idtrabajador)){
             
-            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d($nacimiento), $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d($nacimiento), 
+            $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta, $tipo, $_POST["desempenio"], $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo json_encode($rspta, true);
   
@@ -172,7 +174,8 @@
             }
 
             // editamos un trabajador existente
-            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d( $nacimiento), $edad, $email, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d( $nacimiento), 
+            $edad, $email, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta, $tipo, $_POST["desempenio"], $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo json_encode($rspta, true);
           }            
@@ -234,19 +237,21 @@
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                   </div>',
                 "3"=> $value['nombre_tipo'],
-                "4"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['detalle_ocupacion'].'</div>',
-                "5"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
-                "6"=>format_d_m_a($value['fecha_nacimiento']).'<b>: </b>'. '<b>'.$value['edad'].'</b>' ,
-                "7"=> '<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] .' <br> <b>CCI: </b>'.$value['cci'],
-                "8"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>': '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
-                "9"=> $value['trabajador'],
-                "10"=> $value['tipo_documento'],
-                "11"=> $value['numero_documento'],
-                "12"=> format_d_m_a($value['fecha_nacimiento']),
-                "13"=>$value['edad'],
-                "14"=> $value['banco'],
-                "15"=> $value['cuenta_bancaria'],
-                "16"=> $value['cci'],
+                "4"=> $value['nombre_ocupacion'],
+                "5"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['html_desempenio'].'</div>',
+                "6"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
+                "7"=>format_d_m_a($value['fecha_nacimiento']).'<b>: </b>'. '<b>'.$value['edad'].'</b>' ,
+                "8"=> '<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] .' <br> <b>CCI: </b>'.$value['cci'],
+
+                "9"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>': '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                "10"=> $value['trabajador'],
+                "11"=> $value['tipo_documento'],
+                "12"=> $value['numero_documento'],
+                "13"=> format_d_m_a($value['fecha_nacimiento']),
+                "14"=>$value['edad'],
+                "15"=> $value['banco'],
+                "16"=> $value['cuenta_bancaria'],
+                "17"=> $value['cci'],
               );
             }
             $results = array(
@@ -283,11 +288,12 @@
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .'<br>'.format_d_m_a($value['fecha_nacimiento']).' : '.$value['edad'].' años</span>
                   </div>',
                 "3"=> '<div class="center-vertical">'. $value['nombre_tipo'] .'</div>',
-                "4"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['detalle_ocupacion'].'</div>',
+                "4"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['html_desempenio'].'</div>',
                 "5"=> '<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
-                "6"=> $value['descripcion_expulsion'] ,
+                "6"=> $value['descripcion_expulsion'] ,                
                 "7"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>':
                 '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+
                 "8"=> $value['trabajador'],
                 "9"=> $value['tipo_documento'],
                 "10"=> $value['numero_documento'],

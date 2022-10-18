@@ -90,15 +90,12 @@
                                                 <th>Nombre</th>
                                                 <th>Categoria</th>
                                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">UM</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Unitario">Precio ingresado</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                                <th  >Marcas</th>
+                                                <th class="text-center" >Precio promedio</th>
+                                                <th class="text-center" >Descripción</th>
                                                 <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
                                                 <th>Nombre</th>
                                                 <th>Marca</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
@@ -110,15 +107,12 @@
                                                 <th>Nombre</th>
                                                 <th>Categoria</th>
                                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">UM</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio Ingresado">Precio ingresado</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="Sub total">Sub total</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="IGV">IGV</th>
-                                                <th class="text-center" data-toggle="tooltip" data-original-title="Precio real">Precio real</th>
+                                                <th  >Marcas</th>
+                                                <th class="text-center" >Precio promedio</th>
+                                                <th class="text-center" >Descripción</th>
                                                 <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
                                                 <th>Nombre</th>
                                                 <th>Marca</th>
-                                                <th>Color</th>
-                                                <th>Descripción</th>
                                               </tr>
                                             </tfoot>
                                           </table>
@@ -164,115 +158,50 @@
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!--  -->
-                              <input type="hidden" name="idproducto" id="idproducto" />   
-                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">   
+                              <input type="hidden" name="idproducto" id="idproducto" /> 
                               
                               <input type="hidden" id="modelo" name="modelo" />
                               <input type="hidden" id="serie" name="serie" />
                               <input type="hidden" id="color" name="color" value="1" />
 
+                              <input type="hidden" id="precio_unitario" name="precio_unitario" value="0" />
+                              <input type="hidden" id="estado_igv" name="estado_igv" value="0" />
+                              <input type="hidden" id="precio_sin_igv" name="precio_sin_igv" value="0" />
+                              <input type="hidden" id="precio_igv" name="precio_igv" value="0" />
+                              <input type="hidden" id="precio_total" name="precio_total" value="0" />
+
                               <!-- Nombre -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-8">
                                 <div class="form-group">
                                   <label for="nombre">Nombre <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre del activo." />
                                 </div>
                               </div>
 
-                              <!-- Categoria -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <!-- Clasificación -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="categoria_insumos_af">Clasificación <sup class="text-danger">(unico*)</sup></label>
                                   <select name="categoria_insumos_af" id="categoria_insumos_af" class="form-control select2" style="width: 100%;"> 
                                   </select>
                                 </div>
-                              </div>
-
-                              <!-- Modelo -->
-                              <!-- <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="modelo">Modelo <sup class="text-danger">*</sup> </label>
-                                  <input class="form-control" type="text" id="modelo" name="modelo" placeholder="Modelo." />
-                                </div>
-                              </div> -->
-
-                              <!-- Serie -->
-                              <!-- <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="serie">Serie </label>
-                                  <input class="form-control" type="text" id="serie" name="serie" placeholder="Serie." />
-                                </div>
-                              </div> -->
-
-                              <!-- Marca
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="marca">Marca </label>
-                                  <input class="form-control" type="text" id="marca" name="marca" placeholder="Marca de activo." />
-                                </div>
-                              </div> -->
-
-                              <!-- Marca -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="marca">Marca <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="marca" id="marca" class="form-control select2" style="width: 100%;"> </select>
-                                </div>
-                              </div>
+                              </div>                               
                               
                               <!-- Unnidad de medida-->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-6" >
                                 <div class="form-group">
                                   <label for="Unidad-medida">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="unid_medida" id="unid_medida" class="form-control select2" style="width: 100%;"> </select>
+                                  <select name="unidad_medida" id="unidad_medida" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
-                              </div>
-
-                              <!--Precio Unitario-->
-                              <div class="col-7 col-sm-7 col-md-8 col-lg-4">
+                              </div>     
+                              
+                              <!-- select2 multiple marca-->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <div class="form-group">
-                                  <label for="precio_unitario">Precio <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="precio_unitario" class="form-control miimput" id="precio_unitario" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
-                                </div>
-                              </div>
-
-                              <!-- Rounded switch -->
-                              <div class="col-5 col-sm-5 col-md-4 col-lg-2">
-                                <div class="form-group">
-                                  <label for="" class="labelswitch">Sin o Con (Igv)</label>
-                                  <div id="switch_igv">
-                                    <div class="myestilo-switch">
-                                      <div class="switch-toggle">
-                                        <input type="checkbox" id="my-switch_igv" checked />
-                                        <label for="my-switch_igv"></label>
-                                      </div>
-                                    </div>
+                                  <label for="marcas">Marca <sup class="text-danger">(unico*)</sup></label>
+                                  <div class="select2-purple">
+                                    <select name="marcas[]" id="marcas" class="form-control select2" multiple="multiple" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione" style="width: 100%;"> </select>
                                   </div>
-                                  <input type="hidden" name="estado_igv" id="estado_igv" />
-                                </div>
-                              </div>
-
-                              <!--Sub Total subtotal igv total-->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <div class="form-group">
-                                  <label for="precio_sin_igv">Sub Total</label>
-                                  <input type="text" class="form-control" name="precio_sin_igv" id="precio_sin_igv" placeholder="Subtotal" onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                </div>
-                              </div>
-
-                              <!--IGV-->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <div class="form-group">
-                                  <label for="precio_igv">IGV</label>
-                                  <input type="text" class="form-control" name="precio_igv" id="precio_igv" placeholder="IGV" onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                </div>
-                              </div>
-
-                              <!--Total-->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
-                                <div class="form-group">
-                                  <label for="precio_total">Total</label>
-                                  <input type="text" class="form-control" name="precio_total" id="precio_total" placeholder="Precio real." readonly />
                                 </div>
                               </div>
 

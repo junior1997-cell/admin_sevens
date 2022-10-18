@@ -101,6 +101,7 @@ function table_show_hide(flag) {
     }
   }
 }
+
 // ══════════════════════════════════════ PRINCIPAL ══════════════════════════════════════
 function sumas_totales_tabla_principal(id_proyecto) {
 
@@ -112,12 +113,16 @@ function sumas_totales_tabla_principal(id_proyecto) {
     $('#tbody-tabla-principal').empty(); // Vacía en caso de que las columnas cambien
   }
 
-  $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': id_proyecto }, function (data, status) {
-    data = JSON.parse(data);  console.log(data); 
-    $('.sueldo_total_tbla_principal').html(`<span>S/</span> <b>${formato_miles(data.sueldo_mesual_x_proyecto)}</b>`);
-    $('.deposito_total_tbla_principal').html(`<span>S/</span> <b>${formato_miles(data.monto_total_depositado_x_proyecto)}</b>`);
+  $.post("../ajax/pago_administrador.php?op=mostrar_total_tbla_principal", { 'nube_idproyecto': id_proyecto }, function (e, status) {
+    e = JSON.parse(e);  console.log(e); 
+    if (e.status == true) {
+      $('.sueldo_total_tbla_principal').html(`<span>S/</span> <b>${formato_miles(e.data.sueldo_mesual_x_proyecto)}</b>`);
+      $('.deposito_total_tbla_principal').html(`<span>S/</span> <b>${formato_miles(e.data.monto_total_depositado_x_proyecto)}</b>`);
 
-    listar_tbla_principal(id_proyecto);    
+      listar_tbla_principal(id_proyecto);
+    } else {
+      ver_errores(e);
+    }        
   }); 
 }
 
@@ -329,182 +334,43 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
 
     $('.data-fechas-mes').html('');
 
-    $.post("../ajax/pago_administrador.php?op=mostrar_fechas_mes", { 'id_tabajador_x_proyecto': id_tabajador_x_proyecto }, function (data, status) {
+    $.post("../ajax/pago_administrador.php?op=mostrar_fechas_mes", { 'id_tabajador_x_proyecto': id_tabajador_x_proyecto }, function (e, status) {
     
-      data = JSON.parse(data);   console.log(data);
+      e = JSON.parse(e);   console.log(e);
+      if (e.status == true) {
+        var cant_total_mes = 0; //console.log(array_fechas_mes);
 
-      var cant_total_mes = 0; //console.log(array_fechas_mes);
+        if (e.data.length === 0) {
+          array_fechas_mes.forEach((element, indice) => {
 
-      if (data.length === 0) {
-        array_fechas_mes.forEach((element, indice) => {
-
-          monto_total += (sueldo_mensual/element.dias_mes)*element.dias_regular;
-  
-          monto_x_mes = (sueldo_mensual/element.dias_mes)*element.dias_regular;
-          
-          dias_regular_total += element.dias_regular;
-
-          deposito_total += 0; 
-          saldo_total += parseFloat(monto_x_mes);
-
-          var bg_siguiente_pago = "";  var bg_siguiente_pago_2 = '';
-
-          if ( fecha_dentro_de_rango(fecha_hoy_actual, format_a_m_d(element.fecha_i), format_a_m_d(element.fecha_f)) ) {
-            bg_siguiente_pago = "bg-success"; bg_siguiente_pago_2 = 'bg-color-28a74533';
-          } else {
-            bg_siguiente_pago = ""; bg_siguiente_pago_2 = '';
-          }
-  
-          $('.data-fechas-mes').append(`<tr>
-            <td class="text-center py-1 ${bg_siguiente_pago_2}">${indice + 1}</td>
-            <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.mes_nombre} </td>
-            <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.fecha_i}</td>
-            <td class="text-center py-1 ${bg_siguiente_pago}" >${element.fecha_f}</td>
-            <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.dias_regular}/${element.dias_mes}</td>
-            <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(sueldo_mensual)}</div></td>
-            <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(monto_x_mes)}</div></td>
-            <td class="py-1 ${bg_siguiente_pago_2}">
-              <div class="formato-numero-conta">
-                <button class="btn btn-danger btn-sm mr-1" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}','${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/ 0.00</button>
-              </div>
-            </td>
-            <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(monto_x_mes)}</div></td>
-            <td class="text-center py-1 ${bg_siguiente_pago_2}"> 
-              <button class="btn btn-outline-info btn-sm" ${btn_disabled} onclick="listar_tbla_recibo_por_honorario('');">
-                <i class="fas fa-file-invoice fa-lg"></i>
-              </button> 
-            </td>
-          </tr>`);
-  
-          cant_total_mes = indice + 1;        
-        });
-      } else {
-        
-        array_fechas_mes.forEach((element, indice) => {
-
-          var monto_x_mes = 0; var saldo_x_mes = 0;
-
-          var cant_dias_laborables_e = 0; var cant_dias_mes_e = 0; var estado_e = ""; var fecha_final_e = "";    
-          var fecha_inicial_e = ""; var idfechas_mes_pagos_administrador_e = ""; var idtrabajador_por_proyecto_e = ""; 
-          var monto_x_mes_e = 0; var nombre_mes_e = ""; var sueldo_mensual_e = 0; var numero_comprobante_e = ""; var recibos_x_honorarios_e = "";
-           var btn_tipo = ""; var suma_monto_depositado_e = 0; var btn_tipo_deposito = ""; var bg_saldo = ""
-
-          var fechas_mes_estado = false;
-
-          // buscamos las fechas           
-          data.forEach(value => {
-            if (value.fecha_inicial == format_a_m_d(element.fecha_i) && value.fecha_final == format_a_m_d(element.fecha_f) ) {
-
-              fechas_mes_estado = true;
-
-              idfechas_mes_pagos_administrador_e = value.idfechas_mes_pagos_administrador; 
-              idtrabajador_por_proyecto_e = value.idtrabajador_por_proyecto;
-              fecha_inicial_e = value.fecha_inicial;
-              fecha_final_e = value.fecha_final;
-              nombre_mes_e = value.nombre_mes;
-              cant_dias_mes_e = value.cant_dias_mes;
-              cant_dias_laborables_e = value.cant_dias_laborables; 
-              sueldo_mensual_e = value.sueldo_mensual;
-              monto_x_mes_e = value.monto_x_mes;
-              numero_comprobante_e = value.numero_comprobante;
-              recibos_x_honorarios_e = value.recibos_x_honorarios;
-              estado_e = value.estado;
-
-              suma_monto_depositado_e = value.suma_monto_depositado
-
-              // Validamos el tipo de boton para los "recibos por honorarios"
-              if (value.cant_rh == '' || value.cant_rh == null || value.cant_rh == 0) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += value.cant_rh; }
-            } 
-            // console.log(`${nombre_mes_e} - fecha encontrada: ${fecha_inicial_e} == ${format_a_m_d(element.fecha_i)} ---- ${fecha_final_e} == ${format_a_m_d(element.fecha_f)}`);
-          });
-          
-          // validamos si encontramos las fechas
-          if (fechas_mes_estado) { 
-            //console.log('entreee');
-            monto_total += (parseFloat(sueldo_mensual_e)/parseFloat(cant_dias_mes_e))*parseInt(cant_dias_laborables_e);
-            saldo_x_mes = parseFloat(monto_x_mes_e) - parseFloat(suma_monto_depositado_e);
-            dias_regular_total += parseInt(cant_dias_laborables_e);
-
-            deposito_total += parseFloat(suma_monto_depositado_e); 
-            saldo_total += saldo_x_mes;
-
-            if ( parseFloat(suma_monto_depositado_e) == 0 ) {
-              btn_tipo_deposito = "btn-danger";
-            } else {
-              if ( parseFloat(suma_monto_depositado_e) > 0 &&  parseFloat(suma_monto_depositado_e) < parseFloat(monto_x_mes_e) ) {
-                btn_tipo_deposito = "btn-warning";
-              } else {
-                if ( parseFloat(suma_monto_depositado_e) >= parseFloat(monto_x_mes_e) ) {
-                  btn_tipo_deposito = "btn-success";
-                }
-              }              
-            }
-
-            if (saldo_x_mes < 0) {
-              bg_saldo = "bg-red";
-            } else {
-              bg_saldo = "";
-            }
-
-            var bg_siguiente_pago = ""; var bg_siguiente_pago_2 = '';
-
-            if ( fecha_dentro_de_rango(fecha_hoy_actual, fecha_inicial_e, fecha_final_e) ) {
-              bg_siguiente_pago = "bg-success"; bg_siguiente_pago_2 = 'bg-color-28a74533';
-            } else {
-              bg_siguiente_pago = "";
-            }
+            monto_total += (sueldo_mensual/element.dias_mes)*element.dias_regular;
     
-            $('.data-fechas-mes').append(`<tr>
-              <td class="text-center py-1 ${bg_siguiente_pago_2}">${indice + 1}</td>
-              <td class="text-center py-1 ${bg_siguiente_pago_2}">${nombre_mes_e} </td>
-              <td class="text-center py-1 ${bg_siguiente_pago_2}">${format_d_m_a(fecha_inicial_e)}</td>
-              <td class="text-center py-1 ${bg_siguiente_pago}" >${format_d_m_a(fecha_final_e)}</td>
-              <td class="text-center py-1 ${bg_siguiente_pago_2}">${cant_dias_laborables_e}/${cant_dias_mes_e}</td>
-              <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(sueldo_mensual_e)}</div></td>
-              <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(monto_x_mes_e)}</div></td>
-              <td class="py-1 ${bg_siguiente_pago_2}">
-                <div class="formato-numero-conta">
-                  <button class="btn ${btn_tipo_deposito} btn-sm mr-1" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('${idfechas_mes_pagos_administrador_e}', '${idtrabajador_por_proyecto_e}', '${format_d_m_a(fecha_inicial_e)}', '${format_d_m_a(fecha_final_e)}', '${nombre_mes_e}', '${cant_dias_mes_e}', '${cant_dias_laborables_e}', '${sueldo_mensual_e}', '${monto_x_mes_e}', '${nombre_trabajador}', '${cuenta_bancaria}', '${saldo_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
-                  <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">S/ ${formato_miles(suma_monto_depositado_e)}</button>
-                </div>
-              </td>
-              <td class="py-1 ${(bg_saldo==''?bg_siguiente_pago_2:bg_saldo)}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(saldo_x_mes)}</div></td>
-              <td class="text-center py-1 ${bg_siguiente_pago_2}"> 
-                <button class="btn ${btn_tipo} btn-sm" ${btn_disabled} onclick="listar_tbla_recibo_por_honorario('${idfechas_mes_pagos_administrador_e}');">
-                  <i class="fas fa-file-invoice fa-lg"></i>
-                </button> 
-              </td>
-            </tr>`);
-          } else {
-            monto_total += (parseFloat(sueldo_mensual)/parseFloat(element.dias_mes))*parseInt(element.dias_regular);
-  
-            monto_x_mes = (parseFloat(sueldo_mensual)/parseFloat(element.dias_mes))*parseInt(element.dias_regular);
+            monto_x_mes = (sueldo_mensual/element.dias_mes)*element.dias_regular;
             
-            dias_regular_total += parseInt(element.dias_regular);
+            dias_regular_total += element.dias_regular;
 
             deposito_total += 0; 
             saldo_total += parseFloat(monto_x_mes);
-            
-            var bg_siguiente_pago = ""; var bg_siguiente_pago_2 = '';
+
+            var bg_siguiente_pago = "";  var bg_siguiente_pago_2 = '';
 
             if ( fecha_dentro_de_rango(fecha_hoy_actual, format_a_m_d(element.fecha_i), format_a_m_d(element.fecha_f)) ) {
               bg_siguiente_pago = "bg-success"; bg_siguiente_pago_2 = 'bg-color-28a74533';
             } else {
-              bg_siguiente_pago = "";
+              bg_siguiente_pago = ""; bg_siguiente_pago_2 = '';
             }
-
+    
             $('.data-fechas-mes').append(`<tr>
-              <td class="text-center py-1 ${bg_siguiente_pago_2}" >${indice + 1}</td>
+              <td class="text-center py-1 ${bg_siguiente_pago_2}">${indice + 1}</td>
               <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.mes_nombre} </td>
               <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.fecha_i}</td>
               <td class="text-center py-1 ${bg_siguiente_pago}" >${element.fecha_f}</td>
               <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.dias_regular}/${element.dias_mes}</td>
               <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(sueldo_mensual)}</div></td>
               <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(monto_x_mes)}</div></td>
-              <td class="text-center py-1 ${bg_siguiente_pago_2}">
+              <td class="py-1 ${bg_siguiente_pago_2}">
                 <div class="formato-numero-conta">
-                  <button class="btn btn-danger btn-sm mr-1" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}', '${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                  <button class="btn btn-danger btn-sm mr-1" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}','${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
                   <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/ 0.00</button>
                 </div>
               </td>
@@ -515,27 +381,169 @@ function detalle_fechas_mes_trabajador(id_tabajador_x_proyecto, nombre_trabajado
                 </button> 
               </td>
             </tr>`);
-          }         
-  
-          cant_total_mes = indice + 1;        
-        });
-      }      
+    
+            cant_total_mes = indice + 1;        
+          });
+        } else {
+          
+          array_fechas_mes.forEach((element, indice) => {
 
-      if (cant_total_mes > 1 ) {  $('.cant_meses_total').html(`${cant_total_mes} meses`); } else { $('.cant_meses_total').html(`${cant_total_mes} mes`); } 
+            var monto_x_mes = 0; var saldo_x_mes = 0;
 
-      if (dias_regular_total > 1) {
-        $('.dias_x_mes_total').html(`${dias_regular_total} días`);
+            var cant_dias_laborables_e = 0; var cant_dias_mes_e = 0; var estado_e = ""; var fecha_final_e = "";    
+            var fecha_inicial_e = ""; var idfechas_mes_pagos_administrador_e = ""; var idtrabajador_por_proyecto_e = ""; 
+            var monto_x_mes_e = 0; var nombre_mes_e = ""; var sueldo_mensual_e = 0; var numero_comprobante_e = ""; var recibos_x_honorarios_e = "";
+            var btn_tipo = ""; var suma_monto_depositado_e = 0; var btn_tipo_deposito = ""; var bg_saldo = ""
+
+            var fechas_mes_estado = false;
+
+            // buscamos las fechas           
+            e.data.forEach(value => {
+              if (value.fecha_inicial == format_a_m_d(element.fecha_i) && value.fecha_final == format_a_m_d(element.fecha_f) ) {
+
+                fechas_mes_estado = true;
+
+                idfechas_mes_pagos_administrador_e = value.idfechas_mes_pagos_administrador; 
+                idtrabajador_por_proyecto_e = value.idtrabajador_por_proyecto;
+                fecha_inicial_e = value.fecha_inicial;
+                fecha_final_e = value.fecha_final;
+                nombre_mes_e = value.nombre_mes;
+                cant_dias_mes_e = value.cant_dias_mes;
+                cant_dias_laborables_e = value.cant_dias_laborables; 
+                sueldo_mensual_e = value.sueldo_mensual;
+                monto_x_mes_e = value.monto_x_mes;
+                numero_comprobante_e = value.numero_comprobante;
+                recibos_x_honorarios_e = value.recibos_x_honorarios;
+                estado_e = value.estado;
+
+                suma_monto_depositado_e = value.suma_monto_depositado
+
+                // Validamos el tipo de boton para los "recibos por honorarios"
+                if (value.cant_rh == '' || value.cant_rh == null || value.cant_rh == 0) { btn_tipo = 'btn-outline-info'; } else { btn_tipo = 'btn-info'; rh_total += value.cant_rh; }
+              } 
+              // console.log(`${nombre_mes_e} - fecha encontrada: ${fecha_inicial_e} == ${format_a_m_d(element.fecha_i)} ---- ${fecha_final_e} == ${format_a_m_d(element.fecha_f)}`);
+            });
+            
+            // validamos si encontramos las fechas
+            if (fechas_mes_estado) { 
+              //console.log('entreee');
+              monto_total += (parseFloat(sueldo_mensual_e)/parseFloat(cant_dias_mes_e))*parseInt(cant_dias_laborables_e);
+              saldo_x_mes = parseFloat(monto_x_mes_e) - parseFloat(suma_monto_depositado_e);
+              dias_regular_total += parseInt(cant_dias_laborables_e);
+
+              deposito_total += parseFloat(suma_monto_depositado_e); 
+              saldo_total += saldo_x_mes;
+
+              if ( parseFloat(suma_monto_depositado_e) == 0 ) {
+                btn_tipo_deposito = "btn-danger";
+              } else {
+                if ( parseFloat(suma_monto_depositado_e) > 0 &&  parseFloat(suma_monto_depositado_e) < parseFloat(monto_x_mes_e) ) {
+                  btn_tipo_deposito = "btn-warning";
+                } else {
+                  if ( parseFloat(suma_monto_depositado_e) >= parseFloat(monto_x_mes_e) ) {
+                    btn_tipo_deposito = "btn-success";
+                  }
+                }              
+              }
+
+              if (saldo_x_mes < 0) {
+                bg_saldo = "bg-red";
+              } else {
+                bg_saldo = "";
+              }
+
+              var bg_siguiente_pago = ""; var bg_siguiente_pago_2 = '';
+
+              if ( fecha_dentro_de_rango(fecha_hoy_actual, fecha_inicial_e, fecha_final_e) ) {
+                bg_siguiente_pago = "bg-success"; bg_siguiente_pago_2 = 'bg-color-28a74533';
+              } else {
+                bg_siguiente_pago = "";
+              }
+      
+              $('.data-fechas-mes').append(`<tr>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">${indice + 1}</td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">${nombre_mes_e} </td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">${format_d_m_a(fecha_inicial_e)}</td>
+                <td class="text-center py-1 ${bg_siguiente_pago}" >${format_d_m_a(fecha_final_e)}</td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">${cant_dias_laborables_e}/${cant_dias_mes_e}</td>
+                <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(sueldo_mensual_e)}</div></td>
+                <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(monto_x_mes_e)}</div></td>
+                <td class="py-1 ${bg_siguiente_pago_2}">
+                  <div class="formato-numero-conta">
+                    <button class="btn ${btn_tipo_deposito} btn-sm mr-1" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('${idfechas_mes_pagos_administrador_e}', '${idtrabajador_por_proyecto_e}', '${format_d_m_a(fecha_inicial_e)}', '${format_d_m_a(fecha_final_e)}', '${nombre_mes_e}', '${cant_dias_mes_e}', '${cant_dias_laborables_e}', '${sueldo_mensual_e}', '${monto_x_mes_e}', '${nombre_trabajador}', '${cuenta_bancaria}', '${saldo_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                    <button style="font-size: 14px;" class="btn ${btn_tipo_deposito} btn-sm">S/ ${formato_miles(suma_monto_depositado_e)}</button>
+                  </div>
+                </td>
+                <td class="py-1 ${(bg_saldo==''?bg_siguiente_pago_2:bg_saldo)}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(saldo_x_mes)}</div></td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}"> 
+                  <button class="btn ${btn_tipo} btn-sm" ${btn_disabled} onclick="listar_tbla_recibo_por_honorario('${idfechas_mes_pagos_administrador_e}');">
+                    <i class="fas fa-file-invoice fa-lg"></i>
+                  </button> 
+                </td>
+              </tr>`);
+            } else {
+              monto_total += (parseFloat(sueldo_mensual)/parseFloat(element.dias_mes))*parseInt(element.dias_regular);
+    
+              monto_x_mes = (parseFloat(sueldo_mensual)/parseFloat(element.dias_mes))*parseInt(element.dias_regular);
+              
+              dias_regular_total += parseInt(element.dias_regular);
+
+              deposito_total += 0; 
+              saldo_total += parseFloat(monto_x_mes);
+              
+              var bg_siguiente_pago = ""; var bg_siguiente_pago_2 = '';
+
+              if ( fecha_dentro_de_rango(fecha_hoy_actual, format_a_m_d(element.fecha_i), format_a_m_d(element.fecha_f)) ) {
+                bg_siguiente_pago = "bg-success"; bg_siguiente_pago_2 = 'bg-color-28a74533';
+              } else {
+                bg_siguiente_pago = "";
+              }
+
+              $('.data-fechas-mes').append(`<tr>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}" >${indice + 1}</td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.mes_nombre} </td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.fecha_i}</td>
+                <td class="text-center py-1 ${bg_siguiente_pago}" >${element.fecha_f}</td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">${element.dias_regular}/${element.dias_mes}</td>
+                <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(sueldo_mensual)}</div></td>
+                <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(monto_x_mes)}</div></td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}">
+                  <div class="formato-numero-conta">
+                    <button class="btn btn-danger btn-sm mr-1" ${btn_disabled} onclick="listar_tbla_pagos_x_mes('', '${id_tabajador_x_proyecto}', '${element.fecha_i}', '${element.fecha_f}', '${element.mes_nombre}', '${element.dias_mes}', '${element.dias_regular}', '${sueldo_mensual}', '${monto_x_mes}', '${nombre_trabajador}', '${cuenta_bancaria}', '${monto_x_mes}' );"><i class="fas fa-dollar-sign"></i> Pagar</button>
+                    <button style="font-size: 14px;" class="btn btn-danger btn-sm">S/ 0.00</button>
+                  </div>
+                </td>
+                <td class="py-1 ${bg_siguiente_pago_2}"><div class="formato-numero-conta"> <span>S/</span>${formato_miles(monto_x_mes)}</div></td>
+                <td class="text-center py-1 ${bg_siguiente_pago_2}"> 
+                  <button class="btn btn-outline-info btn-sm" ${btn_disabled} onclick="listar_tbla_recibo_por_honorario('');">
+                    <i class="fas fa-file-invoice fa-lg"></i>
+                  </button> 
+                </td>
+              </tr>`);
+            }         
+    
+            cant_total_mes = indice + 1;        
+          });
+        }      
+
+        if (cant_total_mes > 1 ) {  $('.cant_meses_total').html(`${cant_total_mes} meses`); } else { $('.cant_meses_total').html(`${cant_total_mes} mes`); } 
+
+        if (dias_regular_total > 1) {
+          $('.dias_x_mes_total').html(`${dias_regular_total} días`);
+        } else {
+          $('.dias_x_mes_total').html(`${dias_regular_total} día`);
+        }      
+
+        $('.monto_x_mes_total').html(`<span>S/</span> ${formato_miles(monto_total)}`);
+
+        $('.monto_x_mes_pagado_total').html(`<span>S/</span> ${formato_miles(deposito_total)}`);
+
+        $('.saldo_total').html(`<span>S/</span> ${formato_miles(saldo_total)}`); 
+
+        $('.rh_total').html(`${rh_total} <small class="text-gray">(docs.)</small>`);
       } else {
-        $('.dias_x_mes_total').html(`${dias_regular_total} día`);
+        ver_errores(e);
       }      
-
-      $('.monto_x_mes_total').html(`<span>S/</span> ${formato_miles(monto_total)}`);
-
-      $('.monto_x_mes_pagado_total').html(`<span>S/</span> ${formato_miles(deposito_total)}`);
-
-      $('.saldo_total').html(`<span>S/</span> ${formato_miles(saldo_total)}`); 
-
-      $('.rh_total').html(`${rh_total} <small class="text-gray">(docs.)</small>`);
     });    
   }    
 }
@@ -640,11 +648,11 @@ function guardar_y_editar_pagos_x_mes(e) {
     success: function (e) {
       try {
         e = JSON.parse(e); console.log(e);
-        if (e.estado) {
+        if (e.status == true) {
 
           // tabla_ingreso_pagos.ajax.reload(null, false); 
-          $('#idfechas_mes_pagos_administrador_pxm').val(datos.id_tabla);
-          reload_table_pagos_x_mes(datos.id_tabla);        
+          $('#idfechas_mes_pagos_administrador_pxm').val(e.id_tabla);
+          reload_table_pagos_x_mes(e.id_tabla);        
 
           //tabla_principal.ajax.reload(null, false);  
           listar_tbla_principal(localStorage.getItem('nube_idproyecto'));   
@@ -656,8 +664,7 @@ function guardar_y_editar_pagos_x_mes(e) {
           $("#modal-agregar-pago-trabajdor").modal("hide");        
 
         }else{
-
-          Swal.fire("Error!", datos, "error");				 
+          ver_errores(e);
         }
       } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
       $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
@@ -700,37 +707,40 @@ function mostrar_pagos_x_mes(id) {
   $("#cargando-2-fomulario").show();
   $("#modal-agregar-pago-trabajdor").modal('show');
 
-  $.post("../ajax/pago_administrador.php?op=mostrar_pagos_x_mes", { 'idpagos_x_mes_administrador': id }, function (data, status) {
+  $.post("../ajax/pago_administrador.php?op=mostrar_pagos_x_mes", { 'idpagos_x_mes_administrador': id }, function (e, status) {
 
-    data = JSON.parse(data);  console.log(data); 
+    e = JSON.parse(e);  console.log(e);
     
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+    if (e.status == true) {
+      $('#idpagos_x_mes_administrador').val(e.data.idpagos_x_mes_administrador);
+      $("#monto").val(e.data.monto);
+      $("#fecha_pago").val(e.data.fecha_pago);
+      $("#forma_pago").val(e.data.forma_de_pago).trigger("change"); 
+      $("#descripcion").val(e.data.descripcion); 
 
-    $('#idpagos_x_mes_administrador').val(data.idpagos_x_mes_administrador);
-    $("#monto").val(data.monto);
-    $("#fecha_pago").val(data.fecha_pago);
-    $("#forma_pago").val(data.forma_de_pago).trigger("change"); 
-    $("#descripcion").val(data.descripcion); 
+      //validamoos BAUCHER - DOC 1
+      if (e.data.baucher == "" || e.data.baucher == null  ) {
 
-    //validamoos BAUCHER - DOC 1
-    if (data.baucher == "" || data.baucher == null  ) {
+        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
 
-      $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+        $("#doc1_nombre").html('');
 
-      $("#doc1_nombre").html('');
+        $("#doc_old_1").val(""); $("#doc1").val("");
 
-      $("#doc_old_1").val(""); $("#doc1").val("");
+      } else {
 
+        $("#doc_old_1").val(e.data.baucher); 
+
+        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.baucher)}</i></div></div>`);
+        // cargamos la imagen adecuada par el archivo
+        $("#doc1_ver").html(doc_view_extencion(e.data.baucher, 'pago_administrador', 'baucher_deposito', width='100%', height='210'));     
+            
+      }     
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
     } else {
-
-      $("#doc_old_1").val(data.baucher); 
-
-      $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(data.baucher)}</i></div></div>`);
-      // cargamos la imagen adecuada par el archivo
-      $("#doc1_ver").html(doc_view_extencion(data.baucher, 'pago_administrador', 'baucher_deposito', width='100%', height='210'));     
-          
-    }     
+      ver_errores(e);
+    }    
   });
 }
 
@@ -749,15 +759,15 @@ function desactivar_pago_x_mes(id) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/pago_administrador.php?op=desactivar_pago_x_mes", { 'idpagos_x_mes_administrador': id }, function (e) {
-
-        if (e == "ok") {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
           //tabla_principal.ajax.reload(null, false);
           listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
           reload_table_pagos_x_mes(id_fechas_mes);
           Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
         } else {
-          Swal.fire("Error!", e, "error");
+          ver_errores(e);
         }        
       });      
     }
@@ -779,8 +789,8 @@ function activar_pago_x_mes(id) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.post("../ajax/pago_administrador.php?op=activar_pago_x_mes", { 'idpagos_x_mes_administrador': id }, function (e) {
-
-        if (e == "ok") {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
           //tabla_principal.ajax.reload(null, false);
           listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
 
@@ -876,9 +886,9 @@ function guardar_y_editar_recibos_x_honorarios(e) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (datos) {
-             
-      if (datos == 'ok') {
+    success: function (e) {
+      e = JSON.parse(e); console.log(e);
+      if (e.status == true) {
 
         // console.log(id_tabajador_x_proyecto_r, nombre_trabajador_r, fecha_inicial_r, fecha_hoy_r, fecha_final_r, sueldo_mensual_r, cuenta_bancaria_r, cant_dias_trabajando_r);
 
@@ -894,8 +904,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
         $("#modal-recibos-x-honorarios").modal("hide");        
 
 			}else{
-
-        Swal.fire("Error!", datos, "error");				 
+        ver_errores(e);				 
 			}
     },
     xhr: function () {

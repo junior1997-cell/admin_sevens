@@ -26,12 +26,12 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['concreto_agregado']==1){
-            //require 'enmantenimiento.php';
+          if ($_SESSION['clasificacion_grupo']==1){
+            require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
+            <div class="content-wrapper hidden">
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">

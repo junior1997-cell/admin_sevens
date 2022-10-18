@@ -214,6 +214,7 @@
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
                                         <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
                                         <option title="fas fa-gas-pump" value="CONBUSTIBLE">CONBUSTIBLE</option>
+                                        <option title="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
                                       </select>
                                     </div>
                                   </div>
@@ -546,58 +547,56 @@
                         <form id="form-materiales" name="form-materiales" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
+                            <input type="hidden" name="idproducto_p" id="idproducto_p" /> 
 
-                              <!-- idproducto -->
-                              <input type="hidden" name="idproducto_p" id="idproducto_p" /> 
-                              <input type="hidden" name="categoria_insumos_af_p" id="categoria_insumos_af_p" value="1">   
-                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">
-                              <input type="hidden" name="color_p" id="color_p" value="1">
-                              
-                              <input type="hidden" name="precio_unitario_p" id="precio_unitario_p" value="1">
-                              <input type="hidden" name="precio_sin_igv_p" id="precio_sin_igv_p" value="1">
-                              <input type="hidden" name="precio_igv_p" id="precio_igv_p" value="1">
-                              <input type="hidden" name="precio_igv_p" id="precio_igv_p" value="1">
-                              <input type="hidden" name="precio_total_p" id="precio_total_p" />
+                              <input type="hidden" id="cont" name="cont" />
+                              <input type="hidden" id="modelo_p" name="modelo_p" />
+                              <input type="hidden" id="serie_p" name="serie_p" />
+                              <input type="hidden" id="color_p" name="color_p" value="1" />
 
-                              <!-- cont registro -->
-                              <input type="hidden" name="cont" id="cont" />                              
+                              <input type="hidden" id="precio_unitario_p" name="precio_unitario_p" value="0" />
+                              <input type="hidden" id="estado_igv_p" name="estado_igv_p" value="0" />
+                              <input type="hidden" id="precio_sin_igv_p" name="precio_sin_igv_p" value="0" />
+                              <input type="hidden" id="precio_igv_p" name="precio_igv_p" value="0" />
+                              <input type="hidden" id="precio_total_p" name="precio_total_p" value="0" />
 
                               <!-- Nombre -->
-                              <div class="col-sm-12 col-md-12 col-lg-8 ">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-8">
                                 <div class="form-group">
                                   <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
+                                  <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del activo." />
                                 </div>
                               </div>
-                              
-                              <!-- Unnidad-->
-                              <div class="col-lg-4 ">
+
+                              <!-- Clasificación -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
+                                <div class="form-group">
+                                  <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
+                                  <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
+                                  </select>
+                                </div>
+                              </div>                               
+
+                              <!-- Unnidad de medida-->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6" >
                                 <div class="form-group">
                                   <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                   <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
-                              </div>
+                              </div>     
 
-                              <!-- Unnidad-->
-                              <div class="col-lg-4 ">
+                              <!-- select2 multiple marca-->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <div class="form-group">
-                                  <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> </select>
-                                </div>
-                              </div>
-
-                              <!-- Unnidad-->
-                              <div class="col-lg-12 ">
-                                <div class="form-group">
-                                  <label for="marca_p">Marca <sup class="text-danger">(unico*)</sup></label>
+                                  <label for="marcas_p">Marca <sup class="text-danger">(unico*)</sup></label>
                                   <div class="select2-purple">
-                                    <select name="marca_p[]" id="marca_p" class="form-control select2" multiple="multiple" data-dropdown-css-class="select2-purple" style="width: 100%;"> </select>
+                                    <select name="marcas_p[]" id="marcas_p" class="form-control select2" multiple="multiple" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione marca" style="width: 100%;"> </select>
                                   </div>
                                 </div>
                               </div>
 
                               <!--Descripcion-->
-                              <div class="col-lg-12 ">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="descripcion_p">Descripción </label> <br />
                                   <textarea name="descripcion_p" id="descripcion_p" class="form-control" rows="2"></textarea>

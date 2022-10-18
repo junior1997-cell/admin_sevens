@@ -80,7 +80,7 @@
 
           if (empty($idsubcontrato)){
             //var_dump($idproyecto,$idproveedor);
-            $rspta=$sub_contrato->insertar($idproyecto, $idproveedor,$idclasificacion_grupo,$ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);
+            $rspta=$sub_contrato->insertar($idproyecto, $idproveedor,$idclasificacion_grupo,$ruc_proveedor, $tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($costo_parcial), $descripcion, $comprobante,$tipo_gravada);
             echo json_encode($rspta, true);
           }
           else {
@@ -92,7 +92,7 @@
               if ($ficha1_ant != "") { unlink("../dist/docs/sub_contrato/comprobante_subcontrato/" . $ficha1_ant);  }
             }
 
-            $rspta=$sub_contrato->editar($idsubcontrato, $idproyecto, $idproveedor,$idclasificacion_grupo,$tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, $subtotal, $igv, $costo_parcial, $descripcion, $comprobante,$tipo_gravada);            
+            $rspta=$sub_contrato->editar($idsubcontrato, $idproyecto, $idproveedor,$idclasificacion_grupo,$tipo_comprobante, $numero_comprobante, $forma_de_pago, $fecha_subcontrato, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($costo_parcial), $descripcion, $comprobante,$tipo_gravada);            
             echo json_encode($rspta, true);
           }
 				

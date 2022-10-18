@@ -13,7 +13,7 @@
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
-    if ($_SESSION['valorizacion'] == 1) {
+    if ($_SESSION['valorizacion_fierro'] == 1) {
 
       require_once "../modelos/Valorizacion_fierro.php";
 

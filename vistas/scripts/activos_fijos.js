@@ -4,25 +4,27 @@ var tabla;
 function init() {  
   
   $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
+  $("#bloc_ActivoFijo").addClass("menu-open bg-color-191f24");
 
   $("#mRecurso").addClass("active");
+  $("#mActivoFijo").addClass("active bg-primary");
 
-  $("#lActivosfijos").addClass("active");
+  $("#lActivosfijos").addClass("active ");
 
   lista_de_items();
   tabla_principal('todos');
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
-  lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marca', null);
-  lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unid_medida', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marcas', null);
+  lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida', null);
   lista_select2("../ajax/ajax_general.php?op=select2Categoria", '#categoria_insumos_af', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-activos-fijos").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#marca").select2({ theme: "bootstrap4", placeholder: "Seleccinar marca", allowClear: true, });
-  $("#unid_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
+  $("#marcas").select2({placeholder: "Seleccinar marcas", });
+  $("#unidad_medida").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
   $("#categoria_insumos_af").select2({ theme: "bootstrap4", placeholder: "Seleccinar una categoria", allowClear: true, });
 
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
@@ -68,20 +70,24 @@ function doc2_eliminar() {
 //Función limpiar
 function limpiar() {
   
-  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
-
-  //Mostramos los Materiales
-  $("#idproducto").val("");  
-  $("#nombre").val("");
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');  
+  // no usados
+  $("#precio_unitario").val("0");
+  $("#precio_sin_igv").val("0");
+  $("#precio_igv").val("0");
+  $("#precio_total").val("0");
+  $("#color").val(1);
   $("#modelo").val("");
   $("#serie").val("");
-  // $("#marca").val("");
-  $("#descripcion").val("");
+  $("#estado_igv").val("1");
 
-  $("#precio_unitario").val("");
-  $("#precio_sin_igv").val("");
-  $("#precio_igv").val("");
-  $("#precio_total").val("");
+  //input usados
+  $("#idproducto").val("");  
+  $("#nombre").val("");  
+  $("#categoria_insumos_af").val("").trigger("change");
+  $("#unidad_medida").val("").trigger("change");  
+  $("#marcas").val("").trigger("change");  
+  $("#descripcion").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
   $("#foto1").val("");
@@ -92,14 +98,6 @@ function limpiar() {
   $("#doc2").val("");  
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
   $('#doc2_nombre').html("");
-
-  $("#unid_medida").val("").trigger("change");
-  $("#color").val(1).trigger("change");
-  $("#marca").val("").trigger("change");
-  $("#categoria_insumos_af").val("").trigger("change");
-
-  $("#my-switch_igv").prop("checked", true);
-  $("#estado_igv").val("1");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -146,9 +144,9 @@ function tabla_principal(id_categoria) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,11,12,13,4,5,6,7,8,9,14], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,11,12,13,4,5,6,7,8,9,14], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,11,12,13,4,5,6,7,8,9,14], } },      
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,10,4,5,11,7,8], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,10,4,5,11,7,8], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,10,4,5,11,7,8], } },      
     ],
     ajax: {
       url: `../ajax/activos_fijos.php?op=tabla_principal&id_categoria=${id_categoria}`,
@@ -165,11 +163,6 @@ function tabla_principal(id_categoria) {
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: code
       if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
-      // columna: pago total       
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-right  text-nowrap'); } 
-      if (data[7] != '') { $("td", row).eq(7).addClass('text-right  text-nowrap'); }
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right  text-nowrap'); }
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right  text-nowrap'); } 
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -180,8 +173,8 @@ function tabla_principal(id_categoria) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11,12,13,14], visible: false, searchable: false, },
-      { targets: [6,7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [10,11], visible: false, searchable: false, },
+      { targets: [7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 }
@@ -275,31 +268,24 @@ function mostrar(idproducto) {
     
     e = JSON.parse(e); console.log(e);
 
-    if (e.status) {
-      $("#idproducto").val(e.data.idproducto);
-      $("#nombre").val(e.data.nombre);
+    if (e.status == true) {
+      // input no usados
       $("#modelo").val(e.data.modelo);
       $("#serie").val(e.data.serie);
-      $("#marca").val(e.data.marca).trigger("change");  
-      $("#descripcion").val(e.data.descripcion);
+      $('#precio_unitario').val(e.data.precio_unitario);      
+      $("#precio_sin_igv").val(e.data.precio_sin_igv);
+      $("#precio_igv").val(e.data.precio_igv);
+      $("#precio_total").val(e.data.precio_total);
+      $("#color").val(e.data.idcolor);  
+      $("#estado_igv").val(e.data.estado_igv);      
 
-      $('#precio_unitario').val(parseFloat(e.data.precio_unitario).toFixed(2));
-      
-      $("#precio_sin_igv").val(parseFloat(e.data.precio_sin_igv).toFixed(2));
-      $("#precio_igv").val(parseFloat(e.data.precio_igv).toFixed(2));
-      $("#precio_total").val(parseFloat(e.data.precio_total).toFixed(2));
-      
-      $("#unid_medida").val(e.data.idunidad_medida).trigger("change");
-      $("#color").val(e.data.idcolor).trigger("change");  
+      // input usados
+      $("#idproducto").val(e.data.idproducto);
+      $("#nombre").val(e.data.nombre);      
       $("#categoria_insumos_af").val(e.data.idcategoria_insumos_af).trigger("change");
-
-      if (e.data.estado_igv == "1") {
-        $("#my-switch_igv").prop("checked", true);
-        $("#estado_igv").val(1);
-      } else {
-        $("#my-switch_igv").prop("checked", false);
-        $("#estado_igv").val(0);
-      }
+      $("#unidad_medida").val(e.data.idunidad_medida).trigger("change");
+      $("#marcas").val(e.data.id_marca).trigger("change");  
+      $("#descripcion").val(e.data.descripcion);  
        
       if (e.data.imagen != "") {        
         $("#foto1_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);  
@@ -393,7 +379,10 @@ function verdatos(idproducto){
         ficha_tecnica='Sin Ficha Técnica';
         btn_ficha_tecnica='';
 
-      }     
+      }  
+
+      var marca =""; 
+      e.data.marcas.forEach((valor, index) => { marca = marca.concat( `<span class="username">${index + 1 } ${valor}</span> </br>`);  });   
 
       verdatos=`                                                                            
       <div class="col-12">
@@ -402,12 +391,9 @@ function verdatos(idproducto){
             <table class="table table-hover table-bordered">        
               <tbody>
                 <tr data-widget="expandable-table" aria-expanded="false">
-                  <th rowspan="2">${imagen_perfil}<br>${btn_imagen_perfil}</th>
+                  <th >${imagen_perfil}<br>${btn_imagen_perfil}</th>
                   <td> <b>Nombre: </b> ${e.data.nombre}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <td> <b>Color: </b> ${e.data.nombre_color}</td>
-                </tr>
+                </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Clasificación</th>
                   <td>${e.data.categoria}</td>
@@ -418,39 +404,11 @@ function verdatos(idproducto){
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Marca</th>
-                    <td>${e.data.nombre_marca}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Con IGV</th>
-                  <td>${(e.data.estado_igv==1? '<div class="myestilo-switch ml-2"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" checked disabled /><label for="my-switch-igv-2"></label></div></div>' : '<div class="myestilo-switch ml-3"><div class="switch-toggle"><input type="checkbox" id="my-switch-igv-2" disabled/><label for="my-switch-igv-2"></label></div></div>')}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Precio  </th>
-                  <td>${e.data.precio_unitario}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Sub Total</th>
-                  <td>${e.data.precio_sin_igv}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>IGV</th>
-                  <td>${e.data.precio_igv}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Total </th>
-                  <td>${e.data.precio_total}</td>
-                </tr> 
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Modelo</th>
-                  <td>${e.data.modelo}</td>
-                </tr>
-                <tr data-widget="expandable-table" aria-expanded="false">
-                  <th>Serie</th>
-                  <td>${e.data.serie}</td>
-                </tr>               
+                    <td>${marca}</td>
+                </tr>                    
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Descripción</th>
-                  <td>${e.data.descripcion}</td>
+                  <td><textarea cols="30" rows="2" class="textarea_datatable" readonly="">${e.data.descripcion}</textarea></td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Ficha Técnica</th>
@@ -499,90 +457,28 @@ function eliminar(idproducto, nombre) {
 
 }
 
-function precio_con_igv() {
-  var precio_ingresado = $("#precio_unitario").val()=='' ? 0 : parseFloat($("#precio_unitario").val());
-
-  var input_precio_con_igv = 0;
-  var igv = 0;
-  var input_precio_sin_igv = 0;
-
-  if ($("#my-switch_igv").is(":checked")) {
-    input_precio_sin_igv = precio_ingresado / 1.18;
-    igv = precio_ingresado - input_precio_sin_igv;
-    input_precio_con_igv = precio_ingresado;
-    
-    $("#precio_sin_igv").val(input_precio_sin_igv.toFixed(2));
-    $("#precio_igv").val(igv.toFixed(2));    
-    $("#precio_total").val(input_precio_con_igv.toFixed(2));
-
-    $("#estado_igv").val("1");
-  } else {
-    input_precio_con_igv = precio_ingresado * 1.18;
-    igv = input_precio_con_igv - precio_ingresado;
-    input_precio_sin_igv = precio_ingresado;
-
-    $("#precio_sin_igv").val(input_precio_sin_igv.toFixed(2));
-    $("#precio_igv").val(igv.toFixed(2));    
-    $("#precio_total").val(input_precio_con_igv.toFixed(2));
-
-    $("#estado_igv").val("0");
-  }
-}
-
-$("#my-switch_igv").on("click ", function (e) {
-  var precio_ingresado = $("#precio_unitario").val()=='' ? 0 : parseFloat($("#precio_unitario").val());
-  var input_precio_sin_igv = 0;
-  var igv = 0;
-  var input_precio_con_igv = 0;
-  
-  if ($("#my-switch_igv").is(":checked")) {
-    input_precio_sin_igv = precio_ingresado / 1.18;
-    igv = precio_ingresado - input_precio_sin_igv;
-    input_precio_con_igv = precio_ingresado;  
-
-    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));
-    $("#precio_igv").val(redondearExp(igv, 2));
-    $("#precio_total").val(redondearExp(input_precio_con_igv, 2)) ;
-
-    $("#estado_igv").val("1");
-  } else {
-    input_precio_con_igv = precio_ingresado * 1.18;     
-    igv = input_precio_con_igv - precio_ingresado;
-    input_precio_sin_igv = precio_ingresado; 
-
-    $("#precio_sin_igv").val(redondearExp(input_precio_sin_igv, 2));
-    $("#precio_igv").val(redondearExp(igv, 2));
-    $("#precio_total").val(redondearExp(input_precio_con_igv, 2) );
-
-    $("#estado_igv").val("0");
-  }
-});
 
 init();
 
 $(function () {
 
-  $('#unid_medida').on('change', function() { $(this).trigger('blur'); });
+  $('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
   $('#marca').on('change', function() { $(this).trigger('blur'); });
   $('#categoria_insumos_af').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-materiales-activos-fijos").validate({
     rules: {
       nombre:         { required: true, minlength:3, maxlength:200},
-      categoria_insumos_af: { required: true },
+      categoria_insumos_af: { required: true },      
+      unidad_medida:  { required: true },
       marca:          { required: true },
-      unid_medida:    { required: true },
-      modelo:         {  minlength: 3 },
-      precio_unitario:{ required: true },
       descripcion:    { minlength: 4 },
     },
     messages: {
       nombre:         { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },
-      categoria_insumos_af: { required: "Campo requerido", },
-      marca:          { required: "Campo requerido" },
-      unid_medida:    { required: "Campo requerido" },
-      modelo:         { minlength: "Minimo 3 caracteres", },
-      precio_unitario:{ required: "Ingresar precio compra", },      
+      categoria_insumos_af: { required: "Campo requerido", },      
+      unidad_medida:  { required: "Campo requerido" },
+      marca:          { required: "Campo requerido" },    
       descripcion:    { minlength: "Minimo 4 caracteres" },
     },
 
@@ -590,7 +486,6 @@ $(function () {
 
     errorPlacement: function (error, element) {
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
@@ -607,7 +502,7 @@ $(function () {
     },
   });
 
-  $('#unid_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $('#marca').rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $('#categoria_insumos_af').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });

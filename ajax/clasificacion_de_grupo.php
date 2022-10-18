@@ -9,7 +9,7 @@
     echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
-    if ($_SESSION['concreto_agregado'] == 1) {
+    if ($_SESSION['clasificacion_grupo'] == 1) {
       
       require_once "../modelos/Clasificacion_de_grupo.php";
       require_once "../modelos/Compra_insumos.php";

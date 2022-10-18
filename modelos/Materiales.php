@@ -10,36 +10,32 @@ class Materiales
   }
 
   //Implementamos un método para insertar registros
-  public function insertar($idcategoria, $nombre, $modelo, $serie, $marcas, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $precio_igv, $precio_sin_igv, $unidad_medida, $color, $total_precio)
+  public function insertar($nombre, $idcategoria, $unidad_medida, $marca, $descripcion, $color, $modelo, $serie, $estado_igv, $precio_unitario, $precio_sin_igv, $precio_igv, $precio_total, $ficha_tecnica, $imagen1)
   {
 
     // $array_marcas = json_decode($marcas, true);
 
-    $sql = "SELECT p.nombre, p.modelo , p.serie, p.imagen, p.precio_igv,	p.precio_sin_igv, p.precio_total,	p.estado, c.nombre_color, 
-    um.nombre_medida, p.estado, p.estado_delete, ttc.nombre as tipo_tierra_concreto
-		FROM producto p, unidad_medida as um, color as c, tipo_tierra_concreto as ttc
-    WHERE um.idunidad_medida=p.idunidad_medida AND c.idcolor=p.idcolor 
-    AND idcategoria_insumos_af = '1' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unidad_medida';";
-    $buscando = ejecutarConsultaArray($sql); if ($buscando['status'] == false) { return $buscando; }
+    $sql = "SELECT p.nombre, p.imagen, p.estado, p.estado_delete, um.nombre_medida, ciaf.nombre as nombre_categoria
+		FROM producto p, unidad_medida as um, categoria_insumos_af as ciaf 
+    WHERE um.idunidad_medida=p.idunidad_medida  AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af AND p.idcategoria_insumos_af = '$idcategoria' AND p.nombre='$nombre' AND p.idcolor = '$color' AND p.idunidad_medida = '$unidad_medida';";
+    $buscando = ejecutarConsultaArray($sql); if ( $buscando['status'] == false) {return $buscando; } 
 
     if ( empty($buscando['data']) ) {
 
-      $sql = "INSERT INTO producto (idcategoria_insumos_af, idtipo_tierra_concreto, nombre, modelo, serie, precio_unitario, descripcion, imagen, ficha_tecnica, estado_igv, precio_igv, precio_sin_igv,idunidad_medida,idcolor,precio_total,user_created) 
-      VALUES ('$idcategoria','1', '$nombre', '$modelo', '$serie', '$precio_unitario','$descripcion','$imagen1','$ficha_tecnica','$estado_igv','$precio_igv','$precio_sin_igv','$unidad_medida','$color','$total_precio','" . $_SESSION['idusuario'] . "')";
-     
-      $intertar =  ejecutarConsulta_retornarID($sql); if ($intertar['status'] == false) {  return $intertar; } 
+      $sql = "INSERT INTO producto(nombre, idcategoria_insumos_af, idunidad_medida, descripcion, idcolor, modelo, serie,  estado_igv, precio_unitario, precio_sin_igv, precio_igv, precio_total, ficha_tecnica,  imagen, user_created) 
+      VALUES ('$nombre', '$idcategoria', '$unidad_medida', '$descripcion', '$color', '$modelo', '$serie',  '$estado_igv', '$precio_unitario', '$precio_sin_igv', '$precio_igv', '$precio_total', '$ficha_tecnica', '$imagen1', '" . $_SESSION['idusuario'] . "')";
+      $insertar =  ejecutarConsulta_retornarID($sql); if ($insertar['status'] == false) {  return $insertar; } 
 
       //add registro en nuestra bitacora
-      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','".$intertar['data']."','Nuevo producto registrado','" . $_SESSION['idusuario'] . "')";
-      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
-
-      foreach ($marcas as $key => $value) {
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','".$insertar['data']."','Nuevo activo fijo registrado','" . $_SESSION['idusuario'] . "')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+      
+      foreach ($marca as $key => $value) {
         //detalle de marcas
-         $sql = "INSERT INTO detalle_marca (idproducto, idmarca, user_created) VALUES ('". $intertar['data'] ."', '$value','" . $_SESSION['idusuario'] . "')";
-         $marcas = ejecutarConsulta($sql); if ( $marcas['status'] == false) {return $marcas; } 
+        $sql = "INSERT INTO detalle_marca (idproducto, idmarca, user_created) VALUES ('". $insertar['data'] ."', '$value','" . $_SESSION['idusuario'] . "')";
+        $marcas = ejecutarConsulta($sql); if ( $marcas['status'] == false) {return $marcas; } 
       }
-
-     return $intertar;
+      return $insertar;
 
     } else {
       $info_repetida = ''; 
@@ -60,30 +56,28 @@ class Materiales
   }
 
   //Implementamos un método para editar registros
-  public function editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $precio_igv, $precio_sin_igv, $unidad_medida, $color, $total_precio)
+  public function editar($idproducto, $nombre, $idcategoria, $unidad_medida, $marca, $descripcion, $color, $modelo, $serie, $estado_igv, $precio_unitario, $precio_sin_igv, $precio_igv, $precio_total, $ficha_tecnica, $imagen1)
   {
    
     $sql = "UPDATE producto SET 
-		idcategoria_insumos_af = '$idcategoria',
-		nombre='$nombre', 
-    modelo = '$modelo', 
-    serie = '$serie',
-		precio_unitario='$precio_unitario', 
-		descripcion='$descripcion', 
-		imagen='$imagen1',
-		ficha_tecnica='$ficha_tecnica',
-		estado_igv='$estado_igv',
-		precio_igv='$precio_igv',
-		precio_sin_igv='$precio_sin_igv',
-		idunidad_medida='$unidad_medida',
-		idcolor='1',
-		precio_total='$total_precio',
+    nombre = '$nombre',
+    idcategoria_insumos_af = '$idcategoria',
+		idunidad_medida = '$unidad_medida',
+    descripcion = '$descripcion',
+		idcolor = '$color',		
+		modelo = '$modelo',
+		serie = '$serie',
+		estado_igv = '$estado_igv',
+		precio_unitario='$precio_unitario',
+		precio_igv = '$precio_igv',
+		precio_sin_igv = '$precio_sin_igv',
+		precio_total = '$precio_total',
+		ficha_tecnica = '$ficha_tecnica',		
+		imagen = '$imagen1',
     user_updated= '" . $_SESSION['idusuario'] . "'
+		WHERE idproducto = '$idproducto';";
+    $editar =  ejecutarConsulta($sql); if ( $editar['status'] == false) {return $editar; } 
 
-		WHERE idproducto='$idproducto'";
-
-    $editar =  ejecutarConsulta($sql); if ( $editar['status'] == false) {return $editar; }
-    
     $sql ="DELETE FROM detalle_marca WHERE idproducto= '$idproducto'";
     $delete_marca = ejecutarConsulta($sql);  if ($delete_marca['status'] == false) { return  $delete_marca;}
 
@@ -94,7 +88,7 @@ class Materiales
     }
 
     //add registro en nuestra bitacora
-    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','$idproducto','Producto editado','" . $_SESSION['idusuario'] . "')";
+    $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('producto','$idproducto','Activo fijo editado','" . $_SESSION['idusuario'] . "')";
     $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
 
     return $editar;
@@ -139,35 +133,49 @@ class Materiales
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idproducto)
   {
-    $data = Array(); $array_marca = []; $array_marca_name = [];
+    $data = []; $array_marca = []; $array_marca_name = [];
 
-    $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie,
-		p.descripcion, p.imagen, p.estado_igv, p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total,
-		p.ficha_tecnica, p.estado, um.nombre_medida
-		FROM producto p, unidad_medida as um
-		WHERE um.idunidad_medida=p.idunidad_medida AND p.idproducto ='$idproducto';";
-    $producto = ejecutarConsultaSimpleFila($sql); if ($producto['status'] == false) { return $producto; }
+    $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie,  p.estado_igv, 
+    p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.created_at,
+    um.nombre_medida, c.nombre_color, ciaf.nombre AS categoria
+		FROM producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+    WHERE p.idunidad_medida = um.idunidad_medida AND p.idcolor = c.idcolor 
+    AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND p.idproducto = '$idproducto'";
+    $activos = ejecutarConsultaSimpleFila($sql); if ($activos['status'] == false) { return  $activos;}
 
-    $sql3 = "SELECT dm.iddetalle_marca, m.nombre_marca FROM detalle_marca as dm, marca as m WHERE dm.idmarca=m.idmarca AND dm.idproducto = '$idproducto';";
+    $sql3 = "SELECT dm.iddetalle_marca, m.idmarca, m.nombre_marca FROM detalle_marca as dm, marca as m WHERE dm.idmarca=m.idmarca AND dm.idproducto = '$idproducto';";
     $detalle_marca = ejecutarConsultaArray($sql3); if ($detalle_marca['status'] == false) { return  $detalle_marca;}
 
-    foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca, $value['iddetalle_marca'] ); }
+    foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca, $value['idmarca'] ); }
     foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca_name, $value['nombre_marca'] ); }
+    
+    $data = [
+      'idproducto'      => $activos['data']['idproducto'],
+      'idunidad_medida' => $activos['data']['idunidad_medida'],
+      'nombre_medida'   => $activos['data']['nombre_medida'],
+      'idcolor'         => $activos['data']['idcolor'],
+      'nombre_color'    => $activos['data']['nombre_color'],
+      'idcategoria_insumos_af'  => $activos['data']['idcategoria_insumos_af'],
+      'categoria'               => $activos['data']['categoria'],
+      'nombre'          => decodeCadenaHtml($activos['data']['nombre']),
+      'modelo'          => decodeCadenaHtml($activos['data']['modelo']),
+      'serie'           => decodeCadenaHtml($activos['data']['serie']),
+      'estado_igv'      => (empty($activos['data']['estado_igv']) ? 0 :  $activos['data']['estado_igv']),
+      'precio_unitario' => (empty($activos['data']['precio_unitario']) ? 0 : $activos['data']['precio_unitario']),
+      'precio_igv'      => (empty($activos['data']['precio_igv']) ? 0 : $activos['data']['precio_igv']),
+      'precio_sin_igv'  => (empty($activos['data']['precio_sin_igv']) ? 0 : $activos['data']['precio_sin_igv']),
+      'precio_total'    => (empty($activos['data']['precio_total']) ? 0 : $activos['data']['precio_total']),
+      'ficha_tecnica'   => $activos['data']['ficha_tecnica'],
+      'descripcion'     => decodeCadenaHtml($activos['data']['descripcion']),
+      'imagen'          => $activos['data']['imagen'],
+      'estado'          => $activos['data']['estado'],
+      'fecha'           => $activos['data']['created_at'],
 
-    $data = array(
-      'idproducto'      => ( empty($producto['data']['idproducto']) ? '' : $producto['data']['idproducto']),
-      'idcategoria_insumos_af' => ( empty($producto['data']['idcategoria_insumos_af']) ? '' : $producto['data']['idcategoria_insumos_af']),
-      'idunidad_medida' => ( empty($producto['data']['idunidad_medida']) ? '' : $producto['data']['idunidad_medida']),
-      'nombre'          => ( empty($producto['data']['nombre']) ? '' :decodeCadenaHtml($producto['data']['nombre'])),
-      'descripcion'     => ( empty($producto['data']['descripcion']) ? '' : decodeCadenaHtml($producto['data']['descripcion'])),
-      'imagen'          => ( empty($producto['data']['imagen']) ? '' : $producto['data']['imagen']),
-      'ficha_tecnica'   => ( empty($producto['data']['ficha_tecnica']) ? '' : $producto['data']['ficha_tecnica']),
-      'estado'          => ( empty($producto['data']['estado']) ? '' : $producto['data']['estado']),
-      'nombre_medida'   => ( empty($producto['data']['nombre_medida']) ? '' : $producto['data']['nombre_medida']),
-      'detalle_marca'   => $array_marca,
-      'marcas'   => $array_marca_name,
-    );
-    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];
+      'id_marca'        => $array_marca,
+      'marcas'          => $array_marca_name,
+    ];
+
+    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];  
     
   }
 
@@ -198,20 +206,20 @@ class Materiales
       }
 
       $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
-      $promedio_precio = ejecutarConsultaSimpleFila($sql);  if ($promedio_precio['status'] == false){ return $promedio_precio; }
+      $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
 
       $data[] = Array(
-        'idproducto'      => ( empty($value['idproducto']) ? '' : $value['idproducto']),
-        'idunidad_medida' => ( empty($value['idunidad_medida']) ? '' : $value['idunidad_medida']),
+        'idproducto'      =>  $value['idproducto'],
+        'idunidad_medida' =>  $value['idunidad_medida'],
         'nombre'          => ( empty($value['nombre']) ? '' : decodeCadenaHtml($value['nombre'])),
         'imagen'          => ( empty($value['imagen']) ? '' : $value['imagen']),
         'ficha_tecnica'   => ( empty($value['ficha_tecnica']) ? '' : $value['ficha_tecnica']),
         'estado'          => ( empty($value['estado']) ? '' : $value['estado']),
         'nombre_medida'   => ( empty($value['nombre_medida']) ? '' : $value['nombre_medida']),
-        'detalle_marca'   => '<ol>'.$datalle_marcas. '</ol>',
-        'detalle_marca_export'   => $datalle_marcas_export,
-        'promedio_precio' => ( empty($promedio_precio['data']['promedio_precio']) ? '0.00' : floatval($promedio_precio['data']['promedio_precio'])),        
-        'descripcion' => ( empty($value['descripcion']) ? '' : $value['descripcion'])
+        'marca'           => '<ol class="pl-3">'.$datalle_marcas. '</ol>',
+        'marca_export'    => $datalle_marcas_export,
+        'promedio_precio' => ( empty($precio['data']['promedio_precio']) ? '0.00' : floatval($precio['data']['promedio_precio'])),        
+        'descripcion'     => ( empty($value['descripcion']) ? '' : $value['descripcion'])
       );
 
     }

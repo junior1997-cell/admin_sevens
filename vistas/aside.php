@@ -335,7 +335,7 @@
             </li>
             <?php  }  ?>      
             
-            <?php if ($_SESSION['subcontrato']==1) {  ?>  
+            <?php if ($_SESSION['mano_obra']==1) {  ?>  
             <li class="nav-item ver-otros-modulos-1">
               <a href="mano_de_obra.php" class="nav-link pl-2" id="lManodeObra">
                 <i class="nav-icon fa-solid fa-person-digging"></i>
@@ -490,7 +490,7 @@
               </li>
             <?php  }  ?>            
 
-            <?php if ($_SESSION['concreto_agregado']==1) {  ?>
+            <?php if ($_SESSION['clasificacion_grupo']==1) {  ?>
             <!-- CONCRETO, CEMENTO Y AGREGADO -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="clasificacion_de_grupo.php" class="nav-link pl-2" id="lConcretoAgregado">
@@ -500,7 +500,7 @@
             </li>
             <?php  }  ?>
 
-            <?php if ($_SESSION['fierro']==1) {  ?>
+            <?php if ($_SESSION['valorizacion_concreto']==1) {  ?>
             <!-- CONCRETO -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="valorizacion_concreto.php" class="nav-link pl-2" id="lConcretoValorizacion">
@@ -511,13 +511,13 @@
             </li>
             <?php  }  ?>
 
-            <?php if ($_SESSION['fierro']==1) {  ?>
+            <?php if ($_SESSION['valorizacion_fierro']==1) {  ?>
             <!-- FIERROS -->       
             <li class="nav-item ver-otros-modulos-1">
               <a href="valorizacion_fierro.php" class="nav-link pl-2" id="lFierroValorizacion">
                 <!-- <i class="nav-icon fas fa-dumpster"></i> -->
                 <img src="../dist/svg/fierro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                <p>Fierros</p>
+                <p>Valorización Fierros</p>
               </a>
             </li>
             <?php  }  ?> 

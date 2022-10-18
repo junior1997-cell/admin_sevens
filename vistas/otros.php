@@ -1274,10 +1274,10 @@
         <script type="text/javascript" src="scripts/unidades_m.js"></script>
         <script type="text/javascript" src="scripts/ocupacion.js"></script>
         <script type="text/javascript" src="scripts/tipo.js"></script>
-        <script type="text/javascript" src="scripts/cargo.js"></script>
+        <!-- <script type="text/javascript" src="scripts/cargo.js"></script> -->
         <script type="text/javascript" src="scripts/categoria_af.js"></script>
         <script type="text/javascript" src="scripts/marca.js"></script>
-        <script type="text/javascript" src="scripts/glosa.js"></script>
+        <!-- <script type="text/javascript" src="scripts/glosa.js"></script> -->
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

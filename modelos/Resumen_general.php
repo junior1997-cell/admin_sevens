@@ -55,7 +55,8 @@ class Resumen_general
           "proveedor" => $value['razon_social'],
           "descripcion" => $value['descripcion'],
 
-          "monto_pago_total" => ($retVal_2 = empty($t_monto['data']) ? 0 : ($retVal_3 = empty($t_monto['data']['total_p']) ? 0 : $t_monto['data']['total_p'])),
+          //"monto_pago_total" => ($retVal_2 = empty($t_monto['data']) ? 0 : ($retVal_3 = empty($t_monto['data']['total_p']) ? 0 : $t_monto['data']['total_p'])),
+          "monto_pago_total" => ($retVal_1 = empty($value['total']) ? 0 : $value['total']),
         ];
       }
     }
@@ -138,7 +139,8 @@ class Resumen_general
               "proveedor"   => $value['razon_social'],
 
               "costo_parcial"   => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
-              "deposito" => $deposito_cubre,
+              //"deposito" => $deposito_cubre,
+              "deposito"   => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
             ];
 
             if ($estado_deposito) { $deposito_m = 0; $deposito_cubre = 0;  }
@@ -211,8 +213,8 @@ class Resumen_general
 					"comprobante"        => $value['comprobante'],
           "razon_social"        => $value['razon_social'],
 
-					"total_deposito"     => ($retVal_2 = empty($total_deposito['data']) ? 0 : ($retVal_3 = empty($total_deposito['data']['total_deposito']) ? 0 : $total_deposito['data']['total_deposito'])),
-
+					//"total_deposito"     => ($retVal_2 = empty($total_deposito['data']) ? 0 : ($retVal_3 = empty($total_deposito['data']['total_deposito']) ? 0 : $total_deposito['data']['total_deposito'])),
+          "total_deposito"      => empty($value['costo_parcial']) ? 0 : $value['costo_parcial']  ,
 				);	
 				
 			}
@@ -458,11 +460,10 @@ class Resumen_general
       $consulta_filtro = "AND tpp.idtrabajador_por_proyecto = '$id_trabajador'";
     }
 
-    $sql = "SELECT tpp.idtrabajador_por_proyecto, tpp.idproyecto, t.nombres, ct.nombre as cargo 
-		FROM trabajador_por_proyecto as tpp, trabajador as t, cargo_trabajador as ct, tipo_trabajador as tt 
-		WHERE tpp.idproyecto='$idproyecto' AND tt.nombre !='Obrero' AND tpp.idtrabajador=t.idtrabajador 
-		AND tpp.idcargo_trabajador=ct.idcargo_trabajador AND ct.idcargo_trabajador=tpp.idcargo_trabajador 
-		AND ct.idtipo_trabjador =tt.idtipo_trabajador  AND tpp.estado = '1' AND tpp.estado_delete = '1' $consulta_filtro";
+    $sql = "SELECT tpp.idtrabajador_por_proyecto, tpp.idproyecto, t.nombres, o.nombre_ocupacion, tt.nombre as nombre_tipo 
+		FROM trabajador_por_proyecto as tpp, trabajador as t, ocupacion as o, tipo_trabajador as tt 
+		WHERE  tpp.idtrabajador=t.idtrabajador AND t.idocupacion=o.idocupacion AND t.idtipo_trabajador =tt.idtipo_trabajador 
+    AND tpp.idproyecto='$idproyecto' AND tt.nombre !='Obrero' AND tpp.estado = '1' AND tpp.estado_delete = '1' $consulta_filtro";
     $traba_adm = ejecutarConsultaArray($sql);
     if ($traba_adm['status'] == false) {  return $traba_adm;}
 
@@ -498,13 +499,14 @@ class Resumen_general
 
         $administrativo[] = [
           "idtrabajador_por_proyecto" => $value['idtrabajador_por_proyecto'],
-          "idproyecto" => $value['idproyecto'],
-          "nombres" => $value['nombres'],
-          "cargo" => $value['cargo'],
+          "idproyecto"                => $value['idproyecto'],
+          "nombres"                   => $value['nombres'],
+          "nombre_ocupacion"          => $value['nombre_ocupacion'],
+          "nombre_tipo"               => $value['nombre_tipo'],
 
-          "total_montos_x_meses" => $m_total_x_meses,
+          "total_montos_x_meses"      => $m_total_x_meses,
 
-          "deposito" => $pago_monto_total,
+          "deposito"                  => $pago_monto_total,
         ];
       }
     }

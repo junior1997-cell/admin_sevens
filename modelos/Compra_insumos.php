@@ -45,8 +45,13 @@ class Compra_insumos
           $id = $idventanew['data'];
           $subtotal_producto = (floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos])) - $descuento[$num_elementos];
 
-          $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
-          VALUES ('$id','$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+          // buscando grupo
+          $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$num_elementos]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
+          $grupo =  ejecutarConsultaSimpleFila($sql_4); if ($grupo['status'] == false) { return  $grupo;}
+          $id_grupo = (empty($grupo['data']) ? 1 : (empty($grupo['data']['idclasificacion_grupo']) ? 1 : $grupo['data']['idclasificacion_grupo'] ) );
+
+          $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, idclasificacion_grupo, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
+          VALUES ('$id','$idproducto[$num_elementos]', '$id_grupo', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]','" . $_SESSION['idusuario'] . "')";
           $compra_new =  ejecutarConsulta_retornarID($sql_detalle); if ($compra_new['status'] == false) { return  $compra_new;}
 
           //add registro en nuestra bitacora.
@@ -87,8 +92,7 @@ class Compra_insumos
     if ( !empty($idcompra_proyecto) ) {
       //Eliminamos todos los permisos asignados para volverlos a registrar
       $sqldel = "DELETE FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";
-      $delete_compra = ejecutarConsulta($sqldel);
-      if ($delete_compra['status'] == false) { return $delete_compra; }
+      $delete_compra = ejecutarConsulta($sqldel);  if ($delete_compra['status'] == false) { return $delete_compra; }
 
       $sql = "UPDATE compra_por_proyecto SET idproyecto = '$idproyecto', idproveedor = '$idproveedor', fecha_compra = '$fecha_compra',
       tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie_comprobante', val_igv = '$val_igv', descripcion = '$descripcion',
@@ -104,8 +108,14 @@ class Compra_insumos
 
       while ($num_elementos < count($idproducto)) {
         $subtotal_producto = (floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos])) - $descuento[$num_elementos];
-        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
-        VALUES ('$idcompra_proyecto', '$idproducto[$num_elementos]', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+
+        // buscando grupo
+        $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$num_elementos]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
+        $grupo =  ejecutarConsultaSimpleFila($sql_4); if ($grupo['status'] == false) { return  $grupo;}
+        $id_grupo = (empty($grupo['data']) ? 1 : (empty($grupo['data']['idclasificacion_grupo']) ? 1 : $grupo['data']['idclasificacion_grupo'] ) );
+
+        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto,	idclasificacion_grupo, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
+        VALUES ('$idcompra_proyecto', '$idproducto[$num_elementos]', '$id_grupo', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]','" . $_SESSION['idusuario'] . "')";
         $detalle_compra = ejecutarConsulta_retornarID($sql_detalle); if ($detalle_compra['status'] == false) { return $detalle_compra; }
 
         //add registro en nuestra bitacora.
@@ -131,10 +141,10 @@ class Compra_insumos
     if ($compra['status'] == false) { return $compra; }
 
     $sql_2 = "SELECT 	dc.idproducto, dc.ficha_tecnica_producto, dc.cantidad, dc.precio_sin_igv, dc.igv, dc.precio_con_igv,
-		dc.descuento,	p.nombre as nombre_producto, p.imagen, dc.unidad_medida, dc.color
-		FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c
-		WHERE idcompra_proyecto='$id_compras_x_proyecto' AND  dc.idproducto=p.idproducto AND p.idcolor = c.idcolor 
-    AND p.idunidad_medida = um.idunidad_medida;";
+		dc.descuento,	p.nombre as nombre_producto, p.imagen, dc.unidad_medida, dc.color, ciaf.nombre AS categoria
+		FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+		WHERE p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND  dc.idproducto=p.idproducto AND p.idcolor = c.idcolor 
+    AND p.idunidad_medida = um.idunidad_medida and idcompra_proyecto='$id_compras_x_proyecto';";
 
     $producto = ejecutarConsultaArray($sql_2);
     if ($producto['status'] == false) { return $producto;  }
@@ -336,202 +346,6 @@ class Compra_insumos
 
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O S ::::::::::::::::::::::::::::::::::::::::: 
 
-  public function insertar_pago( $idcompra_proyecto_p,  $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, $cuenta_destino_pago,
-    $banco_pago, $titular_cuenta_pago, $fecha_pago,  $monto_pago,  $numero_op_pago,  $descripcion_pago, $imagen1  ) {
-    // var_dump($idcompra_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago, $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();
-    $sql = "INSERT INTO pago_compras (idcompra_proyecto, idproveedor, beneficiario, forma_pago, tipo_pago, cuenta_destino, idbancos, titular_cuenta, fecha_pago, monto, numero_operacion, descripcion, imagen, user_created) 
-		VALUES ('$idcompra_proyecto_p',	'$idproveedor_pago', '$beneficiario_pago', '$forma_pago', '$tipo_pago', '$cuenta_destino_pago',
-		'$banco_pago', '$titular_cuenta_pago', '$fecha_pago', '$monto_pago', '$numero_op_pago',	'$descripcion_pago', '$imagen1','" . $_SESSION['idusuario'] . "')";
-		$insertar =  ejecutarConsulta_retornarID($sql); 
-		if ($insertar['status'] == false) {  return $insertar; } 
-		
-		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_compras','".$insertar['data']."','Nuevo pago compras','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
-
-                return $insertar;
-  }
-  
-  //Implementamos un método para editar registros
-  public function editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago,
-    $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 ) {
-    // var_dump($idcompra_proyecto_p,$idproveedor_pago,$beneficiario_pago,$forma_pago,$tipo_pago,$cuenta_destino_pago,$banco_pago, $titular_cuenta_pago,$fecha_pago,$monto_pago,$numero_op_pago,$descripcion_pago,$imagen1);die();
-    
-    $sql = "UPDATE pago_compras SET
-		idcompra_proyecto ='$idcompra_proyecto_p',
-		idproveedor='$idproveedor_pago',
-		beneficiario='$beneficiario_pago',
-		forma_pago='$forma_pago',
-		tipo_pago='$tipo_pago',
-		cuenta_destino='$cuenta_destino_pago',
-		idbancos='$banco_pago',
-		titular_cuenta='$titular_cuenta_pago',
-		fecha_pago='$fecha_pago',
-		monto='$monto_pago',
-		numero_operacion='$numero_op_pago',
-		descripcion='$descripcion_pago',
-		imagen='$imagen1',
-    user_updated= '" . $_SESSION['idusuario'] . "'
-		WHERE idpago_compras='$idpago_compras'";
-		$editar= ejecutarConsulta($sql);
-
-		if ($editar['status'] == false) {  return $editar; }
-
-    //add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_compras','$idpago_compras','Pago editado','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
-
-    return $editar;
-  }
-
-  //Listar pagos-normal
-  public function listar_pagos($idcompra_proyecto) {
-    //var_dump($idproyecto,$idmaquinaria);die();
-    $sql = "SELECT
-		ps.idpago_compras  as idpago_compras,
-		ps.forma_pago as forma_pago,
-		ps.tipo_pago as tipo_pago,
-		ps.beneficiario as beneficiario,
-		ps.cuenta_destino as cuenta_destino,
-		ps.titular_cuenta as titular_cuenta,
-		ps.fecha_pago as fecha_pago,
-		ps.descripcion as descripcion,
-		ps.idbancos as id_banco,
-		bn.nombre as banco,
-		ps.numero_operacion as numero_operacion,
-		ps.monto as monto,
-		ps.imagen as imagen,
-		ps.estado as estado
-		FROM pago_compras ps, bancos as bn 
-		WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos AND ps.estado = '1' AND ps.estado_delete = '1'
-    ORDER BY ps.fecha_pago DESC";
-    return ejecutarConsulta($sql);
-  }
-
-  //Listar pagos1-con detraccion --tabla Proveedor
-  public function listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago) {
-    //var_dump($idproyecto,$idmaquinaria);die();
-    $sql = "SELECT ps.idpago_compras  as idpago_compras,
-    ps.forma_pago as forma_pago,
-    ps.tipo_pago as tipo_pago,
-    ps.beneficiario as beneficiario,
-    ps.cuenta_destino as cuenta_destino,
-    ps.titular_cuenta as titular_cuenta,
-    ps.fecha_pago as fecha_pago,
-    ps.descripcion as descripcion,
-    ps.idbancos as id_banco,
-    bn.nombre as banco,
-    ps.numero_operacion as numero_operacion,
-    ps.monto as monto,
-    ps.imagen as imagen,
-    ps.estado as estado
-    FROM pago_compras ps, bancos as bn 
-    WHERE ps.idcompra_proyecto='$idcompra_proyecto' AND bn.idbancos=ps.idbancos AND ps.tipo_pago='$tipo_pago' AND ps.estado ='1' AND ps.estado_delete ='1'
-    ORDER BY ps.fecha_pago DESC";
-    return ejecutarConsulta($sql);
-  }
-
-  //Implementamos un método para desactivar categorías
-  public function desactivar_pagos($idpago_compras) {
-    //var_dump($idpago_compras);die();
-    $sql = "UPDATE pago_compras SET estado='0',user_trash= '" . $_SESSION['idusuario'] . "' WHERE idpago_compras ='$idpago_compras'";
-		$desactivar= ejecutarConsulta($sql);
-
-		if ($desactivar['status'] == false) {  return $desactivar; }
-		
-		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_compras','".$idpago_compras."','Pago compra desactivado','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
-		
-		return $desactivar;
-  }
-
-  //Implementamos un método para activar categorías
-  public function activar_pagos($idpago_compras) {
-    $sql = "UPDATE pago_compras SET estado='1' WHERE idpago_compras ='$idpago_compras'";
-    return ejecutarConsulta($sql);
-  }
-
-  //Implementamos un método para activar categorías
-  public function eliminar_pagos($idpago_compras) {
-    $sql = "UPDATE pago_compras SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "' WHERE idpago_compras ='$idpago_compras'";
-		$eliminar =  ejecutarConsulta($sql);
-		if ( $eliminar['status'] == false) {return $eliminar; }  
-		
-		//add registro en nuestra bitacora
-		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('pago_compras','$idpago_compras','Pago compra Eliminado','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
-		
-		return $eliminar;
-  }
-
-  //Mostrar datos para editar Pago servicio.
-  public function mostrar_pagos($idpago_compras) {
-
-    $sql = "SELECT
-		ps.idpago_compras as idpago_compras,
-		ps.idcompra_proyecto as idcompra_proyecto,
-		ps.idproveedor as idproveedor,
-		ps.forma_pago as forma_pago,
-		ps.tipo_pago as tipo_pago,
-		ps.beneficiario as beneficiario,
-		ps.cuenta_destino as cuenta_destino,
-		ps.titular_cuenta as titular_cuenta,
-		ps.fecha_pago as fecha_pago,
-		ps.descripcion as descripcion,
-		ps.idbancos as id_banco,
-		bn.nombre as banco,
-		ps.numero_operacion as numero_operacion,
-		ps.monto as monto,
-		ps.imagen as imagen,
-		ps.estado as estado
-		FROM pago_compras ps, bancos as bn
-		WHERE idpago_compras='$idpago_compras' AND ps.idbancos = bn.idbancos";
-    return ejecutarConsultaSimpleFila($sql);
-  }
-
-  // consulta para totales sin detracion
-  public function suma_total_pagos($idcompra_proyecto) {
-
-    $sql = "SELECT SUM(ps.monto) as total_monto
-		FROM pago_compras as ps
-		WHERE  ps.idcompra_proyecto='$idcompra_proyecto' AND ps.estado='1' AND ps.estado_delete='1'";
-    return ejecutarConsultaSimpleFila($sql);
-  }
-
-  //consultas para totales con detracion
-  public function suma_total_pagos_detraccion($idcompra_proyecto, $tipopago) {
-
-    $sql = "SELECT SUM(ps.monto) as total_montoo
-		FROM pago_compras as ps
-		WHERE  ps.idcompra_proyecto='$idcompra_proyecto' AND ps.tipo_pago='$tipopago' AND ps.estado='1' AND ps.estado_delete='1'";
-    return ejecutarConsultaSimpleFila($sql);
-  }
-
-  public function total_costo_parcial_pago($idmaquinaria, $idproyecto) {
-
-    $sql = "SELECT SUM(s.costo_parcial) as costo_parcial  
-		FROM servicio as s 
-		WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado='1'";
-
-    return ejecutarConsultaSimpleFila($sql);
-  }
-  
-  // obtebnemos los DOCS para eliminar
-  public function obtenerComprobanteCompra($idpago_compras) {
-
-    $sql = "SELECT imagen FROM pago_compras WHERE idpago_compras='$idpago_compras'";
-
-    return ejecutarConsulta($sql);
-  }
-
-  //mostrar datos del proveedor y maquina en form
-  public function most_datos_prov_pago($idcompra_proyecto) {
-
-    $sql = " SELECT * FROM compra_por_proyecto as cpp, proveedor as p  
-    WHERE cpp.idproveedor=p.idproveedor AND cpp.idcompra_proyecto='$idcompra_proyecto'";
-    return ejecutarConsultaSimpleFila($sql);
-  }
 
   // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
   public function tbla_comprobantes($id_compra) {

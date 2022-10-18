@@ -25,7 +25,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['valorizacion']==1){
+          if ($_SESSION['valorizacion_fierro']==1){
             //require 'enmantenimiento.php';
             ?>
 
@@ -37,14 +37,14 @@
                   <div class="row mb-2">
                     <div class="col-sm-6">
                       <h1 >
-                        <span class="h1-titulo">Valorización</span>                         
+                        <span class="h1-titulo">Fierro</span>                         
                       </h1> 
                       
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="valorizacion.php">Home</a></li>
-                        <li class="breadcrumb-item active">Valorización</li>
+                        <li class="breadcrumb-item active">Fierro</li>
                       </ol>
                     </div>
                   </div>

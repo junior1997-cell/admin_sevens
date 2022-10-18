@@ -19,22 +19,22 @@
 
       $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
-      $idproducto = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "";
-      $idcategoria = isset($_POST["idcategoria_insumos_af"]) ? limpiarCadena($_POST["idcategoria_insumos_af"]) : "";
+      // input no usados        
+      $idcategoria    = isset($_POST["categoria_insumos_af"]) ? limpiarCadena($_POST["categoria_insumos_af"]) : "" ;
+      $color          = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "" ;    
+      $modelo         = isset($_POST["modelo"]) ? encodeCadenaHtml($_POST["modelo"]) : "" ;
+      $serie          = isset($_POST["serie"]) ? limpiarCadena($_POST["serie"]) : "" ;      
+      $estado_igv     = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "" ;
+      $precio_unitario= isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "" ;      
+      $precio_sin_igv = isset($_POST["precio_sin_igv"]) ? limpiarCadena($_POST["precio_sin_igv"]) : "" ;
+      $precio_igv     = isset($_POST["precio_igv"]) ? limpiarCadena($_POST["precio_igv"]) : "" ;
+      $precio_total   = isset($_POST["precio_total"]) ? limpiarCadena($_POST["precio_total"]) : "" ;      
 
-      $nombre = isset($_POST["nombre_material"]) ? encodeCadenaHtml($_POST["nombre_material"] ) : "";
-      $modelo = isset($_POST["modelo"]) ? encodeCadenaHtml($_POST["modelo"] ) : "";
-      $serie = isset($_POST["serie"]) ? encodeCadenaHtml($_POST["serie"] ) : "";
-      $marca = isset($_POST["marcas"]) ? $_POST["marcas"] : "";         
-      $unidad_medida = isset($_POST["unidad_medida"]) ? limpiarCadena($_POST["unidad_medida"]) : "";
-      $color = isset($_POST["color"]) ? limpiarCadena($_POST["color"]) : "";
-      $descripcion = isset($_POST["descripcion_material"]) ? encodeCadenaHtml($_POST["descripcion_material"]) : "";   
-
-      $precio_unitario = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
-      $estado_igv = isset($_POST["estado_igv"]) ? limpiarCadena($_POST["estado_igv"]) : "";
-      $precio_real = isset($_POST["precio_sin_igv"]) ? limpiarCadena($_POST["precio_sin_igv"]) : "";
-      $monto_igv = isset($_POST["precio_igv"]) ? limpiarCadena($_POST["precio_igv"]) : "";      
-      $total_precio = isset($_POST["precio_con_igv"]) ? limpiarCadena($_POST["precio_con_igv"]) : "";     
+      // input usados
+      $idproducto     = isset($_POST["idproducto"]) ? limpiarCadena($_POST["idproducto"]) : "" ;
+      $nombre         = isset($_POST["nombre"]) ? encodeCadenaHtml($_POST["nombre"]) : "" ;      
+      $unidad_medida  = isset($_POST["unidad_medida"]) ? limpiarCadena($_POST["unidad_medida"]) : "" ;      
+      $descripcion    = isset($_POST["descripcion"]) ? encodeCadenaHtml($_POST["descripcion"]) : "" ; 
 
       $imagen1 = isset($_POST["imagen1"]) ? limpiarCadena($_POST["imagen1"]) : "";
       $imagen_ficha = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : ""; 
@@ -80,7 +80,7 @@
 
           if (empty($idproducto)) {
             
-            $rspta = $materiales->insertar($idcategoria, $nombre, $modelo, $serie, $_POST['marcas'], $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
+            $rspta = $materiales->insertar($nombre, $idcategoria, $unidad_medida, $_POST["marcas"], $descripcion, $color, $modelo, $serie, $estado_igv, $precio_unitario, $precio_sin_igv, $precio_igv, $precio_total, $ficha_tecnica, $imagen1);
             
             echo json_encode( $rspta, true);
 
@@ -88,16 +88,12 @@
 
             // validamos si existe LA IMG para eliminarlo
             if ($flat_img1 == true) {
-
               $datos_f1 = $materiales->obtenerImg($idproducto);
               $img1_ant = $datos_f1['data']['imagen'];
-
-              if ( validar_url_completo($scheme_host. "dist/docs/material/img_perfil/" . $img1_ant)  == 200) {
-                unlink("../dist/docs/material/img_perfil/" . $img1_ant);
-              }
+              if ( !empty($img1_ant) ) { unlink("../dist/docs/material/img_perfil/" . $img1_ant); }
             }
              
-            $rspta = $materiales->editar($idproducto, $idcategoria, $nombre, $modelo, $serie, $marca, $precio_unitario, $descripcion, $imagen1, $ficha_tecnica, $estado_igv, $monto_igv, $precio_real, $unidad_medida, $color, $total_precio);
+            $rspta = $materiales->editar($idproducto, $nombre, $idcategoria, $unidad_medida, $_POST["marcas"], $descripcion, $color, $modelo, $serie, $estado_igv, $precio_unitario, $precio_sin_igv, $precio_igv, $precio_total, $ficha_tecnica, $imagen1);
             
             echo json_encode( $rspta, true) ;
           }
@@ -158,12 +154,13 @@
                     <span class="description">' . '...</span>
                   </div>',
                 "4" => $reg['nombre_medida'],
-                "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 65px;" >'. $reg['detalle_marca'] .'</div>',  
+                "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['marca'] .'</div>',  
                 "6" => $reg['promedio_precio'],
-                "7" => $ficha_tecnica . $toltip,                
+                "7" => $ficha_tecnica . $toltip, 
+                               
                 "8" => decodeCadenaHtml($reg['nombre']),
                 "9" => $reg['descripcion'],
-                "10" => $reg['detalle_marca_export'],
+                "10" => $reg['marca_export'],
               ];
             }
   

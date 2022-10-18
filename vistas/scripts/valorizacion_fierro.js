@@ -71,7 +71,7 @@ function ver_quincenas(nube_idproyecto) {
         
       if (e.data.fecha_valorizacion == "quincenal") {
 
-        $(".h1-titulo").html("Valorización - Quincenal");
+        $(".h1-titulo").html("Fierro - Quincenal");
         var fechas_btn = fechas_valorizacion_quincena(e.data.fecha_inicio, e.data.fecha_fin); 
         //console.log(fechas_btn);  
 
@@ -85,7 +85,7 @@ function ver_quincenas(nube_idproyecto) {
 
         if (e.data.fecha_valorizacion == "mensual") {
 
-          $(".h1-titulo").html("Valorización - Mensual");
+          $(".h1-titulo").html("Fierro - Mensual");
 
           var fechas_btn = fechas_valorizacion_mensual(e.data.fecha_inicio, e.data.fecha_fin); 
           //console.log(fechas_btn);  
@@ -101,7 +101,7 @@ function ver_quincenas(nube_idproyecto) {
 
           if (e.data.fecha_valorizacion == "al finalizar") {
 
-            $(".h1-titulo").html("Valorización - Al finalizar");
+            $(".h1-titulo").html("Fierro - Al finalizar");
 
             $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="buscar_documento('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
             $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
@@ -135,6 +135,7 @@ function ver_quincenas(nube_idproyecto) {
 
 //Función limpiar
 function limpiar_form_fierro() {
+  $("#idfierro_por_valorizacions").val("");
   $("#nombre_doc").val("");
 
   $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
