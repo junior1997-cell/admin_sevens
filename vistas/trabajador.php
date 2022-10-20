@@ -15,8 +15,13 @@
         <title>Trabajadores por Proyecto | Admin Sevens</title>
 
         <?php $title = "Trabajadores"; require 'head.php'; ?>
-
-      </head>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+        <style>
+          #sortable { list-style-type: none !important; margin: 0 !important; padding: 0 !important; width: 60% !important; }
+          #sortable li { margin: 0 3px 3px 3px !important; padding: 0.4em !important; padding-left: 1.5em !important; font-size: 1.4em !important; height: 18px !important; }
+          #sortable li span { position: absolute !important; margin-left: -1.3em !important; }
+        </style>
+      </head> 
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
@@ -56,6 +61,7 @@
                         <div class="card-header">
                           <h3 class="card-title">
                             <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(2);"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-info"  onclick="ver_lista_orden();"><i class="fa-solid fa-arrow-down-short-wide"></i> Ordenar</button>
                             Administra de manera eficiente a los trabajdores
                           </h3>
                         </div>
@@ -363,7 +369,7 @@
                         </button>
                       </div>
 
-                      <div class="modal-body">
+                      <div class="modal-body ">
                         <!-- form start -->
                         <form id="form-all-trabajador" name="form-all-trabajador" method="POST">
                           <div class="card-body">
@@ -647,6 +653,39 @@
                   </div>
                 </div>
 
+                <!-- MODAL - ORNDENAR-->
+                <div class="modal fade" id="modal-order-trabajador">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Datos trabajador</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                       
+                        <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_valorizacion" style="border-spacing: collapse !important; border-spacing: 0 !important;" >
+                          <thead>                             
+                            <tr class="text-center bg-color-48acc6"> 
+                              <th class="pt-1 pb-1 celda-b-b-2px">#</th> 
+                              <th class="pt-1 pb-1 celda-b-b-2px">Nombre</th> 
+                            </tr>
+                          </thead>
+                          <tbody id="html_order_trabajador">  </tbody>
+                          
+                        </table>
+                        
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_orden_trabajador">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </section>
               <!-- /.content -->
             </div>
@@ -665,9 +704,12 @@
         <!-- moment LOCALE -->
         <script src="../plugins/moment/locales.js"></script>
 
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="https://raw.githubusercontent.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js"></script>
+
         <script type="text/javascript" src="scripts/trabajador.js"></script>
 
-        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
+        <script>  $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         
       </body>
     </html>

@@ -27,6 +27,9 @@ function init() {
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_all_trabajador").on("click", function (e) {  $("#submit-form-all-trabajador").submit(); }); 
 
+  $("#guardar_registro_orden_trabajador").on("click", function (e) {  $("#submit-form-all-trabajador").submit(); }); 
+  $("#form-orden-trabajador").on("submit",function(e) { guardar_y_editar_orden_trabajador(e);	});
+
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#trabajador").select2({ templateResult: templateTrabajador, theme: "bootstrap4", placeholder: "Selecione trabajador", allowClear: true, });
   $("#desempenio").select2({ theme: "bootstrap4", placeholder: "Selecione desempeño", allowClear: true, });
@@ -823,6 +826,85 @@ function guardar_y_editar_all_trabajador(e) {
           $("#modal-agregar-all-trabajador").modal("hide"); 
           cant_banco_multimple = 1; 
 
+        }else{
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+
+      $("#guardar_registro_all_trabajador").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_all_trabajador").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress").css({ width: "0%",  });
+      $("#barra_progress").text("0%");
+    },
+    complete: function () {
+      $("#barra_progress").css({ width: "0%", });
+      $("#barra_progress").text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+// .....::::::::::::::::::::::::::::::::::::: ORDEN TRABAJADOR  :::::::::::::::::::::::::::::::::::::::..
+function ver_lista_orden() {
+  $('#modal-order-trabajador').modal('show');
+  $('#html_order_trabajador').html(`<tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`)
+  
+  $.post("../ajax/trabajador.php?op=ver_lista_orden", {'idproyecto': localStorage.getItem('nube_idproyecto')},  function (e, status) {
+      e = JSON.parse(e);  console.log(e);
+      if (e.status == true) {
+        var html_data = '';
+        e.data.forEach((val, key) => {
+          html_data = html_data.concat(`<tr class="cursor-pointer"> 
+            <td class="py-1 text-center">${key + 1}</td> 
+            <td class="py-1">
+              <div class="user-block">
+                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'">
+                <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
+                <span class="description">${val.tipo_documento}: ${val.numero_documento}</span>
+              </div>
+              <input type="hidden" name="td_order_trabajador" value="${val.idtrabajador_por_proyecto}">
+            </td> 
+          </tr>`);
+        });
+        $('#html_order_trabajador').html(`<form id="form-orden-trabajador" name="form-orden-trabajador" method="POST"> ${html_data} <button type="submit" style="display: none;" id="submit-form-orden-trabajador">Submit</button></form>`);
+        $( "#html_order_trabajador" ).sortable();
+      }else{
+        ver_errores(e);
+      }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+//Función para guardar o editar
+function guardar_y_editar_orden_trabajador(e) {
+  e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-orden-trabajador")[0]);
+
+  $.ajax({
+    url: "../ajax/trabajador.php?op=guardar_y_editar_orden_trabajador",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e); 
+        if (e.status == true) {	          
+          Swal.fire("Correcto!", "All-Trabajador guardado correctamente", "success");          
+          $("#modal-agregar-all-trabajador").modal("hide"); 
         }else{
           ver_errores(e);
         }

@@ -121,36 +121,42 @@ table th { vertical-align: top !important; }
 
 .table-dias th{ margin: 0.15rem 0rem 0rem 0rem !important; border: black 1px solid; text-align: center !important; }
 
+.celda-b-t-0px{ border-top: white 0px solid !important; }
 .celda-b-t-1px{ border-top: black 1px solid !important; }
 .celda-b-t-2px{ border-top: black 2px solid !important; }
 .celda-b-t-3px{ border-top: black 3px solid !important; }
 .celda-b-t-4px{ border-top: black 4px solid !important; }
 .celda-b-t-5px{ border-top: black 5px solid !important; }
 
+.celda-b-b-0px{ border-bottom: white 0px solid !important; }
 .celda-b-b-1px{ border-bottom: black 1px solid !important; }
 .celda-b-b-2px{ border-bottom: black 2px solid !important; }
 .celda-b-b-3px{ border-bottom: black 3px solid !important; }
 .celda-b-b-4px{ border-bottom: black 4px solid !important; }
 .celda-b-b-5px{ border-bottom: black 5px solid !important; }
 
+.celda-b-r-0px{ border-right: white 0px solid !important; }
 .celda-b-r-1px{ border-right: black 1px solid !important; }
 .celda-b-r-2px{ border-right: black 2px solid !important; }
 .celda-b-r-3px{ border-right: black 3px solid !important; }
 .celda-b-r-4px{ border-right: black 4px solid !important; }
 .celda-b-r-5px{ border-right: black 5px solid !important; }
 
+.celda-b-l-0px{ border-left: white 0px solid !important; }
 .celda-b-l-1px{ border-left: black 1px solid !important; }
 .celda-b-l-2px{ border-left: black 2px solid !important; }
 .celda-b-l-3px{ border-left: black 3px solid !important; }
 .celda-b-l-4px{ border-left: black 4px solid !important; }
 .celda-b-l-5px{ border-left: black 5px solid !important; }
 
+.celda-b-y-0px{ border-top: white 0px solid !important; border-bottom: white 0px solid !important;}
 .celda-b-y-1px{ border-top: black 1px solid !important; border-bottom: black 1px solid !important;}
 .celda-b-y-2px{ border-top: black 2px solid !important; border-bottom: black 2px solid !important;}
 .celda-b-y-3px{ border-top: black 3px solid !important; border-bottom: black 3px solid !important;}
 .celda-b-y-4px{ border-top: black 4px solid !important; border-bottom: black 4px solid !important;}
 .celda-b-y-5px{ border-top: black 5px solid !important; border-bottom: black 5px solid !important;}
 
+.celda-b-x-0px{ border-left: white 0px solid !important; border-right: white 0px solid !important;}
 .celda-b-x-1px{ border-left: black 1px solid !important; border-right: black 1px solid !important;}
 .celda-b-x-2px{ border-left: black 2px solid !important; border-right: black 2px solid !important;}
 .celda-b-x-3px{ border-left: black 3px solid !important; border-right: black 3px solid !important;}

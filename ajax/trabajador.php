@@ -182,6 +182,14 @@
  
         break;  
 
+        case 'ver_lista_orden':
+
+          $rspta=$trabajadorproyecto->tbla_principal($idproyecto, 1);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+
+        break;
+
         // :::::::::::::::::::::::::::::::::::::::::::::::: ALL-TRABAJADOR ::::::::::::::::::::::::::::::::::::::::::::::::
         
         case 'mostrar_editar_trabajador':         
