@@ -33,11 +33,11 @@
             require 'nav.php';
             require 'aside.php';
             if ($_SESSION['grafico_valorizacion']==1){
-              //require 'enmantenimiento.php';
+              require 'enmantenimiento.php';
               ?>
 
               <!-- Content Wrapper. Contains page content -->
-              <div class="content-wrapper">
+              <div class="content-wrapper hidden">
                 <!-- Content Header (Page header) -->
                 <div class="content-header">
                   <div class="container-fluid">

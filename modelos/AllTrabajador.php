@@ -10,7 +10,7 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci,  $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
+    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci,  $titular_cuenta, $tipo, $desempenio, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
       $sw = Array();
       $sql_0 = "SELECT t.nombres, t.tipo_documento, t.numero_documento, tip.nombre as tipo, t.estado, t.estado_delete, t.fecha_nacimiento, t.edad
       FROM trabajador as t, tipo_trabajador as tip
@@ -19,13 +19,13 @@
       
       if ( empty($existe['data']) ) {
 
-        $sql_2="INSERT INTO trabajador ( nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, titular_cuenta, direccion, telefono, email, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso, idtipo_trabajador , ruc, cv_documentado, cv_no_documentado,user_created)
-        VALUES ( '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$titular_cuenta', '$direccion', '$telefono', '$email', '$imagen1', '$imagen2', '$imagen3', '$tipo', '$ruc', '$cv_documentado', '$cv_nodocumentado','" . $_SESSION['idusuario'] . "')";
+        $sql_2="INSERT INTO trabajador ( idtipo_trabajador, idocupacion, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, titular_cuenta, direccion, telefono, email,  ruc, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso,  cv_documentado, cv_no_documentado,user_created)
+        VALUES ( '$tipo', '$ocupacion', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$titular_cuenta', '$direccion', '$telefono', '$email', '$ruc', '$imagen1', '$imagen2', '$imagen3', '$cv_documentado', '$cv_nodocumentado','" . $_SESSION['idusuario'] . "')";
         $new_trabajador = ejecutarConsulta_retornarID($sql_2);  if ($new_trabajador['status'] == false) { return $new_trabajador;}
         
-        foreach ($ocupacion as $key => $value) {
-          $sql_3 = "INSERT INTO detalle_ocupacion( idtrabajador, idocupacion) VALUES ('".$new_trabajador['data']."','$value')";
-          $insert_ocupacion = ejecutarConsulta($sql_3);  if ($insert_ocupacion['status'] == false) { return  $insert_ocupacion;}
+        foreach ($desempenio as $key => $value) {
+          $sql_3 = "INSERT INTO detalle_desempenio( idtrabajador, iddesempenio) VALUES ('".$new_trabajador['data']."','$value')";
+          $insert_desempenio = ejecutarConsulta($sql_3);  if ($insert_desempenio['status'] == false) { return  $insert_desempenio;}
         }
         
         //add registro en nuestra bitacora
@@ -74,20 +74,20 @@
     }
 
     //Implementamos un método para editar registros $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado
-    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
-      $sql="UPDATE trabajador SET nombres='$nombre', tipo_documento='$tipo_documento', numero_documento='$num_documento', fecha_nacimiento='$nacimiento', edad='$edad',  titular_cuenta='$titular_cuenta',direccion='$direccion', 
+    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci, $titular_cuenta, $tipo, $desempenio, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
+      $sql="UPDATE trabajador SET idocupacion = '$ocupacion', nombres='$nombre', tipo_documento='$tipo_documento', numero_documento='$num_documento', fecha_nacimiento='$nacimiento', edad='$edad',  titular_cuenta='$titular_cuenta',direccion='$direccion', 
       telefono='$telefono', email='$email', imagen_perfil ='$imagen1', imagen_dni_anverso ='$imagen2', imagen_dni_reverso ='$imagen3',
       idtipo_trabajador ='$tipo',  ruc='$ruc', cv_documentado='$cv_documentado', 
       cv_no_documentado='$cv_nodocumentado', user_updated= '" . $_SESSION['idusuario'] . "'
       WHERE idtrabajador='$idtrabajador'";	      
       $trabajdor = ejecutarConsulta($sql);  if ($trabajdor['status'] == false) { return  $trabajdor;}
 
-      $sql ="DELETE FROM detalle_ocupacion WHERE idtrabajador= '$idtrabajador'";
-      $delete_ocupacion = ejecutarConsulta($sql);  if ($delete_ocupacion['status'] == false) { return  $delete_ocupacion;}
+      $sql ="DELETE FROM detalle_desempenio WHERE idtrabajador= '$idtrabajador'";
+      $delete_desempenio = ejecutarConsulta($sql);  if ($delete_desempenio['status'] == false) { return  $delete_desempenio;}
 
-      foreach ($ocupacion as $key => $value) {
-        $sql = "INSERT INTO detalle_ocupacion( idtrabajador, idocupacion) VALUES ('$idtrabajador','$value')";
-        $insert_ocupacion = ejecutarConsulta($sql);  if ($insert_ocupacion['status'] == false) { return  $insert_ocupacion;}
+      foreach ($desempenio as $key => $value) {
+        $sql = "INSERT INTO detalle_desempenio( idtrabajador, iddesempenio) VALUES ('$idtrabajador','$value')";
+        $insert_desempenio = ejecutarConsulta($sql);  if ($insert_desempenio['status'] == false) { return  $insert_desempenio;}
       }
 
       #eliminar
@@ -174,7 +174,7 @@
 
     //Implementar un método para mostrar los datos de un registro a modificar
     public function mostrar($idtrabajador) {
-      $array_ocupacion = [];
+      $array_desempenio = [];
       $sql="SELECT * FROM trabajador WHERE idtrabajador='$idtrabajador'";
       $trabajador = ejecutarConsultaSimpleFila($sql);
       if ($trabajador['status'] == false) { return  $trabajador;}
@@ -185,24 +185,25 @@
       $bancos = ejecutarConsultaArray($sql2);
       if ($bancos['status'] == false) { return  $bancos;}
 
-      $sql3 = "SELECT  doc.idocupacion 
-      FROM detalle_ocupacion as doc, trabajador as t, ocupacion as o  
-      WHERE doc.idtrabajador = t.idtrabajador AND doc.idocupacion = o.idocupacion AND t.idtrabajador = '$idtrabajador';";
-      $detalle_ocupacion = ejecutarConsultaArray($sql3);
-      if ($detalle_ocupacion['status'] == false) { return  $detalle_ocupacion;}
-      foreach ($detalle_ocupacion['data'] as $key => $value) {
-        array_push($array_ocupacion, $value['idocupacion'] ); 
+      $sql3 = "SELECT  doc.iddesempenio 
+      FROM detalle_desempenio as doc, trabajador as t, desempenio as o  
+      WHERE doc.idtrabajador = t.idtrabajador AND doc.iddesempenio = o.iddesempenio AND t.idtrabajador = '$idtrabajador';";
+      $detalle_desempenio = ejecutarConsultaArray($sql3);
+      if ($detalle_desempenio['status'] == false) { return  $detalle_desempenio;}
+      foreach ($detalle_desempenio['data'] as $key => $value) {
+        array_push($array_desempenio, $value['iddesempenio'] ); 
       }
 
-      return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>['trabajador'=>$trabajador['data'], 'bancos'=>$bancos['data'], 'detalle_ocupacion'=>$array_ocupacion]];
+      return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>['trabajador'=>$trabajador['data'], 'bancos'=>$bancos['data'], 'detalle_desempenio'=>$array_desempenio]];
     }
 
     //Implementar un método para mostrar los datos de un registro a modificar
     public function verdatos($idtrabajador) {
       $sql="SELECT t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad,
       t.titular_cuenta, t.direccion, t.telefono, t.email, t.imagen_perfil as imagen_perfil, t.imagen_dni_anverso, t.cv_documentado, 
-      t.cv_no_documentado, t.imagen_dni_reverso as imagen_dni_reverso, tt.nombre as nombre_tipo_trabajador
-      FROM trabajador as t, tipo_trabajador as tt WHERE t.idtipo_trabajador = tt.idtipo_trabajador and t.idtrabajador='$idtrabajador' ";
+      t.cv_no_documentado, t.imagen_dni_reverso as imagen_dni_reverso, tt.nombre as nombre_tipo_trabajador, o.nombre_ocupacion 
+      FROM trabajador as t, tipo_trabajador as tt, ocupacion as o
+      WHERE t.idtipo_trabajador = tt.idtipo_trabajador and t.idocupacion = o.idocupacion and t.idtrabajador='$idtrabajador' ";
       $trabajador = ejecutarConsultaSimpleFila($sql); if ($trabajador['status'] == false) { return  $trabajador;}
 
       $sql2 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
@@ -210,22 +211,22 @@
       WHERE cbt.idbancos = b.idbancos AND cbt.idtrabajador='$idtrabajador' ORDER BY cbt.idcuenta_banco_trabajador ASC ;";
       $bancos = ejecutarConsultaArray($sql2);  if ($bancos['status'] == false) { return  $bancos;}
 
-      $sql3 = "SELECT doc.iddetalle_ocupacion, doc.idtrabajador, doc.idocupacion, o.nombre_ocupacion 
-      FROM detalle_ocupacion as doc, trabajador as t, ocupacion as o  
-      WHERE doc.idtrabajador = t.idtrabajador AND doc.idocupacion = o.idocupacion AND t.idtrabajador = '$idtrabajador';";
-      $detalle_ocupacion = ejecutarConsultaArray($sql3);    if ($detalle_ocupacion['status'] == false) { return  $detalle_ocupacion;}
+      $sql3 = "SELECT doc.iddetalle_desempenio, doc.idtrabajador, doc.iddesempenio, o.nombre_desempenio 
+      FROM detalle_desempenio as doc, trabajador as t, desempenio as o  
+      WHERE doc.idtrabajador = t.idtrabajador AND doc.iddesempenio = o.iddesempenio AND t.idtrabajador = '$idtrabajador';";
+      $detalle_desempenio = ejecutarConsultaArray($sql3);    if ($detalle_desempenio['status'] == false) { return  $detalle_desempenio;}
 
-      $html_ocupacion = "";
-      foreach ($detalle_ocupacion['data'] as $key => $value2) {
-        $html_ocupacion .=  '<li >'.$value2['nombre_ocupacion'].'</li>';
+      $html_desempenio = "";
+      foreach ($detalle_desempenio['data'] as $key => $value2) {
+        $html_desempenio .=  '<li >'.$value2['nombre_desempenio'].'</li>';
       }
 
       return $retorno=['status'=>true, 'message'=>'todo oka ps', 
         'data'=>[
           'trabajador'=>$trabajador['data'], 
           'bancos'=>$bancos['data'], 
-          'detalle_ocupacion'=>$detalle_ocupacion['data'], 
-          'html_ocupacion'=> '<ol>'. $html_ocupacion . '</ol>'
+          'detalle_desempenio'=>$detalle_desempenio['data'], 
+          'html_desempenio'=> '<ol class="pl-3">'. $html_desempenio . '</ol>'
         ]
       ];
     }
@@ -234,9 +235,9 @@
     public function tbla_principal($estado) {
       $data = Array();
       $sql="SELECT t.idtrabajador,  t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.telefono, t.imagen_perfil,  
-      t.estado,  tt.nombre AS nombre_tipo, t.descripcion_expulsion
-      FROM trabajador AS t, tipo_trabajador as tt
-      WHERE  tt.idtipo_trabajador= t.idtipo_trabajador AND  t.estado = '$estado' AND t.estado_delete = '1' ORDER BY  t.nombres ASC ;";
+      t.estado,  tt.nombre AS nombre_tipo, t.descripcion_expulsion, o.nombre_ocupacion
+      FROM trabajador AS t, tipo_trabajador as tt, ocupacion as o
+      WHERE  tt.idtipo_trabajador= t.idtipo_trabajador AND t.idocupacion = o.idocupacion AND  t.estado = '$estado' AND t.estado_delete = '1' ORDER BY  t.nombres ASC ;";
       $trabajdor = ejecutarConsultaArray($sql);
       if ($trabajdor['status'] == false) { return  $trabajdor;}
 
@@ -248,14 +249,14 @@
         $bancos = ejecutarConsultaSimpleFila($sql2);
         if ($bancos['status'] == false) { return  $bancos;}
 
-        $sql3 = "SELECT doc.iddetalle_ocupacion, doc.idtrabajador, doc.idocupacion, o.nombre_ocupacion 
-        FROM detalle_ocupacion as doc, trabajador as t, ocupacion as o  
-        WHERE doc.idtrabajador = t.idtrabajador AND doc.idocupacion = o.idocupacion AND t.idtrabajador = '$id';";
-        $detalle_ocupacion = ejecutarConsultaArray($sql3); if ($detalle_ocupacion['status'] == false) { return  $detalle_ocupacion;}
+        $sql3 = "SELECT doc.iddetalle_desempenio, doc.idtrabajador, doc.iddesempenio, o.nombre_desempenio 
+        FROM detalle_desempenio as doc, trabajador as t, desempenio as o  
+        WHERE doc.idtrabajador = t.idtrabajador AND doc.iddesempenio = o.iddesempenio AND t.idtrabajador = '$id';";
+        $detalle_desempenio = ejecutarConsultaArray($sql3); if ($detalle_desempenio['status'] == false) { return  $detalle_desempenio;}
 
-        $html_ocupacion = "";
-        foreach ($detalle_ocupacion['data'] as $key => $value2) {
-          $html_ocupacion .=  '<li >'.$value2['nombre_ocupacion'].'. </li>';
+        $html_desempenio = "";
+        foreach ($detalle_desempenio['data'] as $key => $value2) {
+          $html_desempenio .=  '<li >'.$value2['nombre_desempenio'].'. </li>';
         }
 
         $data[] = array(
@@ -268,8 +269,9 @@
           'telefono'        => $value['telefono'], 
           'imagen_perfil'   => $value['imagen_perfil'],  
           'estado'          => $value['estado'],          
-          'nombre_tipo'     => $value['nombre_tipo'], 
-          'detalle_ocupacion'=> '<ol>'. $html_ocupacion . '</ol>',
+          'nombre_tipo'     => $value['nombre_tipo'],
+          'nombre_ocupacion'=> $value['nombre_ocupacion'], 
+          'html_desempenio' => '<ol class="pl-3">'. $html_desempenio . '</ol>',
           'descripcion_expulsion' =>$value['descripcion_expulsion'],
 
           'banco'           => (empty($bancos['data']) ? "": $bancos['data']['banco']), 

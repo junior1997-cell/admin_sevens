@@ -26,7 +26,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['concreto_agregado']==1){
+          if ($_SESSION['clasificacion_grupo']==1){
             //require 'enmantenimiento.php';
             ?>
 
@@ -58,8 +58,8 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-items" onclick="limpiar_form_item();"><i class="fas fa-plus-circle"></i> Agregar Grupo</button>
-                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-items" onclick="limpiar_form_item();"><i class="fas fa-eye"></i> Ver Grupo</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-grupo" onclick="limpiar_form_grupo();"><i class="fas fa-plus-circle"></i> Agregar Grupo</button>
+                            <button type="button" class="btn bg-gradient-info" data-toggle="modal" data-target="#modal-tabla-grupo" onclick="limpiar_form_grupo();"><i class="fas fa-eye"></i> Ver Grupo</button>
                             Admnistra de manera eficiente el Concreto y Agregado.
                           </h3>
                         </div>
@@ -109,7 +109,7 @@
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-2">
                                   <div class="form-group">
                                     <!-- <label for="filtros" >Tipo comprobante </label> -->
-                                    <select id="filtro_tipo_comprobante" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
+                                    <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
                                       <option value="0">Todos</option>
                                       <option value="Ninguno">Ninguno</option>
                                       <option value="Boleta">Boleta</option>
@@ -237,8 +237,8 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <!-- MODAL - ITEMS TABLA  -->
-                <div class="modal fade" id="modal-tabla-items">
+                <!-- MODAL - GRUPO TABLA  -->
+                <div class="modal fade" id="modal-tabla-grupo">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header"> 
@@ -250,16 +250,15 @@
 
                       <div class="modal-body row">
                         <div class="col-12">
-                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-items" onclick="limpiar_form_item();" >Agregar Item</button>
+                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-grupo" onclick="limpiar_form_grupo();" >Agregar Item</button>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
-                          <table id="tabla-items" class="table table-bordered table-striped display " style="width: 100% !important;">
+                          <table id="tabla-grupo" class="table table-bordered table-striped display " style="width: 100% !important;">
                             <thead>
                               <tr>
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                <!-- <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th> -->
                                 <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
                                 <th >Estado</th>
                                                         
@@ -271,7 +270,6 @@
                                 <th class="">#</th>
                                 <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
                                 <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                <!-- <th data-toggle="tooltip" data-original-title="Columna de Bombeado">Bombeado</th> -->
                                 <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
                                 <th >Estado</th>                                  
                               </tr>
@@ -288,7 +286,7 @@
                 </div>
 
                 <!-- MODAL -  AGREGAR ITEMS -->
-                <div class="modal fade bg-color-02020280" id="modal-agregar-items">
+                <div class="modal fade bg-color-02020280" id="modal-agregar-grupo">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -296,54 +294,33 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
-                      </div>
+                      </div> 
 
                       <div class="modal-body">
                         <!-- form start -->
-                        <form id="form-items" name="form-items" method="POST">
+                        <form id="form-grupo" name="form-grupo" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-1-fomulario">
                               <!-- id proyecto -->
                               <input type="hidden" name="idproyecto" id="idproyecto" />
                               <!-- id tabla -->
-                              <input type="hidden" name="idtipo_tierra" id="idtipo_tierra" />
+                              <input type="hidden" name="idclasificacion_grupo" id="idclasificacion_grupo" />
                               <!-- id categoria_insumos_af -->
                               <input type="hidden" name="modulo" id="modulo" value="Concreto y Agregado" />
 
                               <!-- Nombre -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
-                                  <label for="nombre_item">Nombre de Grupo <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="nombre_item" class="form-control" id="nombre_item" placeholder="Nombre del Item." />
+                                  <label for="nombre_grupo">Nombre de Grupo <sup class="text-danger">*</sup></label>
+                                  <input type="text" name="nombre_grupo" class="form-control" id="nombre_grupo" placeholder="Nombre del Item." />
                                 </div>
-                              </div>
-
-                              <!-- Columna Calidad -->
-                              <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="form-group">                              
-                                  <div class="custom-control custom-switch custom-switch-on-success">
-                                    <input type="checkbox" class="custom-control-input" name="columna_servicio_bombeado" id="columna_servicio_bombeado" value="1">
-                                    <label class="custom-control-label cursor-pointer" for="columna_servicio_bombeado">Columna Serv. de Bombeado</label>
-                                  </div>                               
-                                </div>
-                              </div> -->
-                              
-                              <!-- Columna Descipcion --> 
-                              <!-- <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <div class="form-group">
-                                  <label for="columna_descripcion">Columna Descripción </label>                                  
-                                  <div class="custom-control custom-switch custom-switch-on-success">
-                                    <input type="checkbox" class="custom-control-input"  name="columna_descripcion" id="columna_descripcion" value="1">
-                                    <label class="custom-control-label cursor-pointer" for="columna_descripcion"></label>
-                                  </div>                               
-                                </div>
-                              </div> -->
+                              </div>                              
 
                               <!-- Descripción -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="descripcion_item">Descripción </label> <br />
-                                  <textarea name="descripcion_item" id="descripcion_item" class="form-control" rows="2"></textarea>
+                                  <label for="descripcion_grupo">Descripción </label> <br />
+                                  <textarea name="descripcion_grupo" id="descripcion_grupo" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>
                               
@@ -369,134 +346,16 @@
                             <!-- /.cargando -->
                           </div>
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-items">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-grupo">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_item();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_items">Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_grupo();">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_grupo">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <!-- MODAL - AGREGAR CONCRETO -->
-                <div class="modal fade" id="modal-agregar-concreto">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Agregar: <b class="modal-title-detalle-items"></b> </h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-concreto" name="form-concreto" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-3-fomulario">
-                              <!-- id TIPO -->
-                              <input type="hidden" name="idtipo_tierra_c" id="idtipo_tierra_c" />
-                              <!-- id tabla -->
-                              <input type="hidden" name="idconcreto_agregado" id="idconcreto_agregado" />                              
-                              
-                              <!-- Proveedor -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="form-group">
-                                  <label for="idproveedor">Proveedor <sup class="text-danger">*</sup></label>
-                                  <select id="idproveedor" name="idproveedor" class="form-control select2" style="width: 100%;"> </select>
-                                </div>
-                              </div> 
-
-                              <!-- Fecha  -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="fecha">Fecha <sup class="text-danger">*</sup></label>
-                                  <input type="date" name="fecha" class="form-control" id="fecha" onchange="optener_dia_de_semana();" onkeyup="optener_dia_de_semana();" />
-                                </div>
-                              </div>
-
-                              <!-- Nombre dia -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="nombre_dia">Nombre dia <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="nombre_dia" class="form-control" id="nombre_dia" placeholder="Nombre dia." readonly />
-                                </div>
-                              </div>                              
-
-                              <!-- Cantidad -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                                <div class="form-group">
-                                  <label for="cantidad">Cantidad <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="cantidad" class="form-control" id="cantidad" placeholder="Cantidad." onchange="calcular_total();" onkeyup="calcular_total();" />
-                                </div>
-                              </div>                            
-
-                              <!-- Precio Parcial  -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                                <div class="form-group">
-                                  <label for="precio_unitario">Precio Parcial  <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="precio_unitario" class="form-control" id="precio_unitario" placeholder="Precio Parcial." onchange="calcular_total();" onkeyup="calcular_total();"  />
-                                </div>
-                              </div>
-
-                               <!-- Precio Total -->
-                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                                <div class="form-group">
-                                  <label for="total">Precio Total <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="total" class="form-control" id="total" placeholder="Precio Total." readonly />
-                                </div>
-                              </div>
-
-                              <!-- Calidad -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 calidad">
-                                <div class="form-group">
-                                  <label for="calidad">Calidad </label>
-                                  <input type="number" name="calidad" class="form-control" id="calidad" placeholder="Calidad." />
-                                </div>
-                              </div>
-
-                              <!-- Descripcion -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 descripcion_concreto">
-                                <div class="form-group">
-                                  <label for="descripcion_concreto">Descripción </label> <br />
-                                  <textarea name="descripcion_concreto" id="descripcion_concreto" class="form-control" rows="2"></textarea>
-                                </div>
-                              </div>
-                              
-                              <!-- barprogress -->
-                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="barra_progress_concreto_div">
-                                  <div id="barra_progress_concreto" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                    0%
-                                  </div>
-                                </div>
-                              </div>
-
-                            </div>
-                            <!-- /.cargando -->
-
-                            <div class="row" id="cargando-4-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
-                              </div>
-                            </div>
-                            <!-- /.cargando -->
-                          </div>
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-concreto">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_concreto();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_concreto">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>                 
+                </div>                       
 
                 <!-- MODAL - VER DETALLE ITEM-->
                 <div class="modal fade" id="modal-ver-detalle-item">
@@ -610,6 +469,39 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- MODAL - VER DETALLE SUBCONTRATO-->
+                <div class="modal fade" id="modal-ver-datos-sub-contrato">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Detalle SubContrato</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
+                      </div>
+
+                      <div class="modal-body">
+                        <div id="datos-sub-contrato" class="">
+                          <!-- vemos los datos del trabajador -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MDOAL - ver-comprobante-->
+                <div class="modal fade" id="modal-ver-comprobante-subontrato">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg ">
+                    <div class="modal-content">
+                      <div class="modal-header" >
+                        <h4 class="modal-title">Comprobante: <b class="tile-modal-comprobante-subontrato"></b></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
+                      </div>
+                      <div class="modal-body html-comprobante-subcontrato">
+                                       
+                      </div>
+                    </div>
+                  </div>
+                </div> 
 
               </section>
               <!-- /.content -->

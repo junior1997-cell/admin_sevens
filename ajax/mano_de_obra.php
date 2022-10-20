@@ -12,7 +12,7 @@
   } else {
 
     //Validamos el acceso solo al usuario logueado y autorizado.
-    if ($_SESSION['viatico'] == 1) {
+    if ($_SESSION['mano_obra'] == 1) {
 
       require_once "../modelos/Mano_de_obra.php";
 
@@ -72,7 +72,7 @@
           
           $cont=1;          
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $reg) {
 
               $data[]=array(
@@ -103,7 +103,6 @@
             echo json_encode($results,true);
             
           } else {
-
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
         

@@ -103,20 +103,17 @@ class Asistencia_obrero
 		atr.estado as estado, p.fecha_inicio AS fecha_inicio_proyect, tp.nombre AS tipo_trabajador, o.nombre_ocupacion as desempenio
 		FROM trabajador AS t, trabajador_por_proyecto AS tpp, tipo_trabajador AS tp, ocupacion as o, asistencia_trabajador AS atr,  proyecto AS p
 		WHERE t.idtrabajador = tpp.idtrabajador AND tpp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto 
-		AND tpp.idproyecto = p.idproyecto AND tpp.idtipo_trabajador = tp.idtipo_trabajador AND tpp.idocupacion = o.idocupacion
+		AND tpp.idproyecto = p.idproyecto AND t.idtipo_trabajador = tp.idtipo_trabajador AND t.idocupacion = o.idocupacion
     AND atr.estado = '1' AND atr.estado_delete = '1' AND tpp.idproyecto = '$nube_idproyecto' 
 		GROUP BY tpp.idtrabajador_por_proyecto ORDER BY t.nombres ASC;";
-    $agrupar_trabajdor = ejecutarConsultaArray($sql);
-
-    if ($agrupar_trabajdor['status'] == false) {  return $agrupar_trabajdor; }
+    $agrupar_trabajdor = ejecutarConsultaArray($sql);  if ($agrupar_trabajdor['status'] == false) {  return $agrupar_trabajdor; }
 
     foreach ($agrupar_trabajdor['data'] as $key => $value) {
       $sql_2 = "SELECT SUM(adicional_descuento) AS adicional_descuento, SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
 			SUM(total_dias_asistidos) AS total_dias_asistidos, SUM(pago_quincenal) AS pago_quincenal
 			FROM resumen_q_s_asistencia 
 			WHERE  estado = '1' AND estado_delete = '1' AND idtrabajador_por_proyecto = '" . $value['idtrabajador_por_proyecto'] . "';";
-      $sab = ejecutarConsultaSimpleFila($sql_2);
-      if ($sab['status'] == false) {  return $sab; }
+      $sab = ejecutarConsultaSimpleFila($sql_2);   if ($sab['status'] == false) {  return $sab; }
 
       $data_array[] = [
         'idtrabajador_por_proyecto' => $value['idtrabajador_por_proyecto'],
@@ -166,7 +163,7 @@ class Asistencia_obrero
     $sql2 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
     t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado
 		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
-		WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = tpp.idocupacion AND tpp.idtipo_trabajador = tp.idtipo_trabajador 
+		WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = t.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador 
 		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY t.nombres ASC ;";
     $trabajador = ejecutarConsultaArray($sql2);
     if ($trabajador['status'] == false) {  return $trabajador; }

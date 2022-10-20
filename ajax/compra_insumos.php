@@ -64,21 +64,22 @@ if (!isset($_SESSION["nombre"])) {
     $doc_old_1          = isset($_POST["doc_old_1"]) ? limpiarCadena($_POST["doc_old_1"]) : "";
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   M A T E R I A L E S ::::::::::::::::::::::::::::::::::::::
-    $idproducto_p     = isset($_POST["idproducto_p"]) ? limpiarCadena($_POST["idproducto_p"]) : "" ;
-    $unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;
-    $color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;
-    $categoria_insumos_af_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
-    $idgrupo          = isset($_POST["idtipo_tierra_concreto"]) ? limpiarCadena($_POST["idtipo_tierra_concreto"]) : "";
-    $nombre_p         = isset($_POST["nombre_p"]) ? encodeCadenaHtml($_POST["nombre_p"]) : "" ;
+    // input no usados        
+    $color_p          = isset($_POST["color_p"]) ? limpiarCadena($_POST["color_p"]) : "" ;    
     $modelo_p         = isset($_POST["modelo_p"]) ? encodeCadenaHtml($_POST["modelo_p"]) : "" ;
-    $serie_p          = isset($_POST["serie_p"]) ? limpiarCadena($_POST["serie_p"]) : "" ;
-    $marca_p          = isset($_POST["marca_p"]) ? encodeCadenaHtml($_POST["marca_p"]) : "" ;
+    $serie_p          = isset($_POST["serie_p"]) ? limpiarCadena($_POST["serie_p"]) : "" ;      
     $estado_igv_p     = isset($_POST["estado_igv_p"]) ? limpiarCadena($_POST["estado_igv_p"]) : "" ;
     $precio_unitario_p= isset($_POST["precio_unitario_p"]) ? limpiarCadena($_POST["precio_unitario_p"]) : "" ;      
     $precio_sin_igv_p = isset($_POST["precio_sin_igv_p"]) ? limpiarCadena($_POST["precio_sin_igv_p"]) : "" ;
     $precio_igv_p     = isset($_POST["precio_igv_p"]) ? limpiarCadena($_POST["precio_igv_p"]) : "" ;
-    $precio_total_p   = isset($_POST["precio_total_p"]) ? limpiarCadena($_POST["precio_total_p"]) : "" ;      
-    $descripcion_p    = isset($_POST["descripcion_p"]) ? encodeCadenaHtml($_POST["descripcion_p"]) : "" ; 
+    $precio_total_p   = isset($_POST["precio_total_p"]) ? limpiarCadena($_POST["precio_total_p"]) : "" ;
+
+    // input usados
+    $idproducto_p     = isset($_POST["idproducto_p"]) ? limpiarCadena($_POST["idproducto_p"]) : "" ;
+    $nombre_p         = isset($_POST["nombre_p"]) ? encodeCadenaHtml($_POST["nombre_p"]) : "" ;
+    $idcategoria_p    = isset($_POST["categoria_insumos_af_p"]) ? limpiarCadena($_POST["categoria_insumos_af_p"]) : "" ;
+    $unidad_medida_p  = isset($_POST["unidad_medida_p"]) ? limpiarCadena($_POST["unidad_medida_p"]) : "" ;      
+    $descripcion_p    = isset($_POST["descripcion_p"]) ? encodeCadenaHtml($_POST["descripcion_p"]) : "" ;  
     $img_pefil_p      = isset($_POST["foto2"]) ? limpiarCadena($_POST["foto2"]) : "" ;
     $ficha_tecnica_p  = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
 
@@ -137,8 +138,7 @@ if (!isset($_SESSION["nombre"])) {
     
         if (empty($idproducto_p)) {
           //var_dump($idproyecto,$idproveedor);
-          $rspta = $insumos->insertar( $categoria_insumos_af_p, $idgrupo,$nombre_p, $modelo_p, $serie_p, $marca_p,$precio_unitario_p, $descripcion_p,$img_pefil_p,$ficha_tecnica_p,
-          $estado_igv_p, $precio_igv_p, $precio_sin_igv_p,$unidad_medida_p, $color_p, $precio_total_p   );
+          $rspta = $insumos->insertar($nombre_p, $idcategoria_p, $unidad_medida_p, $_POST["marcas_p"], $descripcion_p, $color_p, $modelo_p, $serie_p, $estado_igv_p, $precio_unitario_p, $precio_sin_igv_p, $precio_igv_p, $precio_total_p, $ficha_tecnica_p, $img_pefil_p );
           
           echo json_encode($rspta, true);
     
@@ -150,13 +150,10 @@ if (!isset($_SESSION["nombre"])) {
             $datos_f1 = $insumos->obtenerImg($idproducto_p);    
             $img1_ant = (empty($datos_f1['data']) ? '' : $datos_f1['data']['imagen']);
     
-            if (validar_url_completo($scheme_host. "dist/docs/material/img_perfil/" . $img1_ant)  == 200) {    
-              unlink("../dist/docs/material/img_perfil/" . $img1_ant);
-            }
+            if (!empty( $img1_ant)) { unlink("../dist/docs/material/img_perfil/" . $img1_ant); }
           }
           
-          $rspta = $insumos->editar($idproducto_p, $categoria_insumos_af_p, $idgrupo,$nombre_p, $modelo_p, $serie_p, $marca_p,$precio_unitario_p, $descripcion_p,$img_pefil_p,$ficha_tecnica_p,
-          $estado_igv_p, $precio_igv_p, $precio_sin_igv_p,$unidad_medida_p, $color_p, $precio_total_p);
+          $rspta = $insumos->editar($idproducto_p, $nombre_p, $idcategoria_p, $unidad_medida_p, $_POST["marcas_p"], $descripcion_p, $color_p, $modelo_p, $serie_p, $estado_igv_p, $precio_unitario_p, $precio_sin_igv_p, $precio_igv_p, $precio_total_p, $ficha_tecnica_p, $img_pefil_p);
           //var_dump($idactivos_fijos,$idproveedor);
           echo json_encode($rspta, true);
         }
@@ -673,298 +670,7 @@ if (!isset($_SESSION["nombre"])) {
 
       // :::::::::::::::::::::::::: S E C C I O N   P A G O  ::::::::::::::::::::::::::     
 
-      case 'guardaryeditar_pago':
-    
-        // imgen de perfil
-        if (!file_exists($_FILES['doc3']['tmp_name']) || !is_uploaded_file($_FILES['doc3']['tmp_name'])) {
-    
-          $imagen1 = $_POST["doc_old_3"];
-    
-          $flat_img1 = false;
-    
-        } else {
-    
-          $ext1 = explode(".", $_FILES["doc3"]["name"]);
-    
-          $flat_img1 = true;
-    
-          $imagen1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
-    
-          move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/compra_insumo/comprobante_pago/" . $imagen1);
-        }
-    
-        if (empty($idpago_compras)) {
-    
-          $rspta = $compra_insumos->insertar_pago( $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
-          $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
-    
-          echo json_encode($rspta, true);
-    
-        } else {
-    
-          // validamos si existe LA IMG para eliminarlo
-          if ($flat_img1 == true) {
-    
-            $datos_f1 = $compra_insumos->obtenerComprobanteCompra($idpago_compras);
-    
-            $img1_ant = $datos_f1['data']->fetch_object()->imagen;
-    
-            if ($img1_ant != "") {
-    
-              unlink("../dist/docs/compra_insumo/comprobante_pago/" . $img1_ant);
-            }
-          }
-    
-          $rspta = $compra_insumos->editar_pago( $idpago_compras, $idcompra_proyecto_p, $idproveedor_pago, $beneficiario_pago, $forma_pago, $tipo_pago, 
-          $cuenta_destino_pago, $banco_pago, $titular_cuenta_pago, $fecha_pago, $monto_pago, $numero_op_pago, $descripcion_pago, $imagen1 );
-    
-          echo json_encode($rspta, true);
-        }
-      break;
-
-      //MOSTRANDO DATOS DE PROVEEDOR
-      case 'most_datos_prov_pago':
-
-        $idcompra_proyecto = $_POST["idcompra_proyecto"];
-        $rspta = $compra_insumos->most_datos_prov_pago($idcompra_proyecto);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-
-      break;
-    
-      case 'desactivar_pagos':
-
-        $rspta = $compra_insumos->desactivar_pagos($_GET["idpago_compras"]);
-
-        echo json_encode($rspta, true);
-
-      break;
-    
-      case 'activar_pagos':
-
-        $rspta = $compra_insumos->activar_pagos($_GET["idpago_compras"]);
-
-        echo json_encode($rspta, true);
-
-      break;
-
-      case 'eliminar_pago_compra':
-        
-        $rspta = $compra_insumos->eliminar_pagos($_GET["idpago_compras"]);
-    
-        echo json_encode($rspta, true);
-    
-      break;
-    
-      case 'listar_pagos_proveedor':
-        $idcompra_proyecto = $_GET["idcompra_proyecto"];
-            
-        $rspta = $compra_insumos->listar_pagos($idcompra_proyecto);
-        //Vamos a declarar un array
-          
-        $data = []; $cont = 1;
-        $suma = 0;
-        
-        if ($rspta['status'] == true) {
-          while ($reg = $rspta['data']->fetch_object()) {
-      
-            $suma = $suma + $reg->monto;                 
-      
-            $imagen = (empty($reg->imagen) ? '<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>' :  '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(\'' .  $reg->imagen .  '\', \'' .  $reg->fecha_pago . '\')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-            
-            $data[] = [
-              "0" =>$cont++,
-              "1" => $reg->estado
-                ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pago_compra(' . $reg->idpago_compras .', \''.$reg->beneficiario. '\')"><i class="fas fa-skull-crossbones"></i> </button>'      
-                  : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-              "2" => $reg->forma_pago,
-              "3" => '<div class="user-block">
-                <span class="username ml-0"><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
-                <span class="description ml-0"><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span>
-                <span class="description ml-0"><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
-              </div>',             
-              "4" => $reg->fecha_pago,
-              "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-              "6" => $reg->numero_operacion,
-              "7" => number_format($reg->monto, 2, '.', ','),
-              "8" => $imagen,
-              "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
-            ];
-          }
-          //$suma=array_sum($rspta->fetch_object()->monto);
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-            "data" => $data,
-            "suma" => $suma,
-          ];
-          
-          echo json_encode($results, true);
-        } else {
-          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
-        }
-        
-      break;
-    
-      case 'listar_pagos_compra_prov_con_dtracc':
-        
-        $idcompra_proyecto = $_GET["idcompra_proyecto"];
-    
-        $tipo_pago = 'Proveedor';
-        
-        $rspta = $compra_insumos->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
-        //Vamos a declarar un array   
-        $data = []; $cont  =1;
-    
-        $imagen = '';
-        
-        if ($rspta['status'] == true) {
-          while ($reg = $rspta['data']->fetch_object()) {
-      
-            $imagen = (empty($reg->imagen) ? '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>' : '<div><center><a type="btn btn-danger" class="" href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-      
-            $data[] = [
-              "0" =>$cont++,
-              "1" => $reg->estado
-                ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pago_compra(' . $reg->idpago_compras . ')"><i class="fas fa-skull-crossbones"></i> </button>'
-                : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-              "2" => $reg->forma_pago,
-              "3" => '<div class="user-block">
-                <span class="username ml-0" ><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
-                <span class="description ml-0" ><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
-                <span class="description ml-0" ><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
-              </div>',
-              "4" => $reg->fecha_pago,
-              "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-              "6" => $reg->numero_operacion,
-              "7" => number_format($reg->monto, 2, '.', ','),
-              "8" => $imagen,
-              "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
-            ];
-          }
-          //$suma=array_sum($rspta->fetch_object()->monto);
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-            "data" => $data,
-          ];
-          echo json_encode($results, true);
-        } else {
-          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
-        }
-      break;
-    
-      case 'listar_pgs_detrac_detracc_cmprs':
-        //$_GET["nube_idproyecto"]
-        $idcompra_proyecto = $_GET["idcompra_proyecto"];
-    
-        $tipo_pago = 'Detraccion';
-        
-        $rspta = $compra_insumos->listar_pagos_compra_prov_con_dtracc($idcompra_proyecto, $tipo_pago);
-        //Vamos a declarar un array
-        
-        $data = []; $cont = 1;
-        
-        if ($rspta['status'] == true) {
-          while ($reg = $rspta['data']->fetch_object()) {
-
-            $imagen = (empty($reg->imagen) ? '<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>' : '<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_vaucher(' . "'" . $reg->imagen . "'" . ')"><i class="fas fa-file-invoice-dollar fa-2x"></i></a></center></div>');
-                  
-            $data[] = [
-              "0" => $cont++,
-              "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_pago_compra(' . $reg->idpago_compras . ')"><i class="fas fa-skull-crossbones"></i> </button>'
-                : '<button class="btn btn-warning btn-sm" onclick="mostrar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar_pagos(' . $reg->idpago_compras . ')"><i class="fa fa-check"></i></button>',
-              "2" => $reg->forma_pago,
-              "3" => '<div class="user-block">
-                <span class="username ml-0" ><p class="text-primary m-b-02rem" >'. $reg->beneficiario .'</p></span>
-                <span class="description ml-0" ><b>'. $reg->banco .'</b>: '. $reg->cuenta_destino .' </span> 
-                <span class="description ml-0" ><b>Titular: </b>: '. $reg->titular_cuenta .' </span>            
-              </div>',
-              "4" => $reg->fecha_pago,
-              "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-              "6" => $reg->numero_operacion,
-              "7" => number_format($reg->monto, 2, '.', ','),
-              "8" => $imagen,
-              "9" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
-            ];
-          }
-      
-          //$suma=array_sum($rspta->fetch_object()->monto);
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-            "data" => $data,
-          ];
-      
-          echo json_encode($results, true);
-        } else {
-          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
-        }
-        
-      break;
-    
-      case 'suma_total_pagos':
-
-        $idcompra_proyecto = $_POST["idcompra_proyecto"];
-        
-        $rspta = $compra_insumos->suma_total_pagos($idcompra_proyecto);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-
-      break;
-    
-      //----suma total de pagos con detraccion-----
-      case 'suma_total_pagos_prov':
-
-        $idcompra_proyecto = $_POST["idcompra_proyecto"];
-
-        $tipopago = 'Proveedor';
-    
-        $rspta = $compra_insumos->suma_total_pagos_detraccion($idcompra_proyecto, $tipopago);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-    
-      break;
-    
-      case 'suma_total_pagos_detracc':
-
-        $idcompra_proyecto = $_POST["idcompra_proyecto"];
-
-        $tipopago = 'Detraccion';
-    
-        $rspta = $compra_insumos->suma_total_pagos_detraccion($idcompra_proyecto, $tipopago);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-    
-      break;
-    
-      //---- fin suma total de pagos con detraccion-----
-      case 'total_costo_parcial_pago':
-        $idmaquinaria = $_POST["idmaquinaria"];
-        $idproyecto = $_POST["idproyecto"];
-    
-        $rspta = $compra_insumos->total_costo_parcial_pago($idmaquinaria, $idproyecto);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-    
-      break;
-    
-      case 'mostrar_pagos':
-
-        $rspta = $compra_insumos->mostrar_pagos($idpago_compras);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-
-      break;    
+         
     
       // ::::::::::::::::::::::::::::::::::::::::: S I N C R O N I Z A R  :::::::::::::::::::::::::::::::::::::::::
       case 'sincronizar_comprobante':

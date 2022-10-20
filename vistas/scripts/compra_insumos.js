@@ -38,21 +38,16 @@ function init() {
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
-  // lista_select2("../ajax/ajax_general.php?op=select2Color", '#color_p', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marcas_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2UnidaMedida", '#unidad_medida_p', null);
-  lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);
-  lista_select2("../ajax/ajax_general.php?op=select2TierraConcreto", '#idtipo_tierra_concreto', null);
+  lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);  
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
-
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
-
   $("#guardar_registro_pago").on("click", function (e) {  $("#submit-form-pago").submit(); });
-
-  $("#guardar_registro_comprobante_compra").on("click", function (e) {  $("#submit-form-comprobante-compra").submit();  });  
-
+  $("#guardar_registro_comprobante_compra").on("click", function (e) {  $("#submit-form-comprobante-compra").submit();  }); 
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
@@ -62,18 +57,16 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE SELECT2 - COMPRAS ══════════════════════════════════════
 
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
-
   $("#glosa").select2({templateResult: templateGlosa, theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
-
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione Comprobante", allowClear: true, });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - PAGO COMPRAS ══════════════════════════════════════
 
-  $("#banco_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });  
-
+  $("#banco_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Selecione un banco", allowClear: true, });
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione una forma de pago", allowClear: true, });
-
   $("#tipo_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo de pago", allowClear: true, });
+
+  no_select_tomorrow("#fecha_compra");
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - PROVEEDOR ══════════════════════════════════════
 
@@ -82,17 +75,10 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE SELECT2 - MATERIAL ══════════════════════════════════════
 
   $("#categoria_insumos_af_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar Clasificación", allowClear: true, });
+  $("#marcas_p").select2({placeholder: "Seleccinar marcas"});
+  $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });  
 
-  // $("#color_p").select2({templateResult: templateColor, theme: "bootstrap4", placeholder: "Seleccinar color", allowClear: true, });
-
-  $("#unidad_medida_p").select2({ theme: "bootstrap4", placeholder: "Seleccinar una unidad", allowClear: true, });
-
-  $("#idtipo_tierra_concreto").select2({ theme: "bootstrap4", placeholder: "Seleccinar una Grupo", allowClear: true, });
-
-  no_select_tomorrow("#fecha_compra");
-
-  // ══════════════════════════════════════ INITIALIZE SELECT2 - MATERIAL ══════════════════════════════════════
-  //$('#filtro_fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' });
+  // ══════════════════════════════════════ INITIALIZE FILTROS ══════════════════════════════════════
   
   // Inicializar - Date picker  
   $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
@@ -451,7 +437,7 @@ var impuesto = 18;
 var cont = 0;
 var detalles = 0;
 
-function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_color, precio_sin_igv, precio_igv, precio_total, img, ficha_tecnica_producto) {
+function agregarDetalleComprobante(idproducto, nombre, categoria, unidad_medida, nombre_color, precio_sin_igv, precio_igv, precio_total, img, ficha_tecnica_producto) {
   var stock = 5;
   var cantidad = 1;
   var descuento = 0;
@@ -497,7 +483,7 @@ function agregarDetalleComprobante(idproducto, nombre, unidad_medida, nombre_col
           <div class="user-block text-nowrap">
             <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
             <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
-            <span class="description color_${cont}"><b>Color: </b>${nombre_color}</span>
+            <span class="description clasificacion_${cont}"><b>Clasificación: </b>${categoria}</span>
           </div>
         </td>
         <td class=""><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
@@ -894,7 +880,7 @@ function mostrar_compra(idcompra_proyecto) {
               <div class="user-block text-nowrap">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
-                <span class="description color_${cont}"><b>Color: </b>${element.color}</span>
+                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${element.categoria}</span>
               </div>
             </td>
             <td> <span class="unidad_medida_${cont}">${element.unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
@@ -1999,7 +1985,8 @@ function listarmateriales() {
     },
     createdRow: function (row, data, ixdex) {
       // columna: sueldo mensual
-      if (data[3] != '') { $("td", row).eq(3).addClass('text-right'); }  
+      if (data[3] != '' || data[3] == 0) { $("td", row).eq(3).addClass('text-right'); }  
+      if (data[5] != '' ) { $("td", row).eq(5).addClass('text-center'); }  
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -2007,8 +1994,13 @@ function listarmateriales() {
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     bDestroy: true,
-    iDisplayLength: 5, //Paginación
+    iDisplayLength: 10, //Paginación
     // order: [[0, "desc"]], //Ordenar (columna,orden)
+    columnDefs: [ 
+      //{ targets: [6], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [3], render: $.fn.dataTable.render.number(',', '.', 2) },
+      //{ targets: [3], visible: false, searchable: false, }, 
+    ]
   }).DataTable();
 }
 
@@ -2026,36 +2018,29 @@ function mostrar_material(idproducto, cont) {
     e = JSON.parse(e); console.log(e);    
 
     if (e.status == true) {
-      $("#idproducto_p").val(e.data.idproducto);
-      $("#cont").val(cont);
-
-      $("#nombre_p").val(e.data.nombre);
+      
+      $("#cont").val(cont);     
+      
+      // input no usados
       $("#modelo_p").val(e.data.modelo);
       $("#serie_p").val(e.data.serie);
-      $("#marca_p").val(e.data.marca);
-      $("#descripcion_p").val(e.data.descripcion);
-
-      $('#precio_unitario_p').val(e.data.precio_unitario);
-      $("#estado_igv_p").val(e.data.estado_igv);
+      $('#precio_unitario_p').val(e.data.precio_unitario);      
       $("#precio_sin_igv_p").val(e.data.precio_sin_igv);
       $("#precio_igv_p").val(e.data.precio_igv);
       $("#precio_total_p").val(e.data.precio_total);
-      
-      $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
-      $("#color_p").val(1);
+      $("#color_p").val(e.data.idcolor);  
+      $("#estado_igv_p").val(e.data.estado_igv);      
+
+      // input usados
+      $("#idproducto_p").val(e.data.idproducto);
+      $("#nombre_p").val(e.data.nombre);      
       $("#categoria_insumos_af_p").val(e.data.idcategoria_insumos_af).trigger("change");
-      $("#idtipo_tierra_concreto").val(e.data.idtipo_tierra_concreto).trigger("change");    
+      $("#unidad_medida_p").val(e.data.idunidad_medida).trigger("change");
+      $("#marcas_p").val(e.data.id_marca).trigger("change");  
+      $("#descripcion_p").val(e.data.descripcion);  
 
-      if (e.data.estado_igv == "1") {
-        $("#my-switch_igv").prop("checked", true);
-      } else {
-        $("#my-switch_igv").prop("checked", false);
-      }
-      
-      if (e.data.imagen != "") {
-        
+      if (e.data.imagen != "") {        
         $("#foto2_i").attr("src", "../dist/docs/material/img_perfil/" + e.data.imagen);
-
         $("#foto2_actual").val(e.data.imagen);
       }
 
@@ -2088,18 +2073,24 @@ function mostrar_material(idproducto, cont) {
 
 //Función limpiar
 function limpiar_materiales() {
-  $("#idproducto_p").val("");  
-  $("#nombre_p").val("");
+  // no usados
+  $("#precio_unitario_p").val("0");
+  $("#precio_sin_igv_p").val("0");
+  $("#precio_igv_p").val("0");
+  $("#precio_total_p").val("0");
+  $("#color_p").val(1);
   $("#modelo_p").val("");
   $("#serie_p").val("");
-  $("#marca_p").val("1");
+  $("#estado_igv_p").val("1");
+
+  //input usados
+  $("#idproducto_p").val("");  
+  $("#nombre_p").val("");  
+  $("#categoria_insumos_af_p").val("").trigger("change");
+  $("#unidad_medida_p").val("").trigger("change");  
+  $("#marcas_p").val("").trigger("change");  
   $("#descripcion_p").val("");
-
-  $("#precio_unitario_p").val("");
-  $("#precio_sin_igv_p").val("");
-  $("#precio_igv_p").val("");
-  $("#precio_total_p").val("");
-
+ 
   $("#foto2_i").attr("src", "../dist/img/default/img_defecto_activo_fijo_material.png");
   $("#foto2").val("");
   $("#foto2_actual").val("");
@@ -2108,15 +2099,7 @@ function limpiar_materiales() {
   $("#doc_old_2").val("");
   $("#doc2").val("");  
   $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc2_nombre').html("");
-
-  $("#unidad_medida_p").val("").trigger("change");
-  $("#color_p").val(1);
-  $("#categoria_insumos_af_p").val("").trigger("change");
-  $("#idtipo_tierra_concreto").val("").trigger("change");
-
-  $("#my-switch_igv").prop("checked", true);
-  $("#estado_igv_p").val("1");
+  $('#doc2_nombre').html(""); 
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -2156,96 +2139,20 @@ function guardar_y_editar_materiales(e) {
   });
 }
 
-function precio_con_igv() {
-  var precio_total = 0;
-  var mont_igv = 0.0;
-
-  var precio_base = 0;
-  var igv = 0;
-  var precio_re = 0;
-
-  //var precio_r=0;
-  precio_total = $("#precio_unitario_p").val();
-
-  $("#precio_igv_p").val(mont_igv.toFixed(2));
-  $("#precio_sin_igv_p").val(precio_total);
-
-  if ($("#my-switch_igv").is(":checked")) {
-    precio_base = precio_total / 1.18;
-    igv = precio_total - precio_base;
-    precio_re = parseFloat(precio_total) - igv;
-    
-    $("#precio_igv_p").val(igv.toFixed(2));
-    $("#precio_sin_igv_p").val(precio_re.toFixed(2));
-    $("#precio_total_p").val((precio_re + igv).toFixed(2));
-
-    $("#estado_igv_p").val("1");
-  } else {
-    precio_base = precio_total * 1.18;
-
-    igv = precio_base - precio_total;
-    precio_re = parseFloat(precio_total) - igv;
-
-    $("#precio_igv_p").val(igv.toFixed(2));
-    $("#precio_sin_igv_p").val( parseFloat(precio_total).toFixed(2));
-    $("#precio_total_p").val(precio_base.toFixed(2));
-
-    $("#estado_igv_p").val("0"); 
-  }
-}
-
-$("#my-switch_igv").on("click ", function (e) {
-
-  var precio_ingresado = 0;
-  var precio_sin_igv = 0;
-  var igv = 0;
-  var precio_total = 0;
-
-  precio_ingresado = $("#precio_unitario_p").val(); 
-
-  if ($("#my-switch_igv").is(":checked")) {
-    precio_sin_igv = precio_ingresado / 1.18;
-    igv = precio_ingresado - precio_sin_igv;
-    precio_total = parseFloat(precio_sin_igv) + igv;   
-    //console.log(precio_sin_igv, igv, precio_total);
-    $("#precio_sin_igv_p").val(redondearExp(precio_sin_igv, 2));
-
-    $("#precio_igv_p").val(redondearExp(igv, 2));   
-
-    $("#precio_total_p").val(redondearExp(precio_total, 2)) ;
-
-    $("#estado_igv_p").val("1");
-  } else {
-    precio_sin_igv = precio_ingresado * 1.18;     
-    igv = precio_sin_igv - precio_ingresado;
-    precio_total = parseFloat(precio_ingresado) + igv;    
-    //console.log(precio_sin_igv, igv, precio_total);
-    $("#precio_sin_igv_p").val(redondearExp(precio_ingresado, 2));
-
-    $("#precio_igv_p").val(redondearExp(igv, 2));
-
-    $("#precio_total_p").val(redondearExp(precio_total, 2) );
-
-    $("#estado_igv_p").val("0");
-  }
-});
-
 function actualizar_producto() {
 
   var idproducto = $("#idproducto_p").val(); 
   var cont = $("#cont").val(); 
 
-  var nombre_p = $("#nombre_p").val();  
-  var precio_total_p = $("#precio_total_p").val();
+  var nombre_p        = $("#nombre_p").val();  
+  var precio_total_p  = $("#precio_total_p").val();
   var unidad_medida_p = $("#unidad_medida_p").find(':selected').text();
-  var color_p = $("#color_p").val();  
+  var categoria       = $("#categoria_insumos_af_p").find(':selected').text();
 
-  if (idproducto == "" || idproducto == null) {
-     
-  } else {
-    $(`.nombre_producto_${cont}`).html(nombre_p); 
-    $(`.color_${cont}`).html(`<b>Color: </b>${color_p}`);
-    $(`.color_${cont}`).val(color_p); 
+  if (idproducto == "" || idproducto == null) {  } else {
+    $(`.nombre_producto_${cont}`).html(nombre_p);     
+    $(`.clasificacion_${cont}`).html(`<b>Clasificación: </b>${categoria}`);
+    $(`.color_${cont}`).val('SIN COLOR'); 
     $(`.unidad_medida_${cont}`).html(unidad_medida_p); 
     $(`.unidad_medida_${cont}`).val(unidad_medida_p);
     $(`.precio_con_igv_${cont}`).val(precio_total_p);  
@@ -2256,18 +2163,6 @@ function actualizar_producto() {
     }  
   } 
   
-  modificarSubtotales();
-}
-
-function grupo_no_select() {
-  if ($('#categoria_insumos_af_p').select2("val") == null || $('#idproveedor').select2("val") == '') { 
-    $("#idtipo_tierra_concreto").attr("readonly", false);
-  } else if ($('#categoria_insumos_af_p').select2("val") == '1') {     
-    $("#idtipo_tierra_concreto").attr("readonly", false);   
-  } else { 
-    $("#idtipo_tierra_concreto").val("1").trigger("change");   
-    $("#idtipo_tierra_concreto").attr("readonly", true);
-  }
 }
 
 init();
@@ -2286,7 +2181,6 @@ $(function () {
   $("#categoria_insumos_af_p").on('change', function() { $(this).trigger('blur'); });
   // $("#color_p").on('change', function() { $(this).trigger('blur'); });
   $("#unidad_medida_p").on('change', function() { $(this).trigger('blur'); });
-  $("#idtipo_tierra_concreto").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-compras").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -2451,24 +2345,16 @@ $(function () {
 
   $("#form-materiales").validate({
     rules: {
-      nombre_p:               { required: true, minlength:3, maxlength:200},      
-      // color_p:                { required: true },
+      nombre_p:               { required: true, minlength:3, maxlength:200},     
       descripcion_p:          { minlength: 3 },
-      // modelo_p:               { minlength: 3 },
-      unidad_medida_p:        { required: true },
-      precio_unitario_p:      { required: true },      
+      unidad_medida_p:        { required: true },     
       categoria_insumos_af_p: { required: true },
-      idtipo_tierra_concreto:  { required: true },
     },
     messages: {
-      nombre_p:               { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" },      
-      // color_p:                { required: "Campo requerido" },
+      nombre_p:               { required: "Por favor ingrese nombre", minlength:"Minimo 3 caracteres", maxlength:"Maximo 200 caracteres" }, 
       descripcion_p:          { minlength: "Minimo 3 caracteres" },
-      // modelo_p:               { minlength: "Minimo 3 caracteres", },
-      unidad_medida_p:        { required: "Campo requerido" },
-      precio_unitario_p:      { required: "Ingresar precio compra", },      
+      unidad_medida_p:        { required: "Campo requerido" },  
       categoria_insumos_af_p: { required: "Campo requerido", },
-      idtipo_tierra_concreto:  { required: "Campo requerido", },
     },
 
     errorElement: "span",
@@ -2502,7 +2388,6 @@ $(function () {
   $("#categoria_insumos_af_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   // $("#color_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#unidad_medida_p").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $("#idtipo_tierra_concreto").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 function l_m() {

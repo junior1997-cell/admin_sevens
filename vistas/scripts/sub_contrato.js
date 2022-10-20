@@ -240,13 +240,7 @@ function modal_comprobante(comprobante, nombre){
   $('#modal-ver-comprobante').modal("show");
   $('#ver_fact_pdf').html(doc_view_extencion(comprobante, 'sub_contrato', 'comprobante_subcontrato', '100%', '550'));
 
-  if (DocExist(`dist/docs/sub_contrato/comprobante_subcontrato/${comprobante}`) == 200) {
-    $("#iddescargar").attr("href","../dist/docs/sub_contrato/comprobante_subcontrato/"+comprobante).attr("download", nombre).removeClass("disabled");
-    $("#ver_completo").attr("href","../dist/docs/sub_contrato/comprobante_subcontrato/"+comprobante).removeClass("disabled");
-  } else {
-    $("#iddescargar").addClass("disabled");
-    $("#ver_completo").addClass("disabled");
-  }
+  $('.html-comprobante-subcontrato').html(doc_view_download_expand(comprobante, 'dist/docs/sub_contrato/comprobante_subcontrato', removeCaracterEspecial(nombre), '100%', '500'));
 
   $('.jq_image_zoom').zoom({ on:'grab' });  
 }
@@ -406,7 +400,7 @@ function ver_datos(idsubcontrato) {
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Fecha</th>
-                  <td>${e.data.fecha_subcontrato}</td>
+                  <td>${format_d_m_a(e.data.fecha_subcontrato)}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Tipo pago </th>
@@ -418,15 +412,15 @@ function ver_datos(idsubcontrato) {
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Subtotal</th>
-                  <td>${redondearExp(e.data.subtotal)}</td>
+                  <td>${formato_miles(e.data.subtotal)}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>IGV</th>
-                  <td>${redondearExp(e.data.igv)}</td>
+                  <td>${formato_miles(e.data.igv)}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Total</th>
-                  <td>${redondearExp(e.data.costo_parcial)}</td>
+                  <td>${formato_miles(e.data.costo_parcial)}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Comprobante</th>

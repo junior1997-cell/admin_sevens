@@ -25,41 +25,39 @@
       $imagen_error = "this.src='../dist/svg/user_default.svg'";
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-      $idproyecto		  = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
+      $idproyecto		    = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idtrabajador_por_proyecto		= isset($_POST["idtrabajador_por_proyecto"])? limpiarCadena($_POST["idtrabajador_por_proyecto"]):"";
-      $trabajador		  = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
-
-      $tipo_trabajador= isset($_POST["tipo_trabajador"])? limpiarCadena($_POST["tipo_trabajador"]):"";
-      $desempenio	    = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";  
+      $trabajador		    = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
+      $desempenio		    = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";
       
-      $sueldo_diario	= isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
-      $sueldo_mensual = isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
-      $sueldo_hora 		= isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
+      $sueldo_diario	  = isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
+      $sueldo_mensual   = isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
+      $sueldo_hora 		  = isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
 
       $fecha_inicio 		= isset($_POST['fecha_inicio'])? $_POST['fecha_inicio']:"";
       $fecha_fin 		    = isset($_POST['fecha_fin'])? $_POST['fecha_fin']:""; 
-      $cantidad_dias 		= isset($_POST['cantidad_dias'])? $_POST['cantidad_dias']:"";
+      $cantidad_dias 		= isset($_POST['cantidad_dias'])? $_POST['cantidad_dias']:"";      
 
       // ::::::::::::::::::::::::::::::: ALL TRABAJADOR :::::::::::::::::::::::::::::::
-      $idtrabajador	  	= isset($_POST["all_idtrabajador"])? limpiarCadena($_POST["all_idtrabajador"]):"";
-      $nombre 		      = isset($_POST["nombre_all"])? limpiarCadena($_POST["nombre_all"]):"";
-      $tipo_documento 	= isset($_POST["tipo_documento_all"])? limpiarCadena($_POST["tipo_documento_all"]):"";
-      $num_documento  	= isset($_POST["num_documento_all"])? limpiarCadena($_POST["num_documento_all"]):"";
-      $direccion		    = isset($_POST["direccion_all"])? limpiarCadena($_POST["direccion_all"]):"";
-      $telefono		      = isset($_POST["all_telefono"])? limpiarCadena($_POST["all_telefono"]):"";
-      $nacimiento		    = isset($_POST["nacimiento"])? limpiarCadena($_POST["nacimiento"]):"";
-      $edad		          = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";      
-      $email			      = isset($_POST["all_email"])? limpiarCadena($_POST["all_email"]):"";
-      $banco_seleccionado= isset($_POST["banco_seleccionado"])? $_POST["banco_seleccionado"] :"";
-      $banco			      = isset($_POST["banco_array"])?$_POST["banco_array"]:"";      
-      $cta_bancaria		  = isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
-      $cta_bancaria_format= isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
-      $cci	          	= isset($_POST["cci"])?$_POST["cci"]:"";
-      $cci_format      	= isset($_POST["cci"])? $_POST["cci"]:"";
-      $titular_cuenta		= isset($_POST["titular_cuenta_all"])? limpiarCadena($_POST["titular_cuenta_all"]):"";
-      $tipo	          	= isset($_POST["all_tipo"])? limpiarCadena($_POST["all_tipo"]):"";
-      $ocupacion	      = isset($_POST["all_ocupacion"])? $_POST["all_ocupacion"]:"";
-      $ruc	          	= isset($_POST["all_ruc"])? limpiarCadena($_POST["all_ruc"]):"";
+      $idtrabajador_all	  	= isset($_POST["idtrabajador_all"])? limpiarCadena($_POST["idtrabajador_all"]):"";
+      $nombre_all 		      = isset($_POST["nombre_all"])? limpiarCadena($_POST["nombre_all"]):"";
+      $tipo_documento_all 	= isset($_POST["tipo_documento_all"])? limpiarCadena($_POST["tipo_documento_all"]):"";
+      $num_documento_all  	= isset($_POST["num_documento_all"])? limpiarCadena($_POST["num_documento_all"]):"";
+      $direccion_all		    = isset($_POST["direccion_all"])? limpiarCadena($_POST["direccion_all"]):"";
+      $telefono_all		      = isset($_POST["telefono_all"])? limpiarCadena($_POST["telefono_all"]):"";
+      $nacimiento_all		    = isset($_POST["nacimiento_all"])? limpiarCadena($_POST["nacimiento_all"]):"";
+      $edad_all		          = isset($_POST["edad_all"])? limpiarCadena($_POST["edad_all"]):"";      
+      $email_all			      = isset($_POST["email_all"])? limpiarCadena($_POST["email_all"]):"";
+      $banco_seleccionado   = isset($_POST["banco_seleccionado"])? $_POST["banco_seleccionado"] :"";
+      $banco			          = isset($_POST["banco_array"])?$_POST["banco_array"]:"";      
+      $cta_bancaria		      = isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
+      $cta_bancaria_format  = isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
+      $cci	          	    = isset($_POST["cci"])?$_POST["cci"]:"";
+      $cci_format      	    = isset($_POST["cci"])? $_POST["cci"]:"";
+      $titular_cuenta_all		= isset($_POST["titular_cuenta_all"])? limpiarCadena($_POST["titular_cuenta_all"]):"";
+      $tipo_all	          	= isset($_POST["tipo_all"])? limpiarCadena($_POST["tipo_all"]):"";
+      $ocupacion_all	      = isset($_POST["ocupacion_all"])? $_POST["ocupacion_all"]:"";
+      $ruc_all	          	= isset($_POST["ruc_all"])? limpiarCadena($_POST["ruc_all"]):"";
 
       $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
       $imagen2			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
@@ -76,13 +74,15 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar($idproyecto, $trabajador, $tipo_trabajador, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias);
+            $rspta=$trabajadorproyecto->insertar( $idproyecto, $trabajador, $desempenio, $sueldo_diario, $sueldo_mensual, 
+            $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
             
             echo json_encode($rspta, true);
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar($idtrabajador_por_proyecto, $idproyecto, $trabajador, $tipo_trabajador, $desempenio, $sueldo_mensual, $sueldo_diario, $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias);
+            $rspta=$trabajadorproyecto->editar( $idtrabajador_por_proyecto, $idproyecto, $trabajador, $desempenio, $sueldo_diario, $sueldo_mensual, 
+            $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
             
             echo json_encode($rspta, true);
           }
@@ -149,7 +149,7 @@
                 "5"=> $value['email'],
                 "6"=> $value['fecha_nacimiento'],
                 "7"=>$value['nombre_tipo'] ,
-                "8"=>$value['desempeno'],
+                "8"=>$value['nombre_desempeno'],
                 "9"=>'<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] . $toltip ,                
                 
                 "10"=> $value['trabajador'],
@@ -181,6 +181,14 @@
           echo json_encode($rspta, true);
  
         break;  
+
+        case 'ver_lista_orden':
+
+          $rspta=$trabajadorproyecto->tbla_principal($idproyecto, 1);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+
+        break;
 
         // :::::::::::::::::::::::::::::::::::::::::::::::: ALL-TRABAJADOR ::::::::::::::::::::::::::::::::::::::::::::::::
         
@@ -239,47 +247,53 @@
             move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/all_trabajador/cv_no_documentado/" . $cv_nodocumentado);            
           }
 
-          if (empty($idtrabajador)){            
-            $rspta=$all_trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d($nacimiento), $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);            
+          if (empty($idtrabajador_all)){            
+            $rspta=$all_trabajador->insertar( $nombre_all, $tipo_documento_all, $num_documento_all, $direccion_all, $telefono_all, 
+            format_a_m_d( $nacimiento_all), 
+            $edad_all, $email_all, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta_all, $tipo_all, $_POST["desempenio_all"], 
+            $ocupacion_all, $ruc_all, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);            
             echo json_encode($rspta, true);  
           }else {
 
             // validamos si existe LA IMG para eliminarlo
             if ($flat_img1 == true) {
-              $datos_f1 = $all_trabajador->obtenerImg($idtrabajador);
+              $datos_f1 = $all_trabajador->obtenerImg($idtrabajador_all);
               $img1_ant = $datos_f1['data']['imagen_perfil'];
               if ($img1_ant != "") { unlink("../dist/docs/all_trabajador/perfil/" . $img1_ant);  }
             }
 
             //imagen_dni_anverso
             if ($flat_img2 == true) {
-              $datos_f2 = $all_trabajador->obtenerImg($idtrabajador);
+              $datos_f2 = $all_trabajador->obtenerImg($idtrabajador_all);
               $img2_ant = $datos_f2['data']['imagen_dni_anverso'];
               if ($img2_ant != "") { unlink("../dist/docs/all_trabajador/dni_anverso/" . $img2_ant); }
             }
 
             //imagen_dni_reverso
             if ($flat_img3 == true) {
-              $datos_f3 = $all_trabajador->obtenerImg($idtrabajador);
+              $datos_f3 = $all_trabajador->obtenerImg($idtrabajador_all);
               $img3_ant = $datos_f3['data']['imagen_dni_reverso'];
               if ($img3_ant != "") { unlink("../dist/docs/all_trabajador/dni_reverso/" . $img3_ant); }
             }
 
             //cvs
             if ($flat_cv1 == true) {
-              $datos_cv1 = $all_trabajador->obtenercv($idtrabajador);
+              $datos_cv1 = $all_trabajador->obtenercv($idtrabajador_all);
               $cv1_ant = $datos_cv1['data']['cv_documentado'];
               if ($cv1_ant != "") { unlink("../dist/docs/all_trabajador/cv_documentado/" . $cv1_ant); }
             }
 
             if ($flat_cv2 == true) {
-              $datos_cv2 = $all_trabajador->obtenercv($idtrabajador);
+              $datos_cv2 = $all_trabajador->obtenercv($idtrabajador_all);
               $cv2_ant = $datos_cv2['data']['cv_no_documentado'];
               if ($cv2_ant != "") { unlink("../dist/docs/all_trabajador/cv_no_documentado/" . $cv2_ant); }
             }
 
             // editamos un trabajador existente
-            $rspta=$all_trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d( $nacimiento), $edad, $email, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta, $tipo, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $rspta=$all_trabajador->editar( $idtrabajador_all, $nombre_all, $tipo_documento_all, $num_documento_all, $direccion_all, $telefono_all, 
+            format_a_m_d( $nacimiento_all), 
+            $edad_all, $email_all, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta_all, $tipo_all, $_POST["desempenio_all"], 
+            $ocupacion_all, $ruc_all, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado );
             
             echo json_encode($rspta, true);
           }            

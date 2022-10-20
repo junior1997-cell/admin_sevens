@@ -9,13 +9,15 @@
     echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
 
-    if ($_SESSION['concreto_agregado'] == 1) {
+    if ($_SESSION['clasificacion_grupo'] == 1) {
       
       require_once "../modelos/Clasificacion_de_grupo.php";
       require_once "../modelos/Compra_insumos.php";
+      require_once "../modelos/Sub_contrato.php";
 
       $clasificacion_de_grupo = new Clasificacion_de_grupo();
-      $compra_insumos = new Compra_insumos();
+      $compra_insumos         = new Compra_insumos();   
+			$sub_contrato           = new Sub_contrato();
 
       date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");
 
@@ -23,42 +25,25 @@
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
       $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
-
       // :::::::::::::::::::::::::: S E C C I O N   G R U P O  ::::::::::::::::::::::::::
       $idproyecto       = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
-      $idtipo_tierra    = isset($_POST["idtipo_tierra"]) ? limpiarCadena($_POST["idtipo_tierra"]) : "";
-      $modulo           = isset($_POST["modulo"]) ? limpiarCadena($_POST["modulo"]) : "";
-      $nombre_item      = isset($_POST["nombre_item"]) ? encodeCadenaHtml($_POST["nombre_item"] ) : "";
-      $columna_bombeado = isset($_POST["columna_servicio_bombeado"]) ? ( empty($_POST["columna_servicio_bombeado"]) || $_POST["columna_servicio_bombeado"] == '0' ? '0' : '1' ) : "";
-      // $columna_descripcion= isset($_POST["columna_descripcion"]) ? ( empty($_POST["columna_descripcion"]) ? '0' : '1' ) : "";
-      $descripcion_item = isset($_POST["descripcion_item"]) ? encodeCadenaHtml($_POST["descripcion_item"] ) : "";
+      $idclasificacion_grupo    = isset($_POST["idclasificacion_grupo"]) ? limpiarCadena($_POST["idclasificacion_grupo"]) : "";
+      $nombre_grupo      = isset($_POST["nombre_grupo"]) ? encodeCadenaHtml($_POST["nombre_grupo"] ) : "";
+      $descripcion_grupo = isset($_POST["descripcion_grupo"]) ? encodeCadenaHtml($_POST["descripcion_grupo"] ) : "";
       
-      
-      // :::::::::::::::::::::::::: S E C C I O N   C O N C R E T O  ::::::::::::::::::::::::::
-      $idtipo_tierra_c   = isset($_POST["idtipo_tierra_c"]) ? limpiarCadena($_POST["idtipo_tierra_c"]) : "";
-      $idconcreto_agregado      = isset($_POST["idconcreto_agregado"]) ? limpiarCadena($_POST["idconcreto_agregado"]) : "";
-      $idproveedor              = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";      
-      $fecha                    = isset($_POST["fecha"]) ? limpiarCadena($_POST["fecha"]) : "";
-      $nombre_dia               = isset($_POST["nombre_dia"]) ? limpiarCadena($_POST["nombre_dia"]) : "";
-      $calidad                  = isset($_POST["calidad"]) ? limpiarCadena($_POST["calidad"]) : "";
-      $cantidad                 = isset($_POST["cantidad"]) ? limpiarCadena($_POST["cantidad"]) : "";
-      $precio_unitario          = isset($_POST["precio_unitario"]) ? limpiarCadena($_POST["precio_unitario"]) : "";
-      $total                    = isset($_POST["total"]) ? limpiarCadena($_POST["total"]) : "";
-      $descripcion_concreto     = isset($_POST["descripcion_concreto"]) ? limpiarCadena($_POST["descripcion_concreto"]) : "";      
-
       switch ($_GET["op"]) {
         // :::::::::::::::::::::::::: S E C C I O N   G R U P O  ::::::::::::::::::::::::::
         case 'guardar_y_editar_grupo':
           
-          if (empty($idtipo_tierra)) {
+          if (empty($idclasificacion_grupo)) {
             
-            $rspta = $clasificacion_de_grupo->insertar_item($idproyecto, $nombre_item, $modulo, $columna_bombeado, $descripcion_item);
+            $rspta = $clasificacion_de_grupo->insertar_grupo($idproyecto, $nombre_grupo, $descripcion_grupo);
             
             echo json_encode( $rspta, true);
 
           } else {            
              
-            $rspta = $clasificacion_de_grupo->editar_item($idproyecto, $idtipo_tierra, $nombre_item, $modulo, $columna_bombeado, $descripcion_item);
+            $rspta = $clasificacion_de_grupo->editar_grupo($idproyecto, $idclasificacion_grupo, $nombre_grupo, $descripcion_grupo);
             
             echo json_encode( $rspta, true) ;
           }
@@ -66,7 +51,7 @@
     
         case 'desactivar_grupo':
 
-          $rspta = $clasificacion_de_grupo->desactivar_item( $_GET["id_tabla"] );
+          $rspta = $clasificacion_de_grupo->desactivar_grupo( $_GET["id_tabla"] );
 
           echo json_encode( $rspta, true) ;
 
@@ -74,7 +59,7 @@
 
         case 'eliminar_grupo':
 
-          $rspta = $clasificacion_de_grupo->eliminar_item( $_GET["id_tabla"] );
+          $rspta = $clasificacion_de_grupo->eliminar_grupo( $_GET["id_tabla"] );
 
           echo json_encode( $rspta, true) ;
 
@@ -82,25 +67,28 @@
     
         case 'mostrar_grupo':
 
-          $rspta = $clasificacion_de_grupo->mostrar_item($idtipo_tierra);
+          $rspta = $clasificacion_de_grupo->mostrar_grupo($idclasificacion_grupo);
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true) ;
 
         break;
     
         case 'tbla_principal_grupo':
-          $rspta = $clasificacion_de_grupo->tbla_principal_item($_GET["id_proyecto"]);
+          $rspta = $clasificacion_de_grupo->tbla_principal_grupo($_GET["id_proyecto"]);
           //Vamos a declarar un array
           $data = [];  $cont=1;         
 
           if ($rspta['status'] == true) {
-            while ($reg = $rspta['data']->fetch_object()) {              
-              // "3" => ($reg->columna_servicio_bombeado ? '<span class="text-center badge badge-success">SI</span>' : '<span class="text-center badge badge-danger">NO</span>'),
+            while ($reg = $rspta['data']->fetch_object()) {  
+
+              $disabed_uso_general = ($reg->idclasificacion_grupo == 1 ? 'disabled' : '');
+              $funcion_eliminar = ($reg->idclasificacion_grupo > 1 ? 'eliminar_grupo(' . $reg->idclasificacion_grupo .', \''.encodeCadenaHtml($reg->nombre).'\')' : '');
+              $message_tooltip = ($reg->idclasificacion_grupo == 1 ? 'No se puede eliminar' : 'Eliminar o papelera');
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idtipo_tierra_concreto. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_item(' . $reg->idtipo_tierra_concreto .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>' : 
-                '<button class="btn btn-warning btn-sm" onclick="mostrar_item(' . $reg->idtipo_tierra_concreto . ')"><i class="fa fa-pencil-alt"></i></button>',
+                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_grupo(' . $reg->idclasificacion_grupo. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm '. $disabed_uso_general.' " onclick="'.$funcion_eliminar.'" data-toggle="tooltip" data-original-title="'.$message_tooltip.'"><i class="fas fa-skull-crossbones"></i></button>' : 
+                '<button class="btn btn-warning btn-sm" onclick="mostrar_grupo(' . $reg->idclasificacion_grupo . ')"><i class="fa fa-pencil-alt"></i></button>',
                 "2" => $reg->nombre,                
                 "3" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activo</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . $toltip,
@@ -123,62 +111,52 @@
 
         case 'lista_de_grupo':
 
-          $rspta = $clasificacion_de_grupo->lista_de_items($idproyecto);
+          $rspta = $clasificacion_de_grupo->lista_de_grupo($idproyecto);
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true) ;
 
         break;
 
-        // :::::::::::::::::::::::::: S E C C I O N    C O N C R E T O    A G R E G A D O::::::::::::::::::::::::::
-        case 'guardar_y_editar_concreto':
-          
-          if (empty($idconcreto_agregado)) {
-            
-            $rspta = $clasificacion_de_grupo->insertar_concreto($idtipo_tierra_c, $idproveedor, $fecha, $nombre_dia, $calidad, $cantidad, $precio_unitario, $total, $descripcion_concreto );
-            
-            echo json_encode( $rspta, true);
+        // :::::::::::::::::::::::::: S E C C I O N    C O M P R A   Y   S U B C O N T R A T O ::::::::::::::::::::::::::
 
-          } else {            
-             
-            $rspta = $clasificacion_de_grupo->editar_concreto($idconcreto_agregado, $idtipo_tierra_c, $idproveedor, $fecha, $nombre_dia, $calidad, $cantidad, $precio_unitario, $total, $descripcion_concreto );
-            
-            echo json_encode( $rspta, true) ;
-          }
-        break;
-
-        case 'mostrar_concreto':
-
-          $rspta = $clasificacion_de_grupo->mostrar_concreto($idconcreto_agregado);
-          //Codificar el resultado utilizando json
-          echo json_encode( $rspta, true) ;
-
-        break;
-
-        case 'tbla_principal_concreto':
-          $rspta = $clasificacion_de_grupo->tbla_principal_concreto($_GET["id_proyecto"], $_GET["idtipo_tierra"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
+        case 'tbla_principal_compra_subcontrato':
+          $rspta = $clasificacion_de_grupo->tbla_principal_compra_subcontrato($_GET["id_proyecto"], $_GET["idclasificacion_grupo"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
-          $data = [];  $cont=1;         
+          $data = [];  $cont=1;    
+          //echo json_encode( $rspta, true) ;  
 
           if ($rspta['status'] == true) {
 
+            $detalle_fila = '';  $data_comprobante = ''; $btn_tipo = ''; $btn_comprobante_toltip = ''; $btn_detalle_toltip = '';
+
             foreach ($rspta['data'] as $key => $reg) {   
 
-              $data_comprobante = '\''.$reg['idcompra_proyecto'].'\' , \''.removeSpecialChar($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.removeSpecialChar($reg['proveedor']).'\', \''.format_d_m_a($reg['fecha_compra']).'\''; 
-              $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');  
-              $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
-
+              if ($reg['modulo'] == 'compra_insumos') {
+                $detalle_fila     = 'ver_detalle_compras(' . $reg['idcompra_proyecto'] .','. $reg['idproducto'] .')';
+                $data_comprobante = 'comprobante_compras(\''.$cont.'\', \''.$reg['idcompra_proyecto'].'\' , \''.$reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'\', \''.$reg['proveedor'].'\', \''.$reg['fecha_compra'].'\')'; 
+                $btn_tipo         = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');  
+                $btn_comprobante_toltip   = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));
+                $btn_detalle_toltip = 'Ver detalle compra';
+              } else if ($reg['modulo'] == 'subcontrato') {
+                $detalle_fila     = 'ver_detalle_subcontrato(' . $reg['idcompra_proyecto'] .')';
+                $data_comprobante = 'comprobante_subcontrato(\''.$cont.'\', \''.$reg['comprobante'].'\' , \''.$reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  ''.$reg['serie_comprobante']).' - '.$reg['proveedor'].'\')'; 
+                $btn_tipo         = (empty($reg['comprobante']) ? 'btn-outline-info' : 'btn-info');  
+                $btn_comprobante_toltip   = (empty($reg['comprobante']) ? 'Vacío' : 'Ver comprobante');   
+                $btn_detalle_toltip = 'Ver detalle Subcontrato';
+              }                     
+              
               $data[] = [
                 "0"=>$cont,
-                "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] .','. $reg['idproducto'] .')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' ,
-                "2" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 35px;" >'. $reg['nombre_producto'] .'</div>',
+                "1" => '<button class="btn btn-info btn-sm" onclick="'.$detalle_fila.'" data-toggle="tooltip" data-original-title="'.$btn_detalle_toltip.'"><i class="fa fa-eye"></i></button>' ,
+                "2" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'. $reg['nombre_producto'] .'</textarea>',
                 "3" => $reg['nombre_dia'],
                 "4" => $reg['fecha_compra'],
                 "5" => $reg['cantidad'],
                 "6" => $reg['precio_con_igv'],
                 "7" => $reg['descuento'],
                 "8" => $reg['subtotal'],
-                "9" => $reg['proveedor'],
-                "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$cont.'\', '. $data_comprobante .')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,                
+                "9" => '<div class="w-150px recorte-text text-bold text-primary" data-toggle="tooltip" data-original-title="'. $reg['proveedor'] .'">'. $reg['proveedor'] .'</div>',
+                "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="'. $data_comprobante .'" data-toggle="tooltip" data-original-title="'.$btn_comprobante_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,                
               ];
               $cont++;
             }
@@ -197,31 +175,15 @@
           
         break;
 
-        case 'total_concreto':
+        case 'total_compra_subcontrato':
 
-          $rspta = $clasificacion_de_grupo->total_concreto($_POST["id_proyecto"], $_POST["idtipo_tierra"], $_POST["fecha_1"], $_POST["fecha_2"], $_POST["id_proveedor"], $_POST["comprobante"]);
+          $rspta = $clasificacion_de_grupo->total_compra_subcontrato($_POST["id_proyecto"], $_POST["idclasificacion_grupo"], $_POST["fecha_1"], $_POST["fecha_2"], $_POST["id_proveedor"], $_POST["comprobante"]);
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true) ;
 
         break;
 
-        case 'desactivar_concreto':
-
-          $rspta = $clasificacion_de_grupo->desactivar_concreto( $_GET["id_tabla"] );
-
-          echo json_encode( $rspta, true) ;
-
-        break;      
-
-        case 'eliminar_concreto':
-
-          $rspta = $clasificacion_de_grupo->eliminar_concreto( $_GET["id_tabla"] );
-
-          echo json_encode( $rspta, true) ;
-
-        break;
-
-        // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
+        // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  C O M P R A :::::::::::::::::::::::::: 
         case 'tbla_comprobantes_compra':
           $cont_compra = $_GET["num_orden"];
           $id_compra = $_GET["id_compra"];
@@ -253,6 +215,13 @@
           }
         break;
 
+        // :::::::::::::::::::::::::: S E C C I O N  S U B C O N T R A T O :::::::::::::::::::::::::: 
+        case 'ver_datos_subcontrato':
+          $rspta=$sub_contrato->verdatos($_POST["idsubcontrato"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);	
+				break;
+
         // :::::::::::::::::::::::::: S E C C I O N    R E S U M E N ::::::::::::::::::::::::::
 
         case 'tbla_principal_resumen':
@@ -261,16 +230,16 @@
           $data = [];  $cont=1;         
 
           if ($rspta['status'] == true) {
-            while ($reg = $rspta['data']->fetch_object()) {              
+            foreach ($rspta['data'] as $key => $reg) {            
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->grupo ,
-                "2" => $reg->um_abreviacion ,
-                "3" => $reg->cantidad_total,
-                "4" => $reg->promedio_precio,
-                "5" => $reg->descuento_total,
-                "6" => $reg->precio_total,        
+                "1" => $reg['grupo'] ,
+                "2" => $reg['um_abreviacion'] ,
+                "3" => $reg['cantidad_total'],
+                "4" => $reg['precio_promedio'],
+                "5" => $reg['descuento_total'],
+                "6" => $reg['precio_total'],        
               ];
             }
   

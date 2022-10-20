@@ -141,6 +141,7 @@
                                   <option value="COMISIÓN">COMISIÓN</option>
                                   <option value="TRÁMITES LEGALES">TRÁMITES LEGALES</option>
                                   <option value="SINDICATO">SINDICATO</option>
+                                  <option value="CAMIONETA">CAMIONETA</option>
                                   <option value="OTROS">OTROS</option>
                                 </select>
                               </div>                              

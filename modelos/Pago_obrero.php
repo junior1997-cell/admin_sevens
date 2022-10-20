@@ -21,12 +21,11 @@ class PagoObrero
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, ocupacion AS o
 		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 	AND tpp.idtrabajador = t.idtrabajador  
-    AND tpp.idocupacion = o.idocupacion AND tpp.idtipo_trabajador = tt.idtipo_trabajador  
+    AND t.idocupacion = o.idocupacion AND t.idtipo_trabajador = tt.idtipo_trabajador  
 		AND p.idproyecto = tpp.idproyecto AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' 
 		AND tpp.idproyecto = '$nube_idproyecto'  
 		GROUP BY rqsa.idtrabajador_por_proyecto ORDER BY t.nombres;";
-    $trabajdor = ejecutarConsultaArray($sql_1);
-    if ($trabajdor['status'] == false) { return $trabajdor; }
+    $trabajdor = ejecutarConsultaArray($sql_1);  if ($trabajdor['status'] == false) { return $trabajdor; }
 
      
     foreach ($trabajdor['data'] as $key => $value) {
@@ -37,15 +36,13 @@ class PagoObrero
       WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia
       AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND pqso.estado = '1' AND pqso.estado_delete = '1' 
       AND tpp.idtrabajador_por_proyecto = '$id';";
-      $depositos = ejecutarConsultaSimpleFila($sql_2);
-      if ($depositos['status'] == false) { return $depositos; }
+      $depositos = ejecutarConsultaSimpleFila($sql_2);  if ($depositos['status'] == false) { return $depositos; }
 
       $idtrabajador = $value['idtrabajador'];
       $sql_3 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
       FROM cuenta_banco_trabajador as cbt, bancos as b
       WHERE cbt.idbancos = b.idbancos AND cbt.banco_seleccionado ='1' AND cbt.idtrabajador='$idtrabajador' ;";
-      $bancos = ejecutarConsultaSimpleFila($sql_3);
-      if ($bancos['status'] == false) { return  $bancos;}
+      $bancos = ejecutarConsultaSimpleFila($sql_3); if ($bancos['status'] == false) { return  $bancos;}
 
       $data[] = [
         'idtrabajador' => $value['idtrabajador'],
@@ -91,8 +88,7 @@ class PagoObrero
 		FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
 		WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
 		AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$id';";
-    $monto_1 = ejecutarConsultaSimpleFila($sql_1);
-    if ($monto_1['status'] == false) { return $monto_1; }
+    $monto_1 = ejecutarConsultaSimpleFila($sql_1); if ($monto_1['status'] == false) { return $monto_1; }
 
     $sql_2 = "SELECT SUM(rqsa.total_hn) as total_hn, SUM(rqsa.total_he) as total_he, SUM(rqsa.total_dias_asistidos) as total_dias_asistidos, 
     SUM(rqsa.sabatical) as sabatical,  SUM(rqsa.pago_parcial_hn) as pago_parcial_hn, SUM(rqsa.pago_parcial_he) as pago_parcial_he, 
@@ -101,7 +97,7 @@ class PagoObrero
     FROM resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp
     WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='1' AND  rqsa.estado_envio_contador = '1' 
     AND rqsa.estado = '1' AND rqsa.estado_delete = '1';";
-    $monto_2 = ejecutarConsultaSimpleFila($sql_2);
+    $monto_2 = ejecutarConsultaSimpleFila($sql_2); if ($monto_2['status'] == false) { return $monto_2; }
 
     $data = [
       'status'=> true, 
@@ -169,8 +165,7 @@ class PagoObrero
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
 		WHERE  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' 
 		AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' ;";
-    $q_s = ejecutarConsultaArray($sql_1);
-    if ($q_s['status'] == false) { return $q_s; }
+    $q_s = ejecutarConsultaArray($sql_1); if ($q_s['status'] == false) { return $q_s; }
 
     if (!empty($q_s)) {
       foreach ($q_s['data'] as $key => $q_s) {
@@ -265,30 +260,26 @@ class PagoObrero
      o.nombre_ocupacion , tt.nombre as tipo_trabajador
     FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador as t, ocupacion AS o, tipo_trabajador as tt
     WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador  
-    AND tpp.idocupacion = o.idocupacion AND tpp.idtipo_trabajador = tt.idtipo_trabajador
+    AND t.idocupacion = o.idocupacion AND t.idtipo_trabajador = tt.idtipo_trabajador
     AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND rqsa.estado_envio_contador = '1' 
     AND rqsa.numero_q_s = '$num_quincena' AND tpp.idproyecto ='$nube_idproyecto' ORDER BY t.nombres ASC";
-    $trabajador = ejecutarConsultaArray($sql);
-    if ($trabajador['status'] == false) { return $trabajador; }
+    $trabajador = ejecutarConsultaArray($sql); if ($trabajador['status'] == false) { return $trabajador; }
 
     if (!empty($trabajador)) {
       foreach ($trabajador['data'] as $key => $trabajador) {
         $id = $trabajador['idresumen_q_s_asistencia'];
 
         $sql_2 = "SELECT SUM(monto_deposito) AS deposito  FROM pagos_q_s_obrero WHERE estado = '1'  AND estado_delete = '1' AND idresumen_q_s_asistencia = '$id';";
-        $depositos = ejecutarConsultaSimpleFila($sql_2);
-        if ($depositos['status'] == false) { return $depositos; }
+        $depositos = ejecutarConsultaSimpleFila($sql_2);  if ($depositos['status'] == false) { return $depositos; }
 
         $sql_3 = "SELECT COUNT(recibos_x_honorarios) as cant_rh  FROM pagos_q_s_obrero WHERE estado = '1' AND estado_delete = '1' AND idresumen_q_s_asistencia = '$id' AND recibos_x_honorarios IS NOT NULL AND recibos_x_honorarios != '';";
-        $cant_rh = ejecutarConsultaSimpleFila($sql_3);
-        if ($cant_rh['status'] == false) { return $cant_rh; }
+        $cant_rh = ejecutarConsultaSimpleFila($sql_3); if ($cant_rh['status'] == false) { return $cant_rh; }
 
         $idtrabajador = $trabajador['idtrabajador'];
         $sql_4 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
         FROM cuenta_banco_trabajador as cbt, bancos as b
         WHERE cbt.idbancos = b.idbancos AND cbt.banco_seleccionado ='1' AND cbt.idtrabajador='$idtrabajador' ;";
-        $bancos = ejecutarConsultaSimpleFila($sql_4);
-        if ($bancos['status'] == false) { return  $bancos;}
+        $bancos = ejecutarConsultaSimpleFila($sql_4); if ($bancos['status'] == false) { return  $bancos;}
 
         $data[] = [
           'idresumen_q_s_asistencia' => $trabajador['idresumen_q_s_asistencia'],

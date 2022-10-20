@@ -23,7 +23,7 @@
           <?php
           require 'nav.php';
           require 'aside.php';
-          if ($_SESSION['viatico']==1){
+          if ($_SESSION['mano_obra']==1){
             //require 'enmantenimiento.php';
             ?>
 

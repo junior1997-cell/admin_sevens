@@ -72,9 +72,11 @@
                                 <th>Nombres</th>
                                 <th>Tipo</th>
                                 <th>Ocupación</th>
+                                <th>Desempeño</th>
                                 <th>Telefono</th>
                                 <th>Fecha Nac. / Edad</th>
                                 <th>Cuenta bancaria</th>
+
                                 <th>Estado</th>
                                 <th>Nombres</th>
                                 <th>Tipo</th>
@@ -94,9 +96,11 @@
                                 <th>Nombres</th>
                                 <th>Tipo</th>
                                 <th>Ocupación</th>
+                                <th>Desempeño</th>
                                 <th>Telefono</th>
                                 <th>Fecha Nac. / Edad</th>
                                 <th>Cuenta bancaria</th>
+
                                 <th>Estado</th>
                                 <th>Nombres</th>
                                 <th>Tipo</th>
@@ -119,9 +123,10 @@
                                     <th class="">Aciones</th>
                                     <th>Nombres</th>
                                     <th>Tipo</th>
-                                    <th>Ocupación</th>
+                                    <th>Desempeño</th>
                                     <th>Telefono</th> 
                                     <th>Descripción</th>
+
                                     <th>Estado</th>
                                     <th>Nombres</th>
                                     <th>Tipo</th>
@@ -140,9 +145,10 @@
                                     <th>Aciones</th>
                                     <th>Nombres</th>
                                     <th>Tipo</th>
-                                    <th>Ocupación</th>
+                                    <th>Desempeño</th>
                                     <th>Telefono</th>
                                     <th>Descripción</th>
+
                                     <th>Estado</th>
                                     <th>Nombres</th>
                                     <th>Tipo</th>
@@ -238,16 +244,7 @@
                                   <label for="telefono">Teléfono</label>
                                   <input type="text" name="telefono" id="telefono" class="form-control" data-inputmask="'mask': ['999-999-999', '+51 999 999 999']" data-mask />
                                 </div>
-                              </div>
-
-                              <!-- fecha de nacimiento -->
-                              <!-- <div class="col-12 col-sm-10 col-md-6 col-lg-3">
-                                <div class="form-group">
-                                  <label for="nacimiento">Fecha Nacimiento</label>
-                                  <input type="date" class="form-control" name="nacimiento" id="nacimiento" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento','#edad','#p_edad');" onchange="calcular_edad('#nacimiento','#edad','#p_edad');" />
-                                  
-                                </div>
-                              </div> --> 
+                              </div>                             
 
                               <!-- FECHA NACIMIENTO -->
                               <div class="col-12 col-sm-10 col-md-6 col-lg-3">
@@ -331,11 +328,20 @@
                                 </div>
                               </div>
 
-                              <!-- ocupacion -->
+                              <!-- tipo -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="ocupacion">Ocupación</label>
-                                  <select name="ocupacion[]" id="ocupacion" class="form-control select2"  multiple="multiple" style="width: 100%;"> </select>
+                                  <select name="ocupacion" id="ocupacion" class="form-control select2" style="width: 100%;"> </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                </div>
+                              </div>
+
+                              <!-- ocupacion -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-8">
+                                <div class="form-group">
+                                  <label for="desempenio">Desempeño</label>
+                                  <select name="desempenio[]" id="desempenio" class="form-control select2"  multiple="multiple" style="width: 100%;"> </select>
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
                               </div>
@@ -349,7 +355,7 @@
                               </div>
 
                               <!-- Direccion -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="direccion">Dirección</label>
                                   <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />

@@ -128,7 +128,7 @@
                               <table id="tabla-sub-contratos" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
                                     <tr>
-                                      <th colspan="10" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                      <th colspan="20" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                                     </tr>
                                     <tr>
                                       <th class="text-center">#</th>                                                    
@@ -328,8 +328,8 @@
                                 <!-- grupo -->
                                 <div class="col-lg-4">
                                   <div class="form-group">
-                                  <label for="idclasificacion_grupo">Grupo <sup class="text-danger">(único*)</sup></label>
-                                  <select name="idclasificacion_grupo " id="idclasificacion_grupo " class="form-control select2" style="width: 100%;"> </select>
+                                    <label for="idclasificacion_grupo">Grupo <sup class="text-danger">(único*)</sup></label>
+                                    <select name="idclasificacion_grupo" id="idclasificacion_grupo" class="form-control select2" style="width: 100%;"> </select>
                                   </div>
                                 </div>                 
 
@@ -479,18 +479,8 @@
                           <h4 class="modal-title">Comprobante: <b class="tile-modal-comprobante"></b></h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
                         </div>
-                        <div class="modal-body">
-                          <div class="row">
-                            <div class="col-6 col-md-6">
-                              <a class="btn btn-xs btn-block btn-warning" href="#" id="iddescargar" download="" type="button"><i class="fas fa-download"></i> Descargar</a>
-                            </div>
-                            <div class="col-6 col-md-6">
-                              <a class="btn btn-xs btn-block btn-info" href="#" id="ver_completo"  target="_blank" type="button"><i class="fas fa-expand"></i> Ver completo.</a>
-                            </div>
-                            <div class="col-12 col-md-12 mt-2">
-                              <div id="ver_fact_pdf" width="auto"></div>
-                            </div>
-                          </div>                          
+                        <div class="modal-body html-comprobante-subcontrato">
+                                                   
                         </div>
                       </div>
                     </div>
