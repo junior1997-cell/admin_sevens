@@ -300,6 +300,15 @@
 
         break;
 
+        // :::::::::::::::::::::::::::::::::::::::::::::::: O R D E N   T R A B A J A D O R ::::::::::::::::::::::::::::::::::::::::::::::::
+        case 'guardar_y_editar_orden_trabajador':
+          
+          // editamos un trabajador existente
+          $rspta=$trabajadorproyecto->editar_orden_trabajador( $_POST["td_order_trabajador"] );            
+          echo json_encode($rspta, true);                 
+
+        break;
+
 
         default: 
           $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 

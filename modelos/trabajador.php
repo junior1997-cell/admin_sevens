@@ -172,7 +172,7 @@ class Trabajador
 		FROM trabajador_por_proyecto as tpp, trabajador as t,  tipo_trabajador as tt, ocupacion as oc, desempenio as d
 		WHERE tpp.idtrabajador = t.idtrabajador AND tt.idtipo_trabajador=t.idtipo_trabajador AND t.idocupacion = oc.idocupacion 
     AND d.iddesempenio = tpp.iddesempenio
-    AND tpp.idproyecto = '$nube_idproyecto' AND tpp.estado='$estado' AND tpp.estado_delete='1' ORDER BY t.nombres ASC";
+    AND tpp.idproyecto = '$nube_idproyecto' AND tpp.estado='$estado' AND tpp.estado_delete='1' ORDER BY tpp.orden_trabajador ASC";
     $trabajdor = ejecutarConsultaArray($sql); if ($trabajdor['status'] == false) { return  $trabajdor;}
 
     foreach ($trabajdor['data'] as $key => $value) {
@@ -227,6 +227,20 @@ class Trabajador
     }    
 
     return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>['trabajador'=>$tipo_trabajador['data'],'html_desempenio'=>$html_desempenio]];
+  }
+
+  // :::::::::::::::::::::::::::::::::::::::::::::::: O R D E N   T R A B A J A D O R ::::::::::::::::::::::::::::::::::::::::::::::::
+  //Seleccionar Trabajador Select2
+  public function editar_orden_trabajador($orden_trabajador) {   
+    $cont = 1;
+    foreach ($orden_trabajador as $key => $value) {
+
+      $sql = "UPDATE trabajador_por_proyecto SET orden_trabajador='$cont' WHERE idtrabajador_por_proyecto='$value' ";
+      $update_orden =  ejecutarConsulta($sql); if ($update_orden['status'] == false) { return  $update_orden;}
+      $cont++;
+    }    
+
+    return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>[]];
   }
 
 }

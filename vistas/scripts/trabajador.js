@@ -27,7 +27,7 @@ function init() {
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_all_trabajador").on("click", function (e) {  $("#submit-form-all-trabajador").submit(); }); 
 
-  $("#guardar_registro_orden_trabajador").on("click", function (e) {  $("#submit-form-all-trabajador").submit(); }); 
+  $("#guardar_registro_orden_trabajador").on("click", function (e) {  $("#submit-form-orden-trabajador").submit(); }); 
   $("#form-orden-trabajador").on("submit",function(e) { guardar_y_editar_orden_trabajador(e);	});
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
@@ -876,12 +876,13 @@ function ver_lista_orden() {
                 <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
                 <span class="description">${val.tipo_documento}: ${val.numero_documento}</span>
               </div>
-              <input type="hidden" name="td_order_trabajador" value="${val.idtrabajador_por_proyecto}">
+              <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
             </td> 
           </tr>`);
         });
-        $('#html_order_trabajador').html(`<form id="form-orden-trabajador" name="form-orden-trabajador" method="POST"> ${html_data} <button type="submit" style="display: none;" id="submit-form-orden-trabajador">Submit</button></form>`);
-        $( "#html_order_trabajador" ).sortable();
+        $('#html_order_trabajador').html(` ${html_data} `);
+        $("#html_order_trabajador").sortable();
+        $("#html_order_trabajador").sortable();
       }else{
         ver_errores(e);
       }
@@ -903,8 +904,10 @@ function guardar_y_editar_orden_trabajador(e) {
       try {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {	          
-          Swal.fire("Correcto!", "All-Trabajador guardado correctamente", "success");          
-          $("#modal-agregar-all-trabajador").modal("hide"); 
+          Swal.fire("Correcto!", "Orden guardado correctamente", "success");          
+          $("#modal-order-trabajador").modal("hide"); 
+          if (tabla) { tabla.ajax.reload(null, false); } 
+          if (tabla) { tabla_secundaria.ajax.reload(null, false); }
         }else{
           ver_errores(e);
         }

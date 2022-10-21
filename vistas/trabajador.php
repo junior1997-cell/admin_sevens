@@ -665,18 +665,19 @@
                       </div>
 
                       <div class="modal-body">
-                       
-                        <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_valorizacion" style="border-spacing: collapse !important; border-spacing: 0 !important;" >
-                          <thead>                             
-                            <tr class="text-center bg-color-48acc6"> 
-                              <th class="pt-1 pb-1 celda-b-b-2px">#</th> 
-                              <th class="pt-1 pb-1 celda-b-b-2px">Nombre</th> 
-                            </tr>
-                          </thead>
-                          <tbody id="html_order_trabajador">  </tbody>
-                          
-                        </table>
-                        
+                        <form id="form-orden-trabajador" name="form-orden-trabajador" method="POST">
+                          <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_valorizacion" style="border-spacing: collapse !important; border-spacing: 0 !important;" >
+                            <thead>                             
+                              <tr class="text-center bg-color-48acc6"> 
+                                <th class="pt-1 pb-1 celda-b-b-2px">#</th> 
+                                <th class="pt-1 pb-1 celda-b-b-2px">Nombre</th> 
+                              </tr>
+                            </thead>
+                            <tbody id="html_order_trabajador">  </tbody>
+                            
+                          </table>                        
+                          <button type="submit" style="display: none;" id="submit-form-orden-trabajador">Submit</button>
+                        </form>
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
@@ -705,7 +706,7 @@
         <script src="../plugins/moment/locales.js"></script>
 
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-        <script src="https://raw.githubusercontent.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.min.js"></script>
+        <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
         <script type="text/javascript" src="scripts/trabajador.js"></script>
 
