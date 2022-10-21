@@ -469,6 +469,15 @@
                 </a>
               </li>
             <?php  }  ?>
+            <?php if ($_SESSION['asistencia_obrero']==1) {  ?>
+              <!-- REGISTRO DE ASISTENCIA -->
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="formatos_varios.php" class="nav-link pl-2" id="lformatos_varios">
+                  <i class="fas fa-clipboard-list nav-icon"></i>
+                  <p>Formatos varios </p>
+                </a>
+              </li>
+            <?php  }  ?>
 
             <?php if ($_SESSION['calendario']==1) {  ?>
               <!-- CALENDARIO -->       
