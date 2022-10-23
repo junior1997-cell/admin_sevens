@@ -22,7 +22,9 @@ function init(){
 
 	$("#lResumenInsumos").addClass("active");
 	
-	tbla_principal(localStorage.getItem('nube_idproyecto'));	
+	tbla_principal(localStorage.getItem('nube_idproyecto'));
+  tbla_materiales();
+
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
@@ -110,6 +112,7 @@ function doc2_eliminar() {
 // OCULTAR MOSTRAR - TABLAS
 function table_show_hide(flag) {
   if (flag == 1) {
+    // tabla principal
     $(".mensaje-tbla-principal").show();
     $("#btn-regresar").hide();
     $("#btn-regresar-todo").hide();
@@ -121,30 +124,28 @@ function table_show_hide(flag) {
     $("#tabla-principal").show();
     $("#tabla-factura").hide();
     $("#tabla-editar-factura").hide();
-  } else {
-    if (flag == 2) {
-      $(".mensaje-tbla-principal").hide();
-      $("#btn-regresar").show();
-      $("#btn-regresar-todo").hide();
-      $("#btn-regresar-bloque").hide();
-      $("#guardar_registro_compras").hide();
+  } else if (flag == 2) {
+    // ver editar compra insumos
+    $(".mensaje-tbla-principal").hide();
+    $("#btn-regresar").hide();
+    $("#btn-regresar-todo").show();
+    $("#btn-regresar-bloque").show();   
+    $("#guardar_registro_compras").hide();      
 
-      $("#tabla-principal").hide();
-      $("#tabla-factura").show();
-      $("#tabla-editar-factura").hide();
-    }else{
-      if (flag == 3) {
-        $(".mensaje-tbla-principal").hide();
-        $("#btn-regresar").hide();
-        $("#btn-regresar-todo").show();
-        $("#btn-regresar-bloque").show();   
-        $("#guardar_registro_compras").hide();      
+    $("#tabla-principal").hide();
+    $("#tabla-factura").hide();
+    $("#tabla-editar-factura").show(); 
+  }else if (flag == 3) {
+    // tabla factura
+    $(".mensaje-tbla-principal").hide();
+    $("#btn-regresar").show();
+    $("#btn-regresar-todo").hide();
+    $("#btn-regresar-bloque").hide();
+    $("#guardar_registro_compras").hide();
 
-        $("#tabla-principal").hide();
-        $("#tabla-factura").hide();
-        $("#tabla-editar-factura").show();        
-      }
-    }
+    $("#tabla-principal").hide();
+    $("#tabla-factura").show();
+    $("#tabla-editar-factura").hide();
   }
 }
 
@@ -247,7 +248,7 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 
   $(".nombre-insumo").html(`Producto: <b>${nombre_producto}</b>`);
 
-  table_show_hide(2);	
+  table_show_hide(3);	
 
 	tabla_factura = $('#tbla-facura').dataTable({
 		responsive: true,
@@ -270,12 +271,9 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
     },
     createdRow: function (row, data, ixdex) {
       // columna: Cantidad
-      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
+      if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
       // columna: Precio promedio
-      if (data[6] != '') { $("td", row).eq(6).addClass("text-right h5"); }
-      // columna: Precio actual
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-right"); }    
-      if (data[8] != '') { $("td", row).eq(8).addClass("text-right"); }
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-bold h5"); }
     },
 		language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -286,9 +284,9 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 		iDisplayLength: 10,//Paginación
 		order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [      
-      { targets: [4], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
-      { targets: [10,11], visible: false, searchable: false, },
+      { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [11,12], visible: false, searchable: false, },
     ],
 	}).DataTable();  
 
@@ -340,8 +338,7 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 function limpiar_form_compra() {
   $(".tooltip").removeClass("show").addClass("hidde");
 
-  //Mostramos los select2Proveedor
-  //$.post("../ajax/compra_insumos.php?op=select2Proveedor", function (r) { $("#idproveedor").html(r);  });
+  array_class_compra = [];
 
   $("#idcompra_proyecto").val();
   $("#idproyecto").val();
@@ -377,499 +374,6 @@ function limpiar_form_compra() {
   $(".is-invalid").removeClass("error is-invalid");
 }
 
-// EDITAR - DETALLE DE COMPRA
-function editar_detalle_compras(id) {
-
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
-
-  table_show_hide(3);
-
-  limpiar_form_compra();
-
-  array_class_trabajador = [];
-
-  cont = 0;  detalles = 0;
-
-  tbla_materiales()
-
-  $.post("../ajax/resumen_insumos.php?op=ver_compra_editar", { 'idcompra_proyecto': id }, function (e, status) {
-    
-    e = JSON.parse(e);  console.log(e);
-
-    if (e.status == true) {
-      if (e) {
-
-        $(".subtotal").html("");   $(".igv_comp").html("");  $(".total").html("");
-
-        if (e.data.tipo_comprobante == "Factura") {
-          $(".content-igv").show();
-          $(".content-tipo-comprobante").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
-          $(".content-descripcion").removeClass("col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-          $(".content-serie-comprobante").show();
-        } else if (e.data.tipo_comprobante == "Boleta" || e.data.tipo_comprobante == "Nota de venta") {
-          $(".content-serie-comprobante").show();
-          $(".content-igv").hide();
-          $(".content-tipo-comprobante").removeClass("col-lg-4 col-lg-5").addClass("col-lg-5");
-          $(".content-descripcion").removeClass(" col-lg-4 col-lg-5 col-lg-7 col-lg-8").addClass("col-lg-5");
-        } else if (e.data.tipo_comprobante == "Ninguno") {
-          $(".content-serie-comprobante").hide();
-          $(".content-serie-comprobante").val("");
-          $(".content-igv").hide();
-          $(".content-tipo-comprobante").removeClass("col-lg-5 col-lg-4").addClass("col-lg-4");
-          $(".content-descripcion").removeClass(" col-lg-4 col-lg-5 col-lg-7").addClass("col-lg-8");
-        } else {
-          $(".content-serie-comprobante").show();
-          //$(".content-descripcion").removeClass("col-lg-7").addClass("col-lg-4");
-        }
-
-        $("#idproyecto").val(e.data.idproyecto);
-        $("#idcompra_proyecto").val(e.data.idcompra_x_proyecto);
-        $("#idproveedor").val(e.data.idproveedor).trigger("change");
-        $("#fecha_compra").val(e.data.fecha_compra);
-        $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
-        $("#serie_comprobante").val(e.data.serie_comprobante).trigger("change");
-        $("#val_igv").val(e.data.val_igv);
-        $("#descripcion").val(e.data.descripcion);
-        $("#glosa").val(e.data.glosa).trigger("change");
-
-        if (e.data.estado_detraccion == 0) {
-          $("#estado_detraccion").val("0");
-          $('#my-switch_detracc').prop('checked', false); 
-        } else {
-          $("#estado_detraccion").val("1");
-          $('#my-switch_detracc').prop('checked', true); 
-        }      
-
-        if (e.data.producto) {
-
-          e.data.producto.forEach((element, index) => {
-
-            var img = "";
-
-            if (element.imagen == "" || element.imagen == null) {
-              img = "../dist/docs/material/img_perfil/producto-sin-foto.svg";
-            } else {
-              img = `../dist/docs/material/img_perfil/${element.imagen}`;
-            }
-
-            var fila = `
-            <tr class="filas" id="fila${cont}">
-              <td>
-                <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${element.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
-                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button></td>
-              </td>
-              <td>
-                <input type="hidden" name="idproducto[]" value="${element.idproducto}">
-                <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
-                <div class="user-block text-nowrap">
-                  <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
-                  <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
-                  <span class="description clasificacion_${cont}"><b>Clasificación: </b>${element.categoria}</span>
-                </div>
-              </td>
-              <td> <span class="unidad_medida_${cont}">${element.unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-              <td class="form-group"><input class="producto_${element.idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" value="${element.cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-              <td class="hidden"><input class="w-135px input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
-              <td class="hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
-              <td class="form-group"><input type="number" class="w-135px precio_con_igv_${cont} form-control" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-              <td><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-              <td class="text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
-              <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
-            </tr>`;
-
-            detalles = detalles + 1;
-
-            $("#detalles").append(fila);
-
-            array_class_trabajador.push({ id_cont: cont });
-
-            cont++;
-            evaluar();
-          });
-
-          modificarSubtotales();
-        } else {
-          toastr.error("<h3>Sin productos.</h3> <br> Este registro no tiene productos para mostrar");
-          $(".subtotal").html("S/ 0.00");
-          $(".igv_comp").html("S/ 0.00");
-          $(".total").html("S/ 0.00");
-        }
-      } else {
-        toastr.error("<h3>Error.</h3> <br> Este registro tiene errores, o esta vacio");
-      }
-
-      $("#cargando-1-fomulario").show();
-      $("#cargando-2-fomulario").hide();
-    } else {
-      ver_errores(e);
-    }
-
-  }).fail( function(e) { ver_errores(e); } ); 
-}
-
-// AGREGAR - PRODUCTO
-function agregarDetalleComprobante(idproducto, nombre, categoria, unidad_medida, nombre_color, precio_sin_igv, precio_igv, precio_total, img, ficha_tecnica_producto) {
-  var stock = 5;
-  var cantidad = 1;
-  var descuento = 0;
-
-  if (idproducto != "") {
-    // $('.producto_'+idproducto).addClass('producto_selecionado');
-    if ($(".producto_" + idproducto).hasClass("producto_selecionado")) {
-      toastr.success("Material: " + nombre + " agregado !!");
-
-      var cant_producto = $(".producto_" + idproducto).val();
-
-      var sub_total = parseInt(cant_producto, 10) + 1;
-
-      $(".producto_" + idproducto).val(sub_total);
-
-      modificarSubtotales();
-    } else {
-
-      if ($("#tipo_comprobante").select2("val") == "Factura") {
-        var subtotal = cantidad * precio_total;
-      } else {
-        var subtotal = cantidad * precio_sin_igv;
-      }
-
-      var img_p = "";
-
-      if (img == "" || img == null) {
-        img_p = "../dist/docs/material/img_perfil/producto-sin-foto.svg";
-      } else {
-        img_p = `../dist/docs/material/img_perfil/${img}`;
-      }
-
-      var fila = `
-      <tr class="filas" id="fila${cont}">         
-        <td class="">
-          <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
-          <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
-        </td>
-        <td class="">         
-          <input type="hidden" name="idproducto[]" value="${idproducto}">
-          <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
-          <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
-            <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
-            <span class="description clasificacion_${cont}"><b>Clasificación: </b>${categoria}</span>
-          </div>
-        </td>
-        <td class=""><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
-        <td class=" form-group"><input class="producto_${idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class=" hidden"><input type="number" class="w-135px input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
-        <td class=" hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
-        <td class="form-group"><input class="w-135px precio_con_igv_${cont} form-control" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-        <td class=""><input type="number" class="w-135px descuento_${cont}" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class=" text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
-        <td class=""><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
-      </tr>`;
-
-      detalles = detalles + 1;
-
-      $("#detalles").append(fila);
-
-      array_class_trabajador.push({ id_cont: cont });
-
-      modificarSubtotales();
-
-      toastr.success("Material: " + nombre + " agregado !!");
-
-      cont++;
-      evaluar();
-    }
-  } else {
-    // alert("Error al ingresar el detalle, revisar los datos del artículo");
-    toastr.error("Error al ingresar el detalle, revisar los datos del material.");
-  }
-}
-
-function evaluar() {
-  if (detalles > 0) {
-    $("#guardar_registro_compras").show();
-  } else {
-    $("#guardar_registro_compras").hide();
-    cont = 0;
-    $(".subtotal_compra").html("S/ 0.00");
-    $("#subtotal_compra").val(0);
-
-    $(".igv_compra").html("S/ 0.00");
-    $("#igv_compra").val(0);
-
-    $(".total_venta").html("S/ 0.00");
-    $("#total_compra").val(0);
-
-  }
-}
-
-function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "Factura") { $("#val_igv").val(0.18); } }
-
-
-function modificarSubtotales() {  
-
-  var val_igv = $('#val_igv').val(); //console.log(array_class_trabajador);
-
-  if ($("#tipo_comprobante").select2("val") == null) {
-
-    $(".hidden").hide(); //Ocultamos: IGV, PRECIO CON IGV
-
-    $("#colspan_subtotal").attr("colspan", 5); //cambiamos el: colspan
-
-    $("#val_igv").val(0);
-    $("#val_igv").prop("readonly",true);
-    $(".val_igv").html('IGV (0%)');
-
-    $("#tipo_gravada").val('NO GRAVADA');
-    $(".tipo_gravada").html('NO GRAVADA');
-
-    if (array_class_trabajador.length === 0) {
-    } else {
-      array_class_trabajador.forEach((element, index) => {
-        var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-        var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-        var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
-        var subtotal_producto = 0;
-
-        // Calculamos: IGV
-        var precio_sin_igv = precio_con_igv;
-        $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
-
-        // Calculamos: precio + IGV
-        var igv = 0;
-        $(`.precio_igv_${element.id_cont}`).val(igv);
-
-        // Calculamos: Subtotal de cada producto
-        subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-        $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
-      });
-      calcularTotalesSinIgv();
-    }
-  } else {
-    if ($("#tipo_comprobante").select2("val") == "Factura") {
-
-      $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
-
-      $("#colspan_subtotal").attr("colspan", 7); //cambiamos el: colspan
-      
-      $("#val_igv").prop("readonly",false);
-
-      if (array_class_trabajador.length === 0) {
-        if (val_igv == '' || val_igv <= 0) {
-          $("#tipo_gravada").val('NO GRAVADA');
-          $(".tipo_gravada").html('NO GRAVADA');
-          $(".val_igv").html(`IGV (0%)`);
-        } else {
-          $("#tipo_gravada").val('GRAVADA');
-          $(".tipo_gravada").html('GRAVADA');
-          $(".val_igv").html(`IGV (${(parseFloat(val_igv) * 100).toFixed(2)}%)`);
-        }
-        
-      } else {
-        // validamos el valor del igv ingresado        
-
-        array_class_trabajador.forEach((element, index) => {
-          var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-          var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-          var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
-          var subtotal_producto = 0;
-
-          // Calculamos: Precio sin IGV
-          var precio_sin_igv = ( quitar_igv_del_precio(precio_con_igv, val_igv, 'decimal')).toFixed(2);
-          $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
-
-          // Calculamos: IGV
-          var igv = (parseFloat(precio_con_igv) - parseFloat(precio_sin_igv)).toFixed(2);
-          $(`.precio_igv_${element.id_cont}`).val(igv);
-
-          // Calculamos: Subtotal de cada producto
-          subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-          $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
-        });
-
-        calcularTotalesConIgv();
-      }
-    } else {
-
-      $(".hidden").hide(); //Ocultamos: IGV, PRECIO CON IGV
-
-      $("#colspan_subtotal").attr("colspan", 5); //cambiamos el: colspan
-
-      $("#val_igv").val(0);
-      $("#val_igv").prop("readonly",true);
-      $(".val_igv").html('IGV (0%)');
-
-      $("#tipo_gravada").val('NO GRAVADA');
-      $(".tipo_gravada").html('NO GRAVADA');
-
-      if (array_class_trabajador.length === 0) {
-      } else {
-        array_class_trabajador.forEach((element, index) => {
-          var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-          var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-          var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
-          var subtotal_producto = 0;
-
-          // Calculamos: IGV
-          var precio_sin_igv = precio_con_igv;
-          $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
-
-          // Calculamos: precio + IGV
-          var igv = 0;
-          $(`.precio_igv_${element.id_cont}`).val(igv);
-
-          // Calculamos: Subtotal de cada producto
-          subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-          $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
-        });
-
-        calcularTotalesSinIgv();
-      }
-    }
-  }
-  toastr.success("Precio Actualizado !!!");
-}
-
-function calcularTotalesSinIgv() {
-  var total = 0.0;
-  var igv = 0;
-  var mtotal = 0;
-
-  if (array_class_trabajador.length === 0) {
-  } else {
-    array_class_trabajador.forEach((element, index) => {
-      total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
-    });
-
-    $(".subtotal_compra").html("S/ " + formato_miles(total));
-    $("#subtotal_compra").val(redondearExp(total, 4));
-
-    $(".igv_compra").html("S/ 0.00");
-    $("#igv_compra").val(0.0);
-    $(".val_igv").html('IGV (0%)');
-
-    $(".total_venta").html("S/ " + formato_miles(total.toFixed(2)));
-    $("#total_venta").val(redondearExp(total, 4));
-  }
-}
-
-function calcularTotalesConIgv() {
-  var val_igv = $('#val_igv').val();
-  var igv = 0;
-  var total = 0.0;
-
-  var subotal_sin_igv = 0;
-
-  array_class_trabajador.forEach((element, index) => {
-    total += parseFloat(quitar_formato_miles($(`.subtotal_producto_${element.id_cont}`).text()));
-  });
-
-  //console.log(total); 
-
-  subotal_sin_igv = quitar_igv_del_precio(total, val_igv, 'decimal').toFixed(2);
-  igv = (parseFloat(total) - parseFloat(subotal_sin_igv)).toFixed(2);
-
-  $(".subtotal_compra").html(`S/ ${formato_miles(subotal_sin_igv)}`);
-  $("#subtotal_compra").val(redondearExp(subotal_sin_igv, 4));
-
-  $(".igv_compra").html("S/ " + formato_miles(igv));
-  $("#igv_compra").val(igv);
-
-  $(".total_venta").html("S/ " + formato_miles(total.toFixed(2)));
-  $("#total_venta").val(redondearExp(total, 4));
-
-  total = 0.0;
-}
-
-function quitar_igv_del_precio(precio , igv, tipo ) {
-  
-  var precio_sin_igv = 0;
-
-  switch (tipo) {
-    case 'decimal':
-
-      // validamos el valor del igv ingresado
-      if (igv > 0 && igv <= 1) { 
-        $("#tipo_gravada").val('GRAVADA');
-        $(".tipo_gravada").html('GRAVADA');
-        $(".val_igv").html(`IGV (${(parseFloat(igv) * 100).toFixed(2)}%)`); 
-      } else { 
-        igv = 0; 
-        $(".val_igv").html('IGV (0%)'); 
-        $("#tipo_gravada").val('NO GRAVADA');
-        $(".tipo_gravada").html('NO GRAVADA');
-      }
-
-      if (parseFloat(precio) != NaN && igv > 0 ) {
-        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( ( parseFloat(igv) * 100 ) + 100 )
-      }else{
-        precio_sin_igv = precio;
-      }
-    break;
-
-    case 'entero':
-      
-      // validamos el valor del igv ingresado
-      if (igv > 0 && igv <= 100) { 
-        $("#tipo_gravada").val('GRAVADA');
-        $(".tipo_gravada").html('GRAVADA');
-        $(".val_igv").html(`IGV (${parseFloat(igv)}%)`); 
-      } else { 
-        igv = 0; 
-        $(".val_igv").html('IGV (0%)'); 
-        $("#tipo_gravada").val('NO GRAVADA');
-        $(".tipo_gravada").html('NO GRAVADA');
-      }
-
-      if (parseFloat(precio) != NaN && igv > 0 ) {
-        precio_sin_igv = ( parseFloat(precio) * 100 ) / ( parseFloat(igv)  + 100 )
-      }else{
-        precio_sin_igv = precio;
-      }
-    break;
-  
-    default:
-      $(".val_igv").html('IGV (0%)');
-      toastr.success('No has difinido un tipo de calculo de IGV.')
-    break;
-  } 
-  
-  return precio_sin_igv; 
-}
-
-function ocultar_comprob() {
-  if ($("#tipo_comprobante").select2("val") == "Ninguno") {
-    $("#content-serie-comprobante").hide();
-
-    $("#content-serie-comprobante").val("");
-
-    $("#content-descripcion").removeClass("col-lg-5").addClass("col-lg-7");
-  } else {
-    $("#content-serie-comprobante").show();
-
-    $("#content-descripcion").removeClass("col-lg-7").addClass("col-lg-5");
-  }
-}
-
-function eliminarDetalle(indice) {
-  $("#fila" + indice).remove();
-
-  array_class_trabajador.forEach(function (car, index, object) {
-    if (car.id_cont === indice) {
-      object.splice(index, 1);
-    }
-  });
-
-  modificarSubtotales();
-
-  detalles = detalles - 1;
-
-  evaluar();
-
-  toastr.warning("Material removido.");
-}
-
 //Función para guardar o editar - COMPRAS
 function guardar_y_editar_compras(e) {
    
@@ -901,7 +405,7 @@ function guardar_y_editar_compras(e) {
         tbla_facuras( idproyecto_r, idproducto_r, nombre_producto_r, precio_promedio_r, subtotal_x_producto_r );
         tbla_principal(localStorage.getItem('nube_idproyecto'));
         limpiar_form_compra();
-        table_show_hide(2);  cont = 0;
+        table_show_hide(3);  cont = 0;
       } else {
         ver_errores(result.value);
       }      
@@ -910,7 +414,7 @@ function guardar_y_editar_compras(e) {
 }
 
 //mostramos el detalle del comprobante de la compras
-function ver_detalle_compras(idcompra_proyecto) {
+function ver_detalle_compras(idcompra_proyecto, id_insumo) {
 
   $("#cargando-5-fomulario").hide();
   $("#cargando-6-fomulario").show();
@@ -920,25 +424,21 @@ function ver_detalle_compras(idcompra_proyecto) {
 
   $("#modal-ver-compras").modal("show");
 
-  $.post("../ajax/resumen_insumos.php?op=ver_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
-    $(".detalle_de_compra").html(r); 
-    $("#cargando-5-fomulario").show();
-    $("#cargando-6-fomulario").hide();
+  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_insumo&id_compra=${idcompra_proyecto}&id_insumo=${id_insumo}`, function (e) {
+    e = JSON.parse(e); console.log(e);
+    if (e.status == true) {
+      $(".detalle_de_compra").html(e.data); 
+      $("#cargando-5-fomulario").show();
+      $("#cargando-6-fomulario").hide();
 
-    $("#print_pdf_compra").removeClass('disabled');    
-    $("#excel_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=insumo` );
+      $("#print_pdf_compra").removeClass('disabled');    
+      $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=insumo` );
+    } else {
+      ver_errores(e);
+    }   
   }).fail( function(e) { ver_errores(e); } ); 
 }
-
-//Detraccion
-$("#my-switch_detracc").on("click ", function (e) {
-  if ($("#my-switch_detracc").is(":checked")) {
-    $("#estado_detraccion").val("1");
-  } else {
-    $("#estado_detraccion").val("0");
-  }
-});
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPROBANTES FACTURAS ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -1015,6 +515,11 @@ function tbla_materiales() {
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     // order: [[0, "desc"]], //Ordenar (columna,orden)
+    columnDefs: [ 
+      //{ targets: [6], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [3], render: $.fn.dataTable.render.number(',', '.', 2) },
+      //{ targets: [3], visible: false, searchable: false, }, 
+    ]
   }).DataTable();
 }
 
@@ -1701,17 +1206,18 @@ function ver_img_material(img, nombre) {
 }
 
 function export_excel_detalle_factura() {
-  $tabla = document.querySelector("#tabla_detalle_factura");
+  $tabla = document.querySelector("#tabla_detalle_compra_de_insumo");
   let tableExport = new TableExport($tabla, {
     exportButtons: false, // No queremos botones
     filename: "Detalle comprobante", //Nombre del archivo de Excel
     sheetname: "detalle factura", //Título de la hoja
   });
   let datos = tableExport.getExportData(); console.log(datos);
-  let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
+  let preferenciasDocumento = datos.tabla_detalle_compra_de_insumo.xlsx;
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
 }
+
 function extrae_ruc() {
   if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
     $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');

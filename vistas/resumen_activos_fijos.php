@@ -549,7 +549,7 @@
                             <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
                             <th>Nombre Producto</th>
                             <th>Clasificación</th>
-                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
+                            <th data-toggle="tooltip" data-original-title="Precio Promedio">P/P.</th>
                             <th>Descripción</th>
                             <th data-toggle="tooltip" data-original-title="Ficha Técnica" >Code</th>
                           </thead>

@@ -942,17 +942,20 @@ function ver_detalle_compras_activo_fijo(idcompra_af_general) {
 
   $("#modal-ver-compras-general").modal("show"); 
 
-  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_activo_fijo&idcompra_af_general=" + idcompra_af_general, function (r) {
+  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_activo_fijo&id_compra=${idcompra_af_general}`, function (e) {
 
-    $(".detalle_de_compra_general").html(r); //console.log(r);
+    e = JSON.parse(e); console.log(e);
+    if (e.status == true) {
+      $(".detalle_de_compra_general").html(e.data); 
+      $("#cargando-9-fomulario").show();
+      $("#cargando-10-fomulario").hide();
 
-    $('[data-toggle="tooltip"]').tooltip();
-    $("#cargando-9-fomulario").show();
-    $("#cargando-10-fomulario").hide();
-
-    $("#print_pdf_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_af_general}&op=activo_fijo` );
-    $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").removeClass('disabled');    
+      $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${id_compra}&op=activo_fijo` );
+    } else {
+      ver_errores(e);
+    }     
   }).fail( function(e) { ver_errores(e); } );
 }
 
@@ -967,17 +970,20 @@ function ver_detalle_compras_insumo(id_compra) {
 
   $("#modal-ver-compras-general").modal("show");
   
-  $.post("../ajax/compra_activos_fijos.php?op=ver_detalle_compras_insumo&id_compra=" + id_compra, function (r) {
+  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_insumo&id_compra=${id_compra}`, function (e) {
 
-    $(".detalle_de_compra_general").html(r); //console.log(r);
+    e = JSON.parse(e); console.log(e);
+    if (e.status == true) {
+      $(".detalle_de_compra_general").html(e.data); 
+      $("#cargando-9-fomulario").show();
+      $("#cargando-10-fomulario").hide();
 
-    $('[data-toggle="tooltip"]').tooltip();
-    $("#cargando-9-fomulario").show();
-    $("#cargando-10-fomulario").hide();
-
-    $("#print_pdf_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${id_compra}&op=insumo`);
-    $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").removeClass('disabled');    
+      $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${id_compra}&op=insumo` );
+    } else {
+      ver_errores(e);
+    }   
   }).fail( function(e) { ver_errores(e); } );
 }
 

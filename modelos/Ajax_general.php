@@ -185,7 +185,7 @@
           'ficha_tecnica' =>  $value['ficha_tecnica'],
           'nombre_medida' =>  $value['nombre_medida'],
           'categoria'     =>  $value['categoria'],
-          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ),                  
+          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : number_format(floatval($precio['data']['promedio_precio']), 2, '.', '' ) ) ),                  
         );  
       }
       return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];      
@@ -214,7 +214,7 @@
           'ficha_tecnica' =>  $value['ficha_tecnica'],
           'nombre_medida' =>  $value['nombre_medida'],
           'categoria'     =>  $value['categoria'],
-          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ),                  
+          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : number_format(floatval($precio['data']['promedio_precio']), 2, '.', '' ) ) ),                  
         );  
       }
       return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];      
@@ -243,7 +243,7 @@
           'ficha_tecnica' =>  $value['ficha_tecnica'],
           'nombre_medida' =>  $value['nombre_medida'],
           'categoria'     =>  $value['categoria'],
-          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ),                  
+          'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : number_format(floatval($precio['data']['promedio_precio']), 2, '.', '' ) ) ),                  
         );  
       }
       return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];      

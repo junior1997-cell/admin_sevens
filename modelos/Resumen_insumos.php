@@ -58,10 +58,9 @@ class ResumenInsumos
     return $retorno = ['status' => true, 'data' => $resumen_producto, 'message' => 'todo bien'];
   }
 
-  public function tbla_facturas($idproyecto, $idproducto)
-  {
+  public function tbla_facturas($idproyecto, $idproducto) {
     $sql = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
-		pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
+		dc.idproducto, pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
 		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
@@ -73,23 +72,40 @@ class ResumenInsumos
 
     foreach ($compra['data'] as $key => $value) {
       $idcompra_proyecto = $value['idcompra_proyecto'];
+      $idproducto = $value['idproducto'];
 
       $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
       $cant_comprobantes = ejecutarConsultaSimpleFila($sql3); if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
 
+      //listar detalle_marca
+      $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
+      FROM detalle_marca as dm, marca as m 
+      WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$idproducto' AND dm.estado='1' AND dm.estado_delete='1' ORDER BY dm.iddetalle_marca ASC;";
+      $detalle_marca = ejecutarConsultaArray($sql);   if ($detalle_marca['status'] == false){ return $detalle_marca; }
+      
+      $marcas_html = ""; $datalle_marcas_export = "";
+      foreach ($detalle_marca['data'] as $key => $value2) {
+        $marcas_html .=  '<li >'.$value2['marca'].'</li>';
+        $datalle_marcas_export .=  '<li>  -'.$value2['marca'].'</li>';
+      }
+
       $data[] = [
-        'idproyecto' => $value['idproyecto'],
+        'idproyecto'        => $value['idproyecto'],
         'idcompra_proyecto' => $value['idcompra_proyecto'],
-        'fecha_compra' => $value['fecha_compra'],
-        'ficha_tecnica' => $value['ficha_tecnica'],
-        'nombre_producto' => $value['nombre_producto'],
-        'cantidad' => $value['cantidad'],
-        'tipo_comprobante' => $value['tipo_comprobante'],
+        'fecha_compra'      => $value['fecha_compra'],
+        'ficha_tecnica'     => $value['ficha_tecnica'],
+        'idproducto'        => $value['idproducto'],
+        'nombre_producto'   => $value['nombre_producto'],
+        'cantidad'          => $value['cantidad'],
+        'tipo_comprobante'  => $value['tipo_comprobante'],
         'serie_comprobante' => $value['serie_comprobante'],
-        'precio_con_igv' => $value['precio_con_igv'],
-        'descuento' => $value['descuento'],
-        'subtotal' => $value['subtotal'],
-        'proveedor' => $value['proveedor'],
+        'precio_con_igv'    => $value['precio_con_igv'],
+        'descuento'         => $value['descuento'],
+        'subtotal'          => $value['subtotal'],
+        'proveedor'         => $value['proveedor'],
+
+        'html_marca'        => '<ol class="pl-3">'.$marcas_html. '. </ol>',
+        'marca_export'      => $datalle_marcas_export,
         'cant_comprobantes' => empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']),
       ];
     }

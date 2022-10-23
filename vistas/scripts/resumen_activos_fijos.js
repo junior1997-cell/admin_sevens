@@ -27,6 +27,7 @@ function init(){
 
 	lista_de_items();
   tabla_principal(localStorage.getItem('nube_idproyecto') , 'todos');
+  tbla_materiales();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
@@ -315,6 +316,8 @@ function tbla_facuras( idproyecto, idproducto, nombre_producto, precio_promedio,
 function limpiar_form_compra() {
   $(".tooltip").removeClass("show").addClass("hidde");
 
+  array_class_compra = [];
+
   $("#idcompra_proyecto").val();
   $("#idproyecto").val();
   $("#idproveedor").val("null").trigger("change");
@@ -526,6 +529,11 @@ function tbla_materiales() {
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     // order: [[0, "desc"]], //Ordenar (columna,orden)
+    columnDefs: [ 
+      //{ targets: [6], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [3], render: $.fn.dataTable.render.number(',', '.', 2) },
+      //{ targets: [3], visible: false, searchable: false, }, 
+    ]
   }).DataTable();
 }
 

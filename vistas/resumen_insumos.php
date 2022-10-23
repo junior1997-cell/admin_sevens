@@ -74,7 +74,7 @@
 
                           <!-- regresar "tabla facuras" -->
                           <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas">
-                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(3);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>                    
                         </div>
                         
@@ -129,6 +129,7 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>N° Comprob.</th>
+                                  <th>Marcas</th>
                                   <th>Fecha compra</th>
                                   <th data-toggle="tooltip" data-original-title="Centidad">Cant.</th>
                                   <th>Precio</th>  
@@ -148,9 +149,10 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>N° Comprob.</th>
+                                  <th>Marcas</th>
                                   <th >Fecha compra</th>
                                   <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                  <th class="text-nowrap h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
+                                  <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
                                   <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
                                   <th class="text-nowrap px-2"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
                                   <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                            
@@ -345,7 +347,7 @@
                             </div>
 
                             <div class="modal-footer justify-content-between">
-                              <button type="button" class="btn btn-danger" onclick="table_show_hide(2);" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-danger" onclick="table_show_hide(3);" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                             </div>
                           </div>
@@ -517,7 +519,7 @@
                             <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
                             <th>Nombre Producto</th>
                             <th>Clasificación</th>
-                            <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U.</th>
+                            <th data-toggle="tooltip" data-original-title="Precio Promedio">P/P.</th>
                             <th>Descripción</th>
                             <th data-toggle="tooltip" data-original-title="Ficha Técnica" >Code</th>
                           </thead>
@@ -870,6 +872,7 @@
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <script type="text/javascript" src="scripts/resumen_insumos.js"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

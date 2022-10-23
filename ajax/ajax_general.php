@@ -447,7 +447,7 @@
       /* ══════════════════════════════════════ P R O D U C T O ══════════════════════════════════════ */
       case 'tblaActivosFijos':
           
-        $rspta = $ajax_general->tblaInsumosYActivosFijos(); 
+        $rspta = $ajax_general->tblaActivosFijos(); 
         //echo json_encode($rspta, true);
         //Vamos a declarar un array
         $datas = []; 
@@ -498,7 +498,7 @@
 
       case 'tblaInsumos':
           
-        $rspta = $ajax_general->tblaInsumosYActivosFijos(); 
+        $rspta = $ajax_general->tblaInsumos(); 
         //echo json_encode($rspta, true);
         //Vamos a declarar un array
         $datas = []; 
@@ -868,9 +868,9 @@
 
         $tbody = ""; $cont = 1;
 
-        foreach ( $rspta['data'] as $key => $reg) {
+        foreach ( $rspta['data']['detalle_producto'] as $key => $reg) {
 
-          $bg_resaltar = ($id_insumo == $reg['idproducto']? $class_resaltar_insumo : "" );
+          $bg_resaltar = ($id_activo_fijo == $reg['idproducto']? $class_resaltar_insumo : "" );
           $ficha = empty($reg['ficha_tecnica']) ? ( '<i class="fa-regular fa-file-pdf fa-2x '. $bg_resaltar.' text-gray-50"></i>') : ( '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
           $img_product = 'dist/docs/material/img_perfil/'. (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
 

@@ -401,7 +401,7 @@ function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar
 
 // .....::::::::::::::::::::::::::::::::::::: D E T A L L E S   D E   M O D U L O S  :::::::::::::::::::::::::::::::::::::::..
 
-function detalle_compra_insumo(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_compra_insumo( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -415,21 +415,26 @@ function detalle_compra_insumo(id_tabla, name_tabla, name_id_tabla, id_tabla, ac
   $('#modal-ver-compras .modal-dialog').addClass('modal-xl').removeClass('modal-md');
   $("#modal-ver-compras").modal("show");
 
-  $.post(`../ajax/resumen_gasto.php?op=detalle_compra_insumo`,{'id_tabla':id_tabla}, function (r) {
-    $(".detalle_de_modulo").html(r); 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
+  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_insumo&id_compra=${id_tabla}`, function (e) {    
+    e = JSON.parse(e);
+    if (e.status == true) {
+      $(".detalle_de_modulo").html(e.data); 
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
 
-    $("#print_pdf_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${id_tabla}&op=insumo` );
-    $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").removeClass('disabled');    
+      $("#excel_compra").removeClass('disabled');
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${id_tabla}&op=insumo` );
+    } else {
+      ver_errores(e);
+    }   
 
     $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);
     $('.modal-add-remove-visto-bueno').attr('onclick', `visto_bueno('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${accion}', '${nombre_agregar_quitar}')`);
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_servicio_maquina(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_servicio_maquina( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -534,7 +539,7 @@ function detalle_servicio_maquina(id_tabla, name_tabla, name_id_tabla, id_tabla,
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_servicio_equipo(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_servicio_equipo( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -639,7 +644,7 @@ function detalle_servicio_equipo(id_tabla, name_tabla, name_id_tabla, id_tabla, 
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_sub_contrato(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_sub_contrato( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -748,7 +753,7 @@ function detalle_sub_contrato(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_mano_de_obra(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_mano_de_obra( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -825,7 +830,7 @@ function detalle_mano_de_obra(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_planilla_seguro(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_planilla_seguro( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -930,7 +935,7 @@ function detalle_planilla_seguro(id_tabla, name_tabla, name_id_tabla, id_tabla, 
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_otro_gasto(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_otro_gasto( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1043,7 +1048,7 @@ function detalle_otro_gasto(id_tabla, name_tabla, name_id_tabla, id_tabla, accio
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_transporte(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_transporte( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1176,7 +1181,7 @@ function detalle_transporte(id_tabla, name_tabla, name_id_tabla, id_tabla, accio
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_hospedaje(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_hospedaje( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1305,7 +1310,7 @@ function detalle_hospedaje(id_tabla, name_tabla, name_id_tabla, id_tabla, accion
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_pension(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_pension( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1418,7 +1423,7 @@ function detalle_pension(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, 
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_break(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_break( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1531,7 +1536,7 @@ function detalle_break(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, no
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_comida_extra(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_comida_extra( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1644,7 +1649,7 @@ function detalle_comida_extra(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_otro_ingreso(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_otro_ingreso( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1655,7 +1660,7 @@ function detalle_otro_ingreso(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
   $("#modal-ver-compras").modal("show");
 }
 
-function detalle_otra_factura(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_otra_factura( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
   
@@ -1666,7 +1671,7 @@ function detalle_otra_factura(id_tabla, name_tabla, name_id_tabla, id_tabla, acc
   $("#modal-ver-compras").modal("show");
 }
 
-function detalle_pago_administrador(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_pago_administrador( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1801,7 +1806,7 @@ function detalle_pago_administrador(id_tabla, name_tabla, name_id_tabla, id_tabl
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function detalle_pago_obrero(id_tabla, name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
+function detalle_pago_obrero( name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar_quitar) {
   $('.modal-eliminar-permanente').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   $('.modal-add-remove-visto-bueno').attr('onclick', `toastr_info("Espera!!","Espera la carga completa", 700)`);
   (accion == 'quitar'? $('.modal-add-remove-visto-bueno').removeClass('btn-outline-success').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>').attr('data-original-title','Quitar visto bueno') :$('.modal-add-remove-visto-bueno').removeClass('btn-outline-danger').addClass('btn-outline-success').html('<i class="fas fa-check"></i>').attr('data-original-title','Dar visto bueno'));
@@ -1980,14 +1985,14 @@ init();
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
 function export_excel_detalle_factura() {
-  $tabla = document.querySelector("#tabla_detalle_factura");
+  $tabla = document.querySelector("#tabla_detalle_compra_de_insumo");
   let tableExport = new TableExport($tabla, {
     exportButtons: false, // No queremos botones
     filename: "Detalle comprobante", //Nombre del archivo de Excel
     sheetname: "detalle factura", //Título de la hoja
   });
   let datos = tableExport.getExportData(); console.log(datos);
-  let preferenciasDocumento = datos.tabla_detalle_factura.xlsx;
+  let preferenciasDocumento = datos.tabla_detalle_compra_de_insumo.xlsx;
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
 }

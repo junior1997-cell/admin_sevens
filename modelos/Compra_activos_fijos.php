@@ -507,7 +507,15 @@ class Compra_activos_fijos
       "subtotal"            => $compra['data']['subtotal'],
       "igv"                 => $compra['data']['igv'],
       "total"               => $compra['data']['total'],
+      "tipo_gravada"        => $compra['data']['tipo_gravada'],
       "estado"              => $compra['data']['estado'],
+
+      "idproveedor"         => $compra['data']['idproveedor'],
+      "razon_social"        => $compra['data']['razon_social'],
+      "tipo_documento"      => $compra['data']['tipo_documento'],
+      "ruc"                 => $compra['data']['ruc'],
+      "direccion"           => $compra['data']['direccion'],
+      "telefono"            => $compra['data']['telefono'],
 
       "detalle_producto" => $activos['data'],
     ];

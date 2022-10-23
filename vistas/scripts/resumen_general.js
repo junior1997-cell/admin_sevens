@@ -1574,10 +1574,10 @@ function mostrar_detalle_compras(idcompra_proyecto) {
 
   $("#modal-ver-compras").modal("show");  
 
-  $.post("../ajax/resumen_general.php?op=mostrar_detalle_compras&id_compra=" + idcompra_proyecto, function (r) {
-    r = JSON.parse(r);
-    if (r.status == true) {
-      $(".detalles_compra").html(r.data);
+  $.post(`../ajax/ajax_general.php?op=detalle_compra_de_insumo&id_compra=${idcompra_proyecto}`, function (e) {
+    e = JSON.parse(e);
+    if (e.status == true) {
+      $(".detalles_compra").html(e.data);
       $('#cargando-1-fomulario').show();
       $('#cargando-2-fomulario').hide();
 
