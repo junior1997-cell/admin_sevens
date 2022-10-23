@@ -16,7 +16,7 @@ class Trabajador
     $sql_1 = "SELECT t.nombres as trabajador, t.tipo_documento,t.numero_documento, tip.nombre as tipo, tpp.desempenio, 
     tpp.sueldo_mensual, tpp.estado, tpp.estado_delete
     FROM trabajador_por_proyecto as tpp, trabajador as t,  tipo_trabajador as tip
-    WHERE tpp.idtrabajador = t.idtrabajador and tpp.idtipo_trabajador = tip.idtipo_trabajador
+    WHERE tpp.idtrabajador = t.idtrabajador and t.idtipo_trabajador = tip.idtipo_trabajador
     AND  tpp.idproyecto ='$idproyecto' AND tpp.idtrabajador ='$trabajador';";
     $buscando = ejecutarConsultaArray($sql_1);
 
