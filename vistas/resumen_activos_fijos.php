@@ -27,11 +27,11 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['compra_insumos']==1){
-            require 'enmantenimiento.php';
+            //require 'enmantenimiento.php';
             ?>   
           
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper hidden" >
+            <div class="content-wrapper" >
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">
@@ -56,236 +56,70 @@
                   <div class="row">
                     <div class="col-12">
                       <!-- TBLA PRINCIPAL  -->
-                      <div id="tabla-principal">
+                      <div id="tabla-principal" class="row">
 
-                        <!-- CARD - MAQUINARIA --------------------------------------------- -->
-                        <div class="card card-primary card-outline collapsed-card">
-                          <div class="card-header">
-                            <h3 class="card-title">Lista de activo: <b>Maquinarias</b></h3>
-                            <div class="card-tools">
-                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-plus"></i>
-                              </button>
+                        <!-- TABS - CLASIFICACION --------------------------------------------- -->
+                        <div class="col-12 col-sm-12">
+                          <div class="card card-primary card-outline card-tabs">
+                            <div class="card-header p-0 pt-1 border-bottom-0">
+                              <ul class="nav nav-tabs lista-items" id="tabs-clasificacion-tab" role="tablist">
+                                <li class="nav-item">
+                                <a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a>
+                                </li>
+                                                       
+                              </ul>
                             </div>
-                          </div>
-                          <!-- /.card-header -->
-                          <div class="card-body row-horizon disenio-scroll">
-                            <table id="tbla-resumen-maquinaria" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th>  
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
-                                  <th>Cantidad</th>
-                                  <th>Compra</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th>                      
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>                      
-                                </tr>
-                              </thead>
-                              <tbody>                         
-                                <!-- aqui la va el detalle de la tabla -->
-                              </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th>  
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th>UM</th>
-                                  <th class="text-center suma_total_productos_m h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th>Compra</th>
-                                  <th>Precio promedio</th>
-                                  <th>Precio actual</th>   
-                                  <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_m">0.00</span></div></th>                               
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>  
-                                </tr>
-                              </tfoot>
-                            </table>
-                          </div>
-                          <!-- /.card-body -->
-                        </div>
+                            <div class="card-body">
+                              <div class="tab-content" id="tabs-clasificacion-tabContent">
+                                <div class="tab-pane fade show active" id="tabs-clasificacion" role="tabpanel" aria-labelledby="tabs-clasificacion-tab">
+                                  <table id="tbla-resumen-activo-fijo" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                    <thead>
+                                      <tr>
+                                        <th class="">#</th>
+                                        <th class="">Op</th>
+                                        <th>Code</th>  
+                                        <th class="">Producto</th>
+                                        <th class="">Grupo</th>
+                                        <th class="">Marca</th>
+                                        <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
+                                        <th>Cantidad</th>
+                                        <th>Compra</th> 
+                                        <th>Precio promedio</th> 
+                                        <th>Precio actual</th>    
+                                        <th>Suma Total</th>       
 
-                        <!-- CARD - EQUIPO -------------------------------------------------- -->
-                        <div class="card  card-primary card-outline collapsed-card">
-                          <div class="card-header">
-                            <h3 class="card-title">Lista de activos: <b>Equipos</b></h3>
-                            <div class="card-tools">
-                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-plus"></i>
-                              </button>
+                                        <th>Activo</th>                      
+                                        <th>Modelo</th>                      
+                                      </tr>
+                                    </thead>
+                                    <tbody>                         
+                                      <!-- aqui la va el detalle de la tabla -->
+                                    </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="">#</th>
+                                        <th class="">Op</th>
+                                        <th>Code</th>  
+                                        <th class="">Producto</th>
+                                        <th class="">Grupo</th>
+                                        <th class="">Marca</th>
+                                        <th>UM</th>
+                                        <th class="text-center cantidad_productos h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                        <th>Compra</th>
+                                        <th>Precio promedio</th>
+                                        <th>Precio actual</th>   
+                                        <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="subtotal_de_compras">0.00</span></div></th>                               
+                                        <th>Activo</th>                      
+                                        <th>Modelo</th>  
+                                      </tr>
+                                    </tfoot>
+                                  </table>
+                                </div>                                                            
+                              </div>
                             </div>
+                            <!-- /.card -->
                           </div>
-                          <!-- /.card-header -->
-                          <div class="card-body  row-horizon disenio-scroll">
-                            <table id="tbla-resumen-equipo" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th> 
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
-                                  <th>Cantidad</th>
-                                  <th>Compra</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th>  
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>                      
-                                </tr>
-                              </thead>
-                              <tbody>                         
-                                <!-- aqui la va el detalle de la tabla -->
-                              </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th> 
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th>UM</th>
-                                  <th class="text-center suma_total_productos_e h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th>Compra</th>
-                                  <th>Precio promedio</th>
-                                  <th>Precio actual</th>   
-                                  <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_e">0.00</span></div></th>                               
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>  
-                                </tr>
-                              </tfoot>
-                            </table>
-                          </div>
-                          <!-- /.card-body -->
-                        </div>
-
-                        <!-- CARD - HERRAMIENTA -------------------------------------------- -->
-                        <div class="card card-primary card-outline collapsed-card">
-                          <div class="card-header">
-                            <h3 class="card-title">Lista de activos:  <b>Herramientas</b></h3>
-                            <div class="card-tools">
-                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-plus"></i>
-                              </button>
-                            </div>
-                          </div>
-                          <!-- /.card-header -->
-                          <div class="card-body row-horizon disenio-scroll">
-                            <table id="tbla-resumen-herramienta" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th> 
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
-                                  <th>Cantidad</th>
-                                  <th>Compra</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th>   
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>                     
-                                </tr>
-                              </thead>
-                              <tbody>                         
-                                <!-- aqui la va el detalle de la tabla -->
-                              </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th> 
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th>UM</th>
-                                  <th class="text-center suma_total_productos_h h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th>Compra</th>
-                                  <th>Precio promedio</th>
-                                  <th>Precio actual</th>   
-                                  <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_h">0.00</span></div></th>                               
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>  
-                                </tr>
-                              </tfoot>
-                            </table>
-                          </div>
-                          <!-- /.card-body -->
-                        </div>
-
-                        <!-- CARD - OFICINA ------------------------------------------------ -->
-                        <div class="card card-primary card-outline collapsed-card">
-                          <div class="card-header">
-                            <h3 class="card-title">Lista de activos <b>Oficina</b></h3>
-
-                            <div class="card-tools">
-                              <button type="button" class="btn btn-default float-right" data-card-widget="collapse">
-                                <i class="fas fa-plus"></i>
-                              </button>
-                            </div>
-                          </div>
-                          <!-- /.card-header -->
-                          <div class="card-body row-horizon disenio-scroll">
-                            <table id="tbla-resumen-oficina" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th> 
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
-                                  <th>Cantidad</th>
-                                  <th>Compra</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th>   
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>                     
-                                </tr>
-                              </thead>
-                              <tbody>                         
-                                <!-- aqui la va el detalle de la tabla -->
-                              </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th> 
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th>UM</th>
-                                  <th class="text-center suma_total_productos_o h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
-                                  <th>Compra</th>
-                                  <th>Precio promedio</th>
-                                  <th>Precio actual</th>   
-                                  <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras_o">0.00</span></div></th>                               
-                                  <th>Activo</th>                      
-                                  <th>Modelo</th>  
-                                </tr>
-                              </tfoot>
-                            </table>
-                          </div>
-                          <!-- /.card-body -->
-                        </div>
+                        </div>                        
                       </div>
 
                       <!-- TBLAS SECUNDARIAS  -->
@@ -308,7 +142,7 @@
 
                           <!-- regresar "tabla facuras" -->
                           <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas">
-                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(2);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
+                            <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(3);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>                    
                         </div>
                         
@@ -323,6 +157,7 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>N° Comprob</th>
+                                  <th>Marcas</th>
                                   <th>Fecha compra</th>
                                   <th data-toggle="tooltip" data-original-title="Cantidad">Cant.</th>
                                   <th>Precio</th>  
@@ -341,6 +176,7 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>N° Comprob</th>
+                                  <th>Marcas</th>
                                   <th >Fecha compra</th>
                                   <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="px-2 text-nowrap h5"> <div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
@@ -533,7 +369,7 @@
                             </div>
 
                             <div class="modal-footer justify-content-between">
-                              <button type="button" class="btn btn-danger" onclick="table_show_hide(2);" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-danger" onclick="table_show_hide(3);" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                             </div>
                           </div>
@@ -743,121 +579,56 @@
                         <form id="form-materiales" name="form-materiales" method="POST">
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
+                              <input type="hidden" name="cont" id="cont" /> 
+                              <input type="hidden" name="idproducto_p" id="idproducto_p" /> 
+                              
+                              <input type="hidden" id="modelo_p" name="modelo_p" />
+                              <input type="hidden" id="serie_p" name="serie_p" />
+                              <input type="hidden" id="color_p" name="color_p" value="1" />
 
-                              <!-- idproducto -->
-                              <input type="hidden" name="idproducto_p" id="idproducto_p" />    
-                              <input type="hidden" name="idtipo_tierra_concreto" id="idtipo_tierra_concreto" value="1">
-                              <!-- cont registro -->
-                              <input type="hidden" name="cont" id="cont" />                           
+                              <input type="hidden" id="precio_unitario_p" name="precio_unitario_p" value="0" />
+                              <input type="hidden" id="estado_igv_p" name="estado_igv_p" value="0" />
+                              <input type="hidden" id="precio_sin_igv_p" name="precio_sin_igv_p" value="0" />
+                              <input type="hidden" id="precio_igv_p" name="precio_igv_p" value="0" />
+                              <input type="hidden" id="precio_total_p" name="precio_total_p" value="0" />
 
                               <!-- Nombre -->
-                              <div class="col-lg-8 class_pading">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-8">
                                 <div class="form-group">
                                   <label for="nombre_p">Nombre <sup class="text-danger">(unico*)</sup></label>
-                                  <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del producto." />
+                                  <input type="text" name="nombre_p" class="form-control" id="nombre_p" placeholder="Nombre del activo." />
                                 </div>
                               </div>
 
-                              <!-- Categoria -->
-                              <div class="col-lg-4">
+                              <!-- Clasificación -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="categoria_insumos_af_p">Clasificación <sup class="text-danger">(unico*)</sup></label>
                                   <select name="categoria_insumos_af_p" id="categoria_insumos_af_p" class="form-control select2" style="width: 100%;"> 
                                   </select>
                                 </div>
-                              </div>
-
-                              <!-- Modelo -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="modelo_p">Modelo </label>
-                                  <input class="form-control" type="text" id="modelo_p" name="modelo_p" placeholder="Modelo." />
-                                </div>
-                              </div>
-
-                              <!-- Serie -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="serie_p">Serie </label>
-                                  <input class="form-control" type="text" id="serie_p" name="serie_p" placeholder="Serie." />
-                                </div>
-                              </div>
-
-                              <!-- Marca -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="marca_p">Marca </label>
-                                  <!-- <input class="form-control" type="text" id="marca_p" name="marca_p" placeholder="Marca de activo." /> -->
-                                  <select name="marca_p" id="marca_p" class="form-control select2" style="width: 100%;"> </select>
-                                </div>
-                              </div>
-
-                              <!-- Color -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="color_p">Color <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="color_p" id="color_p" class="form-control select2" style="width: 100%;"> </select>
-                                </div>
-                              </div>
+                              </div>                               
                               
-                              <!-- Unnidad-->
-                              <div class="col-lg-6" id="content-t-unidad">
+                              <!-- Unnidad de medida-->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6" >
                                 <div class="form-group">
                                   <label for="unidad_medida_p">Unidad-medida <sup class="text-danger">(unico*)</sup></label>
                                   <select name="unidad_medida_p" id="unidad_medida_p" class="form-control select2" style="width: 100%;"> </select>
                                 </div>
-                              </div>
-
-                              <!--Precio U-->
-                              <div class="col-lg-4 class_pading">
+                              </div>     
+                              
+                              <!-- select2 multiple marca-->
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <div class="form-group">
-                                  <label for="precio_unitario_p">Precio <sup class="text-danger">*</sup></label>
-                                  <input type="number" name="precio_unitario_p" class="form-control miimput" id="precio_unitario_p" placeholder="Precio Unitario." onchange="precio_con_igv();" onkeyup="precio_con_igv();" />
-                                </div>
-                              </div>
-
-                              <!-- Rounded switch -->
-                              <div class="col-lg-2 class_pading">
-                                <div class="form-group">
-                                  <label for="" class="labelswitch">Sin o Con (Igv)</label>
-                                  <div id="switch_igv">
-                                    <div class="switch-holder myestilo-switch">
-                                      <div class="switch-toggle">
-                                        <input type="checkbox" id="my-switch_igv" checked />
-                                        <label for="my-switch_igv"></label>
-                                      </div>
-                                    </div>
+                                  <label for="marcas_p">Marca <sup class="text-danger">(unico*)</sup></label>
+                                  <div class="select2-purple">
+                                    <select name="marcas_p[]" id="marcas_p" class="form-control select2" multiple="multiple" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione" style="width: 100%;"> </select>
                                   </div>
-                                  <input type="hidden" name="estado_igv_p" id="estado_igv_p" />
-                                </div>
-                              </div>
-
-                              <!--Sub Total subtotal igv total-->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="precio_sin_igv_p">Sub Total</label>
-                                  <input type="number" class="form-control" name="precio_sin_igv_p" id="precio_sin_igv_p" placeholder="Precio real." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                </div>
-                              </div>
-
-                              <!--IGV-->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="precio_igv_p">IGV</label>
-                                  <input type="number" class="form-control" name="precio_igv_p" id="precio_igv_p" placeholder="Monto igv." onchange="precio_con_igv();" onkeyup="precio_con_igv();" readonly />
-                                </div>
-                              </div>
-
-                              <!--Total-->
-                              <div class="col-lg-4 class_pading">
-                                <div class="form-group">
-                                  <label for="precio_total_p">Total</label>
-                                  <input type="number" class="form-control" name="precio_total_p" id="precio_total_p" placeholder="Precio real." readonly />
                                 </div>
                               </div>
 
                               <!--Descripcion-->
-                              <div class="col-lg-12 class_pading">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
                                   <label for="descripcion_p">Descripción </label> <br />
                                   <textarea name="descripcion_p" id="descripcion_p" class="form-control" rows="2"></textarea>
@@ -1071,6 +842,7 @@
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <script type="text/javascript" src="scripts/resumen_activos_fijos.js"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         

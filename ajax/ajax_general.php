@@ -15,9 +15,11 @@
 
     require_once "../modelos/Ajax_general.php";
     require_once "../modelos/Compra_insumos.php";
+    require_once "../modelos/Compra_activos_fijos.php";
 
     $ajax_general = new Ajax_general();
     $compra_insumos = new Compra_insumos();
+    $compra_activos_fijos = new Compra_activos_fijos();
     
     $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
@@ -654,8 +656,163 @@
         $id_insumo  = isset($_GET["id_insumo"]) ? limpiarCadena($_GET["id_insumo"]) : "";
         $class_resaltar_insumo = ( empty($id_insumo) ? "" : "bg-warning") ;
 
-        $rspta      = $compra_insumos->ver_compra($_GET['id_compra']);
-        $rspta2     = $compra_insumos->ver_detalle_compra($_GET['id_compra']);
+        $rspta      = $compra_insumos->ver_detalle_compra($_GET['id_compra']);
+
+        $subtotal = 0; 
+
+        $inputs = '<!-- Tipo de Empresa -->
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label class="font-size-15px" for="idproveedor">Proveedor</label>
+              <h5 class="form-control form-control-sm" >'.$rspta['data']['razon_social'].'</h5>
+            </div>
+          </div>
+          <!-- fecha -->
+          <div class="col-lg-3">
+            <div class="form-group">
+              <label class="font-size-15px" for="fecha_compra">Fecha </label>
+              <span class="form-control form-control-sm"><i class="far fa-calendar-alt"></i>&nbsp;&nbsp;&nbsp;'.format_d_m_a($rspta['data']['fecha_compra']).' </span>
+            </div>
+          </div>
+          <!-- fecha -->
+          <div class="col-lg-3">
+            <div class="form-group">
+              <label class="font-size-15px" for="fecha_compra">Glosa </label>
+              <span class="form-control form-control-sm">'.$rspta['data']['glosa'].' </span>
+            </div>
+          </div>
+          <!-- Tipo de comprobante -->
+          <div class="col-lg-3">
+            <div class="form-group">
+              <label class="font-size-15px" for="tipo_comprovante">Tipo Comprobante</label>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['tipo_comprobante'])) ? '- - -' :  $rspta['data']['tipo_comprobante'])  .' </span>
+            </div>
+          </div>
+          <!-- serie_comprovante-->
+          <div class="col-lg-2">
+            <div class="form-group">
+              <label class="font-size-15px" for="serie_comprovante">N° de Comprobante</label>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['serie_comprobante'])) ? '- - -' :  $rspta['data']['serie_comprobante']).' </span>
+            </div>
+          </div>
+          <!-- IGV-->
+          <div class="col-lg-1 " >
+            <div class="form-group">
+              <label class="font-size-15px" for="igv">IGV</label>
+              <span class="form-control form-control-sm"> '.$rspta['data']['val_igv'].' </span>                                 
+            </div>
+          </div>
+          <!-- Descripcion-->
+          <div class="col-lg-6">
+            <div class="form-group">
+              <label class="font-size-15px" for="descripcion">Descripción </label> <br />
+              <textarea class="form-control form-control-sm" readonly rows="1">'.((empty($rspta['data']['descripcion'])) ? '- - -' :$rspta['data']['descripcion']).'</textarea>
+            </div>
+        </div>';
+
+        $tbody = ""; $cont = 1;
+        foreach ($rspta['data']['detalle_producto'] as $key => $reg) {
+
+          $bg_resaltar = ($id_insumo == $reg['idproducto']? $class_resaltar_insumo : "" );
+          $ficha = empty($reg['ficha_tecnica']) ? ( '<i class="fa-regular fa-file-pdf fa-2x '. $bg_resaltar.' text-gray-50"></i>') : ( '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
+          $img_product = 'dist/docs/material/img_perfil/'. (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
+
+          $tbody .= '<tr class="filas ">
+            <td class="text-center p-6px">' . $cont++ . '</td>
+            <td class="text-center p-6px">' . $ficha . '</td>
+            <td class="text-left p-6px">
+              <div class="user-block text-nowrap">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer '. $bg_resaltar.'" src="../'.$img_product.'" alt="user image" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg['nombre']) . '\', null)" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
+                <span class="username"><p class="mb-0 '. $bg_resaltar.'">' . $reg['nombre'] . '</p></span>
+                <span class="description '. $bg_resaltar.'"><b>Categoría: </b>' . $reg['categoria'] . '</span>
+              </div>
+            </td>
+            <td class="text-left p-6px"> <span class="'. $bg_resaltar.'">' . $reg['unidad_medida'] . '</span></td>
+            <td class="text-center p-6px"><span class="'. $bg_resaltar.'">' . $reg['cantidad'] . '</span></td>		
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['precio_sin_igv'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['igv'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['precio_con_igv'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['descuento'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['subtotal'], 2, '.',',') .'</span></td>
+          </tr>';
+        }         
+
+        $tabla_detalle = '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
+          <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_compra_de_insumo">
+            <thead style="background-color:#ff6c046b">
+              <tr class="text-center hidden">
+                <th class="p-10px">Proveedor:</th>
+                <th class="text-center p-10px" colspan="9" >'.$rspta['data']['razon_social'].'</th>
+              </tr>
+              <tr class="text-center hidden">                
+                <th class="text-center p-10px" colspan="2" >'.((empty($rspta['data']['tipo_comprobante'])) ? '' :  $rspta['data']['tipo_comprobante']). ' ─ ' . ((empty($rspta['data']['serie_comprobante'])) ? '' :  $rspta['data']['serie_comprobante']) .'</th>
+                <th class="p-10px">Fecha:</th>
+                <th class="text-center p-10px" colspan="3" >'.format_d_m_a($rspta['data']['fecha_compra']).'</th>
+                <th class="p-10px">Glosa:</th>
+                <th class="text-center p-10px" colspan="3" >'.$rspta['data']['glosa'].'</th>
+              </tr>
+              <tr class="text-center">
+                <th class="text-center p-10px" >#</th>
+                <th class="text-center p-10px">F.T.</th>
+                <th class="p-10px">Material</th>
+                <th class="p-10px">U.M.</th>
+                <th class="p-10px">Cant.</th>
+                <th class="p-10px">V/U</th>
+                <th class="p-10px">IGV</th>
+                <th class="p-10px">P/U</th>
+                <th class="p-10px">Desct.</th>
+                <th class="p-10px">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>'.$tbody.'</tbody>          
+            <tfoot>
+              <tr>
+                  <td class="p-0" colspan="8"></td>
+                  <td class="p-0 text-right"> <h6 class="mt-1 mb-1 mr-1">'.$rspta['data']['tipo_gravada'].'</h6> </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 pl-1 font-weight-bold text-nowrap formato-numero-conta"><span>S/</span>' . number_format($rspta['data']['subtotal'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="8"></td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1">IGV('.( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ).'%)</h6>
+                  </td>
+                  <td class="p-0 text-right">
+                    <h6 class="mt-1 mb-1 mr-1 pl-1 font-weight-bold text-nowrap formato-numero-conta"><span>S/</span>' . number_format($rspta['data']['igv'], 2, '.',',') . '</h6>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-0" colspan="8"></td>
+                  <td class="p-0 text-right"> <h5 class="mt-1 mb-1 mr-1 font-weight-bold">TOTAL</h5> </td>
+                  <td class="p-0 text-right">
+                    <h5 class="mt-1 mb-1 mr-1 pl-1 font-weight-bold text-nowrap formato-numero-conta"><span>S/</span>' . number_format($rspta['data']['total'], 2, '.',',') . '</h5>
+                  </td>
+                </tr>
+            </tfoot>
+          </table>
+        </div> ';
+        $retorno = ['status' => true, 'message' => 'todo oka', 'data' => $inputs . $tabla_detalle ];
+        echo json_encode( $retorno, true );
+
+      break;
+
+      case 'ver_compra_editar':
+
+        $rspta = $compra_insumos->mostrar_compra_para_editar($_POST["idcompra_proyecto"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+    
+      break;  
+
+      /* ══════════════════════════════════════ C O M P R A   D E   A C T I V O   F I J O  ════════════════════════════ */
+
+      case 'detalle_compra_de_activo_fijo':
+
+        $id_activo_fijo  = isset($_GET["id_activo_fijo"]) ? limpiarCadena($_GET["id_activo_fijo"]) : "";
+        $class_resaltar_insumo = ( empty($id_activo_fijo) ? "" : "bg-warning") ;
+
+        $rspta      = $compra_activos_fijos->ver_detalle_compra($_GET['id_compra']);
 
         $subtotal = 0;    $ficha = ''; 
 
@@ -711,35 +868,35 @@
 
         $tbody = ""; $cont = 1;
 
-        while ($reg = $rspta2['data']->fetch_object()) {
+        foreach ( $rspta['data'] as $key => $reg) {
 
-          $bg_resaltar = ($id_insumo == $reg->idproducto? $class_resaltar_insumo : "" );
-          empty($reg->ficha_tecnica) ? ($ficha = '<i class="fa-regular fa-file-pdf fa-2x '. $bg_resaltar.' text-gray-50"></i>') : ($ficha = '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
-          $img_product = 'dist/docs/material/img_perfil/'. (empty($reg->imagen) ? 'producto-sin-foto.svg' : $reg->imagen );
+          $bg_resaltar = ($id_insumo == $reg['idproducto']? $class_resaltar_insumo : "" );
+          $ficha = empty($reg['ficha_tecnica']) ? ( '<i class="fa-regular fa-file-pdf fa-2x '. $bg_resaltar.' text-gray-50"></i>') : ( '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
+          $img_product = 'dist/docs/material/img_perfil/'. (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
 
           $tbody .= '<tr class="filas ">
             <td class="text-center p-6px">' . $cont++ . '</td>
             <td class="text-center p-6px">' . $ficha . '</td>
             <td class="text-left p-6px">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer '. $bg_resaltar.'" src="../'.$img_product.'" alt="user image" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg->nombre) . '\', null)" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
-                <span class="username"><p class="mb-0 '. $bg_resaltar.'">' . $reg->nombre . '</p></span>
-                <span class="description '. $bg_resaltar.'"><b>Color: </b>' . $reg->color . '</span>
+                <img class="profile-user-img img-responsive img-circle cursor-pointer '. $bg_resaltar.'" src="../'.$img_product.'" alt="user image" onclick="ver_img_material(\''.$img_product.'\', \'' . encodeCadenaHtml( $reg['nombre']) . '\', null)" onerror="this.src=\'../dist/svg/404-v2.svg\';" >
+                <span class="username"><p class="mb-0 '. $bg_resaltar.'">' . $reg['nombre'] . '</p></span>
+                <span class="description '. $bg_resaltar.'"><b>Clasificación: </b>' . $reg['clasificacion'] . '</span>
               </div>
             </td>
-            <td class="text-left p-6px"> <span class="'. $bg_resaltar.'">' . $reg->unidad_medida . '</span></td>
-            <td class="text-center p-6px"><span class="'. $bg_resaltar.'">' . $reg->cantidad . '</span></td>		
-            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->precio_sin_igv, 2, '.',',') . '</span></td>
-            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->igv, 2, '.',',') . '</span></td>
-            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->precio_con_igv, 2, '.',',') . '</span></td>
-            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->descuento, 2, '.',',') . '</span></td>
-            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg->subtotal, 2, '.',',') .'</span></td>
+            <td class="text-left p-6px"> <span class="'. $bg_resaltar.'">' . $reg['unidad_medida'] . '</span></td>
+            <td class="text-center p-6px"><span class="'. $bg_resaltar.'">' . $reg['cantidad'] . '</span></td>		
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['precio_sin_igv'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['igv'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['precio_con_igv'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['descuento'], 2, '.',',') . '</span></td>
+            <td class="text-right p-6px"><span class="'. $bg_resaltar.'">' . number_format($reg['subtotal'], 2, '.',',') .'</span></td>
           </tr>';
         }         
 
         $tabla_detalle = '<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive">
           <table class="table table-striped table-bordered table-condensed table-hover" id="tabla_detalle_compra_de_insumo">
-            <thead style="background-color:#ff6c046b">
+            <thead class="bg-color-127ab6ba">
               <tr class="text-center hidden">
                 <th class="p-10px">Proveedor:</th>
                 <th class="text-center p-10px" colspan="9" >'.$rspta['data']['razon_social'].'</th>

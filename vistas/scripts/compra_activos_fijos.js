@@ -951,7 +951,7 @@ function ver_detalle_compras_activo_fijo(idcompra_af_general) {
     $("#cargando-10-fomulario").hide();
 
     $("#print_pdf_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_af_general}&op=activo_fijo` );
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_af_general}&op=activo_fijo` );
     $("#excel_compra").removeClass('disabled');
   }).fail( function(e) { ver_errores(e); } );
 }
@@ -976,7 +976,7 @@ function ver_detalle_compras_insumo(id_compra) {
     $("#cargando-10-fomulario").hide();
 
     $("#print_pdf_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${id_compra}&op=insumo`);
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${id_compra}&op=insumo`);
     $("#excel_compra").removeClass('disabled');
   }).fail( function(e) { ver_errores(e); } );
 }

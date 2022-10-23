@@ -301,47 +301,52 @@ class Compra_insumos
   }
 
   //mostrar detalles uno a uno de la factura
-  public function ver_compra($idcompra_proyecto) {
+  public function ver_detalle_compra($idcompra) {    
 
-    $sql = "SELECT cpp.idcompra_proyecto as idcompra_proyecto, 
-		cpp.idproyecto , 
-		cpp.idproveedor , 
-		p.razon_social , p.tipo_documento, p.ruc, p.direccion, p.telefono, 
-		cpp.fecha_compra , 
-		cpp.tipo_comprobante , 
-		cpp.serie_comprobante , 
-    cpp.val_igv,
-		cpp.descripcion , 
-    cpp.glosa,
-		cpp.subtotal, 
-		cpp.igv , 
-		cpp.total ,
-    cpp.tipo_gravada ,
-		cpp.estado 
+    $sql = "SELECT cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, p.razon_social , p.tipo_documento, p.ruc, p.direccion, p.telefono, 
+		cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.val_igv,	cpp.descripcion, cpp.glosa,	cpp.subtotal, cpp.igv, cpp.total, 
+    cpp.tipo_gravada, cpp.estado, cpp.estado_detraccion
 		FROM compra_por_proyecto as cpp, proveedor as p 
-		WHERE idcompra_proyecto='$idcompra_proyecto'  AND cpp.idproveedor = p.idproveedor";
+		WHERE idcompra_proyecto='$idcompra'  AND cpp.idproveedor = p.idproveedor;";
 
-    return ejecutarConsultaSimpleFila($sql);
-  }
+    $compra = ejecutarConsultaSimpleFila($sql); if ($compra['status'] == false) { return $compra; }
 
-  //lismatamos los detalles
-  public function ver_detalle_compra($id_compra) {
+    $sql_2 = "SELECT dc.idproducto, dc.ficha_tecnica_producto  as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,
+		dc.cantidad, dc.unidad_medida, dc.color, dc.precio_sin_igv, dc.igv, dc.precio_con_igv, dc.descuento, dc.subtotal,
+		p.nombre as nombre, p.imagen, ciaf.nombre AS categoria, um.abreviacion
+		FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+		WHERE p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND  dc.idproducto=p.idproducto AND p.idcolor = c.idcolor 
+    AND p.idunidad_medida = um.idunidad_medida and idcompra_proyecto='$idcompra';";
 
-    $sql = "SELECT 
-		dc.idproducto,
-		dc.ficha_tecnica_producto  as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,
-		dc.cantidad ,
-    dc.unidad_medida, dc.color,
-		dc.precio_sin_igv ,
-    dc.igv ,
-    dc.precio_con_igv ,
-		dc.descuento ,
-    dc.subtotal ,
-		p.nombre as nombre, p.imagen, um.abreviacion
-		FROM detalle_compra  dc, producto as p, unidad_medida as um
-		WHERE p.idunidad_medida = um.idunidad_medida AND dc.idproducto=p.idproducto AND idcompra_proyecto='$id_compra' ";
+    $producto = ejecutarConsultaArray($sql_2);  if ($producto['status'] == false) { return $producto;  }
 
-    return ejecutarConsulta($sql);
+    $results = [
+      "idcompra_x_proyecto" => $compra['data']['idcompra_proyecto'],      
+      "idproyecto"          => $compra['data']['idproyecto'],      
+      "fecha_compra"        => $compra['data']['fecha_compra'],
+      "tipo_comprobante"    => $compra['data']['tipo_comprobante'],
+      "serie_comprobante"   => $compra['data']['serie_comprobante'],
+      "val_igv"             => $compra['data']['val_igv'],
+      "descripcion"         => $compra['data']['descripcion'],
+      "glosa"               => $compra['data']['glosa'],
+      "subtotal"            => $compra['data']['subtotal'],
+      "igv"                 => $compra['data']['igv'],
+      "total"               => $compra['data']['total'],
+      "tipo_gravada"        => $compra['data']['tipo_gravada'],
+      "estado_detraccion"   => $compra['data']['estado_detraccion'],
+      "estado"              => $compra['data']['estado'],
+
+      "idproveedor"         => $compra['data']['idproveedor'],
+      "razon_social"        => $compra['data']['razon_social'],
+      "tipo_documento"      => $compra['data']['tipo_documento'],
+      "ruc"                 => $compra['data']['ruc'],
+      "direccion"           => $compra['data']['direccion'],
+      "telefono"            => $compra['data']['telefono'],
+
+      "detalle_producto"    => $producto['data'],
+    ];
+
+    return $retorno = ["status" => true, "message" => 'todo oka', "data" => $results] ;
   }
 
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   P A G O S ::::::::::::::::::::::::::::::::::::::::: 

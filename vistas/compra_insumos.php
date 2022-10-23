@@ -74,10 +74,10 @@
                                 <div class="card-header">
                                   <h3 class="card-title">
                                     <!--data-toggle="modal" data-target="#modal-agregar-compra"  onclick="limpiar();"-->
-                                    <button type="button" class="btn bg-gradient-success" id="btn_agregar" onclick="ver_form_add(); limpiar_form_compra();">
+                                    <button type="button" class="btn bg-gradient-success" id="btn_agregar" onclick="table_show_hide(2); limpiar_form_compra();">
                                       <i class="fas fa-plus-circle"></i> Agregar
                                     </button>                                    
-                                    <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="regresar();">
+                                    <button type="button" class="btn bg-gradient-warning" id="regresar" style="display: none;" onclick="table_show_hide(1);">
                                       <i class="fas fa-arrow-left"></i> Regresar
                                     </button>
                                     <button type="button" id="btn-pagar" class="btn bg-gradient-success" style="display: none;" data-toggle="modal"  data-target="#modal-agregar-pago" onclick="limpiar_form_pago_compra();">
@@ -425,7 +425,7 @@
                             </div>
 
                             <div class="modal-footer justify-content-between pl-0 pb-0 ">
-                              <button type="button" class="btn btn-danger" onclick="regresar();" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-danger" onclick="table_show_hide(1);" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                             </div>
                           </div>
@@ -1320,7 +1320,8 @@
         <script src="../plugins/jszip/dist/jszip-utils.js"></script>
         <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
         
-        <script type="text/javascript" src="scripts/compra_insumos.js"></script>         
+        <script type="text/javascript" src="scripts/compra_insumos.js"></script>   
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script>      
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

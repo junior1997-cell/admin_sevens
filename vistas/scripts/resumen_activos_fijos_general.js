@@ -1765,9 +1765,9 @@ function ver_detalle_compras(idcompra_proyecto, op) {
     $("#print_pdf_compra").removeClass('disabled');    
     $("#excel_compra").removeClass('disabled');
     if (op == 'Insumos') {
-      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=insumo` );
     } else {
-      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=activo_fijo` );
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=activo_fijo` );
     }
     
   });

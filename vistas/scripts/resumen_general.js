@@ -1582,7 +1582,7 @@ function mostrar_detalle_compras(idcompra_proyecto) {
       $('#cargando-2-fomulario').hide();
 
       $("#print_pdf_compra").removeClass('disabled');
-      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=insumo` );
       $("#excel_compra").removeClass('disabled');
     }else {
       ver_errores(e);

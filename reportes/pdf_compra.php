@@ -24,12 +24,11 @@ if (!isset($_SESSION["nombre"])) {
     header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
   } else if ($_GET['op'] == 'insumo') {
     $id = $_GET['id'];
-    $rspta = $compra_insumo->ver_compra($id);
-    $rspta2 = $compra_insumo->ver_detalle_compra($id);
+    $rspta = $compra_insumo->ver_detalle_compra($id);
   } else {
     $id = $_GET['id'];
-    $rspta = $compra_activos_fijos->ver_compra_general($id);
-    $rspta2 = $compra_activos_fijos->ver_detalle_compra_general($id);
+    // $rspta = $compra_activos_fijos->ver_compra_general($id);
+    // $rspta2 = $compra_activos_fijos->ver_detalle_compra_general($id);
   }
 
   //Establecemos los datos de la empresa
@@ -70,8 +69,8 @@ if (!isset($_SESSION["nombre"])) {
 
   $cont = 1;
   //Obtenemos todos los detalles de la venta actual
-  while ($reg = $rspta2['data']->fetch_object()) {
-    $line = [ "#" => $cont++, "PRODUCTO" => utf8_decode( decodeCadenaHtml($reg->nombre)), "UM" => $reg->abreviacion, "CANT." => $reg->cantidad, "V/U" => number_format($reg->precio_sin_igv, 2, '.',','), "IGV" => number_format($reg->igv, 2, '.',','), "P.U." => number_format($reg->precio_con_igv, 2, '.',','), "DSCT." => number_format($reg->descuento, 2, '.',','), "SUBTOTAL" => number_format($reg->subtotal, 2, '.',',')];
+  foreach ($rspta['data']['detalle_producto'] as $key => $reg) {
+    $line = [ "#" => $cont++, "PRODUCTO" => utf8_decode( decodeCadenaHtml($reg['nombre'])), "UM" => $reg['abreviacion'], "CANT." => $reg['cantidad'], "V/U" => number_format($reg['precio_sin_igv'], 2, '.',','), "IGV" => number_format($reg['igv'], 2, '.',','), "P.U." => number_format($reg['precio_con_igv'], 2, '.',','), "DSCT." => number_format($reg['descuento'], 2, '.',','), "SUBTOTAL" => number_format($reg['subtotal'], 2, '.',',')];
     $size = $pdf->addLine($y, $line);
     $y += $size + 2;
   }

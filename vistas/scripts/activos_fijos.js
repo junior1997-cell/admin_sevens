@@ -325,8 +325,6 @@ function verdatos(idproducto){
 
   $('#datos-activos-fjos').html(`<div class="row"><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div></div>`);
 
-  var verdatos=''; 
-
   var imagen_perfil =''; var btn_imagen_perfil = '';
   
   var ficha_tecnica=''; var btn_ficha_tecnica = '';
@@ -337,7 +335,7 @@ function verdatos(idproducto){
 
     e = JSON.parse(e);  console.log(e); 
     
-    if (e.status) {     
+    if (e.status == true) {     
     
       if (e.data.imagen != '') {
 
@@ -384,7 +382,7 @@ function verdatos(idproducto){
       var marca =""; 
       e.data.marcas.forEach((valor, index) => { marca = marca.concat( `<span class="username">${index + 1 } ${valor}</span> </br>`);  });   
 
-      verdatos=`                                                                            
+      var retorno_html=`                                                                            
       <div class="col-12">
         <div class="card">
           <div class="card-body">
@@ -420,7 +418,7 @@ function verdatos(idproducto){
         </div>
       </div>`;
     
-      $("#datos-activos-fjos").html(verdatos);
+      $("#datos-activos-fjos").html(retorno_html);
 
     } else {
       ver_errores(e);

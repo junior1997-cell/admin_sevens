@@ -330,7 +330,7 @@ if (!isset($_SESSION["nombre"])) {
             $data[] = [
               "0" => $cont,
               "1" => $reg['estado'] == '1' ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                    ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .                  
+                    ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_insumo(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .                  
                     ' <button class="btn btn-danger  btn-sm" onclick="eliminar_compra(' . $reg['idcompra_proyecto'] .', \''.encodeCadenaHtml('<del><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</del> <del>'.$reg['razon_social'].'</del>'). '\')"><i class="fas fa-skull-crossbones"></i> </button>'
                   : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' .  $reg['idcompra_proyecto'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
                     ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>',
@@ -573,15 +573,7 @@ if (!isset($_SESSION["nombre"])) {
         $retorno = ['status' => true, 'message' => 'todo oka', 'data' => $inputs . $tabla_detalle ,];
         echo json_encode( $retorno, true );
 
-      break;
-    
-      case 'ver_compra_editar':
-
-        $rspta = $compra_insumos->mostrar_compra_para_editar($idcompra_proyecto);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-    
-      break;      
+      break;          
       
       // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
       case 'tbla_comprobantes_compra':

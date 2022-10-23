@@ -421,7 +421,7 @@ function detalle_compra_insumo(id_tabla, name_tabla, name_id_tabla, id_tabla, ac
     $("#cargando-2-fomulario").hide();
 
     $("#print_pdf_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${id_tabla}&op=insumo` );
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${id_tabla}&op=insumo` );
     $("#excel_compra").removeClass('disabled');
 
     $('.modal-eliminar-permanente').attr('onclick', `eliminar_permanente('${name_tabla}', '${name_id_tabla}', '${id_tabla}', '${nombre_agregar_quitar}')`);

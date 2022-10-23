@@ -208,7 +208,7 @@
                               <!--Descripcion-->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                  <label for="descripcion_pago">Descripción </label> <br />
+                                  <label for="descripcion">Descripción </label> <br />
                                   <textarea name="descripcion" id="descripcion" class="form-control" rows="2"></textarea>
                                 </div>
                               </div>

@@ -882,7 +882,8 @@ function ver_lista_orden() {
         });
         $('#html_order_trabajador').html(` ${html_data} `);
         $("#html_order_trabajador").sortable();
-        $("#html_order_trabajador").sortable();
+        // $("#html_order_trabajador").sortable();
+        $("#html_order_trabajador").disableSelection();
       }else{
         ver_errores(e);
       }

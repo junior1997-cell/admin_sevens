@@ -1,4 +1,4 @@
-var tabla_principal;
+var dt_tabla_principal;
 var tabla_factura;
 var tabla_materiales;
 var tabla_comprobantes;
@@ -150,7 +150,7 @@ function table_show_hide(flag) {
 
 // TABLA - PRINCIPAL
 function tbla_principal(id_proyecto) {
-	tabla_principal=$('#tbla-resumen-insumos').dataTable({
+	dt_tabla_principal =$('#tbla-resumen-insumos').dataTable({
 		responsive: true,
 		lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
 		aProcessing: true,//Activamos el procesamiento del datatables
@@ -177,7 +177,7 @@ function tbla_principal(id_proyecto) {
       // columna: UM
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
      //columna:cantidad
-      if (data[7] != '') { $("td", row).eq(7).addClass("text-center"); }
+      if (data[7] != '') { $("td", row).eq(7).addClass("text-center");   }
       // columna: Compra
       if (data[8] != '') { $("td", row).eq(8).addClass("text-center");  }
       // columna: Precio promedio
@@ -927,7 +927,7 @@ function ver_detalle_compras(idcompra_proyecto) {
 
     $("#print_pdf_compra").removeClass('disabled');    
     $("#excel_compra").removeClass('disabled');
-    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra_activos_fijos.php?id=${idcompra_proyecto}&op=insumo` );
+    $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=insumo` );
   }).fail( function(e) { ver_errores(e); } ); 
 }
 
@@ -1070,7 +1070,7 @@ function guardar_materiales(e) {
         if (e.status == true) {
           Swal.fire("Correcto!", "Producto guardado correctamente", "success");        
          
-          tabla_principal.ajax.reload(null, false);
+          dt_tabla_principal.ajax.reload(null, false);
   
           if (tabla_materiales) { tabla_materiales.ajax.reload(null, false); }
   
@@ -1350,7 +1350,7 @@ function guardar_grupos(e) {
         e = JSON.parse(e);  console.log(e);  
         if (e.status == true) {
           Swal.fire("Correcto!", "Grupo guardado correctamente", "success");   
-          if (tabla_principal) { tabla_principal.ajax.reload(null, false); }  
+          if (dt_tabla_principal) { dt_tabla_principal.ajax.reload(null, false); }  
           $("#modal-agregar-grupos").modal("hide");
         } else {
          ver_errores(e);

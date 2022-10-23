@@ -476,23 +476,43 @@ class Compra_activos_fijos
   }
 
   //mostrar detalles uno a uno de la factura
-  public function ver_compra_general($idcompra_af_general) {
-    $sql = "SELECT cafg.idcompra_af_general, cafg.idproveedor, cafg.fecha_compra,	cafg.tipo_comprobante, cafg.serie_comprobante,
-		cafg.descripcion, cafg.subtotal, cafg.igv,	cafg.total,	p.razon_social, p.tipo_documento, p.ruc, p.direccion, p.telefono,	cafg.estado, cafg.glosa, cafg.tipo_gravada, cafg.val_igv
+  public function ver_detalle_compra($idcompra) {
+    
+
+    $sql = "SELECT  cafg.idcompra_af_general, cafg.idproveedor, cafg.fecha_compra,	cafg.tipo_comprobante, cafg.serie_comprobante,
+		cafg.descripcion, cafg.subtotal, cafg.igv,	cafg.total,	p.razon_social, p.tipo_documento, p.ruc, p.direccion, p.telefono,	
+    cafg.estado, cafg.glosa, cafg.tipo_gravada, cafg.val_igv
     FROM compra_af_general as cafg, proveedor as p 
-		WHERE  cafg.idcompra_af_general='$idcompra_af_general' AND cafg.idproveedor=p.idproveedor";
+    WHERE  cafg.idproveedor=p.idproveedor AND cafg.idcompra_af_general='$idcompra'";
 
-    return ejecutarConsultaSimpleFila($sql);
-  }
+    $compra = ejecutarConsultaSimpleFila($sql); if ($compra['status'] == false) { return $compra;}
 
-  //lismatamos los detalles
-  public function ver_detalle_compra_general($id_compra_afg) {
-    $sql = "SELECT dcafg.idproducto, dcafg.ficha_tecnica_producto as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,	dcafg.cantidad, dcafg.precio_sin_igv,	
-    dcafg.igv, dcafg.precio_con_igv, dcafg.descuento, dcafg.subtotal,	p.nombre, p.imagen, dcafg.unidad_medida, dcafg.color, um.abreviacion
-		FROM detalle_compra_af_g as dcafg, producto as p, unidad_medida as um
-		WHERE p.idunidad_medida = um.idunidad_medida AND dcafg.idcompra_af_general='$id_compra_afg' AND  dcafg.idproducto=p.idproducto";
+    $sql_2 = "SELECT dcafg.idproducto, dcafg.ficha_tecnica_producto as ficha_tecnica_old, p.ficha_tecnica as ficha_tecnica_new,	dcafg.cantidad, dcafg.precio_sin_igv,	
+    dcafg.igv, dcafg.precio_con_igv, dcafg.descuento, dcafg.subtotal,	p.nombre, p.imagen, dcafg.unidad_medida,
+    ciaf.nombre as clasificacion
+		FROM detalle_compra_af_g as dcafg, producto as p, categoria_insumos_af as ciaf
+		WHERE dcafg.idproducto=p.idproducto AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND dcafg.idcompra_af_general='$idcompra' ";
 
-    return ejecutarConsulta($sql);
+    $activos = ejecutarConsultaArray($sql_2); if ($activos['status'] == false ) { return $activos; }
+
+    $results = [
+      "idcompra_af_general" => $compra['data']['idcompra_af_general'],  
+      "idproveedor"         => $compra['data']['idproveedor'],
+      "fecha_compra"        => $compra['data']['fecha_compra'],
+      "tipo_comprobante"    => $compra['data']['tipo_comprobante'],
+      "serie_comprobante"   => $compra['data']['serie_comprobante'],
+      "val_igv"             => $compra['data']['val_igv'],
+      "descripcion"         => $compra['data']['descripcion'],
+      "glosa"               => $compra['data']['glosa'],
+      "subtotal"            => $compra['data']['subtotal'],
+      "igv"                 => $compra['data']['igv'],
+      "total"               => $compra['data']['total'],
+      "estado"              => $compra['data']['estado'],
+
+      "detalle_producto" => $activos['data'],
+    ];
+
+    return $retorno = ["status" => true, "message" => 'todo oka', "data" => $results];     
   }
 
   /* =========================== S E C C I O N   P A G O S =========================== */
