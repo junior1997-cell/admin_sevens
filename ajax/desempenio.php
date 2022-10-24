@@ -8,44 +8,43 @@
     $retorno = ['status'=>'login', 'message'=>'Tu sesion a terminado pe, inicia nuevamente', 'data' => [] ];
     echo json_encode($retorno);  //Validamos el acceso solo a los usuarios logueados al sistema.
   } else {
-    require_once "../modelos/Cargo.php";
+    require_once "../modelos/Desempenio.php";
 
-    $cargo = new Cargo();
+    $desempenio = new Desempenio();
 
-    $idcargo_trabajador = isset($_POST["idcargo_trabajador"]) ? limpiarCadena($_POST["idcargo_trabajador"]) : "";
-    $idtipo_trabjador_c = isset($_POST["idtipo_trabjador_c"]) ? limpiarCadena($_POST["idtipo_trabjador_c"]) : "";
-    $nombre = isset($_POST["nombre_cargo"]) ? limpiarCadena($_POST["nombre_cargo"]) : "";
+    $iddesempenio = isset($_POST["iddesempenio"]) ? limpiarCadena($_POST["iddesempenio"]) : "";
+    $nombre       = isset($_POST["nombre_desempenio"]) ? limpiarCadena($_POST["nombre_desempenio"]) : "";
 
     switch ($_GET["op"]) {
-      case 'guardaryeditar_cargo':
-        if (empty($idcargo_trabajador)) {
-          $rspta = $cargo->insertar($idtipo_trabjador_c, $nombre);
+      case 'guardaryeditar_desempenio':
+        if (empty($iddesempenio)) {
+          $rspta = $desempenio->insertar( $nombre);
           echo json_encode( $rspta, true) ;
         } else {
-          $rspta = $cargo->editar($idcargo_trabajador, $idtipo_trabjador_c, $nombre);
+          $rspta = $desempenio->editar($iddesempenio, $nombre);
           echo json_encode( $rspta, true) ;
         }
       break;
 
       case 'desactivar':
-        $rspta = $cargo->desactivar($_GET["id_tabla"]);
+        $rspta = $desempenio->desactivar($_GET["id_tabla"]);
         echo json_encode( $rspta, true) ;
       break;
 
       case 'eliminar':
-        $rspta = $cargo->eliminar($_GET["id_tabla"]);
+        $rspta = $desempenio->eliminar($_GET["id_tabla"]);
         echo json_encode( $rspta, true) ;
       break;
 
       case 'mostrar':
-        //$idcargo_trabajador='1';
-        $rspta = $cargo->mostrar($idcargo_trabajador);
+        //$iddesempenio='1';
+        $rspta = $desempenio->mostrar($iddesempenio);
         //Codificar el resultado utilizando json
         echo json_encode( $rspta, true) ;
       break;
 
-      case 'listar_cargo':
-        $rspta = $cargo->listar();
+      case 'listar_desempenio':
+        $rspta = $desempenio->listar();
         //Vamos a declarar un array
         $data = []; $cont = 1;
 
@@ -56,13 +55,12 @@
             $data[] = [
               "0" => $cont++,
               "1" => $reg->estado
-                ? '<button class="btn btn-warning btn-sm" onclick="mostrar_cargo(' . $reg->idcargo_trabajador . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_cargo(' . $reg->idcargo_trabajador .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'
-                : '<button class="btn btn-warning btn-sm" onclick="mostrar_cargo(' . $reg->idcargo_trabajador . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar_cargo(' . $reg->idcargo_trabajador . ')"><i class="fa fa-check"></i></button>',
-              "2" => $reg->nombre_tipo_t,
-              "3" => $reg->nombre,
-              "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+                ? '<button class="btn btn-warning btn-sm" onclick="mostrar_desempenio(' . $reg->iddesempenio . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_desempenio(' . $reg->iddesempenio .', \''.encodeCadenaHtml($reg->nombre_desempenio).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'
+                : '<button class="btn btn-warning btn-sm" onclick="mostrar_desempenio(' . $reg->iddesempenio . ')"><i class="fa fa-pencil-alt"></i></button>' .
+                  ' <button class="btn btn-primary btn-sm" onclick="activar_desempenio(' . $reg->iddesempenio . ')"><i class="fa fa-check"></i></button>',
+              "2" => $reg->nombre_desempenio,
+              "3" => ($reg->estado ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
             ];
           }
           $results = [

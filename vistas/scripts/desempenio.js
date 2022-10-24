@@ -1,4 +1,4 @@
-var tabla_cargos;
+var tabla_desempenios;
 
 //Función que se ejecuta al inicio
 function init() {
@@ -9,27 +9,26 @@ function init() {
   
   // $("#lBancoColor").addClass("active");
 
-  listar_cargo();
+  listar_desempenio();
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#idtipo_trabjador_c', null);
+  //lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#idtipo_trabjador_c', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
-  $("#guardar_registro_cargo").on("click", function (e) {$("#submit-form-cargo").submit(); });
+  $("#guardar_registro_desempenio").on("click", function (e) {$("#submit-form-desempenio").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
-  $("#idtipo_trabjador_c").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo", allowClear: true, });
+  //$("#idtipo_trabjador_c").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo", allowClear: true, });
   
   // Formato para telefono
   $("[data-mask]").inputmask();
 }
 
 //Función limpiar
-function limpiar_cargo() {
-  $("#guardar_registro_cargo").html('Guardar Cambios').removeClass('disabled');
-  $("#idcargo_trabajador").val("");
-  $("#nombre_cargo").val(""); 
-  $("#idtipo_trabjador_c").val("null").trigger("change");
+function limpiar_desempenio() {
+  $("#guardar_registro_desempenio").html('Guardar Cambios').removeClass('disabled');
+  $("#iddesempenio").val("");
+  $("#nombre_desempenio").val(""); 
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -37,10 +36,10 @@ function limpiar_cargo() {
   $(".error.invalid-feedback").remove();
 }
 
-//Función listar_cargo
-function listar_cargo() {
+//Función listar_desempenio
+function listar_desempenio() {
 
-  tabla_cargos=$('#tabla-cargo').dataTable({
+  tabla_desempenios=$('#tabla-desempenio').dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
@@ -50,7 +49,7 @@ function listar_cargo() {
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,2,3], } } ,
     ],
     ajax:{
-      url: '../ajax/cargo.php?op=listar_cargo',
+      url: '../ajax/desempenio.php?op=listar_desempenio',
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -75,12 +74,12 @@ function listar_cargo() {
 }
 
 //Función para guardar o editar
-function guardaryeditar_cargo(e) {
+function guardaryeditar_desempenio(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-cargo")[0]);
+  var formData = new FormData($("#form-desempenio")[0]);
  
   $.ajax({
-    url: "../ajax/cargo.php?op=guardaryeditar_cargo",
+    url: "../ajax/desempenio.php?op=guardaryeditar_desempenio",
     type: "POST",
     data: formData,
     contentType: false,
@@ -91,12 +90,12 @@ function guardaryeditar_cargo(e) {
 
 				Swal.fire("Correcto!", "Cargo registrado correctamente.", "success");	 
 
-	      tabla_cargos.ajax.reload(null, false);
+	      tabla_desempenios.ajax.reload(null, false);
          
-				limpiar_cargo();
+				limpiar_desempenio();
 
-        $("#modal-agregar-cargo").modal("hide");
-        $("#guardar_registro_cargo").html('Guardar Cambios').removeClass('disabled');
+        $("#modal-agregar-desempenio").modal("hide");
+        $("#guardar_registro_desempenio").html('Guardar Cambios').removeClass('disabled');
 			}else{
 				ver_errores(e);
 			}
@@ -111,44 +110,42 @@ function guardaryeditar_cargo(e) {
 
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
-          $("#barra_progress_cargo").css({"width": percentComplete+'%'});
+          $("#barra_progress_desempenio").css({"width": percentComplete+'%'});
 
-          $("#barra_progress_cargo").text(percentComplete.toFixed(2)+" %");
+          $("#barra_progress_desempenio").text(percentComplete.toFixed(2)+" %");
         }
       }, false);
       return xhr;
     },
     beforeSend: function () {
-      $("#guardar_registro_cargo").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress_cargo").css({ width: "0%",  });
-      $("#barra_progress_cargo").text("0%");
+      $("#guardar_registro_desempenio").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_desempenio").css({ width: "0%",  });
+      $("#barra_progress_desempenio").text("0%");
     },
     complete: function () {
-      $("#barra_progress_cargo").css({ width: "0%", });
-      $("#barra_progress_cargo").text("0%");
+      $("#barra_progress_desempenio").css({ width: "0%", });
+      $("#barra_progress_desempenio").text("0%");
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
-function mostrar_cargo(idcargo_trabajador) {
+function mostrar_desempenio(iddesempenio) {
   $(".tooltip").removeClass("show").addClass("hidde");
   $("#cargando-9-fomulario").hide();
   $("#cargando-10-fomulario").show();
 
-  limpiar_cargo();
+  limpiar_desempenio();
 
-  $("#modal-agregar-cargo").modal("show")
-  $("#idtipo_trabjador_c").val("null").trigger("change");
+  $("#modal-agregar-desempenio").modal("show")
 
-  $.post("../ajax/cargo.php?op=mostrar", {idcargo_trabajador: idcargo_trabajador}, function (e, status) {
+  $.post("../ajax/desempenio.php?op=mostrar", {iddesempenio: iddesempenio}, function (e, status) {
 
     e = JSON.parse(e);  console.log(e);  
 
     if (e.status) {
-      $("#idcargo_trabajador").val(e.data.idcargo_trabajador);
-      $("#nombre_cargo").val(e.data.nombre); 
-      $("#idtipo_trabjador_c").val(e.data.idtipo_trabjador).trigger("change");
+      $("#iddesempenio").val(e.data.iddesempenio);
+      $("#nombre_desempenio").val(e.data.nombre_desempenio); 
 
       $("#cargando-9-fomulario").show();
       $("#cargando-10-fomulario").hide();
@@ -160,17 +157,17 @@ function mostrar_cargo(idcargo_trabajador) {
 }
 
 //Función para desactivar registros
-function eliminar_cargo(idcargo_trabajador, nombre) {
+function eliminar_desempenio(iddesempenio, nombre) {
 
   crud_eliminar_papelera(
-    "../ajax/cargo.php?op=desactivar",
-    "../ajax/cargo.php?op=eliminar", 
-    idcargo_trabajador, 
+    "../ajax/desempenio.php?op=desactivar",
+    "../ajax/desempenio.php?op=eliminar", 
+    iddesempenio, 
     "!Elija una opción¡", 
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){  tabla_cargos.ajax.reload(null, false); },
+    function(){  tabla_desempenios.ajax.reload(null, false); },
     false, 
     false, 
     false,
@@ -183,14 +180,12 @@ init();
 
 $(function () {
 
-  $("#form-cargo").validate({
-    rules: {
-      idtipo_trabjador_c: { required: true },      // terms: { required: true },
-      nombre_cargo: { required: true }
+  $("#form-desempenio").validate({
+    rules: {     // terms: { required: true },
+      nombre_desempenio: { required: true }
     },
     messages: {
-      idtipo_trabjador_c: { required: "Campo requerido", },
-      nombre_cargo:       { required: "Campo requerido", },
+      nombre_desempenio:       { required: "Campo requerido", },
     },
         
     errorElement: "span",
@@ -208,7 +203,7 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");   
     },
     submitHandler: function (e) {    
-      guardaryeditar_cargo(e);      
+      guardaryeditar_desempenio(e);      
     },
   });
 });
