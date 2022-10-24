@@ -880,19 +880,17 @@ function actualizar_producto() {
   var cont = $("#cont").val(); console.log(idproducto, cont);
 
   var nombre_p = $("#nombre_p").val();  
-  var precio_total_p = $("#precio_total_p").val();
   var unidad_medida_p = $("#unidad_medida_p").find(':selected').text();
-  var color_p = $("#color_p").find(':selected').text();  
+  var categoria       = $("#categoria_insumos_af_p").find(':selected').text();
 
   if (idproducto == "" || idproducto == null) {
      
   } else {
     $(`.nombre_producto_${cont}`).html(nombre_p); 
-    $(`.color_${cont}`).html(`<b>Color: </b>${color_p}`);
-    $(`.color_${cont}`).val(color_p); 
+    $(`.clasificacion_${cont}`).html(`<b>Clasificación: </b>${categoria}`);
     $(`.unidad_medida_${cont}`).html(unidad_medida_p); 
     $(`.unidad_medida_${cont}`).val(unidad_medida_p);
-    $(`.precio_con_igv_${cont}`).val(precio_total_p); 
+
     if ($('#foto2').val()) {
       var src_img = $(`#foto2_i`).attr("src");
       $(`.img_perfil_${cont}`).attr("src", src_img);

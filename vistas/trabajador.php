@@ -15,7 +15,7 @@
         <title>Trabajadores por Proyecto | Admin Sevens</title>
 
         <?php $title = "Trabajadores"; require 'head.php'; ?>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+        <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"> -->
         <style>
           #sortable { list-style-type: none !important; margin: 0 !important; padding: 0 !important; width: 60% !important; }
           #sortable li { margin: 0 3px 3px 3px !important; padding: 0.4em !important; padding-left: 1.5em !important; font-size: 1.4em !important; height: 18px !important; }
@@ -258,9 +258,9 @@
                                         </div>
                                       </div>                                 
                                     </div>
-                                  </div>
+                                  </div>                               
 
-                                  <!-- FECHA INICIO -->
+                                  <!-- FECHA FIN -->
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label>Fecha Fin:</label>
@@ -271,7 +271,7 @@
                                         </div>
                                       </div>                                 
                                     </div>
-                                  </div>  
+                                  </div>                                 
 
                                   <!-- Cantidad de Dias -->
                                   <div class="col-lg-2">
@@ -431,7 +431,18 @@
                               </div>                              
 
                               <!-- FECHA NACIMIENTO -->
-                              <div class="col-12 col-sm-10 col-md-6 col-lg-3">
+                              <div class="col-lg-2 ">
+                                <div class="form-group">
+                                  <label>Fecha Inicio:</label>
+                                  <div class="input-group date"  data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#nacimiento_all" id="nacimiento_all" name="nacimiento_all" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_edad('#nacimiento_all','#input_edad','#span_edad');" autocomplete="off" />
+                                    <div class="input-group-append" data-target="#nacimiento_all" data-toggle="datetimepicker">
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                  </div>                                 
+                                </div>
+                              </div>    
+                              <!-- <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
                                   <label for="">Nacimiento: <sup class="text-danger">*</sup></label>
                                   <div class="input-group date"  data-target-input="nearest">
@@ -441,7 +452,7 @@
                                     </div>
                                   </div>                                 
                                 </div>
-                              </div>
+                              </div> -->
 
                               <!-- edad -->
                               <div class="col-12 col-sm-2 col-md-6 col-lg-1">

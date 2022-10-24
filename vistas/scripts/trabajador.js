@@ -41,22 +41,21 @@ function init() {
   
   // ══════════════════════════════════════ INITIALIZE datetimepicker ══════════════════════════════════════
 
-  $('#fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
- 
+  $('#fecha_inicio').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' });
   $('#fecha_inicio').datetimepicker({ locale: 'es',  /* format: 'L',*/  format: 'DD-MM-YYYY', daysOfWeekDisabled: [6],  /*defaultDate: "", */ });
 
-  $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' })
- 
+  $('#fecha_fin').inputmask('dd-mm-yyyy', { 'placeholder': 'dd-mm-yyyy' });
   $('#fecha_fin').datetimepicker({ locale: 'es', /*format: 'L',*/ format: 'DD-MM-YYYY', daysOfWeekDisabled: [6], /*defaultDate: "",*/ });
   
-  $('#nacimiento_all').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, endDate: moment().format('DD/MM/YYYY'), clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  $('#nacimiento_all').datetimepicker({ locale: 'es', /*format: 'L',*/ format: 'DD-MM-YYYY', /*defaultDate: "",*/ });
+  //$('#nacimiento_all').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, endDate: moment().format('DD/MM/YYYY'), clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   // Formato para telefono
   $("[data-mask]").inputmask();
   
 }
 
 // click input group para habilitar: datepiker
-$('.click-btn-nacimiento_all').on('click', function (e) {$('#nacimiento_all').focus().select(); });
+// $('.click-btn-nacimiento_all').on('click', function (e) {$('#nacimiento_all').focus().select(); });
 
 function templateBanco (state) {
   //console.log(state);
@@ -688,7 +687,7 @@ function mostrar_editar_trabajador() {
       $("#direccion_all").val(e.data.trabajador.direccion);
       $("#telefono_all").val(e.data.trabajador.telefono);
       $("#email_all").val(e.data.trabajador.email);
-      $("#nacimiento_all").datepicker("setDate" , format_d_m_a(e.data.trabajador.fecha_nacimiento));             
+      $("#nacimiento_all").val(format_d_m_a(e.data.trabajador.fecha_nacimiento));             
       $("#titular_cuenta_all").val(e.data.trabajador.titular_cuenta);
       $("#ruc_all").val(e.data.trabajador.ruc); 
 
@@ -866,21 +865,27 @@ function ver_lista_orden() {
   $.post("../ajax/trabajador.php?op=ver_lista_orden", {'idproyecto': localStorage.getItem('nube_idproyecto')},  function (e, status) {
       e = JSON.parse(e);  console.log(e);
       if (e.status == true) {
-        var html_data = '';
-        e.data.forEach((val, key) => {
-          html_data = html_data.concat(`<tr class="cursor-pointer"> 
+         
+        var html_data_td_1 ='' ;
+        
+        e.data.forEach((val, key) => {          
+
+           
+          html_data_td_1 = html_data_td_1.concat(`<tr class="cursor-pointer"> 
             <td class="py-1 text-center">${key + 1}</td> 
             <td class="py-1">
               <div class="user-block">
                 <img class="img-circle" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'">
                 <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
-                <span class="description">${val.tipo_documento}: ${val.numero_documento}</span>
+                <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
               </div>
               <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
-            </td> 
+            </td>
           </tr>`);
+          
+          
         });
-        $('#html_order_trabajador').html(` ${html_data} `);
+        $('#html_order_trabajador').html(`${html_data_td_1} `);
         $("#html_order_trabajador").sortable();
         // $("#html_order_trabajador").sortable();
         $("#html_order_trabajador").disableSelection();

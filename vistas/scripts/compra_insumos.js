@@ -1657,24 +1657,20 @@ function actualizar_producto() {
   var cont = $("#cont").val(); 
 
   var nombre_p        = $("#nombre_p").val();  
-  var precio_total_p  = $("#precio_total_p").val();
   var unidad_medida_p = $("#unidad_medida_p").find(':selected').text();
   var categoria       = $("#categoria_insumos_af_p").find(':selected').text();
 
   if (idproducto == "" || idproducto == null) {  } else {
     $(`.nombre_producto_${cont}`).html(nombre_p);     
     $(`.clasificacion_${cont}`).html(`<b>Clasificación: </b>${categoria}`);
-    $(`.color_${cont}`).val('SIN COLOR'); 
     $(`.unidad_medida_${cont}`).html(unidad_medida_p); 
-    $(`.unidad_medida_${cont}`).val(unidad_medida_p);
-    $(`.precio_con_igv_${cont}`).val(precio_total_p);  
+    $(`.unidad_medida_${cont}`).val(unidad_medida_p);    
 
     if ($('#foto2').val()) {
       var src_img = $(`#foto2_i`).attr("src");
       $(`.img_perfil_${cont}`).attr("src", src_img);
     }  
-  } 
-  
+  }   
 }
 
 init();

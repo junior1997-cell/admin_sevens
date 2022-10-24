@@ -183,6 +183,7 @@ class Trabajador
       $bancos = ejecutarConsultaSimpleFila($sql2); if ($bancos['status'] == false) { return  $bancos;}     
 
       $data[] = array(
+        'orden' => $key+1,
         'idtrabajador_por_proyecto' =>$value['idtrabajador_por_proyecto'],
         'idtrabajador'    => $value['idtrabajador'],  
         'trabajador'      => $value['nombres'], 

@@ -105,7 +105,7 @@ class Asistencia_obrero
 		WHERE t.idtrabajador = tpp.idtrabajador AND tpp.idtrabajador_por_proyecto = atr.idtrabajador_por_proyecto 
 		AND tpp.idproyecto = p.idproyecto AND t.idtipo_trabajador = tp.idtipo_trabajador AND t.idocupacion = o.idocupacion
     AND atr.estado = '1' AND atr.estado_delete = '1' AND tpp.idproyecto = '$nube_idproyecto' 
-		GROUP BY tpp.idtrabajador_por_proyecto ORDER BY t.nombres ASC;";
+		GROUP BY tpp.idtrabajador_por_proyecto ORDER BY tpp.orden_trabajador ASC;";
     $agrupar_trabajdor = ejecutarConsultaArray($sql);  if ($agrupar_trabajdor['status'] == false) {  return $agrupar_trabajdor; }
 
     foreach ($agrupar_trabajdor['data'] as $key => $value) {
@@ -164,7 +164,7 @@ class Asistencia_obrero
     t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado
 		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
 		WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = t.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador 
-		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY t.nombres ASC ;";
+		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY tpp.orden_trabajador ASC ;";
     $trabajador = ejecutarConsultaArray($sql2);
     if ($trabajador['status'] == false) {  return $trabajador; }
 

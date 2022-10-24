@@ -150,7 +150,7 @@
                 "6"=> $value['fecha_nacimiento'],
                 "7"=>$value['nombre_tipo'] ,
                 "8"=>$value['nombre_desempeno'],
-                "9"=>'<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] . $toltip ,                
+                "9"=>'<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] . '<br> <b>CCI: </b>'. $value['cci'] . $toltip ,                
                 
                 "10"=> $value['trabajador'],
                 "11"=>$value['numero_documento'],
