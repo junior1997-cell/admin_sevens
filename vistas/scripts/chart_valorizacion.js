@@ -5,6 +5,7 @@ var char_linea_utilidad;
 var char_linea_compra_insumo;
 var char_linea_maquina_y_equipo;
 var char_linea_subcontrato;
+var char_linea_mano_de_obra;
 var char_linea_planilla_seguro;
 var char_linea_otro_gasto;
 var char_linea_transporte;
@@ -203,6 +204,19 @@ function chart_linea_barra() {
         color_linea_utilidad_subcontrato = "#dc3545";
       }
       $('.progress_total_subcontrato').html(`S/. ${formato_miles(e.data.total_monto_subcontrato)}`);
+
+      // mano_de_obra
+      var  color_linea_utilidad_mano_de_obra = "";
+      if (e.data.total_utilidad_mano_de_obra > 0) {
+        $('.progress_total_utilidad_mano_de_obra').removeClass('text-danger').addClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_mano_de_obra)}`);
+        $('.leyenda_utilidad_mano_de_obra').removeClass('text-danger').addClass('text-success');
+        color_linea_utilidad_mano_de_obra = "#008000";
+      } else {
+        $('.progress_total_utilidad_mano_de_obra').addClass('text-danger').removeClass('text-success').html(`S/. ${formato_miles(e.data.total_utilidad_mano_de_obra)}`);
+        $('.leyenda_utilidad_mano_de_obra').addClass('text-danger').removeClass('text-success');
+        color_linea_utilidad_mano_de_obra = "#dc3545";
+      }
+      $('.progress_total_mano_de_obra').html(`S/. ${formato_miles(e.data.total_monto_mano_de_obra)}`);
 
       // planilla_seguro
       var  color_linea_utilidad_planilla_seguro = "";
@@ -659,6 +673,67 @@ function chart_linea_barra() {
             },
             {              
               type: 'line', data: e.data.monto_subcontrato, 
+              backgroundColor: 'transparent', borderColor: '#008080',
+              pointBorderColor: '#008080', pointBackgroundColor: '#008080',
+              fill: false, label: 'Subcontrato',
+              // pointHoverBackgroundColor: color_linea_utilidad,
+              // pointHoverBorderColor    : color_linea_utilidad
+            }
+          ]
+        },
+        options: {
+          maintainAspectRatio: false,
+          tooltips: { mode: mode,  intersect: intersect,
+            callbacks: {
+              title: function (tooltipItem, data) { 
+                return "" + data.labels[tooltipItem[0].index]; 
+              },
+              label: function(tooltipItems, data) {
+                return "Total: S/ " +  Number(tooltipItems.yLabel).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') ;
+              },
+              footer: function (tooltipItem, data) { return "..."; }
+            }
+          },
+          hover: { mode: mode, intersect: intersect },
+          legend: { display: true,  },
+          scales: {
+            yAxes: [{
+              display: true,
+              gridLines: { display: false, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
+              ticks: $.extend({ 
+                beginAtZero: true, suggestedMax: 200,
+                callback: function (value, index, values) {
+                  return 'S/ '+ Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                },
+              }, ticksStyle)
+            }],
+            xAxes: [{ 
+              display: true, 
+              gridLines: { display: false, },
+              ticks: ticksStyle
+            }]
+          }
+        }
+      });
+
+      // :::::::::::::::::::::::::::::::::::::  C H A R T   L I N E A  -  M A N O   D E   O B R A  ::::::::::::::::::::::::
+      var $char_linea_mano_de_obra = $('#chart-line-mano_de_obra');
+      if (char_linea_mano_de_obra) {  char_linea_mano_de_obra.destroy();  }
+      // eslint-disable-next-line no-unused-vars
+      char_linea_mano_de_obra = new Chart($char_linea_mano_de_obra, {
+        data: {
+          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          datasets: [
+            {
+              type: 'line', data: e.data.utilidad_mano_de_obra, 
+              backgroundColor: 'transparent', borderColor: color_linea_utilidad_mano_de_obra,
+              pointBorderColor: color_linea_utilidad_mano_de_obra, pointBackgroundColor: color_linea_utilidad_mano_de_obra,
+              fill: false, label: 'Utilidad',  hidden: true,
+              // pointHoverBackgroundColor: color_linea_utilidad_mano_de_obra,
+              // pointHoverBorderColor    : color_linea_utilidad_mano_de_obra
+            },
+            {              
+              type: 'line', data: e.data.monto_mano_de_obra, 
               backgroundColor: 'transparent', borderColor: '#008080',
               pointBorderColor: '#008080', pointBackgroundColor: '#008080',
               fill: false, label: 'Subcontrato',
@@ -1237,13 +1312,15 @@ function chart_linea_barra() {
       var html_tabla_compra_insumos = "";
       var suma_total_gasto_compra_insumos = 0; var suma_total_utilidad_compra_insumos = 0; 
       e.data.tabla_compra_insumos.forEach((key, indice) => {
+        var class_color_gci_po = key.gasto < 0 ? 'text-red' : '' ; var class_color_uci_po = key.utilidad < 0 ? 'text-red' : '' ; 
+        var class_color_gcia_po = key.suma_total_gasto_pago_obrero < 0 ? 'text-red' : '' ; var class_color_ucia_po = key.suma_total_utilidad_pago_obrero < 0 ? 'text-red' : '' ;
         html_tabla_compra_insumos = html_tabla_compra_insumos.concat(`
           <tr>
             <td class="py-1 text-center " >${key.val}</td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_compra_insumos)} </div></td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_compra_insumos)} </div></td>
+            <td class="py-1 text-right ${class_color_gci_po}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right ${class_color_gcia_po}"><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_compra_insumos)} </div></td>
+            <td class="py-1 text-right ${class_color_uci_po}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right ${class_color_ucia_po}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_compra_insumos)} </div></td>
             <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
           </tr>
         `);
@@ -1259,6 +1336,7 @@ function chart_linea_barra() {
       var html_tabla_maquina_y_equipo = "";
       var suma_total_gasto_maquina_y_equipo = 0; var suma_total_utilidad_maquina_y_equipo = 0; 
       e.data.tabla_maquina_y_equipo.forEach((key, indice) => {
+        
         html_tabla_maquina_y_equipo = html_tabla_maquina_y_equipo.concat(`
           <tr>
             <td class="py-1 text-center " >${key.val}</td>
@@ -1298,6 +1376,28 @@ function chart_linea_barra() {
       $('#body_modulo_subcontrato').html(html_tabla_subcontrato);
       $('.foot_total_gasto_subcontrato').html(formato_miles(suma_total_gasto_subcontrato));
       $('.foot_total_utilidad_subcontrato').html(formato_miles(suma_total_utilidad_subcontrato));
+
+      // :::::::::::::::::::::::::::::::::::::  T A B L A  -  M A N O   D E   O B R A  ::::::::::::::::::::::::::::::::::::::
+      var html_tabla_mano_de_obra = "";
+      var suma_total_gasto_mano_de_obra = 0; var suma_total_utilidad_mano_de_obra = 0; 
+      e.data.tabla_mano_de_obra.forEach((key, indice) => {
+        html_tabla_mano_de_obra = html_tabla_mano_de_obra.concat(`
+          <tr>
+            <td class="py-1 text-center " >${key.val}</td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_mano_de_obra)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_mano_de_obra)} </div></td>
+            <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+          </tr>
+        `);
+        suma_total_gasto_mano_de_obra += key.gasto;
+        suma_total_utilidad_mano_de_obra += key.utilidad;
+      });
+
+      $('#body_modulo_mano_de_obra').html(html_tabla_mano_de_obra);
+      $('.foot_total_gasto_mano_de_obra').html(formato_miles(suma_total_gasto_mano_de_obra));
+      $('.foot_total_utilidad_mano_de_obra').html(formato_miles(suma_total_utilidad_mano_de_obra));
 
       // :::::::::::::::::::::::::::::::::::::  T A B L A  -  P L A N I L L A   S E G U R O  ::::::::::::::::::::::::::::::
       var html_tabla_planilla_seguro = "";
@@ -1479,13 +1579,15 @@ function chart_linea_barra() {
       var html_tabla_pago_obrero = "";
       var suma_total_gasto_pago_obrero = 0; var suma_total_utilidad_pago_obrero = 0; 
       e.data.tabla_pago_obrero.forEach((key, indice) => {
+        var class_color_g_po = key.gasto < 0 ? 'text-red' : '' ; var class_color_u_po = key.utilidad < 0 ? 'text-red' : '' ; 
+        var class_color_ga_po = key.suma_total_gasto_pago_obrero < 0 ? 'text-red' : '' ; var class_color_ua_po = key.suma_total_utilidad_pago_obrero < 0 ? 'text-red' : '' ;
         html_tabla_pago_obrero = html_tabla_pago_obrero.concat(`
           <tr>
             <td class="py-1 text-center " >${key.val}</td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_pago_obrero)} </div></td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
-            <td class="py-1 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_pago_obrero)} </div></td>
+            <td class="py-1 text-right ${class_color_g_po}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-1 text-right ${class_color_ga_po}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_gasto_pago_obrero)} </div></td>
+            <td class="py-1 text-right ${class_color_u_po}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-1 text-right ${class_color_ua_po}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(suma_total_utilidad_pago_obrero)} </div></td>
             <td class="py-1 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
           </tr>
         `);
@@ -1501,13 +1603,14 @@ function chart_linea_barra() {
       var html_tabla_modulos = "";
       var suma_total_modulo_gasto = 0; var suma_total_modulo_utilidad = 0; 
       e.data.tabla_resumen_modulos.forEach((key, indice) => {
+        var class_color_g_rm = key.gasto < 0 ? 'text-red' : '' ; var class_color_u_rm = key.utilidad < 0 ? 'text-red' : '' ;
         html_tabla_modulos = html_tabla_modulos.concat(`
           <tr>
             <td class="py-2 text-center " >${indice+1}</td>
             <td class="py-2 text-left " >${key.modulo}</td>
-            <td class="py-2 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
-            <td class="py-2 text-right" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
-            <td class="py-2 text-center"> <a href="${key.ver_mas}" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
+            <td class="py-2 text-right ${class_color_g_rm}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.gasto)} </div></td>
+            <td class="py-2 text-right ${class_color_u_rm}" ><div class="formato-numero-conta"><span>S/</span> ${formato_miles(key.utilidad)} </div></td>
+            <td class="py-2 text-center"> <a href="${key.ver_mas}" target="_blank" class="text-muted" data-toggle="tooltip" data-original-title="Ir a: ${key.modulo}"> <i class="fas fa-search"></i> </a> </td>
           </tr>
         `);
         suma_total_modulo_gasto += key.gasto;
@@ -1526,7 +1629,7 @@ function chart_linea_barra() {
       chart_barra_resumen_modulos = new Chart($chart_barra_resumen_modulos, {
         type: 'bar',
         data: {
-          labels: ['Compra de insumos','Maquinas y Equipos','Subcontrato','Planilla Seguro','Otro Gasto','Transporte','Hospedaje','Pensión','Breack','Comida Extra', 'Pago Adm.', 'Pago Obrero'],
+          labels: ['Compra de insumos','Maquinas y Equipos','Subcontrato', 'Mano de Obra', 'Planilla Seguro','Otro Gasto','Transporte','Hospedaje','Pensión','Breack','Comida Extra', 'Pago Adm.', 'Pago Obrero'],
           datasets: [
             { backgroundColor: '#008080', borderColor: '#008080', data: e.data.monto_resumen_modulos, label: 'Módulos', },
             { backgroundColor: color_linea_utilidad_resumen_modulos, borderColor: color_linea_utilidad_resumen_modulos, data: e.data.utilidad_resumen_modulos, label: 'Utilidad', }
@@ -1637,6 +1740,9 @@ function export_excel(name_tabla, nombre_excel_file = $('title').text(), nombre_
     tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
   } else if (name_tabla == '#tabla_modulo_subcontrato') {    
     let preferenciasDocumento = datos.tabla_modulo_subcontrato.xlsx;
+    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
+  } else if (name_tabla == '#tabla_modulo_mano_de_obra') {    
+    let preferenciasDocumento = datos.tabla_modulo_mano_de_obra.xlsx;
     tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
   } else if (name_tabla == '#tabla_modulo_planilla_seguro') {    
     let preferenciasDocumento = datos.tabla_modulo_planilla_seguro.xlsx;

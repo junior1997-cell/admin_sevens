@@ -66,6 +66,9 @@ class ChartValorizacion
     // subcontrato
     $total_monto_subcontrato = 0;     $total_utilidad_subcontrato = 0;      $monto_acumulado_subcontrato = Array();     $utilidad_acumulado_subcontrato = Array();      $monto_subcontrato = Array();     $utilidad_subcontrato = Array();
     $tabla_subcontrato = Array();
+    // mano_de_obra
+    $total_monto_mano_de_obra = 0;     $total_utilidad_mano_de_obra = 0;      $monto_acumulado_mano_de_obra = Array();     $utilidad_acumulado_mano_de_obra = Array();      $monto_mano_de_obra = Array();     $utilidad_mano_de_obra = Array();
+    $tabla_mano_de_obra = Array();
     // planilla_seguro
     $total_monto_planilla_seguro = 0; $total_utilidad_planilla_seguro = 0;  $monto_acumulado_planilla_seguro = Array(); $utilidad_acumulado_planilla_seguro = Array();  $monto_planilla_seguro = Array(); $utilidad_planilla_seguro = Array();
     $tabla_planilla_seguro = Array();
@@ -180,6 +183,18 @@ class ChartValorizacion
         array_push($utilidad_subcontrato,   round($val_utilidad_subcontrato,2) );
         $tabla_subcontrato[]= array(
           "modulo"=>'Subcontrato',"val"=>'Val'.$cont, "gasto"=>$cant_monto_subcontrato, "utilidad"=>$val_utilidad_subcontrato, "ver_mas"=>'sub_contrato.php',
+        );
+        // mano_de_obra
+        $cant_monto_mano_de_obra     = suma_totales_mano_de_obra($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $total_monto_mano_de_obra   += $cant_monto_mano_de_obra;
+        $val_utilidad_mano_de_obra   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_mano_de_obra)/$monto_valorizacion_gastado);
+        $total_utilidad_mano_de_obra+= $val_utilidad_mano_de_obra;
+        array_push($monto_acumulado_mano_de_obra,   round($total_monto_mano_de_obra,2) );
+        array_push($utilidad_acumulado_mano_de_obra,   round($total_utilidad_mano_de_obra,2) );
+        array_push($monto_mano_de_obra,   round($cant_monto_mano_de_obra,2) );
+        array_push($utilidad_mano_de_obra,   round($val_utilidad_mano_de_obra,2) );
+        $tabla_mano_de_obra[]= array(
+          "modulo"=>'Mano de Obra',"val"=>'Val'.$cont, "gasto"=>$cant_monto_mano_de_obra, "utilidad"=>$val_utilidad_mano_de_obra, "ver_mas"=>'mano_de_obra.php',
         );
         // planilla_seguro
         $cant_monto_planilla_seguro     = suma_totales_planilla_seguro($id_proyecto, $value['fecha_i'], $value['fecha_f']);
@@ -391,6 +406,18 @@ class ChartValorizacion
           $tabla_subcontrato[]= array(
             "modulo"=>'Subcontrato',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_subcontrato, "utilidad"=>$val_utilidad_subcontrato, "ver_mas"=>'sub_contrato.php',
           );
+          // mano_de_obra
+          $cant_monto_mano_de_obra     = suma_totales_mano_de_obra($id_proyecto, $fecha_iterativa, '');
+          $total_monto_mano_de_obra   += $cant_monto_mano_de_obra;
+          $val_utilidad_mano_de_obra   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_mano_de_obra)/$monto_valorizacion_gastado);
+          $total_utilidad_mano_de_obra+= $val_utilidad_mano_de_obra;
+          array_push($monto_acumulado_mano_de_obra,   round($total_monto_mano_de_obra,2) );
+          array_push($utilidad_acumulado_mano_de_obra,   round($total_utilidad_mano_de_obra,2) );
+          array_push($monto_mano_de_obra,   round($cant_monto_mano_de_obra,2) );
+          array_push($utilidad_mano_de_obra,   round($val_utilidad_mano_de_obra,2) );
+          $tabla_mano_de_obra[]= array(
+            "modulo"=>'Mano de Obra',"val"=>format_d_m_a($fecha_iterativa), "gasto"=>$cant_monto_mano_de_obra, "utilidad"=>$val_utilidad_mano_de_obra, "ver_mas"=>'mano_de_obra.php',
+          );
           // planilla_seguro
           $cant_monto_planilla_seguro     = suma_totales_planilla_seguro($id_proyecto, $fecha_iterativa, '');
           $total_monto_planilla_seguro   += $cant_monto_planilla_seguro;
@@ -525,12 +552,18 @@ class ChartValorizacion
     );
     array_push($monto_resumen_modulos,   round($total_monto_subcontrato,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_subcontrato,2) );  
+    // mano_de_obra
+    $tabla_resumen[]= array(
+      "modulo"=>'Mano de Obra', "gasto"=>$total_monto_mano_de_obra, "utilidad"=>$total_utilidad_mano_de_obra, "ver_mas"=>'mano_de_obra.php',
+    );
+    array_push($monto_resumen_modulos,   round($total_monto_mano_de_obra,2) );
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_mano_de_obra,2) ); 
     // planilla_seguro
     $tabla_resumen[]= array(
       "modulo"=>'Planilla Seguro', "gasto"=>$total_monto_planilla_seguro, "utilidad"=>$total_utilidad_planilla_seguro, "ver_mas"=>'planillas_seguros.php',
     );
     array_push($monto_resumen_modulos,   round($total_monto_planilla_seguro,2) );
-    array_push($utilidad_resumen_modulos,   round($total_utilidad_planilla_seguro,2) ); 
+    array_push($utilidad_resumen_modulos,   round($total_utilidad_planilla_seguro,2) );     
     // otro_gasto
     $tabla_resumen[]= array(
       "modulo"=>'Otro Gasto', "gasto"=>$total_monto_otro_gasto, "utilidad"=>$total_utilidad_otro_gasto, "ver_mas"=>'otro_gasto.php',
@@ -583,20 +616,20 @@ class ChartValorizacion
     return $retorno = [
       'status'=> true, 'message' => 'Salió todo ok,', 
       'data' => [
-        'monto_programado'=>$monto_programado, 
-        'monto_valorizado'=>$monto_valorizado, 
-        'monto_gastado'   =>$monto_gastado, 
-        'monto_utilidad'  => $monto_utilidad,
+        'monto_programado'                =>$monto_programado, 
+        'monto_valorizado'                =>$monto_valorizado, 
+        'monto_gastado'                   =>$monto_gastado, 
+        'monto_utilidad'                  => $monto_utilidad,
 
-        'monto_acumulado_programado'=>$monto_acumulado_programado, 
-        'monto_acumulado_valorizado'=>$monto_acumulado_valorizado, 
-        'monto_acumulado_gastado'   =>$monto_acumulado_gastado,
-        'monto_acumulado_utilidad'  =>$monto_acumulado_utilidad,
+        'monto_acumulado_programado'      =>$monto_acumulado_programado, 
+        'monto_acumulado_valorizado'      =>$monto_acumulado_valorizado, 
+        'monto_acumulado_gastado'         =>$monto_acumulado_gastado,
+        'monto_acumulado_utilidad'        =>$monto_acumulado_utilidad,
         
-        'total_monto_programado'=>$total_monto_programado,
-        'total_monto_valorizado'=>$total_monto_valorizado,
-        'total_monto_gastado'   =>$total_monto_gastado,
-        'total_utilidad'        =>$total_monto_valorizado - $total_monto_gastado,
+        'total_monto_programado'          =>$total_monto_programado,
+        'total_monto_valorizado'          =>$total_monto_valorizado,
+        'total_monto_gastado'             =>$total_monto_gastado,
+        'total_utilidad'                  =>$total_monto_valorizado - $total_monto_gastado,
         // compra_insumos
         'monto_acumulado_compra_insumos'  => $monto_acumulado_compra_insumos,
         'utilidad_acumulado_compra_insumos'=> $utilidad_acumulado_compra_insumos,
@@ -614,61 +647,69 @@ class ChartValorizacion
         'total_utilidad_maquina_y_equipo' =>$total_utilidad_maquina_y_equipo,
         'tabla_maquina_y_equipo'          =>$tabla_maquina_y_equipo,
         // subcontrato
-        'monto_acumulado_subcontrato'   => $monto_acumulado_subcontrato,
-        'utilidad_acumulado_subcontrato'=> $utilidad_acumulado_subcontrato,
-        'monto_subcontrato'             => $monto_subcontrato,
-        'utilidad_subcontrato'          => $utilidad_subcontrato,
-        'total_monto_subcontrato'       =>$total_monto_subcontrato,
-        'total_utilidad_subcontrato'    =>$total_utilidad_subcontrato,
-        'tabla_subcontrato'             =>$tabla_subcontrato,
+        'monto_acumulado_subcontrato'     => $monto_acumulado_subcontrato,
+        'utilidad_acumulado_subcontrato'  => $utilidad_acumulado_subcontrato,
+        'monto_subcontrato'               => $monto_subcontrato,
+        'utilidad_subcontrato'            => $utilidad_subcontrato,
+        'total_monto_subcontrato'         =>$total_monto_subcontrato,
+        'total_utilidad_subcontrato'      =>$total_utilidad_subcontrato,
+        'tabla_subcontrato'               =>$tabla_subcontrato,
+        // mano_de_obra
+        'monto_acumulado_mano_de_obra'    => $monto_acumulado_mano_de_obra,
+        'utilidad_acumulado_mano_de_obra' => $utilidad_acumulado_mano_de_obra,
+        'monto_mano_de_obra'              => $monto_mano_de_obra,
+        'utilidad_mano_de_obra'           => $utilidad_mano_de_obra,
+        'total_monto_mano_de_obra'        =>$total_monto_mano_de_obra,
+        'total_utilidad_mano_de_obra'     =>$total_utilidad_mano_de_obra,
+        'tabla_mano_de_obra'              =>$tabla_mano_de_obra,
         // planilla_seguro
-        'monto_acumulado_planilla_seguro'=> $monto_acumulado_planilla_seguro,
+        'monto_acumulado_planilla_seguro' => $monto_acumulado_planilla_seguro,
         'utilidad_acumulado_planilla_seguro' => $utilidad_acumulado_planilla_seguro,
-        'monto_planilla_seguro'         => $monto_planilla_seguro,
-        'utilidad_planilla_seguro'      => $utilidad_planilla_seguro,
-        'total_monto_planilla_seguro'   =>$total_monto_planilla_seguro,
-        'total_utilidad_planilla_seguro'=>$total_utilidad_planilla_seguro,
-        'tabla_planilla_seguro'         =>$tabla_planilla_seguro,
+        'monto_planilla_seguro'           => $monto_planilla_seguro,
+        'utilidad_planilla_seguro'        => $utilidad_planilla_seguro,
+        'total_monto_planilla_seguro'     =>$total_monto_planilla_seguro,
+        'total_utilidad_planilla_seguro'  =>$total_utilidad_planilla_seguro,
+        'tabla_planilla_seguro'           =>$tabla_planilla_seguro,
         // otro_gasto
-        'monto_acumulado_otro_gasto'    => $monto_acumulado_otro_gasto,
-        'utilidad_acumulado_otro_gasto' => $utilidad_acumulado_otro_gasto,
-        'monto_otro_gasto'              => $monto_otro_gasto,
-        'utilidad_otro_gasto'           => $utilidad_otro_gasto,
-        'total_monto_otro_gasto'        =>$total_monto_otro_gasto,
-        'total_utilidad_otro_gasto'     =>$total_utilidad_otro_gasto,
-        'tabla_otro_gasto'              =>$tabla_otro_gasto,
+        'monto_acumulado_otro_gasto'      => $monto_acumulado_otro_gasto,
+        'utilidad_acumulado_otro_gasto'   => $utilidad_acumulado_otro_gasto,
+        'monto_otro_gasto'                => $monto_otro_gasto,
+        'utilidad_otro_gasto'             => $utilidad_otro_gasto,
+        'total_monto_otro_gasto'          =>$total_monto_otro_gasto,
+        'total_utilidad_otro_gasto'       =>$total_utilidad_otro_gasto,
+        'tabla_otro_gasto'                =>$tabla_otro_gasto,
         // transporte
-        'monto_acumulado_transporte'    => $monto_acumulado_transporte,
-        'utilidad_acumulado_transporte' => $utilidad_acumulado_transporte,
-        'monto_transporte'              => $monto_transporte,
-        'utilidad_transporte'           => $utilidad_transporte,
-        'total_monto_transporte'        =>$total_monto_transporte,
-        'total_utilidad_transporte'     =>$total_utilidad_transporte,
-        'tabla_transporte'              =>$tabla_transporte,
+        'monto_acumulado_transporte'      => $monto_acumulado_transporte,
+        'utilidad_acumulado_transporte'   => $utilidad_acumulado_transporte,
+        'monto_transporte'                => $monto_transporte,
+        'utilidad_transporte'             => $utilidad_transporte,
+        'total_monto_transporte'          =>$total_monto_transporte,
+        'total_utilidad_transporte'       =>$total_utilidad_transporte,
+        'tabla_transporte'                =>$tabla_transporte,
         // hospedaje
-        'monto_acumulado_hospedaje'   => $monto_acumulado_hospedaje,
-        'utilidad_acumulado_hospedaje'=> $utilidad_acumulado_hospedaje,
-        'monto_hospedaje'             => $monto_hospedaje,
-        'utilidad_hospedaje'          => $utilidad_hospedaje,
-        'total_monto_hospedaje'       =>$total_monto_hospedaje,
-        'total_utilidad_hospedaje'    =>$total_utilidad_hospedaje,
-        'tabla_hospedaje'             =>$tabla_hospedaje,
+        'monto_acumulado_hospedaje'       => $monto_acumulado_hospedaje,
+        'utilidad_acumulado_hospedaje'    => $utilidad_acumulado_hospedaje,
+        'monto_hospedaje'                 => $monto_hospedaje,
+        'utilidad_hospedaje'              => $utilidad_hospedaje,
+        'total_monto_hospedaje'           =>$total_monto_hospedaje,
+        'total_utilidad_hospedaje'        =>$total_utilidad_hospedaje,
+        'tabla_hospedaje'                 =>$tabla_hospedaje,
         // pension
-        'monto_acumulado_pension'   => $monto_acumulado_pension,
-        'utilidad_acumulado_pension'=> $utilidad_acumulado_pension,
-        'monto_pension'             => $monto_pension,
-        'utilidad_pension'          => $utilidad_pension,
-        'total_monto_pension'       =>$total_monto_pension,
-        'total_utilidad_pension'    =>$total_utilidad_pension,
-        'tabla_pension'            =>$tabla_pension,
+        'monto_acumulado_pension'         => $monto_acumulado_pension,
+        'utilidad_acumulado_pension'      => $utilidad_acumulado_pension,
+        'monto_pension'                   => $monto_pension,
+        'utilidad_pension'                => $utilidad_pension,
+        'total_monto_pension'             =>$total_monto_pension,
+        'total_utilidad_pension'          =>$total_utilidad_pension,
+        'tabla_pension'                   =>$tabla_pension,
         // breack
-        'monto_acumulado_breack'    => $monto_acumulado_breack,
-        'utilidad_acumulado_breack' => $utilidad_acumulado_breack,
-        'monto_breack'              => $monto_breack,
-        'utilidad_breack'           => $utilidad_breack,
-        'total_monto_breack'        =>$total_monto_breack,
-        'total_utilidad_breack'     =>$total_utilidad_breack,
-        'tabla_breack'              =>$tabla_breack,
+        'monto_acumulado_breack'          => $monto_acumulado_breack,
+        'utilidad_acumulado_breack'       => $utilidad_acumulado_breack,
+        'monto_breack'                    => $monto_breack,
+        'utilidad_breack'                 => $utilidad_breack,
+        'total_monto_breack'              =>$total_monto_breack,
+        'total_utilidad_breack'           =>$total_utilidad_breack,
+        'tabla_breack'                    =>$tabla_breack,
         // comida_extra
         'monto_acumulado_comida_extra'    => $monto_acumulado_comida_extra,
         'utilidad_acumulado_comida_extra' => $utilidad_acumulado_comida_extra,
@@ -678,25 +719,25 @@ class ChartValorizacion
         'total_utilidad_comida_extra'     =>$total_utilidad_comida_extra,
         'tabla_comida_extra'              =>$tabla_comida_extra,
         // pago_administrador
-        'monto_acumulado_pago_administrador'    => $monto_acumulado_pago_administrador,
+        'monto_acumulado_pago_administrador' => $monto_acumulado_pago_administrador,
         'utilidad_acumulado_pago_administrador' => $utilidad_acumulado_pago_administrador,
-        'monto_pago_administrador'              => $monto_pago_administrador,
-        'utilidad_pago_administrador'           => $utilidad_pago_administrador,
-        'total_monto_pago_administrador'        =>$total_monto_pago_administrador,
-        'total_utilidad_pago_administrador'     =>$total_utilidad_pago_administrador,
-        'tabla_pago_administrador'              =>$tabla_pago_administrador,
+        'monto_pago_administrador'        => $monto_pago_administrador,
+        'utilidad_pago_administrador'     => $utilidad_pago_administrador,
+        'total_monto_pago_administrador'  =>$total_monto_pago_administrador,
+        'total_utilidad_pago_administrador'=>$total_utilidad_pago_administrador,
+        'tabla_pago_administrador'        =>$tabla_pago_administrador,
         // pago_obrero
-        'monto_acumulado_pago_obrero'    => $monto_acumulado_pago_obrero,
-        'utilidad_acumulado_pago_obrero' => $utilidad_acumulado_pago_obrero,
-        'monto_pago_obrero'              => $monto_pago_obrero,
-        'utilidad_pago_obrero'           => $utilidad_pago_obrero,
-        'total_monto_pago_obrero'        =>$total_monto_pago_obrero,
-        'total_utilidad_pago_obrero'     =>$total_utilidad_pago_obrero,
-        'tabla_pago_obrero'              =>$tabla_pago_obrero,
+        'monto_acumulado_pago_obrero'     => $monto_acumulado_pago_obrero,
+        'utilidad_acumulado_pago_obrero'  => $utilidad_acumulado_pago_obrero,
+        'monto_pago_obrero'               => $monto_pago_obrero,
+        'utilidad_pago_obrero'            => $utilidad_pago_obrero,
+        'total_monto_pago_obrero'         =>$total_monto_pago_obrero,
+        'total_utilidad_pago_obrero'      =>$total_utilidad_pago_obrero,
+        'tabla_pago_obrero'               =>$tabla_pago_obrero,
         // resumen_modulos
-        'tabla_resumen_modulos'=>$tabla_resumen,
-        'monto_resumen_modulos'=>$monto_resumen_modulos,
-        'utilidad_resumen_modulos'=>$utilidad_resumen_modulos,
+        'tabla_resumen_modulos'           =>$tabla_resumen,
+        'monto_resumen_modulos'           =>$monto_resumen_modulos,
+        'utilidad_resumen_modulos'        =>$utilidad_resumen_modulos,
       ]  
     ];
   }
@@ -758,9 +799,7 @@ function suma_totales_maquina_y_equipo($idproyecto, $fecha_1, $fecha_2) {
   FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
   WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
   AND f.estado = '1' AND f.estado_delete = '1'  AND f.idproyecto = $idproyecto $filtro_fecha;";
-  $maquinaria = ejecutarConsultaSimpleFila($sql2);
-
-  if ($maquinaria['status'] == false) { return $maquinaria; } 
+  $maquinaria = ejecutarConsultaSimpleFila($sql2);  if ($maquinaria['status'] == false) { return $maquinaria; } 
 
   $total    = (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['total']) ? 0 : floatval($maquinaria['data']['total']) );
   $subtotal = (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['subtotal']) ? 0 : floatval($maquinaria['data']['subtotal']) );
@@ -784,15 +823,37 @@ function suma_totales_subcontrato($idproyecto, $fecha_1, $fecha_2) {
   $sql3 = "SELECT SUM(s.subtotal) as subtotal, SUM(s.igv) as igv, SUM(s.costo_parcial) as total
   FROM subcontrato AS s, proveedor as p
   WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1'  AND  idproyecto = $idproyecto $filtro_fecha;";
-  $otro_gasto = ejecutarConsultaSimpleFila($sql3);
-
-  if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+  $otro_gasto = ejecutarConsultaSimpleFila($sql3);  if ($otro_gasto['status'] == false) { return $otro_gasto; } 
   
   $total    = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
   $subtotal = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
   $igv      = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['igv']) ? 0 : floatval($otro_gasto['data']['igv']) );
 
   $data = array( "status"=> true, "message"=> 'todo oka', "data"=> [ "total" => $total, "subtotal" => $subtotal, "igv" => $igv, ] );
+  return $total ;
+}
+
+function suma_totales_mano_de_obra($idproyecto, $fecha_1, $fecha_2) {
+  $filtro_fecha = "";
+
+  if ( !empty($fecha_1) && !empty($fecha_2) ) {
+    $filtro_fecha = "AND mdo.fecha_deposito BETWEEN '$fecha_1' AND '$fecha_2'";
+  } else if (!empty($fecha_1)) {    
+    $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_1'";
+  }else if (!empty($fecha_2)) {      
+    $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_2'";
+  }    
+
+  $sql3 = "SELECT SUM(mdo.monto) as total
+  FROM mano_de_obra AS mdo, proveedor as p
+  WHERE mdo.idproveedor = p.idproveedor and mdo.estado = '1' AND mdo.estado_delete = '1'  AND  idproyecto = $idproyecto $filtro_fecha;";
+  $otro_gasto = ejecutarConsultaSimpleFila($sql3); if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+  
+  $total    = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
+  //$subtotal = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
+  //$igv      = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['igv']) ? 0 : floatval($otro_gasto['data']['igv']) );
+
+  $data = array( "status"=> true, "message"=> 'todo oka', "data"=> [ "total" => $total, "subtotal" => $total, "igv" => 0, ] );
   return $total ;
 }
 
@@ -812,9 +873,7 @@ function suma_totales_planilla_seguro($idproyecto, $fecha_1, $fecha_2) {
   FROM planilla_seguro as ps, proyecto as p
   WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' 
     AND  ps.idproyecto = $idproyecto $filtro_fecha;";
-  $otro_gasto = ejecutarConsultaSimpleFila($sql3);
-
-  if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+  $otro_gasto = ejecutarConsultaSimpleFila($sql3); if ($otro_gasto['status'] == false) { return $otro_gasto; } 
   
   $total    = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
   $subtotal = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
@@ -838,9 +897,7 @@ function suma_totales_otro_gasto($idproyecto, $fecha_1, $fecha_2) {
   $sql3 = "SELECT SUM(costo_parcial) as total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
   FROM otro_gasto  
   WHERE estado = '1' AND estado_delete = '1'  AND  idproyecto = $idproyecto $filtro_fecha;";
-  $otro_gasto = ejecutarConsultaSimpleFila($sql3);
-
-  if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+  $otro_gasto = ejecutarConsultaSimpleFila($sql3); if ($otro_gasto['status'] == false) { return $otro_gasto; } 
   
   $total    = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
   $subtotal = (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
@@ -865,9 +922,7 @@ function suma_totales_transporte($idproyecto, $fecha_1, $fecha_2) {
   $sql4 = "SELECT SUM(t.precio_parcial) AS total, SUM(t.subtotal) AS subtotal, SUM(t.igv) AS igv
   FROM transporte AS t, proveedor AS p
   WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND t.idproyecto = $idproyecto  $filtro_fecha;";
-  $transporte = ejecutarConsultaSimpleFila($sql4);
-
-  if ($transporte['status'] == false) { return $transporte; }
+  $transporte = ejecutarConsultaSimpleFila($sql4); if ($transporte['status'] == false) { return $transporte; }
   
   $total    = (empty($transporte['data'])) ? 0 : ( empty($transporte['data']['total']) ? 0 : floatval($transporte['data']['total']) );
   $subtotal = (empty($transporte['data'])) ? 0 : ( empty($transporte['data']['subtotal']) ? 0 : floatval($transporte['data']['subtotal']) );
@@ -892,9 +947,7 @@ function suma_totales_hospedaje($idproyecto, $fecha_1, $fecha_2) {
   $sql5 = "SELECT SUM(precio_parcial) as total , SUM(subtotal) AS subtotal, SUM(igv) AS igv
   FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND idproyecto = $idproyecto  $filtro_fecha
   ORDER BY fecha_comprobante DESC;";
-  $hospedaje = ejecutarConsultaSimpleFila($sql5);
-
-  if ($hospedaje['status'] == false) { return $hospedaje; }
+  $hospedaje = ejecutarConsultaSimpleFila($sql5); if ($hospedaje['status'] == false) { return $hospedaje; }
   
   $total    = (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['total']) ? 0 : floatval($hospedaje['data']['total']) );
   $subtotal = (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['subtotal']) ? 0 : floatval($hospedaje['data']['subtotal']) );
@@ -920,9 +973,7 @@ function suma_totales_pension($idproyecto, $fecha_1, $fecha_2) {
   FROM detalle_pension as dp, pension as p, proveedor as prov
   WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND  p.idproyecto = $idproyecto
   AND dp.estado = '1' AND dp.estado_delete = '1' $filtro_fecha ;";
-  $factura_pension = ejecutarConsultaSimpleFila($sql6);
-
-  if ($factura_pension['status'] == false) { return $factura_pension; }
+  $factura_pension = ejecutarConsultaSimpleFila($sql6); if ($factura_pension['status'] == false) { return $factura_pension; }
   
   $total    = (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['total']) ? 0 : floatval($factura_pension['data']['total']) );
   $subtotal = (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['subtotal']) ? 0 : floatval($factura_pension['data']['subtotal']) );
@@ -948,9 +999,7 @@ function suma_totales_breack($idproyecto, $fecha_1, $fecha_2) {
   FROM factura_break as fb, semana_break as sb
   WHERE  fb.idsemana_break = sb.idsemana_break AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1'  AND  sb.idproyecto = $idproyecto
   AND sb.estado_delete = '1' $filtro_fecha ;";
-  $factura_break = ejecutarConsultaSimpleFila($sql7);
-
-  if ($factura_break['status'] == false) { return $factura_break; }
+  $factura_break = ejecutarConsultaSimpleFila($sql7); if ($factura_break['status'] == false) { return $factura_break; }
   
   $total    = (empty($factura_break['data'])) ? 0 : ( empty($factura_break['data']['total']) ? 0 : floatval($factura_break['data']['total']) );
   $subtotal = (empty($factura_break['data'])) ? 0 : ( empty($factura_break['data']['subtotal']) ? 0 : floatval($factura_break['data']['subtotal']) );
@@ -975,9 +1024,7 @@ function suma_totales_comida_extra($idproyecto, $fecha_1, $fecha_2) {
   $sql8 = "SELECT SUM(costo_parcial) AS total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
   FROM comida_extra
   WHERE  estado = '1' AND estado_delete = '1' AND  idproyecto = $idproyecto $filtro_fecha;";
-  $comida_extra = ejecutarConsultaSimpleFila($sql8);
-
-  if ($comida_extra['status'] == false) { return $comida_extra; }
+  $comida_extra = ejecutarConsultaSimpleFila($sql8); if ($comida_extra['status'] == false) { return $comida_extra; }
   
   $total    = (empty($comida_extra['data'])) ? 0 : ( empty($comida_extra['data']['total']) ? 0 : floatval($comida_extra['data']['total']) );
   $subtotal = (empty($comida_extra['data'])) ? 0 : ( empty($comida_extra['data']['subtotal']) ? 0 : floatval($comida_extra['data']['subtotal']) );
@@ -1009,9 +1056,7 @@ function suma_totales_pago_administrador($idproyecto, $fecha_1, $fecha_2) {
   FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
   WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador
   AND pxma.estado = '1' AND pxma.estado_delete = '1'  AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
-  $pago_administrador = ejecutarConsultaSimpleFila($sql11);
-
-  if ($pago_administrador['status'] == false) { return $pago_administrador; }
+  $pago_administrador = ejecutarConsultaSimpleFila($sql11);  if ($pago_administrador['status'] == false) { return $pago_administrador; }
   
   $total    = (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['total']) ? 0 : floatval($pago_administrador['data']['total']) );
   $subtotal = (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['subtotal']) ? 0 : floatval($pago_administrador['data']['subtotal']) );
@@ -1035,9 +1080,7 @@ function suma_totales_pago_obrero($idproyecto, $fecha_1, $fecha_2) {
   FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
   WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador
   AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
-  $pago_obrero = ejecutarConsultaSimpleFila($sql12);
-
-  if ($pago_obrero['status'] == false) { return $pago_obrero; }
+  $pago_obrero = ejecutarConsultaSimpleFila($sql12);  if ($pago_obrero['status'] == false) { return $pago_obrero; }
   
   $total    = (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['total']) ? 0 : floatval($pago_obrero['data']['total']) );
   $subtotal = (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['subtotal']) ? 0 : floatval($pago_obrero['data']['subtotal']) );

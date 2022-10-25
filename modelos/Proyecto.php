@@ -20,15 +20,11 @@ class Proyecto
     $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, idempresa_a_cargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
 		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero', '" . $_SESSION['idusuario'] . "');";
 
-    $id_proyect = ejecutarConsulta_retornarID($sql);
-
-    if ($id_proyect['status'] == false) { return $id_proyect; }
+    $id_proyect = ejecutarConsulta_retornarID($sql); if ($id_proyect['status'] == false) { return $id_proyect; }
 
     //add registro en nuestra bitacora
     $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','" . $id_proyect['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
-    $bitacora1 = ejecutarConsulta($sql2);
-
-    if ( $bitacora1['status'] == false) {return $bitacora1; }
+    $bitacora1 = ejecutarConsulta($sql2);  if ( $bitacora1['status'] == false) {return $bitacora1; }
 
     // extraemos todas fechas
     $sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
@@ -41,23 +37,16 @@ class Proyecto
 
       // insertamos las fechas al nuevo proyecto
       foreach ($proyecto['data'] as $indice => $key) {
-        $titulo = $key['titulo'];
-        $descripcion = $key['descripcion'];
-        $fecha_feriado = $key['fecha_feriado'];
-        $background_color = $key['background_color'];
-        $text_color = $key['text_color'];
+
+        $titulo = $key['titulo'];  $descripcion = $key['descripcion']; $fecha_feriado = $key['fecha_feriado']; $background_color = $key['background_color']; $text_color = $key['text_color'];
 
         $sql3 = "INSERT INTO calendario_por_proyecto (idproyecto, titulo, descripcion, fecha_feriado, background_color, text_color,user_created)
 				VALUES ('$id_proyect', '$titulo', '$descripcion', '$fecha_feriado', '$background_color', '$text_color','" . $_SESSION['idusuario'] . "')";
-        $calendario_proyect = ejecutarConsulta_retornarID($sql3);
-
-        if ($calendario_proyect['status'] == false) {return $calendario_proyect;}
+        $calendario_proyect = ejecutarConsulta_retornarID($sql3); if ($calendario_proyect['status'] == false) {return $calendario_proyect;}
 
         //add registro en nuestra bitacora
         $sql3_1 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario_por_proyecto','" . $calendario_proyect['data'] . "','Registramos la fechas de feriadod al nuevo proyecto','" . $_SESSION['idusuario'] . "')";
-        $bitacora3_1 = ejecutarConsulta($sql3_1);
-        
-        if ( $bitacora3_1['status'] == false) {return $bitacora3_1; }
+        $bitacora3_1 = ejecutarConsulta($sql3_1); if ( $bitacora3_1['status'] == false) {return $bitacora3_1; }
 
       }
 

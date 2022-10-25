@@ -30,21 +30,17 @@
           require 'nav.php';
           require 'aside.php';
           if ($_SESSION['valorizacion']==1){
-            require 'enmantenimiento.php';
+            //require 'enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper hidden" >
+            <div class="content-wrapper" >
               <!-- Content Header (Page header) -->
               <section class="content-header">
                 <div class="container-fluid">
                   <div class="row mb-2">
                     <div class="col-sm-6">
-                      <h1 >
-                        <span class="h1-titulo">Valorización</span> 
-                        <button type="button" class="btn btn-success" onclick="export_excel_valorizacion()" ><i class="far fa-file-excel"></i> Export Excel</button>
-                      </h1> 
-                      
+                      <h1 > <span class="h1-titulo">Valorización</span>  </h1>                       
                     </div>
                     <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
@@ -361,6 +357,9 @@
                             </div>
                             <!-- tab info resumen valorizaciones -->
                             <div class="col-lg-12 col-xl-12" id="tab-info">
+                              <button type="button" class="btn btn-info btn-sm mb-3" data-toggle="modal" data-target="#modal-modulos-incluidos" ><i class="fa-solid fa-eye"></i> Modulos</button>
+                              <button type="button" class="btn btn-dark btn-sm mb-3" onclick="export_excel_valorizacion()" ><i class="far fa-file-excel"></i> Export Excel</button>
+                              <button type="button" class="btn btn-warning btn-sm mb-3" onclick="actulizar_fechas_val()" ><i class="fa-solid fa-calendar-day"></i> Actualizar fechas</button>
                               <!-- tabla principal -->
                               <div class="table-responsive pb-3">
                                 <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_valorizacion" >
@@ -584,7 +583,7 @@
                               </div>
 
                               <!-- fecha_inicial -->
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-6"> 
                                 <div class="form-group">
                                   <label for="fecha_inicial">Fecha inicial <sup class="text-danger">(unico*)</sup></label>
                                   <input type="text" name="fecha_inicial" class="form-control" id="fecha_inicial" placeholder="Fecha inicial" readonly />
@@ -696,6 +695,99 @@
                           <button type="button" class="swal2-confirm swal2-styled" data-dismiss="modal" aria-label="Close" style="display: inline-block;">OK</button>                         
                         </div>
                       </div>                     
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - UPDATE FEHCAS OCULTAS -->
+                <div class="modal fade" id="modal-agregar-fechas-ocultas">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-bold _edith">Fechas Ocultas</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="form-fechas-ocultas" name="form-fechas-ocultas" method="POST">
+                          <input type="hidden" name="id_proyecto_fo" id="id_proyecto_fo">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class="table-responsive pb-3">
+                                <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tabla_fechas_ocultas" >
+                                  <thead>                                    
+                                    <tr class="text-center"> 
+                                      <th class="pt-1 pb-1 celda-b-b-2px">#</th> 
+                                      <th class="pt-1 pb-1 celda-b-r-2px celda-b-b-2px">Fechas Formales</th>
+                                      <th class="pt-1 pb-1 celda-b-b-2px">Fecha inicio oculto</th>
+                                      <th class="pt-1 pb-1 celda-b-b-2px">Fecha fin oculto</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody >                         
+                                    <tr><td colspan="4"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>
+                                  </tbody>
+                                  <tfoot>                                    
+                                    <tr class="text-center"> 
+                                      <th class="pt-1 pb-1 ">#</th> 
+                                      <th class="pt-1 pb-1 celda-b-r-2px ">Fechas Formales</th>
+                                      <th class="pt-1 pb-1 ">Fecha inicio oculto</th>
+                                      <th class="pt-1 pb-1 ">Fecha fin oculto</th>                        
+                                    </tr> 
+                                  </tfoot>
+                                </table>
+                              </div> 
+                              <!--/.table-responsive  -->
+                            </div>
+                            <!-- /.col-12 -->
+                          </div>
+                          <!-- /.row -->                          
+                          
+                          <button type="submit" style="display: none;" id="submit-form-fechas-ocultas">Submit</button>
+                        </form>   
+                        <!-- /.form -->
+                          
+                      </div>
+                      <!-- /.modal-body -->
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_fechas_ocultas">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - MODULOS INCLUIDOS  -->
+                <div class="modal fade" id="modal-modulos-incluidos">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Módulos Incluidos</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body"> 
+                        <ol>
+                          <li class="m-b-04rem"><i class="fas fa-shopping-cart nav-icon"></i> COMPRAS INSUMOS</li>
+                          <!-- <li>COMPRAS ACTIVOS FIJOS <small class="text-red">(sin proyecto)</small></li> -->
+                          <li class="m-b-04rem"><img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO MAQUINA </li>
+                          <li class="m-b-04rem"><img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO EQUIPO</li>
+                          <li class="m-b-04rem"><i class="nav-icon fas fa-hands-helping"></i> SUB CONTRATO</li>
+                          <li class="m-b-04rem"><i class="nav-icon fa-solid fa-person-digging"></i> MANO DE OBRA</li>
+                          <li class="m-b-04rem"><img src="../dist/svg/negro-planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > PLANILLA SEGURO</li>
+                          <li class="m-b-04rem"><i class="nav-icon fas fa-network-wired"></i> OTRO GASTO</li>
+                          <li class="m-b-04rem"><i class="fas fa-shuttle-van nav-icon"></i> TRANSPORTE</li>
+                          <li class="m-b-04rem"><i class="fas fa-hotel nav-icon"></i> HOSPEDAJE</li>
+                          <li class="m-b-04rem"><i class="fas fa-utensils nav-icon"></i> PENSION</li>
+                          <li class="m-b-04rem"><i class="fas fa-hamburger nav-icon"></i> BREAK</li>
+                          <li class="m-b-04rem"><i class="fas fa-drumstick-bite nav-icon"></i> COMIDA EXTRA</li>
+                          <!-- <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(sin proyecto)</small></li> -->
+                          <!-- <li>OTRO INGRESO</li> -->
+                          <li class="m-b-04rem"><i class="fas fa-briefcase nav-icon"></i> PAGO ADMINSTRADOR</li>
+                          <li class="m-b-04rem"><i class="fas fa-users nav-icon"></i> PAGO OBRERO</li>
+                        </ol>
+                      </div>
                     </div>
                   </div>
                 </div>

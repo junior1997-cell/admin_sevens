@@ -588,12 +588,12 @@ class Resumen_general
           $total_deposito_obrero = empty($total_deposito['data']) ? 0 : ($retVal_1 = empty($total_deposito['data']['total_deposito']) ? 0 : floatval($total_deposito['data']['total_deposito']));
 
           $obrero[] = array(
-            "idresumen_q_s_asistencia" => $value['idresumen_q_s_asistencia'],
+            "idresumen_q_s_asistencia"  => $value['idresumen_q_s_asistencia'],
             "idtrabajador_por_proyecto" => $value['idtrabajador_por_proyecto'],
-            "nombres" => $value['nombres'],
-            "pago_quincenal" => ($retVal = empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
+            "nombres"                   => $value['nombres'],
+            "pago_quincenal"            => ( empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
 
-            "deposito" => $total_deposito_obrero,
+            "deposito"                  => ( empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
           );
         }
       }      

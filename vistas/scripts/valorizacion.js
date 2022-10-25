@@ -22,6 +22,7 @@ function init() {
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-valorizacion").submit(); });
   $("#guardar_registro_resumen_valorizacion").on("click", function (e) {  $("#submit-form-resumen-valorizacion").submit(); });
+  $("#guardar_registro_fechas_ocultas").on("click", function (e) {  $("#submit-form-fechas-ocultas").submit(); });
 
   //Initialize Select2 Elements
   $("#numero_q_s_resumen").select2({ theme: "bootstrap4", placeholder: "Selecione Valorizacion", allowClear: true, });
@@ -75,8 +76,27 @@ function ver_quincenas(nube_idproyecto) {
 
     $('#lista_quincenas').html('');
 
+    e.data.fechas_val.forEach((val, key) => {
+
+      if (val.fecha_valorizacion == "quincenal") {
+        $(".h1-titulo").html("Valorización - Quincenal");
+      }  else if (val.fecha_valorizacion == "mensual") {
+        $(".h1-titulo").html("Valorización - Mensual");
+      }  else if (val.fecha_valorizacion == "al finalizar") {
+        $(".h1-titulo").html("Valorización - Al finalizar");
+      }
+     
+      //var fechas_btn = fechas_valorizacion_quincena(val.fecha_inicio, val.fecha_fin); 
+      //console.log(fechas_btn);  
+       
+      $('#lista_quincenas').append(` <button id="boton-${val.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(val.fecha_inicio)}', '${format_a_m_d(val.fecha_fin)}', '${val.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${val.num_q_s}<br>${val.fecha_inicio} // ${val.fecha_fin}</button>`)
+      array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(val.fecha_inicio), 'fecha_fin':format_a_m_d(val.fecha_fin), 'num_q_s': val.num_q_s, });
+      cant_valorizaciones = val.num_q_s;
+       
+    });
+
     // VALIDAMOS LAS FECHAS DE QUINCENA
-    if (e.data) { 
+    if (false) { 
         
       if (e.data.fecha_valorizacion == "quincenal") {
 
@@ -600,9 +620,89 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
 
 init();
 
+// :::::::::::::::::::::::::::::::::::::::::: U P D A T E   F E C H A S  O C U L T A S :::::::::::::::::::::::::::::::
+
+function actulizar_fechas_val() {
+
+  $('#tabla_fechas_ocultas>tbody').html(`<tr><td colspan="4"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`);
+  $('#modal-agregar-fechas-ocultas').modal('show');
+
+  $.post(`../ajax/valorizacion.php?op=mostrar_para_editar_fechas`, {'idproyecto': localStorage.getItem('nube_idproyecto') }, function (e, status, jqXHR) {
+    e = JSON.parse(e); console.log(e);
+    if ( e.status == true ) {
+      var html_tr = '';
+      e.data.forEach((val, key) => {
+        html_tr = html_tr.concat(
+          `<tr>
+            <td class="p-b-1px">${key+1}</td> 
+            <td class="p-b-1px celda-b-r-2px text-center">${ format_d_m_a(val.fecha_inicio)} <br> ${format_d_m_a(val.fecha_fin)} <input type="hidden" name="idresumen_q_s_valorizacion_fo[]" value="${val.idresumen_q_s_valorizacion}"></td> 
+            <td class="p-b-1px"><div class="form-group"> <input type="date" name="fecha_inicio_oculto_fo[${key}]" value="${val.fecha_inicio_oculto}" required class="form-control input_fechas_ocultas_valid" > </div></td> 
+            <td class="p-b-1px"><div class="form-group"> <input type="date" name="fecha_fin_oculto_fo[${key}]" value="${val.fecha_fin_oculto}" required class="form-control input_fechas_ocultas_valid"> </div></td>
+          </tr>
+        `);
+      });
+      $('#tabla_fechas_ocultas>tbody').html(html_tr);
+      $('.input_fechas_ocultas_valid').each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Este campo es obligatorio' } }); });
+    } else {
+      ver_errores(e);      
+    } 
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+//Función para guardar o editar
+function guardar_y_editar_fecha_oculta(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-fechas-ocultas")[0]);
+
+  $.ajax({
+    url: "../ajax/valorizacion.php?op=guardar_y_editar_fecha_oculta",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {   
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {	
+          Swal.fire("Correcto!", "Documento guardado correctamente", "success");          
+          if (tabla_principal) { tabla_principal.ajax.reload(null, false); }
+          $("#modal-agregar-fechas-ocultas").modal("hide");
+        }else{
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+      $("#guardar_registro_fechas_ocultas").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'});
+          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_fechas_ocultas").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress").css({ width: "0%",  });
+      $("#barra_progress").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress").css({ width: "0%", });
+      $("#barra_progress").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {  
+  $("#numero_q_s_resumen").on("change", function () { $(this).trigger("blur"); });
 
   $("#form-valorizacion").validate({
 
@@ -634,28 +734,26 @@ $(function () {
       guardaryeditar(e);
     },
 
-  });
-
-  $("#numero_q_s_resumen").on("change", function () { $(this).trigger("blur"); });
+  });  
 
   $("#form-resumen-valorizacion").validate({
 
     rules: {
       numero_q_s_resumen: { required: true },
-      fecha_inicial: { required: true },
-      fecha_final: { required: true },
-      monto_programado: {  minlength: 1, maxlength: 20 },
-      monto_valorizado: {  minlength: 1, maxlength: 20 },
-      //monto_gastado: { required: true, min:0 },
+      fecha_inicial:      { required: true },
+      fecha_final:        { required: true },
+      monto_programado:   {  minlength: 1, maxlength: 20 },
+      monto_valorizado:   {  minlength: 1, maxlength: 20 },
+      //monto_gastado:    { required: true, min:0 },
     },
 
     messages: {
       numero_q_s_resumen: {required: "Por favor selecione un tipo de documento",},       
-      fecha_inicial: {required: "Campo requerido",},       
-      fecha_final: {required: "Campo requerido",},       
-      monto_programado: { minlength: "1 dígitos como minimo.", maxlength: "20 dígitos como máximo."},       
-      monto_valorizado: {minlength: "1 dígitos como minimo.", maxlength: "20 dígitos como máximo."},       
-      //monto_gastado: {required: "Campo requerido",},       
+      fecha_inicial:      {required: "Campo requerido",},       
+      fecha_final:        {required: "Campo requerido",},       
+      monto_programado:   { minlength: "1 dígitos como minimo.", maxlength: "20 dígitos como máximo."},       
+      monto_valorizado:   {minlength: "1 dígitos como minimo.", maxlength: "20 dígitos como máximo."},       
+      //monto_gastado:    {required: "Campo requerido",},       
     },
         
     errorElement: "span",
@@ -680,7 +778,55 @@ $(function () {
 
   });
 
-  $("#numero_q_s_resumen").rules("add", { required: true, messages: { required: "Campo requerido" } });
+  $.validator.addMethod( "mytst",  function (value, element) {
+    var flag = true;  
+
+    $("[name^=fecha_inicio_oculto_fo]").each(function (i, j) {
+      $(this).parent("p").find("label.error").remove();
+      $(this).parent("p").find("label.error").remove();
+      if ($.trim($(this).val()) == "") {
+        flag = false;  
+        $(this) .parent("p") .append('<label  id="id_ct' + i + '-error" class="error">This field is required.</label>');
+      }
+    });
+    return flag;
+  },""); 
+
+  $("#form-fechas-ocultas").validate({
+
+    rules: {
+      "fecha_inicio_oculto_fo[]": { required: true },
+      "fecha_fin_oculto_fo[]": { required: true },
+    },
+
+    messages: {   
+      "fecha_inicio_oculto_fo[]": { required: 'fdsfdsf' },
+      "fecha_fin_oculto_fo[]": { required: 'gdsfds' },
+    },    
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_fecha_oculta(e);
+    },
+
+  });   
+
+  $("#numero_q_s_resumen").rules("add", { required: true, messages: { required: "Campo requerido" } });  
 
 });
 
@@ -1623,3 +1769,4 @@ function export_excel_valorizacion() {
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
 }
+

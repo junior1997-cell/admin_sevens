@@ -15,7 +15,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Graficos Valorización | Admin Sevens</title>
 
-        <?php $title = "Compras  de Insumos"; require 'head.php'; ?>
+        <?php $title = "Graficos Valorización"; require 'head.php'; ?>
 
       </head>
       <!--
@@ -33,11 +33,11 @@
             require 'nav.php';
             require 'aside.php';
             if ($_SESSION['grafico_valorizacion']==1){
-              require 'enmantenimiento.php';
+              //require 'enmantenimiento.php';
               ?>
 
               <!-- Content Wrapper. Contains page content -->
-              <div class="content-wrapper hidden">
+              <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <div class="content-header">
                   <div class="container-fluid">
@@ -595,6 +595,101 @@
                                     <p class="text-center"> <strong>Subcontrato</strong> </p>
                                     <div class="progress-group text-center">
                                       <h2 class="progress_total_subcontrato" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->
+                                  </div>
+                                </div>    
+                                <!-- /.row -->                      
+                              </div>     
+                              <!-- /.col -->
+                            </div>                            
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
+
+                      <!-- CHART LINEA - M A N O   D E   O B R A ══════════════════════════════════════════ -->
+                      <div class="col-lg-12">
+                        <div class="card">
+                          <div class="card-header border-0">
+                            <div class="d-flex justify-content-center">
+                              <h3 class="card-title font-weight-bold">Mano de Obra por Valorización</h3>
+                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="card-header border-0">
+                                  
+                                  <div class="card-tools">
+                                    <button onclick="export_excel('#tabla_modulo_mano_de_obra','Mano de Obra');" class="btn btn-tool btn-sm"> <i class="fas fa-download"></i> </button>
+                                    <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i> </a>
+                                  </div> 
+                                </div>
+                                <div class="card-body table-responsive p-0">
+                                  <table class="table table-striped table-valign-middle" id="tabla_modulo_mano_de_obra">
+                                    <thead>
+                                      <tr>
+                                        <th class="text-center">#</th>                                        
+                                        <th class="text-center">Gasto</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Utilidad</th>
+                                        <th class="text-center" >Acumulado</th>
+                                        <th class="text-center">Mas</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="body_modulo_mano_de_obra"> <!-- aqui van los detalles --> </tbody>
+                                    <tfoot>
+                                      <tr>
+                                        <th class="text-center"></th>                                        
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_gasto_mano_de_obra"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center pr-2"><div class="formato-numero-conta"><span>S/</span><span class="foot_total_utilidad_mano_de_obra"><i class="fas fa-spinner fa-pulse fa-1x"> </i></span></div></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center"></th>
+                                      </tr>
+                                    </tfoot>
+                                  </table>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <!-- <div class="d-flex">
+                                      <p class="d-flex flex-column">
+                                        <span class="text-bold text-lg">$18,230.00</span> <span>Sales Over Time</span>
+                                      </p>
+                                      <p class="ml-auto d-flex flex-column text-right">
+                                        <span class="text-success"><i class="fas fa-arrow-up"></i> 33.1% </span>
+                                        <span class="text-muted">Since last month</span>
+                                      </p>
+                                    </div> -->
+                                    <!-- /.d-flex -->
+
+                                    <div class="position-relative mb-4">
+                                      <canvas id="chart-line-mano_de_obra" height="350"></canvas>
+                                    </div>
+
+                                    <div class="d-flex flex-row justify-content-end">
+                                      <span class="mr-2"><i class="fas fa-square leyenda_utilidad_mano_de_obra"></i> Utilidad</span>
+                                      <span class="mr-2"><i class="fas fa-square" style="color: #008080;"></i> Mano de Obra</span>
+                                    </div>
+                                  </div>
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-3 mb-3"> </div>
+
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Utilidad Total</strong> </p>
+                                    <div class="progress-group text-center mb-4">
+                                      <h2 class="progress_total_utilidad_mano_de_obra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
+                                    </div>
+                                    <!-- /.progress-group -->                                    
+                                  </div>                                  
+                                  <div class="col-md-6">
+                                    <p class="text-center"> <strong>Mano de Obra</strong> </p>
+                                    <div class="progress-group text-center">
+                                      <h2 class="progress_total_mano_de_obra" ><i class="fas fa-spinner fa-pulse fa-lg"></i></h2>
                                     </div>
                                     <!-- /.progress-group -->
                                   </div>
@@ -1518,7 +1613,7 @@
                                     <!-- /.d-flex -->
 
                                     <div class="position-relative mb-4">
-                                      <canvas id="chart-barra-resumen-modulos" height="350"></canvas>
+                                      <canvas id="chart-barra-resumen-modulos" height="500"></canvas>
                                     </div>
 
                                     <div class="d-flex flex-row justify-content-end">
@@ -1632,6 +1727,7 @@
                             <li class="m-b-04rem"><img src="../dist/svg/negro-excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO MAQUINA </li>
                             <li class="m-b-04rem"><img src="../dist/svg/negro-estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > SERVICIO EQUIPO</li>
                             <li class="m-b-04rem"><i class="nav-icon fas fa-hands-helping"></i> SUB CONTRATO</li>
+                            <li class="m-b-04rem"><i class="nav-icon fa-solid fa-person-digging"></i> MANO DE OBRA</li>
                             <li class="m-b-04rem"><img src="../dist/svg/negro-planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" > PLANILLA SEGURO</li>
                             <li class="m-b-04rem"><i class="nav-icon fas fa-network-wired"></i> OTRO GASTO</li>
                             <li class="m-b-04rem"><i class="fas fa-shuttle-van nav-icon"></i> TRANSPORTE</li>

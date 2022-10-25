@@ -616,21 +616,22 @@ function limpiar_form_all_trabajador() {
 
   $(".modal-title-all-trabajador").html('Agregar All-Trabajador');
 
-  $("#all_idtrabajador").val("");
+  $("#idtrabajador_all").val("");
   $("#tipo_documento_all option[value='DNI']").attr("selected", true);
   $("#nombre_all").val(""); 
   $("#num_documento_all").val(""); 
   $("#direccion_all").val(""); 
-  $("#all_telefono").val(""); 
-  $("#all_email").val(""); 
-  $("#nacimiento").val("");
-  $("#edad").val("0");  $("#p_edad").html("0");    
+  $("#telefono_all").val(""); 
+  $("#email_all").val(""); 
+  $("#nacimiento_all").val("");
+  $("#input_edad").val("0");  $("#span_edad").html("0");    
   $("#cta_bancaria").val("");  
   $("#cci").val("");  
   $("#banco_0").val("").trigger("change"); $("#lista_bancos").html("");
 
-  $("#all_tipo").val("").trigger("change");
-  $("#all_ocupacion").val("").trigger("change");
+  $("#tipo_all").val("").trigger("change");
+  $("#ocupacion_all").val("").trigger("change");
+  $("#desempenio_all").val("").trigger("change");
   $("#titular_cuenta_all").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -1008,8 +1009,9 @@ $(function () {
   $("#desempenio").on('change', function() { $(this).trigger('blur'); });
 
   $("#banco_0").on('change', function() { $(this).trigger('blur'); });
-  $("#all_tipo").on('change', function() { $(this).trigger('blur'); });
-  $("#all_ocupacion").on('change', function() { $(this).trigger('blur'); });
+  $("#tipo_all").on('change', function() { $(this).trigger('blur'); });
+  $("#ocupacion_all").on('change', function() { $(this).trigger('blur'); });
+  $("#desempenio_all").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-trabajador-proyecto").validate({
     rules: {
@@ -1053,29 +1055,31 @@ $(function () {
       tipo_documento_all: { required: true },
       num_documento_all:  { required: true, minlength: 6, maxlength: 20 },
       nombre_all:         { required: true, minlength: 6, maxlength: 100 },
-      all_email:          { email: true, minlength: 10, maxlength: 50 },
+      email_all:          { email: true, minlength: 10, maxlength: 50 },
       direccion_all:      { minlength: 5, maxlength: 70 },
-      all_telefono:       { minlength: 8 },
+      telefono_all:       { minlength: 8 },
       cta_bancaria:       { minlength: 10,},
       banco_0:            { required: true},
       banco_seleccionado: { required: true},
-      all_tipo:           { required: true},
-      all_ocupacion:      { required: true},
-      all_ruc:            { minlength: 11, maxlength: 11},
+      tipo_all:           { required: true},
+      ocupacion_all:      { required: true},
+      ocupacion_all:      { required: true},
+      desempenio_all:            { minlength: 11, maxlength: 11},
     },
     messages: {
       tipo_documento_all: { required: "Campo requerido.", },
       num_documento_all:  { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 20 caracteres.", },
       nombre_all:         { required: "Campo requerido.", minlength: "MÍNIMO 6 caracteres.", maxlength: "MÁXIMO 100 caracteres.", },
-      all_email:          { required: "Campo requerido.", email: "Ingrese un coreo electronico válido.", minlength: "MÍNIMO 10 caracteres.", maxlength: "MÁXIMO 50 caracteres.", },
+      email_all:          { required: "Campo requerido.", email: "Ingrese un coreo electronico válido.", minlength: "MÍNIMO 10 caracteres.", maxlength: "MÁXIMO 50 caracteres.", },
       direccion_all:      { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 70 caracteres.", },
-      all_telefono:       { minlength: "MÍNIMO 8 caracteres.", },
+      telefono_all:       { minlength: "MÍNIMO 8 caracteres.", },
       cta_bancaria:       { minlength: "MÍNIMO 10 caracteres.", },
-      all_tipo:           { required: "Campo requerido.", },
-      all_ocupacion:      { required: "Campo requerido.", },
+      tipo_all:           { required: "Campo requerido.", },
+      ocupacion_all:      { required: "Campo requerido.", },
       banco_0:            { required: "Campo requerido.", },
       banco_seleccionado: { required: "Requerido.", },
-      all_ruc:            { minlength: "MÍNIMO 11 caracteres.", maxlength: "MÁXIMO 11 caracteres.", },
+      ocupacion_all:      { required: true},
+      desempenio_all:     { minlength: "MÍNIMO 11 caracteres.", maxlength: "MÁXIMO 11 caracteres.", },
     },
         
     errorElement: "span",
@@ -1101,8 +1105,9 @@ $(function () {
   $("#desempenio").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 
   $("#banco_0").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $("#all_tipo").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $("#all_ocupacion").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#tipo_all").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#ocupacion_all").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#desempenio_all").rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

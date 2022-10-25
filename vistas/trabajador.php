@@ -431,9 +431,9 @@
                               </div>                              
 
                               <!-- FECHA NACIMIENTO -->
-                              <div class="col-lg-2 ">
+                              <div class="col-lg-3 ">
                                 <div class="form-group">
-                                  <label>Fecha Inicio:</label>
+                                  <label>Nacimiento:</label>
                                   <div class="input-group date"  data-target-input="nearest">
                                     <input type="text" class="form-control datetimepicker-input" data-target="#nacimiento_all" id="nacimiento_all" name="nacimiento_all" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_edad('#nacimiento_all','#input_edad','#span_edad');" autocomplete="off" />
                                     <div class="input-group-append" data-target="#nacimiento_all" data-toggle="datetimepicker">

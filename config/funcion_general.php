@@ -220,9 +220,7 @@ if (!function_exists('ejecutarConsulta')) {
     $sql = "SELECT SUM(cpp.total) AS total, SUM(cpp.subtotal) AS subtotal, SUM(cpp.igv) AS igv
     FROM compra_por_proyecto AS cpp, proveedor p
     WHERE cpp.idproveedor = p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1'  AND  cpp.idproyecto = $idproyecto $filtro_fecha ;";
-    $compra = ejecutarConsultaSimpleFila($sql);
-  
-    if ($compra['status'] == false) { return $compra; }
+    $compra = ejecutarConsultaSimpleFila($sql); if ($compra['status'] == false) { return $compra; }
   
     $total    += (empty($compra['data'])) ? 0 : ( empty($compra['data']['total']) ? 0 : floatval($compra['data']['total']) );
     $subtotal += (empty($compra['data'])) ? 0 : ( empty($compra['data']['subtotal']) ? 0 : floatval($compra['data']['subtotal']) );
@@ -265,9 +263,7 @@ if (!function_exists('ejecutarConsulta')) {
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1'  AND f.idproyecto = $idproyecto $filtro_fecha;";
-    $maquinaria = ejecutarConsultaSimpleFila($sql2);
-  
-    if ($maquinaria['status'] == false) { return $maquinaria; } 
+    $maquinaria = ejecutarConsultaSimpleFila($sql2);  if ($maquinaria['status'] == false) { return $maquinaria; } 
   
     $total    += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['total']) ? 0 : floatval($maquinaria['data']['total']) );
     $subtotal += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['subtotal']) ? 0 : floatval($maquinaria['data']['subtotal']) );
@@ -287,13 +283,31 @@ if (!function_exists('ejecutarConsulta')) {
     $sql3 = "SELECT SUM(s.subtotal) as subtotal, SUM(s.igv) as igv, SUM(s.costo_parcial) as total
     FROM subcontrato AS s, proveedor as p
     WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1'  AND  idproyecto = $idproyecto $filtro_fecha;";
-    $otro_gasto = ejecutarConsultaSimpleFila($sql3);
-  
-    if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+    $otro_gasto = ejecutarConsultaSimpleFila($sql3); if ($otro_gasto['status'] == false) { return $otro_gasto; } 
     
     $total    += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
     $subtotal += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
     $igv      += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['igv']) ? 0 : floatval($otro_gasto['data']['igv']) );
+
+    // SUMAS TOTALES - MANO DE OBRA --------------------------------------------------------------------------------
+    $filtro_fecha = "";
+  
+    if ( !empty($fecha_1) && !empty($fecha_2) ) {
+      $filtro_fecha = "AND mdo.fecha_deposito BETWEEN '$fecha_1' AND '$fecha_2'";
+    } else if (!empty($fecha_1)) {
+      $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_1'";
+    }else if (!empty($fecha_2)) {
+      $filtro_fecha = "AND mdo.fecha_deposito = '$fecha_2'";
+    }    
+  
+    $sql3 = "SELECT  SUM(mdo.monto) as total
+    FROM mano_de_obra AS mdo, proveedor as p
+    WHERE mdo.idproveedor = p.idproveedor and mdo.estado = '1' AND mdo.estado_delete = '1'  AND  mdo.idproyecto = $idproyecto $filtro_fecha;";
+    $otro_gasto = ejecutarConsultaSimpleFila($sql3);  if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+    
+    $total    += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
+    $subtotal += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
+    $igv      += 0;
   
     // SUMAS TOTALES - PLANILLA SEGURO --------------------------------------------------------------------------------
   
@@ -311,9 +325,7 @@ if (!function_exists('ejecutarConsulta')) {
     FROM planilla_seguro as ps, proyecto as p
     WHERE ps.idproyecto = p.idproyecto and ps.estado ='1' and ps.estado_delete = '1' 
       AND  ps.idproyecto = $idproyecto $filtro_fecha;";
-    $otro_gasto = ejecutarConsultaSimpleFila($sql3);
-  
-    if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+    $otro_gasto = ejecutarConsultaSimpleFila($sql3); if ($otro_gasto['status'] == false) { return $otro_gasto; } 
     
     $total    += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
     $subtotal += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
@@ -333,9 +345,7 @@ if (!function_exists('ejecutarConsulta')) {
     $sql3 = "SELECT SUM(costo_parcial) as total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
     FROM otro_gasto  
     WHERE estado = '1' AND estado_delete = '1'  AND  idproyecto = $idproyecto $filtro_fecha;";
-    $otro_gasto = ejecutarConsultaSimpleFila($sql3);
-  
-    if ($otro_gasto['status'] == false) { return $otro_gasto; } 
+    $otro_gasto = ejecutarConsultaSimpleFila($sql3); if ($otro_gasto['status'] == false) { return $otro_gasto; } 
     
     $total    += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['total']) ? 0 : floatval($otro_gasto['data']['total']) );
     $subtotal += (empty($otro_gasto['data'])) ? 0 : ( empty($otro_gasto['data']['subtotal']) ? 0 : floatval($otro_gasto['data']['subtotal']) );
@@ -355,9 +365,7 @@ if (!function_exists('ejecutarConsulta')) {
     $sql4 = "SELECT SUM(t.precio_parcial) AS total, SUM(t.subtotal) AS subtotal, SUM(t.igv) AS igv
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND t.idproyecto = $idproyecto  $filtro_fecha;";
-    $transporte = ejecutarConsultaSimpleFila($sql4);
-  
-    if ($transporte['status'] == false) { return $transporte; }
+    $transporte = ejecutarConsultaSimpleFila($sql4); if ($transporte['status'] == false) { return $transporte; }
     
     $total    += (empty($transporte['data'])) ? 0 : ( empty($transporte['data']['total']) ? 0 : floatval($transporte['data']['total']) );
     $subtotal += (empty($transporte['data'])) ? 0 : ( empty($transporte['data']['subtotal']) ? 0 : floatval($transporte['data']['subtotal']) );
@@ -377,9 +385,7 @@ if (!function_exists('ejecutarConsulta')) {
     $sql5 = "SELECT SUM(precio_parcial) as total , SUM(subtotal) AS subtotal, SUM(igv) AS igv
     FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND idproyecto = $idproyecto  $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
-    $hospedaje = ejecutarConsultaSimpleFila($sql5);
-  
-    if ($hospedaje['status'] == false) { return $hospedaje; }
+    $hospedaje = ejecutarConsultaSimpleFila($sql5); if ($hospedaje['status'] == false) { return $hospedaje; }
     
     $total    += (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['total']) ? 0 : floatval($hospedaje['data']['total']) );
     $subtotal += (empty($hospedaje['data'])) ? 0 : ( empty($hospedaje['data']['subtotal']) ? 0 : floatval($hospedaje['data']['subtotal']) );
@@ -400,9 +406,7 @@ if (!function_exists('ejecutarConsulta')) {
     FROM detalle_pension as dp, pension as p, proveedor as prov
     WHERE dp.idpension = p.idpension AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND  p.idproyecto = $idproyecto
     AND dp.estado = '1' AND dp.estado_delete = '1' $filtro_fecha ;";
-    $factura_pension = ejecutarConsultaSimpleFila($sql6);
-  
-    if ($factura_pension['status'] == false) { return $factura_pension; }
+    $factura_pension = ejecutarConsultaSimpleFila($sql6); if ($factura_pension['status'] == false) { return $factura_pension; }
     
     $total    += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['total']) ? 0 : floatval($factura_pension['data']['total']) );
     $subtotal += (empty($factura_pension['data'])) ? 0 : ( empty($factura_pension['data']['subtotal']) ? 0 : floatval($factura_pension['data']['subtotal']) );
@@ -423,9 +427,7 @@ if (!function_exists('ejecutarConsulta')) {
     FROM factura_break as fb, semana_break as sb
     WHERE  fb.idsemana_break = sb.idsemana_break AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1'  AND  sb.idproyecto = $idproyecto
     AND sb.estado_delete = '1' $filtro_fecha ;";
-    $factura_break = ejecutarConsultaSimpleFila($sql7);
-  
-    if ($factura_break['status'] == false) { return $factura_break; }
+    $factura_break = ejecutarConsultaSimpleFila($sql7); if ($factura_break['status'] == false) { return $factura_break; }
     
     $total    += (empty($factura_break['data'])) ? 0 : ( empty($factura_break['data']['total']) ? 0 : floatval($factura_break['data']['total']) );
     $subtotal += (empty($factura_break['data'])) ? 0 : ( empty($factura_break['data']['subtotal']) ? 0 : floatval($factura_break['data']['subtotal']) );
@@ -445,9 +447,7 @@ if (!function_exists('ejecutarConsulta')) {
     $sql8 = "SELECT SUM(costo_parcial) AS total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
     FROM comida_extra
     WHERE  estado = '1' AND estado_delete = '1' AND  idproyecto = $idproyecto $filtro_fecha;";
-    $comida_extra = ejecutarConsultaSimpleFila($sql8);
-  
-    if ($comida_extra['status'] == false) { return $comida_extra; }
+    $comida_extra = ejecutarConsultaSimpleFila($sql8); if ($comida_extra['status'] == false) { return $comida_extra; }
     
     $total    += (empty($comida_extra['data'])) ? 0 : ( empty($comida_extra['data']['total']) ? 0 : floatval($comida_extra['data']['total']) );
     $subtotal += (empty($comida_extra['data'])) ? 0 : ( empty($comida_extra['data']['subtotal']) ? 0 : floatval($comida_extra['data']['subtotal']) );
@@ -468,9 +468,7 @@ if (!function_exists('ejecutarConsulta')) {
     // $sql9 = "SELECT SUM(oi.subtotal) as subtotal, SUM(oi.igv) as igv, SUM(oi.costo_parcial) as total
     // FROM otro_ingreso as oi, proyecto as p
     // WHERE oi.idproyecto = p.idproyecto AND oi.estado = '1' AND oi.estado_delete = '1' AND  oi.idproyecto = $idproyecto $filtro_fecha";
-    // $otra_factura = ejecutarConsultaSimpleFila($sql9);
-  
-    // if ($otra_factura['status'] == false) { return $otra_factura; } 
+    // $otra_factura = ejecutarConsultaSimpleFila($sql9); if ($otra_factura['status'] == false) { return $otra_factura; } 
     
     // $total    += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['total']) ? 0 : floatval($otra_factura['data']['total']) );
     // $subtotal += (empty($otra_factura['data'])) ? 0 : ( empty($otra_factura['data']['subtotal']) ? 0 : floatval($otra_factura['data']['subtotal']) );
@@ -516,9 +514,7 @@ if (!function_exists('ejecutarConsulta')) {
     FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
     WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador
     AND pxma.estado = '1' AND pxma.estado_delete = '1'  AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
-    $pago_administrador = ejecutarConsultaSimpleFila($sql11);
-  
-    if ($pago_administrador['status'] == false) { return $pago_administrador; }
+    $pago_administrador = ejecutarConsultaSimpleFila($sql11); if ($pago_administrador['status'] == false) { return $pago_administrador; }
     
     $total    += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['total']) ? 0 : floatval($pago_administrador['data']['total']) );
     $subtotal += (empty($pago_administrador['data'])) ? 0 : ( empty($pago_administrador['data']['subtotal']) ? 0 : floatval($pago_administrador['data']['subtotal']) );
@@ -538,9 +534,7 @@ if (!function_exists('ejecutarConsulta')) {
     FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
     WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador
     AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' $filtro_fecha;";
-    $pago_obrero = ejecutarConsultaSimpleFila($sql12);
-  
-    if ($pago_obrero['status'] == false) { return $pago_obrero; }
+    $pago_obrero = ejecutarConsultaSimpleFila($sql12); if ($pago_obrero['status'] == false) { return $pago_obrero; }
     
     $total    += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['total']) ? 0 : floatval($pago_obrero['data']['total']) );
     $subtotal += (empty($pago_obrero['data'])) ? 0 : ( empty($pago_obrero['data']['subtotal']) ? 0 : floatval($pago_obrero['data']['subtotal']) );

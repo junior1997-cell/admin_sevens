@@ -301,6 +301,22 @@
           echo json_encode($rspta, true) ;
         break;
 
+        // :::::::::::::::::::::::::::::::::::::::::: U P D A T E   F E C H A S  O C U L T A S :::::::::::::::::::::::::::::::
+        case 'mostrar_para_editar_fechas':
+          $rspta=$valorizacion->mostrar_para_editar_fechas($_POST['idproyecto']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true) ;
+        break;
+
+        // :::::::::::::::::::::::::::::::::::::::::: U P D A T E   F E C H A S  O C U L T A S :::::::::::::::::::::::::::::::
+        case 'guardar_y_editar_fecha_oculta':
+          //$fecha1 = $_POST['fecha_inicio_oculto_fo'];  $fecha2 = $_POST['fecha_fin_oculto_fo']; $id = $_POST['idresumen_q_s_valorizacion_fo']; 
+          $rspta=$valorizacion->guardar_y_editar_fecha_oculta($_POST['idresumen_q_s_valorizacion_fo'], $_POST['fecha_inicio_oculto_fo'], $_POST['fecha_fin_oculto_fo']);
+          //Codificar el resultado utilizando json
+          //$rspta = array('status' => true, 'data' => ['id' => $id, 'fecha1' => $fecha1, 'fecha2' => $fecha2,], 'message' => 'Se actualizó correctamente');
+          echo json_encode($rspta, true) ;
+        break;
+
         default: 
           $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
         break;
