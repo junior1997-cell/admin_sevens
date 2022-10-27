@@ -610,10 +610,19 @@ class ChartValorizacion
     );
     array_push($monto_resumen_modulos,   round($total_monto_pago_obrero,2) );
     array_push($utilidad_resumen_modulos,   round($total_utilidad_pago_obrero,2) );
+
+    // labels ----------------
+    $array_label = [];
+    $sql_val = "SELECT idresumen_q_s_valorizacion, idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto
+    FROM resumen_q_s_valorizacion WHERE idproyecto = '$id_proyecto' AND estado=1 AND estado_delete=1  ORDER BY numero_q_s ASC; "; 
+    $fechas_label = ejecutarConsultaArray($sql_val); if ($fechas_label['status'] == false) { return $fechas_label; }
+
+    foreach ($fechas_label['data'] as $key => $value) { array_push($array_label, 'Val. '. $value['numero_q_s'] ); }
     
     return $retorno = [
       'status'=> true, 'message' => 'Salió todo ok,', 
       'data' => [
+        'label_valorizacion_x'            =>$array_label, 
         'monto_programado'                =>$monto_programado, 
         'monto_valorizado'                =>$monto_valorizado, 
         'monto_gastado'                   =>$monto_gastado, 
@@ -748,7 +757,7 @@ class ChartValorizacion
     $proyecto = ejecutarConsultaSimpleFila($sql_1); if ($proyecto['status'] == false) { return $proyecto; }
 
     $sql_2 = "SELECT idresumen_q_s_valorizacion, idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto
-    FROM resumen_q_s_valorizacion WHERE idproyecto = '$nube_idproyecto' AND estado=1 AND estado_delete=1  ORDER BY numero_q_s ASC; "; 
+    FROM resumen_q_s_valorizacion WHERE idproyecto = '$nube_idproyecto' AND estado='1' AND estado_delete='1'  ORDER BY numero_q_s ASC; "; 
     $fechas = ejecutarConsultaArray($sql_2); if ($fechas['status'] == false) { return $fechas; }
 
     $results = [

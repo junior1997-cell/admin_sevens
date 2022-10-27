@@ -50,7 +50,7 @@ function listar_btn_q_s(nube_idproyecto) {
 
   $.post("../ajax/chart_valorizacion.php?op=listar_btn_q_s", { nube_idproyecto: nube_idproyecto }, function (e, status) {
 
-    e =JSON.parse(e); //console.log(e);
+    e =JSON.parse(e); console.log(e);
 
     // VALIDAMOS LAS FECHAS DE QUINCENA
     if (e.data.fechas_val.length === 0) { 
@@ -63,7 +63,7 @@ function listar_btn_q_s(nube_idproyecto) {
       </div>`); 
     } else {
 
-      var html_select_filtro = '', f_i_o = e.data.fechas_val.shift(), f_f_o = e.data.fechas_val.slice(-1).pop();
+      var html_select_filtro = '', f_i_o = e.data.fechas_val[0], f_f_o = e.data.fechas_val.slice(-1).pop();
       
       if ( e.data.fecha_valorizacion == "quincenal") {
         $(".h1-titulo").html(`Valorización - <b>Quincenal</b> (${format_d_m_a(e.data.fecha_inicio)} al ${format_d_m_a(e.data.fecha_fin)})`);
@@ -93,70 +93,7 @@ function listar_btn_q_s(nube_idproyecto) {
   
       chart_linea_barra();
     }
-    if (false) {     
-        
-      if (e.data.fecha_valorizacion == "quincenal") {
-
-        $(".h1-titulo").html("Reportes Valorización - <b>Quincenal</b>");
-        $("#valorizacion_filtro").append(`<option value="0" >Todos ─ ${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</option>`);
-
-        var fechas_btn = fechas_valorizacion_quincena(e.data.fecha_inicio, e.data.fecha_fin); 
-        //console.log(fechas_btn);  
-
-        fechas_btn.forEach((key, indice) => {
-          cant_valorizacion = key.num_q_s;
-          $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
-          $("#valorizacion_filtro").append(`<option value="${key.num_q_s} ${format_a_m_d(key.fecha_inicio)} ${format_a_m_d(key.fecha_fin)}" >Val ${key.num_q_s} ─ ${key.fecha_inicio} - ${key.fecha_fin}</option>`);
-          array_fechas_valorizacion.push({ 'fecha_i':format_a_m_d(key.fecha_inicio), 'fecha_f':format_a_m_d(key.fecha_fin), 'num_val': key.num_q_s, });
-        });
-
-        chart_linea_barra();
-
-      } else {
-
-        if (e.data.fecha_valorizacion == "mensual") {
-
-          $(".h1-titulo").html("Reportes Valorización - <b>Mensual</b>");
-          $("#valorizacion_filtro").append(`<option value="0" >Todos ─ ${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</option>`);
-
-          var fechas_btn = fechas_valorizacion_mensual(e.data.fecha_inicio, e.data.fecha_fin); 
-          //console.log(fechas_btn);  
-
-          fechas_btn.forEach((key, indice) => {
-            cant_valorizacion = key.num_q_s;
-            $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
-            $("#valorizacion_filtro").append(`<option value="${key.num_q_s} ${format_a_m_d(key.fecha_inicio)} ${format_a_m_d(key.fecha_fin)}" >Val ${key.num_q_s} ─ ${key.fecha_inicio} - ${key.fecha_fin}</option>`);
-            array_fechas_valorizacion.push({ 'fecha_i':format_a_m_d(key.fecha_inicio), 'fecha_f':format_a_m_d(key.fecha_fin), 'num_val': key.num_q_s, });
-          });
-
-          chart_linea_barra();
-
-        } else {
-
-          if (e.data.fecha_valorizacion == "al finalizar") {
-
-            $(".h1-titulo").html("Reportes Valorización - <b>Al finalizar</b>");
-            $("#valorizacion_filtro").append(`<option value="0" >Todos ─ ${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</option>`);
-
-            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
-            $("#valorizacion_filtro").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Val ${i+1} ─ ${format_d_m_a(fecha_ii)} - ${format_d_m_a(fecha_ff)}</option>`);
-            cant_valorizacion = 1;
-            array_fechas_valorizacion.push({'fecha_i':fecha_ii, 'fecha_f':fecha_ff, 'num_val':i+1,});
-
-            chart_linea_barra();
-
-          } else {
-            $('#valorizacion_filtro').html(`<option value="" >No hay fechas, no has selecionado tipo pago.</option>`);
-          }
-        }
-      }   
-      
-      
-
-    } else {
-      // $('#lista_quincenas').html('<option value="" >No hay fechas, editalas en su modulo correspondiente.</option>');
-    }    
-    //console.log(fecha);
+    
   });
 }
 
@@ -178,8 +115,8 @@ function chart_linea_barra() {
   var valorizacion_filtro = $("#valorizacion_filtro").select2("val");
 
   var fecha_inicial = ''; var fecha_final = ''; var num_val = '';
-  if ( valorizacion_filtro == ''|| valorizacion_filtro == null ) {  }else{
-     
+
+  if ( valorizacion_filtro == ''|| valorizacion_filtro == null ) {  }else{     
     num_val = $('#valorizacion_filtro').select2('data')[0].element.attributes.numero_q_s.value;
     fecha_inicial = $('#valorizacion_filtro').select2('data')[0].element.attributes.fecha_inicio_oculto.value;
     fecha_final = $('#valorizacion_filtro').select2('data')[0].element.attributes.fecha_fin_oculto.value;
@@ -398,7 +335,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       chart_linea_curva_s = new Chart($chart_linea_curva_s, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.monto_acumulado_programado, 
@@ -470,7 +407,7 @@ function chart_linea_barra() {
       chart_barra_curva_s = new Chart($chart_barra_curva_s, {
         type: 'bar',
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             { backgroundColor: '#000000', borderColor: '#000000', data: e.data.monto_programado, label: 'Programado', },
             { backgroundColor: '#ffc107', borderColor: '#ffc107', data: e.data.monto_valorizado, label: 'Valorizado', },
@@ -520,7 +457,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_utilidad = new Chart($char_linea_utilidad, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.monto_acumulado_utilidad, 
@@ -581,7 +518,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_compra_insumo = new Chart($char_linea_compra_insumo, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_compra_insumos, 
@@ -642,7 +579,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_maquina_y_equipo = new Chart($char_linea_maquina_y_equipo, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_maquina_y_equipo, 
@@ -703,7 +640,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_subcontrato = new Chart($char_linea_subcontrato, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_subcontrato, 
@@ -764,7 +701,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_mano_de_obra = new Chart($char_linea_mano_de_obra, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_mano_de_obra, 
@@ -825,7 +762,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_planilla_seguro = new Chart($char_linea_planilla_seguro, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_planilla_seguro, 
@@ -886,7 +823,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_otro_gasto = new Chart($char_linea_otro_gasto, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_otro_gasto, 
@@ -947,7 +884,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_transporte = new Chart($char_linea_transporte, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_transporte, 
@@ -1008,7 +945,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_hospedaje = new Chart($char_linea_hospedaje, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_hospedaje, 
@@ -1069,7 +1006,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_pension = new Chart($char_linea_pension, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_pension, 
@@ -1130,7 +1067,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_breack = new Chart($char_linea_breack, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_breack, 
@@ -1191,7 +1128,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_comida_extra = new Chart($char_linea_comida_extra, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_comida_extra, 
@@ -1246,7 +1183,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_pago_administrador = new Chart($char_linea_pago_administrador, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_pago_administrador, 
@@ -1301,7 +1238,7 @@ function chart_linea_barra() {
       // eslint-disable-next-line no-unused-vars
       char_linea_pago_obrero = new Chart($char_linea_pago_obrero, {
         data: {
-          labels: valorizacion_x(valorizacion_filtro, cant_valorizacion),
+          labels: e.data.label_valorizacion_x,
           datasets: [
             {
               type: 'line', data: e.data.utilidad_pago_obrero, 

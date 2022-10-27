@@ -89,9 +89,7 @@ class Resumen_general
 		WHERE s.estado = '1' AND s.estado_delete='1' AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' $filtro_proveedor
 		AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor 
     GROUP BY s.idmaquinaria;";
-
-    $maquinaria = ejecutarConsultaArray($sql);
-    if ($maquinaria['status'] == false) {  return $maquinaria;}
+    $maquinaria = ejecutarConsultaArray($sql); if ($maquinaria['status'] == false) {  return $maquinaria;}
 
     if (!empty($maquinaria['data'])) {
       foreach ($maquinaria['data'] as $key => $val) {

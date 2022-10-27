@@ -337,22 +337,26 @@ if (!function_exists('ejecutarConsulta')) {
     $filtro_fecha = "";
   
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND f.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+      $filtro_fecha = "AND s.fecha_entrega BETWEEN '$fecha_1' AND '$fecha_2'";
     } else if (!empty($fecha_1)) {
-      $filtro_fecha = "AND f.fecha_emision = '$fecha_1'";
+      $filtro_fecha = "AND s.fecha_entrega = '$fecha_1'";
     }else if (!empty($fecha_2)) {
-      $filtro_fecha = "AND f.fecha_emision = '$fecha_2'";
+      $filtro_fecha = "AND s.fecha_entrega = '$fecha_2'";
     }    
   
-    $sql2 = "SELECT SUM(f.monto) AS total , SUM(f.subtotal) AS subtotal, SUM(f.igv) AS igv
-    FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
-    WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-    AND f.estado = '1' AND f.estado_delete = '1'  AND f.idproyecto = $idproyecto $filtro_fecha;";
+    // $sql2 = "SELECT SUM(f.monto) AS total , SUM(f.subtotal) AS subtotal, SUM(f.igv) AS igv
+    // FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
+    // WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
+    // AND f.estado = '1' AND f.estado_delete = '1'  AND f.idproyecto = $idproyecto $filtro_fecha;";
+    $sql2 ="SELECT s.idmaquinaria, s.idproyecto,  SUM(s.costo_parcial) AS total
+		FROM servicio as s
+		WHERE s.estado = '1' AND s.estado_delete='1' AND s.idproyecto='$idproyecto' $filtro_fecha ;";
     $maquinaria = ejecutarConsultaSimpleFila($sql2);  if ($maquinaria['status'] == false) { return $maquinaria; } 
   
     $total    += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['total']) ? 0 : floatval($maquinaria['data']['total']) );
-    $subtotal += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['subtotal']) ? 0 : floatval($maquinaria['data']['subtotal']) );
-    $igv      += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['igv']) ? 0 : floatval($maquinaria['data']['igv']) );
+    $subtotal += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['total']) ? 0 : floatval($maquinaria['data']['total']) );
+    //$igv      += (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['igv']) ? 0 : floatval($maquinaria['data']['igv']) );
+    $igv      += 0;
   
     // SUMAS TOTALES - SUB CONTRATO --------------------------------------------------------------------------------
     $filtro_fecha = "";
