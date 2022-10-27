@@ -18,7 +18,7 @@ function init() {
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
   $("#idproyecto_q_s").val(localStorage.getItem('nube_idproyecto'));
   
-  ver_quincenas(localStorage.getItem('nube_idproyecto'));  
+  listar_quincenas_btn(localStorage.getItem('nube_idproyecto'));  
 
   $("#guardar_registro").on("click", function (e) {  $("#submit-form-valorizacion").submit(); });
   $("#guardar_registro_resumen_valorizacion").on("click", function (e) {  $("#submit-form-resumen-valorizacion").submit(); });
@@ -66,101 +66,51 @@ function mostrar_form_table(estados) {
 }
 
 // ver las echas de quincenas
-function ver_quincenas(nube_idproyecto) {
-
+function listar_quincenas_btn(nube_idproyecto) {
+  array_fechas_q_s = [];
   $('#lista_quincenas').html('<i class="fas fa-spinner fa-pulse fa-2x"></i>'); //console.log(nube_idproyecto);
 
-  $.post("../ajax/valorizacion.php?op=listarquincenas", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
+  $.post("../ajax/valorizacion.php?op=listar_quincenas_btn", { 'nube_idproyecto': nube_idproyecto }, function (e, status) {
 
     e =JSON.parse(e); console.log(e);    
 
-    $('#lista_quincenas').html('');
-
-    e.data.fechas_val.forEach((val, key) => {
-
-      if (val.fecha_valorizacion == "quincenal") {
-        $(".h1-titulo").html("Valorización - Quincenal");
-      }  else if (val.fecha_valorizacion == "mensual") {
-        $(".h1-titulo").html("Valorización - Mensual");
-      }  else if (val.fecha_valorizacion == "al finalizar") {
-        $(".h1-titulo").html("Valorización - Al finalizar");
-      }
-     
-      //var fechas_btn = fechas_valorizacion_quincena(val.fecha_inicio, val.fecha_fin); 
-      //console.log(fechas_btn);  
-       
-      $('#lista_quincenas').append(` <button id="boton-${val.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(val.fecha_inicio)}', '${format_a_m_d(val.fecha_fin)}', '${val.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${val.num_q_s}<br>${val.fecha_inicio} // ${val.fecha_fin}</button>`)
-      array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(val.fecha_inicio), 'fecha_fin':format_a_m_d(val.fecha_fin), 'num_q_s': val.num_q_s, });
-      cant_valorizaciones = val.num_q_s;
-       
-    });
+    $('#lista_quincenas').html('');   
 
     // VALIDAMOS LAS FECHAS DE QUINCENA
-    if (false) { 
-        
-      if (e.data.fecha_valorizacion == "quincenal") {
-
-        $(".h1-titulo").html("Valorización - Quincenal");
-        var fechas_btn = fechas_valorizacion_quincena(e.data.fecha_inicio, e.data.fecha_fin); 
-        //console.log(fechas_btn);  
-
-        fechas_btn.forEach((key, indice) => {
-          $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
-          array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(key.fecha_inicio), 'fecha_fin':format_a_m_d(key.fecha_fin), 'num_q_s': key.num_q_s, });
-          cant_valorizaciones = key.num_q_s;
-        });
-        
-        tbla_resumen_q_s(nube_idproyecto);
-      } else {
-
-        if (e.data.fecha_valorizacion == "mensual") {
-
-          $(".h1-titulo").html("Valorización - Mensual");
-
-          var fechas_btn = fechas_valorizacion_mensual(e.data.fecha_inicio, e.data.fecha_fin); 
-          //console.log(fechas_btn);  
-
-          fechas_btn.forEach((key, indice) => {
-            $('#lista_quincenas').append(` <button id="boton-${key.num_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${format_a_m_d(key.fecha_inicio)}', '${format_a_m_d(key.fecha_fin)}', '${key.num_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${key.num_q_s}<br>${key.fecha_inicio} // ${key.fecha_fin}</button>`)
-            array_fechas_q_s.push({ 'fecha_inicio':format_a_m_d(key.fecha_inicio), 'fecha_fin':format_a_m_d(key.fecha_fin), 'num_q_s': key.num_q_s, });
-            cant_valorizaciones = key.num_q_s;
-          });
-
-          tbla_resumen_q_s(nube_idproyecto);
-        } else {
-
-          if (e.data.fecha_valorizacion == "al finalizar") {
-
-            $(".h1-titulo").html("Valorización - Al finalizar");
-
-            $('#lista_quincenas').append(` <button id="boton-0" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="fecha_quincena('${e.data.fecha_inicio}', '${e.data.fecha_fin}', '0');"><i class="far fa-calendar-alt"></i> Valorización 1<br>${format_d_m_a(e.data.fecha_inicio)} // ${format_d_m_a(e.data.fecha_fin)}</button>`)
-            $("#numero_q_s_resumen").append(`<option value="${i+1} ${fecha_ii} ${fecha_ff}" >Valorización ${i+1}</option>`);
-            array_fechas_q_s.push({'fecha_inicio':fecha_ii, 'fecha_fin':fecha_ff, 'num_q_s': i+1, });
-            cant_valorizaciones = i+1;
-
-            tbla_resumen_q_s(nube_idproyecto);
-          } else {
-            $('#lista_quincenas').html(`<div class="info-box shadow-lg w-600px"> 
-              <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
-              <div class="info-box-content"> 
-                <span class="info-box-text">Alerta</span> 
-                <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
-              </div> 
-            </div>`);
-          }
-        }
-      }     
-
+    if (e.data.fechas_val.length === 0) { 
+      $('#lista_quincenas').html(`<div class="info-box shadow-lg w-300px">
+        <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Alerta</span>
+          <span class="info-box-number">Las fechas del proyecto <br> es menor de 1 día.</span>
+        </div>
+      </div>`); 
     } else {
-      $('#lista_quincenas').html('<div class="info-box shadow-lg w-300px">'+
-        '<span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span>'+
-        '<div class="info-box-content">'+
-          '<span class="info-box-text">Alerta</span>'+
-          '<span class="info-box-number">Las fechas del proyecto <br> es menor de 1 día.</span>'+
-        '</div>'+
-      '</div>');
+
+      if ( e.data.fecha_valorizacion == "quincenal") {
+        $(".h1-titulo").html(`Valorización - <b>Quincenal</b> (${format_d_m_a(e.data.fecha_inicio)} al ${format_d_m_a(e.data.fecha_fin)})`);
+      }  else if ( e.data.fecha_valorizacion == "mensual") {
+        $(".h1-titulo").html(`Valorización - <b>Mensual</b> (${format_d_m_a(e.data.fecha_inicio)} al ${format_d_m_a(e.data.fecha_fin)})`);
+      }  else if ( e.data.fecha_valorizacion == "al finalizar") {
+        $(".h1-titulo").html(`Valorización - <b>Al finalizar</b> (${format_d_m_a(e.data.fecha_inicio)} al ${format_d_m_a(e.data.fecha_fin)})`);
+      }
+
+      e.data.fechas_val.forEach((val, key) => {       
+
+        $('#lista_quincenas').append(` <button id="boton-${val.numero_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${val.fecha_inicio}', '${val.fecha_fin}', '${val.numero_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${val.numero_q_s}<br>${format_d_m_a(val.fecha_inicio)} // ${format_d_m_a(val.fecha_fin)}</button>`)
+        array_fechas_q_s.push({  
+          'fecha_inicio':       val.fecha_inicio, 
+          'fecha_fin':          val.fecha_fin, 
+          'fecha_inicio_oculto':val.fecha_inicio_oculto, 
+          'fecha_fin_oculto':   val.fecha_fin_oculto, 
+          'num_q_s':            val.numero_q_s, }
+        );
+        cant_valorizaciones = val.numero_q_s;
+         
+      });
+  
+      tbla_resumen_q_s(nube_idproyecto);   
     }    
-    //console.log(fecha);
   });
 }
 
@@ -665,7 +615,7 @@ function guardar_y_editar_fecha_oculta(e) {
         e = JSON.parse(e);
         if (e.status == true) {	
           Swal.fire("Correcto!", "Documento guardado correctamente", "success");          
-          if (tabla_principal) { tabla_principal.ajax.reload(null, false); }
+          listar_quincenas_btn(localStorage.getItem('nube_idproyecto'));
           $("#modal-agregar-fechas-ocultas").modal("hide");
         }else{
           ver_errores(e);

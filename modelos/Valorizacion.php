@@ -70,14 +70,14 @@ class Valorizacion
   }
 
   // Data para listar lo bototnes por quincena
-  public function listarquincenas($nube_idproyecto) {
+  public function listar_quincenas_btn($nube_idproyecto) {
     $sql_1 = "SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion 
 		FROM proyecto as p 
 		WHERE p.idproyecto = '$nube_idproyecto' AND p.fecha_inicio != p.fecha_fin";
     $proyecto = ejecutarConsultaSimpleFila($sql_1); if ($proyecto['status'] == false) { return $proyecto; }
 
     $sql_2 = "SELECT idresumen_q_s_valorizacion, idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto
-    FROM resumen_q_s_valorizacion WHERE idproyecto = ''"; 
+    FROM resumen_q_s_valorizacion WHERE idproyecto = '$nube_idproyecto' AND estado=1 AND estado_delete=1  ORDER BY numero_q_s ASC; "; 
     $fechas = ejecutarConsultaArray($sql_2); if ($fechas['status'] == false) { return $fechas; }
 
     $results = [
@@ -100,12 +100,12 @@ class Valorizacion
   public function ver_detalle_quincena($f1, $f2, $nube_idproyect) {
     $sql = "SELECT v.idvalorizacion, v.idproyecto, v.indice, v.nombre, v.doc_valorizacion, v.fecha_inicio, v.estado
 		FROM valorizacion as v
-		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_inicio BETWEEN '$f1' AND '$f2';";
+		WHERE v.idproyecto = '$nube_idproyect' AND v.fecha_inicio BETWEEN '$f1' AND '$f2' ;";
     $data1 = ejecutarConsultaArray($sql);  if ($data1['status'] == false) { return $data1; }
 
     $sql2 = "SELECT p.idproyecto, p.doc1_contrato_obra AS doc1, p.doc2_entrega_terreno AS doc81, p.doc3_inicio_obra AS doc82, p.doc7_cronograma_obra_valorizad AS doc4, p.doc8_certificado_habilidad_ing_residnt AS doc83 
 		FROM proyecto as p 
-		WHERE p.idproyecto = '$nube_idproyect';";
+		WHERE p.idproyecto = '$nube_idproyect' ;";
     $data2 = ejecutarConsultaSimpleFila($sql2); if ($data2['status'] == false) { return $data2; }
 
     $results = [
@@ -132,15 +132,15 @@ class Valorizacion
       foreach ($valorizacion['data'] as $key => $value1) {
         $monto_total_gastado = suma_totales_modulos($nube_idproyecto, $value1['fecha_inicio'], $value1['fecha_fin']);
         $data[] = [
-          'nombre_tabla' => 'valorizacion',
-          'idtabla' => $value1['idvalorizacion'],
-          'nombre_columna' => 'idvalorizacion',
-          'indice' => $value1['indice'],
-          'nombre' => $value1['nombre'],
-          'doc_valorizacion' => $value1['doc_valorizacion'],
-          'fecha_inicio' => $value1['fecha_inicio'],
-          'fecha_fin' => $value1['fecha_fin'],
-          'numero_q_s' => $value1['numero_q_s'],
+          'nombre_tabla'        => 'valorizacion',
+          'idtabla'             => $value1['idvalorizacion'],
+          'nombre_columna'      => 'idvalorizacion',
+          'indice'              => $value1['indice'],
+          'nombre'              => $value1['nombre'],
+          'doc_valorizacion'    => $value1['doc_valorizacion'],
+          'fecha_inicio'        => $value1['fecha_inicio'],
+          'fecha_fin'           => $value1['fecha_fin'],
+          'numero_q_s'          => $value1['numero_q_s'],
           'monto_total_gastado' => $monto_total_gastado,
         ];
       }
@@ -254,43 +254,27 @@ class Valorizacion
 
   // =============================== R E S U M E N   Q S ======================================
 
-  public function insertar_editar_resumen_q_s($array_val, $idproyecto) {
-
-    $sql_0 = "UPDATE resumen_q_s_valorizacion SET estado='0',estado_delete='0' WHERE idproyecto = '$idproyecto';";
-    $elimnar_val = ejecutarConsulta($sql_0); if ($elimnar_val['status'] == false) { return $elimnar_val; }
-    //B I T A C O R A -------
-    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$idproyecto."', 'Eliminar y Desactivar segun proyecto: $idproyecto', '".$_SESSION['idusuario']."')";
-    $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+  public function insertar_editar_resumen_q_s($array_val, $idproyecto) {    
 
     foreach (json_decode( $array_val, true) as $key => $value) {
-      $idresumen_q_s_valorizacion   = $value['idresumen_q_s_valorizacion'];
+      $idresumen        = $value['idresumen_q_s_valorizacion'];
       $idproyecto       = $value['idproyecto'];
       $numero_q_s       = $value['numero_q_s'];
       $fecha_inicial    = $value['fecha_inicio'];
       $fecha_final      = $value['fecha_fin'];
       $monto_programado = $value['monto_programado'];
-      $monto_valorizado = $value['monto_valorizado'];
+      $monto_valorizado = $value['monto_valorizado'];      
 
-      $sql_1            = "SELECT * FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto' AND numero_q_s='$numero_q_s'";
-      $buscando         = ejecutarConsultaArray($sql_1); if ($buscando['status'] == false) { return $buscando; }
-
-      if ( empty($buscando['data']) ) {
-        $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, monto_programado, monto_valorizado, monto_gastado, user_created) 
-        VALUES ('$idproyecto','$numero_q_s','$fecha_inicial','$fecha_final','$monto_programado','$monto_valorizado', '0', '".$_SESSION['idusuario']."')";
-        $insertando = ejecutarConsulta_retornarID($sql_2); if ($insertando['status'] == false) { return $insertando; }
-
-        //B I T A C O R A -------
-        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
-        $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
-
+      if ( empty($idresumen) ) {
+        return $retorno = ['status' => 'error', 'message' => 'todo oka ps', 'data' => [], ];
       } else {         
         $sql_3 = "UPDATE resumen_q_s_valorizacion SET idproyecto='$idproyecto', numero_q_s='$numero_q_s', fecha_inicio='$fecha_inicial',
         fecha_fin='$fecha_final', monto_programado='$monto_programado', monto_valorizado='$monto_valorizado', monto_gastado='0', 
-        estado='1', estado_delete='1', user_updated='".$_SESSION['idusuario']."' WHERE numero_q_s='$numero_q_s'";
+        estado='1', estado_delete='1', user_updated='".$_SESSION['idusuario']."' WHERE idresumen_q_s_valorizacion='$idresumen'";
         $editando =  ejecutarConsulta($sql_3); if ($editando['status'] == false) { return $editando; }
 
         //B I T A C O R A -------
-        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$numero_q_s."', 'Editar registro', '".$_SESSION['idusuario']."')";
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$idresumen."', 'Editar registro', '".$_SESSION['idusuario']."')";
         $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
       } 
     }    
@@ -306,21 +290,23 @@ class Valorizacion
       WHERE idproyecto='$idproyecto' AND numero_q_s='$num' AND estado=1 AND estado_delete=1;";
       $val_q_s =  ejecutarConsultaSimpleFila($sql);  if ($val_q_s['status'] == false) { return $val_q_s; }
 
-      $monto_gastado = suma_totales_modulos($idproyecto, $value['fecha_inicio'],$value['fecha_fin']);
+      $monto_gastado = suma_totales_modulos($idproyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
       $data[] = [
-        'idresumen_q_s_valorizacion' => (empty($val_q_s['data']) ? '' : $val_q_s['data']['idresumen_q_s_valorizacion']),
-        'idproyecto' => $idproyecto,
-        'numero_q_s' => $value['num_q_s'],
-        'fecha_inicio' => $value['fecha_inicio'],
-        'fecha_fin' => $value['fecha_fin'],
-        'monto_programado' => (empty($val_q_s['data']) ? 0 : (empty($val_q_s['data']['monto_programado']) ? 0 : floatval($val_q_s['data']['monto_programado']) ) ),
-        'monto_valorizado' => (empty($val_q_s['data']) ? 0 : (empty($val_q_s['data']['monto_valorizado']) ? 0 : floatval($val_q_s['data']['monto_valorizado']) ) ),
-        'monto_gastado' => $monto_gastado,
+        'idresumen_q_s_valorizacion'=> (empty($val_q_s['data']) ? '' : $val_q_s['data']['idresumen_q_s_valorizacion']),
+        'idproyecto'                => $idproyecto,
+        'numero_q_s'                => $value['num_q_s'],
+        'fecha_inicio'              => $value['fecha_inicio'],
+        'fecha_fin'                 => $value['fecha_fin'],
+        'fecha_inicio_oculto'       => $value['fecha_inicio_oculto'],
+        'fecha_fin_oculto'          => $value['fecha_fin_oculto'],
+        'monto_programado'          => (empty($val_q_s['data']) ? 0 : (empty($val_q_s['data']['monto_programado']) ? 0 : floatval($val_q_s['data']['monto_programado']) ) ),
+        'monto_valorizado'          => (empty($val_q_s['data']) ? 0 : (empty($val_q_s['data']['monto_valorizado']) ? 0 : floatval($val_q_s['data']['monto_valorizado']) ) ),
+        'monto_gastado'             => $monto_gastado,
       ];
     }
 
     $sql_2 = "SELECT idproyecto,  nombre_codigo,  costo, garantia, fecha_inicio, fecha_fin, feriado_domingo,  fecha_valorizacion, permanente_pago_obrero
-    FROM proyecto WHERE idproyecto='$idproyecto';";
+    FROM proyecto WHERE idproyecto='$idproyecto' ;";
     $proyecto =  ejecutarConsultaSimpleFila($sql_2);  if ($proyecto['status'] == false) { return $proyecto; }
     
     return $retorno = [ 'status' => true, 
@@ -358,7 +344,7 @@ class Valorizacion
   // :::::::::::::::::::::::::::::::::::::::::: U P D A T E   F E C H A S  O C U L T A S :::::::::::::::::::::::::::::::
   public function mostrar_para_editar_fechas($idproyecto) {
     
-    $sql = "SELECT * FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete=1;";
+    $sql = "SELECT * FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto' AND estado=1 AND estado_delete=1 ORDER BY numero_q_s ASC;;";
     return ejecutarConsultaArray($sql);    
 
   }

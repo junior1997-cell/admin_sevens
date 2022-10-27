@@ -229,8 +229,8 @@
 
         break;
         
-        case 'listarquincenas':
-          $rspta=$valorizacion->listarquincenas($_POST["nube_idproyecto"]);
+        case 'listar_quincenas_btn':
+          $rspta=$valorizacion->listar_quincenas_btn($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break; 

@@ -26,7 +26,49 @@ class Proyecto
     $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','" . $id_proyect['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
     $bitacora1 = ejecutarConsulta($sql2);  if ( $bitacora1['status'] == false) {return $bitacora1; }
 
-    // extraemos todas fechas
+    // CREAMOS FECHAS DE VALORIZACION ----------------------------------------------------------
+    if ($fecha_valorizacion == "quincenal") {
+      
+      $fechas_val = fechas_valorizacion_quincena($fecha_inicio, $fecha_fin,);
+      
+      foreach ($fechas_val as $key => $val) {
+        $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, monto_programado, monto_valorizado, monto_gastado, user_created) 
+        VALUES ('".$id_proyect['data']."','".$val['num_q_s']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','0','0', '0', '".$_SESSION['idusuario']."')";
+        $insertando = ejecutarConsulta_retornarID($sql_2); if ($insertando['status'] == false) { return $insertando; }
+
+        //B I T A C O R A -------
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+        $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+      }
+      
+    } else if ($fecha_valorizacion == "mensual") {       
+    
+      $fechas_val = fechas_valorizacion_mensual($fecha_inicio, $fecha_fin);
+      //console.log(fechas_btn);
+  
+      foreach ($fechas_val as $key => $val) {
+        $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, monto_programado, monto_valorizado, monto_gastado, user_created) 
+        VALUES ('".$id_proyect['data']."','".$val['num_q_s']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','0','0', '0', '".$_SESSION['idusuario']."')";
+        $insertando = ejecutarConsulta_retornarID($sql_2); if ($insertando['status'] == false) { return $insertando; }
+
+        //B I T A C O R A -------
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+        $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+      }
+    
+    } else if ($fecha_valorizacion == "al finalizar") {        
+  
+      $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, monto_programado, monto_valorizado, monto_gastado, user_created) 
+      VALUES ('".$id_proyect['data']."','1','$fecha_inicio','$fecha_fin', '$fecha_inicio','$fecha_fin','0','0', '0', '".$_SESSION['idusuario']."')";
+      $insertando = ejecutarConsulta_retornarID($sql_2); if ($insertando['status'] == false) { return $insertando; }
+
+      //B I T A C O R A -------
+      $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+      $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+    }
+    
+
+    // extraemos todas fechas ------------------------------------------------------------------
     $sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
     $proyecto = ejecutarConsultaArray($sql2);
     if ($proyecto['status'] == false) {return $proyecto;}
@@ -47,15 +89,11 @@ class Proyecto
         //add registro en nuestra bitacora
         $sql3_1 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('calendario_por_proyecto','" . $calendario_proyect['data'] . "','Registramos la fechas de feriadod al nuevo proyecto','" . $_SESSION['idusuario'] . "')";
         $bitacora3_1 = ejecutarConsulta($sql3_1); if ( $bitacora3_1['status'] == false) {return $bitacora3_1; }
-
       }
 
       return $calendario_proyect;
-
     } else {
-
       return $proyecto;
-
     }
 
     // $sql2=	$tipo_documento.$numero_documento.$empresa.$nombre_proyecto.$ubicacion.$actividad_trabajo.$empresa_acargo.$costo.$fecha_inicio.$fecha_fin.$doc1.$doc2.$doc3;
@@ -73,15 +111,99 @@ class Proyecto
       permanente_pago_obrero = '$permanente_pago_obrero',
       user_updated= '" . $_SESSION['idusuario'] . "'
 		WHERE idproyecto='$idproyecto'";
-
-    $edit =  ejecutarConsulta($sql);
-    if ( $edit['status'] == false) {return $edit; }
+    $edit =  ejecutarConsulta($sql); if ( $edit['status'] == false) {return $edit; }
 
     //add registro en nuestra bitacora
     $sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','$idproyecto','Editamos registro proyecto','" . $_SESSION['idusuario'] . "')";
-    $bitacora = ejecutarConsulta($sql);
+    $bitacora = ejecutarConsulta($sql);  if ( $bitacora['status'] == false) {return $bitacora; }
+
+    // eliminanos la fechas anteriores ----------
+    $sql_d = "UPDATE resumen_q_s_valorizacion SET estado='0', estado_delete='0', user_delete= '" . $_SESSION['idusuario'] . "' WHERE idproyecto='$idproyecto';";
+    //$sql_d = "DELETE FROM resumen_q_s_valorizacion WHERE WHERE idproyecto='$idproyecto';";    
+    $deletele_val = ejecutarConsulta($sql_d);  if ( $deletele_val['status'] == false) {return $deletele_val; }
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$idproyecto."', 'Eliminar y Desactivar segun proyecto: $idproyecto', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+
+    // CREAMOS FECHAS DE VALORIZACION ----------------------------------------------------------
+    if ($fecha_valorizacion == "quincenal") {
+      
+      $fechas_val = fechas_valorizacion_quincena($fecha_inicio, $fecha_fin);
+      
+      foreach ($fechas_val as $key => $val) {
+        $sql_1            = "SELECT idresumen_q_s_valorizacion as id FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto' AND numero_q_s='".$val['num_q_s']."'";
+        $buscando         = ejecutarConsultaSimpleFila($sql_1); if ($buscando['status'] == false) { return $buscando; }
+
+        if (empty($buscando['data'])) {
+          $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, monto_programado, monto_valorizado, monto_gastado, user_created) 
+          VALUES ('$idproyecto','".$val['num_q_s']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','0','0', '0', '".$_SESSION['idusuario']."')";
+          $insertando = ejecutarConsulta_retornarID($sql_2); if ($insertando['status'] == false) { return $insertando; }
+
+          //B I T A C O R A -------
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+          $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+        } else {
+          $sql_3 = "UPDATE resumen_q_s_valorizacion SET idproyecto='$idproyecto', numero_q_s='".$val['num_q_s']."', fecha_inicio='".$val['fecha_inicio']."', 
+          fecha_fin='".$val['fecha_fin']."', estado='1', estado_delete='1', user_updated='".$_SESSION['idusuario']."' WHERE idproyecto='$idproyecto' and numero_q_s='".$val['num_q_s']."'";
+          $editando =  ejecutarConsulta($sql_3); if ($editando['status'] == false) { return $editando; }
+
+          //B I T A C O R A -------
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$buscando['data']['id']."', 'Editar registro segun numero Q-S ".$val['num_q_s']."', '".$_SESSION['idusuario']."')";
+          $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+        }         
+      }
+      
+    } else if ($fecha_valorizacion == "mensual") {       
     
-    if ( $bitacora['status'] == false) {return $bitacora; }
+      $fechas_val = fechas_valorizacion_mensual($fecha_inicio, $fecha_fin);
+      //console.log(fechas_btn);
+  
+      foreach ($fechas_val as $key => $val) {
+        $sql_1            = "SELECT idresumen_q_s_valorizacion as id FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto' AND numero_q_s='".$val['num_q_s']."'";
+        $buscando         = ejecutarConsultaSimpleFila($sql_1); if ($buscando['status'] == false) { return $buscando; }
+
+        if (empty($buscando['data'])) {
+          $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, monto_programado, monto_valorizado, monto_gastado, user_created) 
+          VALUES ('$idproyecto','".$val['num_q_s']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','".$val['fecha_inicio']."','".$val['fecha_fin']."','0','0', '0', '".$_SESSION['idusuario']."')";
+          $insertando = ejecutarConsulta_retornarID($sql_2); if ($insertando['status'] == false) { return $insertando; }
+
+          //B I T A C O R A -------
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+          $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+        } else {
+          $sql_3 = "UPDATE resumen_q_s_valorizacion SET idproyecto='$idproyecto', numero_q_s='".$val['num_q_s']."', fecha_inicio='".$val['fecha_fin']."', 
+          fecha_fin='".$val['fecha_fin']."', estado='1', estado_delete='1', user_updated='".$_SESSION['idusuario']."' WHERE idproyecto='$idproyecto' and numero_q_s='".$val['num_q_s']."'";
+          $editando =  ejecutarConsulta($sql_3); if ($editando['status'] == false) { return $editando; }
+
+          //B I T A C O R A -------
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$buscando['data']['id']."', 'Editar registro segun numero Q-S ".$val['num_q_s']."', '".$_SESSION['idusuario']."')";
+          $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+        }         
+      }
+    
+    } else if ($fecha_valorizacion == "al finalizar") {       
+
+      $sql_1     = "SELECT idresumen_q_s_valorizacion as id FROM resumen_q_s_valorizacion WHERE idproyecto='$idproyecto' AND numero_q_s='1'";
+      $buscando  = ejecutarConsultaSimpleFila($sql_1); if ($buscando['status'] == false) { return $buscando; }
+
+      if (empty($buscando['data'])) {
+        $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, monto_programado, monto_valorizado, monto_gastado, user_created) 
+        VALUES ('$idproyecto','1','$fecha_inicio','$fecha_fin','$fecha_inicio','$fecha_fin' ,'0','0', '0', '".$_SESSION['idusuario']."')";
+        $insertando = ejecutarConsulta_retornarID($sql_2); if ($insertando['status'] == false) { return $insertando; }
+
+        //B I T A C O R A -------
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
+        $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+      } else {
+        $sql_3 = "UPDATE resumen_q_s_valorizacion SET idproyecto='$idproyecto', numero_q_s='1', fecha_inicio='$fecha_inicio', 
+        fecha_fin='$fecha_fin', estado='1', estado_delete='1', user_updated='".$_SESSION['idusuario']."' WHERE idproyecto='$idproyecto' and numero_q_s='1'";
+        $editando =  ejecutarConsulta($sql_3); if ($editando['status'] == false) { return $editando; }
+
+        //B I T A C O R A -------
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$buscando['data']['id']."', 'Editar registro segun numero Q-S 1', '".$_SESSION['idusuario']."')";
+        $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+      }      
+    }
 
     return $edit;
   }

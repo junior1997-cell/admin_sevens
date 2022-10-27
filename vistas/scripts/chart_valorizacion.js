@@ -50,10 +50,50 @@ function listar_btn_q_s(nube_idproyecto) {
 
   $.post("../ajax/chart_valorizacion.php?op=listar_btn_q_s", { nube_idproyecto: nube_idproyecto }, function (e, status) {
 
-    e =JSON.parse(e); console.log(e);
+    e =JSON.parse(e); //console.log(e);
 
     // VALIDAMOS LAS FECHAS DE QUINCENA
-    if (e.data) {     
+    if (e.data.fechas_val.length === 0) { 
+      $('#lista_quincenas').html(`<div class="info-box shadow-lg w-300px">
+        <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Alerta</span>
+          <span class="info-box-number">Las fechas del proyecto <br> es menor de 1 día.</span>
+        </div>
+      </div>`); 
+    } else {
+
+      var html_select_filtro = '', f_i_o = e.data.fechas_val.shift(), f_f_o = e.data.fechas_val.slice(-1).pop();
+      
+      if ( e.data.fecha_valorizacion == "quincenal") {
+        $(".h1-titulo").html(`Valorización - <b>Quincenal</b> (${format_d_m_a(e.data.fecha_inicio)} al ${format_d_m_a(e.data.fecha_fin)})`);
+      }  else if ( e.data.fecha_valorizacion == "mensual") {
+        $(".h1-titulo").html(`Valorización - <b>Mensual</b> (${format_d_m_a(e.data.fecha_inicio)} al ${format_d_m_a(e.data.fecha_fin)})`);
+      }  else if ( e.data.fecha_valorizacion == "al finalizar") {
+        $(".h1-titulo").html(`Valorización - <b>Al finalizar</b> (${format_d_m_a(e.data.fecha_inicio)} al ${format_d_m_a(e.data.fecha_fin)})`);
+      }
+
+      e.data.fechas_val.forEach((val, key) => {       
+
+        cant_valorizacion = val.numero_q_s;
+        $('#lista_quincenas').append(` <button id="boton-${val.numero_q_s}" type="button" class="mb-2 btn bg-gradient-info text-center btn-sm" onclick="fecha_quincena('${val.fecha_inicio}', '${val.fecha_fin}', '${val.numero_q_s}');"><i class="far fa-calendar-alt"></i> Valorización ${val.numero_q_s}<br>${val.fecha_inicio} // ${val.fecha_fin}</button>`)
+        html_select_filtro = html_select_filtro.concat(`<option value="${val.idresumen_q_s_valorizacion}" numero_q_s="${val.numero_q_s}" fecha_inicio_oculto="${val.fecha_inicio_oculto}" fecha_fin_oculto="${val.fecha_fin_oculto}" >Val ${val.numero_q_s} ─ ${format_d_m_a(val.fecha_inicio)} - ${format_d_m_a(val.fecha_fin)}</option>`);
+        array_fechas_valorizacion.push({  
+          'fecha_inicio':       val.fecha_inicio, 
+          'fecha_fin':          val.fecha_fin, 
+          'fecha_inicio_oculto':val.fecha_inicio_oculto, 
+          'fecha_fin_oculto':   val.fecha_fin_oculto, 
+          'num_val':            val.numero_q_s, }
+        );
+        // cant_valorizaciones = val.numero_q_s;         
+      });
+
+      $("#valorizacion_filtro").html(`<option value="0" numero_q_s="0" fecha_inicio_oculto="${f_i_o.fecha_inicio_oculto}" fecha_fin_oculto="${f_f_o.fecha_fin_oculto}" >Todos ─ ${format_d_m_a(e.data.fecha_inicio)} - ${format_d_m_a(e.data.fecha_fin)}</option> ${html_select_filtro}`);
+      $('.cargando_filtro_valorizacion').html('<i class="far fa-calendar-alt"></i>');
+  
+      chart_linea_barra();
+    }
+    if (false) {     
         
       if (e.data.fecha_valorizacion == "quincenal") {
 
@@ -111,10 +151,10 @@ function listar_btn_q_s(nube_idproyecto) {
         }
       }   
       
-      $('.cargando_filtro_valorizacion').html('<i class="far fa-calendar-alt"></i>');
+      
 
     } else {
-      $('#lista_quincenas').html('<option value="" >No hay fechas, editalas en su modulo correspondiente.</option>');
+      // $('#lista_quincenas').html('<option value="" >No hay fechas, editalas en su modulo correspondiente.</option>');
     }    
     //console.log(fecha);
   });
@@ -138,15 +178,17 @@ function chart_linea_barra() {
   var valorizacion_filtro = $("#valorizacion_filtro").select2("val");
 
   var fecha_inicial = ''; var fecha_final = ''; var num_val = '';
-  if ( valorizacion_filtro == '0'|| valorizacion_filtro == ''|| valorizacion_filtro == null ) {  }else{
-    var val_split = valorizacion_filtro.split(' ');
-    num_val = val_split[0]; fecha_inicial = val_split[1]; fecha_final = val_split[2];
+  if ( valorizacion_filtro == ''|| valorizacion_filtro == null ) {  }else{
+     
+    num_val = $('#valorizacion_filtro').select2('data')[0].element.attributes.numero_q_s.value;
+    fecha_inicial = $('#valorizacion_filtro').select2('data')[0].element.attributes.fecha_inicio_oculto.value;
+    fecha_final = $('#valorizacion_filtro').select2('data')[0].element.attributes.fecha_fin_oculto.value;
   }
 
-  //console.log(array_fechas_valorizacion);
+  console.log(array_fechas_valorizacion); console.log(num_val); console.log(fecha_inicial);console.log(fecha_final);
   
   $.post("../ajax/chart_valorizacion.php?op=chart_linea", { 'idnubeproyecto': idnubeproyecto , 'valorizacion_filtro':valorizacion_filtro, 'array_fechas_valorizacion':JSON.stringify(array_fechas_valorizacion), 'fecha_inicial': fecha_inicial, 'fecha_final':fecha_final, 'num_val':num_val,  'cant_valorizacion':cant_valorizacion }, function (e, status) {
-    e = JSON.parse(e);   console.log(e);
+    e = JSON.parse(e);   //console.log(e);
     if (e.status == true) {
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T    P R O G R E S ::::::::::::::::::::::::::::::::::::
       // valorizacion

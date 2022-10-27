@@ -101,18 +101,16 @@ class ChartValorizacion
     if ($valorizacion_filtro == null || $valorizacion_filtro == '' || $valorizacion_filtro == '0' ) {
       // extraemos datos generales
       $sql_date = "SELECT fecha_inicio_actividad, fecha_fin_actividad, fecha_inicio, fecha_fin  FROM proyecto WHERE idproyecto = '$id_proyecto';";
-      $fecha_proyecto = ejecutarConsultaSimpleFila($sql_date);
-      if ($fecha_proyecto['status'] == false) { return $fecha_proyecto; } 
+      $fecha_proyecto = ejecutarConsultaSimpleFila($sql_date);  if ($fecha_proyecto['status'] == false) { return $fecha_proyecto; } 
 
       $sql_val = "SELECT SUM(monto_valorizado) AS monto_valorizado FROM resumen_q_s_valorizacion WHERE idproyecto = '$id_proyecto' AND estado = '1' AND estado_delete = '1'";
-      $init_valorizado = ejecutarConsultaSimpleFila($sql_val);
-      if ($init_valorizado['status'] == false) { return $init_valorizado; }
+      $init_valorizado = ejecutarConsultaSimpleFila($sql_val);   if ($init_valorizado['status'] == false) { return $init_valorizado; }
 
       if (empty($fecha_proyecto['data']['fecha_inicio']) || empty($fecha_proyecto['data']['fecha_fin'])) {       
         return $retorno = ['status'=>'error_ing_pool', 'user' => $_SESSION['nombre'], 'mesage'=>'No ha definido las fechas de <b>INICIO</b> o <b>FIN</b> de proyecto.', 'data'=>'sin data', ]; 
       } 
 
-      $monto_valorizacion_gastado   = suma_totales_modulos($id_proyecto, $fecha_proyecto['data']['fecha_inicio'],$fecha_proyecto['data']['fecha_fin']);
+      $monto_valorizacion_gastado   = suma_totales_modulos($id_proyecto, $fecha_i, $fecha_f);
       $monto_valorizacion_valorizado = (empty($init_valorizado['data']) ? 0 : (empty($init_valorizado['data']['monto_valorizado']) ? 0 : floatval($init_valorizado['data']['monto_valorizado']) ) );
       $monto_valorizacion_utilidad = $monto_valorizacion_valorizado - $monto_valorizacion_gastado;
       // end - extraemos datos generales
@@ -127,7 +125,7 @@ class ChartValorizacion
 
         $val_monto_programado = (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_programado']) ? 0 : floatval($valorizacion['data']['monto_programado']) ) );
         $val_monto_valorizado = (empty($valorizacion['data']) ? 0 : (empty($valorizacion['data']['monto_valorizado']) ? 0 : floatval($valorizacion['data']['monto_valorizado']) ) );
-        $cant_monto_gastado   = suma_totales_modulos($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_gastado   = suma_totales_modulos($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_gastado += $cant_monto_gastado;
         $val_monto_utilidad   = $val_monto_valorizado - $cant_monto_gastado;
 
@@ -149,7 +147,7 @@ class ChartValorizacion
         //  ---------------------------------------------- modulos ----------------------------------------------
 
         // compra_insumos
-        $cant_monto_compra_insumos     = suma_totales_compra_insumos($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_compra_insumos     = suma_totales_compra_insumos($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_compra_insumos   += $cant_monto_compra_insumos;
         $val_utilidad_compra_insumos   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_compra_insumos )/$monto_valorizacion_gastado)  ;
         $total_utilidad_compra_insumos+= $val_utilidad_compra_insumos;
@@ -161,7 +159,7 @@ class ChartValorizacion
           "modulo"=>'Compra de insumos',"val"=>'Val'.$cont, "gasto"=>$cant_monto_compra_insumos, "utilidad"=>$val_utilidad_compra_insumos, "gasto_t"=>$cant_monto_gastado, "utilidad_t"=>$val_utilidad_compra_insumos,  "ver_mas"=>'compra_insumos.php',
         );          
         // maquina_y_equipo
-        $cant_monto_maquina_y_equipo     = suma_totales_maquina_y_equipo($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_maquina_y_equipo     = suma_totales_maquina_y_equipo($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_maquina_y_equipo   += $cant_monto_maquina_y_equipo;
         $val_utilidad_maquina_y_equipo   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_maquina_y_equipo)/$monto_valorizacion_gastado);
         $total_utilidad_maquina_y_equipo+= $val_utilidad_maquina_y_equipo;
@@ -173,7 +171,7 @@ class ChartValorizacion
           "modulo"=>'Maquinas y Equipos',"val"=>'Val'.$cont, "gasto"=>$cant_monto_maquina_y_equipo, "utilidad"=>$val_utilidad_maquina_y_equipo, "ver_mas"=>'servicio_maquina.php',
         );
         // subcontrato
-        $cant_monto_subcontrato     = suma_totales_subcontrato($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_subcontrato     = suma_totales_subcontrato($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_subcontrato   += $cant_monto_subcontrato;
         $val_utilidad_subcontrato   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_subcontrato)/$monto_valorizacion_gastado);
         $total_utilidad_subcontrato+= $val_utilidad_subcontrato;
@@ -185,7 +183,7 @@ class ChartValorizacion
           "modulo"=>'Subcontrato',"val"=>'Val'.$cont, "gasto"=>$cant_monto_subcontrato, "utilidad"=>$val_utilidad_subcontrato, "ver_mas"=>'sub_contrato.php',
         );
         // mano_de_obra
-        $cant_monto_mano_de_obra     = suma_totales_mano_de_obra($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_mano_de_obra     = suma_totales_mano_de_obra($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_mano_de_obra   += $cant_monto_mano_de_obra;
         $val_utilidad_mano_de_obra   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_mano_de_obra)/$monto_valorizacion_gastado);
         $total_utilidad_mano_de_obra+= $val_utilidad_mano_de_obra;
@@ -197,7 +195,7 @@ class ChartValorizacion
           "modulo"=>'Mano de Obra',"val"=>'Val'.$cont, "gasto"=>$cant_monto_mano_de_obra, "utilidad"=>$val_utilidad_mano_de_obra, "ver_mas"=>'mano_de_obra.php',
         );
         // planilla_seguro
-        $cant_monto_planilla_seguro     = suma_totales_planilla_seguro($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_planilla_seguro     = suma_totales_planilla_seguro($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_planilla_seguro   += $cant_monto_planilla_seguro;
         $val_utilidad_planilla_seguro   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_planilla_seguro)/$monto_valorizacion_gastado);
         $total_utilidad_planilla_seguro+= $val_utilidad_planilla_seguro;
@@ -209,7 +207,7 @@ class ChartValorizacion
           "modulo"=>'Planilla Seguro',"val"=>'Val'.$cont, "gasto"=>$cant_monto_planilla_seguro, "utilidad"=>$val_utilidad_planilla_seguro, "ver_mas"=>'planillas_seguros.php',
         );
         // otro_gasto
-        $cant_monto_otro_gasto     = suma_totales_otro_gasto($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_otro_gasto     = suma_totales_otro_gasto($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_otro_gasto   += $cant_monto_otro_gasto;
         $val_utilidad_otro_gasto   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_otro_gasto)/$monto_valorizacion_gastado);
         $total_utilidad_otro_gasto+= $val_utilidad_otro_gasto;
@@ -221,7 +219,7 @@ class ChartValorizacion
           "modulo"=>'Otro Gasto',"val"=>'Val'.$cont, "gasto"=>$cant_monto_otro_gasto, "utilidad"=>$val_utilidad_otro_gasto, "ver_mas"=>'otro_gasto.php',
         );
         // transporte
-        $cant_monto_transporte     = suma_totales_transporte($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_transporte     = suma_totales_transporte($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_transporte   += $cant_monto_transporte;
         $val_utilidad_transporte   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_transporte)/$monto_valorizacion_gastado);
         $total_utilidad_transporte+= $val_utilidad_transporte;
@@ -233,7 +231,7 @@ class ChartValorizacion
           "modulo"=>'Transporte',"val"=>'Val'.$cont, "gasto"=>$cant_monto_transporte, "utilidad"=>$val_utilidad_transporte, "ver_mas"=>'transporte.php',
         );
         // hospedaje
-        $cant_monto_hospedaje     = suma_totales_hospedaje($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_hospedaje     = suma_totales_hospedaje($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_hospedaje   += $cant_monto_hospedaje;
         $val_utilidad_hospedaje   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_hospedaje)/$monto_valorizacion_gastado);
         $total_utilidad_hospedaje+= $val_utilidad_hospedaje;
@@ -245,7 +243,7 @@ class ChartValorizacion
           "modulo"=>'Hospedaje',"val"=>'Val'.$cont, "gasto"=>$cant_monto_hospedaje, "utilidad"=>$val_utilidad_hospedaje, "ver_mas"=>'hospedaje.php',
         );
         // pension
-        $cant_monto_pension     = suma_totales_pension($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_pension     = suma_totales_pension($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_pension   += $cant_monto_pension;
         $val_utilidad_pension   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pension)/$monto_valorizacion_gastado);
         $total_utilidad_pension+= $val_utilidad_pension;
@@ -257,7 +255,7 @@ class ChartValorizacion
           "modulo"=>'Pension',"val"=>'Val'.$cont, "gasto"=>$cant_monto_pension, "utilidad"=>$val_utilidad_pension, "ver_mas"=>'pension.php',
         );
         // breack
-        $cant_monto_breack     = suma_totales_breack($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_breack     = suma_totales_breack($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_breack   += $cant_monto_breack;
         $val_utilidad_breack   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_breack)/$monto_valorizacion_gastado);
         $total_utilidad_breack+= $val_utilidad_breack;
@@ -269,7 +267,7 @@ class ChartValorizacion
           "modulo"=>'Breack',"val"=>'Val'.$cont, "gasto"=>$cant_monto_breack, "utilidad"=>$val_utilidad_breack, "ver_mas"=>'break.php',
         );
         // comida_extra
-        $cant_monto_comida_extra     = suma_totales_comida_extra($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_comida_extra     = suma_totales_comida_extra($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_comida_extra   += $cant_monto_comida_extra;
         $val_utilidad_comida_extra   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_comida_extra)/$monto_valorizacion_gastado);
         $total_utilidad_comida_extra+= $val_utilidad_comida_extra;
@@ -281,7 +279,7 @@ class ChartValorizacion
           "modulo"=>'Comida Extra',"val"=>'Val'.$cont, "gasto"=>$cant_monto_comida_extra, "utilidad"=>$val_utilidad_comida_extra, "ver_mas"=>'comidas_extras.php',
         );
         // pago_administrador
-        $cant_monto_pago_administrador     = suma_totales_pago_administrador($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_pago_administrador     = suma_totales_pago_administrador($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_pago_administrador   += $cant_monto_pago_administrador;
         $val_utilidad_pago_administrador   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pago_administrador)/$monto_valorizacion_gastado);
         $total_utilidad_pago_administrador+= $val_utilidad_pago_administrador;
@@ -293,7 +291,7 @@ class ChartValorizacion
           "modulo"=>'Pago Administrador',"val"=>'Val'.$cont, "gasto"=>$cant_monto_pago_administrador, "utilidad"=>$val_utilidad_pago_administrador, "ver_mas"=>'pago_administrador.php',
         );
         // pago_obrero
-        $cant_monto_pago_obrero     = suma_totales_pago_obrero($id_proyecto, $value['fecha_i'], $value['fecha_f']);
+        $cant_monto_pago_obrero     = suma_totales_pago_obrero($id_proyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
         $total_monto_pago_obrero   += $cant_monto_pago_obrero;
         $val_utilidad_pago_obrero   = ($monto_valorizacion_gastado==0 ? 0 : ($monto_valorizacion_utilidad * $cant_monto_pago_obrero)/$monto_valorizacion_gastado);
         $total_utilidad_pago_obrero+= $val_utilidad_pago_obrero;
@@ -744,11 +742,29 @@ class ChartValorizacion
 
   // Data para listar lo bototnes por quincena
   public function listar_btn_q_s($nube_idproyecto) {
-    $sql = "SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion 
+    $sql_1 = "SELECT p.idproyecto, p.fecha_inicio, p.fecha_fin, p.plazo, p.fecha_pago_obrero, p.fecha_valorizacion 
 		FROM proyecto as p 
 		WHERE p.idproyecto = '$nube_idproyecto' AND p.fecha_inicio != p.fecha_fin";
+    $proyecto = ejecutarConsultaSimpleFila($sql_1); if ($proyecto['status'] == false) { return $proyecto; }
 
-    return ejecutarConsultaSimpleFila($sql);
+    $sql_2 = "SELECT idresumen_q_s_valorizacion, idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto
+    FROM resumen_q_s_valorizacion WHERE idproyecto = '$nube_idproyecto' AND estado=1 AND estado_delete=1  ORDER BY numero_q_s ASC; "; 
+    $fechas = ejecutarConsultaArray($sql_2); if ($fechas['status'] == false) { return $fechas; }
+
+    $results = [
+      "status" => true,
+      "message" => 'Todo oka',
+      "data" => [
+        "idproyecto"          => $proyecto['data']['idproyecto'],
+        "fecha_inicio"        => $proyecto['data']['fecha_inicio'],
+        "fecha_fin"           => $proyecto['data']['fecha_fin'],
+        "plazo"               => $proyecto['data']['plazo'],
+        "fecha_pago_obrero"   => $proyecto['data']['fecha_pago_obrero'],
+        "fecha_valorizacion"  => $proyecto['data']['fecha_valorizacion'],
+        "fechas_val"          => $fechas['data'],
+      ],
+    ];
+    return $results;
   }
 }
 

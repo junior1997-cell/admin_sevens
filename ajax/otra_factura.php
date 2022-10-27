@@ -62,7 +62,7 @@
       
           if (empty($idotra_factura)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $otra_factura->insertar($idproveedor, $empresa_acargo, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
+            $rspta = $otra_factura->insertar($idproveedor, $empresa_acargo, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($precio_parcial), $descripcion, $glosa, $comprobante, $tipo_gravada);
             
             echo json_encode($rspta, true) ;
       
@@ -77,7 +77,7 @@
               if (validar_url_completo($scheme_host. "dist/docs/otra_factura/comprobante/" . $ficha1_ant)  == 200) {  unlink("../dist/docs/otra_factura/comprobante/" . $ficha1_ant); }
             }
       
-            $rspta = $otra_factura->editar($idotra_factura, $idproveedor, $empresa_acargo, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada);
+            $rspta = $otra_factura->editar($idotra_factura, $idproveedor, $empresa_acargo, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($precio_parcial), $descripcion, $glosa, $comprobante, $tipo_gravada);
             //var_dump($idotra_factura,$idproveedor);
             echo json_encode($rspta, true) ;
           }

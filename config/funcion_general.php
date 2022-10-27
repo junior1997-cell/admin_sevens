@@ -49,6 +49,18 @@ if (!function_exists('ejecutarConsulta')) {
     return date("Y-m-d",strtotime( "$cant days" , strtotime( $fecha ) ) ); 
   }
 
+  function cantidad_dia_mes( $fecha )  {    
+    return date("t",strtotime( $fecha )  ); 
+  }
+
+  function extraer_dia_mes( $fecha )  {    
+    return date("d",strtotime( $fecha )  ); 
+  }
+
+  function ultimo_dia_mes( $fecha )  {    
+    return date("Y-m-t",strtotime( $fecha )  ); 
+  }
+
   function validar_fecha_menor_que($fecha_menor, $fecha_mayor) {
     $fecha_1 = strtotime( $fecha_menor );
     $fecha_2 = strtotime( $fecha_mayor );
@@ -65,22 +77,38 @@ if (!function_exists('ejecutarConsulta')) {
 
   // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
   function format_a_m_d( $fecha ) {
-    $fecha_convert = "";
+
     if (empty($fecha) || $fecha == '0000-00-00') { }else{
-      $fecha_expl = explode("-", $fecha);
-      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+      return  date("Y-m-d", strtotime( $fecha ) ); 
     }
-    return $fecha_convert;
+    return "";
   }
 
   // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
   function format_d_m_a( $fecha ) {
-    $fecha_convert = "";
+    
     if (empty($fecha) || $fecha == '0000-00-00') { }else{
-      $fecha_expl = explode("-", $fecha);
-      $fecha_convert =  $fecha_expl[2]."-".$fecha_expl[1]."-".$fecha_expl[0];
+      return  date("d-m-Y", strtotime( $fecha ) );
     }
-    return $fecha_convert;
+    return "";
+  }
+
+  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(mm-aa): 12-2021
+  function format_m_a( $fecha ) {
+    
+    if (empty($fecha) || $fecha == '0000-00-00') { }else{
+      return  date("m-Y", strtotime( $fecha ) );
+    }
+    return "";
+  }
+
+  // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(aa-mm): 2021-12
+  function format_a_m( $fecha ) {
+    
+    if (empty($fecha) || $fecha == '0000-00-00') { }else{
+      return  date("Y-m", strtotime( $fecha ) );
+    }
+    return "";
   }
 
   function diferencia_days_months_years($fecha_1, $fecha_2, $tipo = 'days') {
@@ -119,6 +147,57 @@ if (!function_exists('ejecutarConsulta')) {
     } 
   
     return $fecha;
+  }
+
+  function fechas_valorizacion_quincena($fecha_inicial, $fecha_final) {
+    $fecha_ii = $fecha_inicial;
+    $fecha_ff = "";
+    $fecha_iterativa = $fecha_inicial;
+    $fechas_array = [];
+    $i = 1;
+    $cal_mes = false;
+  
+    while ($cal_mes == false) {
+  
+      $dia_mes = extraer_dia_mes($fecha_ii);
+      if ($dia_mes < 15) {
+        $fecha_ff = format_a_m($fecha_ii).'-15';
+      } else if ($dia_mes >= 15 ) {
+        $fecha_ff =  ultimo_dia_mes($fecha_ii);
+      }    
+      
+      if (validar_fecha_menor_que( $fecha_ff, $fecha_final) == false) { $cal_mes = true; $fecha_ff = $fecha_final; }
+  
+      array_push($fechas_array, [ 'fecha_inicio'=> $fecha_ii, 'fecha_fin'=>$fecha_ff, 'num_q_s'=> $i, ]);
+      
+      $fecha_ii = sumar_dias(1, $fecha_ff);
+      $i++;
+    }
+    return $fechas_array;
+  }
+
+  function fechas_valorizacion_mensual($fecha_inicial, $fecha_final) {
+    $fecha_ii = $fecha_inicial;
+    $fecha_ff = "";
+    $fecha_iterativa = $fecha_inicial;
+    $fechas_array = [];
+    $i = 1;
+    $cal_mes = false;
+  
+    while ($cal_mes == false) {
+  
+      $dia_mes = extraer_dia_mes($fecha_ii);
+      
+      $fecha_ff =  ultimo_dia_mes($fecha_ii); 
+      
+      if (validar_fecha_menor_que( $fecha_ff, $fecha_final) == false) { $cal_mes = true; $fecha_ff = $fecha_final; }
+      
+      array_push($fechas_array, [ 'fecha_inicio'=> $fecha_ii, 'fecha_fin'=>$fecha_ff, 'num_q_s'=> $i, ]);
+      
+      $fecha_ii = sumar_dias(1,$fecha_ff);
+      $i++;
+    }
+    return $fechas_array;
   }
 
   /*  ══════════════════════════════════════════ - N U M E R I C O S - ══════════════════════════════════════════ */
@@ -205,6 +284,12 @@ if (!function_exists('ejecutarConsulta')) {
   function suma_totales_modulos($idproyecto, $fecha_1, $fecha_2) {
 
     $data = Array(); $total = 0; $subtotal = 0; $igv = 0;
+
+    // Validando si no hay fechas
+    if (empty($fecha_1) && empty($fecha_2)) {
+      $data = array( "status"=> true, "message"=> 'todo oka', "data"=> [ "total" => 0, "subtotal" => 0, "igv" => 0 ]);    
+      return $total ;
+    }
   
     // SUMAS TOTALES - COMPRA INSUMO --------------------------------------------------------------------------------
     $filtro_fecha = "";
