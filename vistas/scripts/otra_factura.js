@@ -3,7 +3,9 @@ var tabla;
 //Función que se ejecuta al inicio
 function init() {
   //Activamos el "aside"
-  $("#lOtraFactura").addClass("active bg-primary");
+  $("#bloc_Contable").addClass("menu-open bg-color-191f24");
+  $("#mContable").addClass("active");
+  $("#lOtraFactura").addClass("active");
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
@@ -457,6 +459,9 @@ function eliminar(idotra_factura, nombre ) {
 
 function calc_total() {
 
+  $('#num_documento').val("");
+  $('#razon_social').val("");
+
   $(".nro_comprobante").html("Núm. Comprobante");
 
   var total         = es_numero($('#precio_parcial').val()) == true? parseFloat($('#precio_parcial').val()) : 0;
@@ -472,6 +477,7 @@ function calc_total() {
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
   }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00"); 
@@ -479,6 +485,7 @@ function calc_total() {
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
     $(".nro_comprobante").html("Núm. de Operación");
+    $(".div_ruc").hide(); $(".div_razon_social").hide();
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    
@@ -505,12 +512,14 @@ function calc_total() {
         $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
       }    
     }
+    $(".div_ruc").show(); $(".div_razon_social").show();
   } else {
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00");
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
     $("#val_igv").prop("readonly",true);
+    $(".div_ruc").hide(); $(".div_razon_social").hide();  
   }
 
   if (val_igv > 0 && val_igv <= 1) {

@@ -10,16 +10,18 @@ class Otra_factura
   }
   //$idotra_factura,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
-  public function insertar($idproveedor, $empresa_acargo, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
-  {
+  public function insertar($tipo_documento, $num_documento, $razon_social, $direccion, $empresa_acargo,  $tipo_comprobante, $nro_comprobante, 
+  $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, 
+  $descripcion, $glosa, $comprobante, $tipo_gravada) {
     $sql_1 = "SELECT  p.razon_social, p.tipo_documento, p.ruc, of.tipo_comprobante, of.numero_comprobante, of.fecha_emision, 
     of.costo_parcial, of.forma_de_pago, of.estado, of.estado_delete
     FROM otra_factura as of, proveedor as p
-    WHERE p.idproveedor = of.idproveedor and p.ruc ='$ruc_proveedor' AND of.tipo_comprobante ='$tipo_comprobante' and of.numero_comprobante ='$nro_comprobante';";
-		$prov = ejecutarConsultaArray($sql_1);
-		if ($prov['status'] == false) { return  $prov;}
+    WHERE p.idproveedor = of.idproveedor and p.ruc ='$num_documento' AND of.tipo_comprobante ='$tipo_comprobante' and of.numero_comprobante ='$nro_comprobante';";
+		$prov = ejecutarConsultaArray($sql_1); if ($prov['status'] == false) { return  $prov;}
 
     if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
+      $sql = "SELECT * FROM proveedor WHERE ruc = '$num_documentosol'"
+
       $sql = "INSERT INTO otra_factura (idproveedor, idempresa_a_cargo, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada, user_created) 
 		  VALUES ('$idproveedor', '$empresa_acargo', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada','" . $_SESSION['idusuario'] . "')";
       $insertar =  ejecutarConsulta_retornarID($sql); 
@@ -49,7 +51,9 @@ class Otra_factura
   }
 
   //Implementamos un método para editar registros
-  public function editar($idotra_factura, $idproveedor, $empresa_acargo, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, $descripcion, $glosa, $comprobante, $tipo_gravada)
+  public function editar( $idotra_factura, $tipo_documento, $num_documento, $razon_social, $direccion, $empresa_acargo,  
+  $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, 
+  $descripcion, $glosa, $comprobante, $tipo_gravada)
   {
     $sql = "UPDATE otra_factura SET 
     idproveedor       ='$idproveedor',

@@ -217,7 +217,6 @@ function calc_total() {
     $("#num_documento").val(""); $("#razon_social").val("");
     $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
-
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    

@@ -199,15 +199,16 @@
                               <!-- id hospedaje -->
                               <input type="hidden" name="idotra_factura" id="idotra_factura" />
                               <input type="hidden" name="ruc_proveedor" id="ruc_proveedor" />
+                              <input type="hidden" name="tipo_documento" id="tipo_documento" value="RUC"/>
                               <!-- Proceedor -->
-                              <div class="col-lg-10">
+                              <!-- <div class="col-lg-10">
                                 <div class="form-group">
                                   <label for="idproveedor">Proveedor <sup class="text-danger">(único*)</sup></label>
                                   <select name="idproveedor" id="idproveedor" class="form-control select2" placeholder="Seleccinar un proveedor" onchange="extrae_ruc();"> </select>
                                 </div>
-                              </div>
+                              </div> -->
                               <!-- adduser -->
-                              <div class="col-lg-2">
+                              <!-- <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="Add" style="color: white;">.</label>
                                   <a data-toggle="modal" href="#modal-agregar-proveedor" >
@@ -216,27 +217,7 @@
                                     </button>
                                   </a>
                                 </div>
-                              </div>
-
-                              <!-- Empresa a cargo -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                  <label for="empresa_acargo">Empresa a cargo <small class="text-orange d-none d-lg-inline-block empresa_a_cargo_form text-lowercase">("Seven's Ingenieros")</small></label>
-                                  <select class="form-control select2" name="empresa_acargo" id="empresa_acargo" style="width: 100%;">
-                                    <!-- <option selected value="Seven's Ingenieros SAC" title="logo-icono.svg">Seven's Ingenieros SAC</option> -->
-                                    <!-- <option value="Consorcio Seven's Ingenieros SAC" title="logo-icono-plomo.svg">Consorcio Seven's Ingenieros SAC</option> -->
-                                    <!-- <option value="Ninguno" title="emogi-carita-feliz.svg">Ninguno</option> -->
-                                  </select>                                     
-                                </div>
-                              </div>
-
-                                <!-- Fecha 1  -->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="fecha_emision">Fecha Emisión <sup class="text-danger">*</sup></label>
-                                  <input type="date" name="fecha_emision" class="form-control" id="fecha_emision" />
-                                </div>
-                              </div>
+                              </div>     -->
 
                               <!--forma pago-->
                               <div class="col-lg-6">
@@ -261,6 +242,53 @@
                                   </select>
                                 </div>
                               </div>
+                              
+                               <!-- RUC -->
+                              <div class="col-lg-4 div_ruc" style="display: none;">
+                                <div class="form-group">
+                                  <label for="num_documento">R.U.C <small class="text-danger text-lowercase"> (Único)</small></label>
+                                  <div class="input-group">
+                                    <input type="number" name="num_documento" class="form-control" id="num_documento" placeholder="N° de documento" onchange="delay(function(){buscar_sunat_reniec('')}, 150 );" onkeyup="delay(function(){buscar_sunat_reniec('')}, 150 );" />
+                                    <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar razón social" onclick="buscar_sunat_reniec();">
+                                      <span class="input-group-text" style="cursor: pointer;">
+                                        <i class="fas fa-search text-primary" id="search"></i>
+                                        <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge" style="display: none;"></i>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Razón social-->
+                              <div class="col-lg-8 div_razon_social" style="display: none;">
+                                <div class="form-group">
+                                  <label class="razon_social" for="razon_social">Razón social </label>
+                                  <input type="text" name="razon_social" id="razon_social" class="form-control" placeholder="Razón social" readonly />
+                                  <input type="hidden" name="direccion" id="direccion" />
+                                </div>
+                              </div>
+
+                              <!-- Empresa a cargo -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                  <label for="empresa_acargo">Empresa a cargo <small class="text-orange d-none d-lg-inline-block empresa_a_cargo_form text-lowercase">("Seven's Ingenieros")</small></label>
+                                  <select class="form-control select2" name="empresa_acargo" id="empresa_acargo" style="width: 100%;">
+                                    <!-- <option selected value="Seven's Ingenieros SAC" title="logo-icono.svg">Seven's Ingenieros SAC</option> -->
+                                    <!-- <option value="Consorcio Seven's Ingenieros SAC" title="logo-icono-plomo.svg">Consorcio Seven's Ingenieros SAC</option> -->
+                                    <!-- <option value="Ninguno" title="emogi-carita-feliz.svg">Ninguno</option> -->
+                                  </select>                                     
+                                </div>
+                              </div>
+
+                                <!-- Fecha 1  -->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="fecha_emision">Fecha Emisión <sup class="text-danger">*</sup></label>
+                                  <input type="date" name="fecha_emision" class="form-control" id="fecha_emision" />
+                                </div>
+                              </div>
+
+                              
                               <!-- Glosa-->
                               <div class="col-lg-6" id="content-t-comprob">
                                 <div class="form-group">

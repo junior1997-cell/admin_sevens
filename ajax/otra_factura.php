@@ -22,8 +22,6 @@
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       $idotra_factura   = isset($_POST["idotra_factura"]) ? limpiarCadena($_POST["idotra_factura"]) : "";      
-      $idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
-      $ruc_proveedor    = isset($_POST["ruc_proveedor"]) ? limpiarCadena($_POST["ruc_proveedor"]) : "";      
       $fecha_emision    = isset($_POST["fecha_emision"]) ? limpiarCadena($_POST["fecha_emision"]) : "";
       $forma_pago       = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
       $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
@@ -36,6 +34,14 @@
       $glosa            = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
       $tipo_gravada     = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";
 
+      //$idproveedor      = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
+      $tipo_documento   = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";  
+      $num_documento    = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";      
+      $razon_social     = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";      
+      $direccion        = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";    
+
+      
+
       $empresa_acargo   = isset($_POST["empresa_acargo"]) ? limpiarCadena($_POST["empresa_acargo"]) : "";
 
       $foto2 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
@@ -43,41 +49,31 @@
       switch ($_GET["op"]) {
         case 'guardaryeditar':
           // Comprobante
-          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
-      
-            $comprobante = $_POST["doc_old_1"];
-      
-            $flat_ficha1 = false;
-      
-          } else {
-      
-            $ext1 = explode(".", $_FILES["doc1"]["name"]);
-      
-            $flat_ficha1 = true;
-      
-            $comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
-      
+          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {      
+            $comprobante = $_POST["doc_old_1"];      
+            $flat_ficha1 = false;      
+          } else {      
+            $ext1 = explode(".", $_FILES["doc1"]["name"]);      
+            $flat_ficha1 = true;      
+            $comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);      
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/otra_factura/comprobante/" . $comprobante);
           }
       
           if (empty($idotra_factura)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $otra_factura->insertar($idproveedor, $empresa_acargo, $ruc_proveedor, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($precio_parcial), $descripcion, $glosa, $comprobante, $tipo_gravada);
+            $rspta = $otra_factura->insertar($tipo_documento, $num_documento, $razon_social, $direccion, $empresa_acargo,  $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($precio_parcial), $descripcion, $glosa, $comprobante, $tipo_gravada);
             
             echo json_encode($rspta, true) ;
       
           } else {
             //validamos si existe comprobante para eliminarlo
-            if ($flat_ficha1 == true) {
-      
-              $datos_ficha1 = $otra_factura->ObtnerCompr($idotra_factura);
-      
-              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
-      
-              if (validar_url_completo($scheme_host. "dist/docs/otra_factura/comprobante/" . $ficha1_ant)  == 200) {  unlink("../dist/docs/otra_factura/comprobante/" . $ficha1_ant); }
+            if ($flat_ficha1 == true) {      
+              $datos_ficha1 = $otra_factura->ObtnerCompr($idotra_factura);      
+              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;      
+              if ( !empty( $ficha1_ant)) {  unlink("../dist/docs/otra_factura/comprobante/" . $ficha1_ant); }
             }
       
-            $rspta = $otra_factura->editar($idotra_factura, $idproveedor, $empresa_acargo, $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($precio_parcial), $descripcion, $glosa, $comprobante, $tipo_gravada);
+            $rspta = $otra_factura->editar($idotra_factura, $tipo_documento, $num_documento, $razon_social, $direccion, $empresa_acargo,  $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, quitar_formato_miles($subtotal), quitar_formato_miles($igv), quitar_formato_miles($precio_parcial), $descripcion, $glosa, $comprobante, $tipo_gravada);
             //var_dump($idotra_factura,$idproveedor);
             echo json_encode($rspta, true) ;
           }
