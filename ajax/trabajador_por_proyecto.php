@@ -14,10 +14,10 @@
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['trabajador'] == 1) {
 
-      require_once "../modelos/trabajador.php";
+      require_once "../modelos/Trabajador_por_proyecto.php";
       require_once "../modelos/AllTrabajador.php";
 
-      $trabajadorproyecto=new Trabajador();
+      $trabajadorproyecto=new TrabajadorPorProyecto();
       $all_trabajador=new AllTrabajador();
 
       date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");

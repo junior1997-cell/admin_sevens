@@ -260,7 +260,7 @@
             <?php if ($_SESSION['trabajador']==1) {  ?>
               <!-- TRABAJADORES -->
               <li class="nav-item ver-otros-modulos-1">
-                <a href="trabajador.php" class="nav-link pl-2" id="lTrabajador">
+                <a href="trabajador_por_proyecto.php" class="nav-link pl-2" id="lTrabajador">
                   <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
                   <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                   <p>Trabajadores</p>

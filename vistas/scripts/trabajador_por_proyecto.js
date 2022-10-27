@@ -90,7 +90,7 @@ function capture_idtrabajador(estado_editar = false) {
 
       $("#tipo_trabajador").html("");
         
-      $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
+      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
         e = JSON.parse(e);  console.log(e);   
         if (e.status == true) {
@@ -107,7 +107,7 @@ function capture_idtrabajador(estado_editar = false) {
 
       lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', $("#desempenio").select2("val"));
         
-      $.post("../ajax/trabajador.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
+      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
         e = JSON.parse(e);  console.log(e);   
         if (e.status == true) {          
@@ -219,7 +219,7 @@ function tbla_principal( nube_idproyecto ) {
       { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }
     ],
     ajax:{
-      url: `../ajax/trabajador.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=1`,
+      url: `../ajax/trabajador_por_proyecto.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=1`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -263,7 +263,7 @@ function tbla_secundaria( nube_idproyecto ) {
       { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }
     ],
     ajax:{
-      url: `../ajax/trabajador.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=0`,
+      url: `../ajax/trabajador_por_proyecto.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=0`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -299,7 +299,7 @@ function guardaryeditar(e) {
   var formData = new FormData($("#form-trabajador-proyecto")[0]);
 
   $.ajax({
-    url: "../ajax/trabajador.php?op=guardaryeditar",
+    url: "../ajax/trabajador_por_proyecto.php?op=guardaryeditar",
     type: "POST",
     data: formData,
     contentType: false,
@@ -357,7 +357,7 @@ function verdatos(idtrabajador){
 
   $("#modal-ver-trabajador").modal("show")
 
-  $.post("../ajax/trabajador.php?op=ver_datos_trabajador", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
+  $.post("../ajax/trabajador_por_proyecto.php?op=ver_datos_trabajador", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
 
     e = JSON.parse(e);  console.log(e); 
     if (e.status == true) {      
@@ -478,7 +478,7 @@ function mostrar(idtrabajador,idtipo) {
 
   show_hide_form(2);  
 
-  $.post("../ajax/trabajador.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
+  $.post("../ajax/trabajador_por_proyecto.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
 
     e = JSON.parse(e);  console.log(e); 
 
@@ -517,7 +517,7 @@ function desactivar(idtrabajador) {
     confirmButtonText: "Si, desactivar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=desactivar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
+      $.post("../ajax/trabajador_por_proyecto.php?op=desactivar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
 
         Swal.fire("Desactivado!", "Tu trabajador ha sido desactivado.", "success");
     
@@ -540,7 +540,7 @@ function activar(idtrabajador) {
     confirmButtonText: "Si, activar!",
   }).then((result) => {
     if (result.isConfirmed) {
-      $.post("../ajax/trabajador.php?op=activar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
+      $.post("../ajax/trabajador_por_proyecto.php?op=activar", { idtrabajador_por_proyecto: idtrabajador }, function (e) {
 
         Swal.fire("Activado!", "Tu trabajador ha sido activado.", "success");
 
@@ -675,7 +675,7 @@ function mostrar_editar_trabajador() {
   $('#modal-agregar-all-trabajador').modal('show');
   $(".tooltip").remove();
 
-  $.post("../ajax/trabajador.php?op=mostrar_editar_trabajador", { 'idtrabajador': $('#trabajador').select2("val") }, function (e, status) {
+  $.post("../ajax/trabajador_por_proyecto.php?op=mostrar_editar_trabajador", { 'idtrabajador': $('#trabajador').select2("val") }, function (e, status) {
 
     e = JSON.parse(e);  console.log(e);
 
@@ -811,7 +811,7 @@ function guardar_y_editar_all_trabajador(e) {
   var formData = new FormData($("#form-all-trabajador")[0]);
 
   $.ajax({
-    url: "../ajax/trabajador.php?op=guardar_y_editar_all_trabajador",
+    url: "../ajax/trabajador_por_proyecto.php?op=guardar_y_editar_all_trabajador",
     type: "POST",
     data: formData,
     contentType: false,
@@ -863,7 +863,7 @@ function ver_lista_orden() {
   $('#modal-order-trabajador').modal('show');
   $('#html_order_trabajador').html(`<tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`)
   
-  $.post("../ajax/trabajador.php?op=ver_lista_orden", {'idproyecto': localStorage.getItem('nube_idproyecto')},  function (e, status) {
+  $.post("../ajax/trabajador_por_proyecto.php?op=ver_lista_orden", {'idproyecto': localStorage.getItem('nube_idproyecto')},  function (e, status) {
       e = JSON.parse(e);  console.log(e);
       if (e.status == true) {
          
@@ -902,7 +902,7 @@ function guardar_y_editar_orden_trabajador(e) {
   var formData = new FormData($("#form-orden-trabajador")[0]);
 
   $.ajax({
-    url: "../ajax/trabajador.php?op=guardar_y_editar_orden_trabajador",
+    url: "../ajax/trabajador_por_proyecto.php?op=guardar_y_editar_orden_trabajador",
     type: "POST",
     data: formData,
     contentType: false,

@@ -719,7 +719,7 @@
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/trabajador.js"></script>
+        <script type="text/javascript" src="scripts/trabajador_por_proyecto.js"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         
