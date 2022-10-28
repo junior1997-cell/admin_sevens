@@ -202,58 +202,59 @@
                             <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
                               <!-- <h1>----------------------------------</h1> -->
                               <!-- tabla REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA -->
-                              <table class="table table-bordered table-striped">
-                              <thead>
-                                <tr>
-                                  <th class="p-y-3px celda-b-b-0px" colspan="1"></th>
-                                  <th class="p-y-3px" colspan="8" rowspan="2" >REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA</th>
-                                  <th class="p-y-3px" colspan="1"></th>
-                                </tr>
-                                <tr>
-                                  <th class="p-y-3px" colspan="1"></th>
-                                  <th class="p-y-3px" colspan="8">REVISIÓN </th>
-                                </tr>
-                                <tr>
-                                  <th class="p-y-3px" colspan="1"></th>
-                                  <th class="p-y-3px" colspan="8" rowspan="2">CONSTRUCCIÓN DE LA SEDE MISIÓN NOR ORIENTAL - II ETAPA</th>
-                                  <th class="p-y-3px" colspan="1">FECHA: 12/10/22 </th>
-
-                                </tr>
-                                <tr>
-                                  <th class="p-y-3px" colspan="1"></th>
-                                  <th class="p-y-3px" colspan="8">MIÉRCOLES</th>
-                                </tr>
-                                <tr>
-                                  <th class="p-y-3px" colspan="1">PROYECTO</th>
-                                  <th class="p-y-3px" colspan="9">CONSTRUCCIÓN DE LA SEDE MISIÓN NOR ORIENTAL - II ETAPA</th>
-                                </tr>
-                                <tr>
-                                  <th class="p-y-3px" colspan="1">UBICACIÓN</th>
-                                  <th class="p-y-3px" colspan="9">JR. RAMIREZ HURTADO N° 317 -  DISTRITO DE TARAPOTO, PROVINCIA Y DEPARTAMENTO DE SAN MARTÍN.</th>                                  
-                                </tr>
-                                <tr  colspan="10">
-                                  <th class="p-y-3px" colspan="1" >EMPRESA</th>
-                                  <th class="p-y-3px" colspan="4">SEVEN´S INGENIEROS SELVA  S.A.C. </th>
-                                  <th class="p-y-3px" colspan="1">RUC</th>
-                                  <th class="p-y-3px" colspan="4" >20609935651</th>
-                                </tr>
-                                <tr colspan="10">
-                                  <th class="p-y-4px" colspan="2"></th>
-                                  <th class="p-y-3px text-center" colspan="4">INGRESO</th>
-                                  <th class="p-y-3px text-center" colspan="4">SALIDA</th>
-                                </tr>
-                                <tr>
-                                  <th class="p-y-4px">N°</th>
-                                  <th class="p-y-3px">Nombre y Apellido </th>
-                                  <th class="p-y-3px">Firma </th>
-                                  <th class="p-y-3px">Hora del registro </th>
-                                  <th class="p-y-3px">T (°C) (34°-37.5°)</th>
-                                  <th class="p-y-3px">%S.O. (87-100)</th>
-                                  <th class="p-y-3px">Firma </th>
-                                  <th class="p-y-3px">Hora del registro</th>
-                                  <th class="p-y-3px">T (°C) (34°-37.5°)</th>
-                                  <th class="p-y-3px">%S.O. (87-100)</th>
-                                </tr>
+                              <button type="button" class="btn bg-gradient-success m-05rem" onclick="export_excel_detalle_temperatura();"> <i class="fas fa-plus-circle"></i> export </button>
+                              <br>
+                              <table id="formato_temperatura"  class="table table-bordered table-striped">
+                                <thead>
+                                  <tr class="font-size-14px">
+                                    <th class="p-y-3px celda-b-y-0px" colspan="1"></th>
+                                    <th class="p-y-3px" colspan="7" rowspan="2">REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA</th>
+                                    <th class="p-y-3px" colspan="2"></th>
+                                  </tr>
+                                  <tr>
+                                    <th class="p-y-3px celda-b-y-0px" colspan="1"></th>
+                                    <th class="p-y-3px font-size-13px" colspan="7">REVISIÓN</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="p-y-3px celda-b-y-0px" colspan="1"></th>
+                                    <th class="p-y-3px font-size-14px" colspan="7" rowspan="2">CONSTRUCCIÓN DE LA SEDE MISIÓN NOR ORIENTAL - II ETAPA</th>
+                                    <th class="p-y-3px font-size-13px" colspan="2">FECHA: 12/10/22</th>
+                                  </tr>
+                                  <tr class="font-size-14px">
+                                    <th class="p-y-3px celda-b-y-0px" colspan="1"></th>
+                                    <th class="p-y-3px celda-b-y-0px font-size-13px" colspan="8">MIÉRCOLES</th>
+                                  </tr>
+                                  <tr class="font-size-14px">
+                                    <th class="p-y-3px" colspan="1">PROYECTO</th>
+                                    <th class="p-y-3px" colspan="9">CONSTRUCCIÓN DE LA SEDE MISIÓN NOR ORIENTAL - II ETAPA</th>
+                                  </tr>
+                                  <tr class="font-size-14px">
+                                    <th class="p-y-3px" colspan="1">UBICACIÓN</th>
+                                    <th class="p-y-3px" colspan="9">JR. RAMIREZ HURTADO N° 317 - DISTRITO DE TARAPOTO, PROVINCIA Y DEPARTAMENTO DE SAN MARTÍN.</th>
+                                  </tr>
+                                  <tr class="font-size-14px" colspan="10">
+                                    <th class="p-y-3px" colspan="1">EMPRESA</th>
+                                    <th class="p-y-3px" colspan="4">SEVEN´S INGENIEROS SELVA S.A.C.</th>
+                                    <th class="p-y-3px" colspan="1">RUC</th>
+                                    <th class="p-y-3px" colspan="4">20609935651</th>
+                                  </tr>
+                                  <tr class="font-size-15px" colspan="10">
+                                    <th class="p-y-4px" colspan="2"></th>
+                                    <th class="p-y-3px text-center" colspan="4">INGRESO</th>
+                                    <th class="p-y-3px text-center" colspan="4">SALIDA</th>
+                                  </tr>
+                                  <tr class="font-size-13px text-center">
+                                    <th class="p-y-4px">N°</th>
+                                    <th class="p-y-3px">Nombre y Apellido</th>
+                                    <th class="p-y-3px">Firma</th>
+                                    <th class="p-y-3px">Hora del registro</th>
+                                    <th class="p-y-3px">T (°C) (34°-37.5°)</th>
+                                    <th class="p-y-3px">%S.O. (87-100)</th>
+                                    <th class="p-y-3px">Firma</th>
+                                    <th class="p-y-3px">Hora del registro</th>
+                                    <th class="p-y-3px">T (°C) (34°-37.5°)</th>
+                                    <th class="p-y-3px">%S.O. (87-100)</th>
+                                  </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
@@ -316,9 +317,9 @@
                                     <td class="p-y-2px">firma</td>
                                     <td class="p-y-2px">firma</td>
                                   </tr>
-
                                 </tbody>
                               </table>
+
                             </div>
                             <div class="tab-pane fade" id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
                               Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.

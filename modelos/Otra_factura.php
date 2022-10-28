@@ -11,8 +11,8 @@ class Otra_factura
   //$idotra_factura,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
   public function insertar($tipo_documento, $num_documento, $razon_social, $direccion, $empresa_acargo,  $tipo_comprobante, $nro_comprobante, 
-  $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, 
-  $descripcion, $glosa, $comprobante, $tipo_gravada) {
+  $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial,$descripcion, $glosa, $comprobante, $tipo_gravada) {
+
     $sql_1 = "SELECT  p.razon_social, p.tipo_documento, p.ruc, of.tipo_comprobante, of.numero_comprobante, of.fecha_emision, 
     of.costo_parcial, of.forma_de_pago, of.estado, of.estado_delete
     FROM otra_factura as of, proveedor as p
@@ -20,7 +20,21 @@ class Otra_factura
 		$prov = ejecutarConsultaArray($sql_1); if ($prov['status'] == false) { return  $prov;}
 
     if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
-      $sql = "SELECT * FROM proveedor WHERE ruc = '$num_documentosol'"
+
+      $sql_2 = "SELECT * FROM proveedor WHERE ruc = '$num_documento'";
+      $resul_provedor = ejecutarConsultaSimpleFila($sql_2); if ($resul_provedor['status'] == false) { return  $resul_provedor;}
+      
+      if (empty($resul_provedor['data'])) {
+
+        $sql_3 = "INSERT INTO proveedor (idbancos,tipo_documento, ruc, razon_social, direccion)
+        VALUES ('1','$tipo_documento', '$num_documento', '$razon_social', '$direccion')";
+        $proveedor = ejecutarConsulta_retornarID($sql_3); if ($proveedor['status'] == false) { return  $proveedor;}
+        $idproveedor = $proveedor['data'];
+
+      } else {
+
+        $idproveedor = $resul_provedor['data']['idproveedor'];
+      }
 
       $sql = "INSERT INTO otra_factura (idproveedor, idempresa_a_cargo, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada, user_created) 
 		  VALUES ('$idproveedor', '$empresa_acargo', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada','" . $_SESSION['idusuario'] . "')";
@@ -55,6 +69,20 @@ class Otra_factura
   $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, 
   $descripcion, $glosa, $comprobante, $tipo_gravada)
   {
+    $sql_2 = "SELECT * FROM proveedor WHERE ruc = '$num_documento'";
+    $prov = ejecutarConsultaSimpleFila($sql_2); if ($prov['status'] == false) { return  $prov;}
+    
+    if (empty($prov['data'])) {
+
+      $sql_3 = "INSERT INTO proveedor (idbancos,tipo_documento, ruc, razon_social, direccion)
+      VALUES ('1','$tipo_documento', '$num_documento', '$razon_social', '$direccion')";
+      $proveedor = ejecutarConsulta_retornarID($sql_3); if ($proveedor['status'] == false) { return  $proveedor;}
+      $idproveedor = $proveedor['data'];
+    } else {
+
+      $idproveedor = $prov['data']['idproveedor'];
+    }
+    
     $sql = "UPDATE otra_factura SET 
     idproveedor       ='$idproveedor',
     idempresa_a_cargo ='$empresa_acargo',
@@ -117,9 +145,9 @@ class Otra_factura
   {
     $sql = "SELECT of.idotra_factura, of.idproveedor, of.idempresa_a_cargo, of.tipo_comprobante, of.numero_comprobante, of.forma_de_pago, of.fecha_emision, 
     of.val_igv, of.subtotal, of.igv, of.costo_parcial, of.descripcion, of.glosa, of.comprobante, of.tipo_gravada, of.estado, of.estado_delete,
-    ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento ec_numero_documento, ec.logo as ec_logo
-    FROM otra_factura AS of, empresa_a_cargo AS ec
-    WHERE of.idempresa_a_cargo = ec.idempresa_a_cargo AND of.idotra_factura ='$idotra_factura'";
+    ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento ec_numero_documento, ec.logo as ec_logo, p.ruc, p.razon_social
+    FROM otra_factura AS of, empresa_a_cargo AS ec, proveedor as p
+    WHERE of.idempresa_a_cargo = ec.idempresa_a_cargo AND of.idproveedor = p.idproveedor AND of.idotra_factura ='$idotra_factura'";
     return ejecutarConsultaSimpleFila($sql);
   }
 

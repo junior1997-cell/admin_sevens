@@ -101,6 +101,8 @@ function limpiar() {
   $("#precio_parcial").val("");
   $("#descripcion").val("");
   $("#tipo_gravada").val("");
+  $("#tipo_comprobante").val("").trigger('change');
+  $("#num_documento").val("");
 
   $("#doc_old_1").val("");
   $("#doc1").val("");  
@@ -297,13 +299,15 @@ function mostrar(idotra_factura) {
   $("#modal-agregar-otras_facturas").modal("show");
 
   $.post("../ajax/otra_factura.php?op=mostrar", { idotra_factura: idotra_factura }, function (e, status) {
-    
+    console.log(',,,,,,,,,,,,,,,,,,,,,,,');
     e = JSON.parse(e); console.log(e);   
 
     if (e.status) {
       $("#empresa_acargo").val(e.data.idempresa_a_cargo).trigger("change");
       $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
-      $("#idproveedor").val(e.data.idproveedor).trigger("change");
+      $("#num_documento").val(e.data.ruc);
+      $("#razon_social").val(e.data.razon_social).trigger("change");
+
       $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
       $("#glosa").val(e.data.glosa).trigger("change");
       $("#idotra_factura").val(e.data.idotra_factura);
@@ -459,9 +463,6 @@ function eliminar(idotra_factura, nombre ) {
 
 function calc_total() {
 
-  $('#num_documento').val("");
-  $('#razon_social').val("");
-
   $(".nro_comprobante").html("Núm. Comprobante");
 
   var total         = es_numero($('#precio_parcial').val()) == true? parseFloat($('#precio_parcial').val()) : 0;
@@ -478,6 +479,8 @@ function calc_total() {
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
     $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $('#num_documento').val("");
+    $('#razon_social').val("");
   }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00"); 
@@ -486,6 +489,8 @@ function calc_total() {
     $("#val_igv").prop("readonly",true);
     $(".nro_comprobante").html("Núm. de Operación");
     $(".div_ruc").hide(); $(".div_razon_social").hide();
+    $('#num_documento').val("");
+    $('#razon_social').val("");
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    
@@ -498,6 +503,8 @@ function calc_total() {
       $("#subtotal").val(redondearExp(total));
       $("#igv").val(0.00);
       $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+      $('#num_documento').val("");
+      $('#razon_social').val("");
     }else{     
 
       subtotal = quitar_igv_del_precio(total, val_igv, 'decimal');
@@ -510,7 +517,7 @@ function calc_total() {
         $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
       } else {
         $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
-      }    
+      } 
     }
     $(".div_ruc").show(); $(".div_razon_social").show();
   } else {
@@ -520,6 +527,8 @@ function calc_total() {
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
     $("#val_igv").prop("readonly",true);
     $(".div_ruc").hide(); $(".div_razon_social").hide();  
+    $('#num_documento').val("");
+    $('#razon_social').val("");
   }
 
   if (val_igv > 0 && val_igv <= 1) {
