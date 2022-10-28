@@ -21,9 +21,9 @@ class TrabajadorPorProyecto
     $buscando = ejecutarConsultaArray($sql_1);
 
     if (empty($buscando['data'])) {
-      $sql_orden = "SELECT orden_trabajador FROM trabajador_por_proyecto WHERE idproyecto = '$idproyecto' ORDER BY orden_trabajador DESC LIMIT 1;";
-      $orden = ejecutarConsulta($sql_orden); if ( $orden['status'] == false) {return $orden; }  
-      $num_orden = empty($orden['data']) ? 1 : ( empty($orden['data']['orden_trabajador']) ? 1 : $orden['data']['orden_trabajador'] ); 
+      $sql_orden = "SELECT MAX(orden_trabajador) as n_orden FROM trabajador_por_proyecto WHERE idproyecto = '$idproyecto';";
+      $orden = ejecutarConsultaSimpleFila($sql_orden); if ( $orden['status'] == false) {return $orden; }  
+      $num_orden = empty($orden['data']) ? 1 : ( empty($orden['data']['n_orden']) ? 1 : floatval( $orden['data']['n_orden']) + 1  ); 
 
       $sql_2 = "INSERT INTO trabajador_por_proyecto (idproyecto, idtrabajador, iddesempenio, sueldo_mensual, sueldo_diario, sueldo_hora, fecha_inicio, fecha_fin, cantidad_dias, orden_trabajador, user_created)
       VALUES ('$idproyecto', '$trabajador', '$desempenio', '$sueldo_mensual', '$sueldo_diario', '$sueldo_hora', '$fecha_inicio', '$fecha_fin', '$cantidad_dias', '$num_orden', '" . $_SESSION['idusuario'] . "')";

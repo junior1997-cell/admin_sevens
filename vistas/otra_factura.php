@@ -56,7 +56,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otras_facturas" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-otras_facturas" onclick="limpiar_form_otra_factura();"><i class="fas fa-plus-circle"></i> Agregar</button>
                             Administra de manera eficiente otras facturas.
                           </h3>
                         </div>
@@ -142,7 +142,7 @@
                                 <th>IGV</th>
                                 <th>Monto Total</th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Compr.</th>
                                 <th>Glosa</th>
                                 <th>Comprobante</th>
                                 <th>Numero</th>
@@ -161,7 +161,7 @@
                                 <th>IGV</th>
                                 <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span id="total_monto">0.00</span></div></th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Comprobante">Compr.</th>
                                 <th>Glosa</th>
                                 <th>Comprobante</th>
                                 <th>Numero</th>
@@ -347,7 +347,7 @@
                               <div class="col-lg-4 class_pading">
                                 <div class="form-group">
                                   <label for="precio_parcial">Monto total <sup class="text-danger">*</sup></label>
-                                  <input type="text" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" placeholder="Precio Parcial" />                                  
+                                  <input type="text" name="precio_parcial" id="precio_parcial" class="form-control" onkeyup="delay(function(){calc_total();}, 100 );" onchange="delay(function(){calc_total();}, 100 );" onclick="this.select();" placeholder="Precio Parcial" />                                  
                                 </div>
                               </div>
 
@@ -408,7 +408,7 @@
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_otra_factura();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
                       </div>
                     </div>

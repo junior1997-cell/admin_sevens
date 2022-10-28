@@ -75,6 +75,31 @@
         } 
       break;
 
+      case 'select2TrabajadorPorProyecto': 
+
+        $rspta = $ajax_general->select2_trabajador_por_proyecto( $_GET['id_proyecto'] );  $cont = 1; $data = "";
+
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {
+
+            $data .= '<option  value=' . $value['id'] . ' title="'.$value['imagen_perfil'].'">' . $cont++ . '. ' . $value['nombres'] .' - '. $value['numero_documento'] . '</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        } 
+      break;
+
       case "select2TipoTrabajador":
 
         $rspta = $ajax_general->select2_tipo_trabajador(); $cont = 1; $data = "";

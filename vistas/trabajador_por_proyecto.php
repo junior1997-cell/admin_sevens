@@ -229,21 +229,21 @@
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                      <input type="number" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
+                                      <input type="text" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onchange="sueld_mensual();" onkeyup="sueld_mensual();" onclick="this.select();" />
                                     </div>
                                   </div>
                                   <!-- Sueldo(Diario) -->
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label for="sueldo_diario">Sueldo(Diario)</label>
-                                      <input type="number" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
+                                      <input type="text" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
                                     </div>
                                   </div>
                                   <!-- Sueldo(Hora) -->
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label for="sueldo_hora">Sueldo(8 Hora)</label>
-                                      <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
+                                      <input type="text" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
                                     </div>
                                   </div>
 

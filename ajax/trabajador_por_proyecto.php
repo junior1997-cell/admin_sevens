@@ -74,15 +74,15 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar( $idproyecto, $trabajador, $desempenio, $sueldo_diario, $sueldo_mensual, 
-            $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
+            $rspta=$trabajadorproyecto->insertar( $idproyecto, $trabajador, $desempenio, quitar_formato_miles($sueldo_diario), quitar_formato_miles($sueldo_mensual), 
+            quitar_formato_miles($sueldo_hora), format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
             
             echo json_encode($rspta, true);
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar( $idtrabajador_por_proyecto, $idproyecto, $trabajador, $desempenio, $sueldo_diario, $sueldo_mensual, 
-            $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
+            $rspta=$trabajadorproyecto->editar( $idtrabajador_por_proyecto, $idproyecto, $trabajador, $desempenio, quitar_formato_miles($sueldo_diario), quitar_formato_miles($sueldo_mensual), 
+            quitar_formato_miles($sueldo_hora), format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
             
             echo json_encode($rspta, true);
           }

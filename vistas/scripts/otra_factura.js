@@ -87,7 +87,7 @@ function doc1_eliminar() {
 }
 
 //Función limpiar
-function limpiar() {
+function limpiar_form_otra_factura() {
 
   $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
 
@@ -100,8 +100,7 @@ function limpiar() {
   $("#igv").val("");
   $("#precio_parcial").val("");
   $("#descripcion").val("");
-  $("#tipo_gravada").val("");
-  $("#tipo_comprobante").val("").trigger('change');
+  $("#tipo_gravada").val(""); 
   $("#num_documento").val("");
 
   $("#doc_old_1").val("");
@@ -248,7 +247,7 @@ function guardaryeditar(e) {
 
           Swal.fire("Éxito!", "El registro se guardo correctamente.", "success");
           tabla.ajax.reload(null, false);
-          limpiar();
+          limpiar_form_otra_factura();
           $("#modal-agregar-otras_facturas").modal("hide");
           //total();
 
@@ -286,13 +285,10 @@ function guardaryeditar(e) {
 
 function mostrar(idotra_factura) {
 
-  limpiar();
+  limpiar_form_otra_factura();
   
   $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();  
-
-  $("#tipo_comprobante").val("").trigger("change");
-  $("#idproveedor").val("").trigger("change");
+  $("#cargando-2-fomulario").show();    
 
   $('#estado-edit-add-modal').html('Editar:');
 
@@ -302,7 +298,7 @@ function mostrar(idotra_factura) {
 
     e = JSON.parse(e); //console.log(e);   
 
-    if (e.status) {
+    if (e.status == true) {
       $("#empresa_acargo").val(e.data.idempresa_a_cargo).trigger("change");
       $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
       $("#num_documento").val(e.data.ruc);
@@ -319,6 +315,8 @@ function mostrar(idotra_factura) {
       $("#subtotal").val(e.data.subtotal);
       $("#igv").val(e.data.igv);
       $("#val_igv").val(e.data.val_igv).trigger("change");
+
+      select_comprobante();
 
       if (e.data.comprobante == "" || e.data.comprobante == null  ) {
 
@@ -481,20 +479,14 @@ function calc_total() {
     $("#igv").val("0.00"); 
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
-    $("#val_igv").prop("readonly",true);
-    $(".div_ruc").hide(); $(".div_razon_social").hide();
-    $('#num_documento').val("");
-    $('#razon_social').val("");
+    $("#val_igv").prop("readonly",true);    
   }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00"); 
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
-    $(".nro_comprobante").html("Núm. de Operación");
-    $(".div_ruc").hide(); $(".div_razon_social").hide();
-    $('#num_documento').val("");
-    $('#razon_social').val("");
+    $(".nro_comprobante").html("Núm. de Operación");    
   }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
 
     $("#val_igv").prop("readonly",false);    
@@ -522,17 +514,14 @@ function calc_total() {
       } else {
         $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
       } 
-    }
-    $(".div_ruc").show(); $(".div_razon_social").show();
+    }    
   } else {
     $("#subtotal").val(redondearExp(total));
     $("#igv").val("0.00");
     $("#val_igv").val("0.00"); 
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
     $("#val_igv").prop("readonly",true);
-    $(".div_ruc").hide(); $(".div_razon_social").hide();  
-    $('#num_documento').val("");
-    $('#razon_social').val("");
+    
   }
 
   if (val_igv > 0 && val_igv <= 1) {
@@ -543,13 +532,21 @@ function calc_total() {
 }
 
 function select_comprobante() {
+  console.log('select_comprobante');
   if ($("#tipo_comprobante").select2("val") == "Factura") {
     $("#val_igv").prop("readonly",false);
     $("#val_igv").val(0.18); 
     $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)");
-  }else {
+    $(".div_ruc").show(); $(".div_razon_social").show();
+  }else if ($("#tipo_comprobante").select2("val") == "Boleta") {
+    $(".div_ruc").show(); $(".div_razon_social").show(); 
+  }else {    
     $("#val_igv").val(0.00); 
     $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+
+    $(".div_ruc").hide(); $(".div_razon_social").hide();  
+    $('#num_documento').val("");
+    $('#razon_social').val("");
   }  
 }
 

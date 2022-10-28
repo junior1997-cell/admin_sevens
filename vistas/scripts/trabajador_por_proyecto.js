@@ -16,7 +16,7 @@ function init() {
   tbla_secundaria( localStorage.getItem('nube_idproyecto') ); 
   
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2("../ajax/ajax_general.php?op=select2Trabajador", '#trabajador', null);
+  lista_select2(`../ajax/ajax_general.php?op=select2TrabajadorPorProyecto&id_proyecto=${localStorage.getItem('nube_idproyecto')}`, '#trabajador', null);
 
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_0', null);
 
@@ -49,7 +49,11 @@ function init() {
   
   $('#nacimiento_all').datetimepicker({ locale: 'es', /*format: 'L',*/ format: 'DD-MM-YYYY', /*defaultDate: "",*/ });
   //$('#nacimiento_all').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, endDate: moment().format('DD/MM/YYYY'), clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
-  // Formato para telefono
+  // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
+  $('#sueldo_mensual').number( true, 2 );
+  $('#sueldo_diario').number( true, 2 );
+  $('#sueldo_hora').number( true, 2 );
+
   $("[data-mask]").inputmask();
   
 }
@@ -311,6 +315,7 @@ function guardaryeditar(e) {
           Swal.fire("Correcto!", "Trabajador registrado correctamente", "success");
           if (tabla) { tabla.ajax.reload(null, false); } 
           if (tabla) { tabla_secundaria.ajax.reload(null, false); }
+          lista_select2(`../ajax/ajax_general.php?op=select2TrabajadorPorProyecto&id_proyecto=${localStorage.getItem('nube_idproyecto')}`, '#trabajador', null);
                    
           show_hide_form(1);
         }else{
