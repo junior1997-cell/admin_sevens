@@ -299,8 +299,8 @@ function mostrar(idotra_factura) {
   $("#modal-agregar-otras_facturas").modal("show");
 
   $.post("../ajax/otra_factura.php?op=mostrar", { idotra_factura: idotra_factura }, function (e, status) {
-    console.log(',,,,,,,,,,,,,,,,,,,,,,,');
-    e = JSON.parse(e); console.log(e);   
+
+    e = JSON.parse(e); //console.log(e);   
 
     if (e.status) {
       $("#empresa_acargo").val(e.data.idempresa_a_cargo).trigger("change");
