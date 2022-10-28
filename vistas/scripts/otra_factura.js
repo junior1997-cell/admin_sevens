@@ -388,6 +388,10 @@ function verdatos(idotra_factura){
             <table class="table table-hover table-bordered">        
               <tbody>
                 <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Proveedor:</th> 
+                  <td> <span>${e.data.razon_social}</span><br> <span>${e.data.tipo_documento} : ${e.data.ruc}</span>  </td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Tipo comprobante:</th> 
                   <td>${e.data.tipo_comprobante}</td>
                 </tr>
