@@ -768,35 +768,6 @@ function mostrar_editar_trabajador() {
   }).fail( function(e) { ver_errores(e); });
 }
 
-// damos formato a: Cta, CCI
-function formato_banco(id) {
-
-  if ($(`#banco_${id}`).select2("val") == null || $(`#banco_${id}`).select2("val") == "" || $(`#banco_${id}`).select2("val") == '1') {
-
-    $(`.cta_bancaria_${id}`).prop("readonly",true);   $(`.cci_${id}`).prop("readonly",true);
-  } else {
-    
-    $(`.${id}_chargue-format-1`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(`.${id}_chargue-format-2`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
-
-    $(`#banco_array_${id}`).val($(`#banco_${id}`).select2("val"));
-
-    $(`.cta_bancaria_${id}`).prop("readonly",false);   $(`.cci_${id}`).prop("readonly",false);
-
-    $.post("../ajax/ajax_general.php?op=formato_banco", { idbanco: $(`#banco_${id}`).select2("val") }, function (data, status) {
-
-      data = JSON.parse(data);  //console.log(data); 
-
-      $(`.${id}_chargue-format-1`).html('Cuenta Bancaria'); $(`.${id}_chargue-format-2`).html('CCI');
-
-      var format_cta = decifrar_format_banco(data.data.formato_cta); var format_cci = decifrar_format_banco(data.data.formato_cci);
-
-      $(`.cta_bancaria_${id}`).inputmask(`${format_cta}`);
-
-      $(`.cci_${id}`).inputmask(`${format_cci}`);
-    }).fail( function(e) { ver_errores(e); } );  
-  }  
-}
-
 function sueld_mensual(){
 
   var sueldo_mensual = $('#sueldo_mensual').val()
@@ -866,35 +837,51 @@ function guardar_y_editar_all_trabajador(e) {
 // .....::::::::::::::::::::::::::::::::::::: ORDEN TRABAJADOR  :::::::::::::::::::::::::::::::::::::::..
 function ver_lista_orden() {
   $('#modal-order-trabajador').modal('show');
-  $('#html_order_trabajador').html(`<tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`)
+  $('#html_order_trabajador_1').html(`<tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`)
+  $('#html_order_trabajador_2').html(`<tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`)
   
   $.post("../ajax/trabajador_por_proyecto.php?op=ver_lista_orden", {'idproyecto': localStorage.getItem('nube_idproyecto')},  function (e, status) {
       e = JSON.parse(e);  console.log(e);
       if (e.status == true) {
          
-        var html_data_td_1 ='' ;
-        
-        e.data.forEach((val, key) => {          
+        var html_data_td_1 ='' ; var html_data_td_2 ='' ;       
+        var i_2 = parseInt(e.data.length/2); console.log(i_2);        
 
-           
-          html_data_td_1 = html_data_td_1.concat(`<tr class="cursor-pointer"> 
-            <td class="py-1 text-center">${key + 1}</td> 
-            <td class="py-1">
-              <div class="user-block">
-                <img class="img-circle" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'">
-                <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
-                <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
-              </div>
-              <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
-            </td>
-          </tr>`);
+        e.data.forEach((val, key) => {   
           
+          var imagen = (val.imagen_perfil == '' ? '../dist/svg/user_default.svg' : `../dist/docs/all_trabajador/perfil/${val.imagen_perfil}`) ;        
           
+          if ((key + 1) <= i_2) {
+            html_data_td_1 = html_data_td_1.concat(`<tr class="cursor-pointer"> 
+              <td class="py-1 text-center">${key + 1}</td> 
+              <td class="py-1">
+                <div class="user-block">
+                  <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'" onclick="ver_perfil('${ imagen }', '${encodeHtml(val.trabajador)}');">
+                  <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
+                  <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
+                </div>
+                <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
+              </td>              
+            </tr>`);            
+          } else {
+            html_data_td_2 = html_data_td_2.concat(`<tr class="cursor-pointer"> 
+              <td class="py-1 text-center">${key + 1}</td> 
+              <td class="py-1">
+                <div class="user-block">
+                  <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'" onclick="ver_perfil('${ imagen }', '${encodeHtml(val.trabajador)}');">
+                  <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
+                  <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
+                </div>
+                <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
+              </td>              
+            </tr>`);
+          }                   
+                    
         });
-        $('#html_order_trabajador').html(`${html_data_td_1} `);
-        $("#html_order_trabajador").sortable();
-        // $("#html_order_trabajador").sortable();
-        $("#html_order_trabajador").disableSelection();
+        $('#html_order_trabajador_1').html(`${html_data_td_1} `);
+        $('#html_order_trabajador_2').html(`${html_data_td_2} `);
+        $(".orden_trabajador_1").sortable({connectWith: '#html_order_trabajador_2'}).disableSelection();
+        $(".orden_trabajador_2").sortable({connectWith: '#html_order_trabajador_1'}).disableSelection();
       }else{
         ver_errores(e);
       }
@@ -953,6 +940,35 @@ function guardar_y_editar_orden_trabajador(e) {
 }
 
 // .....::::::::::::::::::::::::::::::::::::: B A N C O   M U L T I P L E  :::::::::::::::::::::::::::::::::::::::..
+// damos formato a: Cta, CCI
+function formato_banco(id) {
+
+  if ($(`#banco_${id}`).select2("val") == null || $(`#banco_${id}`).select2("val") == "" || $(`#banco_${id}`).select2("val") == '1') {
+    $(`#banco_array_${id}`).val(1);
+    $(`.cta_bancaria_${id}`).prop("readonly",true);   $(`.cci_${id}`).prop("readonly",true); 
+  } else {
+    
+    $(`.${id}_chargue-format-1`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(`.${id}_chargue-format-2`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+
+    $(`#banco_array_${id}`).val($(`#banco_${id}`).select2("val"));
+
+    $(`.cta_bancaria_${id}`).prop("readonly",false);   $(`.cci_${id}`).prop("readonly",false);
+
+    $.post("../ajax/ajax_general.php?op=formato_banco", { idbanco: $(`#banco_${id}`).select2("val") }, function (data, status) {
+
+      data = JSON.parse(data);  //console.log(data); 
+
+      $(`.${id}_chargue-format-1`).html('Cuenta Bancaria'); $(`.${id}_chargue-format-2`).html('CCI');
+
+      var format_cta = decifrar_format_banco(data.data.formato_cta); var format_cci = decifrar_format_banco(data.data.formato_cci);
+
+      $(`.cta_bancaria_${id}`).inputmask(`${format_cta}`);
+
+      $(`.cci_${id}`).inputmask(`${format_cci}`);
+    }).fail( function(e) { ver_errores(e); } );  
+  }  
+}
+
 function add_bancos(id_select_banco = null) {
   $('#lista_bancos').append(`   
     <!-- banco -->
@@ -1117,3 +1133,10 @@ $(function () {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
+function ver_perfil(file, nombre) {
+  $('.modal-title-perfil-trabajador').html(nombre);
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#modal-ver-perfil-trabajador").modal("show");
+  $('#html-perfil-trabajador').html(`<span class="jq_image_zoom"><img class="img-thumbnail" src="${file}" onerror="this.src='../dist/svg/user_default.svg';" alt="Perfil" width="100%"></span>`);
+  $('.jq_image_zoom').zoom({ on:'grab' });
+}

@@ -927,6 +927,7 @@ function formato_banco(id) {
   if ($(`#banco_${id}`).select2("val") == null || $(`#banco_${id}`).select2("val") == "" || $(`#banco_${id}`).select2("val") == '1') {
 
     $(`.cta_bancaria_${id}`).prop("readonly",true);   $(`.cci_${id}`).prop("readonly",true);
+    $(`#banco_array_${id}`).val(1);
   } else {
     
     $(`.${id}_chargue-format-1`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(`.${id}_chargue-format-2`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
@@ -961,4 +962,12 @@ function sueld_mensual(){
   $("#sueldo_diario").val(sueldo_diario);
 
   $("#sueldo_hora").val(sueldo_horas);
+}
+
+function ver_perfil(file, nombre) {
+  $('.modal-title-perfil-trabajador').html(nombre);
+  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#modal-ver-perfil-trabajador").modal("show");
+  $('#html-perfil-trabajador').html(`<span class="jq_image_zoom"><img class="img-thumbnail" src="${file}" onerror="this.src='../dist/svg/user_default.svg';" alt="Perfil" width="100%"></span>`);
+  $('.jq_image_zoom').zoom({ on:'grab' });
 }

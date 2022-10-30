@@ -489,6 +489,23 @@
                   </div>
                 </div>
 
+                <!-- MODAL - VER PERFIL TRABAJADOR-->
+                <div class="modal fade" id="modal-ver-perfil-trabajador">
+                  <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content bg-color-0202022e shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white modal-title-perfil-trabajador">Foto Perfil</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body text-center" id="html-perfil-trabajador" >                         
+                        <!-- vemos los datos del trabajador -->                       
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </section>
               <!-- /.content -->
             </div>
