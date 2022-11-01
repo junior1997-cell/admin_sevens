@@ -122,7 +122,7 @@ class Otra_factura
 		if ($desactivar['status'] == false) {  return $desactivar; }
 		
 		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','".$idotra_factura."','Otra factura desactivada','" . $_SESSION['idusuario'] . "')";
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','".$idotra_factura."','Registro enviado a papelera','" . $_SESSION['idusuario'] . "')";
 		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
 		
 		return $desactivar;
@@ -131,12 +131,12 @@ class Otra_factura
   //Implementamos un método para desactivar categorías
   public function eliminar($idotra_factura)
   {
-    $sql = "UPDATE otra_factura SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idotra_factura ='$idotra_factura'";
+    $sql = "UPDATE otra_factura SET estado_delete='0', user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idotra_factura ='$idotra_factura'";
 		$eliminar =  ejecutarConsulta($sql);
 		if ( $eliminar['status'] == false) {return $eliminar; }  
 		
 		//add registro en nuestra bitacora
-		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','$idotra_factura','Otra factura Eliminada','" . $_SESSION['idusuario'] . "')";
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','$idotra_factura','Registro Eliminado','" . $_SESSION['idusuario'] . "')";
 		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
 		
 		return $eliminar;

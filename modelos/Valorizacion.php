@@ -274,7 +274,7 @@ class Valorizacion
         $editando =  ejecutarConsulta($sql_3); if ($editando['status'] == false) { return $editando; }
 
         //B I T A C O R A -------
-        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$idresumen."', 'Editar registro', '".$_SESSION['idusuario']."')";
+        $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$idresumen."', 'Editar registro montos', '".$_SESSION['idusuario']."')";
         $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
       } 
     }    
@@ -349,16 +349,45 @@ class Valorizacion
 
   }
 
-  public function guardar_y_editar_fecha_oculta($idtabla, $array_fechas_1, $array_fechas_2) {
+  public function guardar_y_editar_fecha_oculta($idtabla, $idproyecto_fo, $array_fechas_p_1, $array_fechas_p_2,  $array_fechas_1, $array_fechas_2) {
     
-    foreach ($idtabla as $key => $value) {
-      $sql = "UPDATE resumen_q_s_valorizacion SET fecha_inicio_oculto='".$array_fechas_1[$key]."',fecha_fin_oculto='".$array_fechas_2[$key]."' 
-      WHERE idresumen_q_s_valorizacion='$value'";
-      $sw = ejecutarConsulta($sql); if ($sw['status'] == false) { return $sw; }
-    }   
-    
-    return $retorno = [ 'status' => true, 'message' => 'todo oka', 'data' => []] ;
+    $cont = 1;
+    $sql = "UPDATE resumen_q_s_valorizacion SET estado='0',estado_delete='0', user_delete ='".$_SESSION['idusuario']."' WHERE idproyecto ='".$idproyecto_fo[0]."'";
+    $delete_f = ejecutarConsulta($sql); if ( $delete_f['status'] == false) {return $delete_f; }
 
+    //B I T A C O R A -------
+    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$idproyecto_fo[0]."', 'Eliminar fechas segun proyecto: ".$idproyecto_fo[0]."', '".$_SESSION['idusuario']."')";
+    $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+
+    foreach ($idtabla as $key => $value) {
+      if ( isset( $array_fechas_p_1[$key] ) ) {       
+      
+        if (empty($value) || $value == 0) {
+          
+          $sql = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, user_created) 
+          VALUES ('".$idproyecto_fo[$key]."','$cont','".$array_fechas_p_1[$key]."','".$array_fechas_p_2[$key]."','".$array_fechas_1[$key]."','".$array_fechas_2[$key]."', '".$_SESSION['idusuario']."')";
+          $sw = ejecutarConsulta_retornarID($sql); if ($sw['status'] == false) { return $sw; }
+
+          //B I T A C O R A -------
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$sw['data']."', 'Crear registro fechas ocultas', '".$_SESSION['idusuario']."')";
+          $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+        } else {
+          $sql = "UPDATE resumen_q_s_valorizacion SET numero_q_s = '$cont', 
+          fecha_inicio='".$array_fechas_p_1[$key]."', fecha_fin='".$array_fechas_p_2[$key]."', 
+          fecha_inicio_oculto='".$array_fechas_1[$key]."', fecha_fin_oculto='".$array_fechas_2[$key]."', estado='1', estado_delete='1',
+          user_updated = '".$_SESSION['idusuario']."' 
+          WHERE idresumen_q_s_valorizacion='$value'";
+          $sw = ejecutarConsulta($sql); if ($sw['status'] == false) { return $sw; }
+
+          //B I T A C O R A -------
+          $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$value."', 'Editar registro fechas ocultas', '".$_SESSION['idusuario']."')";
+          $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
+        } 
+        $cont++;    
+      }             
+    }  
+    
+    return $retorno = [ 'status' => true, 'message' => 'todo oka', 'data' => $cont] ;
   }
 
 }
