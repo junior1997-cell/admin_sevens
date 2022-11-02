@@ -161,12 +161,11 @@ class Asistencia_obrero
 
     // extraemos todos lo trabajadores del proyecto
     $sql2 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
-    t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado
+    t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado, tpp.fecha_inicio, tpp.fecha_fin
 		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
 		WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = t.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador 
 		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY tpp.orden_trabajador ASC ;";
-    $trabajador = ejecutarConsultaArray($sql2);
-    if ($trabajador['status'] == false) {  return $trabajador; }
+    $trabajador = ejecutarConsultaArray($sql2); if ($trabajador['status'] == false) {  return $trabajador; }
 
     $data = [];
     $extras = "";
@@ -192,73 +191,73 @@ class Asistencia_obrero
       // extraemos la asistencia por trabajador
       $sql3 = "SELECT * FROM asistencia_trabajador  AS atr 
 			WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
-      $asistencia = ejecutarConsultaArray($sql3);
-      if ($asistencia['status'] == false) {  return $asistencia; }
+      $asistencia = ejecutarConsultaArray($sql3);  if ($asistencia['status'] == false) {  return $asistencia; }
 
       $sql4 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal, estado_envio_contador 
 			FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_trabajador_proyect' AND fecha_q_s_inicio = '$f1';";
-      $extras = ejecutarConsultaSimpleFila($sql4);
-      if ($extras['status'] == false) {  return $extras; }
+      $extras = ejecutarConsultaSimpleFila($sql4); if ($extras['status'] == false) {  return $extras; }
 
       if (empty($extras['data'])) {
         $idresumen_q_s_asistencia = "";
-        $fecha_q_s_inicio = "";
-        $total_hn = 0;
-        $total_he = 0;
-        $total_dias_asistidos = 0;
-        $sabatical = 0;
-        $sabatical_manual_1 = "-";
-        $sabatical_manual_2 = "-";
-        $pago_parcial_hn = 0;
-        $pago_parcial_he = 0;
-        $adicional_descuento = 0;
-        $descripcion_descuento = "";
-        $pago_quincenal = 0;
-        $estado_envio_contador = "";
+        $fecha_q_s_inicio         = "";
+        $total_hn                 = 0;
+        $total_he                 = 0;
+        $total_dias_asistidos     = 0;
+        $sabatical                = 0;
+        $sabatical_manual_1       = "-";
+        $sabatical_manual_2       = "-";
+        $pago_parcial_hn          = 0;
+        $pago_parcial_he          = 0;
+        $adicional_descuento      = 0;
+        $descripcion_descuento    = "";
+        $pago_quincenal           = 0;
+        $estado_envio_contador    = "";
       } else {
         $idresumen_q_s_asistencia = $extras['data']['idresumen_q_s_asistencia'];
-        $fecha_q_s_inicio = $extras['data']['fecha_q_s_inicio'];
-        $total_hn = $extras['data']['total_hn'];
-        $total_he = $extras['data']['total_he'];
-        $total_dias_asistidos = $extras['data']['total_dias_asistidos'];
-        $sabatical = $extras['data']['sabatical'];
-        $sabatical_manual_1 = $extras['data']['sabatical_manual_1'];
-        $sabatical_manual_2 = $extras['data']['sabatical_manual_2'];
-        $pago_parcial_hn = $extras['data']['pago_parcial_hn'];
-        $pago_parcial_he = $extras['data']['pago_parcial_he'];
-        $adicional_descuento = $extras['data']['adicional_descuento'];
-        $descripcion_descuento = $extras['data']['descripcion_descuento'];
-        $pago_quincenal = $extras['data']['pago_quincenal'];
-        $estado_envio_contador = $extras['data']['estado_envio_contador'];
+        $fecha_q_s_inicio         = $extras['data']['fecha_q_s_inicio'];
+        $total_hn                 = $extras['data']['total_hn'];
+        $total_he                 = $extras['data']['total_he'];
+        $total_dias_asistidos     = $extras['data']['total_dias_asistidos'];
+        $sabatical                = $extras['data']['sabatical'];
+        $sabatical_manual_1       = $extras['data']['sabatical_manual_1'];
+        $sabatical_manual_2       = $extras['data']['sabatical_manual_2'];
+        $pago_parcial_hn          = $extras['data']['pago_parcial_hn'];
+        $pago_parcial_he          = $extras['data']['pago_parcial_he'];
+        $adicional_descuento      = $extras['data']['adicional_descuento'];
+        $descripcion_descuento    = $extras['data']['descripcion_descuento'];
+        $pago_quincenal           = $extras['data']['pago_quincenal'];
+        $estado_envio_contador    = $extras['data']['estado_envio_contador'];
       }
 
       $data[] = [
         "idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
-        "nombre_ocupacion" => $key['nombre_ocupacion'],
-        "tipo_trabajador" => $key['tipo_trabajador'],
-        "nombres" => $key['nombres'],
-        "tipo_documento" => $key['tipo_documento'],
-        "numero_documento" => $key['numero_documento'],
-        "sueldo_mensual" => $key['sueldo_mensual'],
-        "sueldo_diario" => $key['sueldo_diario'],
-        "sueldo_hora" => $key['sueldo_hora'],
-        "estado_trabajador" => $key['estado'],
-        "asistencia" => $asistencia['data'],
+        "nombre_ocupacion"          => $key['nombre_ocupacion'],
+        "tipo_trabajador"           => $key['tipo_trabajador'],
+        "nombres"                   => $key['nombres'],
+        "tipo_documento"            => $key['tipo_documento'],
+        "numero_documento"          => $key['numero_documento'],
+        "sueldo_mensual"            => $key['sueldo_mensual'],
+        "sueldo_diario"             => $key['sueldo_diario'],
+        "sueldo_hora"               => $key['sueldo_hora'],
+        "estado_trabajador"         => $key['estado'],
+        "fecha_inicio_t"            => $key['fecha_inicio'],
+        "fecha_fin_t"               => $key['fecha_fin'],
+        "asistencia"                => $asistencia['data'],
 
-        'idresumen_q_s_asistencia' => $idresumen_q_s_asistencia,
-        'fecha_registro' => $fecha_q_s_inicio,
-        'total_hn' => $total_hn,
-        'total_he' => $total_he,
-        'total_dias_asistidos' => $total_dias_asistidos,
-        'sabatical' => $sabatical,
-        'sabatical_manual_1' => $sabatical_manual_1,
-        'sabatical_manual_2' => $sabatical_manual_2,
-        'pago_parcial_hn' => $pago_parcial_hn,
-        'pago_parcial_he' => $pago_parcial_he,
-        'adicional_descuento' => $adicional_descuento,
-        'descripcion_descuento' => $descripcion_descuento,
-        'pago_quincenal' => $pago_quincenal,
-        'estado_envio_contador' => $estado_envio_contador,
+        'idresumen_q_s_asistencia'  => $idresumen_q_s_asistencia,
+        'fecha_registro'            => $fecha_q_s_inicio,
+        'total_hn'                  => $total_hn,
+        'total_he'                  => $total_he,
+        'total_dias_asistidos'      => $total_dias_asistidos,
+        'sabatical'                 => $sabatical,
+        'sabatical_manual_1'        => $sabatical_manual_1,
+        'sabatical_manual_2'        => $sabatical_manual_2,
+        'pago_parcial_hn'           => $pago_parcial_hn,
+        'pago_parcial_he'           => $pago_parcial_he,
+        'adicional_descuento'       => $adicional_descuento,
+        'descripcion_descuento'     => $descripcion_descuento,
+        'pago_quincenal'            => $pago_quincenal,
+        'estado_envio_contador'     => $estado_envio_contador,
       ];
 
       $idresumen_q_s_asistencia = "";
@@ -713,7 +712,7 @@ class Asistencia_obrero
   public function insertar_detalle_adicional($idtrabajador_por_proyecto, $fecha_registro, $detalle_adicional) {
     $sql = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, fecha_q_s_inicio, descripcion_descuento, user_created) 
 		VALUES ('$idtrabajador_por_proyecto', '$fecha_registro', '$detalle_adicional', '".$_SESSION['idusuario']."' )";
-    $insert = ejecutarConsulta_retornarID($sql);
+    $insert = ejecutarConsulta_retornarID($sql); if ( $insert['status'] == false) {return $insert; }
 
     //B I T A C O R A -------
     $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$insert['data']."', 'Crear adicional descuento', '".$_SESSION['idusuario']."')";
@@ -726,8 +725,7 @@ class Asistencia_obrero
     $sql = "UPDATE resumen_q_s_asistencia 
 		SET  idtrabajador_por_proyecto='$idtrabajador_por_proyecto', fecha_q_s_inicio='$fecha_registro', descripcion_descuento = '$detalle_adicional', user_updated = '".$_SESSION['idusuario']."'
 		WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
-    $editar = ejecutarConsulta($sql);
-    if ( $editar['status'] == false) {return $editar; }
+    $editar = ejecutarConsulta($sql);  if ( $editar['status'] == false) {return $editar; }
 
     //B I T A C O R A -------
     $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$idresumen_q_s_asistencia."', 'Editar descripción adicional descuento', '".$_SESSION['idusuario']."')";
@@ -745,8 +743,7 @@ class Asistencia_obrero
 
   public function fechas_actividad($id) {
     $sql = "SELECT idproyecto, fecha_inicio_actividad, fecha_fin_actividad, plazo_actividad
-		FROM proyecto 
-		WHERE idproyecto = '$id'";
+		FROM proyecto WHERE idproyecto = '$id'";
 
     return ejecutarConsultaSimpleFila($sql);
   }
@@ -755,8 +752,7 @@ class Asistencia_obrero
     $sql = "UPDATE proyecto SET fecha_inicio_actividad='$fecha_inicio_actividad', fecha_fin_actividad= '$fecha_fin_actividad',
 		plazo_actividad = '$plazo_actividad', user_updated = '".$_SESSION['idusuario']."'
 		WHERE idproyecto = '$id_proyecto_f'";
-    $fecha = ejecutarConsulta($sql);
-    if ( $fecha['status'] == false) {return $fecha; }
+    $fecha = ejecutarConsulta($sql);  if ( $fecha['status'] == false) {return $fecha; }
 
     //B I T A C O R A -------
     $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto', '".$id_proyecto_f."', 'Editar fechas de actividad', '".$_SESSION['idusuario']."')";
