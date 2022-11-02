@@ -70,14 +70,15 @@
                               <a class="nav-link" id="custom-content-below-profile-tab" data-toggle="pill" href="#custom-content-below-profile" role="tab" aria-controls="custom-content-below-profile" aria-selected="false">TEMPERATURA</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" id="custom-content-below-messages-tab" data-toggle="pill" href="#custom-content-below-messages" role="tab" aria-controls="custom-content-below-messages" aria-selected="false">TEMPERATURA</a>
+                              <a class="nav-link" id="custom-content-below-messages-tab" data-toggle="pill" href="#custom-content-below-messages" role="tab" aria-controls="custom-content-below-messages" aria-selected="false">CHECK LIST EPPS</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link" id="custom-content-below-settings-tab" data-toggle="pill" href="#custom-content-below-settings" role="tab" aria-controls="custom-content-below-settings" aria-selected="false">CHECK LIST EPPS</a>
+                              <a class="nav-link" id="custom-content-below-settings-tab" data-toggle="pill" href="#custom-content-below-settings" role="tab" aria-controls="custom-content-below-settings" aria-selected="false">xxxxxxx</a>
                             </li>
                           </ul>
                           <div class="tab-content" id="custom-content-below-tabContent">
-                            <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab"> 
+
+                            <div class="tab-pane fade " id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab"> 
                               <button type="button" class="btn bg-gradient-success" onclick="export_excel_detalle_factura();">
                                 <i class="fas fa-plus-circle"></i> export
                               </button>
@@ -199,6 +200,7 @@
 
 
                             </div>
+
                             <div class="tab-pane fade" id="custom-content-below-profile" role="tabpanel" aria-labelledby="custom-content-below-profile-tab">
                               <!-- <h1>----------------------------------</h1> -->
                               <!-- tabla REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA -->
@@ -321,12 +323,109 @@
                               </table>
 
                             </div>
-                            <div class="tab-pane fade" id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
-                              Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia, ex vitae gravida fermentum, lectus ipsum gravida arcu, id fermentum metus arcu vel metus. Curabitur eget sem eu risus tincidunt eleifend ac ornare magna.
+
+                            <div class="tab-pane fade show active" id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
+                              <!-- tabla REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA -->
+                              <button type="button" class="btn bg-gradient-success m-05rem" onclick="export_excel_control_equipos();"> <i class="fas fa-plus-circle"></i> export </button>
+                              <br>
+                              <table id="formato_control_equipos"  class="table table-bordered table-striped">
+                                <thead>
+                                  <tr>
+                                    <th class="p-y-3px text-center" colspan="26">CONTROL DIARIO DE EQUIPOS DE PROTECCIÓN PERSONAL</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="p-y-3px text-center" colspan="26">CONSTRUCCIÓN DE LA SEDE MISIÓN NOR ORIENTAL - II ETAPA 12/10/2022 MIERCOLES</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="p-y-3px text-center bg-color-acc3c7" colspan="26">DATOS DEL EMPLEADOR PRINCIPAL:</th>
+                                  </tr>
+                                  <tr>
+                                    <th class="p-y-3px font-size-13px" colspan="3">RAZÓN SOCIAL O <br> DENOMINACIÓN SOCIAL</th>
+                                    <th class="p-y-3px font-size-13px" colspan="3">RUC</th>
+                                    <th class="p-y-3px font-size-13px" colspan="3">DOMICILIO <br> (Dirección, distrito, departamento, provincia)</th>
+                                    <th class="p-y-3px font-size-13px" colspan="3">TIPO DE ACTIVIDAD <br> ECONÓMICA</th>
+                                    <th class="p-y-3px font-size-13px" colspan="3">N° TRABAJADORES  <br> EN EL TRABAJO</th>
+                                    <th class="p-y-3px font-size-13px celda-b-x-0px" colspan="10" rowspan="2"></th>
+                                  </tr>
+                                  <tr>
+                                    <th class="p-y-3px font-size-12px" colspan="3">SEVEN´S INGENIEROS SELVA  <br>  S.A.C. </th>
+                                    <th class="p-y-3px font-size-12px" colspan="3">20609935651</th>
+                                    <th class="p-y-3px font-size-12px" colspan="3">JR. MANCO CAPAC N°491  <br> SAN MARTIN - MORALES.</th>
+                                    <th class="p-y-3px font-size-12px" colspan="3">ARQUITECTURA E INGENIERIA</th>
+                                    <th class="p-y-3px font-size-12px" colspan="3"></th>
+                                    <th class="p-y-3px font-size-12px celda-b-y-0px celda-b-x-0px" colspan="11" ></th>
+                                  </tr>
+                                  <tr class="font-size-12px text-center">
+                                    <th class="p-y-3px">N°</th>
+                                    <th class="p-y-3px" >VERIFICACIÓN DE EQUIPOS DE SEGURIDAD</th>
+                                    <th class="p-y-3px"  colspan="2">CASCO</th>
+                                    <th class="p-y-3px"  colspan="2">CORTA VIENTO</th>
+                                    <th class="p-y-3px"  colspan="2">LENTES DE SEGURIDAD</th>
+                                    <th class="p-y-3px"  colspan="2">GUANTES DE NITRILO</th>
+                                    <th class="p-y-3px"  colspan="2">GUANTES DE JEBE</th>
+                                    <th class="p-y-3px"  colspan="2">GUANTES DE CUERO</th>
+                                    <th class="p-y-3px"  colspan="2">ZAPATOS DE SEGURIDAD</th>
+                                    <th class="p-y-3px"  colspan="2">PROTECTORES AUDITIVOS</th>
+                                    <th class="p-y-3px"  colspan="2">ARNES</th>
+                                    <th class="p-y-3px"  colspan="2">CARETA</th>
+                                    <th class="p-y-3px"  colspan="2">BOTAS DE JEBE</th>
+                                    <th class="p-y-3px"  colspan="2">CAPOTIN</th>
+                                  </tr>
+                                  <tr class="font-size-13px text-center">
+
+                                    <th class="p-y-4px">N°</th>
+                                    <th class="p-y-8px">APELLIDOS Y NOMBRES</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                    <th class="p-y-3px" >SI</th>
+                                    <th class="p-y-3px" >NO</th>
+                                  </tr>
+
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td class="p-y-2px">1</td>
+                                    <td class="p-y-2px text-nowrap">Requejo Sannta cruz David</td>
+                                  </tr>
+                                  <tr>
+                                    <td class="p-y-2px">1</td>
+                                    <td class="p-y-2px">Requejo Sannta cruz David melvin Requejo sa nta  crf </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="p-y-2px">1</td>
+                                    <td class="p-y-2px">Requejo Sannta cruz David</td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
                             </div>
+
                             <div class="tab-pane fade" id="custom-content-below-settings" role="tabpanel" aria-labelledby="custom-content-below-settings-tab">
                               Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis tempus turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt venenatis vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a vestibulum pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget aliquet urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac habitasse platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
                             </div>
+
                           </div>
                         </div>
                           <!-- /.card-body -->
