@@ -229,21 +229,21 @@
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                      <input type="number" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onclick="sueld_mensual();" onkeyup="sueld_mensual();" />
+                                      <input type="text" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onchange="sueld_mensual();" onkeyup="sueld_mensual();" onclick="this.select();" />
                                     </div>
                                   </div>
                                   <!-- Sueldo(Diario) -->
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label for="sueldo_diario">Sueldo(Diario)</label>
-                                      <input type="number" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
+                                      <input type="text" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
                                     </div>
                                   </div>
                                   <!-- Sueldo(Hora) -->
                                   <div class="col-lg-2">
                                     <div class="form-group">
                                       <label for="sueldo_hora">Sueldo(8 Hora)</label>
-                                      <input type="number" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
+                                      <input type="text" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
                                     </div>
                                   </div>
 
@@ -470,7 +470,7 @@
                                   <select name="banco_0" id="banco_0" class="form-control select2 banco_0" style="width: 100%;" onchange="formato_banco(0);">
                                     <!-- Aqui listamos los bancos -->
                                   </select>
-                                  <input type="hidden" name="banco_array[]" id="banco_array_0">
+                                  <input type="hidden" name="banco_array[]" id="banco_array_0" >
                                 </div>
                               </div>
 
@@ -666,7 +666,7 @@
 
                 <!-- MODAL - ORNDENAR-->
                 <div class="modal fade" id="modal-order-trabajador">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title">Datos trabajador</h4>
@@ -677,22 +677,54 @@
 
                       <div class="modal-body">
                         <form id="form-orden-trabajador" name="form-orden-trabajador" method="POST">
-                          <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_valorizacion" style="border-spacing: collapse !important; border-spacing: 0 !important;" >
-                            <thead>                             
-                              <tr class="text-center bg-color-48acc6"> 
-                                <th class="pt-1 pb-1 celda-b-b-2px">#</th> 
-                                <th class="pt-1 pb-1 celda-b-b-2px">Nombre</th> 
-                              </tr>
-                            </thead>
-                            <tbody id="html_order_trabajador">  </tbody>
-                            
-                          </table>                        
+                          <div class="row">
+                            <div class="col-6">
+                              <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_orden_1" >
+                                <thead>                             
+                                  <tr class="text-center bg-color-48acc6"> 
+                                    <th class="pt-1 pb-1 celda-b-b-2px">#</th> 
+                                    <th class="pt-1 pb-1 celda-b-b-2px">Nombre</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="html_order_trabajador_1" class="orden_trabajador_1">  </tbody>                            
+                              </table>
+                            </div>
+                            <div class="col-6">
+                              <table class="table table-bordered /*table-striped*/ table-hover text-nowrap" id="tbla_export_excel_orden_2" >
+                                <thead>                             
+                                  <tr class="text-center bg-color-48acc6"> 
+                                    <th class="pt-1 pb-1 celda-b-b-2px">#</th> 
+                                    <th class="pt-1 pb-1 celda-b-b-2px">Nombre</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="html_order_trabajador_2" class="orden_trabajador_2">  </tbody>                            
+                              </table> 
+                            </div>
+                          </div>                            
+
                           <button type="submit" style="display: none;" id="submit-form-orden-trabajador">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger"  data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_orden_trabajador">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - VER PERFIL TRABAJADOR-->
+                <div class="modal fade" id="modal-ver-perfil-trabajador">
+                  <div class="modal-dialog modal-dialog-centered modal-md">
+                    <div class="modal-content bg-color-02020280 shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title text-white modal-title-perfil-trabajador">Foto Perfil</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-white cursor-pointer" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body text-center" id="html-perfil-trabajador" >                         
+                        <!-- vemos los datos del trabajador -->                       
                       </div>
                     </div>
                   </div>
@@ -715,7 +747,8 @@
         
         <!-- moment LOCALE -->
         <script src="../plugins/moment/locales.js"></script>
-
+        
+        <!-- Jquery UI -->
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 

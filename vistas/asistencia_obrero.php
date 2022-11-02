@@ -18,6 +18,19 @@
 
         <?php $title = "Asistencia Obrero"; require 'head.php'; ?>
 
+        <style>          
+          /* fijar table head */
+          .table.table-head-fixed thead tr:nth-child(2) th {
+            background-color: #fff;
+            border-bottom: black 1px solid;
+            box-shadow: 0 1px 10px 7px #dee2e6, 12px -2px 9px 6px #dee2e6;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 50px;
+            z-index: 10;
+          }
+        </style>
+
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -83,12 +96,12 @@
                         </div>
                         <!-- /.card-header -->
 
-                        <div class="card-body" >
+                        <div class="card-body " >
 
                           <!-- TBLA - PRINCIPAL -->
                           <div id="tabla-asistencia-trab" >
                             <table id="tabla-asistencia" class="table table-bordered table-striped display " style="width: 100% !important;">
-                              <thead>
+                              <thead >
                                 <tr>
                                   <th>#</th>
                                   <th class="text-center" data-toggle="tooltip" data-original-title="Opciones.">Op.</th>
@@ -129,11 +142,11 @@
                           </div>
 
                           <!-- TBLA- REGISTRO DE ASISTENCIA-->                         
-                          <div class="table-responsive disenio-scroll" id="ver_asistencia" style="display: none;">
+                          <div class="table-responsive p-0" id="ver_asistencia" style="display: none; height: 650px;">
                               
-                            <table class="table table-hover text-nowrap styletabla" style="border: black 1px solid;">
-                              <thead>
-                                <tr>
+                            <table class="table table-hover table-head-fixed text-nowrap" style="border: black 1px solid;">
+                              <thead class="bg-white" >
+                                <tr class="celda-b-t-1px ">
                                   <th rowspan="2" class="stile-celda inicio_tabla">#</th>
                                   <th rowspan="2" class="stile-celda "><i class="far fa-clock"></i></th>
                                   <th rowspan="2" class="stile-celda ">Nombre del trabajador</th>
@@ -144,6 +157,7 @@
                                     <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_right mr-1" data-toggle="tooltip" data-original-title="Deslizar al la derecha"><i class="far fa-arrow-alt-circle-right fa-lg m-1"></i></span>
                                     <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_bottom mr-1" data-toggle="tooltip" data-original-title="Deslizar al final"><i class="far fa-arrow-alt-circle-down fa-lg m-1"></i></span>
                                     <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_left mr-1" data-toggle="tooltip" data-original-title="Deslizar al la izquierda"><i class="far fa-arrow-alt-circle-left fa-lg m-1"></i></span>                                  
+                                     
                                   </th>
                                   <th rowspan="2" class="stile-celda ">Horas<br>normal/extras</th>
                                   <th rowspan="2" class="stile-celda ">Días<br>asistidos</th>

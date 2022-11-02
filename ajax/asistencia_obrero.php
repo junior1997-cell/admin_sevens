@@ -16,8 +16,7 @@ ob_start();
 
       $asistencia_obrero=new Asistencia_obrero();  
       
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
@@ -442,7 +441,7 @@ ob_start();
           }else {             
 
             // editamos un recibo x honorario existente
-            $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_d_m_a($fecha_inicio_actividad), format_d_m_a($fecha_fin_actividad), $plazo_actividad);
+            $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_a_m_d($fecha_inicio_actividad), format_a_m_d($fecha_fin_actividad), $plazo_actividad);
             
             echo json_encode($rspta, true);
           }

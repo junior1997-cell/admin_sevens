@@ -311,7 +311,7 @@
         // :::::::::::::::::::::::::::::::::::::::::: U P D A T E   F E C H A S  O C U L T A S :::::::::::::::::::::::::::::::
         case 'guardar_y_editar_fecha_oculta':
           //$fecha1 = $_POST['fecha_inicio_oculto_fo'];  $fecha2 = $_POST['fecha_fin_oculto_fo']; $id = $_POST['idresumen_q_s_valorizacion_fo']; 
-          $rspta=$valorizacion->guardar_y_editar_fecha_oculta($_POST['idresumen_q_s_valorizacion_fo'], $_POST['fecha_inicio_oculto_fo'], $_POST['fecha_fin_oculto_fo']);
+          $rspta=$valorizacion->guardar_y_editar_fecha_oculta($_POST['idresumen_q_s_valorizacion_fo'], $_POST['idproyecto_fo'], $_POST['fecha_inicio_proyecto_fo'], $_POST['fecha_fin_proyecto_fo'], $_POST['fecha_inicio_oculto_fo'], $_POST['fecha_fin_oculto_fo']);
           //Codificar el resultado utilizando json
           //$rspta = array('status' => true, 'data' => ['id' => $id, 'fecha1' => $fecha1, 'fecha2' => $fecha2,], 'message' => 'Se actualizó correctamente');
           echo json_encode($rspta, true) ;

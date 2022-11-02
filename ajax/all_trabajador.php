@@ -224,6 +224,7 @@
           if ($rspta['status'] == true) {
 
             foreach ($rspta['data'] as $key => $value) {             
+              $imagen = (empty($value['imagen_perfil']) ? '../dist/svg/user_default.svg' : '../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil']) ;
           
               $data[]=array(
                 "0"=>$cont++,
@@ -232,7 +233,7 @@
                   ' <button class="btn btn-info btn-sm" onclick="verdatos('.$value['idtrabajador'].')"data-toggle="tooltip" data-original-title="ver datos"><i class="far fa-eye"></i></button>':
                   ' <button class="btn btn-info btn-sm" onclick="verdatos('.$value['idtrabajador'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>',
                 "2"=>'<div class="user-block">
-                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                  <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'' . $imagen . '\', \''.encodeCadenaHtml($value['trabajador']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['trabajador'] .'</p></span>
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                   </div>',

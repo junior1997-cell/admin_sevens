@@ -471,7 +471,7 @@
                             <!-- id proyecto -->
                             <input type="hidden" name="idproyecto" id="idproyecto" />
                             <!-- id valorizacion -->
-                            <input type="hidden" name="idvalorizacion" id="idvalorizacion" />
+                            <input type="hidden" name="idvalorizacion" id="idvalorizacion"  />
                             <!-- indice -->
                             <input type="hidden" name="indice" id="indice" />
                             <!-- nombre -->
@@ -704,7 +704,9 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title text-bold _edith">Fechas Ocultas</h4>
+                        <h4 class="modal-title text-bold _edith">Fechas Ocultas 
+                          <button type="button" class="btn bg-gradient-success btn-sm btn-add-tr-fc" onclick=""><i class="fas fa-plus-circle"></i> Agregar fila</button>
+                        </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -722,17 +724,19 @@
                                       <th class="pt-1 pb-1 celda-b-r-2px celda-b-b-2px">Fechas Formales</th>
                                       <th class="pt-1 pb-1 celda-b-b-2px">Fecha inicio oculto</th>
                                       <th class="pt-1 pb-1 celda-b-b-2px">Fecha fin oculto</th>
+                                      <th class="pt-1 pb-1 celda-b-b-2px"><i class="fa-solid fa-trash-can"></i></th>
                                     </tr>
                                   </thead>
                                   <tbody >                         
-                                    <tr><td colspan="4"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>
+                                    <tr><td colspan="5"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>
                                   </tbody>
                                   <tfoot>                                    
                                     <tr class="text-center"> 
                                       <th class="pt-1 pb-1 ">#</th> 
                                       <th class="pt-1 pb-1 celda-b-r-2px ">Fechas Formales</th>
                                       <th class="pt-1 pb-1 ">Fecha inicio oculto</th>
-                                      <th class="pt-1 pb-1 ">Fecha fin oculto</th>                        
+                                      <th class="pt-1 pb-1 ">Fecha fin oculto</th>   
+                                      <th class="pt-1 pb-1 "><i class="fa-solid fa-trash-can"></i></th>                     
                                     </tr> 
                                   </tfoot>
                                 </table>
@@ -811,6 +815,10 @@
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
+
+        <!-- Jquery UI -->
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
         <script type="text/javascript" src="scripts/valorizacion.js"></script>
 

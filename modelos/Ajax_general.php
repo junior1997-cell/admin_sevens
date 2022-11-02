@@ -66,6 +66,14 @@
       return ejecutarConsulta($sql);
     }
 
+    public function select2_trabajador_por_proyecto($id_proyecto){
+      $sql = "SELECT t.idtrabajador as id, t.nombres, t.tipo_documento, t.numero_documento, t.ruc , t.imagen_perfil 
+      FROM trabajador  as t
+      LEFT JOIN  trabajador_por_proyecto as tpp ON t.idtrabajador = tpp.idtrabajador and tpp.idproyecto = '$id_proyecto'
+      WHERE t.estado='1' AND t.estado_delete = '1' AND tpp.idtrabajador IS NULL ORDER BY t.nombres ASC;";
+      return ejecutarConsulta($sql);
+    }
+
     public function select2_tipo_trabajador() {
       $sql="SELECT * FROM tipo_trabajador where estado='1' AND estado_delete = '1' ORDER BY nombre ASC";
       return ejecutarConsulta($sql);		

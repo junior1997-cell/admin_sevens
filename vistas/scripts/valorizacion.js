@@ -358,7 +358,7 @@ function eliminar(nombre_eliminar, nombre_tabla, nombre_columna, idtabla) {
         // processData: false,
         success: function (e) {   
           try {
-            e = JSON.parse(e);
+            e = JSON.parse(e); console.log(e);
             if (e.status == true) {	    
               $("#icono-respuesta").html(`<div class="swal2-icon swal2-success swal2-icon-show" style="display: flex;"> <div class="swal2-success-circular-line-left" style="background-color: rgb(255, 255, 255);"></div> <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span> <div class="swal2-success-ring"></div> <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div> <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div> </div>  <div  class="text-center"> <h2 class="swal2-title" id="swal2-title" >Correcto!</h2> <div id="swal2-content" class="swal2-html-container" style="display: block;">Asistencia registrada correctamente</div> </div>` );             
               $(".progress-bar").addClass("bg-success"); $("#barra_progress_cargando").text("100% Completado!");
@@ -574,29 +574,71 @@ init();
 
 function actulizar_fechas_val() {
 
-  $('#tabla_fechas_ocultas>tbody').html(`<tr><td colspan="4"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`);
+  $('#tabla_fechas_ocultas>tbody').html(`<tr><td colspan="5"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`);
   $('#modal-agregar-fechas-ocultas').modal('show');
+  $('.btn-add-tr-fc').attr('onclick', `toastr_error('Cargando Datos','No puede agregar una linea mientras se esta consultado a la Base de Datos',700)`);
 
   $.post(`../ajax/valorizacion.php?op=mostrar_para_editar_fechas`, {'idproyecto': localStorage.getItem('nube_idproyecto') }, function (e, status, jqXHR) {
     e = JSON.parse(e); console.log(e);
     if ( e.status == true ) {
       var html_tr = '';
-      e.data.forEach((val, key) => {
-        html_tr = html_tr.concat(
-          `<tr>
-            <td class="p-b-1px">${key+1}</td> 
-            <td class="p-b-1px celda-b-r-2px text-center">${ format_d_m_a(val.fecha_inicio)} <br> ${format_d_m_a(val.fecha_fin)} <input type="hidden" name="idresumen_q_s_valorizacion_fo[]" value="${val.idresumen_q_s_valorizacion}"></td> 
-            <td class="p-b-1px"><div class="form-group"> <input type="date" name="fecha_inicio_oculto_fo[${key}]" value="${val.fecha_inicio_oculto}" required class="form-control input_fechas_ocultas_valid" > </div></td> 
-            <td class="p-b-1px"><div class="form-group"> <input type="date" name="fecha_fin_oculto_fo[${key}]" value="${val.fecha_fin_oculto}" required class="form-control input_fechas_ocultas_valid"> </div></td>
-          </tr>
-        `);
-      });
-      $('#tabla_fechas_ocultas>tbody').html(html_tr);
-      $('.input_fechas_ocultas_valid').each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Este campo es obligatorio' } }); });
+      if (e.data.length === 0) {
+        $('.btn-add-tr-fc').attr('onclick', `agregar_tr_fecha_ocultas(0)`);
+        $('#tabla_fechas_ocultas>tbody').html(html_tr);
+      } else {
+        e.data.forEach((val, key) => {
+          html_tr = html_tr.concat(
+            `<tr id="file_tr_${key+1}">
+              <td class="p-y-3px cursor-pointer" >${key+1} 
+                <input type="hidden" name="idresumen_q_s_valorizacion_fo[]" value="${val.idresumen_q_s_valorizacion}">   
+                <input type="hidden" name="idproyecto_fo[]" value="${localStorage.getItem('nube_idproyecto')}">            
+              </td> 
+              <td class="p-y-3px celda-b-r-2px text-center">
+                <div class="form-group mb-0"> 
+                  <input type="date" name="f_i_p[${key}]" value="${val.fecha_inicio}" id="f_i_p_${key}" onchange="value_fecha_oculta('#f_i_p', '${key}', '#fecha_inicio_proyecto_fo');" required class="form-control h-30px input_fechas_ocultas_valid" > 
+                  <input type="hidden" name="fecha_inicio_proyecto_fo[]" value="${val.fecha_inicio}" id="fecha_inicio_proyecto_fo_${key}" > 
+                </div>
+                <div class="form-group mb-0"> 
+                  <input type="date" name="f_f_p[${key}]" value="${val.fecha_fin}" id="f_f_p_${key}" onchange="value_fecha_oculta('#f_f_p', '${key}', '#fecha_fin_proyecto_fo');" required class="form-control h-30px input_fechas_ocultas_valid" > 
+                  <input type="hidden" name="fecha_fin_proyecto_fo[]" value="${val.fecha_fin}" id="fecha_fin_proyecto_fo_${key}" > 
+                </div>
+              </td> 
+              <td class="p-y-3px">
+                <div class="form-group mb-0"> 
+                  <input type="date" name="f_i_o[${key}]" value="${val.fecha_inicio_oculto}" id="f_i_o_${key}" onchange="value_fecha_oculta('#f_i_o', '${key}', '#fecha_inicio_oculto_fo');" required class="form-control h-30px input_fechas_ocultas_valid" > 
+                  <input type="hidden" name="fecha_inicio_oculto_fo[]" value="${val.fecha_inicio_oculto}" id="fecha_inicio_oculto_fo_${key}"  > 
+                </div>
+              </td> 
+              <td class="p-y-3px">
+                <div class="form-group mb-0"> 
+                  <input type="date" name="f_f_o[${key}]" value="${val.fecha_fin_oculto}" id="f_f_o_${key}" onchange="value_fecha_oculta('#f_f_o', '${key}', '#fecha_fin_oculto_fo');" required class="form-control h-30px input_fechas_ocultas_valid"> 
+                  <input type="hidden" name="fecha_fin_oculto_fo[]" value="${val.fecha_fin_oculto}" id="fecha_fin_oculto_fo_${key}" > 
+                </div>
+              </td>
+              <td class="p-y-3px text-center">
+                <button type="button" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-original-title="Eliminar" onclick="eliminar_tr_fecha_ocultas(${key+1});"><i class="fa-solid fa-trash-can"></i></button>
+              </td> 
+            </tr>
+          `);
+          $('.btn-add-tr-fc').attr('onclick', `agregar_tr_fecha_ocultas(${key+1})`);
+        });
+        $('#tabla_fechas_ocultas>tbody').html(html_tr);
+        $('.input_fechas_ocultas_valid').each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Este campo es obligatorio' } }); });
+        
+        $("#tabla_fechas_ocultas>tbody").sortable().disableSelection();
+      }      
     } else {
       ver_errores(e);      
     } 
+    $('[data-toggle="tooltip"]').tooltip();
   }).fail( function(e) { ver_errores(e); } );
+}
+
+function value_fecha_oculta(nombre_input, id, input_hidden) {
+  console.log(nombre_input, id, input_hidden);
+  var val_fecha = $(`${nombre_input}_${id}`).val() == '' || $(`${nombre_input}_${id}`).val() == null ? '' : $(`${nombre_input}_${id}`).val();
+  console.log(val_fecha);
+  $(`${input_hidden}_${id}`).val(val_fecha);
 }
 
 //Función para guardar o editar
@@ -648,6 +690,66 @@ function guardar_y_editar_fecha_oculta(e) {
   });
 }
 
+function agregar_tr_fecha_ocultas(key) {
+  $('#tabla_fechas_ocultas>tbody').append(
+    `<tr id="file_tr_${key+1}">
+      <td class="p-y-3px cursor-pointer" data-toggle="tooltip" data-original-title="Arrastrar para mover">${key+1} 
+        <input type="hidden" name="idresumen_q_s_valorizacion_fo[]" value="0">
+        <input type="hidden" name="idproyecto_fo[]" value="${localStorage.getItem('nube_idproyecto')}">
+      </td>  
+      <td class="p-y-3px celda-b-r-2px text-center">
+        <div class="form-group mb-0"> 
+          <input type="date" name="f_i_p[${key}]" value="" id="f_i_p_${key}" onchange="value_fecha_oculta('#f_i_p', '${key}', '#fecha_inicio_proyecto_fo');" required class="form-control h-30px input_fechas_ocultas_valid" > 
+          <input type="hidden" name="fecha_inicio_proyecto_fo[]" value="" id="fecha_inicio_proyecto_fo_${key}" > 
+        </div>
+        <div class="form-group mb-0"> 
+          <input type="date" name="f_f_p[${key}]" value="" id="f_f_p_${key}" onchange="value_fecha_oculta('#f_f_p', '${key}', '#fecha_fin_proyecto_fo');" required class="form-control h-30px input_fechas_ocultas_valid" >
+          <input type="hidden" name="fecha_fin_proyecto_fo[]" value="" id="fecha_fin_proyecto_fo_${key}" > 
+        </div>
+      </td> 
+      <td class="p-y-3px">
+        <div class="form-group mb-0"> 
+          <input type="date" name="f_i_o[${key}]" value="" id="f_i_o_${key}" onchange="value_fecha_oculta('#f_i_o', '${key}', '#fecha_inicio_oculto_fo');" required class="form-control h-30px input_fechas_ocultas_valid" >
+          <input type="hidden" name="fecha_inicio_oculto_fo[]" value="" id="fecha_inicio_oculto_fo_${key}" > 
+        </div>
+      </td> 
+      <td class="p-y-3px">
+        <div class="form-group mb-0"> 
+          <input type="date" name="f_f_o[${key}]" value="" id="f_f_o_${key}" onchange="value_fecha_oculta('#f_f_o', '${key}', '#fecha_fin_oculto_fo');" required class="form-control h-30px input_fechas_ocultas_valid">
+          <input type="hidden" name="fecha_fin_oculto_fo[]" value="" id="fecha_fin_oculto_fo_${key}" > 
+        </div>
+      </td>
+      <td class="p-y-3px text-center">
+        <button type="button" class="btn bg-gradient-danger btn-sm" data-toggle="tooltip" data-original-title="Eliminar" onclick="eliminar_tr_fecha_ocultas(${key+1});"><i class="fa-solid fa-trash-can"></i></button>
+      </td> 
+    </tr>
+  `);
+  $('.btn-add-tr-fc').attr('onclick', `agregar_tr_fecha_ocultas(${key+1})`);
+  $('.input_fechas_ocultas_valid').each(function(e) { $(this).rules('add', { required: true, messages: { required: 'Este campo es obligatorio' } }); });
+  $('[data-toggle="tooltip"]').tooltip();
+  $("#tabla_fechas_ocultas>tbody").sortable().disableSelection();
+  toastr_success('Fila agregada', 'agrega las fechas correspondiente', 700);
+  $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+}
+
+function eliminar_tr_fecha_ocultas(id_tr) {
+  $(".tooltip").remove();
+  Swal.fire({
+    title: `Eliminar fila !! <br> N° ${id_tr}`,
+    html: `Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor:  '#3085d6',
+    confirmButtonText: 'Si, eliminar!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $(`#file_tr_${id_tr}`).remove();
+      Swal.fire( 'Eliminado!', 'La fila a sido eliminado.', 'success' );
+    }
+  });
+  
+}
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 

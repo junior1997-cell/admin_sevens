@@ -19,22 +19,22 @@ class Otra_factura
     WHERE p.idproveedor = of.idproveedor and p.ruc ='$num_documento' AND of.tipo_comprobante ='$tipo_comprobante' and of.numero_comprobante ='$nro_comprobante';";
 		$prov = ejecutarConsultaArray($sql_1); if ($prov['status'] == false) { return  $prov;}
 
-    if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {
-
-      $sql_2 = "SELECT * FROM proveedor WHERE ruc = '$num_documento'";
-      $resul_provedor = ejecutarConsultaSimpleFila($sql_2); if ($resul_provedor['status'] == false) { return  $resul_provedor;}
-      
-      if (empty($resul_provedor['data'])) {
-
-        $sql_3 = "INSERT INTO proveedor (idbancos,tipo_documento, ruc, razon_social, direccion)
-        VALUES ('1','$tipo_documento', '$num_documento', '$razon_social', '$direccion')";
-        $proveedor = ejecutarConsulta_retornarID($sql_3); if ($proveedor['status'] == false) { return  $proveedor;}
-        $idproveedor = $proveedor['data'];
-
+    if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {      
+      $idproveedor = '';
+      if ( empty($num_documento) ) {
+        $idproveedor = '1';
       } else {
-
-        $idproveedor = $resul_provedor['data']['idproveedor'];
-      }
+        $sql_2 = "SELECT * FROM proveedor WHERE ruc = '$num_documento'";
+        $resul_provedor = ejecutarConsultaSimpleFila($sql_2); if ($resul_provedor['status'] == false) { return  $resul_provedor;}
+        if (empty($resul_provedor['data'])) {
+          $sql_3 = "INSERT INTO proveedor (idbancos,tipo_documento, ruc, razon_social, direccion)
+          VALUES ('1','$tipo_documento', '$num_documento', '$razon_social', '$direccion')";
+          $proveedor = ejecutarConsulta_retornarID($sql_3); if ($proveedor['status'] == false) { return  $proveedor;}
+          $idproveedor = $proveedor['data'];
+        } else {
+          $idproveedor = $resul_provedor['data']['idproveedor'];
+        }
+      }      
 
       $sql = "INSERT INTO otra_factura (idproveedor, idempresa_a_cargo, tipo_comprobante, numero_comprobante, forma_de_pago, fecha_emision, val_igv, subtotal, igv, costo_parcial, descripcion, glosa, comprobante, tipo_gravada, user_created) 
 		  VALUES ('$idproveedor', '$empresa_acargo', '$tipo_comprobante', '$nro_comprobante', '$forma_pago', '$fecha_emision', '$val_igv', '$subtotal', '$igv', '$precio_parcial', '$descripcion', '$glosa', '$comprobante', '$tipo_gravada','" . $_SESSION['idusuario'] . "')";
@@ -67,21 +67,23 @@ class Otra_factura
   //Implementamos un método para editar registros
   public function editar( $idotra_factura, $tipo_documento, $num_documento, $razon_social, $direccion, $empresa_acargo,  
   $tipo_comprobante, $nro_comprobante, $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial, 
-  $descripcion, $glosa, $comprobante, $tipo_gravada)
-  {
-    $sql_2 = "SELECT * FROM proveedor WHERE ruc = '$num_documento'";
-    $prov = ejecutarConsultaSimpleFila($sql_2); if ($prov['status'] == false) { return  $prov;}
-    
-    if (empty($prov['data'])) {
+  $descripcion, $glosa, $comprobante, $tipo_gravada)  {
 
-      $sql_3 = "INSERT INTO proveedor (idbancos,tipo_documento, ruc, razon_social, direccion)
-      VALUES ('1','$tipo_documento', '$num_documento', '$razon_social', '$direccion')";
-      $proveedor = ejecutarConsulta_retornarID($sql_3); if ($proveedor['status'] == false) { return  $proveedor;}
-      $idproveedor = $proveedor['data'];
+    $idproveedor = '';
+    if ( empty($num_documento) ) {
+      $idproveedor = '1';
     } else {
-
-      $idproveedor = $prov['data']['idproveedor'];
-    }
+      $sql_2 = "SELECT * FROM proveedor WHERE ruc = '$num_documento'";
+      $resul_provedor = ejecutarConsultaSimpleFila($sql_2); if ($resul_provedor['status'] == false) { return  $resul_provedor;}
+      if (empty($resul_provedor['data'])) {
+        $sql_3 = "INSERT INTO proveedor (idbancos,tipo_documento, ruc, razon_social, direccion)
+        VALUES ('1','$tipo_documento', '$num_documento', '$razon_social', '$direccion')";
+        $proveedor = ejecutarConsulta_retornarID($sql_3); if ($proveedor['status'] == false) { return  $proveedor;}
+        $idproveedor = $proveedor['data'];
+      } else {
+        $idproveedor = $resul_provedor['data']['idproveedor'];
+      }
+    }      
     
     $sql = "UPDATE otra_factura SET 
     idproveedor       ='$idproveedor',
@@ -120,7 +122,7 @@ class Otra_factura
 		if ($desactivar['status'] == false) {  return $desactivar; }
 		
 		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','".$idotra_factura."','Otra factura desactivada','" . $_SESSION['idusuario'] . "')";
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','".$idotra_factura."','Registro enviado a papelera','" . $_SESSION['idusuario'] . "')";
 		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
 		
 		return $desactivar;
@@ -129,12 +131,12 @@ class Otra_factura
   //Implementamos un método para desactivar categorías
   public function eliminar($idotra_factura)
   {
-    $sql = "UPDATE otra_factura SET estado_delete='0',user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idotra_factura ='$idotra_factura'";
+    $sql = "UPDATE otra_factura SET estado_delete='0', user_delete= '" . $_SESSION['idusuario'] . "'  WHERE idotra_factura ='$idotra_factura'";
 		$eliminar =  ejecutarConsulta($sql);
 		if ( $eliminar['status'] == false) {return $eliminar; }  
 		
 		//add registro en nuestra bitacora
-		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','$idotra_factura','Otra factura Eliminada','" . $_SESSION['idusuario'] . "')";
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('otra_factura','$idotra_factura','Registro Eliminado','" . $_SESSION['idusuario'] . "')";
 		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
 		
 		return $eliminar;

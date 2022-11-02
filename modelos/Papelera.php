@@ -38,26 +38,26 @@ class Papelera
       }
     }
 
-    $sql_2 = "SELECT idcargo_trabajador,  nombre, estado, created_at, updated_at FROM cargo_trabajador WHERE estado = '0' AND estado_delete = '1';";
-    $cargo_trabajador = ejecutarConsultaArray($sql_2);
+    // $sql_2 = "SELECT idcargo_trabajador,  nombre, estado, created_at, updated_at FROM cargo_trabajador WHERE estado = '0' AND estado_delete = '1';";
+    // $cargo_trabajador = ejecutarConsultaArray($sql_2);
 
-    if ($cargo_trabajador['status'] == false) { return $cargo_trabajador; }
+    // if ($cargo_trabajador['status'] == false) { return $cargo_trabajador; }
 
-    if (!empty($cargo_trabajador['data'])) {
-      foreach ($cargo_trabajador['data'] as $key => $value2) {
-        $data[] = array(
-          'nombre_tabla'    => 'cargo_trabajador',
-          'nombre_id_tabla' => 'idcargo_trabajador',
-          'id_tabla'        => $value2['idcargo_trabajador'],
-          'modulo'          => 'Cargo Trabajdor',
-          'nombre_archivo'  => $value2['nombre'],
-          'descripcion'     => '- - -',
-          'nombre_proyecto'  => 'General',
-          'created_at'      => $value2['created_at'],
-          'updated_at'      => $value2['updated_at'],
-        );
-      }
-    }
+    // if (!empty($cargo_trabajador['data'])) {
+    //   foreach ($cargo_trabajador['data'] as $key => $value2) {
+    //     $data[] = array(
+    //       'nombre_tabla'    => 'cargo_trabajador',
+    //       'nombre_id_tabla' => 'idcargo_trabajador',
+    //       'id_tabla'        => $value2['idcargo_trabajador'],
+    //       'modulo'          => 'Cargo Trabajdor',
+    //       'nombre_archivo'  => $value2['nombre'],
+    //       'descripcion'     => '- - -',
+    //       'nombre_proyecto'  => 'General',
+    //       'created_at'      => $value2['created_at'],
+    //       'updated_at'      => $value2['updated_at'],
+    //     );
+    //   }
+    // }
 
     $sql_3 = "SELECT cpt.idcarpeta, cpt.nombre, cpt.estado, cpt.created_at, cpt.updated_at,p.nombre_codigo
     FROM carpeta_plano_otro as cpt, proyecto as p
@@ -835,13 +835,11 @@ class Papelera
     }
     
     $sql34 = "SELECT tpp.idtrabajador_por_proyecto, tpp.desempenio, tpp.sueldo_mensual, tpp.created_at, tpp.updated_at, t.nombres, 
-    p.nombre_codigo, ctr.nombre as cargo
-    FROM trabajador_por_proyecto as tpp,  proyecto as p, trabajador as t, cargo_trabajador as ctr
-    WHERE tpp.idcargo_trabajador = ctr.idcargo_trabajador AND  tpp.idproyecto=p.idproyecto AND tpp.idtrabajador=t.idtrabajador AND
+    p.nombre_codigo
+    FROM trabajador_por_proyecto as tpp,  proyecto as p, trabajador as t
+    WHERE  tpp.idproyecto=p.idproyecto AND tpp.idtrabajador=t.idtrabajador AND
     tpp.estado='0' AND tpp.estado_delete='1' AND tpp.idproyecto='$nube_idproyecto'";
-    $trabajador_por_proyecto = ejecutarConsultaArray($sql34);
-
-    if ($trabajador_por_proyecto['status'] == false) { return $trabajador_por_proyecto; }
+    $trabajador_por_proyecto = ejecutarConsultaArray($sql34);   if ($trabajador_por_proyecto['status'] == false) { return $trabajador_por_proyecto; }
 
     if (!empty($trabajador_por_proyecto['data'])) {
       foreach ($trabajador_por_proyecto['data'] as $key => $value34) {
@@ -851,9 +849,7 @@ class Papelera
           'modulo'          => 'Trabajador por proyecto',
           'id_tabla'        => $value34['idtrabajador_por_proyecto'],
           'nombre_archivo'  => '<b>Trabajador: </b>'.$value34['nombres']. '<br>'.
-          '<b>Sueldo Mensual: </b>'.number_format($value34['sueldo_mensual'],2,'.',',').'<br>'.
-          '<b>Cargo: </b>'.$value34['cargo'].'<br>'.
-          '<b>Desempeño: </b>'.$value34['desempenio'].'<br>' ,
+          '<b>Sueldo Mensual: </b>'.number_format($value34['sueldo_mensual'],2,'.',',').'<br>' ,
           'descripcion'     => '- - - ',
           'nombre_proyecto'  => $value34['nombre_codigo'],
           'created_at'      => $value34['created_at'],

@@ -74,15 +74,15 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar( $idproyecto, $trabajador, $desempenio, $sueldo_diario, $sueldo_mensual, 
-            $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
+            $rspta=$trabajadorproyecto->insertar( $idproyecto, $trabajador, $desempenio, quitar_formato_miles($sueldo_diario), quitar_formato_miles($sueldo_mensual), 
+            quitar_formato_miles($sueldo_hora), format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
             
             echo json_encode($rspta, true);
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar( $idtrabajador_por_proyecto, $idproyecto, $trabajador, $desempenio, $sueldo_diario, $sueldo_mensual, 
-            $sueldo_hora, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
+            $rspta=$trabajadorproyecto->editar( $idtrabajador_por_proyecto, $idproyecto, $trabajador, $desempenio, quitar_formato_miles($sueldo_diario), quitar_formato_miles($sueldo_mensual), 
+            quitar_formato_miles($sueldo_hora), format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
             
             echo json_encode($rspta, true);
           }
@@ -130,23 +130,21 @@
           
           if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $value) { 
+              $imagen = (empty($value['imagen_perfil']) ? '../dist/svg/user_default.svg' : '../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil']) ;
               $data[]=array(
                 "0"=> $cont++,
-                "1"=>($value['estado'])?'<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$value['idtrabajador_por_proyecto'].','.$value['idtipo_trabajador'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
+                "1"=>'<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$value['idtrabajador_por_proyecto'].','.$value['idtipo_trabajador'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-danger btn-sm mb-1" onclick="desactivar('.$value['idtrabajador_por_proyecto'].')" data-toggle="tooltip" data-original-title="Desactivar"><i class="far fa-trash-alt  "></i></button>'.
-                  ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$value['idtrabajador_por_proyecto'].')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="far fa-eye"></i></button>':
-                  '<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$value['idtrabajador_por_proyecto'].','.$value['idtipo_trabajador'].')"><i class="fa fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-primary btn-sm mb-1" onclick="activar('.$value['idtrabajador_por_proyecto'].')"><i class="fa fa-check"></i></button>'.
-                  ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$value['idtrabajador_por_proyecto'].')"><i class="far fa-eye"></i></button>',
+                  ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$value['idtrabajador_por_proyecto'].')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="far fa-eye"></i></button>',
                 "2"=>'<div class="user-block">
-                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
+                  <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'' . $imagen . '\', \''.encodeCadenaHtml($value['trabajador']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['trabajador'] .'</p></span>
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                   </div>',
-                "3"=>'<div class="text-nowrap"><b>Fecha inicio: </b>'. ( empty($value['fecha_inicio']) ? '--' : format_d_m_a($value['fecha_inicio']) ). '<br> 
-                  <b>Fecha fin: </b>'.( empty($value['fecha_fin']) ? '--' : format_d_m_a($value['fecha_fin']) ) . '</div>',
-                "4"=> $value['telefono'],
-                "5"=> $value['email'],
+                "3"=>'<div class="text-nowrap"><b>Inicio: </b>'. ( empty($value['fecha_inicio']) ? '--' : format_d_m_a($value['fecha_inicio']) ). '<br> 
+                  <b>Fin: </b>'.( empty($value['fecha_fin']) ? '--' : format_d_m_a($value['fecha_fin']) ) . '</div>',
+                "4"=> '<a data-toggle="tooltip" data-original-title="Realizar llamada" href="tel:+51'.quitar_guion($value['telefono']).'">'.$value['telefono'].'</a>' ,
+                "5"=> '<a data-toggle="tooltip" data-original-title="Enviar correo" href="mailto:'.$value['email'].'">'.$value['email'].'</a>' ,
                 "6"=> $value['fecha_nacimiento'],
                 "7"=>$value['nombre_tipo'] ,
                 "8"=>$value['nombre_desempeno'],
