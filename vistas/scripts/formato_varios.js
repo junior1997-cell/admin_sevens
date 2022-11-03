@@ -36,3 +36,61 @@ function export_excel_control_equipos() {
   tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
 
 }
+
+function data_format_ats(nube_idproyecto) {
+
+  $("#cargando-1-fomulario").hide();
+  $("#cargando-2-fomulario").show();
+
+  $.post("../ajax/formatos_varios.php?op=data_format_ats", {'nube_idproyecto': nube_idproyecto}, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e);  
+
+    if (e.status == true) {
+      
+      var cant_t = e.data.length;
+      var cant_mitad_t = e.data.length/2; console.log('la mitad es:' + cant_mitad_t);
+      var html_trabajador = '';
+      
+      e.data.forEach((val, key) => {
+        if (cant_mitad_t < cant_t) {
+          var data_mitad = e.data[cant_mitad_t];
+          console.log(val.trabajador); 
+          if (data_mitad === undefined) {  } else {
+            console.log(data_mitad.trabajador);
+          }
+          console.log(key, cant_mitad_t);
+
+          
+
+          html_trabajador = html_trabajador.concat(`
+            <tr>
+              <td class="p-y-2px">${key+1}</td>
+              <td class="p-y-2px">${val.trabajador}</td>
+              <td class="p-y-2px"></td>
+              <td class="p-y-2px">${cant_mitad_t}</td>
+              <td class="p-y-2px">${data_mitad.trabajador}</td>
+              <td class="p-y-2px"></td>
+            </tr>
+          `);
+
+          
+          
+          cant_mitad_t++;
+        } 
+       
+      });
+
+      $(`#formato_ats>tbody`).html(html_trabajador);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+
+data_format_ats(localStorage.getItem('nube_idproyecto'));

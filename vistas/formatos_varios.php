@@ -14,15 +14,12 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <title>Asistencia Obrero | Admin Sevens</title>
+        <title>Formato | Admin Sevens</title>
 
-        <?php $title = "Asistencia Obrero"; require 'head.php'; ?>
-<style>
-  .class_text{
-    font-weight: 200;
-    font-size: unset;
-  }
-</style>
+        <?php $title = "Formato"; require 'head.php'; ?>
+        <style>
+          .class_text{ font-weight: 200; font-size: unset; }
+        </style>
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
         <!-- Content Wrapper. Contains page content -->
@@ -78,7 +75,7 @@
                           </ul>
                           <div class="tab-content" id="custom-content-below-tabContent">
 
-                            <div class="tab-pane fade " id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab"> 
+                            <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab"> 
                               <button type="button" class="btn bg-gradient-success" onclick="export_excel_detalle_factura();">
                                 <i class="fas fa-plus-circle"></i> export
                               </button>
@@ -197,7 +194,6 @@
 
                                 </tbody>
                               </table>
-
 
                             </div>
 
@@ -324,7 +320,7 @@
 
                             </div>
 
-                            <div class="tab-pane fade show active" id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
+                            <div class="tab-pane fade " id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
                               <!-- tabla REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA -->
                               <button type="button" class="btn bg-gradient-success m-05rem" onclick="export_excel_control_equipos();"> <i class="fas fa-plus-circle"></i> export </button>
                               <br>
@@ -437,127 +433,7 @@
                   </div>
                   <!-- /.container-fluid -->
                 </div>
-                <!-- MODAL - agregar asistencia - :::::::::::::::::::::::::::::::::: NO SE SE USA -->
-                <div class="modal fade" id="modal-agregar-asistencia">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Agregar asistencia</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-asistencia" name="form-asistencia" method="POST">                    
-                          <div class="row" >
-                            <!-- id proyecto -->
-                            <input type="hidden" name="idproyecto" id="idproyecto" required />
-
-                            <!-- id asistencia -->
-                            <input type="hidden" name="idasistencia_trabajador" id="idasistencia_trabajador" />
-
-                            <!-- fecha del registro de la asistencia -->
-                            <div class="col-lg-4  mb-2">
-                              <div class="form-group">
-                                <label for="fecha">Fecha de asistencia</label>
-                                <input type="date" class="form-control" name="fecha" id="fecha"  />                            
-                              </div>
-                            </div>
-
-                            <!-- Seleccionar una fecha para todos -->
-                            <div class="col-lg-4 mb-2">
-                              <div class="bootstrap-timepicker">
-                                <div class="form-group">
-                                  <label>Hora para todos:</label>
-                                  <div class="input-group date" id="timepicker" data-target-input="nearest">
-                                    <input type="text" id="hora_all" class="form-control datetimepicker-input" data-target="#timepicker" onchange="agregar_hora_all();" onkeyup="agregar_hora_all();" oninput="agregar_hora_all()" />
-                                    <div class="input-group-append" data-target="#timepicker" data-toggle="datetimepicker">
-                                      <div class="input-group-text"><i class="far fa-clock"></i></div>
-                                    </div>
-                                    </div>
-                                  <!-- /.input group -->
-                                </div>
-                                <!-- /.form group -->
-                              </div>
-                            </div>
-
-                            <div class="col-lg-4"></div>
-                            
-                            <div class="col-lg-12">
-                              <div class="row" id="lista-de-trabajadores">
-                                <!-- Lista de todos lo trabajadores -->
-                              </div>                                                  
-                            </div> 
-                          </div>                   
-                          
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-asistencia">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- MODAL - editar asistencia - :::::::::::::::::::::::::::::::::::: NO SE SE USA -->
-                <div class="modal fade" id="modal-editar-asistencia">
-                  <div class="modal-dialog modal-dialog-scrollable modal-md">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Editar asistencia</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-editar-asistencia" name="form-editar-asistencia" method="POST">
-                          <div class="row" id="cargando-1-fomulario">
-                            <!-- id proyecto -->
-                            <input type="hidden" name="idproyecto2" id="idproyecto2" required />
-
-                            <!-- id asistencia -->
-                            <input type="hidden" name="idasistencia_trabajador2" id="idasistencia_trabajador2"   />
-
-                            <!-- fecha del registro de la asistencia -->
-                            <div class="col-lg-12 mb-2">
-                              <div class="form-group">
-                                <label for="fecha">Fecha de asistencia</label>
-                                <input type="date" class="form-control" name="fecha2" id="fecha2"  />                            
-                              </div>
-                            </div>                      
-                            
-                            <div class="col-lg-12">
-                              <div class="row" id="lista-de-trabajadores2">
-                                <!-- Lista de todos lo trabajadores -->
-                              </div>                                                  
-                            </div>
-                          </div>
-
-                          <div class="row" id="cargando-2-fomulario" style="display: none;">
-                            <div class="col-lg-12 text-center">
-                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                              <br />
-                              <h4>Cargando...</h4>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-asistencia2">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro2">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
 
                 <!-- MODAL - justificar asistencia -->
                 <div class="modal fade" id="modal-justificar-asistencia">
@@ -644,207 +520,6 @@
                     </div>
                   </div>
                 </div> 
-                
-                <!-- MODAL - adicinoal / descuento -->
-                <div class="modal fade" id="modal-adicional-descuento" >
-                  <div class="modal-dialog modal-dialog-scrollable modal-md">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Adicional / descuento</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-adicional-descuento" name="form-adicional-descuento" method="POST">
-                          <div class="row" id="cargando-5-fomulario">
-                            
-                            <!-- id adicionales -->
-                            <input type="hidden" name="idresumen_q_s_asistencia" id="idresumen_q_s_asistencia" /> 
-                            <!-- ID trabajador por proyecto -->
-                            <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />   
-                            <!-- fecha de quincena o semana -->
-                            <input type="hidden" name="fecha_q_s" id="fecha_q_s" />                                         
-                            
-                            <!-- Descripcion -->
-                            <div class="col-md-12 col-lg-12">
-                              <div class="form-group">
-                                <label for="nombre">Descripción</label>
-                                <textarea name="detalle_adicional" id="detalle_adicional" class="form-control" rows="5" placeholder="Ingresa descripción"></textarea>
-                              </div>
-                            </div> 
-                          </div>
-
-                          <div class="row" id="cargando-6-fomulario" style="display: none;">
-                            <div class="col-lg-12 text-center">
-                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                              <br />
-                              <h4>Cargando...</h4>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-adicional-descuento">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_adicional_descuento">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- MODAL - cargando -->
-                <div class="modal fade" id="modal-cargando" data-keyboard="false" data-backdrop="static">
-                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
-                    <div class="modal-content">
-                      <div class="modal-body">
-                        
-                        <div id="icono-respuesta">
-                          <!-- icon ERROR -->
-                          <!-- icon success -->
-                        </div>
-                        
-                        <!-- barprogress -->
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                          <div class="progress h-px-30" id="div_barra_progress">
-                            <div id="barra_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                              0%
-                            </div>
-                          </div>
-                        </div> 
-                        
-                        <!-- boton -->
-                        <div class="swal2-actions" >
-                          <div class="swal2-loader"></div>
-                          <button onclick="cerrar_modal_cargando()" type="button" class="swal2-confirm swal2-styled" aria-label="" style="display: inline-block;">OK</button>                         
-                        </div>
-                      </div>                     
-                    </div>
-                  </div>
-                </div>
-
-                <!-- MODAL - Fechas de Actividades -->
-                <div class="modal fade" id="modal-agregar-fechas-actividades">
-                  <div class="modal-dialog /*modal-dialog-scrollable*/ modal-md">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h4 class="modal-title">Fechas de Actividades</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body">
-                        <!-- form start -->
-                        <form id="form-fechas-actividades" name="form-fechas-actividades" method="POST">
-                          <div class="row" id="cargando-7-fomulario">
-                            
-                            <!-- id asistencia -->
-                            <input type="hidden" name="id_proyecto_f" id="id_proyecto_f" /> 
-
-                            <!-- FECHA INICIO DE ACTIVIDADES -->
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                <label for="">Fecha Inicio de actividades: <sup class="text-danger">*</sup></label>
-                                <div class="input-group date "  data-target-input="nearest">
-                                  <input type="text" class="form-control" id="fecha_inicio_actividad" name="fecha_inicio_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();"  />
-                                  <div class="input-group-append click-btn-fecha-inicio-actividad cursor-pointer" for="fecha_inicio_actividad" >
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                  </div>
-                                </div>                                 
-                              </div>
-                            </div>
-                              
-                            <!-- FECHA INICIO FIN DE ACTIVIDADES -->
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                <label>Fecha Fin de actividades: <sup class="text-danger">*</sup></label>
-                                <div class="input-group date"  data-target-input="nearest">
-                                  <input type="text" class="form-control" id="fecha_fin_actividad" name="fecha_fin_actividad" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_actividad();" />
-                                  <div class="input-group-append click-btn-fecha-fin-actividad cursor-pointer">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                  </div>
-                                </div>                                 
-                              </div>
-                            </div>
-
-                            <!-- Dias habiles -->
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                <label for="plazo_actividad">Plazo Actividades<sup class="text-danger">*</sup> <small class="text-orange">(días hábiles)</small> </label>
-                                <span class="form-control plazo_actividad"> 0 </span>
-                                <input type="hidden" name="plazo_actividad" id="plazo_actividad" >
-                              </div>
-                            </div>                                                     
-
-                          </div>
-
-                          <div class="row" id="cargando-8-fomulario" style="display: none;">
-                            <div class="col-lg-12 text-center">
-                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                              <br />
-                              <h4>Cargando...</h4>
-                            </div>
-                          </div>
-                          <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-fechas-actividades">Submit</button>
-                        </form>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_fechas_actividades">Guardar Cambios</button>
-                      </div>
-                    </div>
-                  </div>
-                </div> 
-                
-                <!-- MODAL - Horas Multiples -->
-                <div class="modal fade" id="modal-agregar-horas-multiples" data-keyboard="false" data-backdrop="static">
-                  <div class="modal-dialog /*modal-dialog-scrollable*/ modal-md">
-                    <div class="modal-content">
-
-                      <div class="modal-header">
-                        <h4 class="modal-title"><i class="far fa-clock fa-lg m-1"></i> Asignar horas multiples</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-
-                      <div class="modal-body"> 
-                        <form id="form-horas-multiples" name="form-horas-multiples" method="POST">                         
-                          
-                          <!-- Horas -->
-                          <div class="col-lg-12"> 
-                            <div class="form-group">
-                              <label for="horas_multiples">Horas<sup class="text-danger">*</sup> <small class="text-danger">(para todos los trabajadores)</small> </label>
-                              <input class="form-control" type="number" name="horas_multiples" id="horas_multiples" >
-                            </div>
-                          </div>
-
-                          <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                            <div class="progress_h_multiple h-px-30" id="div_barra_progress_h_multiple">
-                              <div id="barra_progress_h_multiple" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                0%
-                              </div>
-                            </div>
-                          </div> 
-                          
-                          <button type="submit" style="display: none;" id="submit-form-horas-multiples">Submit</button>
-                        </form>
-                      </div>
-
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button  class="btn btn-success horas-multiples" >Asignar horas</button>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
 
               </section>
               <!-- /.content -->
