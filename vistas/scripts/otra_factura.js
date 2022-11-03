@@ -499,8 +499,8 @@ function calc_total() {
       $("#subtotal").val(redondearExp(total));
       $("#igv").val(0.00);
       $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
-      $('#num_documento').val("");
-      $('#razon_social').val("");
+      // $('#num_documento').val("");
+      // $('#razon_social').val("");
     }else{     
 
       subtotal = quitar_igv_del_precio(total, val_igv, 'decimal');
