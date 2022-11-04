@@ -75,6 +75,14 @@ if (!function_exists('ejecutarConsulta')) {
     return false;
   }
 
+  function fecha_dentro_de_rango($fecha, $fecha_menor, $fecha_mayor) {
+    $fecha_val = strtotime( $fecha );
+    $fecha_1 = strtotime( $fecha_menor );
+    $fecha_2 = strtotime( $fecha_mayor );
+    if ($fecha_val >= $fecha_1 && $fecha_val <= $fecha_2 ) { return true; }    
+    return false;
+  }
+
   // convierte de una fecha(dd-mm-aa): 23-12-2021 a una fecha(aa-mm-dd): 2021-12-23
   function format_a_m_d( $fecha ) {
 

@@ -16,8 +16,13 @@ var  idproducto_r = "", nombre_producto_r = "", precio_promedio_r = "", subtotal
 var op_guardar_compras = "";
 
 function init(){
+  $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
+  $("#bloc_ActivoFijo").addClass("menu-open bg-color-02020280");
 
-  $("#mResumenActivosFijosGeneral").addClass("active");
+  $("#mRecurso").addClass("active");
+  $("#mActivoFijo").addClass("active bg-primary");
+
+  $("#lResumenActivosFijosGeneral").addClass("active");
 	
 	tbla_principal_maquinaria();
 	tbla_principal_equipo();
