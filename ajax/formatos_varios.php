@@ -1,4 +1,6 @@
 <?php
+
+
 ob_start();
 
 	if (strlen(session_id()) < 1){
@@ -12,7 +14,7 @@ ob_start();
     //Validamos el acceso solo al usuario logueado y autorizado.
     if ($_SESSION['asistencia_obrero'] == 1) {
 
-      require_once "../modelos/Formatos_varios.php";
+      require_once "../modelos/Formatos_varios.php";         
 
       $formatos_varios=new FormatosVarios();  
       
@@ -28,6 +30,16 @@ ob_start();
           $rspta=$formatos_varios->formato_ats($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);		
+          
+        break; 
+
+        case 'dowload_format_ats':            
+
+          $rspta=$formatos_varios->formato_ats($_POST["nube_idproyecto"]);
+
+          
+          
+          // echo json_encode($rspta, true);		
           
         break; 
 

@@ -22,7 +22,10 @@ class FormatosVarios
 		WHERE tpp.idtrabajador = t.idtrabajador AND tt.idtipo_trabajador=t.idtipo_trabajador AND t.idocupacion = oc.idocupacion 
     AND d.iddesempenio = tpp.iddesempenio
     AND tpp.idproyecto = '$nube_idproyecto' AND tpp.estado='1' AND tpp.estado_delete='1' ORDER BY tpp.orden_trabajador ASC";
-    $trabajdor = ejecutarConsultaArray($sql); if ($trabajdor['status'] == false) { return  $trabajdor;}
+    $trabajdor = ejecutarConsultaArray($sql); if ($trabajdor['status'] == false) { return  $trabajdor;}   
+
+    $cant_array = count($trabajdor['data']);
+    $cant_array_mitad = count($trabajdor['data'])/2;
 
     foreach ($trabajdor['data'] as $key => $value) {
       $id = $value['idtrabajador'];
@@ -32,8 +35,9 @@ class FormatosVarios
       $bancos = ejecutarConsultaSimpleFila($sql2); if ($bancos['status'] == false) { return  $bancos;}     
 
       $data[] = array(
-        'orden' => $key+1,
-        'idtrabajador_por_proyecto' =>$value['idtrabajador_por_proyecto'],
+        'cant_array'=> $cant_array,
+        'cant_array_mitad'=> $cant_array_mitad,
+        'orden'           => $key+1,
         'idtrabajador'    => $value['idtrabajador'],  
         'trabajador'      => $value['nombres'], 
         'tipo_documento'  => $value['tipo_documento'], 

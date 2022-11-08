@@ -464,7 +464,7 @@
               <!-- REGISTRO DE ASISTENCIA -->
               <li class="nav-item ver-otros-modulos-1">
                 <a href="asistencia_obrero.php" class="nav-link pl-2" id="lAsistencia">
-                  <i class="fas fa-clipboard-list nav-icon"></i>
+                  <i class="fa-regular fa-square-check nav-icon"></i>
                   <p>Asistencia del obrero </p>
                 </a>
               </li>
@@ -473,7 +473,7 @@
               <!-- REGISTRO DE ASISTENCIA -->
               <li class="nav-item ver-otros-modulos-1">
                 <a href="formatos_varios.php" class="nav-link pl-2" id="lformatos_varios">
-                  <i class="fas fa-clipboard-list nav-icon"></i>
+                  <i class="fa-regular fa-square-check nav-icon"></i>
                   <p>Formatos varios </p>
                 </a>
               </li>
