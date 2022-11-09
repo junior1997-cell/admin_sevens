@@ -48,7 +48,7 @@ function data_format_ats(nube_idproyecto) {
         html_temperatura = html_temperatura.concat(`
           <tr>
             <td class="p-y-2px">${key+1}</td>
-            <td class="p-y-2px">${val.trabajador}</td>
+            <td class="p-y-2px" >${val.trabajador}</td>
             <td class="p-y-2px"> --- </td>
             <td class="p-y-2px"> --- </td>
             <td class="p-y-2px"> --- </td>
@@ -98,6 +98,7 @@ function data_format_ats(nube_idproyecto) {
       $(`#formato_check_list_epps>tbody`).html(html_check_lit_epps);
 
       $('#btn-export-ats').attr('href', `../reportes/export_format_ats.php?id_proyecto=${nube_idproyecto}`);
+      $('#btn-export-temperatura').attr('href', `../reportes/export_format_temperatura.php?id_proyecto=${nube_idproyecto}`);
 
       $('#btn-export-ats').attr('target', `_blank`);
 
