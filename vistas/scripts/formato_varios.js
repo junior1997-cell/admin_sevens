@@ -30,16 +30,16 @@ function data_format_ats(nube_idproyecto) {
           cant_mitad_t++;
           var data_mitad = e.data[cant_mitad_t]; //console.log(data_mitad);
 
-          var trabajador = '';
+          var trabajador = ''; console.log(val.orden);
 
           if (data_mitad === undefined) {  } else {
             // console.log(data_mitad.trabajador);
-            trabajador = `<td class="p-y-2px">${cant_mitad_t}</td><td class="p-y-2px">${data_mitad.trabajador}</td> <td class="p-y-2px"></td>`;
+            trabajador = `<td class="p-y-2px">${data_mitad.orden}</td><td colspan="2" class="p-y-2px">${data_mitad.trabajador}</td> <td class="p-y-2px">---</td>`;
           }           
 
           html_ats = html_ats.concat(`
             <tr>
-              <td class="p-y-2px">${key+1}</td> <td class="p-y-2px">${val.trabajador}</td> <td class="p-y-2px"></td> ${trabajador}
+              <td class="p-y-2px w-10px">${val.orden}</td> <td colspan="2" class="p-y-2px">${val.trabajador}</td> <td colspan="2" class="p-y-2px">---</td> ${trabajador}
             </tr>
           `);           
         }      

@@ -78,108 +78,57 @@
                             <div class="tab-pane fade show active" id="custom-content-below-home" role="tabpanel" aria-labelledby="custom-content-below-home-tab"> 
                               <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-ats" href=""  >
                                 <i class="fa-regular fa-file-excel"></i> export
-                              </a>
-                              <button onclick="export_excel_ats();"> export v2</button>
+                              </a>                              
                               <!-- table con el formato de ATS diseño table -->
-                              <div class="table-responsive pb-3">
-                                <table class="table table-bordered" id="formato_ats_v2" style="width: 100% !important;" >
-                                  <tr>
-                                    <td rowspan="3"></td> <td colspan="5">Formato</td>  <td>CÓDIGO</td> <td>00-677-0T</td>
-                                  </tr>
-                                  <tr>
-                                    <td colspan="5" >ANÁLISIS SEGURO DE TRABAJO (ATS)</td>  <td>VERSION</td><td>1.03.6</td>
-                                  </tr>
-                                  <tr>
-                                    <td>FECHA</td><td>13/09/2022</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Tarea a realizar:</td> <td colspan="7">LIMPIEZA, SOLDADURA, TARRAJEO, CORTE EN MUROS, ARMADO DE ANDAMIOS, INSTALACIONES SANITARIAS.</td>
-                                  </tr>
-                                  <tr>
-                                    <td>RAZÓN SOCIAL:</td> <td>SEVEN´S INGENIEROS SELVA S.A.C.</td> <td>RUC: </td> <td>20609935651</td> <td>Lugar:</td> <td>SEDE MNO</td> <td>N° DE REGISTRO</td> <td>001-SH</td>
-                                  </tr>
-                                  <tr>
-                                    <td colspan="8"></td>
-                                  </tr>
-                                  <tr>
-                                    <td colspan="8">EQUIPO DE ATS</td>
-                                  </tr>
-                                  <tr>
-                                    <td>N°</td> <td>Apellidos y Nombres</td> <td></td> <td>Firma</td> <td>Nº</td><td>Apellidos y Nombres</td><td></td><td>Firma</td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                  <tr>
-                                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-                                  </tr>
-                                </table>
+                              <div class="table-responsive pb-3">                                
 
                                 <table id="formato_ats" class="table table-bordered table-striped" style="width: 100% !important;">
                                   <thead>
                                     <tr>
                                       <th class="p-y-2px"  rowspan="3"></th> 
-                                      <th class="p-y-2px"  rowspan="3">#</th> 
-                                      <th class="p-y-2px">Formato</th> 
-                                      <th class="p-y-2px" rowspan="3"></th>
-                                      <th class="p-y-2px">CÓDIGO</th> 
+                                      <th class="p-y-2px text-center"  rowspan="3"><img src="../dist/img/logo-principal.png" alt="logo Admin Sevens" width="100px" ></th> 
+                                      <th class="p-y-2px text-center" colspan="5">Formato</th> 
+                                      <th class="p-y-2px">CÓDIGO:</th> 
                                       <th class="p-y-2px">---</th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-2px" rowspan="2"  >ANÁLISIS SEGURO DE TRABAJO (ATS)</th>  
-                                      <th class="p-y-2px">VERSION</th> 
+                                      <th class="p-y-2px text-center" rowspan="2" colspan="5"  >ANÁLISIS SEGURO DE TRABAJO (ATS)</th>  
+                                      <th class="p-y-2px">VERSION:</th> 
                                       <th class="p-y-2px">---</th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-2px">FECHA</th> 
-                                      <th class="p-y-2px">12/10/22 MIÉRCOLES</th>
+                                      <th class="p-y-2px">FECHA:</th> 
+                                      <th class="p-y-2px">---</th>
                                     </tr>
                                     <tr>
                                       <th class="p-y-2px"></th>
                                       <th class="p-y-2px bg-gray-light">Tarea a realizar:</th>
-                                      <th class="p-y-2px" colspan="4"> LIMPIEZA, SOLDADURA, TARRAJEO, CORTE EN MUROS, ARMADO DE ANDAMIOS, INSTALACIONES SANITARIAS.</th>
+                                      <th class="p-y-2px" colspan="7"> ---</th>
                                     </tr>
                                     <tr> 
                                       <th class="p-y-2px"></th>
-                                      <th class="p-y-2px"> <b> RAZÓN SOCIAL: </b>  <span> SEVEN´S INGENIEROS SELVA S.A.C.</span></th>
-                                      <th class="p-y-2px"> <b>  RUC: </b>  <span> 20609935651</span></th>
-                                      <th class="p-y-2px"></th>
-                                      <th class="p-y-2px" > <b> Lugar: </b>  <span> SEDE MNO</span></th>
-                                      <th class="p-y-2px"> <b> N° DE REGISTRO: </b>  <span> 000001-4546</span></th> 
+                                      <th class="p-y-2px"> RAZÓN SOCIAL: </th>
+                                      <th class="p-y-2px"> SEVEN´S INGENIEROS SELVA S.A.C.</th>
+                                      <th class="p-y-2px"> RUC: </th>
+                                      <th class="p-y-2px">20609935651 </th>
+                                      <th class="p-y-2px" >Lugar: </th>
+                                      <th class="p-y-2px" > --- </th>
+                                      <th class="p-y-2px"> N° DE REGISTRO: </th>
+                                      <th class="p-y-2px"> --- </th> 
                                     </tr>
                                     <tr>
-                                      <th class="p-y-2px"></th>
-                                      <th class="p-y-10px" colspan="5"></th>
+                                      <th class="p-y-10px" colspan="9"></th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-2px"></th>
-                                      <th colspan="5" class="text-center p-y-2px">EQUIPO DE ATS</th>
+                                      <th colspan="9" class="text-center p-y-2px">EQUIPO DE ATS</th>
                                     </tr>
                                     <tr colspan="5"> 
                                       <th class="p-y-2px " > N°</th>
-                                      <th class="p-y-2px">Apellidos y Nombres</th>
-                                      <th class="p-y-2px">Firma</th>
+                                      <th class="p-y-2px" colspan="2">Apellidos y Nombres</th>
+                                      <th class="p-y-2px" colspan="2">Firma</th>
                                       <th class="p-y-2px">Nº</th> 
-                                      <th class="p-y-2px">Apellidos y Nombres</th>
-                                      <th class="p-y-2px">Firma</th>
+                                      <th class="p-y-2px" colspan="2">Apellidos y Nombres</th>
+                                      <th class="p-y-2px" colspan="2">Firma</th>
                                     </tr>
                                   </thead>
                                   <tbody>
