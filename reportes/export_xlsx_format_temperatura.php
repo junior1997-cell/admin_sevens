@@ -7,7 +7,7 @@
 
 
   $spreadsheet = new Spreadsheet();
-  $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Ats");
+  $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Temperatura");
   
   $spreadsheet->setActiveSheetIndex(0);
   $spreadsheet->getActiveSheet()->getStyle('A:M')->getAlignment()->setVertical('center');
@@ -116,7 +116,7 @@
 
   // redirect output to client browser
   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  header('Content-Disposition: attachment;filename="fortmato_ats.xlsx"');
+  header('Content-Disposition: attachment;filename="fortmato_temperatura.xlsx"');
   header('Cache-Control: max-age=0');
 
   $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');

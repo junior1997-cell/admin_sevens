@@ -97,8 +97,9 @@ function data_format_ats(nube_idproyecto) {
       $(`#formato_temperatura>tbody`).html(html_temperatura);
       $(`#formato_check_list_epps>tbody`).html(html_check_lit_epps);
 
-      $('#btn-export-ats').attr('href', `../reportes/export_format_ats.php?id_proyecto=${nube_idproyecto}`);
-      $('#btn-export-temperatura').attr('href', `../reportes/export_format_temperatura.php?id_proyecto=${nube_idproyecto}`);
+      $('#btn-export-ats').attr('href', `../reportes/export_xlsx_format_ats.php?id_proyecto=${nube_idproyecto}`);
+      $('#btn-export-temperatura').attr('href', `../reportes/export_xlsx_format_temperatura.php?id_proyecto=${nube_idproyecto}`);
+      $('#btn-export-check-list-epps').attr('href', `../reportes/export_xlsx_format_check_list.php?id_proyecto=${nube_idproyecto}`);
 
       $('#btn-export-ats').attr('target', `_blank`);
 

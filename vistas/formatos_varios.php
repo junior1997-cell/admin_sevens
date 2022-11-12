@@ -202,52 +202,56 @@
 
                             <div class="tab-pane fade " id="custom-content-below-messages" role="tabpanel" aria-labelledby="custom-content-below-messages-tab">
                               <!-- tabla REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA -->
-                              <button type="button" class="btn bg-gradient-success btn-sm my-3" onclick="export_excel_control_equipos();"> <i class="fa-regular fa-file-excel"></i> export </button>
+                              <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-check-list-epps"> <i class="fa-regular fa-file-excel"></i> export </a>
                               <div class="table-responsive pb-3">
                                 <table id="formato_check_list_epps"  class="table table-bordered table-striped">
-                                  <thead>
+                                  <thead class="text-center">
                                     <tr>
-                                      <th class="p-y-3px text-center" colspan="26">CONTROL DIARIO DE EQUIPOS DE PROTECCIÓN PERSONAL</th>
+                                      <th class="p-y-3px celda-b-y-0px" rowspan="3" colspan="2"><img src="../dist/img/logo-principal.png" alt="logo Admin Sevens" width="100px" ></th>
+                                      <th class="p-y-3px" colspan="24">CONTROL DIARIO DE EQUIPOS DE PROTECCIÓN PERSONAL</th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-3px text-center" colspan="26">CONSTRUCCIÓN DE LA SEDE MISIÓN NOR ORIENTAL - II ETAPA 12/10/2022 MIERCOLES</th>
+                                      <th class="p-y-3px" colspan="24"> --- </th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-3px text-center bg-color-acc3c7" colspan="26">DATOS DEL EMPLEADOR PRINCIPAL:</th>
+                                      <th class="p-y-3px" colspan="24"> --- </th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-3px font-size-13px" colspan="3">RAZÓN SOCIAL O <br> DENOMINACIÓN SOCIAL</th>
-                                      <th class="p-y-3px font-size-13px" colspan="3">RUC</th>
-                                      <th class="p-y-3px font-size-13px" colspan="3">DOMICILIO <br> (Dirección, distrito, departamento, provincia)</th>
-                                      <th class="p-y-3px font-size-13px" colspan="3">TIPO DE ACTIVIDAD <br> ECONÓMICA</th>
-                                      <th class="p-y-3px font-size-13px" colspan="3">N° TRABAJADORES  <br> EN EL TRABAJO</th>
-                                      <th class="p-y-3px font-size-13px celda-b-x-0px" colspan="10" rowspan="2"></th>
+                                      <th class="p-y-3px bg-color-acc3c7" colspan="26">DATOS DEL EMPLEADOR PRINCIPAL:</th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-3px font-size-12px" colspan="3">SEVEN´S INGENIEROS SELVA  <br>  S.A.C. </th>
-                                      <th class="p-y-3px font-size-12px" colspan="3">20609935651</th>
-                                      <th class="p-y-3px font-size-12px" colspan="3">JR. MANCO CAPAC N°491  <br> SAN MARTIN - MORALES.</th>
-                                      <th class="p-y-3px font-size-12px" colspan="3">ARQUITECTURA E INGENIERIA</th>
-                                      <th class="p-y-3px font-size-12px" colspan="3"></th>
-                                      <th class="p-y-3px font-size-12px celda-b-y-0px celda-b-x-0px" colspan="11" ></th>
+                                      <th class="p-y-3px font-size-13px" colspan="2">RAZÓN SOCIAL O DENOMINACIÓN SOCIAL</th>
+                                      <th class="p-y-3px font-size-13px" colspan="4">RUC</th>
+                                      <th class="p-y-3px font-size-13px" colspan="6">DOMICILIO <br> (Dirección, distrito, departamento, provincia)</th>
+                                      <th class="p-y-3px font-size-13px" colspan="6">TIPO DE ACTIVIDAD <br> ECONÓMICA</th>
+                                      <th class="p-y-3px font-size-13px" colspan="4">N° TRABAJADORES  <br> EN EL TRABAJO</th>
+                                      <th class="p-y-3px font-size-13px celda-b-x-0px" colspan="4" rowspan="2"></th>
                                     </tr>
-                                    <tr class="font-size-12px text-center">
-                                      <th class="p-y-3px">N°</th>
+                                    <tr>
+                                      <th class="p-y-3px font-size-12px font-weight-normal" colspan="2">SEVEN´S INGENIEROS SELVA   S.A.C. </th>
+                                      <th class="p-y-3px font-size-12px font-weight-normal" colspan="4">20609935651</th>
+                                      <th class="p-y-3px font-size-12px font-weight-normal" colspan="6"> --- </th>
+                                      <th class="p-y-3px font-size-12px font-weight-normal" colspan="6">ARQUITECTURA E INGENIERIA</th>
+                                      <th class="p-y-3px font-size-12px font-weight-normal" colspan="4"> --- </th>
+                                      <th class="p-y-3px font-size-12px celda-b-y-0px celda-b-x-0px" colspan="4" > </th>
+                                    </tr>
+                                    <tr class="font-size-12px">
+                                      <th class="p-y-3px"></th>
                                       <th class="p-y-3px" >VERIFICACIÓN DE EQUIPOS DE SEGURIDAD</th>
-                                      <th class="p-y-3px"  colspan="2">CASCO</th>
-                                      <th class="p-y-3px"  colspan="2">CORTA VIENTO</th>
-                                      <th class="p-y-3px"  colspan="2">LENTES DE SEGURIDAD</th>
-                                      <th class="p-y-3px"  colspan="2">GUANTES DE NITRILO</th>
-                                      <th class="p-y-3px"  colspan="2">GUANTES DE JEBE</th>
-                                      <th class="p-y-3px"  colspan="2">GUANTES DE CUERO</th>
-                                      <th class="p-y-3px"  colspan="2">ZAPATOS DE SEGURIDAD</th>
-                                      <th class="p-y-3px"  colspan="2">PROTECTORES AUDITIVOS</th>
-                                      <th class="p-y-3px"  colspan="2">ARNES</th>
-                                      <th class="p-y-3px"  colspan="2">CARETA</th>
-                                      <th class="p-y-3px"  colspan="2">BOTAS DE JEBE</th>
-                                      <th class="p-y-3px"  colspan="2">CAPOTIN</th>
+                                      <th class="p-y-3px" colspan="2">CASCO</th>
+                                      <th class="p-y-3px" colspan="2">CORTA VIENTO</th>
+                                      <th class="p-y-3px" colspan="2">LENTES DE SEGURIDAD</th>
+                                      <th class="p-y-3px" colspan="2">GUANTES DE NITRILO</th>
+                                      <th class="p-y-3px" colspan="2">GUANTES DE JEBE</th>
+                                      <th class="p-y-3px" colspan="2">GUANTES DE CUERO</th>
+                                      <th class="p-y-3px" colspan="2">ZAPATOS DE SEGURIDAD</th>
+                                      <th class="p-y-3px" colspan="2">PROTECTORES AUDITIVOS</th>
+                                      <th class="p-y-3px" colspan="2">ARNES</th>
+                                      <th class="p-y-3px" colspan="2">CARETA</th>
+                                      <th class="p-y-3px" colspan="2">BOTAS DE JEBE</th>
+                                      <th class="p-y-3px" colspan="2">CAPOTIN</th>
                                     </tr>
-                                    <tr class="font-size-13px text-center">
+                                    <tr class="font-size-13px">
 
                                       <th class="p-y-4px">N°</th>
                                       <th class="p-y-8px">APELLIDOS Y NOMBRES</th>

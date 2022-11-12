@@ -458,7 +458,7 @@ function ver_detalle_compras(idcompra_proyecto) {
       $("#cargando-6-fomulario").hide();
 
       $("#print_pdf_compra").removeClass('disabled');    
-      $("#excel_compra").removeClass('disabled');
+      $("#excel_compra").removeClass('disabled').attr('href', `../reportes/export_xlsx_compra_insumo.php?id=${idcompra_proyecto}&op=insumo`);
       $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=insumo` );
     } else {
       ver_errores(e);
