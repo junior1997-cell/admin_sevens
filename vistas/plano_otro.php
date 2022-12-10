@@ -55,12 +55,12 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title" id="title-1">
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-carpeta" onclick="limpiar();"><i class="fas fa-folder-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-carpeta" onclick="limpiar_carpeta();"><i class="fas fa-folder-plus"></i> Agregar</button>
                             Admnistra de manera eficiente tus carpetas.
                           </h3>
                           <h3 class="card-title" id="title-2" style="display: none !important;">
                             <button type="button" class="btn bg-gradient-warning"  onclick="regresar();"><i class="fas fa-arrow-left"></i> Regresar</button>
-                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-planootros" onclick="limpiar();"><i class="fas fa-file-contract"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-planootros" onclick="limpiar_plano();"><i class="fas fa-file-contract"></i> Agregar</button>
                             Admnistra de manera eficiente tus plano y otros archivos.
                           </h3>
                         </div>
@@ -169,8 +169,8 @@
 
                               <!-- barprogress -->
                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="div_barra_progress">
-                                  <div id="barra_progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                <div class="progress" id="barra_progress_carpeta_div">
+                                  <div id="barra_progress_carpeta" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                     0%
                                   </div>
                                 </div>
@@ -192,7 +192,7 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_carpeta">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
@@ -261,8 +261,8 @@
 
                               <!-- barprogress -->
                               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="div_barra_progress2">
-                                  <div id="barra_progress2" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                <div class="progress" id="barra_progress_plano_div">
+                                  <div id="barra_progress_plano" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                     0%
                                   </div>
                                 </div>
@@ -284,7 +284,7 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_2">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_plano">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>

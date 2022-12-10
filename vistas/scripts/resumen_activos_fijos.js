@@ -1187,10 +1187,6 @@ function export_excel_detalle_factura() {
 
 }
 
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!");
-}
-
 function extrae_ruc() {
   if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
     $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');

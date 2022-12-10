@@ -38,7 +38,7 @@ function init(){
 
   }).fail( function(e) { ver_errores(e); } );
 
-   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
 
   $('#fecha_pago_obrero').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true });
   $('#fecha_valorizacion').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true});
@@ -266,12 +266,12 @@ function tbla_secundaria() {
 }
 
 //Función para guardar o editar
-function guardaryeditar(e) {
+function guardar_y_editar_proyecto(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-proyecto")[0]);
 
   $.ajax({
-    url: "../ajax/proyecto.php?op=guardaryeditar",
+    url: "../ajax/proyecto.php?op=guardar_y_editar_proyecto",
     type: "POST",
     data: formData,
     contentType: false,
@@ -279,7 +279,7 @@ function guardaryeditar(e) {
     success: function (e) {
       try {
         e = JSON.parse(e);  //console.log(e);  
-        if (e) {
+        if (e.status == true) {
           
           tabla.ajax.reload(null, false);	
 
@@ -476,22 +476,22 @@ function calcular_palzo() {
 
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addImageApplication(e, $("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addImageApplication(e, $("#doc1").attr("id"), null, '100%', '210' ) });
 
 $("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
-$("#doc2").change(function(e) {  addImageApplication(e, $("#doc2").attr("id")) });
+$("#doc2").change(function(e) {  addImageApplication(e, $("#doc2").attr("id"), null, '100%', '210' ) });
 
 $("#doc3_i").click(function() {  $('#doc3').trigger('click'); });
-$("#doc3").change(function(e) {  addImageApplication(e, $("#doc3").attr("id")) });
+$("#doc3").change(function(e) {  addImageApplication(e, $("#doc3").attr("id"), null, '100%', '210' ) });
 
 $("#doc4_i").click(function() {  $('#doc4').trigger('click'); });
-$("#doc4").change(function(e) {  addImageApplication(e, $("#doc4").attr("id")) });
+$("#doc4").change(function(e) {  addImageApplication(e, $("#doc4").attr("id"), null, '100%', '210' ) });
 
 $("#doc5_i").click(function() {  $('#doc5').trigger('click'); });
-$("#doc5").change(function(e) {  addImageApplication(e, $("#doc5").attr("id")) });
+$("#doc5").change(function(e) {  addImageApplication(e, $("#doc5").attr("id"), null, '100%', '210' ) });
 
 $("#doc6_i").click(function() {  $('#doc6').trigger('click'); });
-$("#doc6").change(function(e) {  addImageApplication(e, $("#doc6").attr("id")) });
+$("#doc6").change(function(e) {  addImageApplication(e, $("#doc6").attr("id"), null, '100%', '210' ) });
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
@@ -747,14 +747,6 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
   }
 
   $(".tooltip").removeClass("show").addClass("hidde");
-}
-
-function no_pdf() {
-  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
-}
-
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!")
 }
 
 function mostrar(idproyecto) {
@@ -1194,87 +1186,6 @@ function box_proyecto() {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function ver_modal_docs_valorizaciones(idproyecto, documento) {
-
-  //console.log(idproyecto, extrae_extencion( documento));
-
-  $('#verdoc7').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
-
-  $('#idproyect').val(idproyecto);
-
-  $('#doc_old_7').val(documento);
-
-  $('#modal-agregar-valorizaciones').modal("show");
-
-  if (documento == "") {
-
-    $('#verdoc7').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
-
-    $("#verdoc7_nombre").html("valorizaciones"+
-      '<div class="col-md-12 row mt-2">'+
-        '<div class="col-md-6">'+
-          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
-            '<i class="fas fa-download"></i>'+
-          '</a>'+
-          '</div>'+
-
-          '<div class="col-md-6">'+
-          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
-            'Ver completo <i class="fas fa-expand"></i>'+
-          '</a>'+
-        '</div>'+
-      '</div>'+
-    '');
-  } else {
-    var nombredocs = "";
-
-    
-    if (extrae_extencion( documento) == "xls") {
-
-      nombredocs = "valorizaciones.xls";     $('#verdoc7').html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-    } else {
-
-      if (extrae_extencion( documento) == "xlsx") {
-
-        nombredocs = "valorizaciones.xlsx";  $('#verdoc7').html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-      } else {
-
-        if (extrae_extencion( documento) == "xlsx") {
-
-          nombredocs = "valorizaciones.xlsx";  $('#verdoc7').html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-  
-        } else {
-
-          if (extrae_extencion( documento) == "xlsm") {
-
-            nombredocs = "valorizaciones.xlsm";  $('#verdoc7').html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-    
-          } else {
-            nombredocs = "valorizaciones";  $('#verdoc7').html('<img src="../dist/svg/logo-excel.svg" alt="" width="50%" >');
-          }
-        }
-      }      
-    }       
-
-    $("#verdoc7_nombre").html(nombredocs +
-      '<div class="col-md-12 row mt-2">'+
-          '<div class="col-md-6 ">'+
-            '<a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/documento/'+documento+'"  download="Valorizaciones" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-              '<i class="fas fa-download"></i>'+
-            '</a>'+
-          '</div>'+
-          '<div class="col-md-6 ">'+
-            '<button  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/documento/'+documento+'" disabled  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-              'Ver completo <i class="fas fa-expand"></i>'+
-            '</button>'+
-          '</div>'+
-      '</div>'+
-    '');
-  }
-}
-
 function calcular_plazo_fechafin() {
   
   if ($("#dias_habiles").val() == "" && $("#fecha_inicio").val() == "20-02-1112") {  //console.log($("#dias_habiles").val(),$("#fecha_inicio").val());   
@@ -1419,7 +1330,7 @@ $(function () {
 
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardaryeditar(e);       
+      guardar_y_editar_proyecto(e);       
     },
   });
 

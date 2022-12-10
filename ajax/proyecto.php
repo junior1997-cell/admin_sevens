@@ -52,7 +52,7 @@
       // $empresa_acargo,$costo,$fecha_inicio,$fecha_fin,$doc1_contrato_obra,$doc2_entrega_terreno,$doc3_inicio_obra,
       switch ($_GET["op"]){
 
-        case 'guardaryeditar':
+        case 'guardar_y_editar_proyecto':
           
           $fecha_inicio_actividad =  format_a_m_d( $fecha_inicio_actividad);          
           $fecha_fin_actividad =  format_a_m_d( $fecha_fin_actividad);
@@ -62,192 +62,109 @@
 
           //*DOC 1*//
           if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
-
-            $flat_doc1 = false;  $doc1 = $_POST["doc_old_1"];
-
+            $flat_doc1  = false;  $doc1 = $_POST["doc_old_1"];
           } else {
-
-            $flat_doc1 = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);            
-              
-            $doc1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
-
-            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc1);
-            
+            $flat_doc1  = true;  $ext_doc1 = explode(".", $_FILES["doc1"]["name"]);              
+            $doc1       = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc1);
+            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc1);            
           }	
 
           //*DOC 2*//
           if (!file_exists($_FILES['doc2']['tmp_name']) || !is_uploaded_file($_FILES['doc2']['tmp_name'])) {
-
-            $flat_doc2 = false;
-
-            $doc2      = $_POST["doc_old_2"];
-
+            $flat_doc2  = false;
+            $doc2       = $_POST["doc_old_2"];
           } else {
-
-            $flat_doc2 = true;
-
-            $ext_doc2     = explode(".", $_FILES["doc2"]["name"]);
-              
-            $doc2 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
-
-            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc2);
-            
+            $flat_doc2  = true; $ext_doc2 = explode(".", $_FILES["doc2"]["name"]);              
+            $doc2       = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc2);
+            move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc2);            
           }	
 
           //*DOC 3*//
           if (!file_exists($_FILES['doc3']['tmp_name']) || !is_uploaded_file($_FILES['doc3']['tmp_name'])) {
-
-            $flat_doc3 = false;
-
-            $doc3      = $_POST["doc_old_3"];
-
+            $flat_doc3  = false;
+            $doc3       = $_POST["doc_old_3"];
           } else {
-
-            $flat_doc3 = true;
-
-            $ext_doc3     = explode(".", $_FILES["doc3"]["name"]);
-              
-            $doc3 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
-
-            move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc3);
-            
+            $flat_doc3  = true;  $ext_doc3 = explode(".", $_FILES["doc3"]["name"]);              
+            $doc3       = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc3);
+            move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc3);            
           }	
 
           //*DOC 4*//
           if (!file_exists($_FILES['doc4']['tmp_name']) || !is_uploaded_file($_FILES['doc4']['tmp_name'])) {
-
-            $flat_doc4 = false;
-
-            $doc4      = $_POST["doc_old_4"];
-
+            $flat_doc4  = false;
+            $doc4       = $_POST["doc_old_4"];
           } else {
-
-            $flat_doc4 = true;
-
-            $ext_doc4     = explode(".", $_FILES["doc4"]["name"]);
-              
-            $doc4 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
-
-            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc4);
-            
+            $flat_doc4  = true; $ext_doc4 = explode(".", $_FILES["doc4"]["name"]);              
+            $doc4       = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc4);
+            move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc4);            
           }	
 
           //*DOC 5*//
           if (!file_exists($_FILES['doc5']['tmp_name']) || !is_uploaded_file($_FILES['doc5']['tmp_name'])) {
-
-            $flat_doc5 = false;
-
-            $doc5      = $_POST["doc_old_5"];
-
+            $flat_doc5  = false;
+            $doc5       = $_POST["doc_old_5"];
           } else {
-
-            $flat_doc5 = true;
-
-            $ext_doc5     = explode(".", $_FILES["doc5"]["name"]);
-              
-            $doc5 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
-
-            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc5);
-            
+            $flat_doc5  = true;  $ext_doc5 = explode(".", $_FILES["doc5"]["name"]);              
+            $doc5       = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc5);
+            move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc5);            
           }	
 
           //*DOC 6*//
           if (!file_exists($_FILES['doc6']['tmp_name']) || !is_uploaded_file($_FILES['doc6']['tmp_name'])) {
-
-            $flat_doc6 = false;
-
-            $doc6      = $_POST["doc_old_6"];
-
+            $flat_doc6  = false;
+            $doc6       = $_POST["doc_old_6"];
           } else {
-
-            $flat_doc6 = true;
-
-            $ext_doc6     = explode(".", $_FILES["doc6"]["name"]);
-            
-            // echo json_encode($_FILES['doc6']); 
-            $doc6 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
-
-            move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc6);
-            
+            $flat_doc6  = true;  $ext_doc6 = explode(".", $_FILES["doc6"]["name"]);            
+            $doc6       = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext_doc6);
+            move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc6);            
           }          
 
           if (empty($idproyecto)){
             // insertamos en la bd
-            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
-            // echo $rspta ;
+            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);            
             echo json_encode($rspta, true);
 
           } else {
             // validamos si existe el doc para eliminarlo
             if ($flat_doc1 == true) {
-
               $datos_f1 = $proyecto->obtenerDocs($idproyecto);
-
               $doc1_ant = $datos_f1['data']['doc1_contrato_obra'];
-
-              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc1_ant)  == 200) {
-                unlink("../dist/docs/valorizacion/documento/" . $doc1_ant);
-              }
+              if ( !empty( $doc1_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc1_ant); }
             }
 
             if ($flat_doc2 == true) {
-
               $datos_f2 = $proyecto->obtenerDocs($idproyecto);
-
               $doc2_ant = $datos_f2['data']['doc2_entrega_terreno'];
-
-              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc2_ant)  == 200) {
-                unlink("../dist/docs/valorizacion/documento/" . $doc2_ant);
-              }
+              if ( !empty( $doc2_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc2_ant); }
             }
 
             if ($flat_doc3 == true) {
-
               $datos_f3 = $proyecto->obtenerDocs($idproyecto);
-
               $doc3_ant = $datos_f3['data']['doc3_inicio_obra'];
-
-              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc3_ant)  == 200) {
-                unlink("../dist/docs/valorizacion/documento/" . $doc3_ant);
-              }
+              if ( !empty( $doc3_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc3_ant); }
             }
 
             if ($flat_doc4 == true) {
-
               $datos_f4 = $proyecto->obtenerDocs($idproyecto);
-
               $doc4_ant = $datos_f4['data']['doc4_presupuesto'];
-
-              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc4_ant)  == 200) {
-                unlink("../dist/docs/valorizacion/documento/" . $doc4_ant);
-              }
+              if ( !empty( $doc4_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc4_ant); }
             }
 
             if ($flat_doc5 == true) {
-
               $datos_f5 = $proyecto->obtenerDocs($idproyecto);
-
               $doc5_ant = $datos_f5['data']['doc5_analisis_costos_unitarios'];
-
-              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc5_ant)  == 200) {
-                unlink("../dist/docs/valorizacion/documento/" . $doc5_ant);
-              }
+              if ( !empty( $doc5_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc5_ant); }
             }
 
             if ($flat_doc6 == true) {
-
               $datos_f6 = $proyecto->obtenerDocs($idproyecto);
-
               $doc6_ant = $datos_f6['data']['doc6_insumos'];
-
-              if (validar_url_completo($scheme_host. "dist/docs/valorizacion/documento/" . $doc6_ant)  == 200) {
-                unlink("../dist/docs/valorizacion/documento/" . $doc6_ant);
-              }
+              if ( !empty( $doc6_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc6_ant); }
             }
 
-            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);
-            
+            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);            
             echo json_encode( $rspta, true);
+            
           }
             
         break;
@@ -567,6 +484,7 @@
           echo json_encode($rspta, true);	
 
         break;
+        
         // buscar datos de SUNAT
         case 'sunat':
 

@@ -15,6 +15,9 @@
   $spreadsheet->getActiveSheet()->getStyle('A4:K4')->getAlignment()->setHorizontal('center');
   $spreadsheet->getActiveSheet()->getStyle('A')->getAlignment()->setHorizontal('center');
   $spreadsheet->getActiveSheet()->getStyle('C2')->getAlignment()->setHorizontal('left');
+  // $spreadsheet->getActiveSheet()->getStyle('F:I')->getAlignment()->setHorizontal('right'); # subtotal
+  $spreadsheet->getActiveSheet()->getStyle('K')->getAlignment()->setHorizontal('right'); # subtotal
+
 
   $spreadsheet->getActiveSheet()->getStyle('B1')->getFont()->setBold(true);
   $spreadsheet->getActiveSheet()->getStyle('B2')->getFont()->setBold(true);

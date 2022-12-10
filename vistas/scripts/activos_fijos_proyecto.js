@@ -2261,14 +2261,6 @@ function re_visualizacion() {
   }
 }
 
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!");
-}
-
-function extrae_extencion(filename) {
-  return filename.split(".").pop();
-}
-
 //validando excedentes
 function validando_excedentes() {
   var totattotal = localStorage.getItem("monto_total_p");

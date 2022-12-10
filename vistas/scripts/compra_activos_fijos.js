@@ -2063,10 +2063,6 @@ function l_m() {
   $("#barra_progress2").text("0%");
 }
 
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!");
-}
-
 //validando excedentes
 function validando_excedentes() {
 

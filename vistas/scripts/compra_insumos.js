@@ -1941,10 +1941,6 @@ function filtros() {
   tbla_principal(localStorage.getItem("nube_idproyecto"), fecha_1, fecha_2, id_proveedor, comprobante);
 }
 
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!");
-}
-
 //validando excedentes
 function validando_excedentes() {
   var totattotal = quitar_formato_miles(localStorage.getItem("monto_total_p"));

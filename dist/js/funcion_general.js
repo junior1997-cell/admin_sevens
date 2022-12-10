@@ -1552,3 +1552,11 @@ function optener_ultima_clase(clase) {
 function abrir_calculadora() {
   var newWindow = window.open("https://www.desmos.com/scientific?lang=es", "_blank", "top=100, left=100, width=350, height=500, menubar=yes,toolbar=yes, scrollbars=yes, resizable=yes");
 }
+
+function no_pdf() {
+  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
+}
+
+function dowload_pdf() {
+  toastr.success("El documento se descargara en breve!!")
+}
