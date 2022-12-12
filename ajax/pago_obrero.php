@@ -19,8 +19,7 @@
 
       $pagoobrero = new PagoObrero();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");
 
       // DATA - agregar pago x quincena o semana	
       $idpagos_q_s_obrero 		  = isset($_POST["idpagos_q_s_obrero"])? limpiarCadena($_POST["idpagos_q_s_obrero"]):"";

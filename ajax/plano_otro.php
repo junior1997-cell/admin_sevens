@@ -19,6 +19,10 @@
 
       $plano_otro = new PlanoOtro();
 
+      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");  
+      $imagen_error = "this.src='../dist/svg/user_default.svg'";
+      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+
       //$idtrabajador,$nombre,$tipo_documento,$num_documento,$direccion,$telefono,$nacimiento,$tipo_trabajador,$desempenio,$c_bancaria,$email,$cargo,$banco,$tutular_cuenta,$sueldo_diario,$sueldo_mensual,$sueldo_hora,$imagen	
       $idproyecto		        = isset($_POST["idproyecto"])? limpiarCadena($_POST["idproyecto"]):"";
       $idcarpeta		        = isset($_POST["idcarpeta"])? limpiarCadena($_POST["idcarpeta"]):"";
@@ -57,7 +61,7 @@
 						$imagen1=$_POST["doc_old_1"]; $flat_img1 = false;
 					} else {
 						$ext1 = explode(".", $_FILES["doc1"]["name"]); $flat_img1 = true;	
-            $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $imagen1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/plano_otro/archivos/" . $imagen1);						
 					}
 
@@ -153,19 +157,19 @@
   
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger btn-sm" onclick="eliminar_carpeta('.$reg->idcarpeta.')"><i class="fas fa-skull-crossbones"></i></button>'.
-                  ' <button class="btn btn-info btn-sm" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i> Ingresar</button>':
-                  ' <button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-primary btn-sm" onclick="activar_carpeta('.$reg->idcarpeta.')"><i class="fa fa-check"></i></button>'.
-                  ' <button class="btn btn-info btn-sm" onclick="listar_plano('.$docs.')"><i class="far fa-eye"></i> Ingresar</button>',
+                "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-danger btn-sm" onclick="eliminar_carpeta('.$reg->idcarpeta.')" data-toggle="tooltip" data-original-title="Papelera o Eliminar"><i class="fas fa-skull-crossbones"></i></button>'.
+                  ' <button class="btn btn-info btn-sm" onclick="listar_plano('.$docs.')" data-toggle="tooltip" data-original-title="Ingresar a la carpeta"><i class="far fa-eye"></i> Ingresar</button>':
+                  ' <button class="btn btn-warning btn-sm" onclick="mostrar_carpeta('.$reg->idcarpeta.')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-primary btn-sm" onclick="activar_carpeta('.$reg->idcarpeta.')" data-toggle="tooltip" data-original-title="Papelera o Eliminar"><i class="fa fa-check"></i></button>'.
+                  ' <button class="btn btn-info btn-sm" onclick="listar_plano('.$docs.')" data-toggle="tooltip" data-original-title="Ingresar a la carpeta"><i class="far fa-eye"></i> Ingresar</button>',
                 "2"=>'<div class="user-block">
                   <img class="img-circle" src="../dist/svg/carpeta.svg" alt="User Image" ">
                   <span class="username"><p class="text-primary"style="margin-bottom: 0.2rem !important"; >'. $reg->nombre .'</p></span>
                   <span class="description"><b>Creado el:</b> '. date("d/m/Y g:i a", strtotime($reg->created_at)) .' </span>
                 </div>',
                 "3"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',
-                "4"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+                "4"=>(($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'). $toltip
               );
             }
             $results = array(
@@ -187,8 +191,7 @@
           $rspta=$plano_otro->listar_plano($id_carpeta);
           //Vamos a declarar un array
           $data= Array();
-
-          $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          
           $cont=1;
 
           if ($rspta['status'] == true) {
@@ -196,7 +199,7 @@
 
               $exten1 = explode(".", $reg->doc );  $exten2 = end($exten1); $img = ""; //$descripcion="";
               
-              $docs= "'$reg->nombre', '$reg->descripcion', '$reg->doc'";           
+              $docs= '\''. encodeCadenaHtml($reg->nombre). '\', \''.encodeCadenaHtml($reg->descripcion). '\', \''.encodeCadenaHtml($reg->doc) .'\'';           
   
               if ( $exten2 == "xls") {
                 $img = '<img src="../dist/svg/xls.svg" height="auto" width="60" >';
@@ -245,22 +248,18 @@
   
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_plano('.$reg->idplano_otro.')"><i class="fas fa-skull-crossbones"></i></button>'.
-                  ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>':
-                  ' <button class="btn btn-warning  btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')"><i class="fa fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-primary  btn-sm" onclick="activar_plano('.$reg->idplano_otro.')"><i class="fa fa-check"></i></button>'.
-                  ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')"><i class="far fa-eye"></i></button>',
+                "1"=>($reg->estado)?'<button class="btn btn-warning btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-danger  btn-sm" onclick="eliminar_plano('.$reg->idplano_otro.')" data-toggle="tooltip" data-original-title="Papelera o Eliminar"><i class="fas fa-skull-crossbones"></i></button>'.
+                  ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="far fa-eye"></i></button>':
+                  ' <button class="btn btn-warning  btn-sm" onclick="mostrar_plano('.$reg->idplano_otro.')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-pencil-alt"></i></button>'.
+                  ' <button class="btn btn-primary  btn-sm" onclick="activar_plano('.$reg->idplano_otro.')" data-toggle="tooltip" data-original-title="Papelera o Eliminar"><i class="fa fa-check"></i></button>'.
+                  ' <button class="btn btn-info  btn-sm" onclick="ver_modal_docs('.$docs.')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="far fa-eye"></i></button>',
                 "2"=>$reg->nombre,
                 "3"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',   
-                "4" => '<div ">
-                  <center>
-                    <a type="btn btn-danger" class=""  href="#"  onclick="ver_modal_docs('.$docs.')"data-toggle="tooltip" data-original-title="Ver documentos" >
-                      '.$img.'
-                    </a>
-                  </center>
+                "4" => '<div data-toggle="tooltip" data-original-title="Ver documentos">
+                  <center class="cursor-pointer" onclick="ver_modal_docs('.$docs.')">'.$img.'</center>
                 </div>',                      
-                "5"=>($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+                "5"=>(($reg->estado)?'<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>' ). $toltip
               );
             }
             $results = array(

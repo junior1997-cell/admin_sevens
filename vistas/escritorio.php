@@ -235,7 +235,7 @@
                                   <th>Empresa</th>
                                   <th>Código proyecto</th>
                                   <th>Ubicación</th>                              
-                                  <th>Costo</th>
+                                  <th class="px-2">Costo</th> 
                                   <th>Empresa</th>
                                   <th>Documento</th>
                                   <th>Ubicación</th>
@@ -287,7 +287,7 @@
                                     <th>Empresa</th>
                                     <th>Código proyecto</th>
                                     <th>Ubicación</th>                              
-                                    <th>Costo</th>
+                                    <th class="px-2">Costo</th>
                                     <th>Empresa</th>
                                     <th>Documento</th>
                                     <th>Ubicación</th>
@@ -447,9 +447,9 @@
                                 <!-- FECHA INICIO -->
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
-                                    <label>Fecha Inicio: <sup class="text-danger">*</sup></label>
+                                    <label>Fecha Inicio: <small class="text-red html-text-fechainicio" >(---)</small> <sup class="text-danger">*</sup></label>
                                     <div class="input-group date"  data-target-input="nearest">
-                                      <input type="text" class="form-control " id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_fechafin()" autocomplete="off" />
+                                      <input type="text" class="form-control " id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_plazo_fechafin_v2()" autocomplete="off" />
                                       <div class="input-group-append cursor-pointer click-btn-fecha-inicio">
                                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                       </div>
@@ -460,8 +460,8 @@
                                 <!-- Dias habiles -->
                                 <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                   <div class="form-group">
-                                    <label for="dias_habiles">Plazo <sup class="text-danger">*</sup> <small class="text-orange">(días hábiles)</small> </label>
-                                    <input type="number" name="dias_habiles" id="dias_habiles" class="form-control" min="0"  placeholder="Días habiles" onchange="calcular_plazo_fechafin()" onkeyup="calcular_plazo_fechafin()" >
+                                    <label for="dias_habiles">Plazo <sup class="text-danger">*</sup> <small class="text-orange html-fechafin-h">(días hábiles)</small> </label>
+                                    <input type="number" name="dias_habiles" id="dias_habiles" class="form-control" min="0"  placeholder="Días habiles" onchange="calcular_plazo_fechafin_v2()" onkeyup="calcular_plazo_fechafin_v2()" >
                                   </div>
                                 </div>
 
@@ -476,11 +476,11 @@
                                 <!-- FECHA FIN -->
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                   <div class="form-group">
-                                    <label>Fecha fin: <sup class="text-danger">*</sup></label>
+                                    <label>Fecha fin: <small class="text-red html-text-fechafin" >(---)</small> <sup class="text-danger">*</sup></label>
                                     <div class="input-group date"  data-target-input="nearest">
                                       <input type="text" class="form-control" id="fecha_fin" name="fecha_fin" readonly  data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask/>
                                       <div class="input-group-append">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        <div class="input-group-text cursor-pointer btn-detalle-fechas-calculadas" data-toggle="tooltip" data-original-title="Ver detalle fechas" onclick=""><i class="fa fa-eye"></i></div>
                                       </div>
                                     </div>                                 
                                   </div>
@@ -984,90 +984,54 @@
                   </div>
 
                   <!-- Modal agregar valorizaciones -->
-                  <div class="modal fade" id="modal-agregar-valorizaciones">
+                  <div class="modal fade bg-color-02020263" id="modal-ver-detalle-fechas-calculadas">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h4 class="modal-title">Valorizaciones <small class="text-danger">(El documento nuevo reemplazara al antiguo)</small></h4>
+                          <h4 class="modal-title">Detalle fechas calculadas <small class="text-danger">(conteo de sábados y feriados)</small></h4>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span class="text-danger" aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        
-                        <div class="modal-body">
-                          <!-- form start -->
-                          <form id="form-valorizaciones" name="form-valorizaciones"  method="POST" >                      
-                            
-                            <div class="row" id="cargando-3-fomulario">
-                              <!-- id proyecto -->
-                              <input type="hidden" name="idproyect" id="idproyect" />
-                              
-                              <!-- Doc Valorizaciones -->
-                              <div class="col-md-12 col-lg-6" >                               
-                                <div class="row text-center">
-                                  <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
-                                    <label for="cip" class="control-label" >Valorizaciones </label>
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-success btn-block" id="doc7_i">
-                                      <i class="fas fa-file-upload"></i> Subir.
-                                    </button>
-                                    <input type="hidden" id="doc_old_7" name="doc_old_7" />
-                                    <input style="display: none;" id="doc7" type="file" name="doc7" accept=".xlsx, .xlsm, .xls, .csv" class="docpdf" /> 
-                                  </div>
-                                  <div class="col-md-6 text-center">
-                                    <button type="button" class="btn btn-info btn-block" disabled onclick="PreviewImage();">
-                                      <i class="fa fa-eye"></i> Excel.
-                                    </button>
-                                  </div>
-                                </div>                              
-                                <div id="doc7_ver" class="text-center mt-4">
-                                  <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
-                                </div>
-                                <div class="text-center" id="doc7_nombre"><!-- aqui va el nombre del pdf --></div>
+                        <!-- /.modal-header -->
+                        <div class="modal-body"> 
+                          <span class="text-bold">RESUMEN:</span>
+                          <div class="card" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%); ">
+                            <div class="row m-2">
+                              <div class="col-6">
+                                <span class="text-bold">Total Sabado: </span> <span id="html-total-sabados"><i class="fas fa-spinner fa-pulse"></i></span>
                               </div>
-
-                              <!-- Documento existe -->
-                              <!-- Pdf 1 -->
-                              <div class="col-md-12 col-lg-6 " > 
-                                <!-- linea divisoria -->
-                                <div class="borde-arriba-naranja mt-4"> </div>
-
-                                <div class="text-center" id="verdoc7_nombre">
-                                  <!-- aqui va el nombre del pdf -->
-                                </div>    
-                                <div id="verdoc7" class="text-center mt-4">
-                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                                  <h4>Cargando...</h4>
-                                </div>                            
-                              </div> 
-
-                              <!-- barprogress -->
-                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="div_barra_progress">
-                                  <div id="barra_progress2" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                    0%
-                                  </div>
-                                </div>
-                              </div>                                          
-
-                            </div>  
-
-                            
-                            
-                            <div class="row" id="cargando-4-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
-                                <h4>Cargando...</h4>
+                              <div class="col-6">
+                                <span class="text-bold">Total Feriado: </span> <span id="html-total-feriado"><i class="fas fa-spinner fa-pulse"></i></span>
+                              </div>
+                              <div class="col-6">
+                                <span class="text-bold">Total Dias laborables: </span> <span id="html-total-laboral"><i class="fas fa-spinner fa-pulse"></i></span>
+                              </div>                              
+                              <div class="col-6">
+                                <span class="text-bold">Total Dias: </span> <span id="html-total-total"><i class="fas fa-spinner fa-pulse"></i></span>
                               </div>
                             </div>
-                            <!-- /.card-body -->                      
-                            <button type="submit" style="display: none;" id="submit-form-valorizaciones">Submit</button>                      
-                          </form>
+                          </div>
+                          <div class="card-body table-responsive p-0">
+                            <table class="table table-hover text-nowrap">
+                              <thead class="bg-info">
+                                <tr>
+                                  <th>#</th>
+                                  <th>Fecha</th>
+                                  <th>Dia</th>
+                                  <th>Mes</th>
+                                  <th>Feriado?</th>
+                                </tr>
+                              </thead>
+                              <tbody id="html-detalle-fechas-calculadas">
+                                                                
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
+                        <!-- /.modal-body -->
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-success" id="guardar_registro_valorizaciones">Guardar Cambios</button>
                         </div>                  
                       </div>
                     </div>

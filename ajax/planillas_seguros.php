@@ -15,8 +15,7 @@
 
       $planillas_seguros = new Planillas_seguros();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");      
+      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");      
       
       $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idproveedor        = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";

@@ -17,8 +17,7 @@
       $otro_ingreso = new Otro_ingreso();
       $proveedor = new AllProveedor();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima'); $date_now = date("d-m-Y h.i.s A");
 
       $idotro_ingreso     = isset($_POST["idotro_ingreso"]) ? limpiarCadena($_POST["idotro_ingreso"]) : ""; 
       $idproyecto       = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";      

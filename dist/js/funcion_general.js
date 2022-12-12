@@ -1,12 +1,6 @@
 /*  ══════════════════════════════════════════ - F E C H A S - ══════════════════════════════════════════ */
 
-function sumar_mes(fecha) {
-  var split_fecha =  fecha.split("-");
-  var dias_total_mes = cantDiasEnUnMes( parseInt(split_fecha[1]), parseInt(split_fecha[0]) );  
-  var mes_next =  sumaFecha(dias_total_mes-1, fecha); 
-  // console.log(`🚀 ${fecha} + ${dias_total_mes-1} =  fecha_f:${mes_next}`);
-  return mes_next;
-}
+function sumar_mes(m = 1, fecha) { var date = new Date(fecha);   return new Date( date.setMonth(date.getMonth() + m ) ).toISOString().slice(0, 10); }
 
 // Función que suma o resta días a la fecha indicada
 sumaFecha = function(d, fecha){
@@ -25,6 +19,13 @@ sumaFecha = function(d, fecha){
   var fechaFinal = dia+sep+mes+sep+anno;
   return (fechaFinal);
 }
+
+function sumar_dias_moment(d, fecha) { return moment(fecha).add(d, 'days').format('YYYY-MM-DD'); }
+function sumar_meses_moment(d, fecha) { return moment(fecha).add(d, 'months').format('YYYY-MM-DD'); }
+
+// Extrae los nombres de dias de semana "Abreviado"
+function extraer_dia_semana_number_moment(fecha) { return moment(fecha, "YYYY-MM-DD").day(); }
+function extraer_semana_anio_number_moment(fecha) { return moment(fecha, "YYYY-MM-DD").week(); }
 
 // Extrae los nombres de dias de semana "Abreviado"
 function extraer_dia_semana(fecha) {
@@ -51,16 +52,24 @@ function extraer_dia_semana_completo(fecha) {
 
 function extraer_dia_mes(fecha) {
   var dia_mes = "";
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') {  } else { dia_mes = parseFloat(moment(fecha).format('DD')); }
+  return dia_mes;
+}
 
-  if (fecha == '' || fecha == null || fecha == '0000-00-00') {  } else {
-    dia_mes = parseFloat(moment(fecha).format('DD'));
-  }
+function extraer_mes_number(fecha) {
+  var dia_mes = "";
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') {  } else { dia_mes = moment(fecha).format('MM'); }
+  return dia_mes;
+}
+
+function extraer_year(fecha) {
+  var dia_mes = "";
+  if (fecha == '' || fecha == null || fecha == '0000-00-00') {  } else { dia_mes = moment(fecha).format('YYYY'); }
   return dia_mes;
 }
 
 function extraer_ultimo_dia_mes(fecha) {
   var ultimo_dia_mes = "";
-
   if (fecha == '' || fecha == null || fecha == '0000-00-00') {  } else {
     ultimo_dia_mes = moment(fecha).endOf("month").format('DD-MM-YYYY');
   }
@@ -82,12 +91,6 @@ function extraer_nombre_mes(fecha) {
   }
 
   return nombre_completo;
-}
-
-// calulamos la cantidad de dias de una mes especifico
-function cantidad_dias_mes(year, month) {
-  var diasMes = new Date(year, month, 0).getDate();
-  return diasMes;
 }
 
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
@@ -170,6 +173,11 @@ function restrigir_fecha_ant(nombre_input,fecha_minima) {
   $(nombre_input).rules("add", { min: today2, messages: { min: `Ingresa una fecha mayor a: ${format_d_m_a(today2)}` } });
 }
 
+// calulamos la cantidad de dias de una mes especifico
+function cantidad_dias_mes(year, month) {
+  var diasMes = new Date(year, month, 0).getDate();
+  return diasMes;
+}
 function cant_dias_mes(date_anio, date_mes) {
 	var año = date_anio;
   var mes = date_mes;
@@ -227,6 +235,8 @@ function validarFechaEnRango(fechaI, fechaF, fechaV){
     return false;
   }
 }
+
+function validar_fecha_igual(f1, f2) { return moment(f1).isSame(f2); }
 
 function validarFechaMayorIgualQue(fecha_1, fecha_2) {
   const fecha_a=new Date(fecha_1);

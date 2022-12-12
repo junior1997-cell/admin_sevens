@@ -264,7 +264,7 @@
                 </div>',              
                 "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description" >'.$value['nombre_codigo'].'</span> </div>' ,
                 "4"=> '<div class="asignar_paint_'.$value['idproyecto'].'">'. $ubicacion.'</div>',             
-                "5"=>  number_format($value['costo'], 2, '.', ''),
+                "5"=> $value['costo'],
                 "6"=> $value['empresa'],
                 "7"=> $value['tipo_documento'] . ': '. $value['numero_documento'],
                 "8"=> $value['ubicacion'],
@@ -460,9 +460,15 @@
 
         case 'mostrar-rango-fechas-feriadas':
 
-          $fecha_i = $_POST["fecha_i"]; $fecha_f = $_POST["fecha_f"];
+          $rspta=$proyecto->listar_rango_feriados($_POST["fecha_i"], $_POST["fecha_f"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);	
 
-          $rspta=$proyecto->listar_rango_feriados($fecha_i, $fecha_f);
+        break;
+
+        case 'mostrar-fechas-feriadas-mayor-a':
+
+          $rspta=$proyecto->mostrar_fechas_feriadas_mayor_a($_POST["fecha_i"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);	
 
@@ -472,28 +478,7 @@
 
           $fecha_f = $_POST["fecha_fin"];
           
-        break;
-
-        // buscar datos de RENIEC
-        case 'reniec':
-
-          $dni = $_POST["dni"];
-
-          $rspta = $proyecto->datos_reniec($dni);
-
-          echo json_encode($rspta, true);	
-
-        break;
-        
-        // buscar datos de SUNAT
-        case 'sunat':
-
-          $ruc = $_POST["ruc"];
-
-          $rspta = $proyecto->datos_sunat($ruc);
-
-          echo json_encode($rspta, true);	
-        break;
+        break;        
 
         default: 
           $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 
