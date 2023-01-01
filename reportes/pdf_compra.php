@@ -77,8 +77,7 @@ if (!isset($_SESSION["nombre"])) {
     $y += $size + 2;
   }
 
-  //Convertimos el total en letras
-  
+  //Convertimos el total en letras  
   $num_total = $numero_a_letra->toMoney( $rspta['data']['total'], 2, 'soles' );  #echo $num_total; die;
   $decimales_mun = explode('.', $rspta['data']['total']); #echo $decimales_mun[1]; die;
   $centimos = (isset($decimales_mun[1])? $decimales_mun[1] : '00' ) . '/100 CÉNTIMOS';

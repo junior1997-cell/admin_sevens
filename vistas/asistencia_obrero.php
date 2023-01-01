@@ -51,7 +51,10 @@
                     <div class="col-sm-6">
                       <h1>Asistencia 
                         <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-fechas-actividades" onclick="limpiar_form_fechas_actividades();">
-                        <i class="far fa-calendar-alt"></i> Agregar Fechas de Actividades
+                          <i class="far fa-calendar-alt"></i> Agregar Fechas de Actividades
+                        </button>
+                        <button type="button" class="btn bg-gradient-success btn-sm" onclick="export_table_excel();">
+                        <i class="fa-regular fa-file-excel"></i> Export
                         </button>
                       </h1>
                     </div>
