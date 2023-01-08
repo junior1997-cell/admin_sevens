@@ -314,7 +314,9 @@ function mostrar(idotra_factura) {
       $("#precio_parcial").val(e.data.costo_parcial);
       $("#subtotal").val(e.data.subtotal);
       $("#igv").val(e.data.igv);
-      $("#val_igv").val(e.data.val_igv).trigger("change");
+      $("#val_igv").val(e.data.val_igv);
+
+      // console.log(e.data.igv+' - '+e.data.val_igv);
 
       select_comprobante();
 
