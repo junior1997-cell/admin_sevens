@@ -298,58 +298,22 @@ class Proyecto
     return ejecutarConsultaSimpleFila($sql);
   }
 
+  // optenemos el rango de feriados
+  public function mostrar_fechas_feriadas_mayor_a($fecha_i)  {
+    $sql = "SELECT c.fecha_feriado, c.titulo, c.descripcion
+		FROM calendario as c
+		WHERE c.estado = '1' AND c.fecha_feriado >= '$fecha_i';";
+
+    return ejecutarConsultaArray($sql);
+  }
+
   // obtebnemos los DOCS para eliminar
   public function obtenerDocs($idproyecto)  {
     $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos FROM proyecto WHERE idproyecto='$idproyecto'";
 
     return ejecutarConsultaSimpleFila($sql);
   }
-
-  //CAPTURAR PERSONA  DE RENIEC
-  public function datos_reniec($dni)  {
-    $url = "https://dniruc.apisperu.com/api/v1/dni/" . $dni . "?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imp1bmlvcmNlcmNhZG9AdXBldS5lZHUucGUifQ.bzpY1fZ7YvpHU5T83b9PoDxHPaoDYxPuuqMqvCwYqsM";
-    //  Iniciamos curl
-    $curl = curl_init();
-    // Desactivamos verificación SSL
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-    // Devuelve respuesta aunque sea falsa
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    // Especificamo los MIME-Type que son aceptables para la respuesta.
-    curl_setopt($curl, CURLOPT_HTTPHEADER, ['Accept: application/json']);
-    // Establecemos la URL
-    curl_setopt($curl, CURLOPT_URL, $url);
-    // Ejecutmos curl
-    $json = curl_exec($curl);
-    // Cerramos curl
-    curl_close($curl);
-
-    $respuestas = json_decode($json, true);
-
-    return $respuestas;
-  }
-
-  //CAPTURAR PERSONA  DE RENIEC
-  public function datos_sunat($ruc)  {
-    $url = "https://dniruc.apisperu.com/api/v1/ruc/" . $ruc . "?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imp1bmlvcmNlcmNhZG9AdXBldS5lZHUucGUifQ.bzpY1fZ7YvpHU5T83b9PoDxHPaoDYxPuuqMqvCwYqsM";
-    //  Iniciamos curl
-    $curl = curl_init();
-    // Desactivamos verificación SSL
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-    // Devuelve respuesta aunque sea falsa
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    // Especificamo los MIME-Type que son aceptables para la respuesta.
-    curl_setopt($curl, CURLOPT_HTTPHEADER, ['Accept: application/json']);
-    // Establecemos la URL
-    curl_setopt($curl, CURLOPT_URL, $url);
-    // Ejecutmos curl
-    $json = curl_exec($curl);
-    // Cerramos curl
-    curl_close($curl);
-
-    $respuestas = json_decode($json, true);
-
-    return $respuestas;
-  }
+ 
   
 }
 

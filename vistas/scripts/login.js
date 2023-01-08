@@ -80,3 +80,12 @@ function varaibles_get() {
 function typeOfVar (obj) {
     return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
 }
+
+function ver_password() {
+    var x = document.getElementById("clavea");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+}

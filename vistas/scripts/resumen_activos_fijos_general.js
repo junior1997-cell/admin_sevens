@@ -16,8 +16,13 @@ var  idproducto_r = "", nombre_producto_r = "", precio_promedio_r = "", subtotal
 var op_guardar_compras = "";
 
 function init(){
+  $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
+  $("#bloc_ActivoFijo").addClass("menu-open bg-color-02020280");
 
-  $("#mResumenActivosFijosGeneral").addClass("active");
+  $("#mRecurso").addClass("active");
+  $("#mActivoFijo").addClass("active bg-primary");
+
+  $("#lResumenActivosFijosGeneral").addClass("active");
 	
 	tbla_principal_maquinaria();
 	tbla_principal_equipo();
@@ -2011,10 +2016,6 @@ function l_m() {
 }
 
 // ::::::::::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::::::::
-
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!");
-}
 
 // ver imagen grande del producto agregado a la compra
 function ver_img_activo(img, nombre) {

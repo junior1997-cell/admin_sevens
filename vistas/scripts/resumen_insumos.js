@@ -1191,10 +1191,6 @@ function l_m() {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!");
-}
-
 // ver imagen grande del producto agregado a la compra
 function ver_img_material(img, nombre) {
   $("#ver_img_material").attr("src", `${ img}`);

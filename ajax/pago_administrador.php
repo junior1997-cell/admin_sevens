@@ -19,8 +19,7 @@
 
       $pago_administrador = new PagoAdministrador();
 
-      date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");
 
       // DATA - agregar pago x mes
       $idpagos_x_mes_administrador = isset($_POST["idpagos_x_mes_administrador"])? limpiarCadena($_POST["idpagos_x_mes_administrador"]):"";

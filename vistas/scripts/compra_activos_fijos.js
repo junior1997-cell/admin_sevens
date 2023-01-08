@@ -8,8 +8,13 @@ var array_class_trabajador = [];
 
 //Requejo99@
 function init() {
-  
-  $("#mAllactivos_fijos").addClass("active");
+  $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
+  $("#bloc_ActivoFijo").addClass("menu-open bg-color-02020280");
+
+  $("#mRecurso").addClass("active");
+  $("#mActivoFijo").addClass("active bg-primary");
+
+  $("#lCompraActivoFijo").addClass("active");
 
   fecha_actual();
 
@@ -2056,10 +2061,6 @@ function l_m() {
   $("#barra_progress2").css({ width: "0%" });
 
   $("#barra_progress2").text("0%");
-}
-
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!");
 }
 
 //validando excedentes

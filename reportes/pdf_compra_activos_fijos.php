@@ -1,8 +1,6 @@
 <?php
-
-require '../vendor/autoload.php';
-use Luecano\NumeroALetras\NumeroALetras;
-
+//Activamos el almacenamiento en el buffer
+ob_start();
 if (strlen(session_id()) < 1) {
   session_start();
 }
@@ -11,26 +9,27 @@ if (!isset($_SESSION["nombre"])) {
   header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
    
+   
   require 'Factura.php';
   require_once "../modelos/Compra_activos_fijos.php";
-  require_once "../modelos/Compra_insumos.php";  
+  require_once "../modelos/Compra_insumos.php";
 
   //Establecemos la configuración de la factura
   $pdf = new PDF_Invoice('P', 'mm', 'A4');
   
   $compra_activos_fijos = new Compra_activos_fijos();
   $compra_insumo = new Compra_insumos();
-  $numero_a_letra = new NumeroALetras();
 
   if (empty($_GET)) {
     header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
   } else if ($_GET['op'] == 'insumo') {
     $id = $_GET['id'];
-    $rspta = $compra_insumo->ver_detalle_compra($id);
+    $rspta = $compra_insumo->ver_compra($id);
+    $rspta2 = $compra_insumo->ver_detalle_compra($id);
   } else {
     $id = $_GET['id'];
-    // $rspta = $compra_activos_fijos->ver_compra_general($id);
-    // $rspta2 = $compra_activos_fijos->ver_detalle_compra_general($id);
+    $rspta = $compra_activos_fijos->ver_compra_general($id);
+    $rspta2 = $compra_activos_fijos->ver_detalle_compra_general($id);
   }
 
   //Establecemos los datos de la empresa
@@ -71,18 +70,18 @@ if (!isset($_SESSION["nombre"])) {
 
   $cont = 1;
   //Obtenemos todos los detalles de la venta actual
-  foreach ($rspta['data']['detalle_producto'] as $key => $reg) {
-    $line = [ "#" => $cont++, "PRODUCTO" => utf8_decode( decodeCadenaHtml($reg['nombre'])), "UM" => $reg['abreviacion'], "CANT." => $reg['cantidad'], "V/U" => number_format($reg['precio_sin_igv'], 2, '.',','), "IGV" => number_format($reg['igv'], 2, '.',','), "P.U." => number_format($reg['precio_con_igv'], 2, '.',','), "DSCT." => number_format($reg['descuento'], 2, '.',','), "SUBTOTAL" => number_format($reg['subtotal'], 2, '.',',')];
+  while ($reg = $rspta2['data']->fetch_object()) {
+    $line = [ "#" => $cont++, "PRODUCTO" => utf8_decode( decodeCadenaHtml($reg->nombre)), "UM" => $reg->abreviacion, "CANT." => $reg->cantidad, "V/U" => number_format($reg->precio_sin_igv, 2, '.',','), "IGV" => number_format($reg->igv, 2, '.',','), "P.U." => number_format($reg->precio_con_igv, 2, '.',','), "DSCT." => number_format($reg->descuento, 2, '.',','), "SUBTOTAL" => number_format($reg->subtotal, 2, '.',',')];
     $size = $pdf->addLine($y, $line);
     $y += $size + 2;
   }
 
-  //Convertimos el total en letras  
-  $num_total = $numero_a_letra->toMoney( $rspta['data']['total'], 2, 'soles' );  #echo $num_total; die;
-  $decimales_mun = explode('.', $rspta['data']['total']); #echo $decimales_mun[1]; die;
-  $centimos = (isset($decimales_mun[1])? $decimales_mun[1] : '00' ) . '/100 CÉNTIMOS';
-  $con_letra = strtoupper( utf8_decode($num_total .' '. $centimos) );
-  $pdf->addCadreTVAs("- " . $con_letra);
+  //Convertimos el total en letras
+  require_once "Letras.php";
+  $V = new EnLetras();
+  $num_total = floatval($rspta['data']['total']);
+  $con_letra = strtoupper($V->ValorEnLetras($num_total, "SOLES"));
+  $pdf->addCadreTVAs("---" . $con_letra);
 
   //Mostramos el impuesto
   $pdf->addTVAs(number_format($rspta['data']['subtotal'], 2, '.',','), number_format($rspta['data']['igv'], 2, '.',','), number_format($rspta['data']['total'], 2, '.',','), "S/ ");
@@ -91,5 +90,9 @@ if (!isset($_SESSION["nombre"])) {
    
 }
 
-
+function number_words($valor,$desc_moneda, $sep, $desc_decimal) {
+  $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+  return $f->format(1432);
+}
+ob_end_flush();
 ?>

@@ -1,4 +1,5 @@
 var tabla; var tabla2; 
+var array_fechas_calculadas = [], array_fechas_feriadas = [];
 
 //Función que se ejecuta al inicio
 function init(){  
@@ -38,7 +39,7 @@ function init(){
 
   }).fail( function(e) { ver_errores(e); } );
 
-   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
+  // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
 
   $('#fecha_pago_obrero').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true });
   $('#fecha_valorizacion').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true});
@@ -111,6 +112,10 @@ function limpiar() {
   $("#nombre_proyecto").val(""); $("#nombre_codigo").val("");
   $("#ubicacion").val(""); 
   $("#actividad_trabajo").val("");  
+
+  $(".html-text-fechainicio").html('(---)');
+  $(".html-text-fechafin").html('(---)');  
+  $(".html-fechafin-h").html('(días hábiles: ---)');
 
   $("#fecha_inicio_actividad").val("");  $("#fecha_fin_actividad").val("");
   $('#plazo_actividad').val("0");
@@ -195,6 +200,11 @@ function tbla_principal(estado, class_color, box_select) {
       // columna: costo
       if (data[5] != '') { $("td", row).eq(5).addClass("text-right"); }
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api = this.api(); 
+      var total = api.column( 5 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api.column( 5 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );      
+    },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
@@ -266,12 +276,12 @@ function tbla_secundaria() {
 }
 
 //Función para guardar o editar
-function guardaryeditar(e) {
+function guardar_y_editar_proyecto(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-proyecto")[0]);
 
   $.ajax({
-    url: "../ajax/proyecto.php?op=guardaryeditar",
+    url: "../ajax/proyecto.php?op=guardar_y_editar_proyecto",
     type: "POST",
     data: formData,
     contentType: false,
@@ -279,16 +289,11 @@ function guardaryeditar(e) {
     success: function (e) {
       try {
         e = JSON.parse(e);  //console.log(e);  
-        if (e) {
-          
+        if (e.status == true) {          
           tabla.ajax.reload(null, false);	
-
-          Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	      
-          
+          Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	          
           limpiar(); tablero(); box_proyecto();
-
-          $("#modal-agregar-proyecto").modal("hide");        
-          
+          $("#modal-agregar-proyecto").modal("hide"); 
         }else{
           ver_errores(e);				 
         }
@@ -296,18 +301,11 @@ function guardaryeditar(e) {
       $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
     xhr: function () {
-
       var xhr = new window.XMLHttpRequest();
-
       xhr.upload.addEventListener("progress", function (evt) {
-
         if (evt.lengthComputable) {
-
-          var percentComplete = (evt.loaded / evt.total)*100;
-          /*console.log(percentComplete + '%');*/
-          $("#barra_progress").css({"width": percentComplete+'%'});
-
-          $("#barra_progress").text(percentComplete.toFixed(2)+" %");
+          var percentComplete = (evt.loaded / evt.total)*100; /*console.log(percentComplete + '%');*/
+          $("#barra_progress").css({"width": percentComplete+'%'}); $("#barra_progress").text(percentComplete.toFixed(2)+" %");
         }
       }, false);
       return xhr;
@@ -323,72 +321,6 @@ function guardaryeditar(e) {
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
-}
-
-//Función para guardar o editar
-function guardar_editar_valorizacion(e) {
-  e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form-valorizaciones")[0]);
-
-  $.ajax({
-    url: "../ajax/proyecto.php?op=editar_doc_valorizaciones",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (datos) {
-             
-      if (datos == 'ok') {
-
-        tabla.ajax.reload(null, false);	
-
-        Swal.fire("Correcto!", "Documento guardado correctamente", "success");	      
-         
-				limpiar();
-
-        $("#modal-agregar-valorizaciones").modal("hide");        
-
-			}else{
-
-        Swal.fire("Error!", datos, "error");
-				 
-			}
-    },
-    xhr: function () {
-
-      var xhr = new window.XMLHttpRequest();
-
-      xhr.upload.addEventListener("progress", function (evt) {
-
-        if (evt.lengthComputable) {
-
-          var percentComplete = (evt.loaded / evt.total)*100;
-          /*console.log(percentComplete + '%');*/
-          $("#barra_progress2").css({"width": percentComplete+'%'});
-
-          $("#barra_progress2").text(percentComplete.toFixed(2)+" %");
-
-          if (percentComplete === 100) {
-
-            setTimeout(l_m, 600);
-          }
-        }
-      }, false);
-      return xhr;
-    },
-    error: function (jqXhr) { ver_errores(jqXhr); },
-  });
-}
-
-function l_m(){
-  
-  // limpiar();
-  $("#barra_progress").css({"width":'0%'});
-  $("#barra_progress").text("0%");
-
-  $("#barra_progress2").css({"width":'0%'});
-  $("#barra_progress2").text("0%");
-  
 }
 
 function abrir_proyecto(idproyecto, ec_razon_social, nombre_proyecto, fecha_inicial, fecha_final) {
@@ -463,93 +395,64 @@ function reiniciar_proyecto(idproyecto, nombre_proyecto) {
   );       
 }
 
-// caculamos el plazo CON DATE RANGER
-function calcular_palzo() {
-
-  $("#fecha_inicio_fin").on("apply.daterangepicker", function (ev, picker) { 
-
-    var plazo_dia = picker.endDate.diff(picker.startDate, "days");
-
-    $("#plazo").val( plazo_dia +' dias');    
-  });
-}
-
 // abrimos el navegador de archivos
 $("#doc1_i").click(function() {  $('#doc1').trigger('click'); });
-$("#doc1").change(function(e) {  addImageApplication(e, $("#doc1").attr("id")) });
+$("#doc1").change(function(e) {  addImageApplication(e, $("#doc1").attr("id"), null, '100%', '210' ) });
 
 $("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
-$("#doc2").change(function(e) {  addImageApplication(e, $("#doc2").attr("id")) });
+$("#doc2").change(function(e) {  addImageApplication(e, $("#doc2").attr("id"), null, '100%', '210' ) });
 
 $("#doc3_i").click(function() {  $('#doc3').trigger('click'); });
-$("#doc3").change(function(e) {  addImageApplication(e, $("#doc3").attr("id")) });
+$("#doc3").change(function(e) {  addImageApplication(e, $("#doc3").attr("id"), null, '100%', '210' ) });
 
 $("#doc4_i").click(function() {  $('#doc4').trigger('click'); });
-$("#doc4").change(function(e) {  addImageApplication(e, $("#doc4").attr("id")) });
+$("#doc4").change(function(e) {  addImageApplication(e, $("#doc4").attr("id"), null, '100%', '210' ) });
 
 $("#doc5_i").click(function() {  $('#doc5').trigger('click'); });
-$("#doc5").change(function(e) {  addImageApplication(e, $("#doc5").attr("id")) });
+$("#doc5").change(function(e) {  addImageApplication(e, $("#doc5").attr("id"), null, '100%', '210' ) });
 
 $("#doc6_i").click(function() {  $('#doc6').trigger('click'); });
-$("#doc6").change(function(e) {  addImageApplication(e, $("#doc6").attr("id")) });
+$("#doc6").change(function(e) {  addImageApplication(e, $("#doc6").attr("id"), null, '100%', '210' ) });
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
-
 	$("#doc1").val("");
-
 	$("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
 	$("#doc1_nombre").html("");
 }
 
 // Eliminamos el doc 2
 function doc2_eliminar() {
-
 	$("#doc2").val("");
-
 	$("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
 	$("#doc2_nombre").html("");
 }
 
 // Eliminamos el doc 3
 function doc3_eliminar() {
-
 	$("#doc3").val("");
-
 	$("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
 	$("#doc3_nombre").html("");
 }
 
 // Eliminamos el doc 4
 function doc4_eliminar() {
-
 	$("#doc4").val("");
-
 	$("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
 	$("#doc4_nombre").html("");
 }
 
 // Eliminamos el doc 5
 function doc5_eliminar() {
-
 	$("#doc5").val("");
-
 	$("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
 	$("#doc5_nombre").html("");
 }
 
 // Eliminamos el doc 6
 function doc6_eliminar() {
-
 	$("#doc6").val("");
-
 	$("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
 	$("#doc6_nombre").html("");
 } 
 
@@ -747,14 +650,6 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
   }
 
   $(".tooltip").removeClass("show").addClass("hidde");
-}
-
-function no_pdf() {
-  toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!")
-}
-
-function dowload_pdf() {
-  toastr.success("El documento se descargara en breve!!")
 }
 
 function mostrar(idproyecto) {
@@ -1194,117 +1089,38 @@ function box_proyecto() {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function ver_modal_docs_valorizaciones(idproyecto, documento) {
-
-  //console.log(idproyecto, extrae_extencion( documento));
-
-  $('#verdoc7').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
-
-  $('#idproyect').val(idproyecto);
-
-  $('#doc_old_7').val(documento);
-
-  $('#modal-agregar-valorizaciones').modal("show");
-
-  if (documento == "") {
-
-    $('#verdoc7').html('<img src="../dist/svg/doc_uploads_no.svg" alt="" height="206" >');
-
-    $("#verdoc7_nombre").html("valorizaciones"+
-      '<div class="col-md-12 row mt-2">'+
-        '<div class="col-md-6">'+
-          '<a class="btn btn-warning  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
-            '<i class="fas fa-download"></i>'+
-          '</a>'+
-          '</div>'+
-
-          '<div class="col-md-6">'+
-          '<a class="btn btn-info  btn-block" href="#"  onclick="no_pdf();"style="padding:0px 12px 0px 12px !important;" type="button" >'+
-            'Ver completo <i class="fas fa-expand"></i>'+
-          '</a>'+
-        '</div>'+
-      '</div>'+
-    '');
-  } else {
-    var nombredocs = "";
-
-    
-    if (extrae_extencion( documento) == "xls") {
-
-      nombredocs = "valorizaciones.xls";     $('#verdoc7').html('<img src="../dist/svg/xls.svg" alt="" width="50%" >');
-
-    } else {
-
-      if (extrae_extencion( documento) == "xlsx") {
-
-        nombredocs = "valorizaciones.xlsx";  $('#verdoc7').html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-
-      } else {
-
-        if (extrae_extencion( documento) == "xlsx") {
-
-          nombredocs = "valorizaciones.xlsx";  $('#verdoc7').html('<img src="../dist/svg/xlsx.svg" alt="" width="50%" >');
-  
-        } else {
-
-          if (extrae_extencion( documento) == "xlsm") {
-
-            nombredocs = "valorizaciones.xlsm";  $('#verdoc7').html('<img src="../dist/svg/xlsm.svg" alt="" width="50%" >');
-    
-          } else {
-            nombredocs = "valorizaciones";  $('#verdoc7').html('<img src="../dist/svg/logo-excel.svg" alt="" width="50%" >');
-          }
-        }
-      }      
-    }       
-
-    $("#verdoc7_nombre").html(nombredocs +
-      '<div class="col-md-12 row mt-2">'+
-          '<div class="col-md-6 ">'+
-            '<a  class="btn btn-warning  btn-block" href="../dist/docs/valorizacion/documento/'+documento+'"  download="Valorizaciones" onclick="dowload_pdf();" style="padding:0px 6px 0px 12px !important;" type="button" >'+
-              '<i class="fas fa-download"></i>'+
-            '</a>'+
-          '</div>'+
-          '<div class="col-md-6 ">'+
-            '<button  class="btn btn-info  btn-block " href="../dist/docs/valorizacion/documento/'+documento+'" disabled  target="_blank" style="padding:0px 12px 0px 12px !important;" type="button" >'+
-              'Ver completo <i class="fas fa-expand"></i>'+
-            '</button>'+
-          '</div>'+
-      '</div>'+
-    '');
-  }
-}
-
 function calcular_plazo_fechafin() {
-  
-  if ($("#dias_habiles").val() == "" && $("#fecha_inicio").val() == "20-02-1112") {  //console.log($("#dias_habiles").val(),$("#fecha_inicio").val());   
-  } else { //console.log($("#dias_habiles").val(),$("#fecha_inicio").val());
-    if ($("#dias_habiles").val() != "") {
 
-      if ($("#fecha_inicio").val() != "") {      
+  var input_dias_habiles = $("#dias_habiles").val() , input_fecha_inicio = $("#fecha_inicio").val() ;
+
+  if (input_dias_habiles == "" && input_fecha_inicio == "20-02-1112") {  //console.log(input_dias_habiles,input_fecha_inicio);   
+  } else { //console.log(input_dias_habiles,input_fecha_inicio);
+    if (input_dias_habiles != "") {
+
+      if (input_fecha_inicio != "") {      
       
-        if (parseInt( $("#dias_habiles").val() ) > 0) {
+        if (parseInt( input_dias_habiles ) > 0) {
           
           // sumamos las fechas
-          var fecha_fin = sumaFecha( $("#dias_habiles").val(), $("#fecha_inicio").val()); //console.log(format_a_m_d(fecha_fin));
+          var fecha_fin = sumaFecha( input_dias_habiles, input_fecha_inicio); //console.log(format_a_m_d(fecha_fin));
 
-          $.post("../ajax/proyecto.php?op=mostrar-rango-fechas-feriadas", { fecha_i: format_a_m_d($("#fecha_inicio").val()), fecha_f: format_a_m_d(fecha_fin) }, function (data, status) {
+          $.post("../ajax/proyecto.php?op=mostrar-rango-fechas-feriadas", { fecha_i: format_a_m_d(input_fecha_inicio), fecha_f: format_a_m_d(fecha_fin) }, function (e, status) {
             
-            data = JSON.parse(data);  //console.log(data);
-            if (data.status) {
+            e = JSON.parse(e);  console.log(e);
+            if (e.status) {
               var fecha_fin_es_feriado = true;
               // sumamos el new plazo            
-              var new_plazo = parseInt($("#dias_habiles").val()) + parseInt( data.data.count_feriado) ;
+              var new_plazo = parseInt(input_dias_habiles) + parseInt( e.data.count_feriado) ;
 
               // sumamos las fechas con el nuevo plazo
-              fecha_fin = sumaFecha( new_plazo, $("#fecha_inicio").val());
+              fecha_fin = sumaFecha( new_plazo, input_fecha_inicio);
 
-              var cant_sabados = cuentaSabado( format_a_m_d($("#fecha_inicio").val()), format_a_m_d( fecha_fin ) );
+              var cant_sabados = cuenta_sabado_domingo( format_a_m_d(input_fecha_inicio), format_a_m_d( fecha_fin ), true );
 
-              new_plazo = parseInt($("#dias_habiles").val()) + parseInt( data.data.count_feriado) + parseInt(cant_sabados);
+              new_plazo = parseInt(input_dias_habiles) + parseInt( e.data.count_feriado) + parseInt(cant_sabados);
 
               // sumamos las fechas con el nuevo plazo
-              fecha_fin = sumaFecha( new_plazo, $("#fecha_inicio").val());
+              fecha_fin = sumaFecha( new_plazo, input_fecha_inicio);
 
               //console.log(cant_sabados);
               // while (fecha_fin_es_feriado == false) {            
@@ -1318,7 +1134,12 @@ function calcular_plazo_fechafin() {
 
               $("#fecha_fin").val(fecha_ayer); $("#plazo").val(new_plazo);
 
-              toastr.success(`Suma de fecha correctamente. </br> <h6 class="pt-1 mt-1 pb-1 mb-1">→ ${data.data.count_feriado} feriados encontrados. </h6> <h6 class="pt-1 mt-1">→ ${cant_sabados} sábados</h6>`)
+              $(".html-fechafin-h").html( `(días hábiles= ${sumaFecha( parseInt(input_dias_habiles), input_fecha_inicio)})`);
+
+              var date_end = format_a_m_d(fecha_ayer);
+              $(".html-text-fechafin").html(`(${extraer_dia_semana_completo(date_end)}, ${extraer_dia_mes(date_end)} de ${extraer_nombre_mes(date_end)} del ${extraer_year(date_end)})` );
+
+              toastr_success( '<span class="font-size-20px">Suma correcta.</span> ', `<h6 class="pt-1 mt-1 pb-1 mb-1">→ ${e.data.count_feriado} feriados encontrados. </h6> <h6 class="pt-1 mt-1">→ ${cant_sabados} sábados</h6> <h6>Dentro de los ${input_dias_habiles} días.</h6>`, 700)
             
             } else {
               ver_errores(data);
@@ -1336,6 +1157,76 @@ function calcular_plazo_fechafin() {
     } else {
       // toastr.error('Agregar un PLAZO válido')
     } 
+  } 
+}
+
+function calcular_plazo_fechafin_v2() {
+  array_fechas_calculadas = [];
+  $(".html-text-fechainicio").html(`(<i class="fas fa-spinner fa-pulse"></i>)`);
+  $(".html-text-fechafin").html(`<i class="fas fa-spinner fa-pulse"></i>`);
+  $(".html-fechafin-h").html( `<i class="fas fa-spinner fa-pulse"></i>`);
+
+  $('.btn-detalle-fechas-calculadas').attr('onclick', `toastr_error('Espera!!', 'Los calulos estan en proceso', 700);`); 
+
+  var input_dias_habiles = $("#dias_habiles").val() == '' || $("#dias_habiles").val() == null ? 0 : parseFloat($("#dias_habiles").val()) ; 
+  var input_fecha_inicio = $("#fecha_inicio").val() ;
+
+  if (input_dias_habiles == "" && input_fecha_inicio == "20-02-1112") {  //console.log(input_dias_habiles,input_fecha_inicio);   
+  } else if (input_dias_habiles != "") {    
+
+    if (input_fecha_inicio != "") {      
+    
+      if (parseInt( input_dias_habiles ) > 0) {        
+
+        $.post("../ajax/proyecto.php?op=mostrar-fechas-feriadas-mayor-a", { fecha_i: format_a_m_d(input_fecha_inicio) }, function (e, status) {
+          
+          e = JSON.parse(e);  console.log(e);
+          array_fechas_feriadas = e.data;
+          if (e.status == true) {  
+
+            // console.log(cant_dias_feriados);
+            var count_sabado = 0, count_feriado = 0, total_feriado = 0;
+            var fecha_init = format_a_m_d(input_fecha_inicio);
+            var count_dias_no_feriado = 0;
+
+            while (true) {
+              if (extraer_dia_semana_number_moment(fecha_init) == 6 || fecha_es_feriada(e.data, fecha_init ) == true ) {
+                count_sabado = extraer_dia_semana_number_moment(fecha_init) == 6 ? count_sabado + 1 : count_sabado + 0 ;
+                count_feriado = fecha_es_feriada(e.data, fecha_init ) == true ? count_feriado + 1 : count_feriado + 0 ;
+                total_feriado++;                
+              } else {
+                count_dias_no_feriado++;
+              }
+              array_fechas_calculadas.push({'fecha': fecha_init });
+              
+              // si son iguales salimos del bucle
+              if ( count_dias_no_feriado == input_dias_habiles  ) { break; } 
+              fecha_init = sumar_dias_moment(1, fecha_init);
+            }             
+
+            $("#fecha_fin").val(format_d_m_a(fecha_init)); $("#plazo").val(total_feriado + input_dias_habiles);
+
+            $(".html-fechafin-h").html( `(días hábiles: ${sumaFecha( (parseInt(input_dias_habiles) - 1), input_fecha_inicio)})`);
+
+            $(".html-text-fechainicio").html(`(${extraer_dia_semana_completo(format_a_m_d(input_fecha_inicio))}, ${extraer_dia_mes(format_a_m_d(input_fecha_inicio))} de ${extraer_nombre_mes(format_a_m_d(input_fecha_inicio))} del ${extraer_year(format_a_m_d(input_fecha_inicio))})` );
+            $(".html-text-fechafin").html(`(${extraer_dia_semana_completo(fecha_init)}, ${extraer_dia_mes(fecha_init)} de ${extraer_nombre_mes(fecha_init)} del ${extraer_year(fecha_init)})` );
+
+            toastr_success( '<span class="font-size-20px">Suma correcta.</span> ', `<h6 class="pt-1 mt-1 pb-1 mb-1">→ ${count_feriado} feriados encontrados. </h6> <h6 class="pt-1 mt-1">→ ${count_sabado} sábados</h6> <h6>Dentro de los ${input_dias_habiles} días.</h6>`, 700)
+            $('.btn-detalle-fechas-calculadas').attr('onclick', `ver_detalle_fechas_calculadas()`); 
+          } else {
+            ver_errores(e);
+          }
+          
+        }).fail( function(e) { ver_errores(e); } );
+        
+      } else {
+        toastr_error('Error de calculo', 'Seleccione una plazo positivo', 700);
+      }
+    } else {
+      toastr_error('Error de calculo', 'Seleccione una fecha INICIO', 700);
+    }
+  } else {
+    // toastr.error('Agregar un PLAZO válido');    
   } 
 }
 
@@ -1419,7 +1310,7 @@ $(function () {
 
     submitHandler: function (e) {
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
-      guardaryeditar(e);       
+      guardar_y_editar_proyecto(e);       
     },
   });
 
@@ -1451,6 +1342,36 @@ function cuentaSabado(fi, ff){
   }
 
  return cuentaFinde;
+}
+
+function cuenta_sabado_domingo(fi, ff, count_sab = false, count_dom = false){
+
+  var fecha_inicio = fi, cant_sab_dom = 0;
+
+  if (count_sab == true && count_dom == true) {
+    while (true) { if (extraer_dia_semana_number_moment(fecha_inicio) == 0 || extraer_dia_semana_number_moment(fecha_inicio) == 6) { cant_sab_dom++; } fecha_inicio = sumar_dias_moment(1, fecha_inicio); if (validarFechaMenorIgualQue(fecha_inicio, ff) == false) { break;} }
+    return cant_sab_dom;
+  } else if (count_sab == true) {
+    while (true) { if (extraer_dia_semana_number_moment(fecha_inicio) == 6) { cant_sab_dom++; } fecha_inicio = sumar_dias_moment(1, fecha_inicio); if (validarFechaMenorIgualQue(fecha_inicio, ff) == false) { break;} }
+    return cant_sab_dom;
+  } else if (count_dom == true) {
+    while (true) { if (extraer_dia_semana_number_moment(fecha_inicio) == 0) { cant_sab_dom++; } fecha_inicio = sumar_dias_moment(1, fecha_inicio); if (validarFechaMenorIgualQue(fecha_inicio, ff) == false) { break;} }
+    return cant_sab_dom;
+  } else {
+    return 0;
+  }  
+}
+
+function fecha_es_feriada(e, fecha) {
+  var rw = false;
+  e.forEach((val, key) => { if ( validar_fecha_igual(val.fecha_feriado, fecha ) == true ) { rw = true; } });
+  return rw;
+}
+
+function fecha_es_feriada_detalle(e, fecha) {  
+  var rw = false, date = fecha, titulo = '', descripcion ='';
+  e.forEach((val, key) => { if ( validar_fecha_igual(val.fecha_feriado, fecha ) ) { rw = true; date = val.fecha_feriado; titulo = val.titulo; descripcion = val.descripcion; } });
+  return { 'status': rw, 'fecha': date, 'titulo': titulo, 'descripcion': descripcion };
 }
 
 // input decimal letra
@@ -1512,4 +1433,33 @@ $(function() {
 // $('input[name="fecha_inicio_fin"]').on('cancel.daterangepicker', function(ev, picker) {
 //   $(this).val('');
 // });
+
+function ver_detalle_fechas_calculadas() {
+  $('#modal-ver-detalle-fechas-calculadas').modal('show');
+  var html_tbody = "";
+  var total_sabado = 0, total_feriado = 0;
+
+  array_fechas_calculadas.forEach((val, key) => {
+    var bg_sabado = "", es_feriado = "", bg_feriado = "";
+    if (extraer_dia_semana_number_moment(val.fecha) == 6) { bg_sabado = "bg-dark"; total_sabado++; }
+
+    var df = fecha_es_feriada_detalle(array_fechas_feriadas, val.fecha);
+    if (df.status == true) { bg_feriado= 'bg-danger'; es_feriado = `<span class="text-bold">Titulo: </span><span>${df.titulo}</span><br><span class="text-bold">Descripción: </span><span>${df.descripcion}</span>`; total_feriado++; } else { es_feriado = 'NO';}
+    
+    html_tbody =  html_tbody.concat(`
+    <tr class="${bg_sabado} ${bg_feriado}">
+      <td class="p-y-2px">${key+1}</td>
+      <td class="p-y-2px">${format_d_m_a(val.fecha)}</td>
+      <td class="p-y-2px">${extraer_dia_semana_completo(val.fecha)}</td>
+      <td class="p-y-2px">${extraer_nombre_mes(val.fecha)}</td>
+      <td class="p-y-2px"> ${es_feriado} </td>
+    </tr>`);
+  });
+
+  $('#html-detalle-fechas-calculadas').html(html_tbody);
+  $('#html-total-sabados').html(total_sabado);
+  $('#html-total-feriado').html(total_feriado);
+  $('#html-total-laboral').html(array_fechas_calculadas.length - (total_sabado + total_feriado));
+  $('#html-total-total').html( array_fechas_calculadas.length );
+}
 

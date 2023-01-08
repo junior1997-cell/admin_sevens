@@ -127,7 +127,7 @@
 
               <!-- Contable -->
               <li class="nav-item  b-radio-3px" id="bloc_ActivoFijo">
-                <a href="#" class="nav-link pl-2" id="mActivoFijo">
+                <a href="#" class="nav-link pl-3" id="mActivoFijo">
                   <i class="nav-icon fas fa-project-diagram"></i>
                   <p>
                     All-Activos fijos
@@ -139,7 +139,7 @@
                     
                   <!-- Activos fijos -->
                   <li class="nav-item ">
-                    <a href="activos_fijos.php" class="nav-link" id="lActivosfijos">
+                    <a href="activos_fijos.php" class="nav-link pl-4" id="lActivosfijos">
                     <i class="nav-icon fas fa-truck-pickup"></i>
                       <p>Activos fijos</p>
                     </a>
@@ -148,7 +148,7 @@
                   <?php if ($_SESSION['compra_activo_fijo']==1) {  ?>
                     <!-- ALL ACTIVOS FIJOS -->
                     <li class="nav-item">
-                      <a href="compra_activos_fijos.php" class="nav-link pl-2" id="mAllactivos_fijos">
+                      <a href="compra_activos_fijos.php" class="nav-link pl-4" id="lCompraActivoFijo">
                         <i class="nav-icon fas fa-hand-holding-usd"></i>
                         <p>Compras de activos fijos</p>
                       </a>
@@ -158,7 +158,7 @@
                   <?php if ($_SESSION['resumen_activo_fijo_general']==1) {  ?>
                     <!-- RESUMEN ACTIVOS FIJOS GENERAL-->
                     <li class="nav-item">
-                      <a href="resumen_activos_fijos_general.php" class="nav-link pl-2" id="mResumenActivosFijosGeneral">
+                      <a href="resumen_activos_fijos_general.php" class="nav-link pl-4" id="lResumenActivosFijosGeneral">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>Resumen activos fijos</p>
                       </a>
@@ -464,7 +464,7 @@
               <!-- REGISTRO DE ASISTENCIA -->
               <li class="nav-item ver-otros-modulos-1">
                 <a href="asistencia_obrero.php" class="nav-link pl-2" id="lAsistencia">
-                  <i class="fas fa-clipboard-list nav-icon"></i>
+                  <i class="fa-regular fa-square-check nav-icon"></i>
                   <p>Asistencia del obrero </p>
                 </a>
               </li>
@@ -473,7 +473,7 @@
               <!-- REGISTRO DE ASISTENCIA -->
               <li class="nav-item ver-otros-modulos-1">
                 <a href="formatos_varios.php" class="nav-link pl-2" id="lformatos_varios">
-                  <i class="fas fa-clipboard-list nav-icon"></i>
+                  <i class="fa-regular fa-square-check nav-icon"></i>
                   <p>Formatos varios </p>
                 </a>
               </li>

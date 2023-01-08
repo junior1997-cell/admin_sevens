@@ -229,36 +229,40 @@ class Asistencia_obrero
         $estado_envio_contador    = $extras['data']['estado_envio_contador'];
       }
 
-      $data[] = [
-        "idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
-        "nombre_ocupacion"          => $key['nombre_ocupacion'],
-        "tipo_trabajador"           => $key['tipo_trabajador'],
-        "nombres"                   => $key['nombres'],
-        "tipo_documento"            => $key['tipo_documento'],
-        "numero_documento"          => $key['numero_documento'],
-        "sueldo_mensual"            => $key['sueldo_mensual'],
-        "sueldo_diario"             => $key['sueldo_diario'],
-        "sueldo_hora"               => $key['sueldo_hora'],
-        "estado_trabajador"         => $key['estado'],
-        "fecha_inicio_t"            => $key['fecha_inicio'],
-        "fecha_fin_t"               => $key['fecha_fin'],
-        "asistencia"                => $asistencia['data'],
+      if ( validar_fecha_menor_igual_que($f2, $key['fecha_fin']) == true || fecha_dentro_de_rango($key['fecha_fin'],$f1, $f2 ) ) {
+        $data[] = [
+          "idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
+          "nombre_ocupacion"          => $key['nombre_ocupacion'],
+          "tipo_trabajador"           => $key['tipo_trabajador'],
+          "nombres"                   => $key['nombres'],
+          "tipo_documento"            => $key['tipo_documento'],
+          "numero_documento"          => $key['numero_documento'],
+          "sueldo_mensual"            => $key['sueldo_mensual'],
+          "sueldo_diario"             => $key['sueldo_diario'],
+          "sueldo_hora"               => $key['sueldo_hora'],
+          "estado_trabajador"         => $key['estado'],
+          "fecha_inicio_t"            => $key['fecha_inicio'],
+          "fecha_fin_t"               => $key['fecha_fin'],
+          "asistencia"                => $asistencia['data'],
 
-        'idresumen_q_s_asistencia'  => $idresumen_q_s_asistencia,
-        'fecha_registro'            => $fecha_q_s_inicio,
-        'total_hn'                  => $total_hn,
-        'total_he'                  => $total_he,
-        'total_dias_asistidos'      => $total_dias_asistidos,
-        'sabatical'                 => $sabatical,
-        'sabatical_manual_1'        => $sabatical_manual_1,
-        'sabatical_manual_2'        => $sabatical_manual_2,
-        'pago_parcial_hn'           => $pago_parcial_hn,
-        'pago_parcial_he'           => $pago_parcial_he,
-        'adicional_descuento'       => $adicional_descuento,
-        'descripcion_descuento'     => $descripcion_descuento,
-        'pago_quincenal'            => $pago_quincenal,
-        'estado_envio_contador'     => $estado_envio_contador,
-      ];
+          'idresumen_q_s_asistencia'  => $idresumen_q_s_asistencia,
+          'fecha_registro'            => $fecha_q_s_inicio,
+          'total_hn'                  => $total_hn,
+          'total_he'                  => $total_he,
+          'total_dias_asistidos'      => $total_dias_asistidos,
+          'sabatical'                 => $sabatical,
+          'sabatical_manual_1'        => $sabatical_manual_1,
+          'sabatical_manual_2'        => $sabatical_manual_2,
+          'pago_parcial_hn'           => $pago_parcial_hn,
+          'pago_parcial_he'           => $pago_parcial_he,
+          'adicional_descuento'       => $adicional_descuento,
+          'descripcion_descuento'     => $descripcion_descuento,
+          'pago_quincenal'            => $pago_quincenal,
+          'estado_envio_contador'     => $estado_envio_contador,
+        ];
+      } 
+      
+      
 
       $idresumen_q_s_asistencia = "";
       $fecha_registro = "";
