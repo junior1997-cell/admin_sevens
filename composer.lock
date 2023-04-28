@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
+    "content-hash": "249ad9607ad57a123a7079dd3dfac168",
+=======
     "content-hash": "5573a7947c0686b92df237070a01ca58",
+>>>>>>> db090f4d4a623bc59032166292f61c46fe931f33
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -68,6 +72,8 @@
             "time": "2022-09-18T07:06:19+00:00"
         },
         {
+<<<<<<< HEAD
+=======
             "name": "luecano/numero-a-letras",
             "version": "v3.0.0",
             "source": {
@@ -119,6 +125,7 @@
             "time": "2021-03-05T15:13:07+00:00"
         },
         {
+>>>>>>> db090f4d4a623bc59032166292f61c46fe931f33
             "name": "maennchen/zipstream-php",
             "version": "2.2.1",
             "source": {

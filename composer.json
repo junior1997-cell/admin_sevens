@@ -1,6 +1,10 @@
 {
     "require": {
+<<<<<<< HEAD
+        "phpoffice/phpspreadsheet": "^1.25"
+=======
         "phpoffice/phpspreadsheet": "^1.25",
         "luecano/numero-a-letras": "^3.0"
+>>>>>>> db090f4d4a623bc59032166292f61c46fe931f33
     }
 }
