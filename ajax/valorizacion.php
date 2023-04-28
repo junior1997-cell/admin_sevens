@@ -62,7 +62,7 @@
 
 						$ext1 = explode(".", $_FILES["doc7"]["name"]); $flat_doc1 = true;						
 
-            $doc  = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $doc  = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc7"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc ); 
 						

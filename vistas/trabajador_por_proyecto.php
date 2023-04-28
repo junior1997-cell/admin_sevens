@@ -60,7 +60,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success"  onclick="show_hide_form(2);"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success btn-agregar-trabajador"  onclick="show_hide_form(2); limpiar_form_trabajador();"><i class="fas fa-user-plus"></i> Agregar</button>
                             <button type="button" class="btn bg-gradient-info"  onclick="ver_lista_orden();"><i class="fa-solid fa-arrow-down-short-wide"></i> Ordenar</button>
                             Administra de manera eficiente a los trabajdores
                           </h3>

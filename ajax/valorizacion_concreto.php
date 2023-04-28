@@ -53,7 +53,7 @@
 
             $flat_doc1 = true;
 
-            $doc_concreto = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $doc_concreto = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/valorizacion_concreto/documento/" . $doc_concreto);
           }

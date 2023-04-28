@@ -147,7 +147,7 @@
                           <!-- TBLA- REGISTRO DE ASISTENCIA-->                         
                           <div class="table-responsive p-0" id="ver_asistencia" style="display: none; height: 650px;">
                               
-                            <table class="table table-hover table-head-fixed text-nowrap" style="border: black 1px solid;">
+                            <table class="table table-hover table-head-fixed text-nowrap tabla_sistencia_obrero" style="border: black 1px solid;">
                               <thead class="bg-white" >
                                 <tr class="celda-b-t-1px ">
                                   <th rowspan="2" class="stile-celda inicio_tabla">#</th>

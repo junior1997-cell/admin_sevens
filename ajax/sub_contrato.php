@@ -71,7 +71,7 @@
           } else {
 
             $ext1 = explode(".", $_FILES["doc1"]["name"]); $flat_ficha1 = true;	
-            $comprobante = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $comprobante = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/sub_contrato/comprobante_subcontrato/" . $comprobante);
           
           }
@@ -236,7 +236,7 @@
           } else {
             $ext1 = explode(".", $_FILES["doc2"]["name"]);
             $flat_img1 = true;      
-            $imagen1 = $date_now .' '. rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);      
+            $imagen1 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);      
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/sub_contrato/comprobante_pago/" . $imagen1);
           }
       

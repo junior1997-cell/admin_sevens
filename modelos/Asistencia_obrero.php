@@ -32,8 +32,7 @@ class Asistencia_obrero
         $sql_2 = "INSERT INTO asistencia_trabajador (idtrabajador_por_proyecto, horas_normal_dia, pago_normal_dia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia, user_created)			
 				VALUES ('" . $key['id_trabajador'] . "', '" . $key['horas_normal_dia'] . "', '" . $key['pago_normal_dia'] . "', '" .
         $key['horas_extras_dia'] . "', '" . $key['pago_horas_extras'] . "', '" . $key['fecha_asistida'] . "', '" . $key['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
-        $new_registro = ejecutarConsulta_retornarID($sql_2);
-        if ($new_registro['status'] == false) {  return $new_registro; }
+        $new_registro = ejecutarConsulta_retornarID($sql_2); if ($new_registro['status'] == false) {  return $new_registro; }
 
         //B I T A C O R A -------
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '".$new_registro['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
@@ -45,8 +44,7 @@ class Asistencia_obrero
           "', pago_normal_dia='" . $key['pago_normal_dia'] . "', horas_extras_dia='" . $key['horas_extras_dia'] .
           "', pago_horas_extras='" . $key['pago_horas_extras'] . "', fecha_asistencia = '" . $key['fecha_asistida'] .
           "', nombre_dia = '" . $key['nombre_dia'] . "', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='" . $buscar_asistencia['data']['idasistencia_trabajador'] . "';";
-        $edita_registro = ejecutarConsulta($sql_3);
-        if ($edita_registro['status'] == false) {  return $edita_registro; }
+        $edita_registro = ejecutarConsulta($sql_3);  if ($edita_registro['status'] == false) {  return $edita_registro; }
 
         //B I T A C O R A -------
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '".$buscar_asistencia['data']['idasistencia_trabajador']."', 'Editar registro', '".$_SESSION['idusuario']."')";
@@ -59,17 +57,15 @@ class Asistencia_obrero
     foreach ($data_resumen_qs as $indice => $keys) {
       $sql_4 = "SELECT idresumen_q_s_asistencia FROM resumen_q_s_asistencia 
       WHERE idtrabajador_por_proyecto = '" . $keys['id_trabajador'] . "' AND fecha_q_s_inicio = '" . $keys['fecha_q_s_inicio'] . "';";
-      $buscar_extras = ejecutarConsultaSimpleFila($sql_4);
-      if ($buscar_extras['status'] == false) {  return $buscar_extras; }
+      $buscar_extras = ejecutarConsultaSimpleFila($sql_4); if ($buscar_extras['status'] == false) {  return $buscar_extras; }
 
       if (empty($buscar_extras['data'])) {
         # insertamos un nuevo registro
-        $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, adicional_descuento, pago_quincenal, user_created) 
+        $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_he, total_dias_asistidos, sabatical, pago_parcial_hn, pago_parcial_he, pago_parcial_hne, adicional_descuento, pago_quincenal, user_created) 
 				VALUES ('" . $keys['id_trabajador'] . "', '" . $keys['num_semana'] . "', '" . $keys['fecha_q_s_inicio'] . "', '" . $keys['fecha_q_s_fin'] .
         "', '" . $keys['total_hn'] . "', '" . $keys['total_he'] . "', '" . $keys['dias_asistidos'] . "', '" . $keys['sabatical'] . "', '" .
-        $keys['pago_parcial_hn'] . "', '" . $keys['pago_parcial_he'] . "', '" . $keys['adicional_descuento'] . "', '" . $keys['pago_quincenal'] . "', '".$_SESSION['idusuario']."')";
-        $retorno =  ejecutarConsulta_retornarID($sql_5);
-        if ($retorno['status'] == false) {  return $retorno; }
+        $keys['pago_parcial_hn'] . "', '" . $keys['pago_parcial_he'] . "' , '" . $keys['pago_parcial_hne'] . "', '" . $keys['adicional_descuento'] . "', '" . $keys['pago_quincenal'] . "', '".$_SESSION['idusuario']."')";
+        $retorno =  ejecutarConsulta_retornarID($sql_5); if ($retorno['status'] == false) {  return $retorno; }
 
         //B I T A C O R A -------
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '".$retorno['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
@@ -80,11 +76,10 @@ class Asistencia_obrero
         $sql_6 = "UPDATE resumen_q_s_asistencia SET  idtrabajador_por_proyecto='" . $keys['id_trabajador'] . "', numero_q_s='" . $keys['num_semana'] .
         "', fecha_q_s_inicio='" .  $keys['fecha_q_s_inicio'] . "', fecha_q_s_fin='" . $keys['fecha_q_s_fin'] . "', total_hn='" . $keys['total_hn'] .
         "', total_he='" . $keys['total_he'] . "', total_dias_asistidos='" . $keys['dias_asistidos'] . "', sabatical='" . $keys['sabatical'] .
-        "', pago_parcial_hn='" . $keys['pago_parcial_hn'] . "', pago_parcial_he='" . $keys['pago_parcial_he'] . "', 
+        "', pago_parcial_hn='" . $keys['pago_parcial_hn'] . "', pago_parcial_he='" . $keys['pago_parcial_he'] . "', pago_parcial_hne='" . $keys['pago_parcial_hne'] . "',
         adicional_descuento='" . $keys['adicional_descuento'] . "', pago_quincenal='" . $keys['pago_quincenal'] ."', user_updated='".$_SESSION['idusuario']."' 
         WHERE idresumen_q_s_asistencia = '" . $buscar_extras['data']['idresumen_q_s_asistencia'] . "';";
-        $retorno = ejecutarConsulta($sql_6);
-        if ($retorno['status'] == false) {  return $retorno; }
+        $retorno = ejecutarConsulta($sql_6); if ($retorno['status'] == false) {  return $retorno; }
 
         //B I T A C O R A -------
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '".$buscar_extras['data']['idresumen_q_s_asistencia']."', 'Editar registro', '".$_SESSION['idusuario']."')";

@@ -374,7 +374,7 @@
 
         $ext1 = explode(".", $_FILES["foto1"]["name"]); $flat_img1 = true;						
 
-        $imagen1 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+        $imagen1 = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
         move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/docs/all_trabajador/perfil/" . $imagen1);
         
@@ -389,7 +389,7 @@
 
         $ext2 = explode(".", $_FILES["foto2"]["name"]); $flat_img2 = true;
 
-        $imagen2 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext2);
+        $imagen2 = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext2);
 
         move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/all_trabajador/dni_anverso/" . $imagen2);
         
@@ -404,7 +404,7 @@
 
         $ext3 = explode(".", $_FILES["foto3"]["name"]); $flat_img3 = true;
         
-        $imagen3 = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
+        $imagen3 = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
 
         move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/docs/all_trabajador/dni_reverso/" . $imagen3);
         
@@ -419,7 +419,7 @@
 
         $ext3 = explode(".", $_FILES["doc4"]["name"]); $flat_cv1 = true;
         
-        $cv_documentado = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
+        $cv_documentado = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
 
         move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/all_trabajador/cv_documentado/" .  $cv_documentado);
         
@@ -434,7 +434,7 @@
 
         $ext3 = explode(".", $_FILES["doc5"]["name"]); $flat_cv2 = true;
         
-        $cv_nodocumentado = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext3);
+        $cv_nodocumentado = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
 
         move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/all_trabajador/cv_no_documentado/" . $cv_nodocumentado);
         

@@ -109,7 +109,7 @@ function capture_idtrabajador(estado_editar = false) {
     if (idtrabajador == null || idtrabajador == '' ) {  }else{
       console.log('edita trbajadorrr');
 
-      lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', $("#desempenio").select2("val"));
+      // lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', $("#desempenio").select2("val"));
         
       $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
@@ -153,13 +153,13 @@ function sueld_mensual(){
 
 function show_hide_form(flag) {
 
-  limpiar_form_trabajador();
-
   // tabla principal
 	if (flag == 1)	{		
+    $('.btn-agregar-trabajador').show();
 		$("#mostrar-tabla").show();
     $("#mostrar-form").hide();
 	}	else	{
+    $('.btn-agregar-trabajador').hide();
     // formulario		    
 		$("#mostrar-tabla").hide();
     $("#mostrar-form").show();    
@@ -169,9 +169,9 @@ function show_hide_form(flag) {
 //Función limpiar
 function limpiar_form_trabajador() {  
 
-  var fecha_incial_proyecto = "" ;
-  
-  var fecha_final_proyecto = "" ;
+  var fecha_incial_proyecto = "", fecha_final_proyecto = "" ;
+
+  lista_select2(`../ajax/ajax_general.php?op=select2TrabajadorPorProyecto&id_proyecto=${localStorage.getItem('nube_idproyecto')}`, '#trabajador', null);
 
   if (localStorage.getItem('nube_fecha_inicial_proyecto') == "" || localStorage.getItem('nube_fecha_inicial_proyecto') === undefined || localStorage.getItem('nube_fecha_inicial_proyecto') == null) {
     fecha_incial_proyecto = ""
@@ -480,34 +480,39 @@ function mostrar(idtrabajador,idtipo) {
   $("#cargando-2-fomulario").show();
 
   limpiar_form_trabajador();
+  show_hide_form(2);
 
-  show_hide_form(2);  
+  var lista_trabajador = lista_select2(`../ajax/ajax_general.php?op=select2Trabajador`, '#trabajador', null);
 
-  $.post("../ajax/trabajador_por_proyecto.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
+  $(lista_trabajador).ready(function () {  
 
-    e = JSON.parse(e);  console.log(e); 
+    $.post("../ajax/trabajador_por_proyecto.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
 
-    lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data.idtrabajador}`, '#desempenio', e.data.iddesempenio);
+      e = JSON.parse(e);  console.log(e); 
 
-    $("#idtrabajador_por_proyecto").val(e.data.idtrabajador_por_proyecto);
-    $("#trabajador").attr('onchange', 'capture_idtrabajador(true);'); 
-    $("#trabajador").val(e.data.idtrabajador).trigger("change");     
+      lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data.idtrabajador}`, '#desempenio', e.data.iddesempenio);
 
-    $("#ocupacion").html(e.data.nombre_ocupacion);    
-    $("#tipo_trabajador").html(e.data.nombre_tipo);  
+      $("#idtrabajador_por_proyecto").val(e.data.idtrabajador_por_proyecto);
+      $("#trabajador").attr('onchange', `capture_idtrabajador('edit_trabajador');`); 
+      $("#trabajador").val(e.data.idtrabajador).trigger("change");     
 
-    $("#sueldo_mensual").val(e.data.sueldo_mensual);   
-    $("#sueldo_diario").val(e.data.sueldo_diario);   
-    $("#sueldo_hora").val(e.data.sueldo_hora);
+      $("#ocupacion").html(e.data.nombre_ocupacion);    
+      $("#tipo_trabajador").html(e.data.nombre_tipo);  
 
-    $("#fecha_inicio").val(format_d_m_a(e.data.fecha_inicio));
-    $("#fecha_fin").val(format_d_m_a(e.data.fecha_fin)); 
-    $("#cantidad_dias").val(e.data.cantidad_dias);
+      $("#sueldo_mensual").val(e.data.sueldo_mensual);   
+      $("#sueldo_diario").val(e.data.sueldo_diario);   
+      $("#sueldo_hora").val(e.data.sueldo_hora);
 
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-    $("#trabajador").attr('onchange', 'capture_idtrabajador(false);');
-  }).fail( function(e) { ver_errores(e); } );
+      $("#fecha_inicio").val(format_d_m_a(e.data.fecha_inicio));
+      $("#fecha_fin").val(format_d_m_a(e.data.fecha_fin)); 
+      $("#cantidad_dias").val(e.data.cantidad_dias);
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+      $("#trabajador").attr('onchange', 'capture_idtrabajador(false);');
+    }).fail( function(e) { ver_errores(e); } );
+
+  });
 }
 
 //Función para desactivar registros

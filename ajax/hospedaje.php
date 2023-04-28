@@ -51,7 +51,7 @@
             $ext1 = explode(".", $_FILES["doc1"]["name"]);
             $flat_ficha1 = true;
 
-            $comprobante = rand(0, 20) . round(microtime(true)) . rand(21, 41) . '.' . end($ext1);
+            $comprobante = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/hospedaje/comprobante/" . $comprobante);
           }
