@@ -17,7 +17,7 @@
       require_once "../modelos/Trabajador_por_proyecto.php";
       require_once "../modelos/AllTrabajador.php";
 
-      $trabajadorproyecto=new TrabajadorPorProyecto();
+      $trabajadorproyecto=new TrabajadorPorProyecto($_SESSION['idusuario']);
       $all_trabajador=new AllTrabajador();
 
       date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
@@ -30,10 +30,6 @@
       $trabajador		    = isset($_POST["trabajador"])? limpiarCadena($_POST["trabajador"]):"";
       $desempenio		    = isset($_POST["desempenio"])? limpiarCadena($_POST["desempenio"]):"";
       
-      $sueldo_diario	  = isset($_POST["sueldo_diario"])? limpiarCadena($_POST["sueldo_diario"]):"";
-      $sueldo_mensual   = isset($_POST['sueldo_mensual'])? $_POST['sueldo_mensual']:"";
-      $sueldo_hora 		  = isset($_POST['sueldo_hora'])? $_POST['sueldo_hora']:"";
-
       $fecha_inicio 		= isset($_POST['fecha_inicio'])? $_POST['fecha_inicio']:"";
       $fecha_fin 		    = isset($_POST['fecha_fin'])? $_POST['fecha_fin']:""; 
       $cantidad_dias 		= isset($_POST['cantidad_dias'])? $_POST['cantidad_dias']:"";      
@@ -74,15 +70,15 @@
           // registramos un nuevo trabajador
           if (empty($idtrabajador_por_proyecto)){
 
-            $rspta=$trabajadorproyecto->insertar( $idproyecto, $trabajador, $desempenio, quitar_formato_miles($sueldo_diario), quitar_formato_miles($sueldo_mensual), 
-            quitar_formato_miles($sueldo_hora), format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
+            $rspta=$trabajadorproyecto->insertar( $idproyecto, $trabajador, $desempenio, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias,
+            $_POST["sueldo_mensual"], $_POST["sueldo_semanal"], $_POST["sueldo_diario"], $_POST["sueldo_hora"], $_POST["fecha_desde"], $_POST["fecha_hasta"], $_POST["sueldo_actual"] );
             
             echo json_encode($rspta, true);
 
           }else {
             // editamos un trabajador existente
-            $rspta=$trabajadorproyecto->editar( $idtrabajador_por_proyecto, $idproyecto, $trabajador, $desempenio, quitar_formato_miles($sueldo_diario), quitar_formato_miles($sueldo_mensual), 
-            quitar_formato_miles($sueldo_hora), format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias );
+            $rspta=$trabajadorproyecto->editar( $idtrabajador_por_proyecto,  $idproyecto, $trabajador, $desempenio, format_a_m_d($fecha_inicio), format_a_m_d($fecha_fin), $cantidad_dias,
+            $_POST["sueldo_mensual"], $_POST["sueldo_semanal"], $_POST["sueldo_diario"], $_POST["sueldo_hora"], $_POST["fecha_desde"], $_POST["fecha_hasta"], $_POST["sueldo_actual"] );
             
             echo json_encode($rspta, true);
           }
@@ -147,15 +143,16 @@
                 "5"=> '<a data-toggle="tooltip" data-original-title="Enviar correo" href="mailto:'.$value['email'].'">'.$value['email'].'</a>' ,
                 "6"=> $value['fecha_nacimiento'],
                 "7"=>$value['nombre_tipo'] ,
-                "8"=>$value['nombre_desempeno'],
-                "9"=>'<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] . '<br> <b>CCI: </b>'. $value['cci'] . $toltip ,                
+                "8"=>$value['nombre_ocupacion'] ,
+                "9"=>$value['nombre_desempeno'],
+                "10"=>'<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] . '<br> <b>CCI: </b>'. $value['cci'] . $toltip ,                
                 
-                "10"=> $value['trabajador'],
-                "11"=>$value['numero_documento'],
-                "12"=>( empty($value['fecha_inicio']) ? '--' : format_d_m_a($value['fecha_inicio']) ),
-                "13"=>( empty($value['fecha_fin']) ? '--' : format_d_m_a($value['fecha_fin']) ),
-                "14"=>$value['banco'],
-                "15"=>$value['cuenta_bancaria'],
+                "11"=> $value['trabajador'],
+                "12"=>$value['numero_documento'],
+                "13"=>( empty($value['fecha_inicio']) ? '--' : format_d_m_a($value['fecha_inicio']) ),
+                "14"=>( empty($value['fecha_fin']) ? '--' : format_d_m_a($value['fecha_fin']) ),
+                "15"=>$value['banco'],
+                "16"=>$value['cuenta_bancaria'],
 
                 );
             }
