@@ -70,7 +70,7 @@
   
 
   $hojaActiva->setCellValue('C1', 'REGISTRO - SATURACIÓN DE OXÍGENO Y TEMPERATURA');
-  $hojaActiva->setCellValue('C3', '---');
+  // $hojaActiva->setCellValue('C3', '---');
 
   $hojaActiva->setCellValue('L1', 'REVISION:');
   $hojaActiva->setCellValue('L3', '---');
@@ -94,22 +94,33 @@
   $hojaActiva->setCellValue('L9', "T (°C) \n (34°-37.5°)");
   $hojaActiva->setCellValue('M9', "%S.O. \n (87-100)");
 
+  $hojaActiva->setCellValue('C7', 'SEVEN´S INGENIEROS SELVA  S.A.C.                      RUC : 20609935651');
+
   require_once "../modelos/Formatos_varios.php"; 
   $formatos_varios=new FormatosVarios();  
 
   $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
   // echo json_encode($rspta, true);
+  $hojaActiva->setCellValue('C3', $rspta['proyecto']['nombre_proyecto']);
+  $hojaActiva->setCellValue('C5', $rspta['proyecto']['nombre_proyecto']);
+  $hojaActiva->setCellValue('C6', $rspta['proyecto']['ubicacion']);
 
   $fila_1 = 10;
 
-  foreach ($rspta['data'] as $key => $reg) {  
-    
+  foreach ($rspta['data'] as $key => $reg) { 
+      $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
+      $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':M'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+
+      
     
       $hojaActiva->mergeCells('B'.$fila_1.':E'.$fila_1); #aprellidos y nombres
       $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
       $hojaActiva->setCellValue('B'.$fila_1, $reg['trabajador']);
       $spreadsheet->getActiveSheet()->getStyle('M'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
+      $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
       $fila_1++;
     
   }

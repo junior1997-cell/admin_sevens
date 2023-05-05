@@ -103,7 +103,7 @@
                                     <tr>
                                       <th class="p-y-2px"></th>
                                       <th class="p-y-2px bg-gray-light">Tarea a realizar:</th>
-                                      <th class="p-y-2px" colspan="7"> ---</th>
+                                      <th class="p-y-2px" colspan="7"> TRABAJOS DE CONTRUCCÍON</th>
                                     </tr>
                                     <tr> 
                                       <th class="p-y-2px"></th>
@@ -112,7 +112,7 @@
                                       <th class="p-y-2px"> RUC: </th>
                                       <th class="p-y-2px">20609935651 </th>
                                       <th class="p-y-2px" >Lugar: </th>
-                                      <th class="p-y-2px" > --- </th>
+                                      <th class="p-y-2px"><textarea cols="30" rows="1"  id='ubicacion' class="textarea_datatable" readonly ></textarea> </th>
                                       <th class="p-y-2px"> N° DE REGISTRO: </th>
                                       <th class="p-y-2px"> --- </th> 
                                     </tr>
@@ -161,11 +161,11 @@
                                     </tr>
                                     <tr class="font-size-14px">                                      
                                       <th class="p-y-3px" colspan="1">PROYECTO</th>
-                                      <th class="p-y-3px" colspan="9"> --- </th>
+                                      <th class="p-y-3px" colspan="9" id='proyec_temperatura'> --- </th>
                                     </tr>
                                     <tr class="font-size-14px">                                       
                                       <th class="p-y-3px" colspan="1">UBICACIÓN</th>
-                                      <th class="p-y-3px" colspan="9"> --- </th>
+                                      <th class="p-y-3px" colspan="9" id='ubic_temperatura'> --- </th>
                                     </tr>
                                     <tr class="font-size-14px" colspan="10">                                      
                                       <th class="p-y-3px" colspan="1">EMPRESA</th>
@@ -211,7 +211,7 @@
                                       <th class="p-y-3px" colspan="24">CONTROL DIARIO DE EQUIPOS DE PROTECCIÓN PERSONAL</th>
                                     </tr>
                                     <tr>
-                                      <th class="p-y-3px" colspan="24"> --- </th>
+                                      <th class="p-y-3px" colspan="24" id='proyec_check_list'> --- </th>
                                     </tr>
                                     <tr>
                                       <th class="p-y-3px" colspan="24"> --- </th>

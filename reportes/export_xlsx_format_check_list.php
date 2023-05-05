@@ -12,6 +12,7 @@
   $spreadsheet->setActiveSheetIndex(0);
   $spreadsheet->getActiveSheet()->getSheetView()->setZoomScale(85);
   $spreadsheet->getActiveSheet()->getStyle('A:AD')->getAlignment()->setVertical('center');
+  // $spreadsheet->getActiveSheet()->mergeCells('A1:D1');
 
   $spreadsheet->getActiveSheet()->getStyle('D1:AD3')->getAlignment()->setHorizontal('center');
   $spreadsheet->getActiveSheet()->getStyle('A4:AD4')->getAlignment()->setHorizontal('center');
@@ -76,8 +77,9 @@
 
   $hojaActiva->mergeCells('A1:C3'); #imagen
   $hojaActiva->mergeCells('D1:AD1'); #nombre plantilla 
-  $hojaActiva->mergeCells('D2:AD2'); #tarea a realizar
-  $hojaActiva->mergeCells('D3:AD3'); #Fecha
+  $hojaActiva->mergeCells('D2:W3'); #tarea a realizar
+  $hojaActiva->mergeCells('X2:Z3',); #Fecha
+  $hojaActiva->mergeCells('AA2:AD3',); # Rellenar Fecha
   $hojaActiva->mergeCells('A4:AD4'); #Datos del empleador
   
   $hojaActiva->mergeCells('A5:F5'); # RAZÓN SOCIAL O DENOMINACIÓN SOCIAL
@@ -111,6 +113,7 @@
 
   $hojaActiva->setCellValue('D1', 'CONTROL DIARIO DE EQUIPOS DE PROTECCIÓN PERSONAL');
   $hojaActiva->setCellValue('D2', '---');
+  $hojaActiva->setCellValue('X2', 'FECHA : ');
   $hojaActiva->setCellValue('D3', '---');
 
   $hojaActiva->setCellValue('A4', 'DATOS DEL EMPLEADOR PRINCIPAL:');
@@ -174,10 +177,19 @@
 
   $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
   // echo json_encode($rspta, true);
+  $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
+  $hojaActiva->setCellValue('D2', $rspta['proyecto']['nombre_proyecto']);
+  $hojaActiva->setCellValue('K6', 'PJ. YUNGAY NRO. 151 P.J. SANTA ROSA LAMBAYEQUE CHICLAYO CHICLAYO');
 
   $fila_1 = 9;
 
-  foreach ($rspta['data'] as $key => $reg) {     
+  foreach ($rspta['data'] as $key => $reg) {   
+    
+    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
+    $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':AD'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+
     
     $hojaActiva->mergeCells('B'.$fila_1.':F'.$fila_1); #aprellidos y nombres
     $hojaActiva->setCellValue('A'.$fila_1, ($key+1));

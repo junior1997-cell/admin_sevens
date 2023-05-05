@@ -16,9 +16,25 @@ function data_format_ats(nube_idproyecto) {
     e = JSON.parse(e);  console.log(e);  
 
     if (e.status == true) {
+      // ==== ATS ======
+      $('#ubicacion').val("")
+      $('#ubicacion').val(e.proyecto.ubicacion)
+      // ==== TEMPERATURA ======
+      $('#proyec_temperatura').html("")
+      $('#ubic_temperatura').html("")
+      $('#proyec_temperatura').html(e.proyecto.nombre_proyecto)
+      $('#ubic_temperatura').html(e.proyecto.ubicacion)
+      
+      // ==== CHECK LIST EPPS ======
+
+      $('#proyec_check_list').html("")
+      $('#proyec_check_list').html(e.proyecto.nombre_proyecto)
+        
       
       var cant_t = e.data.length;
       var cant_mitad_t = parseInt(e.data.length/2); console.log('la mitad es:' + cant_mitad_t);
+      // console.log('Cant_t '+cant_t); 
+      // console.log('cant_mitad_t '+cant_mitad_t);
       var html_ats = '', html_temperatura = '', html_check_lit_epps = '';
       
       e.data.forEach((val, key) => {

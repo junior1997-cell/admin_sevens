@@ -22,7 +22,11 @@ class FormatosVarios
 		WHERE tpp.idtrabajador = t.idtrabajador AND tt.idtipo_trabajador=t.idtipo_trabajador AND t.idocupacion = oc.idocupacion 
     AND d.iddesempenio = tpp.iddesempenio
     AND tpp.idproyecto = '$nube_idproyecto' AND tpp.estado='1' AND tpp.estado_delete='1' ORDER BY tpp.orden_trabajador ASC";
-    $trabajdor = ejecutarConsultaArray($sql); if ($trabajdor['status'] == false) { return  $trabajdor;}   
+    $trabajdor = ejecutarConsultaArray($sql); if ($trabajdor['status'] == false) { return  $trabajdor;};
+
+    $sql_2 = "SELECT idproyecto,nombre_proyecto,nombre_codigo,actividad_trabajo,empresa_acargo,ubicacion 
+    FROM proyecto WHERE idproyecto ='$nube_idproyecto';" ; 
+    $datosproyect = ejecutarConsultaSimpleFila($sql_2); if ($datosproyect['status'] == false) { return  $datosproyect;};
 
     $cant_array = count($trabajdor['data']);
     $cant_array_mitad = count($trabajdor['data'])/2;
@@ -62,7 +66,15 @@ class FormatosVarios
         'cci'             => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
       );
     }
-    return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>$data];
+    $proyecto = [
+      'idproyecto' => $datosproyect['data']['idproyecto'],
+      'nombre_proyecto'=> $datosproyect['data']['nombre_proyecto'],
+      'nombre_codigo'=> $datosproyect['data']['nombre_codigo'],
+      'actividad_trabajo'=> $datosproyect['data']['actividad_trabajo'],
+      'empresa_acargo'=> $datosproyect['data']['empresa_acargo'],
+      'ubicacion'=> $datosproyect['data']['ubicacion']
+    ]; 
+    return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>$data,'proyecto'=>$proyecto];
   }
 
   //Implementar un método para listar asistencia

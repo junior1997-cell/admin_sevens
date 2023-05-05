@@ -66,7 +66,7 @@
   $hojaActiva->mergeCells('G8:H8'); #aprellidos y nombres
   $hojaActiva->mergeCells('I8:J8'); #Firma
   
-
+  // ,'Trabajos de construcción'
   $hojaActiva->setCellValue('C1', 'Formato');
   $hojaActiva->setCellValue('C2', 'ANÁLISIS SEGURO DE TRABAJO (ATS)');
 
@@ -74,10 +74,13 @@
   $hojaActiva->setCellValue('I2', 'VERSION:');
   $hojaActiva->setCellValue('I3', 'FECHA:');
 
-  $hojaActiva->setCellValue('A4', 'Tarea a realizar:');
+  $hojaActiva->setCellValue('A4', 'TAREA A REALIZAR:');
+  $hojaActiva->setCellValue('C4', 'TRABAJOS DE CONTRUCCÍON');
   $hojaActiva->setCellValue('A5', 'RAZÓN SOCIAL:');
+  $hojaActiva->setCellValue('C5', 'SEVEN´S INGENIEROS SELVA S.A.C.');
 
   $hojaActiva->setCellValue('D5', 'RUC:');
+  $hojaActiva->setCellValue('E5', '20609935651');
   $hojaActiva->setCellValue('F5', 'LUGAR:');
   $hojaActiva->setCellValue('I5', 'N° DE REGISTRO:');
 
@@ -93,17 +96,25 @@
 
   require_once "../modelos/Formatos_varios.php"; 
   $formatos_varios=new FormatosVarios();  
-
+  // 20609935651 ruc de la empresa
   $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
   // echo json_encode($rspta, true);
+  //datos de lugar
+  $hojaActiva->setCellValue('G5', $rspta['proyecto']['ubicacion']);
+
   $cant_array = count($rspta['data']);
   $cant_array_mitad = count($rspta['data'])/2;
 
-  $fila_1 = 9; $fila_2 = 9;
+  $fila_1 = 9; $fila_2 = 9; $row = 9;
 
   foreach ($rspta['data'] as $key => $reg) {  
     
     if ( $cant_array_mitad < $cant_array) {
+
+      $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':C'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      $spreadsheet->getActiveSheet()->getStyle('D'.$fila_1.':E'.$fila_1.'')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+
       $hojaActiva->mergeCells('B'.$fila_1.':C'.$fila_1); #aprellidos y nombres
       $hojaActiva->mergeCells('D'.$fila_1.':E'.$fila_1.''); #Firma
       $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
@@ -112,6 +123,12 @@
 
       $fila_1++;
     } else {
+
+      $spreadsheet->getActiveSheet()->getStyle('G'.$fila_2.':H'.$fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      $spreadsheet->getActiveSheet()->getStyle('I'.$fila_2.':J'.$fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      $spreadsheet->getActiveSheet()->getStyle('F'.$fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+
+
       $hojaActiva->mergeCells('G'.$fila_2.':H'.$fila_2); #aprellidos y nombres
       $hojaActiva->mergeCells('I'.$fila_2.':J'.$fila_2); #Firma
       $hojaActiva->setCellValue('F'.$fila_2, ($key+1));
@@ -121,6 +138,7 @@
       $fila_2++;
     }
     $cant_array_mitad++;
+    $spreadsheet->getActiveSheet()->getRowDimension($row++)->setRowHeight(30);
   }
 
   // redirect output to client browser
