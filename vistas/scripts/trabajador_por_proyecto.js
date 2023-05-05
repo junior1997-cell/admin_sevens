@@ -1,6 +1,7 @@
 var tabla, tabla_secundaria;
 
-var cant_banco_multimple = 1;
+var cant_banco_multimple = 1; cant_sueldo_multimple = 1;
+
 //Función que se ejecuta al inicio
 function init() {  
 
@@ -50,12 +51,12 @@ function init() {
   $('#nacimiento_all').datetimepicker({ locale: 'es', /*format: 'L',*/ format: 'DD-MM-YYYY', /*defaultDate: "",*/ });
   //$('#nacimiento_all').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, endDate: moment().format('DD/MM/YYYY'), clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
-  $('#sueldo_mensual').number( true, 2 );
-  $('#sueldo_diario').number( true, 2 );
-  $('#sueldo_hora').number( true, 2 );
+  $('.sueldo_mensual_0').number( true, 2 );
+  $('.sueldo_semanal_0').number( true, 2 );
+  $('.sueldo_diario_0').number( true, 2 );
+  $('.sueldo_hora_0').number( true, 2 );
 
-  $("[data-mask]").inputmask();
-  
+  $("[data-mask]").inputmask();  
 }
 
 // click input group para habilitar: datepiker
@@ -126,16 +127,11 @@ function capture_idtrabajador(estado_editar = false) {
 
   if ($('#trabajador').select2("val") == null || $('#trabajador').select2("val") == '') { 
     $('.btn-editar-trabajador').addClass('disabled').attr('data-original-title','Seleciona un trabajador');
-  } else { 
-    if ($('#trabajador').select2("val") == 1) {
-      $('.btn-editar-trabajador').addClass('disabled').attr('data-original-title','No editable');      
-    } else{
-      var name_trabajador = $('#trabajador').select2('data')[0].text;
-      $('.btn-editar-trabajador').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_trabajador, 15)}`);      
-    }
+  } else {     
+    var name_trabajador = $('#trabajador').select2('data')[0].text;
+    $('.btn-editar-trabajador').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_trabajador, 15)}`);     
   }
-  $('[data-toggle="tooltip"]').tooltip();
-  
+  $('[data-toggle="tooltip"]').tooltip();  
 }
 
 function sueld_mensual(){
@@ -169,6 +165,8 @@ function show_hide_form(flag) {
 //Función limpiar
 function limpiar_form_trabajador() {  
 
+  cant_sueldo_multimple = 1;
+
   var fecha_incial_proyecto = "", fecha_final_proyecto = "" ;
 
   lista_select2(`../ajax/ajax_general.php?op=select2TrabajadorPorProyecto&id_proyecto=${localStorage.getItem('nube_idproyecto')}`, '#trabajador', null);
@@ -191,9 +189,11 @@ function limpiar_form_trabajador() {
   $("#ocupacion").html("Selecione un trabajador");
   $("#desempenio").val("");  
 
-  $("#sueldo_mensual").val("");   
-  $("#sueldo_diario").val("");   
-  $("#sueldo_hora").val("");
+  $(".sueldo_mensual_0").val("");  
+  $(".sueldo_semanal_0").val("");  
+  $(".sueldo_diario_0").val("");   
+  $(".sueldo_hora_0").val("");
+  $("#lista_sueldo").html("");
 
   $("#fecha_inicio").val(fecha_incial_proyecto);  $("#fecha_fin").val(fecha_final_proyecto); $('#cantidad_dias').val('')
   $('#cantidad_dias').removeClass('input-no-valido input-valido');
@@ -218,9 +218,9 @@ function tbla_principal( nube_idproyecto ) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }, 
-      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }
     ],
     ajax:{
       url: `../ajax/trabajador_por_proyecto.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=1`,
@@ -247,7 +247,7 @@ function tbla_principal( nube_idproyecto ) {
     columnDefs: [ 
       { targets: [6], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       //{ targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
-      { targets: [10,11,12,13,14,15], visible: false, searchable: false, }, 
+      { targets: [11,12,13,14,15,16], visible: false, searchable: false, }, 
     ]
   }).DataTable();
 }
@@ -262,9 +262,9 @@ function tbla_secundaria( nube_idproyecto ) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }, 
-      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,10,11,12,13,4,5,6,7,8,14,15], } }
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }
     ],
     ajax:{
       url: `../ajax/trabajador_por_proyecto.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=0`,
@@ -332,20 +332,19 @@ function guardaryeditar(e) {
         if (evt.lengthComputable) {
           var percentComplete = (evt.loaded / evt.total)*100;
           /*console.log(percentComplete + '%');*/
-          $("#barra_progress_trabajador").css({"width": percentComplete+'%'});
-          $("#barra_progress_trabajador").text(percentComplete.toFixed(2)+" %");
+          $("#barra_progress_trabajador").css({"width": percentComplete+'%'}).text(percentComplete.toFixed(2)+" %");
         }
       }, false);
       return xhr;
     },
     beforeSend: function () {
       $("#guardar_registro_trabajador").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress_trabajador").css({ width: "0%",  });
-      $("#barra_progress_trabajador").text("0%").addClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_trabajador").css({ width: "0%",  }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_trabajador_div").show();
     },
     complete: function () {
-      $("#barra_progress_trabajador").css({ width: "0%", });
-      $("#barra_progress_trabajador").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_trabajador").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_trabajador_div").hide();
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
@@ -510,6 +509,30 @@ function mostrar(idtrabajador,idtipo) {
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
       $("#trabajador").attr('onchange', 'capture_idtrabajador(false);');
+
+      e.data.detalle_sueldo.forEach(function(val, index){         
+        
+        if ( index > 0 ) { 
+          add_sueldo();
+          $(`.sueldo_mensual_${index}`).val(val.sueldo_mensual);  
+          $(`.sueldo_semanal_${index}`).val(val.sueldo_semanal);  
+          $(`.sueldo_diario_${index}`).val(val.sueldo_diario);   
+          $(`.sueldo_hora_${index}`).val(val.sueldo_hora);
+          $(`.fecha_desde_${index}`).val(val.fecha_desde);   
+          $(`.fecha_hasta_${index}`).val(val.fecha_hasta);
+          if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(index) } 
+        } else {          
+          $(".sueldo_mensual_0").val(val.sueldo_mensual);  
+          $(".sueldo_semanal_0").val(val.sueldo_semanal);  
+          $(".sueldo_diario_0").val(val.sueldo_diario);   
+          $(".sueldo_hora_0").val(val.sueldo_hora);
+          $(".fecha_desde_0").val(val.fecha_desde);   
+          $(".fecha_hasta_0").val(val.fecha_hasta);
+          if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(0) } 
+        }              
+         
+      }); 
+
     }).fail( function(e) { ver_errores(e); } );
 
   });
@@ -580,6 +603,91 @@ function calcular_dias_trabajo() {
     $('#cantidad_dias').val(0);
   }  
 }
+
+// .....::::::::::::::::::::::::::::::::::::: S U E L D O   M U L T I P L E  :::::::::::::::::::::::::::::::::::::::..
+
+function add_sueldo() {
+  $('#lista_sueldo').append(` 
+    <!-- Sueldo(Semanal) -->
+    <div class="col-lg-3 delete_sueldo_multiple_${cant_sueldo_multimple}">
+      <div class="form-group">
+        <label for="sueldo_semanal">Sueldo(Semanal)</label>
+        <input type="text" step="any" name="sueldo_semanal[]" class="form-control sueldo_semanal_${cant_sueldo_multimple}" id="sueldo_semanal" readonly  />
+        <input type="hidden" step="any" name="sueldo_mensual[]" class="form-control sueldo_mensual_${cant_sueldo_multimple}" readonly />
+      </div>
+    </div>
+
+    <!-- Sueldo(Diario) -->
+    <div class="col-lg-2 delete_sueldo_multiple_${cant_sueldo_multimple}">
+      <div class="form-group">
+        <label for="sueldo_diario">Sueldo(Diario)</label>
+        <input type="text" step="any" name="sueldo_diario[]" class="form-control sueldo_diario_${cant_sueldo_multimple}" id="sueldo_diario" onchange="salary_semanal(${cant_sueldo_multimple});" onkeyup="salary_semanal(${cant_sueldo_multimple});" onclick="this.select();" />
+      </div>
+    </div>
+
+    <!-- Sueldo(Hora) -->
+    <div class="col-lg-2 delete_sueldo_multiple_${cant_sueldo_multimple}">
+      <div class="form-group">
+        <label for="sueldo_hora">Sueldo(8 Hora)</label>
+        <input type="text" step="any" name="sueldo_hora[]" class="form-control sueldo_hora_${cant_sueldo_multimple}" id="sueldo_hora" readonly />
+      </div>
+    </div>
+
+    <!-- Fecha inicial -->
+    <div class="col-lg-2 delete_sueldo_multiple_${cant_sueldo_multimple}"">
+      <div class="form-group">
+        <label for="fecha_desde">Desde</label>
+        <input type="date" name="fecha_desde[]" class="form-control fecha_desde_${cant_sueldo_multimple}" placeholder="Fecha" />
+      </div>
+    </div>
+
+    <!-- Fecha final -->
+    <div class="col-lg-2 delete_sueldo_multiple_${cant_sueldo_multimple}"">
+      <div class="form-group">
+        <label for="fecha_hasta">Hasta</label>
+        <input type="date" name="fecha_hasta[]" class="form-control fecha_hasta_${cant_sueldo_multimple}" placeholder="Fecha" />
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_sueldo_multiple_${cant_sueldo_multimple}">
+      <div class="form-group mb-2">
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-danger" type="radio" id="sueldo_seleccionado_${cant_sueldo_multimple}" name="sueldo_seleccionado" value="${cant_sueldo_multimple}" onclick="replicar_sueldo_actual(${cant_sueldo_multimple});">
+          <label for="sueldo_seleccionado_${cant_sueldo_multimple}" class="custom-control-label">Usar</label>
+          <input type="hidden" name="sueldo_actual[]" class="sueldo_actual" id="sueldo_actual_${cant_sueldo_multimple}" value="0" >
+        </div>
+      </div>
+      <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_sueldo(${cant_sueldo_multimple});"><i class="far fa-trash-alt"></i></button>      
+  </div>`);
+
+  $(`.sueldo_mensual_${cant_sueldo_multimple}`).number( true, 2 );
+  $(`.sueldo_semanal_${cant_sueldo_multimple}`).number( true, 2 );
+  $(`.sueldo_diario_${cant_sueldo_multimple}`).number( true, 2 );
+  $(`.sueldo_hora_${cant_sueldo_multimple}`).number( true, 2 );
+
+  $('[data-toggle="tooltip"]').tooltip();
+  cant_sueldo_multimple++;    
+}
+
+function remove_sueldo(id) { $(`.delete_sueldo_multiple_${id}`).remove(); }
+
+function salary_semanal(id){
+
+  var val_diario  = $(`.sueldo_diario_${id}`).val();
+  var val_mensual = (val_diario*30).toFixed(1);
+  var val_semanal = (val_diario*5).toFixed(1);
+  var val_horas   = (val_diario/8).toFixed(1);
+
+  $(`.sueldo_mensual_${id}`).val(val_mensual);
+  $(`.sueldo_semanal_${id}`).val(val_semanal);
+  $(`.sueldo_hora_${id}`).val(val_horas);
+}
+
+function replicar_sueldo_actual(id) { console.log('entramos a replicar');
+  $(`.sueldo_actual`).val(0);
+  $(`#sueldo_actual_${id}`).val(1);
+}
+
 // .....::::::::::::::::::::::::::::::::::::: T R A B A J A D O R  :::::::::::::::::::::::::::::::::::::::..
 // abrimos el navegador de archivos
 $("#foto1_i").click(function() { $('#foto1').trigger('click'); });
@@ -773,19 +881,6 @@ function mostrar_editar_trabajador() {
   }).fail( function(e) { ver_errores(e); });
 }
 
-function sueld_mensual(){
-
-  var sueldo_mensual = $('#sueldo_mensual').val()
-
-  var sueldo_diario=(sueldo_mensual/30).toFixed(1);
-
-  var sueldo_horas=(sueldo_diario/8).toFixed(1);
-
-  $("#sueldo_diario").val(sueldo_diario);
-
-  $("#sueldo_hora").val(sueldo_horas);
-}
-
 //Función para guardar o editar
 function guardar_y_editar_all_trabajador(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -805,6 +900,7 @@ function guardar_y_editar_all_trabajador(e) {
           Swal.fire("Correcto!", "All-Trabajador guardado correctamente", "success");
           lista_select2("../ajax/ajax_general.php?op=select2Trabajador", '#trabajador', e.data, function(){ $("#trabajador").attr('onchange', 'capture_idtrabajador(false);'); });          
           $("#modal-agregar-all-trabajador").modal("hide"); 
+          lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data}`, '#desempenio', $(`#desempenio`).select2("val"));
           cant_banco_multimple = 1; 
 
         }else{
@@ -1025,6 +1121,7 @@ function add_bancos(id_select_banco = null) {
 }
 
 function remove_bancos(id) { $(`.delete_multiple_${id}`).remove(); }
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: F O R M    V A L I D A T E  :::::::::::::::::::::::::::::::::::::::..

@@ -80,7 +80,8 @@
                                   <th>Correo</th>
                                   <th>Nacimiento</th>
                                   <th>Tipo</th>
-                                  <th>Desempeño</th>
+                                  <th>Ocupación</th>
+                                  <th>Desempeño</th>                                  
                                   <th>Cuenta</th> 
 
                                   <th>Nombre Completo</th>
@@ -101,6 +102,7 @@
                                   <th>Celular</th>
                                   <th>Correo</th>
                                   <th>Nacimiento</th>
+                                  <th>Tipo</th>
                                   <th>Ocupación</th>
                                   <th>Desempeño</th>
                                   <th>Cuenta</th> 
@@ -127,8 +129,9 @@
                                     <th>Celular</th>
                                     <th>Correo</th>
                                     <th>Nacimiento</th>
+                                    <th>Tipo</th>
                                     <th>Ocupación</th>
-                                    <th>Desempeño</th>
+                                    <th>Desempeño</th>                                  
                                     <th>Cuenta</th> 
 
                                     <th>Nombre Completo</th>
@@ -149,6 +152,7 @@
                                     <th>Celular</th>
                                     <th>Correo</th>
                                     <th>Nacimiento</th>
+                                    <th>Tipo</th>
                                     <th>Ocupación</th>
                                     <th>Desempeño</th>
                                     <th>Cuenta</th> 
@@ -223,29 +227,7 @@
                                       <select name="desempenio" id="desempenio" class="form-control select2" style="width: 100%;"  > 
                                       </select>
                                     </div>
-                                  </div>                              
-                                  
-                                  <!-- Sueldo(Mensual) -->
-                                  <div class="col-lg-2">
-                                    <div class="form-group">
-                                      <label for="sueldo_mensual">Sueldo(Mensual)</label>
-                                      <input type="text" step="any" name="sueldo_mensual" class="form-control" id="sueldo_mensual" onchange="sueld_mensual();" onkeyup="sueld_mensual();" onclick="this.select();" />
-                                    </div>
-                                  </div>
-                                  <!-- Sueldo(Diario) -->
-                                  <div class="col-lg-2">
-                                    <div class="form-group">
-                                      <label for="sueldo_diario">Sueldo(Diario)</label>
-                                      <input type="text" step="any" name="sueldo_diario" class="form-control" id="sueldo_diario" readonly />
-                                    </div>
-                                  </div>
-                                  <!-- Sueldo(Hora) -->
-                                  <div class="col-lg-2">
-                                    <div class="form-group">
-                                      <label for="sueldo_hora">Sueldo(8 Hora)</label>
-                                      <input type="text" step="any" name="sueldo_hora" class="form-control" id="sueldo_hora" readonly />
-                                    </div>
-                                  </div>
+                                  </div>                                   
 
                                   <!-- FECHA INICIO -->
                                   <div class="col-lg-2 ">
@@ -281,9 +263,66 @@
                                     </div>
                                   </div> 
 
+                                  <div class="col-12">
+                                    <div class="row">
+                                      <!-- Sueldo(Semanal) -->
+                                      <div class="col-lg-3">
+                                        <div class="form-group">
+                                          <label for="sueldo_semanal">Sueldo(Semanal)</label>
+                                          <input type="text" step="any" name="sueldo_semanal[]" class="form-control sueldo_semanal_0" readonly />
+                                          <input type="hidden" step="any" name="sueldo_mensual[]" class="form-control sueldo_mensual_0" readonly />
+                                        </div>
+                                      </div>
+                                      <!-- Sueldo(Diario) -->
+                                      <div class="col-lg-2">
+                                        <div class="form-group">
+                                          <label for="sueldo_diario">Sueldo(Diario)</label>
+                                          <input type="text" step="any" name="sueldo_diario[]" class="form-control sueldo_diario_0" onchange="salary_semanal(0);" onkeyup="salary_semanal(0);" onclick="this.select();"  />
+                                        </div>
+                                      </div>
+                                      <!-- Sueldo(Hora) -->
+                                      <div class="col-lg-2">
+                                        <div class="form-group">
+                                          <label for="sueldo_hora">Sueldo(8 Hora)</label>
+                                          <input type="text" step="any" name="sueldo_hora[]" class="form-control sueldo_hora_0" readonly />
+                                        </div>
+                                      </div>
+                                      <!-- Fecha inicial -->
+                                      <div class="col-lg-2">
+                                        <div class="form-group">
+                                          <label for="fecha_desde">Desde</label>
+                                          <input type="date" name="fecha_desde[]" class="form-control fecha_desde_0" placeholder="Fecha" />
+                                        </div>
+                                      </div>
+
+                                      <!-- Fecha final -->
+                                      <div class="col-lg-2">
+                                        <div class="form-group">
+                                          <label for="fecha_hasta">Hasta</label>
+                                          <input type="date" name="fecha_hasta[]" class="form-control fecha_hasta_0" placeholder="Fecha" />
+                                        </div>
+                                      </div>
+                                      <!-- boton -->
+                                      <div class="col-12 col-sm-12 col-md-6 col-lg-1">
+                                        <div class="form-group mb-2">
+                                          <div class="custom-control custom-radio ">
+                                            <input class="custom-control-input custom-control-input-danger" type="radio" id="sueldo_seleccionado_0" name="sueldo_seleccionado" value="0" checked onclick="replicar_sueldo_actual(0);">
+                                            <label for="sueldo_seleccionado_0" class="custom-control-label">Usar</label>
+                                            <input type="hidden" name="sueldo_actual[]" class="sueldo_actual" id="sueldo_actual_0" value="1" >
+                                          </div>
+                                        </div>
+                                        <button type="button" class="btn bg-gradient-success btn-sm" onclick="add_sueldo();" data-toggle="tooltip" data-original-title="Agregar neva fila"><i class="fas fa-plus"></i></button>
+                                      </div>
+                                      
+                                      <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                                        <div class="row" id="lista_sueldo"> </div>
+                                      </div>
+                                    </div>
+                                  </div>                                  
+
                                   <!-- barprogress -->
-                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                    <div class="progress" id="barra_progress_trabajador_div">
+                                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-l-20px" id="barra_progress_trabajador_div" style="display: none;" >
+                                    <div class="progress">
                                       <div id="barra_progress_trabajador" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                         0%
                                       </div>
