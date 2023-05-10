@@ -675,7 +675,7 @@ function salary_semanal(id){
 
   var val_diario  = $(`.sueldo_diario_${id}`).val();
   var val_mensual = (val_diario*30).toFixed(1);
-  var val_semanal = (val_diario*5).toFixed(1);
+  var val_semanal = (val_diario*6).toFixed(1);
   var val_horas   = (val_diario/8).toFixed(1);
 
   $(`.sueldo_mensual_${id}`).val(val_mensual);

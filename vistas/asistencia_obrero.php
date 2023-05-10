@@ -56,6 +56,10 @@
                         <button type="button" class="btn bg-gradient-success btn-sm" onclick="export_table_excel();">
                         <i class="fa-regular fa-file-excel"></i> Export
                         </button>
+
+                        <button type="button" class="btn bg-gradient-primary btn-sm btn_mostrar_hne activado_hne" data-toggle="tooltip" data-original-title="Hora normal y extra." style="display: none;" >HNE</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm btn_mostrar_hn" data-toggle="tooltip" data-original-title="Hora normal." style="display: none;">HN</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm btn_mostrar_he" data-toggle="tooltip" data-original-title="Hora extra" style="display: none;">HE</button>
                       </h1>
                     </div>
                     <div class="col-sm-6"> 
@@ -155,16 +159,16 @@
                                   <th rowspan="2" class="stile-celda ">Nombre del trabajador</th>
                                   <th rowspan="2" class="stile-celda ">Cargo</th>
                                   <th colspan="14" id="dias_asistidos_s_q" class="text-center " style="border: black 1px solid;">
-                                    <span class="badge badge-info float-left cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px" data-toggle="tooltip" data-original-title="Horas multiples" onclick="modal_horas_multiples();"><i class="far fa-clock fa-lg m-1"></i></span>  
+                                    <span class="badge badge-info float-left cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px btn-horas-multiples" data-toggle="tooltip" data-original-title="Horas multiples" onclick="modal_horas_multiples();"><i class="far fa-clock fa-lg m-1"></i></span>  
                                     Horas de trabajo por día
                                     <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_right mr-1" data-toggle="tooltip" data-original-title="Deslizar al la derecha"><i class="far fa-arrow-alt-circle-right fa-lg m-1"></i></span>
                                     <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_bottom mr-1" data-toggle="tooltip" data-original-title="Deslizar al final"><i class="far fa-arrow-alt-circle-down fa-lg m-1"></i></span>
                                     <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_left mr-1" data-toggle="tooltip" data-original-title="Deslizar al la izquierda"><i class="far fa-arrow-alt-circle-left fa-lg m-1"></i></span>                                  
                                      
                                   </th>
-                                  <th rowspan="2" class="stile-celda ">Horas<br>normal/extras</th>
+                                  <th rowspan="2" class="stile-celda table_title_hne">Horas<br>normal/extras</th>
                                   <th rowspan="2" class="stile-celda ">Días<br>asistidos</th>
-                                  <th rowspan="2" class="stile-celda ">Sueldo Mensual</th>
+                                  <th rowspan="2" class="stile-celda ">Sueldo Semanal</th>
                                   <th rowspan="2" class="stile-celda ">Jornal</th>
                                   <th rowspan="2" class="stile-celda ">Sueldo <br> hora</th>
                                   <th rowspan="2" class="stile-celda ">Sabatical</th>
@@ -710,32 +714,98 @@
                       </div>
 
                       <div class="modal-body"> 
-                        <form id="form-horas-multiples" name="form-horas-multiples" method="POST">                         
-                          
-                          <!-- Horas -->
-                          <div class="col-lg-12"> 
-                            <div class="form-group">
-                              <label for="horas_multiples">Horas<sup class="text-danger">*</sup> <small class="text-danger">(para todos los trabajadores)</small> </label>
-                              <input class="form-control" type="number" name="horas_multiples" id="horas_multiples" >
+                        
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="card card-primary card-outline card-outline-tabs">
+                              <div class="card-header p-0 border-bottom-0">
+                                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                  <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-four-todo_sq-tab" data-toggle="pill" href="#custom-tabs-four-todo_sq" role="tab" aria-controls="custom-tabs-four-todo_sq" aria-selected="true" onclick="btn_guardar_horas_multiple(1);">Todo</a>
+                                  </li>
+                                  <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-por_dia-tab" data-toggle="pill" href="#custom-tabs-four-por_dia" role="tab" aria-controls="custom-tabs-four-por_dia" aria-selected="false" onclick="btn_guardar_horas_multiple(2);">Por dia</a>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-four-tabContent">
+                                  <div class="tab-pane fade show active" id="custom-tabs-four-todo_sq" role="tabpanel" aria-labelledby="custom-tabs-four-todo_sq-tab">
+                                    <form id="form-horas-multiples" name="form-horas-multiples" method="POST">                         
+                                      
+                                      <!-- Horas -->
+                                      <div class="col-lg-12"> 
+                                        <div class="form-group">
+                                          <label for="horas_multiples">Horas<sup class="text-danger">*</sup> <small class="text-danger">(para todos los trabajadores)</small> </label>
+                                          <input class="form-control" type="number" name="horas_multiples" id="horas_multiples" >
+                                        </div>
+                                      </div>
+
+                                      <!-- barprogress -->
+                                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                        <div class="progress_h_multiple h-px-30" id="div_barra_progress_h_multiple">
+                                          <div id="barra_progress_h_multiple" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                            0%
+                                          </div>
+                                        </div>
+                                      </div> 
+                                      
+                                      <button type="submit" style="display: none;" id="submit-form-horas-multiples">Submit</button>
+                                    </form>
+                                  </div>
+                                  <div class="tab-pane fade" id="custom-tabs-four-por_dia" role="tabpanel" aria-labelledby="custom-tabs-four-por_dia-tab">
+                                    <!-- estamos en desarollo -->
+                                    <form id="form-horas-por-dia-multiples" name="form-horas-por-dia-multiples" method="POST  ">
+                                      <!-- dia -->
+                                      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="form-group">
+                                          <label for="dia_xd">Dia <sup class="text-danger">(unico*)</sup></label>
+                                          <div class="select2-purple">
+                                            <select name="dia_xd" id="dia_xd" class="form-control select2"  data-dropdown-css-class="select2-purple" data-placeholder="Seleccione" style="width: 100%;"> 
+                                              <option value="Domingo">Domingo</option>
+                                              <option value="Lunes">Lunes</option>
+                                              <option value="Martes">Martes</option>
+                                              <option value="Miércoles">Miércoles</option>
+                                              <option value="Jueves">Jueves</option>
+                                              <option value="Viernes">Viernes</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                      </div> 
+
+                                      <!-- Horas -->
+                                      <div class="col-lg-12"> 
+                                        <div class="form-group">
+                                          <label for="horas_xd">Horas<sup class="text-danger">*</sup> <small class="text-danger">(para todos los trabajadores)</small> </label>
+                                          <input class="form-control" type="number" name="horas_xd" id="horas_xd" >
+                                        </div>
+                                      </div>
+
+                                      <!-- barprogress -->
+                                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-t-20px" >
+                                        <div class="progress_h_por_dia h-px-30" id="div_barra_progress_h_por_dia">
+                                          <div id="barra_progress_h_por_dia" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                            0%
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <button type="submit" style="display: none;" id="submit-form-horas-por-dia-multiples">Submit</button>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- /.card -->
                             </div>
                           </div>
-
-                          <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                            <div class="progress_h_multiple h-px-30" id="div_barra_progress_h_multiple">
-                              <div id="barra_progress_h_multiple" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                0%
-                              </div>
-                            </div>
-                          </div> 
-                          
-                          <button type="submit" style="display: none;" id="submit-form-horas-multiples">Submit</button>
-                        </form>
+                        </div>
                       </div>
+                      
 
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button  class="btn btn-success horas-multiples" >Asignar horas</button>
+                        <button  class="btn btn-success horas-por-dia-multiples" style="display: none;" >Asignar horas x dia</button>
                       </div>
 
                     </div>
