@@ -71,7 +71,11 @@
                             <!-- Check list -->
                             <li class="nav-item">
                               <a class="nav-link" id="custom-content-below-messages-tab" data-toggle="pill" href="#custom-content-below-messages" role="tab" aria-controls="custom-content-below-messages" aria-selected="false">CHECK LIST EPPS</a>
-                            </li>                            
+                            </li>   
+                            <!--ASISTENCIA TRABAJADOR-->
+                            <li class="nav-item">
+                              <a class="nav-link" id="custom-content-below-asistencia-tab" data-toggle="pill" href="#custom-content-below-asistencia" role="tab" aria-controls="custom-content-below-asistencia" aria-selected="false">ASISTENCIA TRABAJADOR</a>
+                            </li>                          
                           </ul>
                           <div class="tab-content" id="custom-content-below-tabContent">
 
@@ -291,7 +295,17 @@
                               </div>
                               <!-- /.table-responsive -->                                
                             </div>
-                            <!-- /.tab-panel -->                            
+                            <!-- /.tab-panel -->    
+                            <!--Asistencia trabajador-->
+                            <div class="tab-pane fade " id="custom-content-below-asistencia" role="tabpanel" aria-labelledby="custom-content-below-asistencia-tab">
+                              <!-- tabla ASISTENCIA - TRABAJADOR -->
+                              <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-asistencia_trabajador"> <i class="fa-regular fa-file-excel"></i> export </a>
+                              <div class="table-responsive pb-3">
+                                  <!--TABLA EXPORT ASISTENCIA TRABAJADOR-->
+                              </div>
+                              <!-- /.table-responsive -->                                
+                            </div>
+                            <!-- /.tab-panel -->                           
 
                           </div>
                         </div>

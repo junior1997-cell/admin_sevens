@@ -116,6 +116,7 @@ function data_format_ats(nube_idproyecto) {
       $('#btn-export-ats').attr('href', `../reportes/export_xlsx_format_ats.php?id_proyecto=${nube_idproyecto}`);
       $('#btn-export-temperatura').attr('href', `../reportes/export_xlsx_format_temperatura.php?id_proyecto=${nube_idproyecto}`);
       $('#btn-export-check-list-epps').attr('href', `../reportes/export_xlsx_format_check_list.php?id_proyecto=${nube_idproyecto}`);
+      $('#btn-export-asistencia_trabajador').attr('href', `../reportes/export_xlsx_format_asistencia.php?id_proyecto=${nube_idproyecto}`);
 
       $('#btn-export-ats').attr('target', `_blank`);
 
