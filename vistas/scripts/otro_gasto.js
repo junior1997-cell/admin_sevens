@@ -125,7 +125,7 @@ function calc_total() {
     $(".nro_comprobante").html("Núm. de Operación");
 
     $(".div_ruc").show(); $(".div_razon_social").show();
-    $("#num_documento").val(""); $("#razon_social").val("");
+    // $("#num_documento").val(""); $("#razon_social").val("");
     $("#num_documento").rules("add", { required: true, messages: { required: "Campo requerido" } });
 
 

@@ -107,147 +107,139 @@ class FormatosVarios
     return ejecutarConsultaArray($sql);      
   }
 
-  //============ASISTENCIA TRABAJADOR===================
+  // ══════════════════════════════════════════ - ASISTENCIA TRABAJADOR - ══════════════════════════════════════════
 
-    //listar botones de la quincena o semana
-    public function datos_proyecto($nube_idproyecto) {
-      $sql = "SELECT p.idproyecto, p.fecha_inicio_actividad AS fecha_inicio, p.fecha_fin_actividad AS fecha_fin, p.plazo_actividad AS plazo, 
-      p.fecha_pago_obrero, p.fecha_valorizacion, p.nombre_proyecto, p.nombre_codigo,p.actividad_trabajo,p.empresa,p.ubicacion
-      FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
-      return ejecutarConsultaSimpleFila($sql);
+  //listar botones de la quincena o semana
+  public function datos_proyecto($nube_idproyecto) {
+    $sql = "SELECT p.idproyecto, p.fecha_inicio_actividad AS fecha_inicio, p.fecha_fin_actividad AS fecha_fin, p.plazo_actividad AS plazo, 
+    p.fecha_pago_obrero, p.fecha_valorizacion, p.nombre_proyecto, p.nombre_codigo,p.actividad_trabajo,p.empresa,p.ubicacion
+    FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
+    return  ejecutarConsultaSimpleFila($sql);
 
-    }
+  }
 
-    //ver detalle quincenal o semanal
-    public function ver_detalle_quincena($f1, $f2, $nube_idproyect) {
+  //ver detalle quincenal o semanal
+  public function ver_datos_trabajador($f1, $f2, $nube_idproyect, $num_quincena, $cant_dias_asistencia) {
 
-      // extraemos todos lo trabajadores del proyecto
-      $sql2 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
-      t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado, tpp.fecha_inicio, tpp.fecha_fin
-      FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
-      WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = t.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador 
-      AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY tpp.orden_trabajador ASC ;";
-      $trabajador = ejecutarConsultaArray($sql2); if ($trabajador['status'] == false) {  return $trabajador; }
+    // extraemos todos lo trabajadores del proyecto
+    $sql2 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
+    t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_semanal, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado, tpp.fecha_inicio, tpp.fecha_fin
+    FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
+    WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = t.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador 
+    AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' ORDER BY tpp.orden_trabajador ASC ;";
+    $trabajador = ejecutarConsultaArray($sql2); if ($trabajador['status'] == false) {  return $trabajador; }    
 
-      $data = [];
-      $extras = "";
+    $data = [];
+    $extras = "";    
 
-      $idresumen_q_s_asistencia = "";
-      $fecha_registro = "";
-      $total_hn = "";
-      $total_he = "";
-      $total_dias_asistidos = "";
-      $sabatical = "";
-      $sabatical_manual_1 = "";
-      $sabatical_manual_2 = "";
-      $pago_parcial_hn = "";
-      $pago_parcial_he = "";
-      $adicional_descuento = "";
-      $descripcion_descuento = "";
-      $pago_quincenal = "";
-      $estado_envio_contador = "";
+    foreach ($trabajador['data'] as $indice => $key) {
+      $id_tpp = $key['idtrabajador_por_proyecto']; $d_asistencia = [];
 
-      foreach ($trabajador['data'] as $indice => $key) {
-        $id_trabajador_proyect = $key['idtrabajador_por_proyecto'];
+      // extraemos la asistencia por trabajador
+      $sql3 = "SELECT * FROM asistencia_trabajador  AS atr 
+      WHERE atr.idtrabajador_por_proyecto = '$id_tpp' AND atr.estado='1' AND atr.estado_delete='1' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
+      $asistencia = ejecutarConsultaArray($sql3);  if ($asistencia['status'] == false) {  return $asistencia; }
 
-        // extraemos la asistencia por trabajador
-        $sql3 = "SELECT * FROM asistencia_trabajador  AS atr 
-        WHERE atr.idtrabajador_por_proyecto = '$id_trabajador_proyect' AND atr.fecha_asistencia BETWEEN '$f1' AND '$f2';";
-        $asistencia = ejecutarConsultaArray($sql3);  if ($asistencia['status'] == false) {  return $asistencia; }
+      $f_i  = new DateTime($f1); $dia_regular = 0;
+      $weekday_regular = $f_i->format("w");
+      if ($weekday_regular == "0") { $dia_regular = -1; 
+      } else if ($weekday_regular == "1") { $dia_regular = -2;       
+      } else if ($weekday_regular == "2") { $dia_regular = -3;         
+      } else if ($weekday_regular == "3") { $dia_regular = -4;           
+      } else if ($weekday_regular == "4") { $dia_regular = -5;           
+      } else if ($weekday_regular == "5") { $dia_regular = -6;            
+      } else if ($weekday_regular == "6") { $dia_regular = -7; }
+      
+      $f_i->modify("$dia_regular day");
 
-        $sql4 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal, estado_envio_contador 
-        FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_trabajador_proyect' AND fecha_q_s_inicio = '$f1';";
-        $extras = ejecutarConsultaSimpleFila($sql4); if ($extras['status'] == false) {  return $extras; }
-
-        if (empty($extras['data'])) {
-          $idresumen_q_s_asistencia = "";
-          $fecha_q_s_inicio         = "";
-          $total_hn                 = 0;
-          $total_he                 = 0;
-          $total_dias_asistidos     = 0;
-          $sabatical                = 0;
-          $sabatical_manual_1       = "-";
-          $sabatical_manual_2       = "-";
-          $pago_parcial_hn          = 0;
-          $pago_parcial_he          = 0;
-          $adicional_descuento      = 0;
-          $descripcion_descuento    = "";
-          $pago_quincenal           = 0;
-          $estado_envio_contador    = "";
-        } else {
-          $idresumen_q_s_asistencia = $extras['data']['idresumen_q_s_asistencia'];
-          $fecha_q_s_inicio         = $extras['data']['fecha_q_s_inicio'];
-          $total_hn                 = $extras['data']['total_hn'];
-          $total_he                 = $extras['data']['total_he'];
-          $total_dias_asistidos     = $extras['data']['total_dias_asistidos'];
-          $sabatical                = $extras['data']['sabatical'];
-          $sabatical_manual_1       = $extras['data']['sabatical_manual_1'];
-          $sabatical_manual_2       = $extras['data']['sabatical_manual_2'];
-          $pago_parcial_hn          = $extras['data']['pago_parcial_hn'];
-          $pago_parcial_he          = $extras['data']['pago_parcial_he'];
-          $adicional_descuento      = $extras['data']['adicional_descuento'];
-          $descripcion_descuento    = $extras['data']['descripcion_descuento'];
-          $pago_quincenal           = $extras['data']['pago_quincenal'];
-          $estado_envio_contador    = $extras['data']['estado_envio_contador'];
-        }
-
-        if ( validar_fecha_menor_igual_que($f2, $key['fecha_fin']) == true || fecha_dentro_de_rango($key['fecha_fin'],$f1, $f2 ) ) {
-          $data[] = [
-            "idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
-            "nombre_ocupacion"          => $key['nombre_ocupacion'],
-            "tipo_trabajador"           => $key['tipo_trabajador'],
-            "nombres"                   => $key['nombres'],
-            "tipo_documento"            => $key['tipo_documento'],
-            "numero_documento"          => $key['numero_documento'],
-            "sueldo_mensual"            => $key['sueldo_mensual'],
-            "sueldo_diario"             => $key['sueldo_diario'],
-            "sueldo_hora"               => $key['sueldo_hora'],
-            "estado_trabajador"         => $key['estado'],
-            "fecha_inicio_t"            => $key['fecha_inicio'],
-            "fecha_fin_t"               => $key['fecha_fin'],
-            "asistencia"                => $asistencia['data'],
-
-            'idresumen_q_s_asistencia'  => $idresumen_q_s_asistencia,
-            'fecha_registro'            => $fecha_q_s_inicio,
-            'total_hn'                  => $total_hn,
-            'total_he'                  => $total_he,
-            'total_dias_asistidos'      => $total_dias_asistidos,
-            'sabatical'                 => $sabatical,
-            'sabatical_manual_1'        => $sabatical_manual_1,
-            'sabatical_manual_2'        => $sabatical_manual_2,
-            'pago_parcial_hn'           => $pago_parcial_hn,
-            'pago_parcial_he'           => $pago_parcial_he,
-            'adicional_descuento'       => $adicional_descuento,
-            'descripcion_descuento'     => $descripcion_descuento,
-            'pago_quincenal'            => $pago_quincenal,
-            'estado_envio_contador'     => $estado_envio_contador,
-          ];
-        } 
-        
-        
-
-        $idresumen_q_s_asistencia = "";
-        $fecha_registro = "";
-        $total_hn = "";
-        $total_he = "";
-        $total_dias_asistidos = "";
-        $sabatical = "";
-        $sabatical_manual_1 = "-";
-        $sabatical_manual_2 = "-";
-        $pago_parcial_hn = "";
-        $pago_parcial_he = "";
-        $adicional_descuento = "";
-        $descripcion_descuento = "";
-        $pago_quincenal = "";
+      for ($i=0; $i <= ($dia_regular * -1) ; $i++) { 
+        $d_asistencia[] = [
+          "estado_regular"            => true,
+          "idasistencia_trabajador"   => "",
+          "idtrabajador_por_proyecto" => "",
+          "horas_normal_dia"          => "",
+          "pago_normal_dia"           => "",
+          "horas_extras_dia"          => "",
+          "pago_horas_extras"         => "",
+          "fecha_asistencia"          => $f_i->format("Y-m-d"),
+          "nombre_dia"                => nombre_dia_semana($f_i->format("Y-m-d")),
+          "nombre_dia_v1"             => nombre_dia_semana_v1($f_i->format("Y-m-d")),
+          "nombre_dia_v2"             => nombre_dia_semana_v2($f_i->format("Y-m-d")),
+          "descripcion_justificacion" => "",
+          "estado"                    => "",
+          "estado_delete"             => "",
+        ];
+        $f_i->modify("+1 day");
       }
+      for ($i=0; $i <= $cant_dias_asistencia + $dia_regular; $i++) { 
+        // if (condition) {
+        //   # code...
+        // } else {
+        //   # code...
+        // }
+        
+        $d_asistencia[] = [
+          "estado_regular"            => false,
+          "idasistencia_trabajador"   => "",
+          "idtrabajador_por_proyecto" => "",
+          "horas_normal_dia"          => "",
+          "pago_normal_dia"           => "",
+          "horas_extras_dia"          => "",
+          "pago_horas_extras"         => "",
+          "fecha_asistencia"          => "",
+          "nombre_dia"                => "",
+          "descripcion_justificacion" => "",
+          "estado"                    => "",
+          "estado_delete"             => "",
+        ];
+        $f_i->modify("+1 day");
+      }
+      
 
-      return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => $data];
+      $sql4 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_he, total_dias_asistidos, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal, estado_envio_contador 
+      FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_tpp' AND estado='1' AND estado_delete='1' AND numero_q_s = '$num_quincena';";
+      $extras = ejecutarConsultaSimpleFila($sql4); if ($extras['status'] == false) {  return $extras; }       
 
-      // var_dump($data);die();
+      if ( validar_fecha_menor_igual_que($f2, $key['fecha_fin']) == true || fecha_dentro_de_rango($key['fecha_fin'],$f1, $f2 ) ) {
+        $data[] = [
+          "f_i_sq"                    => $f1,
+          "f_f_sq"                    => $f2,
+          "idtrabajador_por_proyecto" =>  $key['idtrabajador_por_proyecto'],
+          "nombre_ocupacion"          => $key['nombre_ocupacion'],
+          "tipo_trabajador"           => $key['tipo_trabajador'],
+          "nombres_trabajador"        => $key['nombres'],
+          "tipo_documento"            => $key['tipo_documento'],
+          "numero_documento"          => $key['numero_documento'],
+          "sueldo_mensual"            => empty($key['sueldo_mensual']) ? 0 : floatval($key['sueldo_mensual']) ,
+          "sueldo_semanal"            => empty($key['sueldo_semanal']) ? 0 : floatval($key['sueldo_semanal']),
+          "sueldo_diario"             => empty($key['sueldo_diario']) ? 0 : floatval($key['sueldo_diario']),
+          "sueldo_hora"               => empty($key['sueldo_hora']) ? 0 : floatval($key['sueldo_hora']),
+          "estado_trabajador"         => $key['estado'],
+          "fecha_inicio_t"            => $key['fecha_inicio'],
+          "fecha_fin_t"               => $key['fecha_fin'],
+          "asistencia"                => $asistencia['data'],
+
+          'idresumen_q_s_asistencia'  => empty($extras['data']) ? "" : ( empty($extras['data']['idresumen_q_s_asistencia']) ? "" : $extras['data']['idresumen_q_s_asistencia']),
+          'fecha_registro'            => empty($extras['data']) ? "" : ( empty($extras['data']['fecha_q_s_inicio']) ?        "" : $extras['data']['fecha_q_s_inicio']),
+          'total_hn'                  => empty($extras['data']) ? 0  : ( empty($extras['data']['total_hn']) ?                0 : intval($extras['data']['total_hn']) ),
+          'total_he'                  => empty($extras['data']) ? 0  : ( empty($extras['data']['total_he']) ?                0 : floatval($extras['data']['total_he']) ),
+          'total_dias_asistidos'      => empty($extras['data']) ? 0  : ( empty($extras['data']['total_dias_asistidos']) ?    0 : floatval($extras['data']['total_dias_asistidos']) ),
+          'sabatical'                 => empty($extras['data']) ? 0  : ( empty($extras['data']['sabatical']) ?               0 : floatval($extras['data']['sabatical']) ),
+          'sabatical_manual_1'        => empty($extras['data']) ? "-": ( empty($extras['data']['sabatical_manual_1']) ?      "" : $extras['data']['sabatical_manual_1']),
+          'sabatical_manual_2'        => empty($extras['data']) ? "-": ( empty($extras['data']['sabatical_manual_2']) ?      "" : $extras['data']['sabatical_manual_2']),
+          'pago_parcial_hn'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_hn']) ?         0 : floatval($extras['data']['pago_parcial_hn']) ),
+          'pago_parcial_he'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_he']) ?         0 : floatval($extras['data']['pago_parcial_he']) ),
+          'adicional_descuento'       => empty($extras['data']) ? 0  : ( empty($extras['data']['adicional_descuento']) ?     0 : floatval($extras['data']['adicional_descuento']) ),
+          'descripcion_descuento'     => empty($extras['data']) ? "" : ( empty($extras['data']['descripcion_descuento']) ?   "" : $extras['data']['descripcion_descuento']),
+          'pago_quincenal'            => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_quincenal']) ?          0 : floatval($extras['data']['pago_quincenal']) ),
+          'estado_envio_contador'     => empty($extras['data']) ? "" : ( empty($extras['data']['estado_envio_contador']) ?   "" : $extras['data']['estado_envio_contador']),
+        ];
+      }      
     }
 
-
-
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => $data];
+    // var_dump($data);die();
+  }
 }
 
 ?>

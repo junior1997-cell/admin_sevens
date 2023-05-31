@@ -183,13 +183,14 @@
         localStorage.setItem('nube_fecha_inicial_proyecto', '');
         localStorage.setItem('nube_fecha_final_proyecto', '');
         localStorage.setItem('nube_nombre_proyecto', '');
+        localStorage.setItem('nube_fecha_pago_obrero', '');
 
         window.location.reload(); 
       } 
     });
   }
 
-  function abrir_proyecto_para_todos_los_modulos(idproyecto, ec_razon_social, nombre_proyecto, fecha_inicial, fecha_final) {
+  function abrir_proyecto_para_todos_los_modulos(idproyecto, ec_razon_social, nombre_proyecto, fecha_inicial, fecha_final, fecha_pago_obrero) {
 
     let timerInterval
     Swal.fire({
@@ -214,6 +215,7 @@
         localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
         localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
         localStorage.setItem('nube_empresa_a_cargo', ec_razon_social);
+        localStorage.setItem('nube_fecha_pago_obrero', fecha_pago_obrero);
 
         // mostramos el nombre en el NAV
         $("#ver-proyecto").html(`<i class="fas fa-tools"></i> <p class="d-inline-block hide-max-width-1080px">Proyecto:</p> ${nombre_proyecto}`);
