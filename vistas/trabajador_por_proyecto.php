@@ -234,7 +234,7 @@
                                     <div class="form-group">
                                       <label>Fecha Inicio:</label>
                                       <div class="input-group date"  data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo();" autocomplete="off" />
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo(); validar_fecha_rango();" autocomplete="off" />
                                         <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
                                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -247,7 +247,7 @@
                                     <div class="form-group">
                                       <label>Fecha Fin:</label>
                                       <div class="input-group date"  data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo();"  />
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo(); validar_fecha_rango(0);" />
                                         <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
                                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -291,7 +291,7 @@
                                       <div class="col-lg-2">
                                         <div class="form-group">
                                           <label for="fecha_desde">Desde</label>
-                                          <input type="date" name="fecha_desde[]" class="form-control fecha_desde_0" placeholder="Fecha" />
+                                          <input type="date" name="fecha_desde[]" class="form-control fecha_inicial fecha_desde_0"  placeholder="Fecha" />
                                         </div>
                                       </div>
 
@@ -299,7 +299,7 @@
                                       <div class="col-lg-2">
                                         <div class="form-group">
                                           <label for="fecha_hasta">Hasta</label>
-                                          <input type="date" name="fecha_hasta[]" class="form-control fecha_hasta_0" placeholder="Fecha" />
+                                          <input type="date" name="fecha_hasta[]" class="form-control fecha_final fecha_hasta_0" placeholder="Fecha" />
                                         </div>
                                       </div>
                                       <!-- boton -->

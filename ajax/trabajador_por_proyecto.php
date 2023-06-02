@@ -87,7 +87,7 @@
 
         case 'desactivar':
 
-          $rspta=$trabajadorproyecto->desactivar($idtrabajador_por_proyecto);
+          $rspta=$trabajadorproyecto->desactivar($_GET["id_tabla"]);
 
           echo json_encode($rspta, true);	
 
@@ -100,6 +100,15 @@
           echo json_encode($rspta, true);
 
         break;
+        
+        case 'eliminar':
+
+          $rspta=$trabajadorproyecto->eliminar($_GET["id_tabla"]);
+
+          echo json_encode($rspta, true);
+
+        break;
+
 
         case 'mostrar':
 
@@ -130,7 +139,7 @@
               $data[]=array(
                 "0"=> $cont++,
                 "1"=>'<button class="btn btn-warning btn-sm mb-1" onclick="mostrar('.$value['idtrabajador_por_proyecto'].','.$value['idtipo_trabajador'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger btn-sm mb-1" onclick="desactivar('.$value['idtrabajador_por_proyecto'].')" data-toggle="tooltip" data-original-title="Desactivar"><i class="far fa-trash-alt  "></i></button>'.
+                  ' <button class="btn btn-danger btn-sm mb-1" onclick="eliminar_trabajador_proyecto('.$value['idtrabajador_por_proyecto'].',' . "'" . $value['trabajador'] . "'" . ')" data-toggle="tooltip" data-original-title="Desactivar"><i class="far fa-trash-alt  "></i></button>'.
                   ' <button class="btn btn-info btn-sm mb-1" onclick="verdatos('.$value['idtrabajador_por_proyecto'].')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="far fa-eye"></i></button>',
                 "2"=>'<div class="user-block">
                   <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'' . $imagen . '\', \''.encodeCadenaHtml($value['trabajador']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">

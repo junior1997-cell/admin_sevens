@@ -17,6 +17,7 @@ class TrabajadorPorProyecto
   public function insertar( $idproyecto, $trabajador, $desempenio,  $fecha_inicio, $fecha_fin, $cantidad_dias, 
   $sueldo_mensual, $sueldo_semanal, $sueldo_diario,  $sueldo_hora, $fecha_desde, $fecha_hasta,  $sueldo_seleccionado)
   {
+
     $sql_1 = "SELECT t.nombres as trabajador, t.tipo_documento,t.numero_documento, tip.nombre as tipo, tpp.desempenio, 
     tpp.sueldo_mensual, tpp.estado, tpp.estado_delete
     FROM trabajador_por_proyecto as tpp, trabajador as t,  tipo_trabajador as tip
@@ -42,18 +43,18 @@ class TrabajadorPorProyecto
       // Agregamos el sueldo
       $ii = 0;
       while ($ii < count($sueldo_semanal)) {
-        
+        $s_semanal =  quitar_formato_miles($sueldo_semanal[$ii]); 
         $sql_detalle = "";
         if ( $sueldo_seleccionado[$ii] == 1 || $sueldo_seleccionado[$ii] == "1" ) {
           $sql_detalle = "INSERT INTO sueldo( idtrabajador_por_proyecto, sueldo_mensual, sueldo_semanal, sueldo_diario, sueldo_hora, fecha_desde, fecha_hasta, sueldo_actual, user_created) VALUES 
-          ('$idtpp','$sueldo_mensual[$ii]', '$sueldo_semanal[$ii]', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '1','$this->id_usr_sesion')";
+          ('$idtpp','$sueldo_mensual[$ii]', '$s_semanal', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '1','$this->id_usr_sesion')";
           
-          $edit_tpp = "UPDATE trabajador_por_proyecto SET sueldo_mensual='$sueldo_mensual[$ii]',sueldo_semanal='$sueldo_semanal[$ii]',sueldo_diario='$sueldo_diario[$ii]',sueldo_hora='$sueldo_hora[$ii]' 
+          $edit_tpp = "UPDATE trabajador_por_proyecto SET sueldo_mensual='$sueldo_mensual[$ii]',sueldo_semanal='$s_semanal',sueldo_diario='$sueldo_diario[$ii]',sueldo_hora='$sueldo_hora[$ii]' 
           WHERE idtrabajador_por_proyecto ='$idtpp'";
           $tpp_edit =  ejecutarConsulta_retornarID($edit_tpp); if ($tpp_edit['status'] == false) { return  $tpp_edit;}
         } else {
           $sql_detalle = "INSERT INTO sueldo( idtrabajador_por_proyecto, sueldo_mensual, sueldo_semanal, sueldo_diario, sueldo_hora, fecha_desde, fecha_hasta, sueldo_actual, user_created) VALUES 
-          ('$idtpp','$sueldo_mensual[$ii]', '$sueldo_semanal[$ii]', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '0','$this->id_usr_sesion')";
+          ('$idtpp','$sueldo_mensual[$ii]', '$s_semanal', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '0','$this->id_usr_sesion')";
         }          
         
         $sueldo_new =  ejecutarConsulta_retornarID($sql_detalle); if ($sueldo_new['status'] == false) { return  $sueldo_new;}
@@ -90,6 +91,7 @@ class TrabajadorPorProyecto
   //Implementamos un método para editar registros
   public function editar($idtpp, $idproyecto, $trabajador, $desempenio,  $fecha_inicio, $fecha_fin, $cantidad_dias, 
   $sueldo_mensual, $sueldo_semanal, $sueldo_diario,  $sueldo_hora, $fecha_desde, $fecha_hasta,  $sueldo_seleccionado) {
+    // var_dump($sueldo_semanal);die();
     $sql = "UPDATE trabajador_por_proyecto SET idproyecto = '$idproyecto', idtrabajador='$trabajador', iddesempenio='$desempenio', 
 		fecha_inicio='$fecha_inicio', fecha_fin='$fecha_fin', cantidad_dias='$cantidad_dias',user_updated= '$this->id_usr_sesion'
 		WHERE idtrabajador_por_proyecto='$idtpp'";
@@ -105,19 +107,25 @@ class TrabajadorPorProyecto
 
     // Agregamos el sueldo
     $ii = 0;
+    // var_dump(count($sueldo_semanal));die();
     while ($ii < count($sueldo_semanal)) {
       
       $sql_detalle = "";
+      $s_semanal =  quitar_formato_miles($sueldo_semanal[$ii]); 
+      // $numero_sin_miles = number_format($sueldo_semanal, 0, '', '');
+      //  var_dump($sueldo_semanal);die();
       if ( $sueldo_seleccionado[$ii] == 1 || $sueldo_seleccionado[$ii] == "1" ) {
+
         $sql_detalle = "INSERT INTO sueldo( idtrabajador_por_proyecto, sueldo_mensual, sueldo_semanal, sueldo_diario, sueldo_hora, fecha_desde, fecha_hasta, sueldo_actual, user_created) VALUES 
-        ('$idtpp','$sueldo_mensual[$ii]', '$sueldo_semanal[$ii]', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '1','$this->id_usr_sesion')";
+        ('$idtpp','$sueldo_mensual[$ii]', '$s_semanal', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '1','$this->id_usr_sesion')";
         
-        $edit_tpp = "UPDATE trabajador_por_proyecto SET sueldo_mensual='$sueldo_mensual[$ii]',sueldo_semanal='$sueldo_semanal[$ii]',sueldo_diario='$sueldo_diario[$ii]',sueldo_hora='$sueldo_hora[$ii]' 
+        $edit_tpp = "UPDATE trabajador_por_proyecto SET sueldo_mensual='$sueldo_mensual[$ii]',sueldo_semanal='$s_semanal',sueldo_diario='$sueldo_diario[$ii]',sueldo_hora='$sueldo_hora[$ii]' 
         WHERE idtrabajador_por_proyecto ='$idtpp'";
         $tpp_edit =  ejecutarConsulta_retornarID($edit_tpp); if ($tpp_edit['status'] == false) { return  $tpp_edit;}
+
       } else {
         $sql_detalle = "INSERT INTO sueldo( idtrabajador_por_proyecto, sueldo_mensual, sueldo_semanal, sueldo_diario, sueldo_hora, fecha_desde, fecha_hasta, sueldo_actual, user_created) VALUES 
-        ('$idtpp','$sueldo_mensual[$ii]', '$sueldo_semanal[$ii]', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '0','$this->id_usr_sesion')";
+        ('$idtpp','$sueldo_mensual[$ii]', '$s_semanal', '$sueldo_diario[$ii]', '$sueldo_hora[$ii]', '$fecha_desde[$ii]', '$fecha_hasta[$ii]', '0','$this->id_usr_sesion')";
       }          
       
       $sueldo_new =  ejecutarConsulta_retornarID($sql_detalle); if ($sueldo_new['status'] == false) { return  $sueldo_new;}
@@ -146,6 +154,22 @@ class TrabajadorPorProyecto
 		return $desactivar;
 
   }
+
+    //Implementamos un método para eliminar
+    public function eliminar($idtrabajador) {
+      $sql = "UPDATE trabajador_por_proyecto SET estado_delete='0',user_trash= '$this->id_usr_sesion' WHERE idtrabajador_por_proyecto='$idtrabajador'";
+      $eliminar= ejecutarConsulta($sql);
+  
+      if ($eliminar['status'] == false) {  return $eliminar; }
+      
+      //add registro en nuestra bitacora
+      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('trabajador_por_proyecto','".$idtrabajador."','Trabajador de proyecto eliminado','$this->id_usr_sesion')";
+      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+      
+      return $eliminar;
+  
+    }
+
 
   //Implementamos un método para activar categorías
   public function activar($idtrabajador) {
