@@ -25,22 +25,15 @@ ob_start();
       
       switch ($_GET["op"]){        
 
-        case 'data_format_ats':         
-
+        case 'data_format_ats':
           $rspta=$formatos_varios->formato_ats($_POST["nube_idproyecto"]);
           //Codificar el resultado utilizando json
-          echo json_encode($rspta, true);		
-          
+          echo json_encode($rspta, true);		          
         break; 
 
         case 'dowload_format_ats':            
-
-          $rspta=$formatos_varios->formato_ats($_POST["nube_idproyecto"]);
-
-          
-          
-          // echo json_encode($rspta, true);		
-          
+          $rspta=$formatos_varios->formato_ats($_POST["nube_idproyecto"]);          
+          // echo json_encode($rspta, true);          
         break; 
 
         default: 

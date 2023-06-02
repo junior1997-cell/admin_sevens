@@ -29,20 +29,17 @@ if (!function_exists('ejecutarConsulta')) {
   }
 
   // NOMBRE DIA DE SEMANA
-  function nombre_dia_semana($fecha) {
-
-    $nombre_dia_semana = "";
-
-    if (!empty($fecha) || $fecha != '0000-00-00') {
-
-      $fechas = new FechaEs($fecha);
-
-      $dia = $fechas->getDDDD().PHP_EOL;
-
-      $nombre_dia_semana = $dia;
-    }
-
-    return $nombre_dia_semana;
+  function nombre_dia_semana($fecha) {    
+    if (!empty($fecha) || $fecha != '0000-00-00') {  $fechas = new FechaEs($fecha);  return $fechas->getDDDD().PHP_EOL;  }
+    return "";
+  }
+  function nombre_dia_semana_v1($fecha) {    
+    if (!empty($fecha) || $fecha != '0000-00-00') {  $fechas = new FechaEs($fecha);  return $fechas->getDDDD().PHP_EOL;  }
+    return "";
+  }
+  function nombre_dia_semana_v2($fecha) {    
+    if (!empty($fecha) || $fecha != '0000-00-00') {  $fechas = new FechaEs($fecha);  return $fechas->getDDDD().PHP_EOL;  }
+    return "";
   }
 
   function sumar_dias( $cant, $fecha )  {    

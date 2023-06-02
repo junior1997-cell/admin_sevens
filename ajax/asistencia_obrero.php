@@ -20,18 +20,19 @@ ob_start();
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
-      $detalle_adicional	= isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
+      $detalle_adicional	        = isset($_POST["detalle_adicional"])? limpiarCadena($_POST["detalle_adicional"]):"";
 
       // :::::::::::::::::::::::::::::::::::: D A T O S   J U S  T I F I C A C I O N ::::::::::::::::::::::::::::::::::::::
       $idasistencia_trabajador_j	= isset($_POST["idasistencia_trabajador_j"])? limpiarCadena($_POST["idasistencia_trabajador_j"]):"";
-      $detalle_j	= isset($_POST["detalle_j"])? limpiarCadena($_POST["detalle_j"]):"";
-      $doc1	= isset($_POST["doc1"])? $_POST["doc1"]:"";
+      $detalle_j	                = isset($_POST["detalle_j"])? limpiarCadena($_POST["detalle_j"]):"";
+      $doc1	                      = isset($_POST["doc1"])? $_POST["doc1"]:"";
 
       // :::::::::::::::::::::::::::::::::::: D A T O S   F E C H A S   D E   A C T I V I D A D E S ::::::::::::::::::::::::::::::::::::::
-      $id_proyecto_f	= isset($_POST["id_proyecto_f"])? limpiarCadena($_POST["id_proyecto_f"]):"";
-      $fecha_inicio_actividad	= isset($_POST["fecha_inicio_actividad"])? limpiarCadena($_POST["fecha_inicio_actividad"]):"";
-      $fecha_fin_actividad	= isset($_POST["fecha_fin_actividad"])? limpiarCadena($_POST["fecha_fin_actividad"]):"";
-      $plazo_actividad	= isset($_POST["plazo_actividad"])? limpiarCadena($_POST["plazo_actividad"]):"";
+      $id_proyecto_f	            = isset($_POST["id_proyecto_f"])? limpiarCadena($_POST["id_proyecto_f"]):"";
+      $fecha_inicio_actividad	    = isset($_POST["fecha_inicio_actividad"])? limpiarCadena($_POST["fecha_inicio_actividad"]):"";
+      $fecha_fin_actividad	      = isset($_POST["fecha_fin_actividad"])? limpiarCadena($_POST["fecha_fin_actividad"]):"";
+      $plazo_actividad	          = isset($_POST["plazo_actividad"])? limpiarCadena($_POST["plazo_actividad"]):"";
+      $fecha_pago_obrero	        = isset($_POST["fecha_pago_obrero"])? limpiarCadena($_POST["fecha_pago_obrero"]):"";
       
       switch ($_GET["op"]){
         // Gurdamos cada dia de asistencia del OBRERO
@@ -50,9 +51,10 @@ ob_start();
           $f1 = $_POST["f1"];
           $f2 = $_POST["f2"];
           $nube_idproyect = $_POST["nube_idproyect"];
+          $n_f_i_p = $_POST["n_f_i_p"]; $n_f_f_p = $_POST["n_f_f_p"];
           // $f1 = '2021-07-09'; $f2 = '2021-07-23'; $nube_idproyect = '1';
 
-          $rspta=$asistencia_obrero->ver_detalle_quincena($f1,$f2,$nube_idproyect);
+          $rspta=$asistencia_obrero->ver_detalle_quincena($f1,$f2,$nube_idproyect, $n_f_i_p, $n_f_f_p);
 
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);		
@@ -441,7 +443,7 @@ ob_start();
           }else {             
 
             // editamos un recibo x honorario existente
-            $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_a_m_d($fecha_inicio_actividad), format_a_m_d($fecha_fin_actividad), $plazo_actividad);
+            $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_a_m_d($fecha_inicio_actividad), format_a_m_d($fecha_fin_actividad), $plazo_actividad, $fecha_pago_obrero);
             
             echo json_encode($rspta, true);
           }

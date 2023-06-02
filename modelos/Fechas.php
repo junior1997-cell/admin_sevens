@@ -5,6 +5,8 @@ class FechaEs {
     private $M_es = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
     private $M_en = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
     private $D_es = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+    private $D_es_v1 = array("Lun", "Mar", "Miér", "Jue", "Vie", "Sáb", "Dom");
+    private $D_es_v2 = array("L", "M", "M", "J", "V", "S", "D");    
     private $D_en = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
 
 
@@ -13,11 +15,20 @@ class FechaEs {
         $this->objFecha=DateTime::createFromFormat('Y-m-d', $mFecha);
     }
 
-    public function getDDDD()
-    {
+    public function getDDDD() { #nombre de dia de semana
         $nombreDia=$this->objFecha->format('l');
         return str_replace($this->D_en,$this->D_es,$nombreDia);    
-    }       
+    }    
+    
+    public function getDDDD_v1() { #nombre de dia de semana
+        $nombreDia=$this->objFecha->format('l');
+        return str_replace($this->D_en,$this->D_es_v1,$nombreDia);    
+    } 
+
+    public function getDDDD_v2() { #nombre de dia de semana
+        $nombreDia=$this->objFecha->format('l');
+        return str_replace($this->D_en,$this->D_es_v2,$nombreDia);    
+    } 
 
     public function getMM()
     {

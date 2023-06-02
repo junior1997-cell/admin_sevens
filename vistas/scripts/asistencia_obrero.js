@@ -12,6 +12,9 @@ var idtrabajador_por_proyecto_r = 0;
 
 var array_btn_fechas = [];
 
+var n_f_i_p = localStorage.getItem('nube_fecha_inicial_proyecto');
+var n_f_f_p = localStorage.getItem('nube_fecha_final_proyecto');
+
 //Función que se ejecuta al inicio
 function init() {
 
@@ -461,7 +464,7 @@ function mostrar_hne(f1, f2, i, cant_dias_asistencia, class_btn) {
 
   // $('.data-numero-semana').html(table_numero_semana);
   
-  $.post("../ajax/asistencia_obrero.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (e, status) {
+  $.post("../ajax/asistencia_obrero.php?op=ver_datos_quincena", {'f1':format_a_m_d(f1),'f2':format_a_m_d(f2),'nube_idproyect':nube_idproyect, 'n_f_i_p': n_f_i_p, 'n_f_f_p': n_f_f_p}, function (e, status) {
         
     e =JSON.parse(e); console.log(e);   
 
@@ -669,7 +672,7 @@ function mostrar_hne(f1, f2, i, cant_dias_asistencia, class_btn) {
 
               var weekday = extraer_dia_semana(format_a_m_d(fecha)); //console.log(weekday);
               var class_val_x_dia = `${extraer_dia_semana(format_a_m_d(fecha))}_${extraer_dia_mes(format_a_m_d(fecha))}_${extraer_mes_number(format_a_m_d(fecha))}`;
-              console.log(class_val_x_dia);
+              // console.log(class_val_x_dia);
               if (weekday != 'sa') {
 
                 if (estado_dentro_de_obra == false) {
@@ -1222,7 +1225,7 @@ function mostrar_hne(f1, f2, i, cant_dias_asistencia, class_btn) {
     //scroll segun tamaño
     scroll_tabla_asistencia();
 
-  }).fail( function(e) { ver_errores(e); } ); //end post - ver_datos_quincena
+  }).fail( function(e) { ver_errores(e); } ); //end post -
   
   $('[data-toggle="tooltip"]').tooltip();
 
@@ -1309,7 +1312,7 @@ function mostrar_hn( f1, f2, i, cant_dias_asistencia, class_btn) {
 
   // $('.data-numero-semana').html(table_numero_semana);
   
-  $.post("../ajax/asistencia_obrero.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (e, status) {
+  $.post("../ajax/asistencia_obrero.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),'nube_idproyect':nube_idproyect, 'n_f_i_p': n_f_i_p, 'n_f_f_p': n_f_f_p}, function (e, status) {
         
     e =JSON.parse(e); console.log(e);   
 
@@ -1940,7 +1943,7 @@ function mostrar_hn( f1, f2, i, cant_dias_asistencia, class_btn) {
         
         var tabla_bloc_HN_1 = `<tr>
           <td class="" rowspan="2"><b>${index+1}</b></td>
-          <td class="">H/N</td>
+          <td class="" rowspan="2">H/N</td>
           ${tabla_bloc_HN_trabaj_2}
           ${tabla_bloc_HN_asistencia_3} 
           ${tabla_bloc_HN_total_hora_4}
@@ -1958,12 +1961,7 @@ function mostrar_hn( f1, f2, i, cant_dias_asistencia, class_btn) {
         // var tabla_bloc_HE_pago_parcial_4 =`<td class="text-center"><span  class="pago_parcial_HE_${value.idtrabajador_por_proyecto}"> ${(parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2)}</span> </td>`;        
         // ${tabla_bloc_HE_pago_parcial_4 }
 
-        var tabla_bloc_HE_1 = `<tr>            
-          <td class="">H/E</td>
-          
-          
-          
-        </tr>`;
+        var tabla_bloc_HE_1 = `<tr></tr>`;
 
         //Unimos y mostramos los bloques separados
         $(".data_table_body").append(tabla_bloc_HN_1 + tabla_bloc_HE_1);
@@ -2068,7 +2066,7 @@ function mostrar_hn( f1, f2, i, cant_dias_asistencia, class_btn) {
     //scroll segun tamaño
     scroll_tabla_asistencia();
 
-  }).fail( function(e) { ver_errores(e); } ); //end post - ver_datos_quincena
+  }).fail( function(e) { ver_errores(e); } ); //end post -
   
   $('[data-toggle="tooltip"]').tooltip();
 
@@ -2154,7 +2152,7 @@ function mostrar_he(f1, f2, i, cant_dias_asistencia, class_btn) {
 
   // $('.data-numero-semana').html(table_numero_semana);
   
-  $.post("../ajax/asistencia_obrero.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),nube_idproyect:nube_idproyect}, function (e, status) {
+  $.post("../ajax/asistencia_obrero.php?op=ver_datos_quincena", {f1:format_a_m_d(f1),f2:format_a_m_d(f2),'nube_idproyect':nube_idproyect, 'n_f_i_p': n_f_i_p, 'n_f_f_p': n_f_f_p}, function (e, status) {
         
     e =JSON.parse(e); console.log(e);   
 
@@ -2787,7 +2785,7 @@ function mostrar_he(f1, f2, i, cant_dias_asistencia, class_btn) {
         
         var tabla_bloc_HN_1 = `<tr>
           <td class="" rowspan="2"><b>${index+1}</b></td>
-          <td class="">H/N</td>
+          <td class="" rowspan="2">H/E</td>
           ${tabla_bloc_HN_trabaj_2}
           ${tabla_bloc_HN_asistencia_3 }
           ${tabla_bloc_HN_total_hora_4}
@@ -2805,9 +2803,7 @@ function mostrar_he(f1, f2, i, cant_dias_asistencia, class_btn) {
         // var tabla_bloc_HE_pago_parcial_4 =`<td class="text-center"><span  class="pago_parcial_HE_${value.idtrabajador_por_proyecto}"> ${(parseFloat(value.sueldo_hora) * parseFloat(horas_extr_total)).toFixed(2)}</span> </td>`;        
         // ${tabla_bloc_HE_pago_parcial_4 }
 
-        var tabla_bloc_HE_1 = `<tr>            
-          <td class="">H/E</td>           
-        </tr>`;
+        var tabla_bloc_HE_1 = `<tr> </tr>`;
 
         //Unimos y mostramos los bloques separados
         $(".data_table_body").append(tabla_bloc_HN_1 + tabla_bloc_HE_1);
@@ -2912,7 +2908,7 @@ function mostrar_he(f1, f2, i, cant_dias_asistencia, class_btn) {
     //scroll segun tamaño
     scroll_tabla_asistencia();
 
-  }).fail( function(e) { ver_errores(e); } ); //end post - ver_datos_quincena
+  }).fail( function(e) { ver_errores(e); } ); //end post -
   
   $('[data-toggle="tooltip"]').tooltip();
 
@@ -4256,12 +4252,13 @@ function limpiar_form_fechas_actividades(params) {
 
   $.post("../ajax/asistencia_obrero.php?op=fechas_actividad", { 'id_proyecto': localStorage.getItem('nube_idproyecto') }, function (e, status) {
     
-    e = JSON.parse(e);  //console.log(e);
+    e = JSON.parse(e);  console.log(e);
 
     $('#fecha_inicio_actividad').datepicker("setDate" , format_d_m_a(e.data.fecha_inicio_actividad));
     $('#fecha_fin_actividad').datepicker("setDate" ,format_d_m_a(e.data.fecha_fin_actividad));
     $('#plazo_actividad').val(e.data.plazo_actividad);
     $('.plazo_actividad').html(e.data.plazo_actividad);
+    $('#fecha_pago_obrero_f').val(e.data.fecha_pago_obrero);
 
     $("#cargando-7-fomulario").show();
     $("#cargando-8-fomulario").hide();
@@ -4289,23 +4286,22 @@ function guardar_y_editar_fechas_actividades(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-fechas-actividades")[0]);
 
-  console.log(array_btn_fechas);
-
   var id_proyecto_f           = $('#id_proyecto_f').val();
   var fecha_inicio_actividad  = $('#fecha_inicio_actividad').val();
   var fecha_fin_actividad     = $('#fecha_fin_actividad').val();
   var plazo_actividad         = $('#plazo_actividad').val();
+  var fecha_pago_obrero       = $('#fecha_pago_obrero_f').val();
 
   $.ajax({
     url: "../ajax/asistencia_obrero.php?op=guardar_y_editar_fechas_actividad",
     type: "POST",
     //data: formData,
     data: {
-      'id_proyecto_f':          id_proyecto_f, 
+      'id_proyecto_f'         : id_proyecto_f, 
       'fecha_inicio_actividad': fecha_inicio_actividad, 
-      'fecha_fin_actividad':    fecha_fin_actividad, 
-      'plazo_actividad':        plazo_actividad, 
-      'fechas':                 JSON.stringify(array_btn_fechas) 
+      'fecha_fin_actividad'   : fecha_fin_actividad, 
+      'plazo_actividad'       : plazo_actividad,      
+      'fecha_pago_obrero'     : fecha_pago_obrero,       
     },
     //contentType: 'application/json; charset=utf-8',
     //processData: false,
@@ -4337,6 +4333,24 @@ function guardar_y_editar_fechas_actividades(e) {
 
 init();
 
+// .....::::::::::::::::::::::::::::::::::::: S E C C I O N   D E   H O R A R I O  :::::::::::::::::::::::::::::::::::::::..
+function show_hide_form_horario(flag) {
+  if (flag == 1) { // tabla
+    $('.input_horario').hide();
+    $('.span_horario').show();
+
+    $('#bnt-exportar-horario').show();
+    $('#btn-editar-horario').show();
+    $('#guardar_registro_horario').hide();
+  } else if (flag == 2) { // formulario
+    $('.input_horario').show();
+    $('.span_horario').hide();
+
+    $('#bnt-exportar-horario').hide();
+    $('#btn-editar-horario').hide();
+    $('#guardar_registro_horario').show();
+  }
+}
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M S  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {    
@@ -4672,9 +4686,11 @@ function lista_trabajadores(nube_idproyecto) {
 
 function scroll_tabla_asistencia() {
   var height_tabla = $('.tabla_sistencia_obrero').height(); console.log(height_tabla);
+  var width_tabla = $('.tabla_sistencia_obrero').width();
   if (height_tabla <= 600) {
     $('#ver_asistencia').css({'height':`${redondearExp((height_tabla+50),0)}px`});
   } else {
-    $('#ver_asistencia').css({'height':`650px`});
+    var alto_real = (width_tabla/2) - 300;
+    $('#ver_asistencia').css({'height':`${redondearExp(alto_real,0)}px`});
   }
 }

@@ -108,20 +108,20 @@
   $fila_1 = 10;
 
   foreach ($rspta['data'] as $key => $reg) { 
-      $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
-      $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':M'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-      $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-      $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
+    $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':M'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
-      
     
-      $hojaActiva->mergeCells('B'.$fila_1.':E'.$fila_1); #aprellidos y nombres
-      $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
-      $hojaActiva->setCellValue('B'.$fila_1, $reg['trabajador']);
-      $spreadsheet->getActiveSheet()->getStyle('M'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+  
+    $hojaActiva->mergeCells('B'.$fila_1.':E'.$fila_1); #aprellidos y nombres
+    $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
+    $hojaActiva->setCellValue('B'.$fila_1, $reg['trabajador']);
+    $spreadsheet->getActiveSheet()->getStyle('M'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
-      $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
-      $fila_1++;
+    $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
+    $fila_1++;
     
   }
 
