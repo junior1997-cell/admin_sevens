@@ -33,6 +33,7 @@ if (!isset($_SESSION["nombre"])) {
     $glosa              = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
     $tipo_comprobante   = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
     $serie_comprobante  = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";
+    $slt2_serie_comprobante  = isset($_POST["slt2_serie_comprobante"]) ? limpiarCadena($_POST["slt2_serie_comprobante"]) : "";
     $val_igv            = isset($_POST["val_igv"]) ? limpiarCadena($_POST["val_igv"]) : "";
     $descripcion        = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
     $subtotal_compra    = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
@@ -197,7 +198,7 @@ if (!isset($_SESSION["nombre"])) {
 
         if (empty($idcompra_proyecto)) {
 
-          $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, $descripcion, 
+          $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
           $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -205,7 +206,7 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         } else {
 
-          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante, $val_igv, 
+          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
           $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -326,7 +327,7 @@ if (!isset($_SESSION["nombre"])) {
             $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');       
             $clss_disabled = (empty($reg['cant_comprobantes']) ? 'disabled' : '');       
             $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
-      
+            $total = ($reg['tipo_comprobante']=='Nota de Crédito' ? -1*$reg['total'] :$reg['total']);
             $data[] = [
               "0" => $cont,
               "1" => $reg['estado'] == '1' ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
@@ -338,7 +339,7 @@ if (!isset($_SESSION["nombre"])) {
               "3" => '<span class="text-primary font-weight-bold" >' . $reg['razon_social'] . '</span>',
               "4" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',
               "5" => empty($reg['estado_detraccion']) ? ($stdo_detraccion = "No") : ($stdo_detraccion = 'Si'),
-              "6" => $reg['total'],
+              "6" => $total,
               // "7" => $list_segun_estado_detracc,
               // "8" => number_format($reg['total_pago_compras'], 2, '.', ','),
               // "9" => number_format($saldo, 2, '.', ','),
@@ -530,6 +531,31 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($rspta, true);
 
       break; 
+
+      /* ═════════════════SERIES COMPROBANTES════════════════════════ */
+      case 'select2_serie_comprobante': 
+  
+        $rspta = $compra_insumos->select2_serie_comprobante($_GET['idproyecto']); $cont = 1; $data = "";
+        
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) { 
+            $data .= '<option value="' . $value['serie_comprobante'] . '" title="'.$value['tipo_comprobante'].'" >'.$value['tipo_comprobante'].' : '. $value['serie_comprobante'] .'</option>';
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
 
       default: 
         $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 

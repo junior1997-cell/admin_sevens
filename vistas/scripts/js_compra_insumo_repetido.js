@@ -101,7 +101,10 @@ function evaluar() {
   }
 }
 
-function default_val_igv() { if ($("#tipo_comprobante").select2("val") == "Factura") { $("#val_igv").val(0.18); } }
+function default_val_igv() { 
+  if ($("#tipo_comprobante").select2("val") == "Factura" || $("#tipo_comprobante").select2("val") == "Nota de Crédito") { 
+    $("#val_igv").val(0.18); } 
+}
 
 function modificarSubtotales() {  
 
@@ -143,7 +146,7 @@ function modificarSubtotales() {
       calcularTotalesSinIgv();
     }
   } else {
-    if ($("#tipo_comprobante").select2("val") == "Factura") {
+    if ($("#tipo_comprobante").select2("val") == "Factura" || $("#tipo_comprobante").select2("val") == "Nota de Crédito") {
 
       $(".hidden").show(); //Mostramos: IGV, PRECIO SIN IGV
 
@@ -340,12 +343,39 @@ function ocultar_comprob() {
 
     $("#content-serie-comprobante").val("");
 
-    $("#content-descripcion").removeClass("col-lg-5").addClass("col-lg-7");
-  } else {
-    $("#content-serie-comprobante").show();
+    $("#content_slt2_serie_comprobante").hide();
 
-    $("#content-descripcion").removeClass("col-lg-7").addClass("col-lg-5");
+    $("#content_slt2_serie_comprobante").val("");
+    $("#slt2_serie_comprobante").val("null").trigger("change");
+
+    $("#content-descripcion").removeClass("col-lg-5").addClass("col-lg-7");
+    $("#content-tipo-comprobante").removeClass("col-lg-2").addClass("col-lg-4");
+    // slt2_serie_comprobante
+  } else {
+
+    if ($("#tipo_comprobante").select2("val") == "Nota de Crédito") {
+      // $("#val_igv").prop("readonly",false);
+      $("#content-serie-comprobante").show();
+
+      // content-tipo-comprobante
+      $("#content-descripcion").removeClass("col-lg-7").addClass("col-lg-5");
+      $("#content-tipo-comprobante").removeClass("col-lg-4").addClass("col-lg-2");
+      $("#content_slt2_serie_comprobante").show();
+
+    } else {
+      $("#slt2_serie_comprobante").val("null").trigger("change");
+      $("#content_slt2_serie_comprobante").hide();
+      $("#content-serie-comprobante").show();
+
+      $("#content-descripcion").removeClass("col-lg-7").addClass("col-lg-5");
+      $("#content-tipo-comprobante").removeClass("col-lg-2").addClass("col-lg-4");
+
+  
+    }
+
   }
+
+
 }
 
 function eliminarDetalle(indice) {
@@ -412,6 +442,7 @@ function mostrar_compra_insumo(idcompra_proyecto) {
       $("#fecha_compra").val(e.data.fecha_compra);
       $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
       $("#serie_comprobante").val(e.data.serie_comprobante).trigger("change");
+      $("#slt2_serie_comprobante").val(e.data.nc_serie_comprobante).trigger("change");
       $("#val_igv").val(e.data.val_igv);
       $("#descripcion").val(e.data.descripcion);
       $("#glosa").val(e.data.glosa).trigger("change");

@@ -143,7 +143,8 @@
                                     <option value="0">Todos</option>
                                     <option value="Ninguno">Ninguno</option>
                                     <option value="Boleta">Boleta</option>
-                                    <option value="Factura">Factura</option>
+                                    <option value="Factura">Factura</option>                                    
+                                    <option value="Nota de Crédito">Nota de Crédito</option>
                                     <option value="Nota de venta">Nota de venta</option>
                                   </select>
                                 </div>
@@ -300,17 +301,26 @@
                                   </div>
 
                                   <!-- Tipo de comprobante -->
-                                  <div class="col-lg-4" id="content-tipo-comprobante">
+                                  <div class="col-lg-2" id="content-tipo-comprobante">
                                     <div class="form-group">
                                       <label for="tipo_comprobante">Tipo Comprobante <sup class="text-danger">(único*)</sup></label>
                                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control select2"  onchange="default_val_igv(); modificarSubtotales(); ocultar_comprob();" placeholder="Seleccinar un tipo de comprobante">
                                         <option value="Ninguno">Ninguno</option>
                                         <option value="Boleta">Boleta</option>
                                         <option value="Factura">Factura</option>
+                                        <option value="Nota de Crédito">Nota de Crédito</option>
                                         <option value="Nota de venta">Nota de venta</option>
                                       </select>
                                     </div>
                                   </div> 
+
+                                  <!-- Tipo de serie de comprobante para la anulación de la factura -->
+                                  <div class="col-lg-2" id="content_slt2_serie_comprobante">
+                                    <div class="form-group">
+                                      <label for="slt2_serie_comprobante">Nro. Factura <sup class="text-danger">(Para Nota de credito*)</sup></label>
+                                      <select id="slt2_serie_comprobante" name="slt2_serie_comprobante" class="form-control select2" data-live-search="true" title="Seleccionar"> </select>
+                                    </div>
+                                  </div>
 
                                   <!-- serie_comprobante-->
                                   <div class="col-lg-2" id="content-serie-comprobante">

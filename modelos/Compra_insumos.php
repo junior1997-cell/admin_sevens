@@ -12,7 +12,7 @@ class Compra_insumos
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   C O M P R A  ::::::::::::::::::::::::::::::::::::::::: 
 
   //Implementamos un método para insertar registros
-  public function insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante,  $serie_comprobante, $val_igv,  $descripcion, $glosa,
+  public function insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante,  $serie_comprobante,$slt2_serie_comprobante, $val_igv,  $descripcion, $glosa,
     $total_compra, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida,  $nombre_color,
     $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
 
@@ -28,8 +28,8 @@ class Compra_insumos
     if ($compra_existe['status'] == false) { return  $compra_existe;}
 
     if (empty($compra_existe['data']) || $tipo_comprobante == 'Ninguno') {
-      $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion, user_created)
-      VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion','" . $_SESSION['idusuario'] . "')";
+      $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante,nc_serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion, user_created)
+      VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante','$slt2_serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion','" . $_SESSION['idusuario'] . "')";
       $idventanew = ejecutarConsulta_retornarID($sql_3); if ($idventanew['status'] == false) { return  $idventanew;}
 
       //add registro en nuestra bitacora
@@ -85,7 +85,7 @@ class Compra_insumos
   }
 
   //Implementamos un método para editar registros
-  public function editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante,  $serie_comprobante, $val_igv,  
+  public function editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante,  $serie_comprobante,$slt2_serie_comprobante, $val_igv,  
   $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida,  $nombre_color,
   $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
 
@@ -95,7 +95,7 @@ class Compra_insumos
       $delete_compra = ejecutarConsulta($sqldel);  if ($delete_compra['status'] == false) { return $delete_compra; }
 
       $sql = "UPDATE compra_por_proyecto SET idproyecto = '$idproyecto', idproveedor = '$idproveedor', fecha_compra = '$fecha_compra',
-      tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie_comprobante', val_igv = '$val_igv', descripcion = '$descripcion',
+      tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie_comprobante',nc_serie_comprobante='$slt2_serie_comprobante', val_igv = '$val_igv', descripcion = '$descripcion',
       glosa = '$glosa', total = '$total_venta', subtotal = '$subtotal_compra', igv = '$igv_compra', tipo_gravada = '$tipo_gravada',
       estado_detraccion = '$estado_detraccion',user_updated= '" . $_SESSION['idusuario'] . "' WHERE idcompra_proyecto = '$idcompra_proyecto'";
       $update_compra = ejecutarConsulta($sql); if ($update_compra['status'] == false) { return $update_compra; }
@@ -132,7 +132,7 @@ class Compra_insumos
 
   public function mostrar_compra_para_editar($id_compras_x_proyecto) {
 
-    $sql = "SELECT  cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.val_igv, 
+    $sql = "SELECT  cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante,cpp.nc_serie_comprobante, cpp.val_igv, 
     cpp.descripcion, cpp.glosa, cpp.subtotal, cpp.igv, cpp.total, cpp.estado_detraccion, cpp.estado
     FROM compra_por_proyecto as cpp
     WHERE idcompra_proyecto='$id_compras_x_proyecto';";
@@ -156,6 +156,7 @@ class Compra_insumos
       "fecha_compra" => $compra['data']['fecha_compra'],
       "tipo_comprobante" => $compra['data']['tipo_comprobante'],
       "serie_comprobante" => $compra['data']['serie_comprobante'],
+      "nc_serie_comprobante" => $compra['data']['nc_serie_comprobante'],
       "val_igv" => $compra['data']['val_igv'],
       "descripcion" => $compra['data']['descripcion'],
       "glosa" => $compra['data']['glosa'],
@@ -289,7 +290,13 @@ class Compra_insumos
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1'
     GROUP BY cpp.idproveedor ORDER BY p.razon_social ASC";
+
+    // $totales= ejecutarConsultaArray($sql);  if ($totales['status'] == false) { return $totales;  }
+
+    // $results = []
+
     return ejecutarConsulta($sql);
+    // return $retorno = ["status" => true, "message" => 'todo oka', "data" => $results] ;
   }
 
   //Implementar un método para listar los registros x proveedor
@@ -454,6 +461,15 @@ class Compra_insumos
 
     return $retorno = ['status'=>true, 'message'=>'todo oka', 'data'=>['comprobante'=>$comprobantes['data'],'factura_compras'=>$factura_compras['data'],], ];
   }  
+
+/* ═════SERIES COMPROBANTES PARA NOTAS DE CREDITOS═══════════════ */
+  public function select2_serie_comprobante($idproyecto)
+  {
+  $sql = "SELECT tipo_comprobante,serie_comprobante FROM compra_por_proyecto 
+  WHERE (tipo_comprobante='Boleta' or tipo_comprobante ='Factura') and idproyecto='$idproyecto';";
+  return ejecutarConsultaArray($sql); 
+  }
+
 }
 
 ?>
