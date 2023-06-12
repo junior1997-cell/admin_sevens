@@ -708,15 +708,15 @@
           <!-- Tipo de comprobante -->
           <div class="col-lg-3">
             <div class="form-group">
-              <label class="font-size-15px" for="tipo_comprovante">Tipo Comprobante</label>
+              <label class="font-size-15px" for="tipo_comprobante">Tipo Comprobante</label>
               <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['tipo_comprobante'])) ? '- - -' :  $rspta['data']['tipo_comprobante'])  .' </span>
             </div>
           </div>
-          <!-- Nota de credito
+          <!-- Nota de Factura
           <label for="slt2_serie_comprobante">Nro. Factura <sup class="text-danger">(Para Nota de credito*)</sup></label>-->
           <div class="col-lg-2">
             <div class="form-group">
-              <label class="font-size-15px" for="nc_serie_comprobante">N° Nota de credito</label>
+              <label class="font-size-15px" for="nc_serie_comprobante">N° Factura</label>
               <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['nc_serie_comprobante'])) ? '- - -' :  $rspta['data']['nc_serie_comprobante']).' </span>
             </div>
           </div>

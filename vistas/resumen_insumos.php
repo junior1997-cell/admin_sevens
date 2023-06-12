@@ -215,7 +215,7 @@
                                       <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
                                         <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
-                                        <option title="fas fa-gas-pump" value="CONBUSTIBLE">CONBUSTIBLE</option>
+                                        <option title="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
                                         <option title="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
                                       </select>
                                     </div>

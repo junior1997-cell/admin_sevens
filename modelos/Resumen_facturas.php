@@ -46,13 +46,8 @@ class Resumenfacturas
           $cant_comprob = ejecutarConsultaSimpleFila($sql3);
           if ($cant_comprob['status'] == false) { return $cant_comprob; }
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
+
           //$tipo_comprobantee  = (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta' ? 'BV' : ($value['tipo_comprobante'] == 'Nota de Crédito' ? 'NC' : ''))));
 
           $data[] = array(
@@ -260,13 +255,7 @@ class Resumenfacturas
       if (!empty($sub_contrato['data'])) {
         foreach ($sub_contrato['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -338,14 +327,7 @@ class Resumenfacturas
       if (!empty($planilla_seguro['data'])) {
         foreach ($planilla_seguro['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
-
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -414,13 +396,7 @@ class Resumenfacturas
       if (!empty($otro_gasto['data'])) {
         foreach ($otro_gasto['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -490,14 +466,7 @@ class Resumenfacturas
       if (!empty($transporte['data'])) {
         foreach ($transporte['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
-
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -567,13 +536,7 @@ class Resumenfacturas
       if (!empty($hospedaje['data'])) {
         foreach ($hospedaje['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -645,13 +608,7 @@ class Resumenfacturas
       if (!empty($factura_pension['data'])) {
         foreach ($factura_pension['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -722,13 +679,7 @@ class Resumenfacturas
       if (!empty($factura_break['data'])) {
         foreach ($factura_break['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -798,13 +749,7 @@ class Resumenfacturas
       if (!empty($comida_extra['data'])) {
         foreach ($comida_extra['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
@@ -874,13 +819,7 @@ class Resumenfacturas
       if (!empty($otra_factura['data'])) {
         foreach ($otra_factura['data'] as $key => $value) {
 
-          if ($value['tipo_comprobante'] == 'Factura') {
-            $tipo_comprob  = 'FT';
-          }elseif ($value['tipo_comprobante'] == 'Boleta') {
-            $tipo_comprob  = 'BV';
-          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
-            $tipo_comprob  = 'NC';
-          }
+          if ($value['tipo_comprobante'] == 'Factura') {$tipo_comprob  = 'FT';}elseif ($value['tipo_comprobante'] == 'Boleta') {$tipo_comprob  = 'BV';}elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {$tipo_comprob  = 'NC';}
 
           $data[] = array(
             "idproyecto"        => '',

@@ -411,7 +411,7 @@ function mostrar_compra_insumo(idcompra_proyecto) {
 
   $.post("../ajax/ajax_general.php?op=ver_compra_editar", { idcompra_proyecto: idcompra_proyecto }, function (e, status) {
     
-    e = JSON.parse(e); // console.log(e);
+    e = JSON.parse(e);  console.log(e);
 
     if (e.status == true) {
 
@@ -435,7 +435,7 @@ function mostrar_compra_insumo(idcompra_proyecto) {
         $(".content-serie-comprobante").show();
         //$(".content-descripcion").removeClass("col-lg-7").addClass("col-lg-4");
       }
-      // console.log('holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'+e.data.glosa);
+
       $("#idproyecto").val(e.data.idproyecto);
       $("#idcompra_proyecto").val(e.data.idcompra_x_proyecto);
       $("#idproveedor").val(e.data.idproveedor).trigger("change");
@@ -446,6 +446,7 @@ function mostrar_compra_insumo(idcompra_proyecto) {
       $("#val_igv").val(e.data.val_igv);
       $("#descripcion").val(e.data.descripcion);
       $("#glosa").val(e.data.glosa).trigger("change");
+      console.log('Glosa : '+e.data.glosa);
 
       if (e.data.estado_detraccion == 0) {
         $("#estado_detraccion").val("0");
