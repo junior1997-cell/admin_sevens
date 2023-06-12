@@ -33,40 +33,39 @@ ob_start();
       $fecha_fin_actividad	      = isset($_POST["fecha_fin_actividad"])? limpiarCadena($_POST["fecha_fin_actividad"]):"";
       $plazo_actividad	          = isset($_POST["plazo_actividad"])? limpiarCadena($_POST["plazo_actividad"]):"";
       $fecha_pago_obrero	        = isset($_POST["fecha_pago_obrero"])? limpiarCadena($_POST["fecha_pago_obrero"]):"";
+      $permanente_pago_obrero	    = isset($_POST["permanente_pago_obrero"])? limpiarCadena($_POST["permanente_pago_obrero"]):"";
       
       switch ($_GET["op"]){
         // Gurdamos cada dia de asistencia del OBRERO
-        case 'guardaryeditar':
+        case 'guardar_y_editar_asistencia':
 
-          $data_asistencia = $_POST["asistencia"];  $resumen_qs = $_POST["resumen_qs"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
+          /*$data_asistencia = $_POST["asistencia"]; */ $resumen_qs = $_POST["resumen_qs"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
                      
-          $rspta=$asistencia_obrero->insertar_asistencia_y_resumen_q_s_asistencia( $data_asistencia, $resumen_qs, $fecha_i, $fecha_f);
+          $rspta=$asistencia_obrero->insertar_asistencia_y_resumen_q_s_asistencia( $resumen_qs, $fecha_i, $fecha_f);
 
           echo json_encode($rspta, true);        
           
         break;  
 
         case 'ver_datos_quincena':
-          
+          $ids_q_asistencia = $_POST["ids_q_asistencia"];
           $f1 = $_POST["f1"];
           $f2 = $_POST["f2"];
           $nube_idproyect = $_POST["nube_idproyect"];
           $n_f_i_p = $_POST["n_f_i_p"]; $n_f_f_p = $_POST["n_f_f_p"];
-          // $f1 = '2021-07-09'; $f2 = '2021-07-23'; $nube_idproyect = '1';
+          // $ids_q_asistencia = '1'; $f1 = '2023-05-08'; $f2 = '2023-05-13'; $nube_idproyect = '1'; $n_f_i_p= ''; $n_f_f_p= '';
 
-          $rspta=$asistencia_obrero->ver_detalle_quincena($f1,$f2,$nube_idproyect, $n_f_i_p, $n_f_f_p);
+          $rspta=$asistencia_obrero->ver_detalle_quincena($ids_q_asistencia, $f1,$f2,$nube_idproyect, $n_f_i_p, $n_f_f_p);
 
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);		
         break;
         
         // listamos los botones de la quincena o semana
-        case 'listarquincenas_botones':
+        case 'listar_s_q_botones':
 
           $nube_idproyecto = $_POST["nube_idproyecto"];
-
-          $rspta=$asistencia_obrero->listarquincenas_botones($nube_idproyecto);
-          
+          $rspta=$asistencia_obrero->listar_s_q_botones($nube_idproyecto);          
           echo json_encode($rspta, true);	 //Codificar el resultado utilizando json
 
         break;
@@ -219,9 +218,9 @@ ob_start();
                 <span class="description" > <b>'. $reg->tipo_doc .'</b>: '. $reg->num_doc .' </span>
               </div>',
               "2"=> $reg->horas_normal_dia,
-              "3"=> 'S/ '. $reg->pago_normal_dia,
+              "3"=> $reg->pago_normal_dia,
               "4"=> $reg->horas_extras_dia,
-              "5"=> 'S/ '. $reg->pago_horas_extras,
+              "5"=> $reg->pago_horas_extras,
               "6"=> '<b>Fecha: </b>'. format_d_m_a($reg->fecha_asistencia) ."<br> <b>Día: </b>". $reg->nombre_dia,
               "7"=>($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip
             );
@@ -340,11 +339,11 @@ ob_start();
                  
                 "1"=> '<center><b>' . $reg->numero_q_s . '</b> ─ '. format_d_m_a($reg->fecha_q_s_inicio) . ' - ' . format_d_m_a($reg->fecha_q_s_fin) . '</center>',
                 "2"=> $reg->total_hn . ' / ' . $reg->total_he,
-                "3"=> '<center>' . $reg->total_dias_asistidos . '</center>',
+                "3"=>  $reg->total_dias_asistidos ,
                 "4"=> 'S/ '. number_format($reg->pago_parcial_hn, 2, '.', ',') . ' / ' . number_format($reg->pago_parcial_he, 2, '.', ','),
-                "5"=> 'S/ '. number_format($reg->adicional_descuento, 2, '.', ','),
-                "6"=> '<center>' . $reg->sabatical . '</center>',
-                "7"=> 'S/ '. number_format($reg->pago_quincenal, 2, '.', ','),
+                "5"=> $reg->adicional_descuento,
+                "6"=> $reg->sabatical ,
+                "7"=> $reg->pago_quincenal,
                 "8"=> '<center>' . ($reg->estado_envio_contador ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>') . '</center>' ,
                 "9"=> '<center>' . ($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . '</center>'.$toltip,
                 "10"=> $reg->trabajdor,
@@ -443,7 +442,7 @@ ob_start();
           }else {             
 
             // editamos un recibo x honorario existente
-            $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_a_m_d($fecha_inicio_actividad), format_a_m_d($fecha_fin_actividad), $plazo_actividad, $fecha_pago_obrero);
+            $rspta=$asistencia_obrero->editar_fechas_actividad($id_proyecto_f, format_a_m_d($fecha_inicio_actividad), format_a_m_d($fecha_fin_actividad), $plazo_actividad, $fecha_pago_obrero, $permanente_pago_obrero);
             
             echo json_encode($rspta, true);
           }

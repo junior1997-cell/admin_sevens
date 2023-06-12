@@ -17,6 +17,7 @@
         <title>Asistencia Obrero | Admin Sevens</title>
 
         <?php $title = "Asistencia Obrero"; require 'head.php'; ?>
+        <link rel="stylesheet" href="../dist/css/switch_domingo.css">
 
         <style>          
           /* fijar table head */
@@ -153,7 +154,7 @@
 
                           <!-- TBLA- REGISTRO DE ASISTENCIA-->                         
                           <div class="table-responsive p-0" id="ver_asistencia" style="display: none; ">
-                              
+                              <input type="hidden" id="tipo_hora">
                             <table class="table table-hover table-head-fixed text-nowrap tabla_sistencia_obrero" style="border: black 1px solid;">
                               <thead class="bg-white" >
                                 <tr class="celda-b-t-1px ">
@@ -252,11 +253,7 @@
 
                           <!-- CARGANDO - REGISTRO DE ASISTENCIA -->
                           <div class="row" id="cargando-registro-asistencia" style="display: none;">
-                            <div class="col-lg-12 text-center">
-                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                              <br />
-                              <h4>Cargando...</h4>
-                            </div>
+                            
                           </div>
 
                           <!-- TBLA - DIAS DE ASISTENCIA POR TRABAJADOR -->
@@ -279,10 +276,10 @@
                                 <tr>
                                   <th class="">Aciones</th>
                                   <th>Nombre</th>
-                                  <th>Horas Normal</th>
-                                  <th>Pago Hr. Normal</th>
-                                  <th>Hora Extras</th>
-                                  <th>Pago Hr. Extras</th>
+                                  <th class="text-center">Horas Normal</th>
+                                  <th class="text-nowrap">Pago Hr. Normal</th>
+                                  <th class="text-center">Hora Extras</th>
+                                  <th class="text-nowrap">Pago Hr. Extras</th>
                                   <th>Fecha Asistencia</th>
                                   <th>Estado</th>
                                 </tr>
@@ -647,7 +644,33 @@
                             
                             <!-- id asistencia -->
                             <input type="hidden" name="id_proyecto_f" id="id_proyecto_f" /> 
-                            <input type="hidden" name="fecha_pago_obrero_f" id="fecha_pago_obrero_f" /> 
+
+                            <!-- fechas de pago de obreros -->
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">                               
+                              <div class="form-group show_hide_select_1">
+                                <label for="fecha_pago_obrero_f">Pago de obreros <sup class="text-danger">*</sup></label>
+                                <select class="form-control select2" name="fecha_pago_obrero_f" id="fecha_pago_obrero_f" style="width: 100%;" onchange="validar_permanent();">
+                                  <option value="quincenal">Quincenal</option>
+                                  <option value="semanal">Semanal</option>
+                                </select>                                
+                              </div>
+                              <div class="form-group show_hide_select_2" style="display: none !important;">
+                                
+                              </div>
+                            </div>
+
+                            <!-- Swichs permanente -->
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                              <label for="fecha_pago_obrero" class="">Definir permanente </label>
+                              <div class="switch-toggle show_hide_switch_1">
+                                <input type="checkbox" id="definiendo" >
+                                <label for="definiendo" onclick="permanente_pago_obrero()"></label>
+                              </div>
+                              <div class="show_hide_switch_2 mb-2" style="display: none;">
+                                Esta no se configuracion <b class="text-danger">NO se puede cambiar</b>
+                              </div>
+                              <input type="hidden" name="permanente_pago_obrero" id="permanente_pago_obrero"  >
+                            </div>
 
                             <!-- FECHA INICIO DE ACTIVIDADES -->
                             <div class="col-lg-12">
@@ -682,7 +705,7 @@
                                 <span class="form-control plazo_actividad"> 0 </span>
                                 <input type="hidden" name="plazo_actividad" id="plazo_actividad" >
                               </div>
-                            </div>                                                     
+                            </div> 
 
                           </div>
 
