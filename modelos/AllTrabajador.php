@@ -10,7 +10,7 @@
     }
 
     //Implementamos un método para insertar registros
-    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci,  $titular_cuenta, $tipo, $desempenio, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
+    public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci,  $titular_cuenta, $tipo, $desempenio, $ocupacion, $ruc, $talla_ropa,$talla_zapato, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
       $sw = Array();
       $sql_0 = "SELECT t.nombres, t.tipo_documento, t.numero_documento, tip.nombre as tipo, t.estado, t.estado_delete, t.fecha_nacimiento, t.edad
       FROM trabajador as t, tipo_trabajador as tip
@@ -19,8 +19,8 @@
       
       if ( empty($existe['data']) ) {
 
-        $sql_2="INSERT INTO trabajador ( idtipo_trabajador, idocupacion, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, titular_cuenta, direccion, telefono, email,  ruc, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso,  cv_documentado, cv_no_documentado,user_created)
-        VALUES ( '$tipo', '$ocupacion', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$titular_cuenta', '$direccion', '$telefono', '$email', '$ruc', '$imagen1', '$imagen2', '$imagen3', '$cv_documentado', '$cv_nodocumentado','" . $_SESSION['idusuario'] . "')";
+        $sql_2="INSERT INTO trabajador ( idtipo_trabajador, idocupacion, nombres, tipo_documento, numero_documento, fecha_nacimiento, edad, titular_cuenta, direccion, telefono, email,  ruc, talla_ropa,talla_zapato, imagen_perfil, imagen_dni_anverso, imagen_dni_reverso,  cv_documentado, cv_no_documentado,user_created)
+        VALUES ( '$tipo', '$ocupacion', '$nombre', '$tipo_documento', '$num_documento', '$nacimiento', '$edad', '$titular_cuenta', '$direccion', '$telefono', '$email', '$ruc', '$talla_ropa', '$talla_zapato', '$imagen1', '$imagen2', '$imagen3', '$cv_documentado', '$cv_nodocumentado','" . $_SESSION['idusuario'] . "')";
         $new_trabajador = ejecutarConsulta_retornarID($sql_2);  if ($new_trabajador['status'] == false) { return $new_trabajador;}
         $id = $new_trabajador['data'];
 
@@ -76,10 +76,10 @@
     }
 
     //Implementamos un método para editar registros $cci, $tipo, $ocupacion, $ruc, $cv_documentado, $cv_nodocumentado
-    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci, $titular_cuenta, $tipo, $desempenio, $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
+    public function editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci, $titular_cuenta, $tipo, $desempenio, $ocupacion, $ruc, $talla_ropa,$talla_zapato, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
       $sql_0="UPDATE trabajador SET idocupacion = '$ocupacion', nombres='$nombre', tipo_documento='$tipo_documento', numero_documento='$num_documento', fecha_nacimiento='$nacimiento', edad='$edad',  titular_cuenta='$titular_cuenta',direccion='$direccion', 
       telefono='$telefono', email='$email', imagen_perfil ='$imagen1', imagen_dni_anverso ='$imagen2', imagen_dni_reverso ='$imagen3',
-      idtipo_trabajador ='$tipo',  ruc='$ruc', cv_documentado='$cv_documentado', 
+      idtipo_trabajador ='$tipo',  ruc='$ruc', talla_ropa='$talla_ropa',talla_zapato='$talla_zapato', cv_documentado='$cv_documentado', 
       cv_no_documentado='$cv_nodocumentado', user_updated= '" . $_SESSION['idusuario'] . "'
       WHERE idtrabajador='$idtrabajador'";	      
       $trabajdor = ejecutarConsulta($sql_0);  if ($trabajdor['status'] == false) { return  $trabajdor;}
@@ -201,7 +201,7 @@
     public function verdatos($idtrabajador) {
       $sql="SELECT t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad,
       t.titular_cuenta, t.direccion, t.telefono, t.email, t.imagen_perfil as imagen_perfil, t.imagen_dni_anverso, t.cv_documentado, 
-      t.cv_no_documentado, t.imagen_dni_reverso as imagen_dni_reverso, tt.nombre as nombre_tipo_trabajador, o.nombre_ocupacion 
+      t.cv_no_documentado, t.imagen_dni_reverso as imagen_dni_reverso, t.talla_ropa, t.talla_zapato, tt.nombre as nombre_tipo_trabajador, o.nombre_ocupacion 
       FROM trabajador as t, tipo_trabajador as tt, ocupacion as o
       WHERE t.idtipo_trabajador = tt.idtipo_trabajador and t.idocupacion = o.idocupacion and t.idtrabajador='$idtrabajador' ";
       $trabajador = ejecutarConsultaSimpleFila($sql); if ($trabajador['status'] == false) { return  $trabajador;}
@@ -235,7 +235,7 @@
     public function tbla_principal($estado) {
       $data = Array();
       $sql="SELECT t.idtrabajador,  t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.telefono, t.imagen_perfil,  
-      t.estado,  tt.nombre AS nombre_tipo, t.descripcion_expulsion, o.nombre_ocupacion
+      t.estado, t.talla_ropa, t.talla_zapato, tt.nombre AS nombre_tipo, t.descripcion_expulsion, o.nombre_ocupacion
       FROM trabajador AS t, tipo_trabajador as tt, ocupacion as o
       WHERE  tt.idtipo_trabajador= t.idtipo_trabajador AND t.idocupacion = o.idocupacion AND  t.estado = '$estado' AND t.estado_delete = '1' ORDER BY  t.nombres ASC ;";
       $trabajdor = ejecutarConsultaArray($sql);
@@ -273,6 +273,9 @@
           'nombre_ocupacion'=> $value['nombre_ocupacion'], 
           'html_desempenio' => '<ol class="pl-3">'. $html_desempenio . '</ol>',
           'descripcion_expulsion' =>$value['descripcion_expulsion'],
+
+          'talla_ropa'      =>$value['talla_ropa'],
+          'talla_zapato'    =>$value['talla_zapato'],
 
           'banco'           => (empty($bancos['data']) ? "": $bancos['data']['banco']), 
           'cuenta_bancaria' => (empty($bancos['data']) ? "" : $bancos['data']['cuenta_bancaria']), 

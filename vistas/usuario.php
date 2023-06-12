@@ -220,8 +220,8 @@
                           <div class="card-body">
                             <div class="row" id="cargando-3-fomulario">
                               <!-- id trabajador -->
-                              <input type="hidden" name="idtrabajador_trab" id="idtrabajador_trab" />
-
+                              <input type="hidden" name="idtrabajador_trab" id="idtrabajador_trab" />  
+                              
                               <!-- Tipo de documento -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -238,7 +238,7 @@
                               <!-- N° de documento -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="num_documento_trab">N° de documento</label>
+                                  <label for="num_documento_trab">N° de documento <sup class="text-danger">(unico*)</sup></label>
                                   <div class="input-group">
                                     <input type="number" name="num_documento_trab" class="form-control" id="num_documento_trab" placeholder="N° de documento" />
                                     <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_trab');">
@@ -265,58 +265,78 @@
                                   <label for="email_trab">Correo electrónico</label>
                                   <input type="email" name="email_trab" class="form-control" id="email_trab" placeholder="Correo electrónico" onkeyup="convert_minuscula(this);" />
                                 </div>
-                              </div>                              
-
+                              </div>
+                              
                               <!-- Telefono -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="telefono_trab">Teléfono</label>
                                   <input type="text" name="telefono_trab" id="telefono_trab" class="form-control" data-inputmask="'mask': ['999-999-999', '+51 999 999 999']" data-mask />
                                 </div>
-                              </div>
+                              </div>                             
 
-                              <!-- fecha de nacimiento -->
+                              <!-- FECHA NACIMIENTO -->
                               <div class="col-12 col-sm-10 col-md-6 col-lg-3">
                                 <div class="form-group">
-                                  <label for="nacimiento_trab">Fecha Nacimiento</label>
-                                  <input type="date" class="form-control" name="nacimiento_trab" id="nacimiento_trab" placeholder="Fecha de Nacimiento" onclick="calcular_edad('#nacimiento_trab', '#edad_trab', '.edad_trab');" onchange="calcular_edad('#nacimiento_trab', '#edad_trab', '.edad_trab');" />
-                                  <input type="hidden" name="edad_trab" id="edad_trab" />
+                                  <label for="">Nacimiento: <sup class="text-danger">*</sup></label>
+                                  <div class="input-group date"  data-target-input="nearest">
+                                    <input type="text" class="form-control" id="nacimiento_trab" name="nacimiento_trab" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_edad('#nacimiento_trab','#edad','#p_edad');"  />
+                                    <div class="input-group-append click-btn-nacimiento-trab cursor-pointer" for="nacimiento_trab" >
+                                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                  </div>                                 
                                 </div>
                               </div>
 
                               <!-- edad -->
                               <div class="col-12 col-sm-2 col-md-6 col-lg-1">
                                 <div class="form-group">
-                                  <label for="edad_trab">Edad</label>
-                                  <p class="edad_trab" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
+                                  <label for="edad">Edad</label>
+                                  <p id="p_edad" style="border: 1px solid #ced4da; border-radius: 4px; padding: 5px;">0 años.</p>
+                                  <input type="hidden" name="edad" id="edad" />
                                 </div>
                               </div>
 
                               <!-- banco -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
                                 <div class="form-group">
-                                  <label for="banco_trab">Banco</label>
-                                  <select name="banco_trab" id="banco_trab" class="form-control select2" style="width: 100%;" onchange="formato_banco();">
+                                  <label for="banco_0">Banco</label>
+                                  <select name="banco_0" id="banco_0" class="form-control select2 banco_0" style="width: 100%;" onchange="formato_banco(0);">
                                     <!-- Aqui listamos los bancos -->
                                   </select>
+                                  <input type="hidden" name="banco_array[]" id="banco_array_0">
                                 </div>
                               </div>
 
                               <!-- Cuenta bancaria -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="c_bancaria_trab" class="chargue-format-1">Cuenta Bancaria</label>
-                                  <input type="text" name="c_bancaria_trab" class="form-control" id="c_bancaria_trab" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+                                  <label for="cta_bancaria" class="0_chargue-format-1">Cuenta Bancaria</label>
+                                  <input type="text" name="cta_bancaria[]" class="form-control cta_bancaria_0" id="cta_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
                                 </div>
                               </div>
 
                               <!-- CCI -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                                 <div class="form-group">
-                                  <label for="cci_trab" class="chargue-format-2">CCI</label>
-                                  <input type="text" name="cci_trab" class="form-control" id="cci_trab" placeholder="CCI" data-inputmask="" data-mask />
+                                  <label for="cci" class="0_chargue-format-2">CCI</label>
+                                  <input type="text" name="cci[]" class="form-control cci_0" id="cci" placeholder="CCI" data-inputmask="" data-mask />
                                 </div>
+                              </div> 
+
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1">
+                                <div class="form-group mb-2">
+                                  <div class="custom-control custom-radio ">
+                                    <input class="custom-control-input custom-control-input-danger" type="radio" id="banco_seleccionado_0" name="banco_seleccionado" value="0" checked>
+                                    <label for="banco_seleccionado_0" class="custom-control-label">Usar</label>
+                                  </div>
+                                </div>
+                                <button type="button" class="btn bg-gradient-success btn-sm" onclick="add_bancos();" data-toggle="tooltip" data-original-title="Agregar neva fila"><i class="fas fa-plus"></i></button>
                               </div>
+
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-12">
+                                <div class="row" id="lista_bancos"> </div>
+                              </div>                              
 
                               <!-- Titular de la cuenta -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
@@ -335,11 +355,20 @@
                                 </div>
                               </div>
 
-                              <!-- ocupacion -->
+                              <!-- tipo -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4">
                                 <div class="form-group">
                                   <label for="ocupacion_trab">Ocupación</label>
                                   <select name="ocupacion_trab" id="ocupacion_trab" class="form-control select2" style="width: 100%;"> </select>
+                                  <!--<input type="hidden" name="color_old" id="color_old" />-->
+                                </div>
+                              </div>
+
+                              <!-- ocupacion -->
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-8">
+                                <div class="form-group">
+                                  <label for="desempenio_trab">Desempeño</label>
+                                  <select name="desempenio_trab[]" id="desempenio_trab" class="form-control select2"  multiple="multiple" style="width: 100%;"> </select>
                                   <!--<input type="hidden" name="color_old" id="color_old" />-->
                                 </div>
                               </div>
@@ -352,8 +381,24 @@
                                 </div>
                               </div>
 
+                              <!-- Talla ropa -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="talla_ropa_trab">Talla ropa</label>
+                                  <input type="number" name="talla_ropa_trab" class="form-control" id="talla_ropa_trab" placeholder="Talla ropa" />
+                                </div>
+                              </div>
+                              
+                              <!-- Talla zapato -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="talla_zapato_trab">Talla zapato</label>
+                                  <input type="number" name="talla_zapato_trab" class="form-control" id="talla_zapato_trab" placeholder="Talla zapato" />
+                                </div>
+                              </div>
+
                               <!-- Direccion -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <div class="form-group">
                                   <label for="direccion_trab">Dirección</label>
                                   <input type="text" name="direccion_trab" class="form-control" id="direccion_trab" placeholder="Dirección" />

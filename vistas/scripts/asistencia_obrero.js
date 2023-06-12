@@ -396,16 +396,19 @@ function mostrar_hne(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_bt
 
             var data_che = `'${format_d_m_a(val2.fecha_asistencia)}', '${val.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${val.sueldo_diario}', '${val.sueldo_hora}', '${e.data.length}', '${val.sabatical_manual_1}', '${val.sabatical_manual_2}', '${tipo_hora}'`;
             var class_val_x_dia = `${extraer_dia_semana(val2.fecha_asistencia)}_${extraer_dia_mes(val2.fecha_asistencia)}_${extraer_mes_number(val2.fecha_asistencia)}`;
+            var color_hn_td = val2.horas_normal_dia >= 8 ? 'bg-color-28a74540': (val2.horas_normal_dia < 8 && val2.horas_normal_dia > 0  ? 'bg-color-28a74540' : 'bg-color-ff000040' ) ; 
+            var color_he_td = val2.horas_extras_dia >= 8 ? 'bg-color-28a74540': (val2.horas_extras_dia < 8 && val2.horas_extras_dia > 0  ? 'bg-color-28a74540' : 'bg-color-ff000040' ) ; 
+
             if (weekday != 'sa') {
               if (val2.dia_regular == true) {
                 tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);                
                 tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> </td>`);
               } else {
-                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center" > 
+                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center ${color_hn_td}" > 
                   <span class="span_asist span_HN_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" >${val2.horas_normal_dia}</span>                  
                 </td>`);
                 
-                tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center" > 
+                tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center ${color_he_td}" > 
                   <span class="span_asist span_HE_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" >${val2.horas_extras_dia}</span>                  
                 </td>`);               
               }
@@ -1234,6 +1237,8 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
 
             var data_che = `'${format_d_m_a(val2.fecha_asistencia)}', '${val.idtrabajador_por_proyecto}', '${cant_dias_asistencia}', '${val.sueldo_diario}', '${val.sueldo_hora}', '${e.data.length}', '${val.sabatical_manual_1}', '${val.sabatical_manual_2}', '${tipo_hora}'`;
             var class_val_x_dia = `${extraer_dia_semana(val2.fecha_asistencia)}_${extraer_dia_mes(val2.fecha_asistencia)}_${extraer_mes_number(val2.fecha_asistencia)}`;
+            var color_td = val2.horas_normal_dia >= 8 ? 'bg-color-28a74540': (val2.horas_normal_dia < 8 && val2.horas_normal_dia > 0  ? 'bg-color-28a74540' : 'bg-color-ff000040' ) ; 
+
             if (weekday != 'sa') {
               if (val2.dia_regular == true) {
                 tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);                
@@ -1243,7 +1248,7 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
                   <span class="span_asist span_HN_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" >-</span> 
                   <input class="w-35px input_asist hn_multiple input_HN_${val.idtrabajador_por_proyecto}_${key2} input_HN_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)} desglose_q_s_${val.idtrabajador_por_proyecto}_${count_bloque_q_s} hidden" id="input_HN_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" onkeyup="calcular_he(${data_che}) };"  type="text" value="${val2.horas_normal_dia}" autocomplete="off">
                 </td>
-                <td class="text-center" rowspan="2"> 
+                <td class="text-center ${color_td}" rowspan="2"> 
                   <span class="span_asist span_HE_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" >${val2.horas_extras_dia}</span> 
                   <input class="input_asist w-35px h-48px he_multiple ${class_val_x_dia} input_HE_${val.idtrabajador_por_proyecto}_${key2} input_HE_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)} hidden" type="text"  onkeyup="calcular_he(${data_che});" value="${val2.horas_extras_dia}">
                   <input type="hidden" class="">
@@ -1410,10 +1415,8 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
           // validamos si existe una suma_adicional 
           if (val.idresumen_q_s_asistencia == "") { fechas_adicional = format_a_m_d(f1); } else { fechas_adicional = val.fecha_registro; }
 
-          var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> 
-            <span class="span_asist" >${val.adicional_descuento}</span> <input class="w-45px input_asist hidden adicional_descuento_${val.idtrabajador_por_proyecto}" onkeyup="delay(function(){ adicional_descuento('${e.data.length}', '${val.idtrabajador_por_proyecto}') }, 100 );" type="text" value="${val.adicional_descuento}" autocomplete="off" > 
-            <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '${val.idresumen_q_s_asistencia}', '${val.idtrabajador_por_proyecto}', '${fechas_adicional}');"><i class="far fa-eye"></i></span>
-          </td>`;
+          var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> <span class="">0</span> </td>`;
+          
           var pago_total_qs = parseFloat(pago_parcial_qs) + parseFloat(val.adicional_descuento); //console.log(pago_total_qs);
           var tabla_bloc_HN_pago_total_10 = `<td rowspan="2" class="text-center center-vertical"> 
             <span  class="val_pago_quincenal_${key+1} pago_quincenal_${val.idtrabajador_por_proyecto}"> ${formato_miles( pago_total_qs )} </span> 

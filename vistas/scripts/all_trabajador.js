@@ -64,52 +64,14 @@ $("#doc4").change(function(e) {  addImageApplication(e,$("#doc4").attr("id")) })
 $("#doc5_i").click(function() {  $('#doc5').trigger('click'); });
 $("#doc5").change(function(e) {  addImageApplication(e,$("#doc5").attr("id")) });
 
-function foto1_eliminar() {
+// Eliminamos el IMG
+function foto1_eliminar() {	$("#foto1").val(""); $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png"); $("#foto1_nombre").html(""); }
+function foto2_eliminar() {	$("#foto2").val(""); $("#foto2_i").attr("src", "../dist/img/default/dni_anverso.webp"); $("#foto2_nombre").html(""); }
+function foto3_eliminar() {	$("#foto3").val(""); $("#foto3_i").attr("src", "../dist/img/default/dni_reverso.webp"); $("#foto3_nombre").html(""); }
 
-	$("#foto1").val("");
-
-	$("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
-
-	$("#foto1_nombre").html("");
-}
-
-function foto2_eliminar() {
-
-	$("#foto2").val("");
-
-	$("#foto2_i").attr("src", "../dist/img/default/dni_anverso.webp");
-
-	$("#foto2_nombre").html("");
-}
-
-function foto3_eliminar() {
-
-	$("#foto3").val("");
-
-	$("#foto3_i").attr("src", "../dist/img/default/dni_reverso.webp");
-
-	$("#foto3_nombre").html("");
-}
-
-// Eliminamos el doc 4
-function doc4_eliminar() {
-
-	$("#doc4").val("");
-
-	$("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-	$("#doc4_nombre").html("");
-}
-
-// Eliminamos el doc 5
-function doc5_eliminar() {
-
-	$("#doc5").val("");
-
-	$("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
-	$("#doc5_nombre").html("");
-}
+// Eliminamos el DOC
+function doc4_eliminar() { $("#doc4").val("");	$("#doc4_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');	$("#doc4_nombre").html(""); }
+function doc5_eliminar() { $("#doc5").val("");	$("#doc5_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');	$("#doc5_nombre").html(""); }
 
 //Función limpiar
 function limpiar_form_trabajador() {
@@ -133,6 +95,9 @@ function limpiar_form_trabajador() {
   $("#ocupacion").val("").trigger("change");
   $("#desempenio").val("").trigger("change");
   $("#titular_cuenta").val("");
+
+  $("#talla_ropa").val("");
+  $("#talla_zapato").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
 	$("#foto1").val("");
@@ -452,6 +417,14 @@ function verdatos(idtrabajador){
                   <td> <b>DNI: </b>${e.data.trabajador.numero_documento}</td>
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Talla ropa</th>
+                  <td>${e.data.trabajador.talla_ropa}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
+                  <th>Talla zapato</th>
+                  <td>${e.data.trabajador.talla_zapato}</td>
+                </tr>
+                <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Dirección</th>
                   <td>${e.data.trabajador.direccion}</td>
                 </tr>
@@ -546,6 +519,9 @@ function mostrar(idtrabajador) {
 
       $("#ocupacion").val(e.data.trabajador.idocupacion).trigger('change');
       $("#desempenio").val(e.data.detalle_desempenio).trigger('change');
+
+      $("#talla_ropa").val(e.data.trabajador.talla_ropa);     
+      $("#talla_zapato").val(e.data.trabajador.talla_zapato);     
       
       e.data.bancos.forEach(function(valor, index){ 
         
