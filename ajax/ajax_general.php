@@ -712,7 +712,15 @@
               <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['tipo_comprobante'])) ? '- - -' :  $rspta['data']['tipo_comprobante'])  .' </span>
             </div>
           </div>
-          <!-- serie_comprovante-->
+          <!-- Nota de credito
+          <label for="slt2_serie_comprobante">Nro. Factura <sup class="text-danger">(Para Nota de credito*)</sup></label>-->
+          <div class="col-lg-2">
+            <div class="form-group">
+              <label class="font-size-15px" for="nc_serie_comprobante">N° Nota de credito</label>
+              <span  class="form-control form-control-sm"> '. ((empty($rspta['data']['nc_serie_comprobante'])) ? '- - -' :  $rspta['data']['nc_serie_comprobante']).' </span>
+            </div>
+          </div>
+          <!-- serie_comprobante-->
           <div class="col-lg-2">
             <div class="form-group">
               <label class="font-size-15px" for="serie_comprovante">N° de Comprobante</label>
@@ -727,7 +735,7 @@
             </div>
           </div>
           <!-- Descripcion-->
-          <div class="col-lg-6">
+          <div class="col-lg-4">
             <div class="form-group">
               <label class="font-size-15px" for="descripcion">Descripción </label> <br />
               <textarea class="form-control form-control-sm" readonly rows="1">'.((empty($rspta['data']['descripcion'])) ? '- - -' :$rspta['data']['descripcion']).'</textarea>

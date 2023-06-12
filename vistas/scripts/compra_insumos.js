@@ -295,8 +295,10 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api = this.api(); var total = api.column( 6 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      var api = this.api(); var total = api.column( 6 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      
       $( api.column( 6 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );
+      // console.log('footer: '+total);
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
@@ -345,7 +347,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
 
 //facturas agrupadas por proveedor.
 function listar_facuras_proveedor(idproveedor, idproyecto) {
-  //console.log('idproyecto '+idproyecto, 'idproveedor '+idproveedor);
+  console.log('idproyecto '+idproyecto, 'idproveedor '+idproveedor);
   $("#div_tabla_compra").hide();
   $("#agregar_compras").hide();
   $("#btn_agregar").hide();
@@ -372,9 +374,16 @@ function listar_facuras_proveedor(idproveedor, idproyecto) {
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api = this.api(); var total = api.column( 5 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 5 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );
+    },
     bDestroy: true,
     iDisplayLength: 5, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+    ],
   }).DataTable();
 }
 

@@ -327,6 +327,7 @@ if (!isset($_SESSION["nombre"])) {
             $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');       
             $clss_disabled = (empty($reg['cant_comprobantes']) ? 'disabled' : '');       
             $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
+
             $total = ($reg['tipo_comprobante']=='Nota de Crédito' ? -1*$reg['total'] :$reg['total']);
             $data[] = [
               "0" => $cont,
@@ -378,14 +379,14 @@ if (!isset($_SESSION["nombre"])) {
         $icon = "eye";
         
         if ($rspta['status']) {
-          while ($reg = $rspta['data']->fetch_object()) {
+          foreach ($rspta['data'] as $key => $value) {
             $data[] = [
               "0" => $cont++,
-              "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $reg->idproveedor . ',' . $reg->idproyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
-              "2" => $reg->razon_social,
-              "3" => "<center>$reg->cantidad</center>",
-              "4" => $reg->telefono,
-              "5" => number_format($reg->total, 2, '.', ','),
+              "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $value['idproveedor'] . ',' . $value['idproyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
+              "2" => $value['razon_social'],
+              "3" => '<center>'.$value['cantidad'].'</center>',
+              "4" => $value['telefono'],
+              "5" => number_format($value['total'], 2, '.', ','),
             ];
           }
           $results = [
@@ -409,13 +410,15 @@ if (!isset($_SESSION["nombre"])) {
         
         if ($rspta['status']) {
           while ($reg = $rspta['data']->fetch_object()) {
+            $total = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->total :$reg->total);
+
             $data[] = [
               "0" => $cont++,
               "1" => '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
               "2" => $reg->fecha_compra,
               "3" => $reg->tipo_comprobante,
               "4" => $reg->serie_comprobante,
-              "5" => number_format($reg->total, 2, '.', ','),
+              "5" => $total,
               "6" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>',
               "7" => $reg->estado == '1' ? '<span class="badge bg-success">Aceptado</span>' : '<span class="badge bg-danger">Anulado</span>',
             ];

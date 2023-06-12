@@ -435,7 +435,7 @@ function mostrar_compra_insumo(idcompra_proyecto) {
         $(".content-serie-comprobante").show();
         //$(".content-descripcion").removeClass("col-lg-7").addClass("col-lg-4");
       }
-
+      // console.log('holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'+e.data.glosa);
       $("#idproyecto").val(e.data.idproyecto);
       $("#idcompra_proyecto").val(e.data.idcompra_x_proyecto);
       $("#idproveedor").val(e.data.idproveedor).trigger("change");

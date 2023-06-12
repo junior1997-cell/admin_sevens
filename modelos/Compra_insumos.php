@@ -285,24 +285,54 @@ class Compra_insumos
   //Implementar un método para listar los registros x proveedor
   public function listar_compraxporvee($nube_idproyecto) {
     // $idproyecto=2;
-    $sql = "SELECT cpp.idproyecto as idproyecto, COUNT(cpp.idcompra_proyecto) as cantidad, SUM(cpp.total) as total, 
-    p.idproveedor as idproveedor, p.razon_social as razon_social, p.telefono
+    $data = [];
+    $sql = "SELECT cpp.idproyecto as idproyecto, COUNT(cpp.idcompra_proyecto) as cantidad, p.idproveedor as idproveedor, p.razon_social as razon_social, p.telefono
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1'
     GROUP BY cpp.idproveedor ORDER BY p.razon_social ASC";
+     $compraxporv = ejecutarConsultaArray($sql); if ($compraxporv['status'] == false) { return  $compraxporv;}
+    //return ejecutarConsultaArray($sql);
+    foreach ($compraxporv['data'] as $key => $value) {
 
-    // $totales= ejecutarConsultaArray($sql);  if ($totales['status'] == false) { return $totales;  }
+      $id = $value['idproveedor'];
+     //AND tipo_comprobante<>'Nota de Crédito'
+      $sql2 = "SELECT  SUM(cpp.total) as total
+      FROM compra_por_proyecto as cpp
+      WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor='$id'  AND cpp.estado = '1' AND cpp.estado_delete = '1'
+      AND tipo_comprobante<>'Nota de Crédito'";
+      $total_1 = ejecutarConsultaSimpleFila($sql2); if ($total_1['status'] == false) { return  $total_1;} 
 
-    // $results = []
+      $sql3 = "SELECT  SUM(cpp.total) as total_NC
+      FROM compra_por_proyecto as cpp
+      WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor='$id' AND tipo_comprobante='Nota de Crédito' AND cpp.estado = '1' AND cpp.estado_delete = '1'";
+      $NC = ejecutarConsultaSimpleFila($sql3); if ($NC['status'] == false) { return  $NC;}
 
-    return ejecutarConsulta($sql);
-    // return $retorno = ["status" => true, "message" => 'todo oka', "data" => $results] ;
+      $total_11  = empty($total_1['data']) ? 0 : (empty($total_1['data']['total']) ? 0 : floatval($total_1['data']['total']));
+      $total_nc  = empty($NC['data']) ? 0 : (empty($NC['data']['total_NC']) ? 0 : floatval($NC['data']['total_NC']));
+
+      $total = $total_11-$total_nc;
+
+      $data[] = array(
+        'orden'        => $key+1,
+        'idproyecto'   =>$value['idproyecto'],
+        'cantidad'     => $value['cantidad'],  
+        'idproveedor'  => $value['idproveedor'], 
+        'razon_social' => $value['razon_social'],       
+        'telefono'     => $value['telefono'],
+        'total'        => $total,
+      );
+    }
+
+    return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>$data];
+      
+
   }
 
   //Implementar un método para listar los registros x proveedor
   public function listar_detalle_comprax_provee($idproyecto, $idproveedor) {
 
-    $sql = "SELECT * FROM compra_por_proyecto WHERE idproyecto='$idproyecto' AND idproveedor='$idproveedor' AND estado = '1' AND estado_delete = '1'";
+    $sql = "SELECT * FROM compra_por_proyecto 
+    WHERE idproyecto='$idproyecto' AND idproveedor='$idproveedor' AND estado = '1' AND estado_delete = '1'";
 
     return ejecutarConsulta($sql);
   }
@@ -311,7 +341,7 @@ class Compra_insumos
   public function ver_detalle_compra($idcompra) {    
 
     $sql = "SELECT cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, p.razon_social , p.tipo_documento, p.ruc, p.direccion, p.telefono, 
-		cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.val_igv,	cpp.descripcion, cpp.glosa,	cpp.subtotal, cpp.igv, cpp.total, 
+		cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante,cpp.nc_serie_comprobante, cpp.val_igv,	cpp.descripcion, cpp.glosa,	cpp.subtotal, cpp.igv, cpp.total, 
     cpp.tipo_gravada, cpp.estado, cpp.estado_detraccion
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE idcompra_proyecto='$idcompra'  AND cpp.idproveedor = p.idproveedor;";
@@ -333,6 +363,7 @@ class Compra_insumos
       "fecha_compra"        => $compra['data']['fecha_compra'],
       "tipo_comprobante"    => $compra['data']['tipo_comprobante'],
       "serie_comprobante"   => $compra['data']['serie_comprobante'],
+      "nc_serie_comprobante"=> $compra['data']['nc_serie_comprobante'],
       "val_igv"             => $compra['data']['val_igv'],
       "descripcion"         => $compra['data']['descripcion'],
       "glosa"               => $compra['data']['glosa'],

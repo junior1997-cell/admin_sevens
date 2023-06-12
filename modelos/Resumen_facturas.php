@@ -25,7 +25,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; } 
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; } 
 
       // var_dump($filtro_proveedor , $filtro_fecha ,$filtro_comprobante); die();
 
@@ -46,13 +46,22 @@ class Resumenfacturas
           $cant_comprob = ejecutarConsultaSimpleFila($sql3);
           if ($cant_comprob['status'] == false) { return $cant_comprob; }
 
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+          //$tipo_comprobantee  = (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta' ? 'BV' : ($value['tipo_comprobante'] == 'Nota de Crédito' ? 'NC' : ''))));
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idcompra_proyecto'],
             "bd_nombre_tabla"   => 'compra_por_proyecto',
             "bd_nombre_id_tabla"=> 'idcompra_proyecto',
             "fecha"             => $value['fecha_compra'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta' ? 'BV' : ''))) ,
+            "tipo_comprobante"  => $tipo_comprob,
             "serie_comprobante" => $value['serie_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -97,7 +106,7 @@ class Resumenfacturas
     
       if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND f.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND f.fecha_emision = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND f.fecha_emision = '$fecha_2'"; }    
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; } 
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; } 
       
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
@@ -165,7 +174,7 @@ class Resumenfacturas
     
       if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND f.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND f.fecha_emision = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND f.fecha_emision = '$fecha_2'"; }    
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; } 
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; } 
       
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
@@ -235,7 +244,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND s.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND s.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; }
       
       $sql3 = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
       s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.tipo_gravada, s.comprobante, p.razon_social, p.tipo_documento, 
@@ -250,13 +259,22 @@ class Resumenfacturas
 
       if (!empty($sub_contrato['data'])) {
         foreach ($sub_contrato['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idsubcontrato'],
             "bd_nombre_tabla"   => 'subcontrato',
             "bd_nombre_id_tabla"=> 'idsubcontrato',
             "fecha"             => $value['fecha_subcontrato'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta'? 'BV' : ''))) ,
+            "tipo_comprobante"  => $tipo_comprob, //(empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta'? 'BV' : ''))) ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -303,7 +321,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND ps.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND ps.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; }
 
       $sql3 = "SELECT ps.idplanilla_seguro, ps.idproyecto, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
       ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante, ps.glosa,
@@ -319,13 +337,23 @@ class Resumenfacturas
 
       if (!empty($planilla_seguro['data'])) {
         foreach ($planilla_seguro['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idplanilla_seguro'],
             "bd_nombre_tabla"   => 'planilla_seguro',
             "bd_nombre_id_tabla"=> 'idplanilla_seguro',
             "fecha"             => $value['fecha_p_s'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta'? 'BV' : ''))) ,
+            "tipo_comprobante"  => $tipo_comprob, //(empty($value['tipo_comprobante']) ? '' : ($value['tipo_comprobante'] == 'Factura' ? 'FT' : ($value['tipo_comprobante'] == 'Boleta'? 'BV' : ''))) ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -371,7 +399,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND og.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND og.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND og.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND og.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND og.tipo_comprobante = '$comprobante'"; }
 
       $sql3 = "SELECT og.idproyecto, og.idotro_gasto, og.razon_social, og.ruc, og.tipo_comprobante, og.numero_comprobante, og.fecha_g, 
       og.costo_parcial, og.subtotal, og.igv, og.glosa, og.comprobante, og.tipo_gravada,
@@ -385,13 +413,22 @@ class Resumenfacturas
 
       if (!empty($otro_gasto['data'])) {
         foreach ($otro_gasto['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idotro_gasto'],
             "bd_nombre_tabla"   => 'otro_gasto',
             "bd_nombre_id_tabla"=> 'idotro_gasto',
             "fecha"             => $value['fecha_g'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal3 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal4 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+            "tipo_comprobante"  => $tipo_comprob, // (empty($value['tipo_comprobante'])) ? '' : $retVal3 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal4 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => 'RUC',
@@ -437,7 +474,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND  t.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND  t.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; }
 
       $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, p.tipo_documento, p.ruc, t.tipo_comprobante, t.numero_comprobante, 
       t.fecha_viaje, t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada,
@@ -452,13 +489,23 @@ class Resumenfacturas
 
       if (!empty($transporte['data'])) {
         foreach ($transporte['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idtransporte'],
             "bd_nombre_tabla"   => 'transporte',
             "bd_nombre_id_tabla"=> 'idtransporte',
             "fecha"             => $value['fecha_viaje'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+            "tipo_comprobante"  => $tipo_comprob,// (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -504,7 +551,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND h.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND h.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND h.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND h.tipo_comprobante = '$comprobante'"; }
 
       $sql5 = "SELECT h.idhospedaje, h.idproyecto, h.razon_social, h.ruc, h.fecha_comprobante, h.tipo_comprobante, h.numero_comprobante, h.subtotal, h.igv, 
       precio_parcial, h.glosa, h.comprobante, h.tipo_gravada,
@@ -519,13 +566,22 @@ class Resumenfacturas
 
       if (!empty($hospedaje['data'])) {
         foreach ($hospedaje['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idhospedaje'],
             "bd_nombre_tabla"   => 'hospedaje',
             "bd_nombre_id_tabla"=> 'idhospedaje',
             "fecha"             => $value['fecha_comprobante'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+            "tipo_comprobante"  => $tipo_comprob, //(empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => 'RUC',
@@ -571,7 +627,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND dp.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND dp.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND dp.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND dp.tipo_comprobante = '$comprobante'"; }
 
       $sql6 = "SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_inicial, dp.fecha_final, dp.cantidad_persona, dp.subtotal, dp.igv, 
       dp.val_igv, dp.precio_parcial, dp.forma_pago, dp.tipo_comprobante, dp.fecha_emision, dp.tipo_gravada, dp.glosa, dp.numero_comprobante, dp.descripcion, 
@@ -588,13 +644,22 @@ class Resumenfacturas
 
       if (!empty($factura_pension['data'])) {
         foreach ($factura_pension['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['iddetalle_pension'],
             "bd_nombre_tabla"   => 'detalle_pension',
             "bd_nombre_id_tabla"=> 'iddetalle_pension',
             "fecha"             => $value['fecha_emision'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+            "tipo_comprobante"  => $tipo_comprob, //(empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -640,7 +705,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND fb.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; }
 
       $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social, fb.ruc, 
       fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante, fb.tipo_gravada,
@@ -656,13 +721,22 @@ class Resumenfacturas
 
       if (!empty($factura_break['data'])) {
         foreach ($factura_break['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idfactura_break'],
             "bd_nombre_tabla"   => 'factura_break',
             "bd_nombre_id_tabla"=> 'idfactura_break',
             "fecha"             => $value['fecha_emision'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+            "tipo_comprobante"  => $tipo_comprob, //(empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
             "serie_comprobante" => $value['nro_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => 'RUC',
@@ -708,7 +782,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ce.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND ce.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND ce.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND ce.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND ce.tipo_comprobante = '$comprobante'"; }
 
       $sql8 = "SELECT ce.idproyecto, ce.idcomida_extra, ce.fecha_comida, ce.tipo_comprobante, ce.numero_comprobante, ce.razon_social, ce.ruc,
       ce.costo_parcial, ce.subtotal, ce.igv, ce.glosa, ce.comprobante, ce.tipo_gravada,
@@ -723,13 +797,22 @@ class Resumenfacturas
 
       if (!empty($comida_extra['data'])) {
         foreach ($comida_extra['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
           $data[] = array(
             "idproyecto"        => $value['idproyecto'],
             "idtabla"           => $value['idcomida_extra'],
             "bd_nombre_tabla"   => 'comida_extra',
             "bd_nombre_id_tabla"=> 'idcomida_extra',
             "fecha"             => $value['fecha_comida'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+            "tipo_comprobante"  => $tipo_comprob , //(empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => 'RUC',
@@ -775,7 +858,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }
 
       $sql9 = "SELECT of.idotra_factura, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, p.tipo_documento, p.ruc,
       of.costo_parcial, of.subtotal, of.igv, of.glosa, of.comprobante , of.tipo_gravada,
@@ -790,13 +873,22 @@ class Resumenfacturas
 
       if (!empty($otra_factura['data'])) {
         foreach ($otra_factura['data'] as $key => $value) {
+
+          if ($value['tipo_comprobante'] == 'Factura') {
+            $tipo_comprob  = 'FT';
+          }elseif ($value['tipo_comprobante'] == 'Boleta') {
+            $tipo_comprob  = 'BV';
+          }elseif ($value['tipo_comprobante'] == 'Nota de Crédito') {
+            $tipo_comprob  = 'NC';
+          }
+
           $data[] = array(
             "idproyecto"        => '',
             "idtabla"           => $value['idotra_factura'],
             "bd_nombre_tabla"   => 'otra_factura',
             "bd_nombre_id_tabla"=> 'idotra_factura',
             "fecha"             => $value['fecha_emision'],
-            "tipo_comprobante"  => (empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
+            "tipo_comprobante"  => $tipo_comprob, //(empty($value['tipo_comprobante'])) ? '' : $retVal5 = ($value['tipo_comprobante'] == 'Factura') ? 'FT' : $retVal6 = ($value['tipo_comprobante'] == 'Boleta') ? 'BV' : '' ,
             "serie_comprobante" => $value['numero_comprobante'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -859,7 +951,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND cpp.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; }
 
       $sql = "SELECT SUM(cpp.total) AS total, SUM(cpp.subtotal) AS subtotal, SUM(cpp.igv) AS igv
       FROM compra_por_proyecto AS cpp, proveedor p
@@ -882,7 +974,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; }
 
       $sql2 = "SELECT SUM(f.monto) AS total , SUM(f.subtotal) AS subtotal, SUM(f.igv) AS igv
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
@@ -906,7 +998,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND f.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND f.tipo_comprobante = '$comprobante'"; }
 
       $sql2 = "SELECT SUM(f.monto) AS total , SUM(f.subtotal) AS subtotal, SUM(f.igv) AS igv
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
@@ -929,7 +1021,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND s.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND s.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND s.tipo_comprobante = '$comprobante'"; }
 
       $sql3 = "SELECT SUM(s.subtotal) as subtotal, SUM(s.igv) as igv, SUM(s.costo_parcial) as total
       FROM subcontrato AS s, proveedor as p
@@ -953,7 +1045,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND ps.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND ps.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND ps.tipo_comprobante = '$comprobante'"; }
 
       $sql4 = "SELECT SUM(ps.subtotal) AS subtotal, SUM(ps.igv) AS igv, SUM(ps.costo_parcial) AS total
       FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
@@ -977,7 +1069,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
 
       $sql3 = "SELECT SUM(costo_parcial) as total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
       FROM otro_gasto  
@@ -1001,7 +1093,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND t.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND t.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND t.tipo_comprobante = '$comprobante'"; }
 
       $sql4 = "SELECT SUM(t.precio_parcial) AS total, SUM(t.subtotal) AS subtotal, SUM(t.igv) AS igv
       FROM transporte AS t, proveedor AS p
@@ -1023,7 +1115,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
       
       $sql5 = "SELECT SUM(precio_parcial) as total , SUM(subtotal) AS subtotal, SUM(igv) AS igv
       FROM hospedaje WHERE estado = '1' AND estado_delete = '1' AND $estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -1046,7 +1138,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND dp.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND dp.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND dp.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND dp.tipo_comprobante = '$comprobante'"; }
       
       $sql6 = "SELECT SUM(dp.precio_parcial) AS total, SUM(dp.subtotal) AS subtotal, SUM(dp.igv) AS igv
       FROM detalle_pension as dp, pension as p, proveedor as prov
@@ -1071,7 +1163,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND fb.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND fb.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND fb.tipo_comprobante = '$comprobante'"; }
       $sql7 = "SELECT SUM(fb.monto) AS total, SUM(fb.subtotal) AS subtotal, SUM(fb.igv) AS igv
       FROM factura_break as fb, semana_break as sb
       WHERE  fb.idsemana_break = sb.idsemana_break AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' 
@@ -1095,7 +1187,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND tipo_comprobante = '$comprobante'"; }
       
       $sql8 = "SELECT SUM(costo_parcial) AS total, SUM(subtotal) AS subtotal, SUM(igv) AS igv
       FROM comida_extra
@@ -1118,7 +1210,7 @@ class Resumenfacturas
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta')"; } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }
       $sql9 = "SELECT SUM(of.costo_parcial) AS total, SUM(of.subtotal) AS subtotal, SUM(of.igv) AS igv
       FROM otra_factura AS of, proveedor p
       WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' AND of.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha";

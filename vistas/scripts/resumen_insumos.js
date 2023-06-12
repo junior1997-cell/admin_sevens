@@ -32,6 +32,7 @@ function init(){
   lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marcas_p', null);
   lista_select2("../ajax/ajax_general.php?op=select2ClasificacionGrupo", '#idclasificacion_grupo_g', null);
+  lista_select2(`../ajax/compra_insumos.php?op=select2_serie_comprobante&idproyecto=${localStorage.getItem('nube_idproyecto')}`, '#slt2_serie_comprobante', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
@@ -43,6 +44,7 @@ function init(){
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione trabajador", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione Comprobante", allowClear: true, });
   $("#glosa").select2({ templateResult: templateGlosa, theme: "bootstrap4", placeholder: "Selecione Glosa", allowClear: true, });
+  $("#slt2_serie_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecionar", allowClear: true, });
 
   // ═══════════════════ SELECT2 - PROVEEDOR ═══════════════════
   //Initialize Select2 BANCO PROVEEDOR
@@ -345,7 +347,8 @@ function limpiar_form_compra() {
   $("#idproveedor").val("null").trigger("change");
   $("#tipo_comprobante").val("Ninguno").trigger("change");
   $("#glosa").val("null").trigger("change");
-
+  $("#slt2_serie_comprobante").val("null").trigger("change");
+  
   $("#serie_comprobante").val("");
   $("#val_igv").val(0);
   $("#descripcion").val("");
