@@ -179,10 +179,13 @@ class TrabajadorPorProyecto
 
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idtrabajador) {
-    $sql = "SELECT tpp.idtrabajador_por_proyecto, tpp.idtrabajador, tpp.idproyecto, tpp.iddesempenio, tpp.sueldo_mensual, tpp.sueldo_diario, 
-    tpp.sueldo_hora, tpp.fecha_inicio, tpp.fecha_fin, tpp.cantidad_dias, d.nombre_desempenio, oc.nombre_ocupacion, tp.nombre as nombre_tipo
-    FROM trabajador_por_proyecto as tpp, desempenio as d, trabajador as t, ocupacion as oc, tipo_trabajador as tp
-    WHERE tpp.iddesempenio = d.iddesempenio AND t.idocupacion = oc.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador AND tpp.idtrabajador_por_proyecto='$idtrabajador'";
+    $sql = "SELECT  tpp.idtrabajador_por_proyecto, tpp.idtrabajador, tpp.idproyecto, tpp.iddesempenio, tpp.desempenio, tpp.sueldo_mensual,
+            tpp.sueldo_semanal, tpp.sueldo_diario, tpp.sueldo_hora, tpp.fecha_inicio, tpp.fecha_fin, tpp.cantidad_dias, tpp.orden_trabajador,
+            d.nombre_desempenio, o.nombre_ocupacion, tt.nombre as tipo_trabajador
+        from trabajador_por_proyecto as tpp, trabajador as t, desempenio as d, ocupacion as o, tipo_trabajador as tt
+        where tpp.idtrabajador_por_proyecto='$idtrabajador' AND tpp.idtrabajador=t.idtrabajador  AND tpp.iddesempenio = d.iddesempenio
+        AND O.idocupacion=t.idocupacion AND tt.idtipo_trabajador=t.idtipo_trabajador;";
+    
     $mostrar_data = ejecutarConsultaSimpleFila($sql); if ($mostrar_data['status'] == false) { return  $mostrar_data;}
 
     $trabajador = $mostrar_data['data']['idtrabajador'];
@@ -215,7 +218,7 @@ class TrabajadorPorProyecto
       'cantidad_dias'           => $mostrar_data['data']['cantidad_dias'], 
       'nombre_desempenio'       => $mostrar_data['data']['nombre_desempenio'], 
       'nombre_ocupacion'        => $mostrar_data['data']['nombre_ocupacion'], 
-      'nombre_tipo'             => $mostrar_data['data']['nombre_tipo'], 
+      'nombre_tipo'             => $mostrar_data['data']['tipo_trabajador'], 
       
       'html_desempenio'         =>  $html_desempenio,
       'detalle_sueldo'          =>  $detalle_sueldo['data'],

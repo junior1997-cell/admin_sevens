@@ -1,7 +1,7 @@
 var tabla, tabla_secundaria;
 
 var cant_banco_multimple = 1; cant_sueldo_multimple = 1;
-var iddesempenio = "";
+
 //Función que se ejecuta al inicio
 function init() {  
 
@@ -146,8 +146,6 @@ function limpiar_form_trabajador() {
   $('#cantidad_dias').removeClass('input-no-valido input-valido');
   $(`.fecha_inicial`).attr({ "min" : format_a_m_d(fecha_incial_proyecto),"max" : format_a_m_d(fecha_final_proyecto) });
   $(`.fecha_final`).attr({ "min" : format_a_m_d(fecha_incial_proyecto),"max" : format_a_m_d(fecha_final_proyecto) });
-
-  $("#trabajador").attr('onchange', 'capture_idtrabajador(false);');  
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -426,128 +424,123 @@ function mostrar(idtrabajador,idtipo) {
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
-  iddesempenio="";
 
   limpiar_form_trabajador();
   show_hide_form(2);
+
+  $.post("../ajax/trabajador_por_proyecto.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
+
+    e = JSON.parse(e); console.log(e); 
+    //console.log('tabajador '+e.data.idtrabajador);select2Trabajador
+    lista_select2(`../ajax/ajax_general.php?op=select2Trabajador`,'#trabajador', e.data.idtrabajador, null);
+
+    lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data.idtrabajador}`, '#desempenio', e.data.iddesempenio);
+
+    $("#idtrabajador_por_proyecto").val(e.data.idtrabajador_por_proyecto);
     
-  var lista_trabajador = lista_select2(`../ajax/ajax_general.php?op=select2Trabajador`, '#trabajador', null);
+    $("#trabajador").val(e.data.idtrabajador).trigger("change"); 
+    // alert(e.data.idtrabajador);
+    console.log(e.data.idtrabajador);
+    $("#desempenio").val(e.data.iddesempenio).trigger("change");    
 
-  $(lista_trabajador).ready(function () {  
+    $("#ocupacion").html(e.data.nombre_ocupacion);    
+    $("#tipo_trabajador").html(e.data.nombre_tipo);  
 
-    $.post("../ajax/trabajador_por_proyecto.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
+    $("#sueldo_mensual").val(e.data.sueldo_mensual);   
+    $("#sueldo_diario").val(e.data.sueldo_diario);   
+    $("#sueldo_hora").val(e.data.sueldo_hora);
 
-      e = JSON.parse(e); console.log(e); 
- 
-      lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data.idtrabajador}`, '#desempenio', e.data.iddesempenio);
+    $("#fecha_inicio").val(format_d_m_a(e.data.fecha_inicio));
+    $("#fecha_fin").val(format_d_m_a(e.data.fecha_fin)); 
+    $("#cantidad_dias").val(e.data.cantidad_dias);
 
-      $("#idtrabajador_por_proyecto").val(e.data.idtrabajador_por_proyecto);
+    $("#cargando-1-fomulario").show();
+    $("#cargando-2-fomulario").hide();
+
+    e.data.detalle_sueldo.forEach(function(val, index){         
       
-      $("#trabajador").val(e.data.idtrabajador).trigger("change"); 
-      $("#desempenio").val(e.data.iddesempenio).trigger("change");    
-      iddesempenio=e.data.iddesempenio;
-      $("#ocupacion").html(e.data.nombre_ocupacion);    
-      $("#tipo_trabajador").html(e.data.nombre_tipo);  
-
-      $("#sueldo_mensual").val(e.data.sueldo_mensual);   
-      $("#sueldo_diario").val(e.data.sueldo_diario);   
-      $("#sueldo_hora").val(e.data.sueldo_hora);
-
-      $("#fecha_inicio").val(format_d_m_a(e.data.fecha_inicio));
-      $("#fecha_fin").val(format_d_m_a(e.data.fecha_fin)); 
-      $("#cantidad_dias").val(e.data.cantidad_dias);
-
-      $("#cargando-1-fomulario").show();
-      $("#cargando-2-fomulario").hide();
-      capture_idtrabajador('edit_trabajador');
-      // $("#trabajador").attr('onchange', 'capture_idtrabajador(false);');
-
-      e.data.detalle_sueldo.forEach(function(val, index){         
+      if ( index > 0 ) { 
+        add_sueldo();
+        $(`.sueldo_mensual_${index}`).val(val.sueldo_mensual);  
+        $(`.sueldo_semanal_${index}`).val(val.sueldo_semanal);  
+        $(`.sueldo_diario_${index}`).val(val.sueldo_diario);   
+        $(`.sueldo_hora_${index}`).val(val.sueldo_hora);
+        $(`.fecha_desde_${index}`).val(val.fecha_desde);   
+        $(`.fecha_hasta_${index}`).val(val.fecha_hasta);
+        if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(index) } 
+      } else {          
+        $(".sueldo_mensual_0").val(val.sueldo_mensual);  
+        $(".sueldo_semanal_0").val(val.sueldo_semanal);  
+        $(".sueldo_diario_0").val(val.sueldo_diario);   
+        $(".sueldo_hora_0").val(val.sueldo_hora);
+        $(".fecha_desde_0").val(val.fecha_desde);   
+        $(".fecha_hasta_0").val(val.fecha_hasta);
+        if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(0) } 
+      }              
         
-        if ( index > 0 ) { 
-          add_sueldo();
-          $(`.sueldo_mensual_${index}`).val(val.sueldo_mensual);  
-          $(`.sueldo_semanal_${index}`).val(val.sueldo_semanal);  
-          $(`.sueldo_diario_${index}`).val(val.sueldo_diario);   
-          $(`.sueldo_hora_${index}`).val(val.sueldo_hora);
-          $(`.fecha_desde_${index}`).val(val.fecha_desde);   
-          $(`.fecha_hasta_${index}`).val(val.fecha_hasta);
-          if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(index) } 
-        } else {          
-          $(".sueldo_mensual_0").val(val.sueldo_mensual);  
-          $(".sueldo_semanal_0").val(val.sueldo_semanal);  
-          $(".sueldo_diario_0").val(val.sueldo_diario);   
-          $(".sueldo_hora_0").val(val.sueldo_hora);
-          $(".fecha_desde_0").val(val.fecha_desde);   
-          $(".fecha_hasta_0").val(val.fecha_hasta);
-          if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(0) } 
-        }              
-         
-      }); 
+    }); 
 
-    }).fail( function(e) { ver_errores(e); } );
+  }).fail( function(e) { ver_errores(e); } );
 
-  });
 }
 
 
 
-//captura id del trabajador
-function capture_idtrabajador(estado_editar = false) { 
+// //captura id del trabajador
+// function capture_idtrabajador(estado_editar = false) { 
   
-  var idtrabajador= $("#trabajador").select2("val");
-   console.log(idtrabajador+' capture_idtrabajador+++');
-  $("#tipo_trabajador").html("Selecione un trabajador");
-  $("#ocupacion").html("Selecione un trabajador");
+//   var idtrabajador= $("#trabajador").select2("val");
+//   $("#tipo_trabajador").html("Selecione un trabajador");
+//   $("#ocupacion").html("Selecione un trabajador");
 
-  if (estado_editar == false) {    
+//   if (estado_editar == false) {    
   
-    if (idtrabajador == null || idtrabajador == '' ) {  }else{
+//     if (idtrabajador == null || idtrabajador == '' ) {  }else{
 
-      lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', null);
+//       lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', null);
 
-      $("#tipo_trabajador").html("");
+//       $("#tipo_trabajador").html("");
         
-      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
+//       $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
-        e = JSON.parse(e);  console.log(e);   
-        if (e.status == true) {
-          $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
-          $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
-        } else {
-          ver_errores(e);
-        }
-      }).fail( function(e) { ver_errores(e); } );
-    }  
-  }else if(estado_editar == 'edit_trabajador'){
-    if (idtrabajador == null || idtrabajador == '' ) {  }else{
+//         e = JSON.parse(e);  console.log(e);   
+//         if (e.status == true) {
+//           $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
+//           $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
+//         } else {
+//           ver_errores(e);
+//         }
+//       }).fail( function(e) { ver_errores(e); } );
+//     }  
+//   }else if(estado_editar == 'edit_trabajador'){
+//     if (idtrabajador == null || idtrabajador == '' ) {  }else{
 
-      // console.log('edita trbajadorrr');
+//       // console.log('edita trbajadorrr');
 
-      console.log(desempenio+' decempenio');
-      lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddesempenio);
+//       console.log(desempenio+' decempenio');
+//       lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddesempenio);
         
-      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
+//       $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
-        e = JSON.parse(e);  console.log(e);   
-        if (e.status == true) {          
-          $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
-          $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
-        } else {
-          ver_errores(e);
-        }
-      }).fail( function(e) { ver_errores(e); } );
-    }  
-  }
+//         e = JSON.parse(e);  console.log(e);   
+//         if (e.status == true) {          
+//           $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
+//           $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
+//         } else {
+//           ver_errores(e);
+//         }
+//       }).fail( function(e) { ver_errores(e); } );
+//     }  
+//   }
 
-  if ($('#trabajador').select2("val") == null || $('#trabajador').select2("val") == '') { 
-    $('.btn-editar-trabajador').addClass('disabled').attr('data-original-title','Seleciona un trabajador');
-  } else {     
-    var name_trabajador = $('#trabajador').select2('data')[0].text;
-    $('.btn-editar-trabajador').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_trabajador, 15)}`);     
-  }
-  $('[data-toggle="tooltip"]').tooltip();  
-}
+//   if ($('#trabajador').select2("val") == null || $('#trabajador').select2("val") == '') { 
+//     $('.btn-editar-trabajador').addClass('disabled').attr('data-original-title','Seleciona un trabajador');
+//   } else {     
+//     var name_trabajador = $('#trabajador').select2('data')[0].text;
+//     $('.btn-editar-trabajador').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_trabajador, 15)}`);     
+//   }
+//   $('[data-toggle="tooltip"]').tooltip();  
+// }
 
 
 
@@ -899,9 +892,8 @@ function guardar_y_editar_all_trabajador(e) {
       try {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {	
-          $("#trabajador").attr('onchange', `capture_idtrabajador('edit_trabajador');`); 
           Swal.fire("Correcto!", "All-Trabajador guardado correctamente", "success");
-          lista_select2("../ajax/ajax_general.php?op=select2Trabajador", '#trabajador', e.data, function(){ $("#trabajador").attr('onchange', 'capture_idtrabajador(false);'); });          
+          lista_select2("../ajax/ajax_general.php?op=select2Trabajador", '#trabajador', e.data);          
           $("#modal-agregar-all-trabajador").modal("hide"); 
           lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data}`, '#desempenio', $(`#desempenio`).select2("val"));
           cant_banco_multimple = 1; 
