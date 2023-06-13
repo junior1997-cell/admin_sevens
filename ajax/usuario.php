@@ -136,30 +136,37 @@
 
   // ::::::::::::::::::::::::::::::::: D A T O S   T R A B A J A D O R :::::::::::::::::::::::::::::
   $idtrabajador_trab	  = isset($_POST["idtrabajador_trab"])? limpiarCadena($_POST["idtrabajador_trab"]):"";
-  $nombre_trab		      = isset($_POST["nombre_trab"])? limpiarCadena($_POST["nombre_trab"]):"";
+  $nombre_trab 		      = isset($_POST["nombre_trab"])? limpiarCadena($_POST["nombre_trab"]):"";
   $tipo_documento_trab 	= isset($_POST["tipo_documento_trab"])? limpiarCadena($_POST["tipo_documento_trab"]):"";
   $num_documento_trab  	= isset($_POST["num_documento_trab"])? limpiarCadena($_POST["num_documento_trab"]):"";
   $direccion_trab		    = isset($_POST["direccion_trab"])? limpiarCadena($_POST["direccion_trab"]):"";
   $telefono_trab		    = isset($_POST["telefono_trab"])? limpiarCadena($_POST["telefono_trab"]):"";
   $nacimiento_trab		  = isset($_POST["nacimiento_trab"])? limpiarCadena($_POST["nacimiento_trab"]):"";
-  $edad_trab		        = isset($_POST["edad_trab"])? limpiarCadena($_POST["edad_trab"]):"";      
+  $edad		              = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";      
   $email_trab			      = isset($_POST["email_trab"])? limpiarCadena($_POST["email_trab"]):"";
-  $banco_trab			      = isset($_POST["banco_trab"])? limpiarCadena($_POST["banco_trab"]):"";
-  $c_bancaria_trab		  = isset($_POST["c_bancaria_trab"])? limpiarCadena($_POST["c_bancaria_trab"]):"";
-  $c_bancaria_format    = isset($_POST["c_bancaria_trab"])? limpiarCadena($_POST["c_bancaria_trab"]):"";     
-  $cci_trab	          	= isset($_POST["cci_trab"])? limpiarCadena($_POST["cci_trab"]):"";
-  $cci_format      	    = isset($_POST["cci_trab"])? limpiarCadena($_POST["cci_trab"]):"";
-  $titular_cuenta_trab  = isset($_POST["titular_cuenta_trab"])? limpiarCadena($_POST["titular_cuenta_trab"]):""; 
+
+  $banco_seleccionado   = isset($_POST["banco_seleccionado"])? $_POST["banco_seleccionado"] :"";
+  $banco			          = isset($_POST["banco_array"])?$_POST["banco_array"]:"";      
+  $cta_bancaria		      = isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
+  $cta_bancaria_format  = isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
+  $cci	          	    = isset($_POST["cci"])?$_POST["cci"]:"";
+  $cci_format      	    = isset($_POST["cci"])? $_POST["cci"]:"";
+
+  $titular_cuenta_trab	= isset($_POST["titular_cuenta_trab"])? limpiarCadena($_POST["titular_cuenta_trab"]):"";
   $tipo_trab	          = isset($_POST["tipo_trab"])? limpiarCadena($_POST["tipo_trab"]):"";
   $ocupacion_trab	      = isset($_POST["ocupacion_trab"])? limpiarCadena($_POST["ocupacion_trab"]):"";
+
   $ruc_trab	          	= isset($_POST["ruc_trab"])? limpiarCadena($_POST["ruc_trab"]):"";
 
-  $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
-  $imagen2			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
-  $imagen3			    = isset($_POST["foto3"])? limpiarCadena($_POST["foto3"]):"";
+  $talla_ropa_trab	    = isset($_POST["talla_ropa_trab"])? limpiarCadena($_POST["talla_ropa_trab"]):"";
+  $talla_zapato_trab	  = isset($_POST["talla_zapato_trab"])? limpiarCadena($_POST["talla_zapato_trab"]):"";
 
-  $cv_documentado			    = isset($_POST["doc4"])? limpiarCadena($_POST["doc4"]):"";
-  $cv_nodocumentado			  = isset($_POST["doc5"])? limpiarCadena($_POST["doc5"]):"";
+  $imagen1			        = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
+  $imagen2			        = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
+  $imagen3			        = isset($_POST["foto3"])? limpiarCadena($_POST["foto3"]):"";
+
+  $cv_documentado			  = isset($_POST["doc4"])? limpiarCadena($_POST["doc4"]):"";
+  $cv_nodocumentado			= isset($_POST["doc5"])? limpiarCadena($_POST["doc5"]):"";
 
   switch ($_GET["op"]) {
 
@@ -195,35 +202,24 @@
     break;
 
     case 'desactivar':
-
       $rspta = $usuario->desactivar($_GET["id_tabla"]);
-
       echo json_encode($rspta, true);
-
     break;
 
     case 'activar':
-
       $rspta = $usuario->activar($_GET["id_tabla"]);
-
       echo json_encode($rspta, true);
-
     break;
 
     case 'eliminar':
-
       $rspta = $usuario->eliminar($_GET["id_tabla"]);
-
       echo json_encode($rspta, true);
-
     break;
 
     case 'mostrar':
-
       $rspta = $usuario->mostrar($idusuario);
       //Codificar el resultado utilizando json
       echo json_encode($rspta, true);
-
     break;
 
     case 'tbla_principal':
@@ -442,7 +438,9 @@
 
       if (empty($idtrabajador)){
 
-        $rspta=$alltrabajador->insertar($nombre_trab, $tipo_documento_trab, $num_documento_trab, $direccion_trab, $telefono_trab, $nacimiento_trab, $edad_trab, $email_trab, $banco_trab, str_replace("-", "",$c_bancaria_trab), $c_bancaria_format, str_replace("-", "",$cci_trab), $cci_format, $titular_cuenta_trab, $tipo_trab, $ocupacion_trab, $ruc_trab, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+        $rspta=$alltrabajador->insertar( $nombre_trab, $tipo_documento_trab, $num_documento_trab, $direccion_trab, $telefono_trab, 
+        format_a_m_d($nacimiento_trab), $edad, $email_trab, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta_trab, $tipo_trab, 
+        $_POST["desempenio_trab"], $ocupacion_trab, $ruc_trab, $talla_ropa_trab,$talla_zapato_trab, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
         
         echo json_encode($rspta, true);
 

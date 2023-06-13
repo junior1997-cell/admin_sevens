@@ -4,9 +4,7 @@ var tabla;
 function init() {
 
   $("#bloc_Accesos").addClass("menu-open bg-color-191f24");
-
   $("#mAccesos").addClass("active");
-
   $("#lUsuario").addClass("active");
 
   tbla_principal();
@@ -14,9 +12,11 @@ function init() {
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
 
   lista_select2("../ajax/usuario.php?op=select2Trabajador", '#trabajador', null);
-  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_trab', null);
+
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_0', null);
   lista_select2("../ajax/ajax_general.php?op=select2TipoTrabajador", '#tipo_trab', null);
   lista_select2("../ajax/ajax_general.php?op=select2OcupacionTrabajador", '#ocupacion_trab', null);
+  lista_select2("../ajax/ajax_general.php?op=select2DesempenioTrabajador", '#desempenio_trab', null);
   
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
 
@@ -27,17 +27,22 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#trabajador").select2({ templateResult: formatState, theme: "bootstrap4",  placeholder: "Selecione trabajador", allowClear: true, });  
 
-  $("#cargo").select2({ theme: "bootstrap4", placeholder: "Selecione cargo", allowClear: true, });
-  $("#banco_trab").select2({ theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
+  $("#banco_0").select2({templateResult: formatState, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
   $("#tipo_trab").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion_trab").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
+  $("#desempenio_trab").select2({ theme: "bootstrap4",  placeholder: "Selecione Desempeño", allowClear: true, });
 
   // restringimos la fecha para no elegir mañana
-  no_select_tomorrow('#nacimiento_trab')
+  // no_select_tomorrow('#nacimiento_trab')
+
+  $('#nacimiento_trab').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, endDate: moment().add(-18, 'years').format('DD/MM/YYYY'), clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   
   // Formato para telefono
   $("[data-mask]").inputmask();   
 }
+
+// click input group para habilitar: datepiker
+$('.click-btn-nacimiento-trab').on('click', function (e) {$('#nacimiento_trab').focus().select(); });
 
 function formatState (state) {
   //console.log(state);
@@ -315,26 +320,33 @@ function eliminar(idusuario, nombre) {
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: S E C C I O N   T R A B A J A D O R  ::::::::::::::::::::::::::::::::::::::::::::::::::::
+var cant_banco_multimple = 1;
+
 function limpiar_form_trabajador() {
 
-  $("#guardar_registro_trabajador").html('Guardar Cambios').removeClass('disabled');
+  cant_banco_multimple = 1;
+  $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
 
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $("#idtrabajador").val("");
+  $("#tipo_documento option[value='DNI']").attr("selected", true);
+  $("#nombre").val(""); 
+  $("#num_documento").val(""); 
+  $("#direccion").val(""); 
+  $("#telefono").val(""); 
+  $("#email").val(""); 
+  $("#nacimiento").val("");
+  $("#edad").val("0");  $("#p_edad").html("0");    
+  $("#cta_bancaria").val("");  
+  $("#cci").val("");  
+  $("#banco_0").val("").trigger("change"); $("#lista_bancos").html("");
 
-  $("#idtrabajador_trab").val("");
-  $("#tipo_documento_trab option[value='DNI']").attr("selected", true);
-  $("#nombre_trab").val(""); 
-  $("#num_documento_trab").val(""); 
-  $("#direccion_trab").val(""); 
-  $("#telefono_trab").val(""); 
-  $("#email_trab").val(""); 
-  $("#nacimiento_trab").val(""); $("#edad_trab").val("0");  $(".edad_trab").html("0");    
-  $("#c_bancaria_trab").val("");  
-  $("#cci_trab").val("");  
-  $("#banco_trab").val("").trigger("change");
-  $("#tipo_trab").val("").trigger("change");
-  $("#ocupacion_trab").val("").trigger("change");
-  $("#titular_cuenta_trab").val("");
+  $("#tipo").val("").trigger("change");
+  $("#ocupacion").val("").trigger("change");
+  $("#desempenio").val("").trigger("change");
+  $("#titular_cuenta").val("");
+
+  $("#talla_ropa").val("");
+  $("#talla_zapato").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
 	$("#foto1").val("");
@@ -433,36 +445,100 @@ function guardar_y_editar_trabajador(e) {
 }
 
 // damos formato a: Cta, CCI
-function formato_banco() {
+function formato_banco(id) {
 
-  if ($("#banco_trab").select2("val") == null || $("#banco_trab").select2("val") == "" || $("#banco_trab").select2("val") == '1') {
+  if ($(`#banco_${id}`).select2("val") == null || $(`#banco_${id}`).select2("val") == "" || $(`#banco_${id}`).select2("val") == '1') {
 
-    $("#c_bancaria_trab").prop("readonly",true);   $("#cci_trab").prop("readonly",true);
+    $(`.cta_bancaria_${id}`).prop("readonly",true);   $(`.cci_${id}`).prop("readonly",true);
+    $(`#banco_array_${id}`).val(1);
   } else {
     
-    $(".chargue-format-1").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(".chargue-format-2").html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
+    $(`.${id}_chargue-format-1`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>'); $(`.${id}_chargue-format-2`).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');
 
-    $("#c_bancaria_trab").prop("readonly",false);   $("#cci_trab").prop("readonly",false);
+    $(`#banco_array_${id}`).val($(`#banco_${id}`).select2("val"));
 
-    $.post("../ajax/ajax_general.php?op=formato_banco", { idbanco: $("#banco_trab").select2("val") }, function (e, status) {
+    $(`.cta_bancaria_${id}`).prop("readonly",false);   $(`.cci_${id}`).prop("readonly",false);
 
-      e = JSON.parse(e);  console.log(e); 
+    $.post("../ajax/all_trabajador.php?op=formato_banco", { idbanco: $(`#banco_${id}`).select2("val") }, function (data, status) {
 
-      if (e.status) {
-        $(".chargue-format-1").html('Cuenta Bancaria'); $(".chargue-format-2").html('CCI');
+      data = JSON.parse(data);  //console.log(data); 
 
-        var format_cta = decifrar_format_banco(e.data.formato_cta); var format_cci = decifrar_format_banco(e.data.formato_cci);
+      $(`.${id}_chargue-format-1`).html('Cuenta Bancaria'); $(`.${id}_chargue-format-2`).html('CCI');
 
-        $("#c_bancaria_trab").inputmask(`${format_cta}`);
+      var format_cta = decifrar_format_banco(data.data.formato_cta); var format_cci = decifrar_format_banco(data.data.formato_cci);
 
-        $("#cci_trab").inputmask(`${format_cci}`);
-      } else {
-        ver_errores(e);
-      }      
+      $(`.cta_bancaria_${id}`).inputmask(`${format_cta}`);
 
-    }).fail( function(e) { ver_errores(e); } );   
+      $(`.cci_${id}`).inputmask(`${format_cci}`);
+    }).fail( function(e) { ver_errores(e); } );  
   }  
 }
+
+function sueld_mensual(){
+
+  var sueldo_mensual = $('#sueldo_mensual').val()
+
+  var sueldo_diario=(sueldo_mensual/30).toFixed(1);
+
+  var sueldo_horas=(sueldo_diario/8).toFixed(1);
+
+  $("#sueldo_diario").val(sueldo_diario);
+
+  $("#sueldo_hora").val(sueldo_horas);
+}
+
+// .....::::::::::::::::::::::::::::::::::::: B A N C O   M U L T I P L E  :::::::::::::::::::::::::::::::::::::::..
+function add_bancos(id_select_banco = null) {
+  $('#lista_bancos').append(`   
+    <!-- banco -->
+    <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${cant_banco_multimple}">
+      <div class="form-group">
+        <label for="banco">Banco</label>
+        <select name="banco_${cant_banco_multimple}" id="banco_${cant_banco_multimple}" class="form-control select2 banco_${cant_banco_multimple}" style="width: 100%;" onchange="formato_banco(${cant_banco_multimple});">
+          <!-- Aqui listamos los bancos -->
+        </select>
+        <input type="hidden" name="banco_array[]" id="banco_array_${cant_banco_multimple}">
+      </div>
+    </div>
+
+    <!-- Cuenta bancaria -->
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 delete_multiple_${cant_banco_multimple}">
+      <div class="form-group">
+        <label for="cta_bancaria" class="${cant_banco_multimple}_chargue-format-1">Cuenta Bancaria</label>
+        <input type="text" name="cta_bancaria[]" class="form-control cta_bancaria_${cant_banco_multimple}" id="cta_bancaria" placeholder="Cuenta Bancaria" data-inputmask="" data-mask />
+      </div>
+    </div>
+
+    <!-- CCI -->
+    <div class="col-12 col-sm-12 col-md-6 col-lg-4 delete_multiple_${cant_banco_multimple}">
+      <div class="form-group">
+        <label for="cta_bancaria" class="${cant_banco_multimple}_chargue-format-2">CCI</label>
+        <input type="text" name="cci[]" class="form-control cci_${cant_banco_multimple}" id="cci" placeholder="CCI" data-inputmask="" data-mask />
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${cant_banco_multimple}">
+      <div class="form-group mb-2">
+        <div class="custom-control custom-radio">
+          <input class="custom-control-input custom-control-input-danger" type="radio" id="banco_seleccionado_${cant_banco_multimple}" name="banco_seleccionado" value="${cant_banco_multimple}">
+          <label for="banco_seleccionado_${cant_banco_multimple}" class="custom-control-label">Usar</label>
+        </div>
+      </div>
+      <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_bancos(${cant_banco_multimple});"><i class="far fa-trash-alt"></i></button>        
+      
+  </div>`);
+
+  lista_select2("../ajax/ajax_general.php?op=select2Banco", `#banco_${cant_banco_multimple}`, id_select_banco);
+
+  $(`#banco_${cant_banco_multimple}`).select2({templateResult: formatState, theme: "bootstrap4", placeholder: "Selecione banco", allowClear: true, });
+  
+  $(`#banco_${cant_banco_multimple}`).on('change', function() { $(this).trigger('blur'); });
+  $(`#banco_${cant_banco_multimple}`).rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  cant_banco_multimple++;
+    
+}
+
+function remove_bancos(id) { $(`.delete_multiple_${id}`).remove(); }
 
 init();
 
@@ -473,9 +549,10 @@ $(function () {
   $("#cargo").on('change', function() { $(this).trigger('blur'); });
   $("#trabajador").on('change', function() { $(this).trigger('blur'); });
 
-  $("#banco_trab").on('change', function() { $(this).trigger('blur'); });
+  $("#banco_0").on('change', function() { $(this).trigger('blur'); });
   $("#tipo_trab").on('change', function() { $(this).trigger('blur'); });
   $("#ocupacion_trab").on('change', function() { $(this).trigger('blur'); });
+  $("#desempenio_trab").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-usuario").validate({
     ignore: '.select2-input, .select2-focusser',
@@ -520,12 +597,13 @@ $(function () {
       direccion_trab:      { minlength: 5, maxlength: 70 },
       telefono_trab:       { minlength: 8 },
       tipo_trabajador_trab:{ required: true},
-      cargo_trab:          { required: true},
-      c_bancaria_trab:     { minlength: 10,},
-      banco_trab:          { required: true},
+      cta_bancaria:   { minlength: 10,},
+      banco_0:      { required: true},
+      banco_seleccionado:{ required: true},
       tipo_trab:           { required: true},
       ocupacion_trab:      { required: true},
-      ruc_trab:            { minlength: 11, maxlength: 11},      
+      desempenio_trab:     { required: true},
+      ruc_trab:            { minlength: 11, maxlength: 11},
     },
     messages: {
       tipo_documento_trab: { required: "Campo requerido.", },
@@ -535,11 +613,12 @@ $(function () {
       direccion_trab:      { minlength: "MÍNIMO 5 caracteres.", maxlength: "MÁXIMO 70 caracteres.", },
       telefono_trab:       { minlength: "MÍNIMO 8 caracteres.", },
       tipo_trabajador_trab:{ required: "Campo requerido.", },
-      cargo_trab:          { required: "Campo requerido.", },
-      c_bancaria_trab:     { minlength: "MÍNIMO 10 caracteres.", },
+      cta_bancaria:   { minlength: "MÍNIMO 10 caracteres.", },
       tipo_trab:           { required: "Campo requerido.", },
       ocupacion_trab:      { required: "Campo requerido.", },
-      banco_trab:          { required: "Campo requerido.", },
+      desempenio_trab:     { required: "Campo requerido.", },
+      banco_0:        { required: "Campo requerido.", },
+      banco_seleccionado:{ required: "Requerido.", },
       ruc_trab:            { minlength: "MÍNIMO 11 caracteres.", maxlength: "MÁXIMO 11 caracteres.", },
     },
         
@@ -565,9 +644,11 @@ $(function () {
 
   $("#cargo").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#trabajador").rules('add', { required: true, messages: {  required: "Campo requerido" } });
-  $("#banco_trab").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+
+  $("#banco_0").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#tipo_trab").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   $("#ocupacion_trab").rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $("#desempenio_trab").rules('add', { required: true, messages: {  required: "Campo requerido" } });
   
 });
 

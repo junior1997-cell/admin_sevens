@@ -33,17 +33,22 @@
       $nacimiento		    = isset($_POST["nacimiento"])? limpiarCadena($_POST["nacimiento"]):"";
       $edad		          = isset($_POST["edad"])? limpiarCadena($_POST["edad"]):"";      
       $email			      = isset($_POST["email"])? limpiarCadena($_POST["email"]):"";
+
       $banco_seleccionado= isset($_POST["banco_seleccionado"])? $_POST["banco_seleccionado"] :"";
       $banco			      = isset($_POST["banco_array"])?$_POST["banco_array"]:"";      
       $cta_bancaria		  = isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
       $cta_bancaria_format= isset($_POST["cta_bancaria"])?$_POST["cta_bancaria"]:"";
       $cci	          	= isset($_POST["cci"])?$_POST["cci"]:"";
       $cci_format      	= isset($_POST["cci"])? $_POST["cci"]:"";
+      
       $titular_cuenta		= isset($_POST["titular_cuenta"])? limpiarCadena($_POST["titular_cuenta"]):"";
       $tipo	          	= isset($_POST["tipo"])? limpiarCadena($_POST["tipo"]):"";
       $ocupacion	      = isset($_POST["ocupacion"])? limpiarCadena($_POST["ocupacion"]):"";
 
       $ruc	          	= isset($_POST["ruc"])? limpiarCadena($_POST["ruc"]):"";
+
+      $talla_ropa	      = isset($_POST["talla_ropa"])? limpiarCadena($_POST["talla_ropa"]):"";
+      $talla_zapato	    = isset($_POST["talla_zapato"])? limpiarCadena($_POST["talla_zapato"]):"";
 
       $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
       $imagen2			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
@@ -133,7 +138,7 @@
           if (empty($idtrabajador)){
             
             $rspta=$trabajador->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d($nacimiento), 
-            $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta, $tipo, $_POST["desempenio"], $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta, $tipo, $_POST["desempenio"], $ocupacion, $ruc, $talla_ropa,$talla_zapato, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo json_encode($rspta, true);
   
@@ -175,7 +180,7 @@
 
             // editamos un trabajador existente
             $rspta=$trabajador->editar($idtrabajador, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, format_a_m_d( $nacimiento), 
-            $edad, $email, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta, $tipo, $_POST["desempenio"], $ocupacion, $ruc, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
+            $edad, $email, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta, $tipo, $_POST["desempenio"], $ocupacion, $ruc, $talla_ropa,$talla_zapato, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
             
             echo json_encode($rspta, true);
           }            
@@ -235,7 +240,7 @@
                 "2"=>'<div class="user-block">
                   <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'' . $imagen . '\', \''.encodeCadenaHtml($value['trabajador']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['trabajador'] .'</p></span>
-                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' | <i class="fa-solid fa-shoe-prints"></i> '.$value['talla_ropa'].' | <i class="fa-solid fa-shirt"></i> '.$value['talla_zapato'].' </span>
                   </div>',
                 "3"=> $value['nombre_tipo'],
                 "4"=> $value['nombre_ocupacion'],

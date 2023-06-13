@@ -303,13 +303,11 @@
                                   </div>
                                 </div>
                                 <button type="button" class="btn bg-gradient-success btn-sm" onclick="add_bancos();" data-toggle="tooltip" data-original-title="Agregar neva fila"><i class="fas fa-plus"></i></button>
-
                               </div>
 
                               <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                                 <div class="row" id="lista_bancos"> </div>
-                              </div>
-                              
+                              </div>                              
 
                               <!-- Titular de la cuenta -->
                               <div class="col-12 col-sm-12 col-md-6 col-lg-4">
@@ -354,8 +352,24 @@
                                 </div>
                               </div>
 
+                              <!-- Talla ropa -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="talla_ropa">Talla ropa</label>
+                                  <input type="number" name="talla_ropa" class="form-control" id="talla_ropa" placeholder="Talla ropa" />
+                                </div>
+                              </div>
+                              
+                              <!-- Talla zapato -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="talla_zapato">Talla zapato</label>
+                                  <input type="number" name="talla_zapato" class="form-control" id="talla_zapato" placeholder="Talla zapato" />
+                                </div>
+                              </div>
+
                               <!-- Direccion -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <div class="form-group">
                                   <label for="direccion">Dirección</label>
                                   <input type="text" name="direccion" class="form-control" id="direccion" placeholder="Dirección" />
