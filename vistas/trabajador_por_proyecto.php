@@ -588,8 +588,33 @@
                                 </div>
                               </div>
 
+                              <!-- Talla ropa talla_ropa_all,talla_zapato_all-->
+
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="talla_ropa_all">Talla ropa</label>
+                                  <select name="talla_ropa_all" id="talla_ropa_all" class="form-control" placeholder="Talla ropa">
+                                    <option value="16">16</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                    <option value="XXXL">XXXL</option>
+                                  </select>
+                                </div>
+                              </div>
+                              
+                              <!-- Talla zapato -->
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                                <div class="form-group">
+                                  <label for="talla_zapato">Talla zapato</label>
+                                  <input type="number" name="talla_zapato_all" class="form-control" id="talla_zapato_all" placeholder="Talla zapato" />
+                                </div>
+                              </div>
+
                               <!-- Direccion -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <div class="form-group">
                                   <label for="direccion_all">Dirección</label>
                                   <input type="text" name="direccion_all" class="form-control" id="direccion_all" placeholder="Dirección" />

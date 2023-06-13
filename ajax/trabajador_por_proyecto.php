@@ -54,7 +54,10 @@
       $tipo_all	          	= isset($_POST["tipo_all"])? limpiarCadena($_POST["tipo_all"]):"";
       $ocupacion_all	      = isset($_POST["ocupacion_all"])? $_POST["ocupacion_all"]:"";
       $ruc_all	          	= isset($_POST["ruc_all"])? limpiarCadena($_POST["ruc_all"]):"";
-
+      $talla_ropa_all	          	= isset($_POST["talla_ropa_all"])? limpiarCadena($_POST["talla_ropa_all"]):"";
+      $talla_zapato_all	          	= isset($_POST["talla_zapato_all"])? limpiarCadena($_POST["talla_zapato_all"]):"";
+      
+      
       $imagen1			    = isset($_POST["foto1"])? limpiarCadena($_POST["foto1"]):"";
       $imagen2			    = isset($_POST["foto2"])? limpiarCadena($_POST["foto2"]):"";
       $imagen3			    = isset($_POST["foto3"])? limpiarCadena($_POST["foto3"]):"";
@@ -255,7 +258,7 @@
             $rspta=$all_trabajador->insertar( $nombre_all, $tipo_documento_all, $num_documento_all, $direccion_all, $telefono_all, 
             format_a_m_d( $nacimiento_all), 
             $edad_all, $email_all, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta_all, $tipo_all, $_POST["desempenio_all"], 
-            $ocupacion_all, $ruc_all, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);            
+            $ocupacion_all, $ruc_all,$talla_ropa_all,$talla_zapato_all, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);            
             echo json_encode($rspta, true);  
           }else {
 
@@ -297,7 +300,7 @@
             $rspta=$all_trabajador->editar( $idtrabajador_all, $nombre_all, $tipo_documento_all, $num_documento_all, $direccion_all, $telefono_all, 
             format_a_m_d( $nacimiento_all), 
             $edad_all, $email_all, $banco_seleccionado, $banco, $cta_bancaria, $cci,  $titular_cuenta_all, $tipo_all, $_POST["desempenio_all"], 
-            $ocupacion_all, $ruc_all, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado );
+            $ocupacion_all, $ruc_all,$talla_ropa_all,$talla_zapato_all, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado );
             
             echo json_encode($rspta, true);
           }            

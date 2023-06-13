@@ -353,10 +353,18 @@
                               </div>
 
                               <!-- Talla ropa -->
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-3">
                                 <div class="form-group">
                                   <label for="talla_ropa">Talla ropa</label>
-                                  <input type="number" name="talla_ropa" class="form-control" id="talla_ropa" placeholder="Talla ropa" />
+                                  <select name="talla_ropa" id="talla_ropa" class="form-control" placeholder="Talla ropa">
+                                    <option value="16">16</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                    <option value="XXXL">XXXL</option>
+                                  </select>
                                 </div>
                               </div>
                               

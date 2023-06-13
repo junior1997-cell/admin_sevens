@@ -184,7 +184,7 @@ class TrabajadorPorProyecto
             d.nombre_desempenio, o.nombre_ocupacion, tt.nombre as tipo_trabajador
         from trabajador_por_proyecto as tpp, trabajador as t, desempenio as d, ocupacion as o, tipo_trabajador as tt
         where tpp.idtrabajador_por_proyecto='$idtrabajador' AND tpp.idtrabajador=t.idtrabajador  AND tpp.iddesempenio = d.iddesempenio
-        AND O.idocupacion=t.idocupacion AND tt.idtipo_trabajador=t.idtipo_trabajador;";
+        AND o.idocupacion=t.idocupacion AND tt.idtipo_trabajador=t.idtipo_trabajador;";
     
     $mostrar_data = ejecutarConsultaSimpleFila($sql); if ($mostrar_data['status'] == false) { return  $mostrar_data;}
 

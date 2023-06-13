@@ -25,6 +25,7 @@ function init() {
   $("#tipo").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion").select2({ theme: "bootstrap4",  placeholder: "Selecione Ocupación", allowClear: true, });
   $("#desempenio").select2({ theme: "bootstrap4",  placeholder: "Selecione Desempeño", allowClear: true, });
+  $("#talla_ropa").select2({ theme: "bootstrap4", placeholder: "Selecione Talla", allowClear: true, });
 
   //no_select_tomorrow('#nacimiento');
 
@@ -96,7 +97,7 @@ function limpiar_form_trabajador() {
   $("#desempenio").val("").trigger("change");
   $("#titular_cuenta").val("");
 
-  $("#talla_ropa").val("");
+  $("#talla_ropa").trigger("change");
   $("#talla_zapato").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -520,7 +521,7 @@ function mostrar(idtrabajador) {
       $("#ocupacion").val(e.data.trabajador.idocupacion).trigger('change');
       $("#desempenio").val(e.data.detalle_desempenio).trigger('change');
 
-      $("#talla_ropa").val(e.data.trabajador.talla_ropa);     
+      $("#talla_ropa").val(e.data.trabajador.talla_ropa).trigger("change");    
       $("#talla_zapato").val(e.data.trabajador.talla_zapato);     
       
       e.data.bancos.forEach(function(valor, index){ 

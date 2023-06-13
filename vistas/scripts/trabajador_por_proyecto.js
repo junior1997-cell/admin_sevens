@@ -39,6 +39,7 @@ function init() {
   $("#tipo_all").select2({ theme: "bootstrap4", placeholder: "Selecione tipo", allowClear: true, });
   $("#ocupacion_all").select2({ theme: "bootstrap4", placeholder: "Selecione desempeño", allowClear: true, });
   $("#desempenio_all").select2({ theme: "bootstrap4", placeholder: "Selecione desempeño", allowClear: true, });
+  $("#talla_ropa_all").select2({ theme: "bootstrap4", placeholder: "Selecione Talla", allowClear: true, });
   
   // ══════════════════════════════════════ INITIALIZE datetimepicker ══════════════════════════════════════
 
@@ -746,6 +747,8 @@ function limpiar_form_all_trabajador() {
   $("#tipo_all").val("").trigger("change");
   $("#ocupacion_all").val("").trigger("change");
   $("#desempenio_all").val("").trigger("change");
+  $("#talla_ropa_all").val("").trigger("change");
+  $("#talla_zapato").val("").trigger("change");
   $("#titular_cuenta_all").val("");
 
   $("#foto1_i").attr("src", "../dist/img/default/img_defecto.png");
@@ -805,6 +808,9 @@ function mostrar_editar_trabajador() {
       $("#nacimiento_all").val(format_d_m_a(e.data.trabajador.fecha_nacimiento));             
       $("#titular_cuenta_all").val(e.data.trabajador.titular_cuenta);
       $("#ruc_all").val(e.data.trabajador.ruc); 
+      $("#talla_ropa_all").val(e.data.trabajador.talla_ropa).trigger('change');
+      $("#talla_zapato_all").val(e.data.trabajador.talla_zapato); 
+      
 
       $("#tipo_all").val(e.data.trabajador.idtipo_trabajador).trigger('change');
       $("#ocupacion_all").val(e.data.trabajador.idocupacion).trigger('change');
@@ -1130,6 +1136,7 @@ $(function () {
   $("#tipo_all").on('change', function() { $(this).trigger('blur'); });
   $("#ocupacion_all").on('change', function() { $(this).trigger('blur'); });
   $("#desempenio_all").on('change', function() { $(this).trigger('blur'); });
+  $("#talla_ropa_all").on('change', function() { $(this).trigger('blur'); });
 
   $("#form-trabajador-proyecto").validate({
     rules: {
@@ -1182,7 +1189,7 @@ $(function () {
       tipo_all:           { required: true},
       ocupacion_all:      { required: true},
       ocupacion_all:      { required: true},
-      desempenio_all:            { minlength: 11, maxlength: 11},
+      desempenio_all:     { minlength: 11, maxlength: 11},
     },
     messages: {
       tipo_documento_all: { required: "Campo requerido.", },
