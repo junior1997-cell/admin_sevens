@@ -509,6 +509,7 @@ function preservarNumeroLetra(str) {
 
 // to miniscula
 function convert_minuscula(e) { e.value = e.value.toLowerCase(); }
+function convert_minuscula_v2(e) { return e.toLowerCase(); }
 
 function quitar_punto(string){ 
   return string.replace(/\./g,'');

@@ -551,13 +551,7 @@ function ver_detalle_subcontrato(id) {
 //Función Listar
 function tbla_principal_resumen(idproyecto) {
 
-  $('.filtros-inputs').hide();
-  
-  var cantidad = 0, descuento = 0, precio_total = 0;
-
-  $(".total_cantidad_resumen").html('0.00');  
-  $(".total_precio_unitario_resumen").html('0.00');      
-  $(".total_resumen").html('0.00');  
+  $('.filtros-inputs').hide(); 
 
   tabla_resumen = $("#tabla-resumen").dataTable({
     responsive: true,
@@ -566,9 +560,9 @@ function tbla_principal_resumen(idproyecto) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3,4,5,6], } }, 
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,1,2,3,4,5,6], }, orientation: 'landscape', pageSize: 'LEGAL', },       
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,1,2,3], } }, 
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0,1,2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },       
     ],
     ajax: {
       url: `../ajax/clasificacion_de_grupo.php?op=tbla_principal_resumen&idproyecto=${idproyecto}`,
@@ -582,55 +576,31 @@ function tbla_principal_resumen(idproyecto) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: 1
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
-      // columna: cantidad
-      if (data[3] != '' || data[3] == 0) { $("td", row).eq(3).addClass("text-center"); $(".total_resumen_cantidad").html( formato_miles( cantidad += parseFloat(data[3]) ));   }
-      // columna: descuento
-      if (data[5] != '') { $(".total_resumen_descuento").html(formato_miles( descuento += parseFloat(data[5]) )); }
-      // columna: total
-      if (data[6] != '') { $(".total_resumen").html(formato_miles( precio_total += parseFloat(data[6]) ));    }
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }      
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 2 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api1.column( 2 ).footer() ).html( `<span class="float-left">S/</span> <span class="float-right">${formato_miles(total1)}</span>` );
+      var api2 = this.api(); var total2 = api2.column( 3 ).data().reduce( function ( a, b ) { return  (parseFloat(a) + parseFloat( b)) ; }, 0 )
+      $( api2.column( 3 ).footer() ).html( `<span class="float-left">S/</span> <span class="float-right">${formato_miles(total2)}</span>` );      
+    },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [3], render: $.fn.dataTable.render.number( ',', '.', 2) },
-      { targets: [4,5,6], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      // { targets: [3], render: $.fn.dataTable.render.number( ',', '.', 2) },
+      { targets: [2,3], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
       //{ targets: [11,12,13], visible: false, searchable: false, },  
     ],
   }).DataTable();
 
-  // total_concreto_resumen(idproyecto);
-  $(document).ready(function () {  });
 }
 
-function total_concreto_resumen(idproyecto) {
-
-  $(".total_cantidad_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');  
-  $(".total_precio_unitario_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');      
-  $(".total_resumen").html('<i class="fas fa-spinner fa-pulse"></i>');  
-
-  $.post("../ajax/clasificacion_de_grupo.php?op=total_resumen", { 'idproyecto': idproyecto }, function (e, status) {
-    
-    e = JSON.parse(e); console.log(e);
-
-    if (e.status) {
-
-      // $(".total_resumen_cantidad").html( formato_miles(e.data.cantidad));  
-      // $(".total_resumen_precio_unitario").html(formato_miles(e.data.precio_unitario));  
-      // $(".total_resumen_descuento").html(formato_miles(e.data.descuento));    
-      // $(".total_resumen").html(formato_miles(e.data.total));    
-
-    } else {
-      ver_errores(e);
-    }
-  }).fail( function(e) { ver_errores(e); } );
-}
 
 init();
 

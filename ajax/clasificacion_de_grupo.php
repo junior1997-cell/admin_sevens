@@ -235,11 +235,8 @@
               $data[] = [
                 "0"=>$cont++,
                 "1" => $reg['grupo'] ,
-                "2" => $reg['um_abreviacion'] ,
-                "3" => $reg['cantidad_total'],
-                "4" => $reg['precio_promedio'],
-                "5" => $reg['descuento_total'],
-                "6" => $reg['precio_total'],        
+                "2" => $reg['descuento_total'],
+                "3" => $reg['precio_total'],        
               ];
             }
   
