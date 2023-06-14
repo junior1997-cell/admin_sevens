@@ -155,12 +155,18 @@ function tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprob
       // columna: igv
       if (data[7] != "") { $("td", row).eq(7).addClass("text-nowrap"); }
       // columna: total
-      if (data[8] != "") { $("td", row).eq(8).addClass("text-nowrap"); $("#total_monto").html(formato_miles( total_monto += parseFloat(data[8]) )); }
+      if (data[8] != "") { $("td", row).eq(8).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api = this.api(); var total = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      
+      $( api.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );
+      // console.log('footer: '+total);
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
@@ -489,7 +495,7 @@ function calc_total() {
     $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
     $("#val_igv").prop("readonly",true);
     $(".nro_comprobante").html("Núm. de Operación");    
-  }else if ($("#tipo_comprobante").select2("val") =="Factura") {  
+  }else if ($("#tipo_comprobante").select2("val") =="Factura" || $("#tipo_comprobante").select2("val") =="Nota de Crédito") {  
 
     $("#val_igv").prop("readonly",false);    
 
@@ -535,12 +541,12 @@ function calc_total() {
 
 function select_comprobante() {
   console.log('select_comprobante');
-  if ($("#tipo_comprobante").select2("val") == "Factura") {
+  if ($("#tipo_comprobante").select2("val") == "Factura" || $("#tipo_comprobante").select2("val") =="Nota de Crédito" ) {
     $("#val_igv").prop("readonly",false);
     $("#val_igv").val(0.18); 
     $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)");
     $(".div_ruc").show(); $(".div_razon_social").show();
-  }else if ($("#tipo_comprobante").select2("val") == "Boleta") {
+  }else if ($("#tipo_comprobante").select2("val") == "Boleta" || $("#tipo_comprobante").select2("val") =="Nota de Crédito") {
     $(".div_ruc").show(); $(".div_razon_social").show(); 
   }else {    
     $("#val_igv").val(0.00); 

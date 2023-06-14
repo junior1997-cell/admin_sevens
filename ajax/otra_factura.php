@@ -114,7 +114,9 @@
               // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_otro_gasto/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
         
               $comprobante = empty($reg->comprobante) ? ( '<center> <i class="fas fa-file-invoice-dollar fa-2x text-gray-50" data-toggle="tooltip" data-original-title="Vacío"></i></center>') : ( '<center><i class="fas fa-file-invoice-dollar fa-2x cursor-pointer text-blue" onclick="modal_comprobante(\'' . $reg->comprobante . '\', \''.$reg->fecha_emision.'\''. ')" data-toggle="tooltip" data-original-title="Ver Baucher"></i></center>');              
-  
+              $subtotal = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->subtotal :$reg->subtotal);
+              $igv = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->igv :$reg->igv);
+              $total = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->costo_parcial :$reg->costo_parcial);
               $data[] = [
                 "0" => $cont++,
                 "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotra_factura. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
@@ -129,9 +131,9 @@
                     <span class="username ml-0" > <p class="text-primary m-b-02rem" >' . $reg->tipo_comprobante . '</p> </span>
                     <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
                   </div>',
-                "6" => $reg->subtotal,
-                "7" => $reg->igv,
-                "8" => $reg->costo_parcial,
+                "6" => $subtotal,
+                "7" => $igv,
+                "8" => $total,
                 "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "10" => $comprobante . $toltip,
                 "11" => $reg->glosa,
