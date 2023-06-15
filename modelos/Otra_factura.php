@@ -26,6 +26,7 @@ class Otra_factura
       } else {
         $sql_2 = "SELECT * FROM proveedor WHERE ruc = '$num_documento'";
         $resul_provedor = ejecutarConsultaSimpleFila($sql_2); if ($resul_provedor['status'] == false) { return  $resul_provedor;}
+        // var_dump($tipo_documento, $num_documento, $razon_social, $direccion);die();
         if (empty($resul_provedor['data'])) {
           $sql_3 = "INSERT INTO proveedor (idbancos,tipo_documento, ruc, razon_social, direccion)
           VALUES ('1','$tipo_documento', '$num_documento', '$razon_social', '$direccion')";

@@ -54,11 +54,11 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
       // columna: sub total
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $(".total-subtotal").html(formato_miles( total_subtotal += parseFloat(data[8]) )); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
       // columna: igv
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); $(".total-igv").html(formato_miles( total_igv += parseFloat(data[9]) )); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
       // columna: total
-      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total").html(formato_miles( total += parseFloat(data[10]) )); }
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); }
       // columna: 4
       if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
@@ -67,13 +67,26 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api = this.api(); var subtotal = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(subtotal)}</span>` );
+      // console.log('footer: '+total);
+      var api = this.api(); var igv = api.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+
+      var api = this.api(); var igv = api.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+    
+    },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [12], visible: false, searchable: false },
-      { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
+      // { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
+      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
     ],
   }).DataTable();
   
@@ -132,11 +145,11 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
       // columna: sub total
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); $(".total-subtotal-visto-bueno").html(formato_miles( total_subtotal += parseFloat(data[8]) )); }
+      if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
       // columna: igv
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); $(".total-igv-visto-bueno").html(formato_miles( total_igv += parseFloat(data[9]) )); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
       // columna: total
-      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total-visto-bueno").html(formato_miles( total += parseFloat(data[10]) )); }
+      if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); }
       // columna: 4
       if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
@@ -145,13 +158,26 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api = this.api(); var subtotal = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(subtotal)}</span>` );
+      // console.log('footer: '+total);
+      var api = this.api(); var igv = api.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+
+      var api = this.api(); var igv = api.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+    
+    },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [12], visible: false, searchable: false },
-      { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
+      // { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
+      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
     ],
   }).DataTable();
   

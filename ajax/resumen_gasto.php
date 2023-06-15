@@ -46,6 +46,10 @@
                 $documento = ($value['cant_comprobante'] == 0) ? '<center> <button class="btn btn-outline-info btn-sm" data-toggle="tooltip" data-original-title="Vacío" ><i class="fas fa-file-invoice fa-lg"></i></button> </center>' : '<center> <button class="btn btn-info btn-sm" onclick="comprobante_multiple( \'' . $value['idtabla'] .'\', \''. $value['fecha'] .'\', \''. $value['tipo_comprobante'] .'\', \''. $value['serie_comprobante'] .'\', \''. $value['ruta'] .'\', \''. $value['carpeta'] .'\', \''. $value['subcarpeta'] . '\')" data-toggle="tooltip" data-original-title="'.($value['cant_comprobante']>1? $value['cant_comprobante'].'comprobantes.':'1 comprobante.').'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'  ;
               }
 
+              $subtotal = ($value['tipo_comprobante']=='Nota de Crédito' ? -1*$value['subtotal'] :$value['subtotal']);
+              $igv      = ($value['tipo_comprobante']=='Nota de Crédito' ? -1*$value['igv'] :$value['igv']);
+              $total    = ($value['tipo_comprobante']=='Nota de Crédito' ? -1*$value['total'] :$value['total']);
+
               $data[] = [
                 "0" => $cont++,
                 "1" => '<div class="text-nowrap"> ' . 
@@ -59,9 +63,9 @@
                 "5" => $value['modulo'],
                 "6" => $value['glosa'],
                 "7" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',                
-                "8" => $value['subtotal'],
-                "9" => $value['igv'],
-                "10" => $value['total'],
+                "8" => $subtotal,
+                "9" => $igv,
+                "10" => $total,
                 "11" => $documento.$toltip,
                 "12" => $value['estado_user_vb'],                
               ];
