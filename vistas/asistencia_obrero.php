@@ -91,13 +91,16 @@
                           <h3 class="card-title mr-3" id="btn-regresar" style="display: none; padding-left: 2px;">
                             <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="mostrar_form_table(1);despintar_btn_select();"><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>
-                          <!-- Editar -->
+                          <!-- Editar --> 
                           <h3 class="card-title mr-3" id="btn-editar" style="display: none; padding-left: 2px;">
                             <button type="button" class="btn bg-gradient-orange btn-sm h-50px" onclick="show_hide_span_input(2);"><i class="fas fa-pencil-alt"></i> <span class="d-none d-sm-inline-block">Editar</span> </button>
                           </h3>
                           <!-- Guardar -->
-                          <h3 class="card-title mr-3" id="btn-guardar" style="display: none; padding-left: 2px;">
-                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_fechas_asistencia();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar </span> </button>
+                          <h3 class="card-title mr-3" id="btn-guardar-hn" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_fechas_asistencia_hn();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar hn </span> </button>
+                          </h3>
+                          <h3 class="card-title mr-3" id="btn-guardar-he" style="display: none; padding-left: 2px;">
+                            <button type="button" class="btn bg-gradient-success btn-guardar-asistencia btn-sm h-50px" onclick="guardar_fechas_asistencia_he();" style="margin-right: 10px;"><i class="far fa-save"></i> <span class="d-none d-sm-inline-block"> Guardar he </span> </button>
                           </h3>
                           <!-- Botones de quincenas -->
                           <div id="lista_quincenas" class="row-horizon disenio-scroll" >
@@ -105,7 +108,7 @@
                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-asistencia" onclick="limpiar();"><i class="fas fa-user-plus"></i> Agregar </button>-->
                           </div>                        
                         </div>
-                        <!-- /.card-header -->
+                        <!-- /.card-header --> 
 
                         <div class="card-body " >
 
@@ -172,13 +175,13 @@
                                   </th>
                                   <th rowspan="2" class="stile-celda table_title_hne">Horas<br>normal/extras</th>
                                   <th rowspan="2" class="stile-celda ">Días<br>asistidos</th>
-                                  <th rowspan="2" class="stile-celda ">Sueldo Semanal</th>
+                                  <th rowspan="2" class="stile-celda ">Sueldo <br> Semanal</th>
                                   <th rowspan="2" class="stile-celda ">Jornal</th>
                                   <th rowspan="2" class="stile-celda ">Sueldo <br> hora</th>
-                                  <th rowspan="2" class="stile-celda ">Sabatical</th>
+                                  <th rowspan="2" class="stile-celda ">Sáb.</th>
                                   <th rowspan="2" class="stile-celda ">Pago <br> parcial</th>
                                   <th rowspan="2" class="stile-celda ">Adicional <br> descuento</th>
-                                  <th rowspan="2" class="stile-celda head_pago_q_s ">Pago quincenal</th> 
+                                  <th rowspan="2" class="stile-celda head_pago_q_s ">Pago <br> quincenal</th> 
                                   <th rowspan="2" class="stile-celda final_tabla"><i class="fas fa-hand-holding-usd fa-2x"></i></th>
                                 </tr>
                                 

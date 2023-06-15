@@ -142,9 +142,9 @@
                                               <tr>
                                                 <th class="text-center">#</th>
                                                 <th>INSUMO</th>
-                                                <th>UND</th>
+                                                <!-- <th>UND</th>
                                                 <th class="text-center" >CANTIDAD</th>
-                                                <th data-toggle="tooltip" data-original-title="Precio Promedio">PRECIO PARCIAL</th>
+                                                <th data-toggle="tooltip" data-original-title="Precio Promedio">PRECIO PARCIAL</th> -->
                                                 <th >DESCUENTO</th>
                                                 <th data-toggle="tooltip" data-original-title="Sub total">PRECIO TOTAL</th>
                                               </tr>
@@ -154,11 +154,11 @@
                                               <tr>
                                                 <th class="text-center">#</th>
                                                 <th>INSUMO</th>
-                                                <th>UND</th>
+                                                <!-- <th>UND</th>
                                                 <th class="text-nowrap px-2 text-center" ><span class="total_resumen_cantidad">0.00</span></th>
-                                                <th >PRECIO PARCIAL</th>
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen_descuento">0.00</span></div></th>
-                                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span class="total_resumen">0.00</span></div></th>
+                                                <th >PRECIO PARCIAL</th> -->
+                                                <th class="px-2">DESCUENTO</th>
+                                                <th class="px-2">PRECIO TOTAL</th>
                                               </tr>
                                             </tfoot>
                                           </table>

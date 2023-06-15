@@ -37,11 +37,21 @@ ob_start();
       
       switch ($_GET["op"]){
         // Gurdamos cada dia de asistencia del OBRERO
-        case 'guardar_y_editar_asistencia':
+        case 'guardar_y_editar_asistencia_hn':
 
           /*$data_asistencia = $_POST["asistencia"]; */ $resumen_qs = $_POST["resumen_qs"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
                      
-          $rspta=$asistencia_obrero->insertar_asistencia_y_resumen_q_s_asistencia( $resumen_qs, $fecha_i, $fecha_f);
+          $rspta=$asistencia_obrero->insertar_asistencia_y_resumen_q_s_asistencia_hn( $resumen_qs, $fecha_i, $fecha_f);
+
+          echo json_encode($rspta, true);        
+          
+        break;  
+
+        case 'guardar_y_editar_asistencia_he':
+
+          /*$data_asistencia = $_POST["asistencia"]; */ $resumen_qs = $_POST["resumen_qs"]; $fecha_i = $_POST["fecha_inicial"]; $fecha_f = $_POST["fecha_final"];
+                     
+          $rspta=$asistencia_obrero->insertar_asistencia_y_resumen_q_s_asistencia_he( $resumen_qs, $fecha_i, $fecha_f);
 
           echo json_encode($rspta, true);        
           
@@ -215,7 +225,7 @@ ob_start();
               "1"=> '<div class="user-block text-nowrap">
                 <img class="img-circle" src="'.$imagen_perfil.'" alt="User Image" onerror="'.$imagen_error.'">
                 <span class="username" ><p class="text-primary m-b-02rem" > '.$reg->trabajador .'</p></span>
-                <span class="description" > <b>'. $reg->tipo_doc .'</b>: '. $reg->num_doc .' </span>
+                <span class="description" > <b>'. $reg->tipo_documento .'</b>: '. $reg->numero_documento .' </span>
               </div>',
               "2"=> $reg->horas_normal_dia,
               "3"=> $reg->pago_normal_dia,
@@ -346,7 +356,7 @@ ob_start();
                 "7"=> $reg->pago_quincenal,
                 "8"=> '<center>' . ($reg->estado_envio_contador ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>') . '</center>' ,
                 "9"=> '<center>' . ($reg->estado?'<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . '</center>'.$toltip,
-                "10"=> $reg->trabajdor,
+                "10"=> $reg->trabajador,
                 "11"=> $reg->tipo_documento . ': ' . $reg->numero_documento,
                 "12"=> $reg->numero_q_s
               );
