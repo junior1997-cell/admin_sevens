@@ -18,9 +18,9 @@ class Asistencia_obrero
 
     $buscar_asistencia = "";
 
-    $retorno = "";
+    $retorno = ""; 
     // registramos o editamos las "resumen q s asistencia"
-    foreach ($data_resumen_qs as $indice => $key_r) {
+    foreach ($data_resumen_qs as $indice1 => $key_r) {
 
       $idtrabajador     = $key_r['id_trabajador'];
       $idresumen_q_s_asistencia = $key_r['idresumen_q_s_asistencia'];
@@ -39,13 +39,16 @@ class Asistencia_obrero
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '$id_rqsa', 'Crear registro', '".$_SESSION['idusuario']."')";
         $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
 
+        $sql_delete = "UPDATE asistencia_trabajador SET estado='0' WHERE idresumen_q_s_asistencia='$idresumen_q_s_asistencia';";
+        $retorno = ejecutarConsulta($sql_delete); if ($retorno['status'] == false) {  return $retorno; }
+
         // registramos o editamos las "asistencias de cada trabajador"
         foreach ($key_r['array_datos_asistencia'] as $indice => $key_a) {
           $idasistencia_trabajador = $key_a['idasistencia_trabajador'];
           if (empty($idasistencia_trabajador)) {
             // insertamos un nuevo registro
-            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_normal_dia, pago_normal_dia, fecha_asistencia, nombre_dia, user_created)			
-            VALUES ('$id_rqsa', '" . $key_a['horas_normal_dia'] . "', '" . $key_a['pago_normal_dia'] . "', '" . $key_a['fecha_asistida'] . "', '" . $key_a['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
+            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_normal_dia, pago_normal_dia, sueldo_diario, fecha_asistencia, nombre_dia, user_created)			
+            VALUES ('$id_rqsa', '" . $key_a['horas_normal_dia'] . "', '" . $key_a['pago_normal_dia'] ."', '" . $key_a['sueldo_diario'] . "', '" . $key_a['fecha_asistida'] . "', '" . $key_a['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
             $new_registro = ejecutarConsulta_retornarID($sql_2); if ($new_registro['status'] == false) {  return $new_registro; }
 
             //B I T A C O R A -------
@@ -55,8 +58,8 @@ class Asistencia_obrero
           } else {
             # editamos el registro existente
             $sql_3 =  "UPDATE asistencia_trabajador SET idresumen_q_s_asistencia='$id_rqsa', horas_normal_dia='" . $key_a['horas_normal_dia'] .
-              "', pago_normal_dia='" . $key_a['pago_normal_dia'] . "', fecha_asistencia = '" . $key_a['fecha_asistida'] .
-              "', nombre_dia = '" . $key_a['nombre_dia'] . "', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
+              "', pago_normal_dia='" . $key_a['pago_normal_dia'] . "', sueldo_diario ='" . $key_a['sueldo_diario'] . "',  fecha_asistencia = '" . $key_a['fecha_asistida'] .
+              "', nombre_dia = '" . $key_a['nombre_dia'] . "', estado ='1', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
             $edita_registro = ejecutarConsulta($sql_3);  if ($edita_registro['status'] == false) {  return $edita_registro; }
 
             //B I T A C O R A -------
@@ -78,13 +81,17 @@ class Asistencia_obrero
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '$idresumen_q_s_asistencia', 'Editar registro', '".$_SESSION['idusuario']."')";
         $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
 
+        $sql_delete = "UPDATE asistencia_trabajador SET estado='0' WHERE idresumen_q_s_asistencia='$idresumen_q_s_asistencia';";
+        $retorno = ejecutarConsulta($sql_delete); if ($retorno['status'] == false) {  return $retorno; }
+        
         // registramos o editamos las "asistencias de cada trabajador"
-        foreach ($key_r['array_datos_asistencia'] as $indice => $key_a) {
-          $idasistencia_trabajador = $key_a['idasistencia_trabajador'];
+        foreach ($key_r['array_datos_asistencia'] as $indice2 => $key_a) {
+          $idasistencia_trabajador = $key_a['idasistencia_trabajador'];  
+          // $dddd[] = ['n'=>$indice1, 'id_trabajador' => $key_a['id_trabajador'],  'h_n_d' => $key_a['horas_normal_dia'],'p_n_d' => $key_a['pago_normal_dia'],'p_n_d' => $key_a['fecha_asistida'], 'n_d' => $key_a['nombre_dia'],];
           if (empty($idasistencia_trabajador)) {
             // insertamos un nuevo registro
-            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_normal_dia, pago_normal_dia, fecha_asistencia, nombre_dia, user_created)			
-            VALUES ('$idresumen_q_s_asistencia', '" . $key_a['horas_normal_dia'] . "', '" . $key_a['pago_normal_dia'] . "', '" .
+            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_normal_dia, pago_normal_dia, sueldo_diario, fecha_asistencia, nombre_dia,  user_created)			
+            VALUES ('$idresumen_q_s_asistencia', '" . $key_a['horas_normal_dia'] . "', '" . $key_a['pago_normal_dia'] . "', '" . $key_a['sueldo_diario'] . "', '" .
             $key_a['fecha_asistida'] . "', '" . $key_a['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
             $new_registro = ejecutarConsulta_retornarID($sql_2); if ($new_registro['status'] == false) {  return $new_registro; }
 
@@ -95,8 +102,8 @@ class Asistencia_obrero
           } else {
             # editamos el registro existente
             $sql_3 =  "UPDATE asistencia_trabajador SET idresumen_q_s_asistencia='$idresumen_q_s_asistencia', horas_normal_dia='" . $key_a['horas_normal_dia'] .
-              "', pago_normal_dia='" . $key_a['pago_normal_dia'] . "',  fecha_asistencia = '" . $key_a['fecha_asistida'] .
-              "', nombre_dia = '" . $key_a['nombre_dia'] . "', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
+              "', pago_normal_dia='" . $key_a['pago_normal_dia'] . "', sueldo_diario='" . $key_a['sueldo_diario'] . "',  fecha_asistencia = '" . $key_a['fecha_asistida'] .
+              "', nombre_dia = '" . $key_a['nombre_dia'] . "', estado='1', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
             $edita_registro = ejecutarConsulta($sql_3);  if ($edita_registro['status'] == false) {  return $edita_registro; }
 
             //B I T A C O R A -------
@@ -137,13 +144,16 @@ class Asistencia_obrero
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '$id_rqsa', 'Crear registro', '".$_SESSION['idusuario']."')";
         $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
 
+        $sql_delete = "UPDATE asistencia_trabajador SET estado='0' WHERE idresumen_q_s_asistencia='$idresumen_q_s_asistencia';";
+        $retorno = ejecutarConsulta($sql_delete); if ($retorno['status'] == false) {  return $retorno; }
+
         // registramos o editamos las "asistencias de cada trabajador"
         foreach ($key_r['array_datos_asistencia'] as $indice => $key_a) {
           $idasistencia_trabajador = $key_a['idasistencia_trabajador'];
           if (empty($idasistencia_trabajador)) {
             // insertamos un nuevo registro
-            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia, user_created)			
-            VALUES ('$id_rqsa',  '" . $key_a['horas_extras_dia'] . "', '" . $key_a['pago_horas_extras'] . "', '" . $key_a['fecha_asistida'] . "', '" . $key_a['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
+            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_extras_dia, pago_horas_extras, sueldo_diario, fecha_asistencia, nombre_dia, user_created)			
+            VALUES ('$id_rqsa',  '" . $key_a['horas_extras_dia'] . "', '" . $key_a['pago_horas_extras'] . "', '" . $key_a['sueldo_diario'] . "', '" . $key_a['fecha_asistida'] . "', '" . $key_a['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
             $new_registro = ejecutarConsulta_retornarID($sql_2); if ($new_registro['status'] == false) {  return $new_registro; }
 
             //B I T A C O R A -------
@@ -153,8 +163,8 @@ class Asistencia_obrero
           } else {
             # editamos el registro existente
             $sql_3 =  "UPDATE asistencia_trabajador SET idresumen_q_s_asistencia='$id_rqsa', horas_extras_dia='" . $key_a['horas_extras_dia'] .
-              "', pago_horas_extras='" . $key_a['pago_horas_extras'] . "', fecha_asistencia = '" . $key_a['fecha_asistida'] .
-              "', nombre_dia = '" . $key_a['nombre_dia'] . "', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
+              "', pago_horas_extras='" . $key_a['pago_horas_extras'] . "', sueldo_diario='" . $key_a['sueldo_diario'] . "', fecha_asistencia = '" . $key_a['fecha_asistida'] .
+              "', nombre_dia = '" . $key_a['nombre_dia'] . "', estado = '1', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
             $edita_registro = ejecutarConsulta($sql_3);  if ($edita_registro['status'] == false) {  return $edita_registro; }
 
             //B I T A C O R A -------
@@ -175,13 +185,16 @@ class Asistencia_obrero
         $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('asistencia_trabajador', '$idresumen_q_s_asistencia', 'Editar registro', '".$_SESSION['idusuario']."')";
         $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
 
+        $sql_delete = "UPDATE asistencia_trabajador SET estado='0' WHERE idresumen_q_s_asistencia='$idresumen_q_s_asistencia';";
+        $retorno = ejecutarConsulta($sql_delete); if ($retorno['status'] == false) {  return $retorno; }
+
         // registramos o editamos las "asistencias de cada trabajador"
         foreach ($key_r['array_datos_asistencia'] as $indice => $key_a) {
           $idasistencia_trabajador = $key_a['idasistencia_trabajador'];
           if (empty($idasistencia_trabajador)) {
             // insertamos un nuevo registro
-            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_extras_dia, pago_horas_extras, fecha_asistencia, nombre_dia, user_created)			
-            VALUES ('$idresumen_q_s_asistencia',  '" . $key_a['horas_extras_dia'] . "', '" . $key_a['pago_horas_extras'] . "', '" . $key_a['fecha_asistida'] . "', '" . $key_a['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
+            $sql_2 = "INSERT INTO asistencia_trabajador (idresumen_q_s_asistencia, horas_extras_dia, pago_horas_extras, sueldo_diario, fecha_asistencia, nombre_dia, user_created)			
+            VALUES ('$idresumen_q_s_asistencia',  '" . $key_a['horas_extras_dia'] . "', '" . $key_a['pago_horas_extras'] . "', '" . $key_a['sueldo_diario'] . "', '" . $key_a['fecha_asistida'] . "', '" . $key_a['nombre_dia'] . "', '".$_SESSION['idusuario']."' )";
             $new_registro = ejecutarConsulta_retornarID($sql_2); if ($new_registro['status'] == false) {  return $new_registro; }
 
             //B I T A C O R A -------
@@ -191,8 +204,8 @@ class Asistencia_obrero
           } else {
             # editamos el registro existente
             $sql_3 =  "UPDATE asistencia_trabajador SET idresumen_q_s_asistencia='$idresumen_q_s_asistencia', horas_extras_dia='" . $key_a['horas_extras_dia'] .
-              "', pago_horas_extras='" . $key_a['pago_horas_extras'] . "', fecha_asistencia = '" . $key_a['fecha_asistida'] .
-              "', nombre_dia = '" . $key_a['nombre_dia'] . "', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
+              "', pago_horas_extras='" . $key_a['pago_horas_extras'] . "', sueldo_diario='" . $key_a['sueldo_diario'] . "', fecha_asistencia = '" . $key_a['fecha_asistida'] .
+              "', nombre_dia = '" . $key_a['nombre_dia'] . "', estado = '1', user_updated='".$_SESSION['idusuario']."' WHERE idasistencia_trabajador='$idasistencia_trabajador';";
             $edita_registro = ejecutarConsulta($sql_3);  if ($edita_registro['status'] == false) {  return $edita_registro; }
 
             //B I T A C O R A -------
@@ -295,121 +308,165 @@ class Asistencia_obrero
     }
    
     // extraemos todos lo trabajadores del proyecto
-    $sql2 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
+    $sql1 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
     t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado, tpp.fecha_inicio, tpp.fecha_fin
 		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
 		WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = t.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador 
-		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero' AND tpp.fecha_fin BETWEEN '$n_f_i_p' AND '$n_f_f_p' ORDER BY tpp.orden_trabajador ASC ;";
-    $trabajador = ejecutarConsultaArray($sql2); if ($trabajador['status'] == false) {  return $trabajador; }
+		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero'  ORDER BY tpp.orden_trabajador ASC ;";
+    $trabajador = ejecutarConsultaArray($sql1); if ($trabajador['status'] == false) {  return $trabajador; }
 
     $data = [];
     $extras = "";   
 
     foreach ($trabajador['data'] as $indice => $key) {
-      $id_trabajador_proyect = $key['idtrabajador_por_proyecto'];      
-      $fechas_asistencia = [];
+      $id_tpp = $key['idtrabajador_por_proyecto'];      
+      $fechas_asistencia = [];      
 
-      $sql4 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos_hn, total_dias_asistidos_he, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal_hn, pago_quincenal_he, estado_envio_contador 
-			FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_trabajador_proyect' AND ids_q_asistencia = '$ids_q_asistencia' AND estado = '1' AND estado_delete = '1';";
-      $extras = ejecutarConsultaSimpleFila($sql4); if ($extras['status'] == false) {  return $extras; }      
+      $sql2 = "SELECT sueldo_mensual, sueldo_semanal, sueldo_diario, fecha_desde, fecha_hasta 
+      FROM sueldo WHERE idtrabajador_por_proyecto = '$id_tpp' AND estado ='1' AND estado_delete ='1';";
+      $sueldo = ejecutarConsultaArray($sql2); if ($sueldo['status'] == false) {  return $sueldo; }       
 
-      if ( empty($extras['data']) ) {
-        foreach ($fecha_array as $key1 => $val1) {
-          $fechas_asistencia[] = [     
-            'dia_regular'               => $val1['dia_regular'],
-            'idasistencia_trabajador'   => "",      
-            'idresumen_q_s_asistencia' => "",   
-            'fecha_asistencia'          => $val1['fecha_dia'],
-            'nombre_dia'                => "",
-            'horas_normal_dia'          => "0",
-            'pago_normal_dia'           => "0",
-            'horas_extras_dia'          => "0",
-            'pago_horas_extras'         => "0",
-            'descripcion_justificacion' => "",
-            'doc_justificacion'         => "",
-            'estado'                    => "",
-            'estado_delete'             => "",               
-          ];
-        }        
-      } else {
-        $id_resumen = $extras['data']['idresumen_q_s_asistencia'] ;
+      // Validamos si tiene sueldos
+      if ( !empty($sueldo['data']) ) {
 
-        // extraemos la asistencia por trabajador
-        $sql3 = "SELECT * FROM asistencia_trabajador  AS atr 
-        WHERE atr.idresumen_q_s_asistencia = '$id_resumen' AND atr.estado = '1' AND atr.estado_delete = '1';";
-        $asistencia = ejecutarConsultaArray($sql3);  if ($asistencia['status'] == false) {  return $asistencia; }      
-
-        foreach ($fecha_array as $key2 => $val2) {
-          $fecha_encontrado = false; $indice_encontrado = 0;
-          foreach ($asistencia['data'] as $key3 => $val3) { if ($val2['fecha_dia'] == $val3['fecha_asistencia'] ) { $fecha_encontrado = true; $indice_encontrado = $key3; } }
-          if ($fecha_encontrado) {
-            $fechas_asistencia[] = [     
-              'dia_regular'               => $val2['dia_regular'],
-              'idasistencia_trabajador'   => $asistencia['data'][$indice_encontrado]['idasistencia_trabajador'],      
-              'idresumen_q_s_asistencia' => $asistencia['data'][$indice_encontrado]['idresumen_q_s_asistencia'],   
-              'fecha_asistencia'          => $asistencia['data'][$indice_encontrado]['fecha_asistencia'],
-              'nombre_dia'                => $asistencia['data'][$indice_encontrado]['nombre_dia'],
-              'horas_normal_dia'          => $asistencia['data'][$indice_encontrado]['horas_normal_dia'],
-              'pago_normal_dia'           => $asistencia['data'][$indice_encontrado]['pago_normal_dia'],
-              'horas_extras_dia'          => $asistencia['data'][$indice_encontrado]['horas_extras_dia'],
-              'pago_horas_extras'         => $asistencia['data'][$indice_encontrado]['pago_horas_extras'],
-              'descripcion_justificacion' => $asistencia['data'][$indice_encontrado]['descripcion_justificacion'],
-              'doc_justificacion'         => $asistencia['data'][$indice_encontrado]['doc_justificacion'],
-              'estado'                    => $asistencia['data'][$indice_encontrado]['estado'],
-              'estado_delete'             => $asistencia['data'][$indice_encontrado]['estado_delete'],               
-            ];
-          } else {
-            $fechas_asistencia[] = [     
-              'dia_regular'               => $val2['dia_regular'],
-              'idasistencia_trabajador'   => "",      
-              'idresumen_q_s_asistencia' => "",   
-              'fecha_asistencia'          => $val2['fecha_dia'],
-              'nombre_dia'                => "",
-              'horas_normal_dia'          => "0",
-              'pago_normal_dia'           => "0",
-              'horas_extras_dia'          => "0",
-              'pago_horas_extras'         => "0",
-              'descripcion_justificacion' => "",
-              'doc_justificacion'         => "",
-              'estado'                    => "",
-              'estado_delete'             => "",               
-            ];
+        $show_hide_tpp = false; 
+        foreach ($sueldo['data'] as $key0 => $val_s) { // Buscamos si esta dentro de la semana
+          if ( validar_fecha_menor_igual_que($val_s['fecha_desde'], $f1) && validar_fecha_mayor_igual_que($val_s['fecha_hasta'], $f2)  ) {
+            $show_hide_tpp = true; break;
+          } else if ( validar_fecha_menor_igual_que($val_s['fecha_desde'], $f1) && fecha_dentro_de_rango($val_s['fecha_hasta'], $f1, $f2)  ) {
+            $show_hide_tpp = true; break;
+          } else if ( fecha_dentro_de_rango($val_s['fecha_desde'], $f1, $f2) && fecha_dentro_de_rango($val_s['fecha_hasta'], $f1, $f2) ) {
+            $show_hide_tpp = true; break;
+          } else if ( fecha_dentro_de_rango($val_s['fecha_desde'], $f1, $f2) && validar_fecha_mayor_igual_que($val_s['fecha_hasta'], $f2) ) {
+            $show_hide_tpp = true; break;
           }          
-        }       
-      }
+        }
 
-      $data[] = [
-        "idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
-        "nombre_ocupacion"          => $key['nombre_ocupacion'],
-        "tipo_trabajador"           => $key['tipo_trabajador'],
-        "nombres"                   => $key['nombres'],
-        "tipo_documento"            => $key['tipo_documento'],
-        "numero_documento"          => $key['numero_documento'],
-        "sueldo_mensual"            => $key['sueldo_mensual'],
-        "sueldo_diario"             => $key['sueldo_diario'],
-        "sueldo_hora"               => $key['sueldo_hora'],
-        "estado_trabajador"         => $key['estado'],
-        "fecha_inicio_t"            => $key['fecha_inicio'],
-        "fecha_fin_t"               => $key['fecha_fin'],
-        "asistencia"                => $fechas_asistencia,
+        // Ocultamos o mostramos segun los buscado
+        if ( $show_hide_tpp == true) {
+          $sql3 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos_hn, total_dias_asistidos_he, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal_hn, pago_quincenal_he, estado_envio_contador 
+          FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_tpp' AND ids_q_asistencia = '$ids_q_asistencia' AND estado = '1' AND estado_delete = '1';";
+          $extras = ejecutarConsultaSimpleFila($sql3); if ($extras['status'] == false) {  return $extras; }      
 
-        'idresumen_q_s_asistencia'  => empty($extras['data']) ? "" : ( empty($extras['data']['idresumen_q_s_asistencia']) ? "" : $extras['data']['idresumen_q_s_asistencia']),
-        'fecha_registro'            => empty($extras['data']) ? "" : ( empty($extras['data']['fecha_q_s_inicio']) ?        "" : $extras['data']['fecha_q_s_inicio']),
-        'total_hn'                  => empty($extras['data']) ? 0  : ( empty($extras['data']['total_hn']) ?                0 : intval($extras['data']['total_hn']) ),
-        'total_he'                  => empty($extras['data']) ? 0  : ( empty($extras['data']['total_he']) ?                0 : floatval($extras['data']['total_he']) ),
-        'total_dias_asistidos_hn'   => empty($extras['data']) ? 0  : ( empty($extras['data']['total_dias_asistidos_hn']) ? 0 : floatval($extras['data']['total_dias_asistidos_hn']) ),
-        'total_dias_asistidos_he'   => empty($extras['data']) ? 0  : ( empty($extras['data']['total_dias_asistidos_he']) ? 0 : floatval($extras['data']['total_dias_asistidos_he']) ),
-        'sabatical'                 => empty($extras['data']) ? 0  : ( empty($extras['data']['sabatical']) ?               0 : floatval($extras['data']['sabatical']) ),
-        'sabatical_manual_1'        => empty($extras['data']) ? "-": ( empty($extras['data']['sabatical_manual_1']) ?     "" : $extras['data']['sabatical_manual_1']),
-        'sabatical_manual_2'        => empty($extras['data']) ? "-": ( empty($extras['data']['sabatical_manual_2']) ?     "" : $extras['data']['sabatical_manual_2']),
-        'pago_parcial_hn'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_hn']) ?         0 : floatval($extras['data']['pago_parcial_hn']) ),
-        'pago_parcial_he'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_he']) ?         0 : floatval($extras['data']['pago_parcial_he']) ),
-        'adicional_descuento'       => empty($extras['data']) ? 0  : ( empty($extras['data']['adicional_descuento']) ?     0 : floatval($extras['data']['adicional_descuento']) ),
-        'descripcion_descuento'     => empty($extras['data']) ? "" : ( empty($extras['data']['descripcion_descuento']) ?  "" : $extras['data']['descripcion_descuento']),
-        'pago_quincenal_hn'         => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_quincenal_hn']) ?       0 : floatval($extras['data']['pago_quincenal_hn']) ),
-        'pago_quincenal_he'         => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_quincenal_he']) ?       0 : floatval($extras['data']['pago_quincenal_he']) ),
-        'estado_envio_contador'     => empty($extras['data']) ? "" : ( empty($extras['data']['estado_envio_contador']) ?  "" : $extras['data']['estado_envio_contador']),
-      ];        
+          if ( empty($extras['data']) ) {
+            foreach ($fecha_array as $key1 => $val1) {
+
+              $dia_bloqueado = true; $i_sueldo = 0;
+              foreach ($sueldo['data'] as $key0 => $val_s) { // Buscamos si esta dentro de la semana
+                if ( fecha_dentro_de_rango($val1['fecha_dia'], $val_s['fecha_desde'], $val_s['fecha_hasta'])  ) {
+                  $dia_bloqueado = false; $i_sueldo = $val_s['sueldo_diario']; break;
+                } 
+              }
+
+              $fechas_asistencia[] = [     
+                'dia_regular'               => $dia_bloqueado,
+                'idasistencia_trabajador'   => "",      
+                'idresumen_q_s_asistencia' => "",   
+                'fecha_asistencia'          => $val1['fecha_dia'],
+                'nombre_dia'                => "",
+                'sueldo_diario'             => $i_sueldo,
+                'horas_normal_dia'          => "0",                
+                'pago_normal_dia'           => "0",
+                'horas_extras_dia'          => "0",
+                'pago_horas_extras'         => "0",
+                'descripcion_justificacion' => "",
+                'doc_justificacion'         => "",
+                'estado'                    => "",
+                'estado_delete'             => "",               
+              ];
+            }        
+          } else {
+            $id_resumen = $extras['data']['idresumen_q_s_asistencia'] ;
+
+            // extraemos la asistencia por trabajador
+            $sql4 = "SELECT * FROM asistencia_trabajador  AS atr 
+            WHERE atr.idresumen_q_s_asistencia = '$id_resumen' AND atr.estado = '1' AND atr.estado_delete = '1';";
+            $asistencia = ejecutarConsultaArray($sql4);  if ($asistencia['status'] == false) {  return $asistencia; }      
+
+            foreach ($fecha_array as $key2 => $val2) {
+
+              $fecha_encontrado = false; $indice_encontrado = 0;
+              foreach ($asistencia['data'] as $key3 => $val3) { if ($val2['fecha_dia'] == $val3['fecha_asistencia'] ) { $fecha_encontrado = true; $indice_encontrado = $key3; } }
+              
+              $dia_bloqueado = true; $i_sueldo = 0;
+              foreach ($sueldo['data'] as $key0 => $val_s) { // Buscamos si esta dentro de la semana
+                if ( fecha_dentro_de_rango($val2['fecha_dia'], $val_s['fecha_desde'], $val_s['fecha_hasta'])  ) {
+                  $dia_bloqueado = false; $i_sueldo =  $val_s['sueldo_diario']; break;
+                } 
+              }
+
+              if ($fecha_encontrado) {
+                $fechas_asistencia[] = [     
+                  'dia_regular'               => $dia_bloqueado,
+                  'idasistencia_trabajador'   => $asistencia['data'][$indice_encontrado]['idasistencia_trabajador'],      
+                  'idresumen_q_s_asistencia' => $asistencia['data'][$indice_encontrado]['idresumen_q_s_asistencia'],   
+                  'fecha_asistencia'          => $asistencia['data'][$indice_encontrado]['fecha_asistencia'],
+                  'nombre_dia'                => $asistencia['data'][$indice_encontrado]['nombre_dia'],
+                  'sueldo_diario'             => $i_sueldo,
+                  'horas_normal_dia'          => $asistencia['data'][$indice_encontrado]['horas_normal_dia'],
+                  'pago_normal_dia'           => $asistencia['data'][$indice_encontrado]['pago_normal_dia'],
+                  'horas_extras_dia'          => $asistencia['data'][$indice_encontrado]['horas_extras_dia'],
+                  'pago_horas_extras'         => $asistencia['data'][$indice_encontrado]['pago_horas_extras'],
+                  'descripcion_justificacion' => $asistencia['data'][$indice_encontrado]['descripcion_justificacion'],
+                  'doc_justificacion'         => $asistencia['data'][$indice_encontrado]['doc_justificacion'],
+                  'estado'                    => $asistencia['data'][$indice_encontrado]['estado'],
+                  'estado_delete'             => $asistencia['data'][$indice_encontrado]['estado_delete'],               
+                ];
+              } else {
+                $fechas_asistencia[] = [     
+                  'dia_regular'               => $dia_bloqueado,
+                  'idasistencia_trabajador'   => "",      
+                  'idresumen_q_s_asistencia' => "",   
+                  'fecha_asistencia'          => $val2['fecha_dia'],
+                  'nombre_dia'                => "",
+                  'sueldo_diario'             => $i_sueldo,
+                  'horas_normal_dia'          => "0",
+                  'pago_normal_dia'           => "0",
+                  'horas_extras_dia'          => "0",
+                  'pago_horas_extras'         => "0",
+                  'descripcion_justificacion' => "",
+                  'doc_justificacion'         => "",
+                  'estado'                    => "",
+                  'estado_delete'             => "",               
+                ];
+              }          
+            }       
+          }
+
+          $data[] = [
+            "idtrabajador_por_proyecto" => $key['idtrabajador_por_proyecto'],
+            "nombre_ocupacion"          => $key['nombre_ocupacion'],
+            "tipo_trabajador"           => $key['tipo_trabajador'],
+            "nombres"                   => $key['nombres'],
+            "tipo_documento"            => $key['tipo_documento'],
+            "numero_documento"          => $key['numero_documento'],
+            "sueldo_mensual"            => $key['sueldo_mensual'],
+            "sueldo_diario"             => $key['sueldo_diario'],
+            "sueldo_hora"               => $key['sueldo_hora'],
+            "estado_trabajador"         => $key['estado'],
+            "fecha_inicio_t"            => $key['fecha_inicio'],
+            "fecha_fin_t"               => $key['fecha_fin'],
+            "asistencia"                => $fechas_asistencia,
+
+            'idresumen_q_s_asistencia'  => empty($extras['data']) ? "" : ( empty($extras['data']['idresumen_q_s_asistencia']) ? "" : $extras['data']['idresumen_q_s_asistencia']),
+            'fecha_registro'            => empty($extras['data']) ? "" : ( empty($extras['data']['fecha_q_s_inicio']) ?        "" : $extras['data']['fecha_q_s_inicio']),
+            'total_hn'                  => empty($extras['data']) ? 0  : ( empty($extras['data']['total_hn']) ?                0 : intval($extras['data']['total_hn']) ),
+            'total_he'                  => empty($extras['data']) ? 0  : ( empty($extras['data']['total_he']) ?                0 : floatval($extras['data']['total_he']) ),
+            'total_dias_asistidos_hn'   => empty($extras['data']) ? 0  : ( empty($extras['data']['total_dias_asistidos_hn']) ? 0 : floatval($extras['data']['total_dias_asistidos_hn']) ),
+            'total_dias_asistidos_he'   => empty($extras['data']) ? 0  : ( empty($extras['data']['total_dias_asistidos_he']) ? 0 : floatval($extras['data']['total_dias_asistidos_he']) ),
+            'sabatical'                 => empty($extras['data']) ? 0  : ( empty($extras['data']['sabatical']) ?               0 : floatval($extras['data']['sabatical']) ),
+            'sabatical_manual_1'        => empty($extras['data']) ? "-": ( empty($extras['data']['sabatical_manual_1']) ?     "" : $extras['data']['sabatical_manual_1']),
+            'sabatical_manual_2'        => empty($extras['data']) ? "-": ( empty($extras['data']['sabatical_manual_2']) ?     "" : $extras['data']['sabatical_manual_2']),
+            'pago_parcial_hn'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_hn']) ?         0 : floatval($extras['data']['pago_parcial_hn']) ),
+            'pago_parcial_he'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_he']) ?         0 : floatval($extras['data']['pago_parcial_he']) ),
+            'adicional_descuento'       => empty($extras['data']) ? 0  : ( empty($extras['data']['adicional_descuento']) ?     0 : floatval($extras['data']['adicional_descuento']) ),
+            'descripcion_descuento'     => empty($extras['data']) ? "" : ( empty($extras['data']['descripcion_descuento']) ?  "" : $extras['data']['descripcion_descuento']),
+            'pago_quincenal_hn'         => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_quincenal_hn']) ?       0 : floatval($extras['data']['pago_quincenal_hn']) ),
+            'pago_quincenal_he'         => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_quincenal_he']) ?       0 : floatval($extras['data']['pago_quincenal_he']) ),
+            'estado_envio_contador'     => empty($extras['data']) ? "" : ( empty($extras['data']['estado_envio_contador']) ?  "" : $extras['data']['estado_envio_contador']),
+          ];
+        }              
+      }          
     }
 
     return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => $data];

@@ -72,6 +72,20 @@ if (!function_exists('ejecutarConsulta')) {
     return false;
   }
 
+  function validar_fecha_mayor_que($fecha_menor, $fecha_mayor) {
+    $fecha_1 = strtotime( $fecha_menor );
+    $fecha_2 = strtotime( $fecha_mayor );
+    if ($fecha_1 > $fecha_2) { return true; }    
+    return false;
+  }
+
+  function validar_fecha_mayor_igual_que($fecha_menor, $fecha_mayor) {
+    $fecha_1 = strtotime( $fecha_menor );
+    $fecha_2 = strtotime( $fecha_mayor );
+    if ($fecha_1 >= $fecha_2) { return true; }    
+    return false;
+  }
+
   function fecha_dentro_de_rango($fecha, $fecha_menor, $fecha_mayor) {
     $fecha_val = strtotime( $fecha );
     $fecha_1 = strtotime( $fecha_menor );
