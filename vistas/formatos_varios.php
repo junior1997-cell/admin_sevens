@@ -75,7 +75,11 @@
                             <!--ASISTENCIA TRABAJADOR-->
                             <li class="nav-item">
                               <a class="nav-link" id="custom-content-below-asistencia-tab" data-toggle="pill" href="#custom-content-below-asistencia" role="tab" aria-controls="custom-content-below-asistencia" aria-selected="false">ASISTENCIA TRABAJADOR</a>
-                            </li>                          
+                            </li>    
+                            <!--ASISTENCIA ATS FORMATOS-->
+                            <li class="nav-item">
+                              <a class="nav-link" id="custom-content-below-asistencia-tab" data-toggle="pill" href="#custom-content-below-asistencia" role="tab" aria-controls="custom-content-below-asistencia" aria-selected="false">ASISTENCIA TRABAJADOR</a>
+                            </li>                        
                           </ul>
                           <div class="tab-content" id="custom-content-below-tabContent">
 

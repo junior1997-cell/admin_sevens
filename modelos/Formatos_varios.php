@@ -24,7 +24,7 @@ class FormatosVarios
     AND tpp.idproyecto = '$nube_idproyecto' AND tpp.estado='1' AND tpp.estado_delete='1' ORDER BY tpp.orden_trabajador ASC";
     $trabajdor = ejecutarConsultaArray($sql); if ($trabajdor['status'] == false) { return  $trabajdor;};
 
-    $sql_2 = "SELECT idproyecto,nombre_proyecto,nombre_codigo,actividad_trabajo,empresa_acargo,ubicacion 
+    $sql_2 = "SELECT idproyecto,nombre_proyecto,nombre_codigo,actividad_trabajo,empresa_acargo,ubicacion,numero_documento,empresa
     FROM proyecto WHERE idproyecto ='$nube_idproyecto';" ; 
     $datosproyect = ejecutarConsultaSimpleFila($sql_2); if ($datosproyect['status'] == false) { return  $datosproyect;};
 
@@ -72,7 +72,9 @@ class FormatosVarios
       'nombre_codigo'=> $datosproyect['data']['nombre_codigo'],
       'actividad_trabajo'=> $datosproyect['data']['actividad_trabajo'],
       'empresa_acargo'=> $datosproyect['data']['empresa_acargo'],
-      'ubicacion'=> $datosproyect['data']['ubicacion']
+      'ubicacion'=> $datosproyect['data']['ubicacion'],
+      'numero_documento'=> $datosproyect['data']['numero_documento'],
+      'empresa'=> $datosproyect['data']['empresa']
     ]; 
     return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>$data,'proyecto'=>$proyecto];
   }
