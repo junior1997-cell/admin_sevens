@@ -332,7 +332,7 @@
           $icon = "eye";
           $cont = 1;
   
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             foreach ($rspta['data'] as $key => $value) {
               $data[] = [
@@ -366,7 +366,7 @@
           //Vamos a declarar un array
           $data = []; $cont = 1;
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $value) {
               $data[] = [
                 "0" => $cont++,

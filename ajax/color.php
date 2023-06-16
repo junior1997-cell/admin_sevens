@@ -50,7 +50,7 @@
 
         $toltip = '<script> $(function() { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
           while ($reg = $rspta['data']->fetch_object()) {
             $data[] = [
               "0" => $cont++,

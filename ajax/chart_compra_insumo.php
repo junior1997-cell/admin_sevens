@@ -40,7 +40,7 @@
 
           $data ="";
          
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $value) {    
               $data .= '<option value=' . $value['anios'] . '>' . $value['anios'] .'</option>';
             }  

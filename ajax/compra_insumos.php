@@ -378,7 +378,7 @@ if (!isset($_SESSION["nombre"])) {
         $info = "info";
         $icon = "eye";
         
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
             $data[] = [
               "0" => $cont++,
@@ -408,7 +408,7 @@ if (!isset($_SESSION["nombre"])) {
         //Vamos a declarar un array
         $data = []; $cont = 1;
         
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
           while ($reg = $rspta['data']->fetch_object()) {
             $total = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->total :$reg->total);
 
@@ -445,7 +445,7 @@ if (!isset($_SESSION["nombre"])) {
         //Vamos a declarar un array
         $data = []; $cont = 1;        
         
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
           while ($reg = $rspta['data']->fetch_object()) {
             $data[] = [
               "0" => $cont,

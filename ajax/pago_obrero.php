@@ -58,7 +58,7 @@
           $Object->setTimezone(new DateTimeZone('America/Lima'));
           $date_actual = $Object->format("d-m-Y");  
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             
             foreach ( $rspta['data'] as $key => $value) {
               $btn_depositos = "";
@@ -202,7 +202,7 @@
           $data= Array();
           $cont = 1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg=$rspta['data']->fetch_object()){
               $baucher_deposito = !empty($reg->baucher)
                 ? ( '<center><a target="_blank" href="../dist/docs/pago_obrero/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
@@ -327,7 +327,7 @@
           $data= Array();
           $cont = 1;
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg=$rspta['data']->fetch_object()){
               $baucher_deposito = !empty($reg->baucher)
                 ? ( '<center><a target="_blank" href="../dist/docs/pago_obrero/baucher_deposito/'.$reg->baucher.'"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')

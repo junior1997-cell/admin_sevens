@@ -68,7 +68,7 @@
 
           $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-          if ($rspta['status']) {   
+          if ($rspta['status'] == true) {   
           
             foreach ($rspta['data'] as $key => $value) {   
 

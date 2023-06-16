@@ -94,7 +94,7 @@
           //Vamos a declarar un array
           $data = []; $cont = 1;        
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $reg) {
               $data[] = [
                 "0" => '<center>' . $cont++ . '</center>',
@@ -163,7 +163,7 @@
           //Vamos a declarar un array
           $data = [];  $cont = 1;
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $reg) {
               $ficha_tecnica = ""; $comprobantes="";
               !empty($reg['ficha_tecnica'])
@@ -721,7 +721,7 @@
           //Vamos a declarar un array
           $data = []; $cont = 1;        
           
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
               $data[] = [
                 "0" => $cont,

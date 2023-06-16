@@ -109,7 +109,7 @@
           //Vamos a declarar un array
           $data = []; $cont = 1;
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
               // empty($reg->comprobante)?$comprobante='<div><center><a type="btn btn-danger" class=""><i class="far fa-times-circle fa-2x"></i></a></center></div>':$comprobante='<center><a target="_blank" href="../dist/img/comprob_otro_gasto/'.$reg->comprobante.'"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>';
         

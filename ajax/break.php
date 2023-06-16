@@ -71,7 +71,7 @@
           $rspta=$breaks->listar($_GET['nube_idproyecto']);
           $data= Array();
           $cont = 1;
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             while ($reg=$rspta['data']->fetch_object()){ 
 
@@ -164,7 +164,7 @@
           $monto=0;
           $cont=1;
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             while ($reg=$rspta['data']->fetch_object()){
 
