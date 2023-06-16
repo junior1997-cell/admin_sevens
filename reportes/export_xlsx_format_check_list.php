@@ -18,15 +18,16 @@
   $spreadsheet->getActiveSheet()->getStyle('A4:AD4')->getAlignment()->setHorizontal('center');
   $spreadsheet->getActiveSheet()->getStyle('A5:AD8')->getAlignment()->setHorizontal('center');
 
-  $spreadsheet->getActiveSheet()->getStyle('A5:W5')->getAlignment()->setWrapText(true);
+  $spreadsheet->getActiveSheet()->getStyle('A5:AD5')->getAlignment()->setWrapText(true);
   $spreadsheet->getActiveSheet()->getStyle('A7:AD7')->getAlignment()->setWrapText(true);
 
   $spreadsheet->getActiveSheet()->getStyle('D1:AD1')->getFont()->setBold(true);
   $spreadsheet->getActiveSheet()->getStyle('A4:AD4')->getFont()->setBold(true);
-  $spreadsheet->getActiveSheet()->getStyle('A5:W5')->getFont()->setBold(true);
+  $spreadsheet->getActiveSheet()->getStyle('A5:AD5')->getFont()->setBold(true);
   $spreadsheet->getActiveSheet()->getStyle('A7:AD7')->getFont()->setBold(true);
     
-  $spreadsheet->getActiveSheet()->getRowDimension('5')->setRowHeight(35);
+  // $spreadsheet->getActiveSheet()->getRowDimension('5')->setRowHeight(35);
+  // $spreadsheet->getActiveSheet()->getRowDimension('6')->setRowHeight(35);
   $spreadsheet->getActiveSheet()->getRowDimension('7')->setRowHeight(35);
 
   $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(5);
@@ -86,13 +87,14 @@
   $hojaActiva->mergeCells('A6:F6'); #
   $hojaActiva->mergeCells('G5:J5'); # RUC
   $hojaActiva->mergeCells('G6:J6'); #
-  $hojaActiva->mergeCells('K5:P5'); # DOMICILIO
-  $hojaActiva->mergeCells('K6:P6'); #
-  $hojaActiva->mergeCells('Q5:V5'); # RAZÓN SOCIAL O DENOMINACIÓN SOCIAL
-  $hojaActiva->mergeCells('Q6:V6'); #
-  $hojaActiva->mergeCells('W5:Z5'); # N° TRABAJADORES EN EL TRABAJO
-  $hojaActiva->mergeCells('W6:Z6'); #
-  $hojaActiva->mergeCells('AA5:AD6'); # vACIO
+  $hojaActiva->mergeCells('K5:Y5'); # Dirección
+  $hojaActiva->mergeCells('K6:Y6'); #
+  $hojaActiva->mergeCells('Z5:AD5'); # ACTIVIDAD
+  $hojaActiva->mergeCells('Z6:AD6'); #
+  // $hojaActiva->mergeCells('Z5:AD6'); #
+  // $hojaActiva->mergeCells('W5:Z5'); # N° TRABAJADORES EN EL TRABAJO
+  // $hojaActiva->mergeCells('W6:Z6'); #
+  // $hojaActiva->mergeCells('AA5:AD6'); # vACIO
 
   $hojaActiva->mergeCells('B7:F7'); # VERIFICACIÓN DE EQUIPOS DE SEGURIDAD
   $hojaActiva->mergeCells('G7:H7'); # CASCO
@@ -120,15 +122,16 @@
 
   $hojaActiva->setCellValue('A5', 'RAZÓN SOCIAL O DENOMINACIÓN SOCIAL');
   $hojaActiva->setCellValue('G5', 'RUC');
-  $hojaActiva->setCellValue('K5', 'DOMICILIO (Dirección, distrito, departamento, provincia)');
-  $hojaActiva->setCellValue('Q5', 'TIPO DE ACTIVIDAD ECONÓMICA');
-  $hojaActiva->setCellValue('W5', 'N° TRABAJADORES EN EL TRABAJO');
+  $hojaActiva->setCellValue('K5', 'DIRECCIÓN');
+  $hojaActiva->setCellValue('Z5', 'TIPO DE ACTIVIDAD ECONÓMICA');
+  // $hojaActiva->setCellValue('W5', 'N° TRABAJADORES EN EL TRABAJO');
+  $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
 
-  $hojaActiva->setCellValue('A6', 'SEVEN´S INGENIEROS SELVA S.A.C. ');
-  $hojaActiva->setCellValue('G6', '20609935651');
+  $hojaActiva->setCellValue('A6', '---');
+  $hojaActiva->setCellValue('G6', '---');
   $hojaActiva->setCellValue('K6', '---');
-  $hojaActiva->setCellValue('Q6', 'ARQUITECTURA E INGENIERIA');
-  $hojaActiva->setCellValue('W6', '---');
+  $hojaActiva->setCellValue('Z6', 'ARQUITECTURA E INGENIERIA');
+  // $hojaActiva->setCellValue('Z6', '---');
 
   $hojaActiva->setCellValue('B7', 'VERIFICACIÓN DE EQUIPOS DE SEGURIDAD');
   $hojaActiva->setCellValue('G7', 'CASCO');
@@ -179,7 +182,11 @@
   // echo json_encode($rspta, true);
   $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
   $hojaActiva->setCellValue('D2', $rspta['proyecto']['nombre_proyecto']);
-  $hojaActiva->setCellValue('K6', 'PJ. YUNGAY NRO. 151 P.J. SANTA ROSA LAMBAYEQUE CHICLAYO CHICLAYO');
+
+  $hojaActiva->setCellValue('A6', $rspta['proyecto']['empresa']);
+  $hojaActiva->setCellValue('G6', $rspta['proyecto']['numero_documento']);
+  $hojaActiva->setCellValue('K6', $rspta['proyecto']['ubicacion']);
+  $hojaActiva->getStyle('K6')->getAlignment()->setWrapText(true);
 
   $fila_1 = 9;
 
@@ -196,7 +203,8 @@
     $hojaActiva->setCellValue('B'.$fila_1, $reg['trabajador']);
     $spreadsheet->getActiveSheet()->getStyle('AD'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
-    $fila_1++;    
+    $fila_1++;  
+    // $hojaActiva->setCellValue('W6', '---');  
   }
 
   // redirect output to client browser

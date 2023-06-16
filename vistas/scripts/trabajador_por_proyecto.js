@@ -1,7 +1,7 @@
 var tabla, tabla_secundaria;
 
 var cant_banco_multimple = 1; cant_sueldo_multimple = 1;
-
+iddes='';
 //Función que se ejecuta al inicio
 function init() {  
 
@@ -428,11 +428,12 @@ function mostrar(idtrabajador,idtipo) {
 
   limpiar_form_trabajador();
   show_hide_form(2);
-
+  iddes="";
   $.post("../ajax/trabajador_por_proyecto.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
 
     e = JSON.parse(e); console.log(e); 
-    //console.log('tabajador '+e.data.idtrabajador);select2Trabajador
+    //console.log('tabajador '+e.data.idtrabajador);select2Trabajador 
+    console.log('seleccionamos');
     lista_select2(`../ajax/ajax_general.php?op=select2Trabajador`,'#trabajador', e.data.idtrabajador, null);
 
     lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data.idtrabajador}`, '#desempenio', e.data.iddesempenio);
@@ -443,6 +444,7 @@ function mostrar(idtrabajador,idtipo) {
     // alert(e.data.idtrabajador);
     console.log(e.data.idtrabajador);
     $("#desempenio").val(e.data.iddesempenio).trigger("change");    
+    iddes=e.data.iddesempenio;
 
     $("#ocupacion").html(e.data.nombre_ocupacion);    
     $("#tipo_trabajador").html(e.data.nombre_tipo);  
@@ -457,6 +459,7 @@ function mostrar(idtrabajador,idtipo) {
 
     $("#cargando-1-fomulario").show();
     $("#cargando-2-fomulario").hide();
+    capture_idtrabajador(estado_editar = true)
 
     e.data.detalle_sueldo.forEach(function(val, index){         
       
@@ -485,63 +488,62 @@ function mostrar(idtrabajador,idtipo) {
 
 }
 
+//captura id del trabajador
+function capture_idtrabajador(estado_editar = false) { 
 
+  var idtrabajador= $("#trabajador").select2("val");
+  $("#tipo_trabajador").html("Selecione un trabajador"); $("#ocupacion").html("Selecione un trabajador");
 
-// //captura id del trabajador
-// function capture_idtrabajador(estado_editar = false) { 
+  if (estado_editar == false) {    
   
-//   var idtrabajador= $("#trabajador").select2("val");
-//   $("#tipo_trabajador").html("Selecione un trabajador");
-//   $("#ocupacion").html("Selecione un trabajador");
+    if (idtrabajador == null || idtrabajador == '' ) {  }else{
 
-//   if (estado_editar == false) {    
-  
-//     if (idtrabajador == null || idtrabajador == '' ) {  }else{
+      lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', null);
 
-//       lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', null);
-
-//       $("#tipo_trabajador").html("");
+      $("#tipo_trabajador").html("");   $("#ocupacion").html("");
         
-//       $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
+      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
-//         e = JSON.parse(e);  console.log(e);   
-//         if (e.status == true) {
-//           $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
-//           $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
-//         } else {
-//           ver_errores(e);
-//         }
-//       }).fail( function(e) { ver_errores(e); } );
-//     }  
-//   }else if(estado_editar == 'edit_trabajador'){
-//     if (idtrabajador == null || idtrabajador == '' ) {  }else{
+        e = JSON.parse(e); // console.log(e);   
+        if (e.status == true) {
+          $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
+          $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
+        } else {
+          ver_errores(e);
+        }
+      }).fail( function(e) { ver_errores(e); } );
+    }  
 
-//       // console.log('edita trbajadorrr');
+  }else if(estado_editar == true){
 
-//       console.log(desempenio+' decempenio');
-//       lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddesempenio);
+     console.log('iddes : '+iddes);
+     $("#desempenio").val(iddes).trigger("change");   
+    // lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddes);
+    if (idtrabajador == null || idtrabajador == '' ) {  }else{
+      //console.log('iddes : '+iddes);
+      //lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddes);
         
-//       $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
+      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
-//         e = JSON.parse(e);  console.log(e);   
-//         if (e.status == true) {          
-//           $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
-//           $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
-//         } else {
-//           ver_errores(e);
-//         }
-//       }).fail( function(e) { ver_errores(e); } );
-//     }  
-//   }
+        e = JSON.parse(e);   
+        if (e.status == true) { 
+          $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo); 
+          $("#ocupacion").html(e.data.trabajador.nombre_ocupacion); 
+        } else { ver_errores(e); }
 
-//   if ($('#trabajador').select2("val") == null || $('#trabajador').select2("val") == '') { 
-//     $('.btn-editar-trabajador').addClass('disabled').attr('data-original-title','Seleciona un trabajador');
-//   } else {     
-//     var name_trabajador = $('#trabajador').select2('data')[0].text;
-//     $('.btn-editar-trabajador').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_trabajador, 15)}`);     
-//   }
-//   $('[data-toggle="tooltip"]').tooltip();  
-// }
+      }).fail( function(e) { ver_errores(e); } );
+    }  
+
+  }
+
+  if ($('#trabajador').select2("val") == null || $('#trabajador').select2("val") == '') { 
+    $('.btn-editar-trabajador').addClass('disabled').attr('data-original-title','Seleciona un trabajador');
+  } else {     
+    var name_trabajador = $('#trabajador').select2('data')[0].text;
+    $('.btn-editar-trabajador').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_trabajador, 15)}`);     
+  }
+  $('[data-toggle="tooltip"]').tooltip();  
+}
 
 
 
