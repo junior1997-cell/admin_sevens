@@ -821,8 +821,8 @@ function mostrar_hn(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
             var color_td = val2.horas_normal_dia >= 8 ? 'bg-color-28a74540': (val2.horas_normal_dia < 8 && val2.horas_normal_dia > 0  ? 'bg-color-28a74540' : 'bg-color-ff000040' ) ; 
             if (weekday != 'sa') {
               if (val2.dia_regular == true) {
-                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);                
-                tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> </td>`);
+                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> <input class="input_HN_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}"  type="hidden" value="0"> </td>`);                
+                tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(``);
               } else {
                 tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center ${color_td}" > 
                   <span class="span_asist span_HN_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" >${val2.horas_normal_dia}</span> 
@@ -901,7 +901,9 @@ function mostrar_hn(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
               'cant_trabajador'   : e.data.length,
               'sueldo_hora'       : val.sueldo_hora,
               'sabatical_manual_1': val.sabatical_manual_1,
-              'sabatical_manual_2': val.sabatical_manual_2
+              'sabatical_manual_2': val.sabatical_manual_2,
+              'dia_regular'       : val2.dia_regular,
+              'sueldo_diario'     : val2.sueldo_diario
             } );
             // no recoge sabados
             array_agregar_horas.push( { 
@@ -1212,8 +1214,8 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
 
             if (weekday != 'sa') {
               if (val2.dia_regular == true) {
-                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class="span_asist " >-</span> </td>`);                
-                tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> </td>`);
+                tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center bg-color-acc3c7"> <span class=" " >-</span> <input class="input_HE_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" type="hidden" value="0"> </td>`);                
+                tabla_bloc_HE_asistencia_2 = tabla_bloc_HE_asistencia_2.concat(``);
               } else {
                 tabla_bloc_HN_asistencia_3 = tabla_bloc_HN_asistencia_3.concat(`<td class="text-center ${color_td}" rowspan="2"> 
                   <span class="span_asist span_HE_${val.idtrabajador_por_proyecto}_${format_d_m_a(val2.fecha_asistencia)}" >${val2.horas_extras_dia}</span> 
@@ -1239,7 +1241,9 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
               'cant_trabajador'   : e.data.length,
               'sueldo_hora'       : val.sueldo_hora,
               'sabatical_manual_1': val.sabatical_manual_1,
-              'sabatical_manual_2': val.sabatical_manual_2
+              'sabatical_manual_2': val.sabatical_manual_2,
+              'dia_regular'       : val2.dia_regular,
+              'sueldo_diario'     : val2.sueldo_diario
             } );
             // no recoge sabados
             array_agregar_horas.push( { 
@@ -1627,7 +1631,9 @@ function guardar_fechas_asistencia_hn() {
         'fecha_asistida'  :format_a_m_d(val2.fecha_asistida),
         'nombre_dia'      :extraer_dia_semana_completo(format_a_m_d(val2.fecha_asistida)),
         'horas_normal_dia':$(`.input_HN_${val2.id_trabajador}_${val2.fecha_asistida}`).val(),
-        'pago_normal_dia' :(parseFloat($(`.input_HN_${val2.id_trabajador}_${val2.fecha_asistida}`).val()) * val2.sueldo_hora).toFixed(2) ,        
+        'pago_normal_dia' :(parseFloat($(`.input_HN_${val2.id_trabajador}_${val2.fecha_asistida}`).val()) * val2.sueldo_hora).toFixed(2) ,    
+        'dia_regular'     :val2.dia_regular ,   
+        'sueldo_diario'   :val2.sueldo_diario ,      
       });
     });
 
@@ -1726,7 +1732,9 @@ function guardar_fechas_asistencia_he() {
         'fecha_asistida'  :format_a_m_d(val2.fecha_asistida),
         'nombre_dia'      :extraer_dia_semana_completo(format_a_m_d(val2.fecha_asistida)),
         'horas_extras_dia':horas_extras_dia,
-        'pago_horas_extras':pago_horas_extras
+        'pago_horas_extras':pago_horas_extras,
+        'dia_regular'     :val2.dia_regular ,   
+        'sueldo_diario'   :val2.sueldo_diario ,
       });
     });
 
