@@ -75,11 +75,11 @@
                             <!--ASISTENCIA TRABAJADOR-->
                             <li class="nav-item">
                               <a class="nav-link" id="custom-content-below-asistencia-tab" data-toggle="pill" href="#custom-content-below-asistencia" role="tab" aria-controls="custom-content-below-asistencia" aria-selected="false">ASISTENCIA TRABAJADOR</a>
-                            </li>    
-                            <!--ASISTENCIA ATS FORMATOS-->
+                            </li> 
+                            <!--CONTROL_EPP_TRABAJADOR-->
                             <li class="nav-item">
-                              <a class="nav-link" id="custom-content-below-asistencia-tab" data-toggle="pill" href="#custom-content-below-asistencia" role="tab" aria-controls="custom-content-below-asistencia" aria-selected="false">ASISTENCIA TRABAJADOR</a>
-                            </li>                        
+                              <a class="nav-link" id="custom-content-below-controlEPP-tab" data-toggle="pill" href="#custom-content-below-controlEPP" role="tab" aria-controls="custom-content-below-controlEPP" aria-selected="false">CONTROL E.P.P TRABAJADOR</a>
+                            </li>                       
                           </ul>
                           <div class="tab-content" id="custom-content-below-tabContent">
 
@@ -309,7 +309,19 @@
                               </div>
                               <!-- /.table-responsive -->                                
                             </div>
-                            <!-- /.tab-panel -->                           
+                            <!-- /.tab-panel -->
+                            
+                            <!--control EPP Trabajador-->
+                            <div class="tab-pane fade " id="custom-content-below-controlEPP" role="tabpanel" aria-labelledby="custom-content-below-controlEPP-tab">
+                              <!-- tabla controlEPP - TRABAJADOR -->
+                              <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-controlEPP_trabajador"> <i class="fa-regular fa-file-excel"></i> export </a>
+                              <div class="table-responsive pb-3">
+                                  <!--TABLA EXPORT controlEPP TRABAJADOR-->
+                                  <h1>CONTROL DE E.P.P POR TRABJADOR</h1>
+                              </div>
+                              <!-- /.table-responsive -->                                
+                            </div>
+                            <!-- /.tab-panel -->      
 
                           </div>
                         </div>
