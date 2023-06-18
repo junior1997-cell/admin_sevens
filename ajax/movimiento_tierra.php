@@ -230,7 +230,7 @@
           //Vamos a declarar un array
           $data = []; $cont = 1;        
           
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
               $data[] = [
                 "0" => $cont,

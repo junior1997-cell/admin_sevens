@@ -140,7 +140,7 @@
           $igv=0;
           $monto=0;
           $cont=1;
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             while ($reg=$rspta['data']->fetch_object()){
               $subtotal=round($reg->subtotal, 2);
@@ -250,7 +250,7 @@
           $icon="";
           $cc="";
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             while ($reg=$rspta['data']->fetch_object()){ 
 
@@ -330,7 +330,7 @@
           //Vamos a declarar un array
           $data= Array();
           $cont=1;
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg=$rspta['data']->fetch_object()){ 
               $data[]=array(
                 "0"=>$cont++,

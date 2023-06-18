@@ -133,7 +133,7 @@
           $data = [];         
           $cont=1;          
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $reg) {
               
               $imagen = (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );

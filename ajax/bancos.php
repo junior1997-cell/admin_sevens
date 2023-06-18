@@ -100,7 +100,7 @@
 
         $imagen = '';
         
-        if ($rspta['status']) {
+        if ($rspta['status'] == true) {
 
           while ($reg = $rspta['data']->fetch_object()) {
 

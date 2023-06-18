@@ -311,7 +311,7 @@
 
           $imagen_error = "this.src='../dist/svg/user_default.svg'";
           $ficha_tecnica = "";
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $reg) {
               // validamos si existe una ficha tecnica
               !empty($reg->ficha_tecnica)
@@ -369,7 +369,7 @@
           //Vamos a declarar un array
           $data = []; $cont = 1;        
           
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
               $data[] = [
                 "0" => $cont,

@@ -19,7 +19,7 @@
 
       $rspta = $usuario->verificar($logina, $clavehash);   //$fetch = $rspta->fetch_object();
 
-      if ( $rspta['status'] ) {
+      if ( $rspta['status'] == true ) {
         if ( !empty($rspta['data']) ) {
           //Declaramos las variables de sesión
           $_SESSION['idusuario'] = $rspta['data']['idusuario'];
@@ -38,7 +38,7 @@
           //Declaramos el array para almacenar todos los permisos marcados
           $valores = [];
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             //Almacenamos los permisos marcados en el array
             foreach ($marcados['data'] as $key => $value) {
               array_push($valores, $value['idpermiso']);
@@ -231,7 +231,7 @@
       $imagen_error = "this.src='../dist/svg/user_default.svg'"; $cont=1;
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-      if ($rspta['status']) {
+      if ($rspta['status'] == true) {
         foreach ($rspta['data'] as $key => $value) {
           $data[] = [
             "0"=>$cont++,
@@ -267,7 +267,7 @@
       //Obtenemos todos los permisos de la tabla permisos      
       $rspta = $permisos->listar();
 
-      if ( $rspta['status'] ) {
+      if ( $rspta['status'] == true ) {
 
         //Obtener los permisos asignados al usuario
         $id = $_GET['id'];
@@ -275,7 +275,7 @@
         //Declaramos el array para almacenar todos los permisos marcados
         $valores = [];
 
-        if ($marcados['status']) {
+        if ($marcados['status'] == true) {
 
           //Almacenar los permisos asignados al usuario en el array
           foreach ($marcados['data'] as $key => $value) {
@@ -340,7 +340,7 @@
 
       $rspta = $usuario->select2_trabajador();  $data = "";
 
-      if ($rspta['status']) {
+      if ($rspta['status'] == true) {
 
         foreach ($rspta['data'] as $key => $value) {
           $data  .= '<option value=' . $value['id'] . ' title="'.$value['imagen_perfil'].'">' . $value['nombre'] . ' - ' . $value['numero_documento'] . '</option>';

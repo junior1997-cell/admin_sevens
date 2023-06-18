@@ -73,7 +73,7 @@
           
           $cont=1;          
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $reg) {
 
               $data[]=array(
@@ -173,7 +173,7 @@
           //Vamos a declarar un array
           $data= Array();  $cont=1;
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             while ($reg=$rspta['data']->fetch_object()){ 
               $comprobante= empty($reg->comprobante)?'<div><center><a type="btn btn-danger" class=""><i class="fas fa-file-invoice-dollar fa-2x text-gray-50"></i></a></center></div>':'<div><center><a type="btn btn-danger" class=""  href="#" onclick="ver_modal_comprobante('."'".$reg->comprobante."'".','."'".$reg->tipo_comprobante."'".','."'".$reg->numero_comprobante."'".')"><i class="fas fa-file-invoice fa-2x"></i></a></center></div>';

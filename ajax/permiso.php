@@ -24,7 +24,7 @@
 					//Vamos a declarar un array
 					$cont=1;
 					$data= Array();
-					if ($rspta['status']) {
+					if ($rspta['status'] == true) {
 						foreach ($rspta['data'] as $key => $value) {
 
 							$data[]=array(
@@ -56,7 +56,7 @@
 					//Vamos a declarar un array
 					$data= Array();
 					$imagen_error = "this.src='../dist/svg/user_default.svg'";
-					if ($rspta['status']) {
+					if ($rspta['status'] == true) {
 						foreach ($rspta['data'] as $key => $value) {
 
 							$data[]=array(

@@ -124,7 +124,7 @@
           $data = [];
           
           $cont = 1;
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
 
               $comprobante = empty($reg->comprobante)
@@ -186,7 +186,7 @@
 
           $rspta = $otro_gasto->selecct_provedor_og($_GET['idproyecto']); $cont = 1; $data = "";
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
   
             foreach ($rspta['data'] as $key => $value) {  
 

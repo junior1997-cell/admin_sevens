@@ -134,7 +134,7 @@
           $comprobante = '';
           $cont = 1;
           
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
 
             while ($reg = $rspta['data']->fetch_object()) {
 
@@ -197,7 +197,7 @@
 
           $rspta = $comidas_extras->selecct_provedor_comidas_ex($_GET['idproyecto']); $cont = 1; $data = "";
 
-          if ($rspta['status']) {
+          if ($rspta['status'] == true) {
   
             foreach ($rspta['data'] as $key => $value) {  
 
