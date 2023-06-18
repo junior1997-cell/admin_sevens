@@ -65,7 +65,7 @@
           in_array(12, $valores) ? ($_SESSION['servicio_maquina'] = 1)  : ($_SESSION['servicio_maquina'] = 0);
           in_array(13, $valores) ? ($_SESSION['servicio_equipo'] = 1)   : ($_SESSION['servicio_equipo'] = 0);
           in_array(14, $valores) ? ($_SESSION['subcontrato'] = 1)       : ($_SESSION['subcontrato'] = 0);
-          in_array(15, $valores) ? ($_SESSION['mano_obra'] = 1): ($_SESSION['mano_obra'] = 0);          
+          in_array(15, $valores) ? ($_SESSION['mano_obra'] = 1)         : ($_SESSION['mano_obra'] = 0);          
 
           in_array(16, $valores) ? ($_SESSION['planilla_seguro'] = 1)   : ($_SESSION['planilla_seguro'] = 0);
           in_array(17, $valores) ? ($_SESSION['otro_gasto'] = 1)        : ($_SESSION['otro_gasto'] = 0);          
@@ -73,23 +73,25 @@
           in_array(19, $valores) ? ($_SESSION['resumen_general'] = 1)   : ($_SESSION['resumen_general'] = 0);
 
           // TECNICO
-          in_array(20, $valores) ? ($_SESSION['valorizacion'] = 1)      : ($_SESSION['valorizacion'] = 0);
-          in_array(21, $valores) ? ($_SESSION['grafico_valorizacion'] = 1) : ($_SESSION['grafico_valorizacion'] = 0);
-          in_array(22, $valores) ? ($_SESSION['asistencia_obrero'] = 1) : ($_SESSION['asistencia_obrero'] = 0);
-          in_array(23, $valores) ? ($_SESSION['calendario'] = 1)        : ($_SESSION['calendario'] = 0);
-          in_array(24, $valores) ? ($_SESSION['plano_otro'] = 1)        : ($_SESSION['plano_otro'] = 0);  
+          in_array(20, $valores) ? ($_SESSION['valorizacion'] = 1)          : ($_SESSION['valorizacion'] = 0);
+          in_array(21, $valores) ? ($_SESSION['grafico_valorizacion'] = 1)  : ($_SESSION['grafico_valorizacion'] = 0);
+          in_array(22, $valores) ? ($_SESSION['asistencia_obrero'] = 1)     : ($_SESSION['asistencia_obrero'] = 0);
+          in_array(23, $valores) ? ($_SESSION['calendario'] = 1)            : ($_SESSION['calendario'] = 0);
+          in_array(24, $valores) ? ($_SESSION['plano_otro'] = 1)            : ($_SESSION['plano_otro'] = 0);  
 
-          in_array(25, $valores) ? ($_SESSION['clasificacion_grupo'] = 1) : ($_SESSION['clasificacion_grupo'] = 0);
+          in_array(25, $valores) ? ($_SESSION['clasificacion_grupo'] = 1)   : ($_SESSION['clasificacion_grupo'] = 0);
           in_array(26, $valores) ? ($_SESSION['valorizacion_concreto'] = 1) : ($_SESSION['valorizacion_concreto'] = 0);
-          in_array(27, $valores) ? ($_SESSION['valorizacion_fierro'] = 1)            : ($_SESSION['valorizacion_fierro'] = 0);
+          in_array(27, $valores) ? ($_SESSION['valorizacion_fierro'] = 1)   : ($_SESSION['valorizacion_fierro'] = 0);
           
           // CONTABLE Y FINANCIERO
-          in_array(28, $valores) ? ($_SESSION['resumen_gasto'] = 1)     : ($_SESSION['resumen_gasto'] = 0);         
-          in_array(29, $valores) ? ($_SESSION['pago_trabajador'] = 1)   : ($_SESSION['pago_trabajador'] = 0);
-          in_array(30, $valores) ? ($_SESSION['prestamo'] = 1)          : ($_SESSION['prestamo'] = 0);
-          in_array(31, $valores) ? ($_SESSION['estado_financiero'] = 1) : ($_SESSION['estado_financiero'] = 0);        
-          in_array(32, $valores) ? ($_SESSION['otro_ingreso'] = 1)      : ($_SESSION['otro_ingreso'] = 0);
-          in_array(33, $valores) ? ($_SESSION['pago_valorizacion'] = 1) : ($_SESSION['pago_valorizacion'] = 0); //new
+          in_array(28, $valores) ? ($_SESSION['otra_factura_proyecto'] = 1)     : ($_SESSION['otra_factura_proyecto'] = 0);
+          in_array(29, $valores) ? ($_SESSION['resumen_factura_proyecto'] = 1)  : ($_SESSION['resumen_factura_proyecto'] = 0);
+          in_array(30, $valores) ? ($_SESSION['resumen_gasto'] = 1)     : ($_SESSION['resumen_gasto'] = 0);         
+          in_array(31, $valores) ? ($_SESSION['pago_trabajador'] = 1)   : ($_SESSION['pago_trabajador'] = 0);
+          in_array(32, $valores) ? ($_SESSION['prestamo'] = 1)          : ($_SESSION['prestamo'] = 0);
+          in_array(33, $valores) ? ($_SESSION['estado_financiero'] = 1) : ($_SESSION['estado_financiero'] = 0);        
+          in_array(34, $valores) ? ($_SESSION['otro_ingreso'] = 1)      : ($_SESSION['otro_ingreso'] = 0);
+          in_array(35, $valores) ? ($_SESSION['pago_valorizacion'] = 1) : ($_SESSION['pago_valorizacion'] = 0); //new
 
         } else {
           echo json_encode($rspta, true);
