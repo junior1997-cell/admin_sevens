@@ -542,6 +542,26 @@
             <p class="font-size-14px">CONTABLE Y FINANCIERO<i class="fas fa-angle-left right"></i></p>
           </a>
           <ul class="nav nav-treeview">
+            <!-- agregando nuevos modulos -->
+            <?php if ($_SESSION['otra_factura_proyecto']==1) {  ?>
+                <li class="nav-item">
+                  <a href="otra_factura_proy.php" class="nav-link pl-2" id="lOtraFacturaProy">
+                    <i class="nav-icon fas fa-receipt"></i>
+                    <p>Otras Facturas</p>
+                  </a>
+                </li>
+              <?php  }  ?>
+              
+              <?php if ($_SESSION['resumen_factura_proyecto']==1) {  ?>
+                <li class="nav-item">
+                  <a href="resumen_factura_proy.php" class="nav-link pl-2" id="lResumenFacuraProy">            
+                    <i class="nav-icon fas fa-poll"></i>
+                    <p>Resumen de Facturas</p>
+                  </a>
+                </li>
+              <?php  }  ?>
+
+            <!-- F I N -->
 
             <?php if ($_SESSION['resumen_gasto']==1) {  ?>
               <!-- RESUMEN DE GASTOS -->
