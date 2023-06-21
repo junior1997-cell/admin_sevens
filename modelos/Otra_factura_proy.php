@@ -159,7 +159,7 @@ class Otra_factura_Proyecto
   }
 
   //Implementar un método para listar los registros
-  public function tbla_principal($empresa_a_cargo, $fecha_1,$fecha_2,$id_proveedor,$comprobante) {
+  public function tbla_principal($id_proyecto,$empresa_a_cargo, $fecha_1,$fecha_2,$id_proveedor,$comprobante) {
   
     $filtro_empresa_a_cargo = ""; $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
 
@@ -178,7 +178,7 @@ class Otra_factura_Proyecto
     if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }  
 
     $sql = "SELECT of.idotra_factura_proyecto,of.idproveedor,of.tipo_comprobante,of.numero_comprobante,of.forma_de_pago,of.fecha_emision,of.subtotal,of.igv,of.costo_parcial,of.descripcion,of.glosa,of.comprobante,of.estado,p.razon_social  
-    FROM otra_factura_proyecto as of, proveedor as p WHERE of.estado=1 AND of.estado_delete=1 AND of.idproveedor=p.idproveedor $filtro_empresa_a_cargo $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY idotra_factura_proyecto DESC";
+    FROM otra_factura_proyecto as of, proveedor as p WHERE of.idproyecto ='$id_proyecto' AND of.estado=1 AND of.estado_delete=1 AND of.idproveedor=p.idproveedor $filtro_empresa_a_cargo $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY idotra_factura_proyecto DESC";
     return ejecutarConsulta($sql);
 
   }

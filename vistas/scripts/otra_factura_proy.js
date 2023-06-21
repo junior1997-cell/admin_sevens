@@ -123,7 +123,7 @@ function limpiar_form_otra_factura() {
 }
 
 //Función Listar
-function tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante) {
+function tbla_principal(nube_idproyecto,empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante) {
 
   var total_monto = 0;
   $("#total_monto").html('0.00');
@@ -138,7 +138,7 @@ function tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprob
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,2,12,13,4,6,7,8,9,11], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,2,12,13,4,6,7,8,9,11], } }, { extend: 'pdfHtml5', footer: false,  exportOptions: { columns: [0,3,2,12,13,4,6,7,8,9,11], } }, {extend: "colvis"} ,
     ],
     ajax: {
-      url: `../ajax/otra_factura_proy.php?op=tbla_principal&empresa_a_cargo=${empresa_a_cargo}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
+      url: `../ajax/otra_factura_proy.php?op=tbla_principal&id_proyecto=${nube_idproyecto}&empresa_a_cargo=${empresa_a_cargo}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -848,6 +848,7 @@ function cargando_search() {
 
 function filtros() {  
 
+  var nube_idproyecto = localStorage.getItem('nube_idproyecto')
   var empresa_a_cargo = $("#filtro_empresa_a_cargo").select2('val');
   var fecha_1         = $("#filtro_fecha_inicio").val();
   var fecha_2         = $("#filtro_fecha_fin").val();  
@@ -874,7 +875,7 @@ function filtros() {
   $('.cargando').show().html(`<i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando ${nombre_empresa_a_cargo} ${nombre_proveedor} ${nombre_comprobante}...`);
   //console.log(fecha_1, fecha_2, id_proveedor, comprobante);
 
-  tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante);
+  tbla_principal(nube_idproyecto,empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprobante);
 }
 
 function extrae_ruc() {

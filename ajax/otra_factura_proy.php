@@ -106,7 +106,7 @@
       
       
         case 'tbla_principal':
-          $rspta = $otra_factura_proy->tbla_principal($_GET["empresa_a_cargo"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
+          $rspta = $otra_factura_proy->tbla_principal($_GET['id_proyecto'],$_GET["empresa_a_cargo"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
           $data = []; $cont = 1;
 
