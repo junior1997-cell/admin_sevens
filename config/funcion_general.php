@@ -34,11 +34,12 @@ if (!function_exists('ejecutarConsulta')) {
     return "";
   }
   function nombre_dia_semana_v1($fecha) {    
-    if (!empty($fecha) || $fecha != '0000-00-00') {  $fechas = new FechaEs($fecha);  return $fechas->getDDDD().PHP_EOL;  }
+    if (!empty($fecha) || $fecha != '0000-00-00') {  $fechas = new FechaEs($fecha);  return $fechas->getDDDD_v1().PHP_EOL;  }
     return "";
   }
+  // nombre completo
   function nombre_dia_semana_v2($fecha) {    
-    if (!empty($fecha) || $fecha != '0000-00-00') {  $fechas = new FechaEs($fecha);  return $fechas->getDDDD().PHP_EOL;  }
+    if (!empty($fecha) || $fecha != '0000-00-00') {  $fechas = new FechaEs($fecha);  return $fechas->getDDDD_v2().PHP_EOL;  }
     return "";
   }
 

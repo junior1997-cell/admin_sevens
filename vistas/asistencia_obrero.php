@@ -57,9 +57,9 @@
                         <button type="button" class="btn bg-gradient-fuchsia btn-sm" data-toggle="modal" data-target="#modal-agregar-horario" onclick="">
                           <i class="far fa-clock"></i> Horario
                         </button>
-                        <button type="button" class="btn bg-gradient-gray btn-sm" onclick="export_table_excel();">
-                        <i class="fa-regular fa-file-excel"></i> Export
-                        </button>
+                        <a type="button" class="btn bg-gradient-gray btn-sm" id="btn-export-qs" href="#" onclick="toastr_error('No hay datos!!', 'Seleccione una quincena o semana para exportar.');">
+                          <i class="fa-regular fa-file-excel"></i> Export
+                        </a> 
 
                         <button type="button" class="btn bg-gradient-primary btn-sm btn_mostrar_hne activado_hne" data-toggle="tooltip" data-original-title="Hora normal y extra." style="display: none;" >HNE</button>
                         <button type="button" class="btn btn-outline-primary btn-sm btn_mostrar_hn" data-toggle="tooltip" data-original-title="Hora normal." style="display: none;">HN</button>
@@ -173,8 +173,8 @@
                                     <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77 p-y-6px ir_a_left mr-1" data-toggle="tooltip" data-original-title="Deslizar al la izquierda"><i class="far fa-arrow-alt-circle-left fa-lg m-1"></i></span>                                  
                                      
                                   </th>
-                                  <th rowspan="2" class="stile-celda table_title_hne">Horas<br>normal/extras</th>
-                                  <th rowspan="2" class="stile-celda ">Días<br>asistidos</th>
+                                  <th rowspan="2" class="stile-celda table_title_hne">Horas<br>HN/HE</th>
+                                  <th rowspan="2" class="stile-celda ">Total<br>Días</th>
                                   <th rowspan="2" class="stile-celda ">Sueldo <br> Semanal</th>
                                   <th rowspan="2" class="stile-celda ">Jornal</th>
                                   <th rowspan="2" class="stile-celda ">Sueldo <br> hora</th>
@@ -921,7 +921,7 @@
                                 </thead>
                                 <tbody>
                                   <tr class="text-nowrap">
-                                    <th class="py-1"><span >MAÑANA</span>  <input type="text" name="turno_he[]" style="display: none;" value="MAÑANA"></th>
+                                    <th class="py-1"><span >TARDE</span>  <input type="text" name="turno_he[]" style="display: none;" value="MAÑANA"></th>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_domingo_m_he">1:00 - 5:00</span><input type="text" class="form-control input_horario" name="domingo_he[]" style="display: none;"> </td>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_lunes_m_he">---</span><input type="text" class="form-control input_horario" name="lunes_he[]" style="display: none;"></td>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_martes_m_he">---</span><input type="text" class="form-control input_horario" name="martes_he[]" style="display: none;"></td>
@@ -930,7 +930,7 @@
                                     <td class="p-1 text-center"><span class="span_horario" id="s_viernes_m_he">---</span><input type="text" class="form-control input_horario" name="viernes_he[]" style="display: none;"></td>
                                   </tr>
                                   <tr  class="text-nowrap">
-                                    <th class="py-1"><span >ALMUERZO</span>  <input type="text" name="turno_he[]" style="display: none;" value="ALMUERZO"></th>
+                                    <th class="py-1"><span >CENA</span>  <input type="text" name="turno_he[]" style="display: none;" value="ALMUERZO"></th>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_domingo_a_he">5:00 - 6:00</span><input type="text" class="form-control input_horario" name="domingo_he[]" style="display: none;"> </td>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_lunes_a_he">---</span><input type="text" class="form-control input_horario" name="lunes_he[]" style="display: none;"></td>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_martes_a_he">---</span><input type="text" class="form-control input_horario" name="martes_he[]" style="display: none;"></td>
@@ -939,7 +939,7 @@
                                     <td class="p-1 text-center"><span class="span_horario" id="s_viernes_a_he">---</span><input type="text" class="form-control input_horario" name="viernes_he[]" style="display: none;"></td>
                                   </tr>
                                   <tr class="text-nowrap">
-                                    <th class="py-1"><span >TARDE</span>  <input type="text" name="turno_he[]" style="display: none;" value="TARDE"></th>
+                                    <th class="py-1"><span >NOCHE</span>  <input type="text" name="turno_he[]" style="display: none;" value="TARDE"></th>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_domingo_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="domingo_he[]" style="display: none;"> </td>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_lunes_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="lunes_he[]" style="display: none;"></td>
                                     <td class="p-1 text-center"><span class="span_horario" id="s_martes_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="martes_he[]" style="display: none;"></td>

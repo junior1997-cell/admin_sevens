@@ -31,30 +31,23 @@ function crud_listar_tabla(url, nombre_modulo) {
   return tabla;
 }
 
-function lista_select2(url, nombre_input, id_tabla, callback_true = false) {
-
+function lista_select2(url, nombre_input, id_tabla, span_charge = null) {
+  if (span_charge == null || span_charge == '' || span_charge == false ) { } else {$(span_charge).html('<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>');}
   $.get(url, function (e, status) {
-
     try {
       e = JSON.parse(e);   //console.log(e);
-
       if (e.status==true) {
-
         $(nombre_input).html(e.data); 
-
         if ( !id_tabla || id_tabla == "NaN" || id_tabla == "" || id_tabla == null || id_tabla == "Infinity" || id_tabla === undefined) {
           $(nombre_input).val(null).trigger("change");
         } else {
           $(nombre_input).val(id_tabla).trigger("change");  
         }
-
-        if (callback_true) { callback_true(); }
-
+        if (span_charge == null || span_charge == '' || span_charge == false ) { } else {  $(span_charge).html(''); } 
       } else {
         ver_errores(e);
       }
     } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
-
   }).fail( function(e) { ver_errores(e); } );
 }
 

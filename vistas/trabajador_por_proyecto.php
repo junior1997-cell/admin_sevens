@@ -60,7 +60,7 @@
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
-                            <button type="button" class="btn bg-gradient-success btn-agregar-trabajador"  onclick="show_hide_form(2); limpiar_form_trabajador();"><i class="fas fa-user-plus"></i> Agregar</button>
+                            <button type="button" class="btn bg-gradient-success btn-agregar-trabajador"  onclick="show_hide_form(2); limpiar_form_trabajador(); trabajador_no_usado();"><i class="fas fa-user-plus"></i> Agregar</button>
                             <button type="button" class="btn bg-gradient-info"  onclick="ver_lista_orden();"><i class="fa-solid fa-arrow-down-short-wide"></i> Ordenar</button>
                             Administra de manera eficiente a los trabajdores
                           </h3>
@@ -223,7 +223,7 @@
                                   <!-- Desempeño -->
                                   <div class="col-lg-6">
                                     <div class="form-group">
-                                      <label for="desempeño">Desempeño</label>
+                                      <label for="desempeño">Desempeño <span id="desempenio_charge"></span> </label>
                                       <select name="desempenio" id="desempenio" class="form-control select2" style="width: 100%;"  > 
                                       </select>
                                     </div>

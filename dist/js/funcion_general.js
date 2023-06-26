@@ -445,6 +445,15 @@ function redondearExp(numero, digitos=2) {
 //Redondear 2 decimales (1.56 = 1.60, 1.52 = 1.50), para dinero
 function roundTwo(num) { return Number(+(Math.round(num + "e+1") + "e-1")).toFixed(2); }
 
+function redondear_mas(numero) { return Math.ceil(numero);  }
+
+function roundToHalf(numero) { 
+  var converted = parseFloat(numero); // Asegúrate de que tengamos un número.
+  var decimal = (converted - parseInt(converted, 10)); 
+  decimal = Math.round(decimal * 10); 
+  if (decimal >= 5) { return (parseInt(converted, 10)+0.5); } else{ return Math.round(converted); }
+} 
+
 // Unico ID
 function unique_id() { return parseInt(Math.round(new Date().getTime() + Math.random() * 100)); }
 

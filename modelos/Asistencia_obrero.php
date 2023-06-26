@@ -309,7 +309,7 @@ class Asistencia_obrero
    
     // extraemos todos lo trabajadores del proyecto
     $sql1 = "SELECT tpp.idtrabajador_por_proyecto, o.nombre_ocupacion, tp.nombre as tipo_trabajador, t.nombres, t.tipo_documento, 
-    t.numero_documento, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado, tpp.fecha_inicio, tpp.fecha_fin
+    t.numero_documento, t.imagen_perfil, tpp.sueldo_mensual, tpp.sueldo_semanal, tpp.sueldo_diario, tpp.sueldo_hora, tpp.estado, tpp.fecha_inicio, tpp.fecha_fin
 		FROM trabajador_por_proyecto AS tpp, trabajador AS t, tipo_trabajador AS tp, ocupacion AS o
 		WHERE tpp.idtrabajador = t.idtrabajador  AND o.idocupacion = t.idocupacion AND t.idtipo_trabajador = tp.idtipo_trabajador 
 		AND  tpp.idproyecto = '$nube_idproyect' AND tp.nombre ='Obrero'  ORDER BY tpp.orden_trabajador ASC ;";
@@ -440,7 +440,9 @@ class Asistencia_obrero
             "nombres"                   => $key['nombres'],
             "tipo_documento"            => $key['tipo_documento'],
             "numero_documento"          => $key['numero_documento'],
+            "imagen_perfil"             => $key['imagen_perfil'],
             "sueldo_mensual"            => $key['sueldo_mensual'],
+            "sueldo_semanal"            => $key['sueldo_semanal'],
             "sueldo_diario"             => $key['sueldo_diario'],
             "sueldo_hora"               => $key['sueldo_hora'],
             "estado_trabajador"         => $key['estado'],

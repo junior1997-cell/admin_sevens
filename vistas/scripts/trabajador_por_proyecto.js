@@ -1,7 +1,9 @@
 var tabla, tabla_secundaria;
 
 var cant_banco_multimple = 1; cant_sueldo_multimple = 1;
-iddes='';
+
+var iddesempeño_r='';
+
 //Función que se ejecuta al inicio
 function init() {  
 
@@ -110,14 +112,17 @@ function show_hide_form(flag) {
 	}
 }
 
+function trabajador_no_usado() {
+  lista_select2(`../ajax/ajax_general.php?op=select2TrabajadorPorProyecto&id_proyecto=${localStorage.getItem('nube_idproyecto')}`, '#trabajador', null);
+}
+
 //Función limpiar
 function limpiar_form_trabajador() {  
 
   cant_sueldo_multimple = 1;
+  iddesempeño_r = null;
 
-  var fecha_incial_proyecto = "", fecha_final_proyecto = "" ;
-
-  lista_select2(`../ajax/ajax_general.php?op=select2TrabajadorPorProyecto&id_proyecto=${localStorage.getItem('nube_idproyecto')}`, '#trabajador', null);
+  var fecha_incial_proyecto = "", fecha_final_proyecto = "" ;  
 
   if (localStorage.getItem('nube_fecha_inicial_proyecto') == "" || localStorage.getItem('nube_fecha_inicial_proyecto') === undefined || localStorage.getItem('nube_fecha_inicial_proyecto') == null) {
     fecha_incial_proyecto = ""
@@ -130,6 +135,7 @@ function limpiar_form_trabajador() {
   } else {
     fecha_final_proyecto = format_d_m_a(localStorage.getItem('nube_fecha_final_proyecto')) ;
   }
+
   $("#idtrabajador_por_proyecto").val("");   
   $("#trabajador").val("").trigger("change");
 
@@ -428,113 +434,84 @@ function mostrar(idtrabajador,idtipo) {
 
   limpiar_form_trabajador();
   show_hide_form(2);
-  iddes="";
+
   $.post("../ajax/trabajador_por_proyecto.php?op=mostrar", { idtrabajador_por_proyecto: idtrabajador }, function (e, status) {
 
     e = JSON.parse(e); console.log(e); 
-    //console.log('tabajador '+e.data.idtrabajador);select2Trabajador 
-    console.log('seleccionamos');
-    lista_select2(`../ajax/ajax_general.php?op=select2Trabajador`,'#trabajador', e.data.idtrabajador, null);
+    if (e.status == true) {
+      lista_select2(`../ajax/ajax_general.php?op=select2Trabajador`,'#trabajador', e.data.idtrabajador, null);
 
-    lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${e.data.idtrabajador}`, '#desempenio', e.data.iddesempenio);
-
-    $("#idtrabajador_por_proyecto").val(e.data.idtrabajador_por_proyecto);
-    
-    $("#trabajador").val(e.data.idtrabajador).trigger("change"); 
-    // alert(e.data.idtrabajador);
-    console.log(e.data.idtrabajador);
-    $("#desempenio").val(e.data.iddesempenio).trigger("change");    
-    iddes=e.data.iddesempenio;
-
-    $("#ocupacion").html(e.data.nombre_ocupacion);    
-    $("#tipo_trabajador").html(e.data.nombre_tipo);  
-
-    $("#sueldo_mensual").val(e.data.sueldo_mensual);   
-    $("#sueldo_diario").val(e.data.sueldo_diario);   
-    $("#sueldo_hora").val(e.data.sueldo_hora);
-
-    $("#fecha_inicio").val(format_d_m_a(e.data.fecha_inicio));
-    $("#fecha_fin").val(format_d_m_a(e.data.fecha_fin)); 
-    $("#cantidad_dias").val(e.data.cantidad_dias);
-
-    $("#cargando-1-fomulario").show();
-    $("#cargando-2-fomulario").hide();
-    capture_idtrabajador(estado_editar = true)
-
-    e.data.detalle_sueldo.forEach(function(val, index){         
+      $("#idtrabajador_por_proyecto").val(e.data.idtrabajador_por_proyecto);  
       
-      if ( index > 0 ) { 
-        add_sueldo();
-        $(`.sueldo_mensual_${index}`).val(val.sueldo_mensual);  
-        $(`.sueldo_semanal_${index}`).val(val.sueldo_semanal);  
-        $(`.sueldo_diario_${index}`).val(val.sueldo_diario);   
-        $(`.sueldo_hora_${index}`).val(val.sueldo_hora);
-        $(`.fecha_desde_${index}`).val(val.fecha_desde);   
-        $(`.fecha_hasta_${index}`).val(val.fecha_hasta);
-        if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(index) } 
-      } else {          
-        $(".sueldo_mensual_0").val(val.sueldo_mensual);  
-        $(".sueldo_semanal_0").val(val.sueldo_semanal);  
-        $(".sueldo_diario_0").val(val.sueldo_diario);   
-        $(".sueldo_hora_0").val(val.sueldo_hora);
-        $(".fecha_desde_0").val(val.fecha_desde);   
-        $(".fecha_hasta_0").val(val.fecha_hasta);
-        if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(0) } 
-      }              
-        
-    }); 
+      iddesempeño_r = e.data.iddesempenio;
 
+      $("#ocupacion").html(e.data.nombre_ocupacion);    
+      $("#tipo_trabajador").html(e.data.nombre_tipo);  
+
+      $("#sueldo_mensual").val(e.data.sueldo_mensual);   
+      $("#sueldo_diario").val(e.data.sueldo_diario);   
+      $("#sueldo_hora").val(e.data.sueldo_hora);
+
+      $("#fecha_inicio").val(format_d_m_a(e.data.fecha_inicio));
+      $("#fecha_fin").val(format_d_m_a(e.data.fecha_fin)); 
+      $("#cantidad_dias").val(e.data.cantidad_dias);
+    
+      e.data.detalle_sueldo.forEach(function(val, index){         
+        
+        if ( index > 0 ) { 
+          add_sueldo();
+          $(`.sueldo_mensual_${index}`).val(val.sueldo_mensual);  
+          $(`.sueldo_semanal_${index}`).val(val.sueldo_semanal);  
+          $(`.sueldo_diario_${index}`).val(val.sueldo_diario);   
+          $(`.sueldo_hora_${index}`).val(val.sueldo_hora);
+          $(`.fecha_desde_${index}`).val(val.fecha_desde);   
+          $(`.fecha_hasta_${index}`).val(val.fecha_hasta);
+          if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(index) } 
+        } else {          
+          $(".sueldo_mensual_0").val(val.sueldo_mensual);  
+          $(".sueldo_semanal_0").val(val.sueldo_semanal);  
+          $(".sueldo_diario_0").val(val.sueldo_diario);   
+          $(".sueldo_hora_0").val(val.sueldo_hora);
+          $(".fecha_desde_0").val(val.fecha_desde);   
+          $(".fecha_hasta_0").val(val.fecha_hasta);
+          if (val.sueldo_actual == '1') { $(`#sueldo_seleccionado_${index}`).prop('checked', true); replicar_sueldo_actual(0) } 
+        }              
+          
+      }); 
+
+      $("#cargando-1-fomulario").show();
+      $("#cargando-2-fomulario").hide();
+    } else {
+      ver_errores(e);
+    }     
   }).fail( function(e) { ver_errores(e); } );
 
 }
 
 //captura id del trabajador
-function capture_idtrabajador(estado_editar = false) { 
+function capture_idtrabajador() { 
 
   var idtrabajador= $("#trabajador").select2("val");
-  $("#tipo_trabajador").html("Selecione un trabajador"); $("#ocupacion").html("Selecione un trabajador");
+  lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddesempeño_r, '#desempenio_charge');
 
-  if (estado_editar == false) {    
+  $("#tipo_trabajador").html(`<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>`); 
+  $("#ocupacion").html(`<i class="fas fa-spinner fa-pulse fa-lg text-danger"></i>`); 
   
-    if (idtrabajador == null || idtrabajador == '' ) {  }else{
+  if (idtrabajador == null || idtrabajador == '' ) { 
+    $("#tipo_trabajador").html("Selecione un trabajador");   $("#ocupacion").html("Selecione un trabajador");
+  }else{     
+      
+    $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
 
-      lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', null);
-
-      $("#tipo_trabajador").html("");   $("#ocupacion").html("");
-        
-      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
-
-        e = JSON.parse(e); // console.log(e);   
-        if (e.status == true) {
-          $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
-          $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
-        } else {
-          ver_errores(e);
-        }
-      }).fail( function(e) { ver_errores(e); } );
-    }  
-
-  }else if(estado_editar == true){
-
-     console.log('iddes : '+iddes);
-     $("#desempenio").val(iddes).trigger("change");   
-    // lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddes);
-    if (idtrabajador == null || idtrabajador == '' ) {  }else{
-      //console.log('iddes : '+iddes);
-      //lista_select2(`../ajax/ajax_general.php?op=select2DesempenioPorTrabajdor&id_trabajador=${idtrabajador}`, '#desempenio', iddes);
-        
-      $.post("../ajax/trabajador_por_proyecto.php?op=m_datos_trabajador", { idtrabajador: idtrabajador }, function (e, status) {
-
-        e = JSON.parse(e);   
-        if (e.status == true) { 
-          $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo); 
-          $("#ocupacion").html(e.data.trabajador.nombre_ocupacion); 
-        } else { ver_errores(e); }
-
-      }).fail( function(e) { ver_errores(e); } );
-    }  
-
-  }
+      e = JSON.parse(e); // console.log(e);   
+      if (e.status == true) {
+        $("#tipo_trabajador").html(e.data.trabajador.nombre_tipo);
+        $("#ocupacion").html(e.data.trabajador.nombre_ocupacion);
+      } else {
+        ver_errores(e);
+      }
+    }).fail( function(e) { ver_errores(e); } );
+  }    
 
   if ($('#trabajador').select2("val") == null || $('#trabajador').select2("val") == '') { 
     $('.btn-editar-trabajador').addClass('disabled').attr('data-original-title','Seleciona un trabajador');
@@ -544,8 +521,6 @@ function capture_idtrabajador(estado_editar = false) {
   }
   $('[data-toggle="tooltip"]').tooltip();  
 }
-
-
 
 //Función para desactivar registros
 function eliminar_trabajador_proyecto(idtrabajador_por_proyecto, nombre) {

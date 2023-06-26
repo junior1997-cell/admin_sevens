@@ -284,7 +284,7 @@
             array_push($valores, $value['idpermiso']);
           }
 
-          $data = ""; $num = 8;  $stado_close = false;
+          $data = ""; $num = 9;  $stado_close = false;
           //Mostramos la lista de permisos en la vista y si están o no marcados <label for=""></label>
           foreach ($rspta['data'] as $key => $value) {
 
@@ -298,7 +298,7 @@
             } else {
               if ( ($key + 1) == $num ) { 
                 $div_close = '</div>';
-                $num += 9;
+                $num += 10;
                 $stado_close = true;
               } else {
                 if ($stado_close) {
