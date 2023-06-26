@@ -235,7 +235,7 @@ class Activos_fijos
   //Seleccionar Trabajador Select2
   public function lista_de_categorias() {
     $sql = "SELECT idcategoria_insumos_af as idcategoria , nombre 
-    FROM categoria_insumos_af WHERE estado='1' AND estado_delete='1' AND idcategoria_insumos_af != '1' ";
+    FROM categoria_insumos_af WHERE estado='1' AND estado_delete='1' AND idcategoria_insumos_af <>1; ";
     return ejecutarConsultaArray($sql);
   }
 

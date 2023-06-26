@@ -25,6 +25,24 @@
     $imagen_error = "this.src='../dist/svg/404-v2.svg'";
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
+    // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
+    $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
+    $idcompra_proyecto  = isset($_POST["idcompra_proyecto"]) ? limpiarCadena($_POST["idcompra_proyecto"]) : "";
+    $idproveedor        = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
+    $fecha_compra       = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
+    $glosa              = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
+    $tipo_comprobante   = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";    
+    $serie_comprobante  = isset($_POST["serie_comprobante"]) ? limpiarCadena($_POST["serie_comprobante"]) : "";
+    $slt2_serie_comprobante  = isset($_POST["slt2_serie_comprobante"]) ? limpiarCadena($_POST["slt2_serie_comprobante"]) : "";
+    $val_igv            = isset($_POST["val_igv"]) ? limpiarCadena($_POST["val_igv"]) : "";
+    $descripcion        = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+    $subtotal_compra    = isset($_POST["subtotal_compra"]) ? limpiarCadena($_POST["subtotal_compra"]) : "";
+    $tipo_gravada       = isset($_POST["tipo_gravada"]) ? limpiarCadena($_POST["tipo_gravada"]) : "";    
+    $igv_compra         = isset($_POST["igv_compra"]) ? limpiarCadena($_POST["igv_compra"]) : "";
+    $total_venta        = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
+    $estado_detraccion  = isset($_POST["estado_detraccion"]) ? limpiarCadena($_POST["estado_detraccion"]) : "";
+
+
     switch ($_GET["op"]) {       
 
       // buscar datos de RENIEC
@@ -835,7 +853,27 @@
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
     
-      break;  
+      break; 
+
+      // :::::::::::::::::::::::::: S E C C I O N   C O M P R A ::::::::::::::::::::::::::
+      case 'guardar_y_editar_compra':
+        if (empty($idcompra_proyecto)) {
+          $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
+          $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
+          $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+          $tipo_gravada, $_POST["ficha_tecnica_producto"]);
+          //precio_sin_igv,precio_igv,precio_total
+          echo json_encode($rspta, true);
+        } else {
+          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
+          $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
+          $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+          $tipo_gravada, $_POST["ficha_tecnica_producto"] );
+    
+          echo json_encode($rspta, true);
+        }
+    
+      break;
 
       /* ══════════════════════════════════════ C O M P R A   D E   A C T I V O   F I J O  ════════════════════════════ */
 

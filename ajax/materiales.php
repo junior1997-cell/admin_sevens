@@ -12,6 +12,7 @@
     if ($_SESSION['recurso'] == 1) {
       
       require_once "../modelos/Materiales.php";
+      require_once "../modelos/Compra_insumos.php";
 
       $materiales = new Materiales();
 
@@ -156,11 +157,12 @@
                 "4" => $reg['nombre_medida'],
                 "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['marca'] .'</div>',  
                 "6" => $reg['promedio_precio'],
-                "7" => $ficha_tecnica . $toltip, 
+                "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre'], ENT_QUOTES) . '\', \'' .  $reg['promedio_precio'] . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                "8" => $ficha_tecnica . $toltip, 
                                
-                "8" => decodeCadenaHtml($reg['nombre']),
-                "9" => $reg['descripcion'],
-                "10" => $reg['marca_export'],
+                "9" => decodeCadenaHtml($reg['nombre']),
+                "10" => $reg['descripcion'],
+                "11" => $reg['marca_export'],
               ];
             }
   
@@ -177,6 +179,96 @@
           }
           
         break;
+        //=====================================C O M P R A S  P O R   P R O D U C T O=======================================
+        //=====================================C O M P R A S  P O R   P R O D U C T O=======================================
+        //=====================================C O M P R A S  P O R   P R O D U C T O=======================================
+
+        case 'tbla_facturas':
+          $idproducto = $_GET["idproducto"];
+
+          $rspta = $materiales->tbla_facturas($idproducto);
+          //Vamos a declarar un array
+          $data = []; $cont = 1;
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+          $imagen_error = "this.src='../dist/svg/user_default.svg'";
+          $ficha_tecnica = "";
+          if ($rspta['status'] == true) {
+            // idcompra_proyecto,num_orden, num_comprobante, fecha
+            foreach ($rspta['data'] as $key => $reg) {
+              // validamos si existe una ficha tecnica
+              !empty($reg['ficha_tecnica'])
+                ? ($ficha_tecnica = '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-lg text-success"></i></a></center>')
+                : ($ficha_tecnica = '<center><i class="far fa-file-pdf fa-lg text-gray-50"></i></center>');
+
+              $btn_tipo = (empty($reg['cant_comprobantes']) ? 'btn-outline-info' : 'btn-info');
+              $descrip_toltip = (empty($reg['cant_comprobantes']) ? 'Vacío' : ($reg['cant_comprobantes']==1 ?  $reg['cant_comprobantes'].' comprobante' : $reg['cant_comprobantes'].' comprobantes'));       
+
+              $data[] = [    
+                "0" => $cont++,
+                "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ', ' .$reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_insumo(' . $reg['idcompra_proyecto'] .  ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
+                "2" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor']. '</span>',    
+                "3" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',  
+                "4" => $reg['nombre_codigo'],
+                "5" => $reg['fecha_compra'],
+                "6" => $reg['cantidad'],
+                "7" => $reg['precio_con_igv'],
+                "8" => $reg['descuento'],
+                "9" => $reg['subtotal'],
+                "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idcompra_proyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
+                
+                "11" => $reg['tipo_comprobante'],
+                "12" => $reg['serie_comprobante']
+
+              ];
+            }
+
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
+            ];
+            echo json_encode($results, true);
+
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+        break;
+        // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
+
+        case 'tbla_comprobantes_compra':
+          $cont_compra = $_GET["num_orden"];
+          $id_compra = $_GET["id_compra"];
+          $rspta = $materiales->tbla_comprobantes( $id_compra );
+          //Vamos a declarar un array
+          $data = []; $cont = 1;        
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
+          
+          if ($rspta['status'] == true) {
+            while ($reg = $rspta['data']->fetch_object()) {
+              $data[] = [
+                "0" => $cont,
+                "1" => '<div class="text-nowrap">'.
+                ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.'·'.$cont.' '.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>              
+                </div>'.$toltip,
+                "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
+                "3" => $reg->updated_at,
+              ];
+              $cont++;
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+              "aaData" => $data,
+            ];
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+        break;
+        
     
         case 'salir':
           //Limpiamos las variables de sesión

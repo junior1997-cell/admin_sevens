@@ -144,7 +144,7 @@
     /* ══════════════════════════════════════ C A T E G O R I A ══════════════════════════════════════ */
 
     public function select2_categoria() {
-      $sql = "SELECT idcategoria_insumos_af as id, nombre FROM categoria_insumos_af WHERE estado='1' AND estado_delete = '1' AND idcategoria_insumos_af > 1 ORDER BY nombre ASC;";
+      $sql = "SELECT idcategoria_insumos_af as id, nombre FROM categoria_insumos_af WHERE estado='1' AND estado_delete = '1' ORDER BY nombre ASC;";
       return ejecutarConsulta($sql);
     }
 

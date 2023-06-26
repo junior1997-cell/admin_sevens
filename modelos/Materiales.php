@@ -240,6 +240,82 @@ class Materiales
     $sql = "SELECT ficha_tecnica FROM producto WHERE idproducto='$idproducto'";
     return ejecutarConsultaSimpleFila($sql);
   }
+  //=====================================C O M P R A S  P O R   P R O D U C T O=======================================
+  //=====================================C O M P R A S  P O R   P R O D U C T O=======================================
+  //=====================================C O M P R A S  P O R   P R O D U C T O=======================================
+
+  public function tbla_facturas($idproducto) {
+    $data = [];
+    $sql = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
+		dc.idproducto, pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
+		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor, P.nombre_codigo, p.nombre_proyecto
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
+		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
+		AND dc.idproducto = pr.idproducto AND cpp.estado = '1' AND cpp.estado_delete = '1'
+		AND cpp.idproveedor = prov.idproveedor AND dc.idproducto = '$idproducto' 
+		ORDER BY cpp.fecha_compra DESC;";
+    // return ejecutarConsulta($sql);
+    $compra = ejecutarConsultaArray($sql); if ($compra['status'] == false) { return $compra; }
+
+    foreach ($compra['data'] as $key => $value) {
+      $idcompra_proyecto = $value['idcompra_proyecto'];
+      $idproducto = $value['idproducto'];
+
+      $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
+      $cant_comprobantes = ejecutarConsultaSimpleFila($sql3); if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
+
+      //listar detalle_marca
+      $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
+      FROM detalle_marca as dm, marca as m 
+      WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$idproducto' AND dm.estado='1' AND dm.estado_delete='1' ORDER BY dm.iddetalle_marca ASC;";
+      $detalle_marca = ejecutarConsultaArray($sql);   if ($detalle_marca['status'] == false){ return $detalle_marca; }
+      
+      $marcas_html = ""; $datalle_marcas_export = "";
+      foreach ($detalle_marca['data'] as $key => $value2) {
+        $marcas_html .=  '<li >'.$value2['marca'].'</li>';
+        $datalle_marcas_export .=  '<li>  -'.$value2['marca'].'</li>';
+      }
+
+      $data[] = [
+        'idproyecto'        => $value['idproyecto'],
+        'idcompra_proyecto' => $value['idcompra_proyecto'],
+        'nombre_codigo'     => $value['nombre_codigo'],
+        'nombre_proyecto'   => $value['nombre_proyecto'],
+        'fecha_compra'      => $value['fecha_compra'],
+        'ficha_tecnica'     => $value['ficha_tecnica'],
+        'idproducto'        => $value['idproducto'],
+        'nombre_producto'   => $value['nombre_producto'],
+        'cantidad'          => $value['cantidad'],
+        'tipo_comprobante'  => $value['tipo_comprobante'],
+        'serie_comprobante' => $value['serie_comprobante'],
+        'precio_con_igv'    => $value['precio_con_igv'],
+        'descuento'         => $value['descuento'],
+        'subtotal'          => $value['subtotal'],
+        'proveedor'         => $value['proveedor'],
+
+        'html_marca'        => '<ol class="pl-3">'.$marcas_html. '. </ol>',
+        'marca_export'      => $datalle_marcas_export,
+        'cant_comprobantes' => empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']),
+      ];
+    }
+
+    return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' => $data, 'affected_rows' => $compra['affected_rows']];
+  }
+
+  // :::::::::::::::::::::::::: S E C C I O N   C O M P R O B A N T E  :::::::::::::::::::::::::: 
+  public function tbla_comprobantes($id_compra) {
+    //var_dump($idfacturacompra);die();
+    $sql = "SELECT fci.idfactura_compra_insumo, fci.idcompra_proyecto, fci.comprobante, fci.estado, fci.estado_delete, fci.created_at, 
+    fci.updated_at, cpp.tipo_comprobante, cpp.serie_comprobante, p.razon_social, cpp.fecha_compra
+    FROM factura_compra_insumo as fci, compra_por_proyecto as cpp, proveedor as p
+    WHERE fci.idcompra_proyecto = cpp.idcompra_proyecto AND cpp.idproveedor = p.idproveedor AND fci.idcompra_proyecto = '$id_compra' AND fci.estado=1 AND fci.estado_delete=1;";
+    return ejecutarConsulta($sql);
+  }
+
+
+
+
+
 }
 
 ?>
