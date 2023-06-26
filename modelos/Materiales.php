@@ -248,7 +248,7 @@ class Materiales
     $data = [];
     $sql = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
 		dc.idproducto, pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
-		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor, P.nombre_codigo, p.nombre_proyecto
+		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor, p.nombre_codigo, p.nombre_proyecto
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
 		AND dc.idproducto = pr.idproducto AND cpp.estado = '1' AND cpp.estado_delete = '1'
