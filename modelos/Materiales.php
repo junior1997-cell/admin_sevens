@@ -205,20 +205,21 @@ class Materiales
         $datalle_marcas_export .=  '<li>  -'.$value2['marca'].'</li>';
       }
 
-      $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
-      $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
+      $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio, COUNT(idcompra_proyecto) as cantidad FROM detalle_compra WHERE idproducto='$id';";
+      $prom_cant = ejecutarConsultaSimpleFila($sql);  if ($prom_cant['status'] == false){ return $prom_cant; }
 
       $data[] = Array(
         'idproducto'      =>  $value['idproducto'],
         'idunidad_medida' =>  $value['idunidad_medida'],
+        'cantidad_fact'   => ( empty($prom_cant['data']['cantidad']) ? '0' : floatval($prom_cant['data']['cantidad'])),
         'nombre'          => ( empty($value['nombre']) ? '' : decodeCadenaHtml($value['nombre'])),
         'imagen'          => ( empty($value['imagen']) ? '' : $value['imagen']),
         'ficha_tecnica'   => ( empty($value['ficha_tecnica']) ? '' : $value['ficha_tecnica']),
         'estado'          => ( empty($value['estado']) ? '' : $value['estado']),
         'nombre_medida'   => ( empty($value['nombre_medida']) ? '' : $value['nombre_medida']),
-        'marca'           => '<ol class="pl-3">'.$datalle_marcas. '</ol>',
+        'marca'           => '<ol class="pl-3" style="font-size: 12px; ">'.$datalle_marcas. '</ol>',
         'marca_export'    => $datalle_marcas_export,
-        'promedio_precio' => ( empty($precio['data']['promedio_precio']) ? '0.00' : floatval($precio['data']['promedio_precio'])),        
+        'promedio_precio' => ( empty($prom_cant['data']['promedio_precio']) ? '0.00' : floatval($prom_cant['data']['promedio_precio'])),        
         'descripcion'     => ( empty($value['descripcion']) ? '' : $value['descripcion'])
       );
 

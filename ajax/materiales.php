@@ -155,9 +155,9 @@
                     <span class="description">' . '...</span>
                   </div>',
                 "4" => $reg['nombre_medida'],
-                "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['marca'] .'</div>',  
+                "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 55px; width: 100px;" >'. $reg['marca'] .'</div>',  
                 "6" => $reg['promedio_precio'],
-                "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre'], ENT_QUOTES) . '\', \'' .  $reg['promedio_precio'] . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre'], ENT_QUOTES) . '\', \'' .  $reg['promedio_precio'] . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"> </i> - ' . $reg['cantidad_fact'].'</button>'. $toltip,
                 "8" => $ficha_tecnica . $toltip, 
                                
                 "9" => decodeCadenaHtml($reg['nombre']),
