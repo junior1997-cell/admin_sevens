@@ -39,9 +39,10 @@
 
   // ══════════════════════════════════════════ - INSERTAMOS LOS NOMBRES DE LOS HEADS - ══════════════════════════════════════════
   plantilla_nombre_head($hojaActiva, $fecha_pago_obrero);
-  $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
+  $hojaActiva->getStyle('D1')->getFont()->setBold(true);
+  $hojaActiva->getStyle('D1')->getFont()->setSize(16);
   
-
+  $hojaActiva->setCellValue('D1', $proyecto['data']['empresa_acargo']);
   $hojaActiva->setCellValue('D5', $proyecto['data']['nombre_proyecto']);
   $hojaActiva->setCellValue('D6', $proyecto['data']['ubicacion']);
   $hojaActiva->setCellValue('D7', $proyecto['data']['empresa']);
@@ -149,6 +150,10 @@
       $total_q += floatval($reg['pago_quincenal_hn']) + floatval($reg['pago_quincenal_he']);
       $fila_1 += 2 ;
     }  
+    $hojaActiva->getStyle('W' . $fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $hojaActiva->getStyle('W' . $fila_1)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00');
+    $hojaActiva->getStyle('W' . $fila_1)->getFont()->setBold(true); # Negrita   
+    $hojaActiva->getStyle('W' . $fila_1)->getFont()->setSize(14);
     $hojaActiva->setCellValue('W' . $fila_1, $total_q);
     $hojaActiva->getStyle('O11:W' . $fila_1)->getNumberFormat()->setFormatCode('#,##0.00');
   } else if ($fecha_pago_obrero == 'quincenal') {
@@ -186,7 +191,7 @@
   // redirect output to client browser
   header('content-type: text/html; charset: utf-8');
   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  header('Content-Disposition: attachment;filename="Asistencia_trabajador.xlsx"');
+  header('Content-Disposition: attachment;filename="Asistencia_trabajador_HNE.xlsx"');
   header('Cache-Control: max-age=0');
 
   $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
@@ -331,7 +336,7 @@
     if ($fecha_pago_obrero == 'semanal') {
       $hoja->getActiveSheet()->getStyle('A1:W10')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
       $hoja->getActiveSheet()->getStyle('A8:G10')->getAlignment()->setWrapText(true);
-      $hoja->getActiveSheet()->getStyle('N8:AC10')->getAlignment()->setWrapText(true);
+      $hoja->getActiveSheet()->getStyle('O8:AC10')->getAlignment()->setWrapText(true);
     } else if ($fecha_pago_obrero == 'quincenal') {
       $hoja->getActiveSheet()->getStyle('A1:AC10')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
       $hoja->getActiveSheet()->getStyle('A8:G10')->getAlignment()->setWrapText(true);
@@ -339,8 +344,7 @@
     }  
   }
 
-  function plantilla_nombre_head($hojaActiva, $fecha_pago_obrero) {
-    $hojaActiva->setCellValue('D1', 'SEVEN´S INGENIEROS SELVA S.A.C.    R.U.C :  20609935651');
+  function plantilla_nombre_head($hojaActiva, $fecha_pago_obrero) {   
 
     $hojaActiva->setCellValue('A5', 'PROYECTO'); //PROYECTO
     $hojaActiva->setCellValue('A6', 'UBICACIÓN'); //UBICACIÓN
