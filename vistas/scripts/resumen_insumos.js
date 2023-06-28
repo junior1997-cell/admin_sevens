@@ -160,9 +160,9 @@ function tbla_principal(id_proyecto) {
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
 	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
 	  buttons: [ 
-      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,9,10,11], }  }, 
-      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,9,10,11], } }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }
+      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], }  }, 
+      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], } }, 
+      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }
     ],
 		ajax:	{
       url: '../ajax/resumen_insumos.php?op=tbla_principal&id_proyecto='+id_proyecto,
@@ -196,6 +196,12 @@ function tbla_principal(id_proyecto) {
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api_1 = this.api(); var total_1 = api_1.column( 7 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_1.column( 7 ).footer() ).html( `<span class="float-right">${formato_miles(total_1)}</span>` );
+      var api_2 = this.api(); var total_2 = api_2.column( 11 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_2.column( 11 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_2)}</span>` );
+    },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación
 	  //order: [[ 0, "desc" ]]//Ordenar (columna,orden)
@@ -205,34 +211,34 @@ function tbla_principal(id_proyecto) {
     ]
 	}).DataTable();
 
-  $.post("../ajax/resumen_insumos.php?op=suma_total_compras", { 'idproyecto': id_proyecto }, function (e, status) {
+  // $.post("../ajax/resumen_insumos.php?op=suma_total_compras", { 'idproyecto': id_proyecto }, function (e, status) {
 
-    e = JSON.parse(e);  console.log(e); 
+  //   e = JSON.parse(e);  console.log(e); 
 
-    if (e.status == true) {
-      if (e.data.length === 0) {
+  //   if (e.status == true) {
+  //     if (e.data.length === 0) {
 
-        $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
-        $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
+  //       $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
+  //       $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
 
-      } else {
-        if (e.data.suma_total_compras == null || e.data.suma_total_compras == '') {
-          $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
-        } else {
-          $(".suma_total_de_compras").html(formato_miles(e.data.suma_total_compras));
-        }
+  //     } else {
+  //       if (e.data.suma_total_compras == null || e.data.suma_total_compras == '') {
+  //         $(".suma_total_de_compras").html('<i class="far fa-frown fa-lg text-danger"></i>');
+  //       } else {
+  //         $(".suma_total_de_compras").html(formato_miles(e.data.suma_total_compras));
+  //       }
 
-        if (e.data.suma_total_productos == null || e.data.suma_total_productos == '') {
-          $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
-        } else {
-          $('.suma_total_productos').html(formato_miles(e.data.suma_total_productos));
-        }
-      }    
-    } else {
-      ver_errores(e);
-    }
+  //       if (e.data.suma_total_productos == null || e.data.suma_total_productos == '') {
+  //         $('.suma_total_productos').html('<i class="far fa-frown fa-lg text-danger"></i>');
+  //       } else {
+  //         $('.suma_total_productos').html(formato_miles(e.data.suma_total_productos));
+  //       }
+  //     }    
+  //   } else {
+  //     ver_errores(e);
+  //   }
     
-  }).fail( function(e) { ver_errores(e); } ); 
+  // }).fail( function(e) { ver_errores(e); } ); 
 }
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION COMPRAS ::::::::::::::::::::::::::::::::::::::::::::::::::::

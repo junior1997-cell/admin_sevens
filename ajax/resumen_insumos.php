@@ -109,12 +109,12 @@
                 </div>',
                 "4" => $reg['grupo'],
                 "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['html_marca'] .'</div>',
-                "6" => $reg['nombre_medida'],
-                "7" => number_format($reg['cantidad_total'],2, ".", ","),
+                "6" => $reg['abreviacion'],
+                "7" => $reg['cantidad_total'],
                 "8" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproyecto'] . ', ' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre_producto'], ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg['precio_total'], 2, ".", ",") . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
-                "9" => number_format($reg['promedio_precio'], 2, ".", ""),
-                "10" => number_format($reg['precio_actual'], 2, ".", ""),
-                "11" => number_format($reg['precio_total'], 2, ".", ""),             
+                "9" => $reg['promedio_precio'],
+                "10" => $reg['precio_actual'],
+                "11" => $reg['precio_total'],             
          
               ];
             }

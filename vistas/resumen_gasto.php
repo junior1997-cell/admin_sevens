@@ -116,7 +116,7 @@
                             <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                  <th colspan="18" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                                 </tr>
                                 <tr> 
                                   <th class="text-center">#</th> 
@@ -131,7 +131,13 @@
                                   <th class="text-center">IGV</th>
                                   <th class="text-center">Total</th> 
                                   <th class="text-center">CFDI.</th>  
-                                  <th class="text-center">Estado</th>                                                  
+
+                                  <th class="text-center">Estado</th>                                    
+                                  <th class="text-center ">Tipo Compro.</th> 
+                                  <th class="text-center ">Num. Compro.</th>                                   
+                                  <th class="text-center ">Subtotal</th>                                
+                                  <th class="text-center">IGV</th>
+                                  <th class="text-center">Total</th>  
                                 </tr>
                               </thead>
                               <tbody> </tbody>
@@ -149,7 +155,13 @@
                                   <th class="text-right text-nowrap total-igv">IGV</th>
                                   <th class="text-right text-nowrap total-total">Total</th>  
                                   <th class="text-center text-black-50">CFDI.</th>
+
                                   <th class="text-center">Estado</th> 
+                                  <th class="text-center ">Tipo Compro.</th> 
+                                  <th class="text-center ">Num. Compro.</th> 
+                                  <th class="text-center ">Subtotal</th>                                
+                                  <th class="text-center">IGV</th>
+                                  <th class="text-center">Total</th>  
                                 </tr>
                               </tfoot>
                             </table>
@@ -162,7 +174,7 @@
                             <table id="tabla-visto-bueno" class="table table-bordered  table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
-                                  <th colspan="12" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                  <th colspan="18" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
                                 </tr>
                                 <tr> 
                                   <th class="text-center">#</th> 
@@ -177,7 +189,10 @@
                                   <th class="text-center">IGV</th>
                                   <th class="text-center">Total</th> 
                                   <th class="text-center">CFDI.</th>  
+
                                   <th class="text-center">Estado</th> 
+                                  <th class="text-center ">Tipo Compro.</th> 
+                                  <th class="text-center ">Num. Compro.</th> 
                                   <th class="text-center ">Subtotal</th>                                
                                   <th class="text-center">IGV</th>
                                   <th class="text-center">Total</th>                                                  
@@ -194,14 +209,17 @@
                                   <th class="text-center text-black-50">Módulo</th>
                                   <th class="text-center text-black-50">Glosa</th>
                                   <th class=" text-black-50">Razón social</th>                                  
-                                  <th class="text-right text-nowrap total-subtotal-visto-bueno">Subtotal</th>                                
-                                  <th class="text-right text-nowrap total-igv-visto-bueno">IGV</th>
-                                  <th class="text-right text-nowrap total-total-visto-bueno">Total</th>  
+                                  <th class="text-right text-nowrap ">Subtotal</th>                                
+                                  <th class="text-right text-nowrap ">IGV</th>
+                                  <th class="text-right text-nowrap ">Total</th>  
                                   <th class="text-center text-black-50">CFDI.</th>
+                                  
                                   <th class="text-center">Estado</th>
-                                  <th class="text-right text-nowrap total-subtotal-visto-bueno">Subtotal</th>                                
-                                  <th class="text-right text-nowrap total-igv-visto-bueno">IGV</th>
-                                  <th class="text-right text-nowrap total-total-visto-bueno">Total</th>  
+                                  <th class="text-center ">Tipo Compro.</th> 
+                                  <th class="text-center ">Num. Compro.</th> 
+                                  <th class="text-right text-nowrap ">Subtotal</th>                                
+                                  <th class="text-right text-nowrap ">IGV</th>
+                                  <th class="text-right text-nowrap ">Total</th>  
                                 </tr>
                               </tfoot>
                             </table>

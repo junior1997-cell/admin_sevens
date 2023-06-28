@@ -41,7 +41,10 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, "colvis"],
+    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, "colvis"
+    ],
     ajax:	{
       url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='0'`,
       type : "get",
@@ -68,14 +71,24 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api = this.api(); var subtotal = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(subtotal)}</span>` );
+      var api_1 = this.api(); var total_1 = api_1.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_1.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_1)}</span>` );
       // console.log('footer: '+total);
-      var api = this.api(); var igv = api.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+      var api_2 = this.api(); var total_2 = api_2.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_2.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_2)}</span>` );
 
-      var api = this.api(); var igv = api.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+      var api_3 = this.api(); var total_3 = api_3.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_3.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_3)}</span>` );
+
+      //----------------
+      var api_4 = this.api(); var total_4 = api_4.column( 15 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_4.column( 15 ).footer() ).html( ` <span class="float-right">${formato_miles(total_4)}</span>` );
+      // console.log('footer: '+total);
+      var api_5 = this.api(); var total_5 = api_5.column( 16 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_5.column( 16 ).footer() ).html( ` <span class="float-right">${formato_miles(total_5)}</span>` );
+
+      var api_6 = this.api(); var total_6 = api_6.column( 17 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_6.column( 17 ).footer() ).html( ` <span class="float-right">${formato_miles(total_6)}</span>` );
     
     },
     bDestroy: true,
@@ -83,7 +96,7 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [12], visible: false, searchable: false },
+      { targets: [12,13,14,15,15,16,17], visible: false, searchable: false },
       // { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
 
@@ -132,12 +145,9 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ 
-      extend: 'copyHtml5', 
-      footer: true, 
-      exportOptions: { columns: [0,3,4,5,6,7,12,14,15,], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,13,14,15, ], } }, 
-      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,13,14,15,], } }, "colvis"],
+    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17 ], } }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, "colvis"],
     ajax:	{
       url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='1'`,
       type : "get",
@@ -164,23 +174,24 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api = this.api(); var subtotal = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(subtotal)}</span>` );
+      var api_1 = this.api(); var total_1 = api_1.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_1.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_1)}</span>` );
       // console.log('footer: '+total);
-      var api = this.api(); var igv = api.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+      var api_2 = this.api(); var total_2 = api_2.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_2.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_2)}</span>` );
 
-      var api = this.api(); var igv = api.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+      var api_3 = this.api(); var total_3 = api_3.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_3.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_3)}</span>` );
+
       //----------------
-      var api = this.api(); var subtotal = api.column( 13 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 13 ).footer() ).html( ` <span class="float-right">${formato_miles(subtotal)}</span>` );
+      var api_4 = this.api(); var total_4 = api_4.column( 15 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_4.column( 15 ).footer() ).html( ` <span class="float-right">${formato_miles(total_4)}</span>` );
       // console.log('footer: '+total);
-      var api = this.api(); var igv = api.column( 14 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 14 ).footer() ).html( ` <span class="float-right">${formato_miles(igv)}</span>` );
+      var api_5 = this.api(); var total_5 = api_5.column( 16 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_5.column( 16 ).footer() ).html( ` <span class="float-right">${formato_miles(total_5)}</span>` );
 
-      var api = this.api(); var igv = api.column( 15 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api.column( 15 ).footer() ).html( ` <span class="float-right">${formato_miles(igv)}</span>` );
+      var api_6 = this.api(); var total_6 = api_6.column( 17 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api_6.column( 17 ).footer() ).html( ` <span class="float-right">${formato_miles(total_6)}</span>` );
     
     },
     bDestroy: true,
@@ -188,7 +199,7 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [12], visible: false, searchable: false },
+      { targets: [12,13,14,15,16,17], visible: false, searchable: false },
       // { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
       { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
 
@@ -428,8 +439,8 @@ function visto_bueno(name_tabla, name_id_tabla, id_tabla, accion, nombre_agregar
         if (tabla_principal) { tabla_principal.ajax.reload(null, false); } 
         if (tabla_visto_bueno) { tabla_visto_bueno.ajax.reload(null, false); } 
         $('#modal-ver-compras').modal('hide');
-        sumas_totales(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
-        sumas_totales_visto_bueno(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
+        // sumas_totales(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
+        // sumas_totales_visto_bueno(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
       } else {
         ver_errores(result);
       }      
@@ -2009,8 +2020,8 @@ function eliminar_permanente(nombre_tabla, nombre_id_tabla, id_tabla, nombre) {
         if (tabla_principal) { tabla_principal.ajax.reload(null, false); } 
         if (tabla_visto_bueno) { tabla_visto_bueno.ajax.reload(null, false); } 
         $('#modal-ver-compras').modal('hide');
-        sumas_totales(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
-        sumas_totales_visto_bueno(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
+        // sumas_totales(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
+        // sumas_totales_visto_bueno(nube_idproyecto_r, fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r);
         $(".tooltip").removeClass("show").addClass("hidde");
       }else{
         ver_errores(result.value);

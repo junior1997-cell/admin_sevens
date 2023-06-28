@@ -110,11 +110,11 @@
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
                                   <th>UM</th>
-                                  <th class="text-center suma_total_productos h5"><i class="fas fa-spinner fa-pulse fa-sm"></i></th> 
+                                  <th class="text-nowrap px-2 h5"><span>00</span></th> 
                                   <th>Compra</th>
                                   <th>Precio promedio</th>
                                   <th>Precio actual</th>   
-                                  <th class="text-nowrap text-right px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="suma_total_de_compras">0.00</span></div></th>                               
+                                  <th class="text-nowrap px-2 h5"><span>S/ 00</span></th>                               
                                 </tr>
                               </tfoot>
                             </table>
