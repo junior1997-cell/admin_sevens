@@ -114,10 +114,10 @@ class FormatosVarios
   //listar botones de la quincena o semana
   public function datos_proyecto($nube_idproyecto) {
     $sql = "SELECT p.idproyecto, p.fecha_inicio_actividad AS fecha_inicio, p.fecha_fin_actividad AS fecha_fin, p.plazo_actividad AS plazo, 
-    p.fecha_pago_obrero, p.fecha_valorizacion, p.nombre_proyecto, p.nombre_codigo,p.actividad_trabajo,p.empresa,p.ubicacion
-    FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
+    p.fecha_pago_obrero, p.fecha_valorizacion, p.nombre_proyecto, p.nombre_codigo, p.actividad_trabajo, p.empresa, p.ubicacion, ep.razon_social AS empresa_acargo
+    FROM proyecto as p, empresa_a_cargo AS ep
+    WHERE p.idempresa_a_cargo = ep.idempresa_a_cargo AND p.idproyecto='$nube_idproyecto'";
     return  ejecutarConsultaSimpleFila($sql);
-
   }
 
   //ver detalle quincenal o semanal

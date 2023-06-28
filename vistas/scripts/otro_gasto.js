@@ -336,25 +336,38 @@ function guardaryeditar(e) {
       try {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
-
           Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
-
-          tabla.ajax.reload(null, false);
-  
-          limpiar();
-  
-          $("#modal-agregar-otro_gasto").modal("hide");
-  
+          tabla.ajax.reload(null, false);  
+          limpiar();  
+          $("#modal-agregar-otro_gasto").modal("hide");  
           total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);
-
         }else{  
           ver_errores(e);
         } 
       } catch (err) {
         console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>');
       } 
-
+      $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
     },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_otro_gasto").css({"width": percentComplete+'%'}).text(percentComplete.toFixed(2)+" %");          
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_otro_gasto").css({ width: "0%",  }).text("0%").addClass('progress-bar-striped progress-bar-animated');      
+    },
+    complete: function () {
+      $("#barra_progress_otro_gasto").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');      
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
 
@@ -593,6 +606,7 @@ $(function () {
     },
     
     submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardaryeditar(e);
     },
   });
