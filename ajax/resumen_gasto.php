@@ -67,7 +67,10 @@
                 "9" => $igv,
                 "10" => $total,
                 "11" => $documento.$toltip,
-                "12" => $value['estado_user_vb'],                
+                "12" => $value['estado_user_vb'], 
+                "13" => $subtotal,
+                "14" => $igv,
+                "15" => $total,               
               ];
             }
   

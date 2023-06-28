@@ -132,7 +132,12 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,], } }, "colvis"],
+    buttons: [{ 
+      extend: 'copyHtml5', 
+      footer: true, 
+      exportOptions: { columns: [0,3,4,5,6,7,12,14,15,], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,13,14,15, ], } }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,13,14,15,], } }, "colvis"],
     ajax:	{
       url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='1'`,
       type : "get",
@@ -167,6 +172,15 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
 
       var api = this.api(); var igv = api.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+      //----------------
+      var api = this.api(); var subtotal = api.column( 13 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 13 ).footer() ).html( ` <span class="float-right">${formato_miles(subtotal)}</span>` );
+      // console.log('footer: '+total);
+      var api = this.api(); var igv = api.column( 14 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 14 ).footer() ).html( ` <span class="float-right">${formato_miles(igv)}</span>` );
+
+      var api = this.api(); var igv = api.column( 15 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 15 ).footer() ).html( ` <span class="float-right">${formato_miles(igv)}</span>` );
     
     },
     bDestroy: true,

@@ -131,7 +131,7 @@
                                   <th class="text-center">IGV</th>
                                   <th class="text-center">Total</th> 
                                   <th class="text-center">CFDI.</th>  
-                                  <th class="text-center">Estado</th>                                                   
+                                  <th class="text-center">Estado</th>                                                  
                                 </tr>
                               </thead>
                               <tbody> </tbody>
@@ -177,7 +177,10 @@
                                   <th class="text-center">IGV</th>
                                   <th class="text-center">Total</th> 
                                   <th class="text-center">CFDI.</th>  
-                                  <th class="text-center">Estado</th>                                                   
+                                  <th class="text-center">Estado</th> 
+                                  <th class="text-center ">Subtotal</th>                                
+                                  <th class="text-center">IGV</th>
+                                  <th class="text-center">Total</th>                                                  
                                 </tr>
                               </thead>
                               <tbody> </tbody>
@@ -196,6 +199,9 @@
                                   <th class="text-right text-nowrap total-total-visto-bueno">Total</th>  
                                   <th class="text-center text-black-50">CFDI.</th>
                                   <th class="text-center">Estado</th>
+                                  <th class="text-right text-nowrap total-subtotal-visto-bueno">Subtotal</th>                                
+                                  <th class="text-right text-nowrap total-igv-visto-bueno">IGV</th>
+                                  <th class="text-right text-nowrap total-total-visto-bueno">Total</th>  
                                 </tr>
                               </tfoot>
                             </table>
