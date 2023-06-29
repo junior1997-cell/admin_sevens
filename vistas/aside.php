@@ -442,6 +442,15 @@
           </a>
           <ul class="nav nav-treeview">
             <?php if ($_SESSION['valorizacion']==1) {  ?>
+              <!-- ALMACEN -->
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="almacen.php" class="nav-link pl-2" id="lAlmacen">
+                  <i class="fas fa-box-open"></i>
+                  <p>Almacen </p>
+                </a>
+              </li>
+            <?php  }  ?>
+            <?php if ($_SESSION['valorizacion']==1) {  ?>
               <!-- VALORIZACIONES -->
               <li class="nav-item ver-otros-modulos-1">
                 <a href="valorizacion.php" class="nav-link pl-2" id="lValorizacion">
