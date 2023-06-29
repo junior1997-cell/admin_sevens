@@ -694,7 +694,7 @@
         </script>
 
         <script type="text/javascript" src="scripts/materiales.js"></script>
-        <!-- <script type="text/javascript" src="scripts/editar_compra_insumos_general.js"></script> -->
+        <!-- <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script> -->
         <script type="text/javascript" src="scripts/js_compra_insumo.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
