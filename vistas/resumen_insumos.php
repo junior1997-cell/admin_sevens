@@ -337,7 +337,7 @@
                                           
                                         </th>
                                       </tfoot>
-                                      <tbody></tbody>
+                                      <tbody class="orden_producto"></tbody>
                                     </table>
                                   </div>                                    
                                 </div>
@@ -879,6 +879,10 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
+        <!-- Jquery UI -->
+        <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+        <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+        
         <script type="text/javascript" src="scripts/resumen_insumos.js"></script>
         <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script>
 

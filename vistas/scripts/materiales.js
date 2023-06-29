@@ -157,35 +157,35 @@ function limpiar_form_material() {
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
 }
-function show_hide(estado) { 
-  if (estado==1) {
-    $(".agregar_material").show();
-    $(".regresar").hide();
+function table_show_hide(estado) { 
+  if (estado==1) { //tabla principal
+    $(".btn-agregar-material").show();
+    $(".btn-regresar").hide();
+
     $("#div_materiales").show();
     $("#div_facturas").hide();
     $("#tabla-editar-factura").hide();
     $(".nombre-insumo").html(`Insumos`);
 
-  }else if (estado==2) {
+  }else if (estado==2) { // editar factura
 
-    $(".agregar_material").hide();
-    $(".regresar").show();
-    $("#div_materiales").hide();
-    $("#div_facturas").show();
-    $("#tabla-editar-factura").hide();
+    $(".btn-agregar-material").hide();
+    $(".btn-regresar").hide();
 
-  } else if (estado==3) {
-    $(".agregar_material").hide();
-    $(".regresar").hide();
     $("#div_materiales").hide();
     $("#div_facturas").hide();
     $("#tabla-editar-factura").show();
     $(".nombre-insumo").html(`Editar Compra`);
 
+  } else if (estado==3) {  //listar facturas x producto
+    $(".btn-agregar-material").hide();
+    $(".btn-regresar").show();
+
+    $("#div_materiales").hide();
+    $("#div_facturas").show();
+    $("#tabla-editar-factura").hide();    
   }
-
-
- }
+}
 
 //Función Listar
 function tbla_principal() {
@@ -522,7 +522,7 @@ init();
 
 // TABLA - FACTURAS
 function tbla_facuras( idproducto, nombre_producto, precio_promedio) {
-  show_hide(2);
+  table_show_hide(3);
   idproducto_r = idproducto; nombre_producto_r = nombre_producto; precio_promedio_r = precio_promedio; 
 
   $(".cantidad_x_producto").html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
@@ -531,8 +531,6 @@ function tbla_facuras( idproducto, nombre_producto, precio_promedio) {
   $('.subtotal_x_producto').html('<i class="fas fa-spinner fa-pulse fa-sm"></i>');
 
   $(".nombre-insumo").html(`Insumo :<b>${nombre_producto}</b>`);
-
-  // show_hide(3);	
 
 	tabla_factura = $('#tbla-facura').dataTable({
 		responsive: true,
@@ -742,7 +740,7 @@ function guardar_y_editar_compras(e) {
         tbla_facuras( idproducto_r, nombre_producto_r, precio_promedio_r, );
         tbla_principal();
         limpiar_form_compra();
-        show_hide(2);  cont = 0;
+        table_show_hide(3);  cont = 0;
       } else {
         ver_errores(result.value);
       }      

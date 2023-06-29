@@ -1053,7 +1053,7 @@ function mostrar_hn(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
           }
 
           // acumulamos el total de pagos
-          total_pago = total_pago + ( parseFloat(val.pago_quincenal_hn) + parseFloat(val.adicional_descuento) );
+          total_pago = total_pago +  parseFloat(val.pago_quincenal_hn)  ; 
           
           var tabla_bloc_HN_1 = `<tr>
           <td class="" rowspan="2"><b>${key+1}</b></td>

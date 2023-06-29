@@ -383,8 +383,8 @@
                                   </div>
 
                                   <!--tabla detalles plantas-->
-                                  <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">
-                                    <br />
+                                  <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 table-responsive row-horizon disenio-scroll">                                    
+                                      
                                     <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
                                       <thead style="background-color: #ff6c046b;">
                                         <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
@@ -395,7 +395,7 @@
                                         <th class="hidden">IGV</th>
                                         <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
                                         <th>Descuento</th>
-                                        <th>Subtotal</th>
+                                        <th>Subtotal</th>                                        
                                       </thead>
                                       <tfoot>
                                         <td colspan="5" id="colspan_subtotal"></td>
@@ -417,8 +417,9 @@
                                           
                                         </th>
                                       </tfoot>
-                                      <tbody></tbody>
-                                    </table>
+                                      <tbody class="orden_producto" ></tbody>
+                                    </table>                                   
+                                    
                                   </div>                                    
                                 </div>
 
@@ -1329,6 +1330,10 @@
         <script src="../plugins/jszip/jszip.js"></script>
         <script src="../plugins/jszip/dist/jszip-utils.js"></script>
         <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
+
+        <!-- Jquery UI -->
+        <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+        <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
         
         <script type="text/javascript" src="scripts/compra_insumos.js"></script>   
         <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script>      

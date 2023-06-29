@@ -920,50 +920,50 @@ function ver_lista_orden() {
   $('#html_order_trabajador_2').html(`<tr><td colspan="11"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`)
   
   $.post("../ajax/trabajador_por_proyecto.php?op=ver_lista_orden", {'idproyecto': localStorage.getItem('nube_idproyecto')},  function (e, status) {
-      e = JSON.parse(e);  console.log(e);
-      if (e.status == true) {
-         
-        var html_data_td_1 ='' ; var html_data_td_2 ='' ;       
-        var i_2 = parseInt(e.data.length/2); console.log(i_2);        
+    e = JSON.parse(e);  console.log(e);
+    if (e.status == true) {
+        
+      var html_data_td_1 ='' ; var html_data_td_2 ='' ;       
+      var i_2 = parseInt(e.data.length/2); console.log(i_2);        
 
-        e.data.forEach((val, key) => {   
-          
-          var imagen = (val.imagen_perfil == '' ? '../dist/svg/user_default.svg' : `../dist/docs/all_trabajador/perfil/${val.imagen_perfil}`) ;        
-          
-          if ((key + 1) <= i_2) {
-            html_data_td_1 = html_data_td_1.concat(`<tr class="cursor-pointer"> 
-              <td class="py-1 text-center">${key + 1}</td> 
-              <td class="py-1">
-                <div class="user-block">
-                  <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'" onclick="ver_perfil('${ imagen }', '${encodeHtml(val.trabajador)}');">
-                  <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
-                  <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
-                </div>
-                <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
-              </td>              
-            </tr>`);            
-          } else {
-            html_data_td_2 = html_data_td_2.concat(`<tr class="cursor-pointer"> 
-              <td class="py-1 text-center">${key + 1}</td> 
-              <td class="py-1">
-                <div class="user-block">
-                  <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'" onclick="ver_perfil('${ imagen }', '${encodeHtml(val.trabajador)}');">
-                  <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
-                  <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
-                </div>
-                <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
-              </td>              
-            </tr>`);
-          }                   
-                    
-        });
-        $('#html_order_trabajador_1').html(`${html_data_td_1} `);
-        $('#html_order_trabajador_2').html(`${html_data_td_2} `);
-        $(".orden_trabajador_1").sortable({connectWith: '#html_order_trabajador_2'}).disableSelection();
-        $(".orden_trabajador_2").sortable({connectWith: '#html_order_trabajador_1'}).disableSelection();
-      }else{
-        ver_errores(e);
-      }
+      e.data.forEach((val, key) => {   
+        
+        var imagen = (val.imagen_perfil == '' ? '../dist/svg/user_default.svg' : `../dist/docs/all_trabajador/perfil/${val.imagen_perfil}`) ;        
+        
+        if ((key + 1) <= i_2) {
+          html_data_td_1 = html_data_td_1.concat(`<tr class="cursor-pointer"> 
+            <td class="py-1 text-center">${key + 1}</td> 
+            <td class="py-1">
+              <div class="user-block">
+                <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'" onclick="ver_perfil('${ imagen }', '${encodeHtml(val.trabajador)}');">
+                <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
+                <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
+              </div>
+              <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
+            </td>              
+          </tr>`);            
+        } else {
+          html_data_td_2 = html_data_td_2.concat(`<tr class="cursor-pointer"> 
+            <td class="py-1 text-center">${key + 1}</td> 
+            <td class="py-1">
+              <div class="user-block">
+                <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/${val.imagen_perfil}" alt="User Image" onerror="this.src='../dist/svg/user_default.svg'" onclick="ver_perfil('${ imagen }', '${encodeHtml(val.trabajador)}');">
+                <span class="username"><p class="text-primary m-b-02rem" >  ${val.trabajador}</p></span>
+                <span class="description">${val.nombre_tipo} | ${val.tipo_documento}: ${val.numero_documento}</span>
+              </div>
+              <input type="hidden" name="td_order_trabajador[]" value="${val.idtrabajador_por_proyecto}">
+            </td>              
+          </tr>`);
+        }                   
+                  
+      });
+      $('#html_order_trabajador_1').html(`${html_data_td_1} `);
+      $('#html_order_trabajador_2').html(`${html_data_td_2} `);
+      $(".orden_trabajador_1").sortable({connectWith: '#html_order_trabajador_2'}).disableSelection();
+      $(".orden_trabajador_2").sortable({connectWith: '#html_order_trabajador_1'}).disableSelection();
+    }else{
+      ver_errores(e);
+    }
   }).fail( function(e) { ver_errores(e); } );
 }
 

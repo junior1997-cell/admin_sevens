@@ -813,7 +813,7 @@
         <script src="../plugins/moment/locales.js"></script>
         
         <!-- Jquery UI -->
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
         <script type="text/javascript" src="scripts/trabajador_por_proyecto.js"></script>

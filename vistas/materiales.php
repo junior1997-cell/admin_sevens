@@ -57,12 +57,12 @@
                     <div class="col-12">
                       <div class="card card-primary card-outline">
                         <div class="card-header">
-                          <h3 class="card-title agregar_material">
+                          <h3 class="card-title btn-agregar-material">
                             <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-material" onclick="limpiar_form_material();"><i class="fas fa-plus-circle"></i> Agregar</button>
                             Admnistra de manera eficiente de tus Insumos.
                           </h3>
-                          <h3 class="card-title regresar" style="display: none;" >
-                            <button type="button" class="btn bg-gradient-warning" onclick="show_hide(1);"> <i class="fas fa-arrow-left"></i> Regresar</button>
+                          <h3 class="card-title btn-regresar" style="display: none;" >
+                            <button type="button" class="btn bg-gradient-warning" onclick="table_show_hide(1);"> <i class="fas fa-arrow-left"></i> Regresar</button>
                           </h3>
                         </div>
                         <!-- /.card-header -->
@@ -323,7 +323,7 @@
                                           
                                         </th>
                                       </tfoot>
-                                      <tbody></tbody>
+                                      <tbody class="orden_producto"></tbody>
                                     </table>
                                   </div>                                    
                                 </div>
@@ -341,7 +341,7 @@
                             </div>
 
                             <div class="modal-footer justify-content-between">
-                              <button type="button" class="btn btn-danger" onclick="show_hide(2);" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-danger" onclick="table_show_hide(3);" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-success" style="display: none;" id="guardar_registro_compras">Guardar Cambios</button>
                             </div>
                           </div>
@@ -496,6 +496,7 @@
                     </div>
                   </div>
                 </div>
+
                 <!-- MODAL - ELEGIR MATERIAL O ACTIVOS FIJOS -->
                 <div class="modal fade" id="modal-elegir-material">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -684,18 +685,14 @@
         </div>
         <!-- /.content-wrapper -->
 
-        <?php  require 'script.php'; ?>        
+        <?php  require 'script.php'; ?>         
 
-
-        <script>
-          $(document).ready(function() {
-              $('.js-example-basic-multiple').select2();
-          });
-        </script>
+        <!-- Jquery UI -->
+        <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+        <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
         <script type="text/javascript" src="scripts/materiales.js"></script>
-        <!-- <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script> -->
-        <script type="text/javascript" src="scripts/js_compra_insumo.js"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 
