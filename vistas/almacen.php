@@ -25,7 +25,8 @@ if (!isset($_SESSION["nombre"])) {
 
     <style>
       .table-container {
-        max-height: auto; /* Ajusta la altura máxima según tus necesidades */
+        max-height: 560px;
+        /* Ajusta la altura máxima según tus necesidades */
         overflow-y: scroll;
       }
 
@@ -42,22 +43,39 @@ if (!isset($_SESSION["nombre"])) {
       }
 
       .custom-table th,
-      .custom-table td{
-        padding: 6px; /* Ajusta el valor del padding según tus necesidades */
+      .custom-table td {
+        padding: 6px;
+        /* Ajusta el valor del padding según tus necesidades */
       }
 
       .custom-table th {
         text-align: center;
-        width: auto; /* Opcional: ajusta el ancho del encabezado según tus necesidades */
+        width: auto;
+        /* Opcional: ajusta el ancho del encabezado según tus necesidades */
         /* vertical-align: middle; Centra verticalmente el contenido del encabezado */
         vertical-align: middle !important;
       }
+
       .style-head {
-        padding-bottom: 4px!important;
-        padding-top: 4px!important;
-        padding-right: 10px!important;
-        padding-left: 10px!important;
+        padding-bottom: 4px !important;
+        padding-top: 4px !important;
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+
       }
+      .st_tr_style{
+        background-color: #fff;
+        border-bottom: 0;
+        box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .text_producto{
+        text-align: inherit !important;
+      }
+
     </style>
 
 
@@ -130,61 +148,61 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="card-body">
                       <!-- TABLA - Almacen -->
                       <div id="div_tabla_compra">
-                      <div class="table-container">
-                        <table class="custom-table" style="width: 100%;" role="grid">
-                          <thead>
-                            <tr>
-                              <th rowspan="4">#</th>
-                              <th rowspan="4">Code</th>
-                              <th rowspan="4">Producto</th>
-                              <th rowspan="4">UND</th>
-                              <th rowspan="4">SALDO ANTERIOR</th>
-                              <th colspan="6">JUNIO</th>
-                              <th colspan="8">JULIO</th>
-                              <th rowspan="4">INGRESO / SALIDA</th>
-                              <th rowspan="4">SALDO</th>
-                            </tr>
-                            <tr>
-                              <th class="style-head">25</th>
-                              <th class="style-head">26</th>
-                              <th class="style-head">27</th>
-                              <th class="style-head">28</th>
-                              <th class="style-head">29</th>
-                              <th class="style-head">30</th>
-                              <th class="style-head">1</th>
-                              <th class="style-head">2</th>
-                              <th class="style-head">3</th>
-                              <th class="style-head">4</th>
-                              <th class="style-head">5</th>
-                              <th class="style-head">6</th>
-                              <th class="style-head">7</th>
-                              <th class="style-head">8</th>
-                            </tr>
+                        <div class="table-container">
+                          <table class="custom-table" style="width: 100%;" role="grid">
+                            <thead class="st_tr_style">
+                              <tr>
+                                <th rowspan="4">#</th>
+                                <th rowspan="4">Code</th>
+                                <th rowspan="4">Producto</th>
+                                <th rowspan="4">UND</th>
+                                <th rowspan="4">SALDO ANTERIOR</th>
+                                <th colspan="6">JUNIO</th>
+                                <th colspan="8">JULIO</th>
+                                <th rowspan="4">INGRESO / SALIDA</th>
+                                <th rowspan="4">SALDO</th>
+                              </tr>
+                              <tr>
+                                <th class="style-head">25</th>
+                                <th class="style-head">26</th>
+                                <th class="style-head">27</th>
+                                <th class="style-head">28</th>
+                                <th class="style-head">29</th>
+                                <th class="style-head">30</th>
+                                <th class="style-head">1</th>
+                                <th class="style-head">2</th>
+                                <th class="style-head">3</th>
+                                <th class="style-head">4</th>
+                                <th class="style-head">5</th>
+                                <th class="style-head">6</th>
+                                <th class="style-head">7</th>
+                                <th class="style-head">8</th>
+                              </tr>
 
-                            <tr>
-                              <th colspan="7">SEMANA 1</th>
-                              <th colspan="7">SEMANA 2</th>
-                            </tr>
-                            <tr>
-                              <th class="style-head">D</th>
-                              <th class="style-head">L</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">J</th>
-                              <th class="style-head">V</th>
-                              <th class="style-head">S</th>
-                              <!-- ------------- -->
-                              <th class="style-head">D</th>
-                              <th class="style-head">L</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">J</th>
-                              <th class="style-head">V</th>
-                              <th class="style-head">S</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
+                              <tr>
+                                <th colspan="7">SEMANA 1</th>
+                                <th colspan="7">SEMANA 2</th>
+                              </tr>
+                              <tr>
+                                <th class="style-head">D</th>
+                                <th class="style-head">L</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">J</th>
+                                <th class="style-head">V</th>
+                                <th class="style-head">S</th>
+                                <!-- ------------- -->
+                                <th class="style-head">D</th>
+                                <th class="style-head">L</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">J</th>
+                                <th class="style-head">V</th>
+                                <th class="style-head">S</th>
+                              </tr>
+                            </thead>
+                            <tbody class="data_table_body">
+                              <!-- <tr>
                               <td rowspan="2">1</td>
                               <td rowspan="2">354</td>
                               <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
@@ -224,9 +242,9 @@ if (!isset($_SESSION["nombre"])) {
                               <td>1</td>
                               <td>1</td>
                               <td>1</td>
-                            </tr>
-                            <!-- --------- -->
-                            <tr>
+                            </tr> -->
+                              <!-- --------- -->
+                              <!-- <tr>
                               <td rowspan="2">1</td>
                               <td rowspan="2">354</td>
                               <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
@@ -266,9 +284,9 @@ if (!isset($_SESSION["nombre"])) {
                               <td>1</td>
                               <td>1</td>
                               <td>1</td>
-                            </tr>
-                            <!-- ----------- -->
-                            <tr>
+                            </tr> -->
+                              <!-- ----------- -->
+                              <!-- <tr>
                               <td rowspan="2">1</td>
                               <td rowspan="2">354</td>
                               <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
@@ -308,17 +326,14 @@ if (!isset($_SESSION["nombre"])) {
                               <td>1</td>
                               <td>1</td>
                               <td>1</td>
-                            </tr>
-                            <!-- Agrega más filas según sea necesario -->
-                          </tbody>
-                        </table>
+                            </tr> -->
+                              <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                          </table>
 
-                        
+
+                        </div>
                       </div>
-                      </div>
-
-
-
                       <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
