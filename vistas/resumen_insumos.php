@@ -90,7 +90,7 @@
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
-                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">UM</th>
+                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
                                   <th>Cantidad</th>
                                   <th>Compra</th> 
                                   <th>Precio promedio</th> 
@@ -109,7 +109,7 @@
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
-                                  <th>UM</th>
+                                  <th>U.M.</th>
                                   <th class="text-nowrap px-2 h5"><span>00</span></th> 
                                   <th>Compra</th>
                                   <th>Precio promedio</th>
