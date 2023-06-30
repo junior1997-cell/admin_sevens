@@ -1,7 +1,10 @@
-/vendor
+vendor/
 /etc
 .vagrant
 .env
 /node_modules
 .idea/
 .DS_Store
+
+composer.lock
+composer.json

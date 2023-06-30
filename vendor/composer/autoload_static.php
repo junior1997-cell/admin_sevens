@@ -4,10 +4,9 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit78be080300dcbf084d4c2b2f856d317d
+class ComposerStaticInit3371883c96d4d5d1d311ae696edee5d4
 {
     public static $files = array (
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     );
 
@@ -15,10 +14,6 @@ class ComposerStaticInit78be080300dcbf084d4c2b2f856d317d
         'Z' => 
         array (
             'ZipStream\\' => 10,
-        ),
-        'S' => 
-        array (
-            'Symfony\\Polyfill\\Mbstring\\' => 26,
         ),
         'P' => 
         array (
@@ -29,8 +24,11 @@ class ComposerStaticInit78be080300dcbf084d4c2b2f856d317d
         ),
         'M' => 
         array (
-            'MyCLabs\\Enum\\' => 13,
             'Matrix\\' => 7,
+        ),
+        'L' => 
+        array (
+            'Luecano\\NumeroALetras\\' => 22,
         ),
         'C' => 
         array (
@@ -42,10 +40,6 @@ class ComposerStaticInit78be080300dcbf084d4c2b2f856d317d
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
-        ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
         'Psr\\SimpleCache\\' => 
         array (
@@ -64,13 +58,13 @@ class ComposerStaticInit78be080300dcbf084d4c2b2f856d317d
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
-        'MyCLabs\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
-        ),
         'Matrix\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
+        ),
+        'Luecano\\NumeroALetras\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/luecano/numero-a-letras/src',
         ),
         'Complex\\' => 
         array (
@@ -90,16 +84,15 @@ class ComposerStaticInit78be080300dcbf084d4c2b2f856d317d
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit78be080300dcbf084d4c2b2f856d317d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit78be080300dcbf084d4c2b2f856d317d::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit78be080300dcbf084d4c2b2f856d317d::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit78be080300dcbf084d4c2b2f856d317d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3371883c96d4d5d1d311ae696edee5d4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3371883c96d4d5d1d311ae696edee5d4::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit3371883c96d4d5d1d311ae696edee5d4::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit3371883c96d4d5d1d311ae696edee5d4::$classMap;
 
         }, null, ClassLoader::class);
     }
