@@ -77,9 +77,9 @@ function templateColor (state) {
   return $state;
 }
 
-function templateGlosa (state) {
-  if (!state.id) { return state.text; }  
-  var $state = $(`<span ><b class="mr-2"><i class="${state.title}"></i></b>${state.text}</span>`);
+function templateGlosa (state) { 
+  if (!state.id) { return state.text; }  console.log(state.element.attributes.icono.value );
+  var $state = $(`<span ><b class="mr-2"><i class="${state.element.attributes.icono.value}"></i></b>${state.text}</span>`);
   return $state;
 }
 
@@ -397,7 +397,7 @@ function guardar_y_editar_compras(e) {
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
     preConfirm: (input) => {
-      return fetch("../ajax/resumen_insumos.php?op=guardar_y_editar_compra", {
+      return fetch("../ajax/ajax_general.php?op=guardar_y_editar_compra", {
         method: 'POST', // or 'PUT'
         body: formData, // data can be `string` or {object}!        
       }).then(response => {

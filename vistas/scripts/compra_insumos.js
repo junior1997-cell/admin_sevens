@@ -115,9 +115,9 @@ function templateColor (state) {
   return $state;
 }
 
-function templateGlosa (state) {
-  if (!state.id) { return state.text; }  
-  var $state = $(`<span ><b class="mr-2"><i class="${state.title}"></i></b>${state.text}</span>`);
+function templateGlosa (state) { 
+  if (!state.id) { return state.text; }  console.log(state.element.attributes.icono.value );
+  var $state = $(`<span ><b class="mr-2"><i class="${state.element.attributes.icono.value}"></i></b>${state.text}</span>`);
   return $state;
 }
 
@@ -252,11 +252,12 @@ function table_show_hide(flag) {
     $("#tabla-compra-proveedor").hide(); 
     $("#div_tabla_compra").hide();
     $("#factura_compras").hide();
+    listarmateriales();
   } else if (flag == 3) {
   } else if (flag == 4) {
   }
   
-  listarmateriales();
+  
 }
 
 //TABLA - COMPRAS
@@ -401,7 +402,7 @@ function guardar_y_editar_compras(e) {
     cancelButtonColor: "#d33",
     confirmButtonText: "Si, Guardar!",
     preConfirm: (input) => {
-      return fetch("../ajax/compra_insumos.php?op=guardaryeditarcompra", {
+      return fetch("../ajax/compra_insumos.php?op=guardar_y_editar_compra", {
         method: 'POST', // or 'PUT'
         body: formData, // data can be `string` or {object}!        
       }).then(response => {
@@ -475,7 +476,7 @@ function ver_detalle_compras(idcompra_proyecto) {
 
       $("#print_pdf_compra").removeClass('disabled');    
       $("#excel_compra").removeClass('disabled').attr('href', `../reportes/export_xlsx_compra_insumo.php?id=${idcompra_proyecto}&op=insumo`);
-      $("#print_pdf_compra").attr('href', `../reportes/pdf_compra.php?id=${idcompra_proyecto}&op=insumo` );
+      $("#print_pdf_compra").attr('href', `../reportes/comprobante_compra_insumo.php?id=${idcompra_proyecto}&op=insumo` );
     } else {
       ver_errores(e);
     }   
@@ -935,13 +936,13 @@ function mostrar_para_editar_proveedor() {
 
 function extrae_ruc() {
   if ($('#idproveedor').select2("val") == null || $('#idproveedor').select2("val") == '') { 
-    $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor');
+    $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','Seleciona un proveedor').attr('title','Seleciona un proveedor');
   } else { 
     if ($('#idproveedor').select2("val") == 1) {
-      $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','No editable');      
+      $('.btn-editar-proveedor').addClass('disabled').attr('data-original-title','No editable').attr('title','No editable');      
     } else{
       var name_proveedor = $('#idproveedor').select2('data')[0].text;
-      $('.btn-editar-proveedor').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_proveedor, 15)}`);      
+      $('.btn-editar-proveedor').removeClass('disabled').attr('data-original-title',`Editar: ${recorte_text(name_proveedor, 15)}`).attr('title',`Editar: ${recorte_text(name_proveedor, 15)}`);      
     }
   }
   $('[data-toggle="tooltip"]').tooltip();
@@ -1502,7 +1503,7 @@ function listarmateriales() {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [],
+    buttons: [{ text: '<i class="fa-solid fa-arrows-rotate" data-toggle="tooltip" data-original-title="Recargar"></i>', className: "btn ", action: function ( e, dt, node, config ) { tablamateriales.ajax.reload(null, false); toastr_success('Exito!!', 'Actualizando tabla', 400); } },],
     ajax: {
       url: "../ajax/ajax_general.php?op=tblaInsumosYActivosFijos",
       type: "get",
@@ -2023,7 +2024,7 @@ function guardar_y_editar_compras____________plantilla_cargando_POST(e) {
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
-        url: "../ajax/compra_insumos.php?op=guardaryeditarcompra",
+        url: "../ajax/compra_insumos.php?op=guardar_y_editar_compra",
         type: "POST",
         data: formData,
         contentType: false,

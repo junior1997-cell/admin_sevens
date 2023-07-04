@@ -13,6 +13,9 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Resumen Insumos | Admin Sevens</title>       
+        
+        <!-- UI - css -->
+        <link rel="stylesheet" href="../plugins/jquery-ui/jquery-ui.min.css">
 
         <?php $title = "Resumen Insumos"; require 'head.php';  ?>
 
@@ -68,12 +71,12 @@
                           </h3>
 
                           <!-- regresar "tabla principal" -->
-                          <h3 class="card-title mr-3" id="btn-regresar-todo" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal">
+                          <h3 class="card-title mr-3" id="btn-regresar-todo" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla principal" title="Regresar a la tabla principal">
                             <button type="button" class="btn btn-block btn-outline-warning btn-sm" onclick="table_show_hide(1);"><i class="fas fa-arrow-left"></i></button>
                           </h3>
 
                           <!-- regresar "tabla facuras" -->
-                          <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas">
+                          <h3 class="card-title mr-3" id="btn-regresar-bloque" style="display: none; padding-left: 2px;" data-toggle="tooltip" data-original-title="Regresar a la tabla fechas" title="Regresar a la tabla fechas">
                             <button type="button" class="btn bg-gradient-warning btn-sm" onclick="table_show_hide(3);"  ><i class="fas fa-arrow-left"></i> <span class="d-none d-sm-inline-block">Regresar</span> </button>
                           </h3>                    
                         </div>
@@ -90,7 +93,7 @@
                                   <th class="">Producto</th>
                                   <th class="">Grupo</th>
                                   <th class="">Marca</th>
-                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida">U.M.</th>
+                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida" title="Unidad de Medida">U.M.</th>
                                   <th>Cantidad</th>
                                   <th>Compra</th> 
                                   <th>Precio promedio</th> 
@@ -129,7 +132,7 @@
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>N° Comprob.</th>
-                                  <th>Marcas</th>
+                                  <th>Marca</th>
                                   <th>Fecha compra</th>
                                   <th data-toggle="tooltip" data-original-title="Centidad">Cant.</th>
                                   <th>Precio</th>  
@@ -145,11 +148,11 @@
                               </tbody>
                               <tfoot>
                                 <tr>
-                                  <th>#</th>
+                                  <th>#</th> 
                                   <th>Op.</th>
                                   <th>Proveedor</th>
                                   <th>N° Comprob.</th>
-                                  <th>Marcas</th>
+                                  <th>Marca</th>
                                   <th >Fecha compra</th>
                                   <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                   <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
@@ -161,7 +164,7 @@
                                 </tr>
                               </tfoot>
                             </table>
-                          </div>
+                          </div> 
 
                           <!-- TBLA EDITAR FACTURA -->
                           <div id="tabla-editar-factura" style="display: none !important;">
@@ -214,9 +217,9 @@
                                     <div class="form-group">
                                       <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
-                                        <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
-                                        <option title="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
-                                        <option title="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
+                                        <option icono="fas fa-hammer" value="MATERIAL">MATERIAL</option>
+                                        <option icono="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
+                                        <option icono="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
                                       </select>
                                     </div>
                                   </div>
@@ -311,9 +314,9 @@
                                         <th>Material</th>
                                         <th>Unidad</th>
                                         <th>Cantidad</th>
-                                        <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
+                                        <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" title="Valor Unitario" >V/U</th>
                                         <th class="hidden">IGV</th>
-                                        <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                                        <th data-toggle="tooltip" data-original-title="Precio Unitario" title="Precio Unitario">P/U</th>
                                         <th>Descuento</th>
                                         <th>Subtotal</th>
                                       </thead>
@@ -406,7 +409,7 @@
                                 <label for="num_documento_prov">N° RUC / DNI <sup class="text-danger">(unico*)</sup></label>
                                 <div class="input-group">
                                   <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
-                                  <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
+                                  <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                     <span class="input-group-text" style="cursor: pointer;">
                                       <i class="fas fa-search text-primary" id="search_prov"></i>
                                       <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge_prov" style="display: none;"></i>
@@ -527,9 +530,9 @@
                             <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
                             <th>Nombre Producto</th>
                             <th>Clasificación</th>
-                            <th data-toggle="tooltip" data-original-title="Precio Promedio">P/P.</th>
+                            <th data-toggle="tooltip" data-original-title="Precio Promedio" title="Precio Promedio">P/P.</th>
                             <th>Descripción</th>
-                            <th data-toggle="tooltip" data-original-title="Ficha Técnica" >Code</th>
+                            <th data-toggle="tooltip" data-original-title="Codigo" >Code</th>
                           </thead>
                           <tbody></tbody>
                         </table>

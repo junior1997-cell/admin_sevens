@@ -5,84 +5,168 @@ var impuesto = 18;
 var cont = 0;
 var detalles = 0;
 
-function agregarDetalleComprobante(idproducto, nombre, categoria, unidad_medida, nombre_color, precio_sin_igv, precio_igv, precio_total, img, ficha_tecnica_producto) {
-  var stock = 5;
-  var cantidad = 1;
-  var descuento = 0;
+function agregarDetalleComprobante(idproducto) {  
+  var cantidad = 1;    
+  $(`.btn-add-producto-${idproducto}`).html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+  $.post("../ajax/ajax_general.php?op=mostrar_producto", { idproducto: idproducto }, function (e, status) {
+    
+    e = JSON.parse(e);  console.log(e);
+    if (e.status == true) {
+      if (e.data == null || e.status == '' ) {
+        toastr_error("NO EXISTE!!",`El producto que esta buscando no existe, ingrese un código nuevo.`, 700);
+      } else {  
+        if ($(".producto_" + idproducto).hasClass("producto_selecionado")) {          
 
-  if (idproducto != "") {
-    // $('.producto_'+idproducto).addClass('producto_selecionado');
-    if ($(".producto_" + idproducto).hasClass("producto_selecionado")) {
-      
-      toastr_success("Agregado!!",`Material: ${nombre} agregado !!`, 700);
+          var cant_producto = $(".producto_" + idproducto).val(); 
 
-      var cant_producto = $(".producto_" + idproducto).val();
+          sub_total = parseInt(cant_producto, 10) + 1;
 
-      var sub_total = parseInt(cant_producto, 10) + 1;
+          $(".producto_" + idproducto).val(sub_total);
 
-      $(".producto_" + idproducto).val(sub_total);
+          modificarSubtotales();
+        } else {          
 
-      modificarSubtotales();
+          var img_p = e.data.imagen == "" || e.data.imagen == null ?  `../dist/docs/material/img_perfil/producto-sin-foto.svg` : `../dist/docs/material/img_perfil/${e.data.image}`; 
+          var marca_ = $("#marca_table_" + idproducto).val();
+          var promedio_precio_ = $(".promedio_precio_" + idproducto).text();
+          var fila = `
+          <tr class="filas" id="fila${cont}">         
+            <td class="py-1">
+              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
+            </td>
+            <td class="py-1">         
+              <input type="hidden" name="idproducto[]" value="${idproducto}">
+              <input type="hidden" name="ficha_tecnica_producto[]" value="${e.data.ficha_tecnica}">
+              <div class="user-block text-nowrap">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(e.data.nombre)}')">
+                <span class="username"><p class="mb-0 nombre_producto_${cont}">${e.data.nombre}</p></span>
+                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${e.data.categoria} | <b>Marca: </b> ${marca_}</span>
+              </div>
+            </td>
+            <td class="py-1">
+              <span class="unidad_medida_${cont}">${e.data.nombre_medida}</span> 
+              <input type="hidden" name="unidad_medida[]" value="${e.data.nombre_medida}">
+              <input type="hidden" name="nombre_color[]" value="${e.data.nombre_color}">
+              <input type="hidden" name="nombre_marca[]" value="${marca_}">
+            </td>
+            <td class="py-1 form-group"><input class="w-100px producto_${idproducto} producto_selecionado cantidad_${cont} form-control" type="number" name="cantidad[]" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="py-1 hidden"><input class="w-135px precio_sin_igv_${cont} input-no-border" type="number" name="precio_sin_igv[]" value="0" readonly min="0" ></td>
+            <td class="py-1 hidden"><input class="w-135px precio_igv_${cont} input-no-border" type="number" name="precio_igv[]" value="0" readonly ></td>
+            <td class="py-1 form-group"><input class="w-135px precio_con_igv_${cont} form-control" type="number" name="precio_con_igv[]" value="${(promedio_precio_)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+            <td class="py-1 form-group"><input class="w-135px descuento_${cont} form-control" type="number" name="descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="py-1 text-right"><span class="subtotal_producto_${cont}" >0</span></td>
+            <td class="py-1"><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+          </tr>`;
+
+          detalles = detalles + 1;
+
+          $("#detalles tbody").append(fila);
+
+          array_class_compra.push({ id_cont: cont });
+
+          modificarSubtotales();
+          
+          // toastr_success("Agregado!!",`Material: ${nombre} agregado !!`, 700);
+
+          cont++;
+          evaluar();
+
+          $(".orden_producto").sortable().disableSelection();
+        }      
+      }
     } else {
-
-      if ($("#tipo_comprobante").select2("val") == "Factura") {
-        var subtotal = cantidad * precio_total;
-      } else {
-        var subtotal = cantidad * precio_sin_igv;
-      }
-
-      var img_p = "";
-
-      if (img == "" || img == null) {
-        img_p = `../dist/docs/material/img_perfil/producto-sin-foto.svg`;
-      } else {
-        img_p = `../dist/docs/material/img_perfil/${img}`;
-      }
-
-      var fila = `
-      <tr class="filas" id="fila${cont}">         
-        <td class="py-1">
-          <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
-          <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
-        </td>
-        <td class="py-1">         
-          <input type="hidden" name="idproducto[]" value="${idproducto}">
-          <input type="hidden" name="ficha_tecnica_producto[]" value="${ficha_tecnica_producto}">
-          <div class="user-block text-nowrap">
-            <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(nombre)}')">
-            <span class="username"><p class="mb-0 nombre_producto_${cont}">${nombre}</p></span>
-            <span class="description clasificacion_${cont}"><b>Clasificación: </b>${categoria}</span>
-          </div>
-        </td>
-        <td class="py-1"><span class="unidad_medida_${cont}">${unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${unidad_medida}"><input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${nombre_color}"></td>
-        <td class="py-1 form-group"><input class="producto_${idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class="py-1 hidden"><input type="number" class="w-135px input-no-border precio_sin_igv_${cont}" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${parseFloat(precio_sin_igv).toFixed(2)}" readonly min="0" ></td>
-        <td class="py-1 hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" id="precio_igv[]" value="${parseFloat(precio_igv).toFixed(2)}" readonly  ></td>
-        <td class="py-1 form-group"><input class="w-135px precio_con_igv_${cont} form-control" type="number" name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(precio_total).toFixed(2)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-        <td class="py-1 form-group"><input type="number" class="w-135px descuento_${cont} form-control" name="descuento[]" value="${descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-        <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">${subtotal}</span></td>
-        <td class="py-1"><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
-      </tr>`;
-
-      detalles = detalles + 1;
-
-      $("#detalles tbody").append(fila);
-
-      array_class_compra.push({ id_cont: cont });
-
-      modificarSubtotales();
-      
-      toastr_success("Agregado!!",`Material: ${nombre} agregado !!`, 700);
-
-      cont++;
-      evaluar();
-
-      $(".orden_producto").sortable().disableSelection();
+      ver_errores(e);
     }
-  } else {
-    // alert("Error al ingresar el detalle, revisar los datos del artículo");
-    toastr_error("Error!!",`Error al ingresar el detalle, revisar los datos del material.`, 700);
-  }
+    $(`.btn-add-producto-${idproducto}`).html(`<span class="fa fa-plus"></span>`);
+    
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function agregar_detalle_comprobante_x_codigo(idproducto) {  
+  var cantidad = 1;    
+  $(`.btn-add-producto-${idproducto}`).html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+  $.post("../ajax/ajax_general.php?op=mostrar_producto", { idproducto: idproducto }, function (e, status) {
+    
+    e = JSON.parse(e);  console.log(e);
+    if (e.status == true) {
+      if (e.data == null || e.status == '' ) {
+        toastr_error("NO EXISTE!!",`El producto que esta buscando no existe, ingrese un código nuevo.`, 700);
+      } else {  
+        if ($(".producto_" + idproducto).hasClass("producto_selecionado")) {          
+
+          var cant_producto = $(".producto_" + idproducto).val(); 
+
+          sub_total = parseInt(cant_producto, 10) + 1;
+
+          $(".producto_" + idproducto).val(sub_total);
+
+          modificarSubtotales();
+        } else {          
+
+          var img_p = e.data.imagen == "" || e.data.imagen == null ?  `../dist/docs/material/img_perfil/producto-sin-foto.svg` : `../dist/docs/material/img_perfil/${e.data.image}`; 
+          var marca_ = $("#marca_table_" + idproducto).val();
+          var promedio_precio_ = $(".promedio_precio_" + idproducto).text();
+          var html_option_marca = '';
+          if (e.data.marcas.length === 0) {
+            html_option_marca = `<option value="SIN MARCA">SIN MARCA</option>`;
+          } else {
+            e.data.marcas.forEach((val, key) => {
+              html_option_marca = html_option_marca.concat(`<option value="${val}">${val}</option>`);
+            });
+          }
+          
+          var fila = `
+          <tr class="filas" id="fila${cont}">         
+            <td class="py-1">
+              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button>
+            </td>
+            <td class="py-1">         
+              <input type="hidden" name="idproducto[]" value="${idproducto}">
+              <input type="hidden" name="ficha_tecnica_producto[]" value="${e.data.ficha_tecnica}">
+              <div class="user-block text-nowrap">
+                <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(e.data.nombre)}')">
+                <span class="username"><p class="mb-0 nombre_producto_${cont}">${e.data.nombre}</p></span>
+                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${e.data.categoria} | <b>Marca: </b> <select name="nombre_marca[]">${html_option_marca}</select></span>
+              </div>
+            </td>
+            <td class="py-1">
+              <span class="unidad_medida_${cont}">${e.data.nombre_medida}</span> 
+              <input type="hidden" name="unidad_medida[]" value="${e.data.nombre_medida}">
+              <input type="hidden" name="nombre_color[]" value="${e.data.nombre_color}">              
+            </td>
+            <td class="py-1 form-group"><input class="w-100px producto_${idproducto} producto_selecionado cantidad_${cont} form-control" type="number" name="cantidad[]" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="py-1 hidden"><input class="w-135px precio_sin_igv_${cont} input-no-border" type="number" name="precio_sin_igv[]" value="0" readonly min="0" ></td>
+            <td class="py-1 hidden"><input class="w-135px precio_igv_${cont} input-no-border" type="number" name="precio_igv[]" value="0" readonly ></td>
+            <td class="py-1 form-group"><input class="w-135px precio_con_igv_${cont} form-control" type="number" name="precio_con_igv[]" value="${(promedio_precio_)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+            <td class="py-1 form-group"><input class="w-135px descuento_${cont} form-control" type="number" name="descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="py-1 text-right"><span class="subtotal_producto_${cont}" >0</span></td>
+            <td class="py-1"><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
+          </tr>`;
+
+          detalles = detalles + 1;
+
+          $("#detalles tbody").append(fila);
+
+          array_class_compra.push({ id_cont: cont });
+
+          modificarSubtotales();
+          
+          // toastr_success("Agregado!!",`Material: ${nombre} agregado !!`, 700);
+
+          cont++;
+          evaluar();
+
+          $(".orden_producto").sortable().disableSelection();
+        }      
+      }
+    } else {
+      ver_errores(e);
+    }
+    $(`.btn-add-producto-${idproducto}`).html(`<span class="fa fa-plus"></span>`);
+    
+  }).fail( function(e) { ver_errores(e); } );
 }
 
 function evaluar() {
@@ -127,23 +211,23 @@ function modificarSubtotales() {
 
     if (array_class_compra.length === 0) {
     } else {
-      array_class_compra.forEach((element, index) => {
-        var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-        var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-        var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+      array_class_compra.forEach((key, index) => {
+        var cantidad = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+        var precio_con_igv = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+        var deacuento = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
         var subtotal_producto = 0;
 
         // Calculamos: IGV
         var precio_sin_igv = precio_con_igv;
-        $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
+        $(`.precio_sin_igv_${key.id_cont}`).val(precio_sin_igv);
 
         // Calculamos: precio + IGV
         var igv = 0;
-        $(`.precio_igv_${element.id_cont}`).val(igv);
+        $(`.precio_igv_${key.id_cont}`).val(igv);
 
         // Calculamos: Subtotal de cada producto
         subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-        $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
+        $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
       });
       calcularTotalesSinIgv();
     }
@@ -170,23 +254,23 @@ function modificarSubtotales() {
       } else {
         // validamos el valor del igv ingresado        
 
-        array_class_compra.forEach((element, index) => {
-          var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-          var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-          var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+        array_class_compra.forEach((key, index) => {
+          var cantidad = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+          var precio_con_igv = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+          var deacuento = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
           var subtotal_producto = 0;
 
           // Calculamos: Precio sin IGV
           var precio_sin_igv = ( quitar_igv_del_precio(precio_con_igv, val_igv, 'decimal')).toFixed(2);
-          $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
+          $(`.precio_sin_igv_${key.id_cont}`).val(precio_sin_igv);
 
           // Calculamos: IGV
           var igv = (parseFloat(precio_con_igv) - parseFloat(precio_sin_igv)).toFixed(2);
-          $(`.precio_igv_${element.id_cont}`).val(igv);
+          $(`.precio_igv_${key.id_cont}`).val(igv);
 
           // Calculamos: Subtotal de cada producto
           subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-          $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
+          $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto.toFixed(2)));
         });
 
         calcularTotalesConIgv();
@@ -206,23 +290,23 @@ function modificarSubtotales() {
 
       if (array_class_compra.length === 0) {
       } else {
-        array_class_compra.forEach((element, index) => {
-          var cantidad = parseFloat($(`.cantidad_${element.id_cont}`).val());
-          var precio_con_igv = parseFloat($(`.precio_con_igv_${element.id_cont}`).val());
-          var deacuento = parseFloat($(`.descuento_${element.id_cont}`).val());
+        array_class_compra.forEach((key, index) => {
+          var cantidad = $(`.cantidad_${key.id_cont}`).val() == '' || $(`.cantidad_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.cantidad_${key.id_cont}`).val());
+          var precio_con_igv = $(`.precio_con_igv_${key.id_cont}`).val() == '' || $(`.precio_con_igv_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.precio_con_igv_${key.id_cont}`).val());
+          var deacuento = $(`.descuento_${key.id_cont}`).val() == '' || $(`.descuento_${key.id_cont}`).val() == null ? 0 : parseFloat($(`.descuento_${key.id_cont}`).val());
           var subtotal_producto = 0;
 
           // Calculamos: IGV
           var precio_sin_igv = precio_con_igv;
-          $(`.precio_sin_igv_${element.id_cont}`).val(precio_sin_igv);
+          $(`.precio_sin_igv_${key.id_cont}`).val(precio_sin_igv);
 
           // Calculamos: precio + IGV
           var igv = 0;
-          $(`.precio_igv_${element.id_cont}`).val(igv);
+          $(`.precio_igv_${key.id_cont}`).val(igv);
 
           // Calculamos: Subtotal de cada producto
           subtotal_producto = cantidad * parseFloat(precio_con_igv) - deacuento;
-          $(`.subtotal_producto_${element.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
+          $(`.subtotal_producto_${key.id_cont}`).html(formato_miles(subtotal_producto.toFixed(4)));
         });
 
         calcularTotalesSinIgv();
@@ -460,38 +544,43 @@ function mostrar_compra_insumo(idcompra_proyecto) {
 
       if (e.data.producto) {
 
-        e.data.producto.forEach((element, index) => {
+        e.data.producto.forEach((val, index) => {
 
           var img = "";
 
-          if (element.imagen == "" || element.imagen == null) {
+          if (val.imagen == "" || val.imagen == null) {
             img = `../dist/docs/material/img_perfil/producto-sin-foto.svg`;
           } else {
-            img = `../dist/docs/material/img_perfil/${element.imagen}`;
+            img = `../dist/docs/material/img_perfil/${val.imagen}`;
           }
 
           var fila = `
           <tr class="filas" id="fila${cont}">
             <td class="py-1">
-              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${element.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
+              <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_material(${val.idproducto}, ${cont})"><i class="fas fa-pencil-alt"></i></button>
               <button type="button" class="btn btn-danger btn-sm" onclick="eliminarDetalle(${cont})"><i class="fas fa-times"></i></button></td>
             </td>
             <td class="py-1">
-              <input type="hidden" name="idproducto[]" value="${element.idproducto}">
-              <input type="hidden" name="ficha_tecnica_producto[]" value="${element.ficha_tecnica_producto}">
+              <input type="hidden" name="idproducto[]" value="${val.idproducto}">
+              <input type="hidden" name="ficha_tecnica_producto[]" value="${val.ficha_tecnica_producto}">
               <div class="user-block text-nowrap">
-                <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(element.nombre_producto)}')">
-                <span class="username"><p class="mb-0 nombre_producto_${cont}" >${element.nombre_producto}</p></span>
-                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${element.categoria}</span>
+                <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(val.nombre_producto)}')">
+                <span class="username"><p class="mb-0 nombre_producto_${cont}" >${val.nombre_producto}</p></span>
+                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${val.categoria} | <b>Marca: </b> ${val.marca==''||val.marca==null?'-':val.marca}</span>
               </div>
             </td>
-            <td class="py-1"> <span class="unidad_medida_${cont}">${element.unidad_medida}</span> <input class="unidad_medida_${cont}" type="hidden" name="unidad_medida[]" id="unidad_medida[]" value="${element.unidad_medida}"> <input class="color_${cont}" type="hidden" name="nombre_color[]" id="nombre_color[]" value="${element.color}"></td>
-            <td class="py-1 form-group"><input class="producto_${element.idproducto} producto_selecionado w-100px cantidad_${cont} form-control" type="number" name="cantidad[]" id="cantidad[]" value="${element.cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td class="py-1 hidden"><input class="w-135px input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" id="precio_sin_igv[]" value="${element.precio_sin_igv}" readonly ></td>
-            <td class="py-1 hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number"  name="precio_igv[]" id="precio_igv[]" value="${element.igv}" readonly ></td>
-            <td class="py-1 form-group"><input type="number" class="w-135px precio_con_igv_${cont} form-control" type="number"  name="precio_con_igv[]" id="precio_con_igv[]" value="${parseFloat(element.precio_con_igv).toFixed(2)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
-            <td class="py-1 form-group"><input type="number" class="w-135px descuento_${cont} form-control" name="descuento[]" value="${element.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
-            <td class="py-1 text-right"><span class="text-right subtotal_producto_${cont}" name="subtotal_producto" id="subtotal_producto">0.00</span></td>
+            <td class="py-1"> 
+              <span class="unidad_medida_${cont}">${val.unidad_medida}</span> 
+              <input type="hidden" name="unidad_medida[]" value="${val.unidad_medida}"> 
+              <input type="hidden" name="nombre_color[]" value="${val.color}">
+              <input type="hidden" name="nombre_marca[]" value="${val.marca==''||val.marca==null?'':val.marca}">
+            </td>
+            <td class="py-1 form-group"><input class="w-100px form-control producto_${val.idproducto} producto_selecionado cantidad_${cont} " type="number" name="cantidad[]" value="${val.cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="py-1 hidden"><input class="w-135px input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" value="${val.precio_sin_igv}" readonly ></td>
+            <td class="py-1 hidden"><input class="w-135px input-no-border precio_igv_${cont}" type="number" name="precio_igv[]" value="${val.igv}" readonly ></td>
+            <td class="py-1 form-group"><input class="w-135px form-control precio_con_igv_${cont}" type="number" name="precio_con_igv[]" value="${parseFloat(val.precio_con_igv).toFixed(2)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+            <td class="py-1 form-group"><input class="w-135px form-control descuento_${cont}" type="number" name="descuento[]" value="${val.descuento}" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
+            <td class="py-1 text-right"><span class="subtotal_producto_${cont}" >0.00</span></td>
             <td class="py-1"><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
           </tr>`;
 
@@ -530,3 +619,31 @@ $("#my-switch_detracc").on("click ", function (e) {
     $("#estado_detraccion").val("0");
   }
 });
+
+function agregar_producto_x_codigo() {
+  var codigo = $('#add_producto_x_codigo').val();
+  if (codigo == '' || codigo == null || codigo === undefined) {
+    toastr_error('VACIO', 'Ingrese un codigo valido para agregar'); 
+  } else {
+    agregar_detalle_comprobante_x_codigo(codigo);
+  }  
+}
+
+function buscar_precio_x_marca(val, idproducto) {
+  $(`#precio_table_${idproducto}`).html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+  var marca_select = $(val).val(); console.log(marca_select);
+  $.post("../ajax/ajax_general.php?op=buscar_precio_x_marca", {'idproducto':idproducto, 'marca':marca_select }, function (e, textStatus, jqXHR) {
+    e = JSON.parse(e);  
+    if (e.status == true) {      
+      if (e.data == '' || e.data == null) {
+        $(`#precio_table_${idproducto}`).html(0); 
+        $(`.promedio_precio_${idproducto}`).html(0);
+      } else { 
+        $(`#precio_table_${idproducto}`).html(parseFloat(e.data.precio_con_igv).toFixed(2)); 
+        $(`.promedio_precio_${idproducto}`).html(parseFloat(e.data.precio_con_igv).toFixed(2));
+      }
+    } else {
+      ver_errores(e);
+    }    
+  }).fail( function(e) { ver_errores(e); } );
+}

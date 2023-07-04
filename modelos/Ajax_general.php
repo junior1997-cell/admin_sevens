@@ -170,6 +170,62 @@
     }
 
     /* ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════ */
+    //Implementar un método para mostrar los datos de un registro a modificar
+    public function mostrar_producto($idproducto)  {
+      $data = []; $array_marca = []; $array_marca_name = [];
+
+      $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie,  p.estado_igv, 
+      p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.created_at,
+      um.nombre_medida, c.nombre_color, ciaf.nombre AS categoria
+      FROM producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
+      WHERE p.idunidad_medida = um.idunidad_medida AND p.idcolor = c.idcolor 
+      AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af AND p.idproducto = '$idproducto'";
+      $activos = ejecutarConsultaSimpleFila($sql); if ($activos['status'] == false) { return  $activos;}
+
+      if ( empty($activos['data'])  ) {
+        return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => null ];
+      }else{
+        $sql3 = "SELECT dm.iddetalle_marca, m.idmarca, m.nombre_marca FROM detalle_marca as dm, marca as m WHERE dm.idmarca=m.idmarca AND dm.idproducto = '$idproducto';";
+        $detalle_marca = ejecutarConsultaArray($sql3); if ($detalle_marca['status'] == false) { return  $detalle_marca;}
+
+        foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca, $value['idmarca'] ); }
+        foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca_name, $value['nombre_marca'] ); }
+        
+        $data = [
+          'idproducto'      => $activos['data']['idproducto'],
+          'idunidad_medida' => $activos['data']['idunidad_medida'],
+          'nombre_medida'   => $activos['data']['nombre_medida'],
+          'idcolor'         => $activos['data']['idcolor'],
+          'nombre_color'    => $activos['data']['nombre_color'],
+          'idcategoria_insumos_af'  => $activos['data']['idcategoria_insumos_af'],
+          'categoria'               => $activos['data']['categoria'],
+          'nombre'          => decodeCadenaHtml($activos['data']['nombre']),
+          'modelo'          => decodeCadenaHtml($activos['data']['modelo']),
+          'serie'           => decodeCadenaHtml($activos['data']['serie']),
+          'estado_igv'      => (empty($activos['data']['estado_igv']) ? 0     : floatval($activos['data']['estado_igv']) ),
+          'precio_unitario' => (empty($activos['data']['precio_unitario']) ? 0: floatval($activos['data']['precio_unitario']) ),
+          'precio_igv'      => (empty($activos['data']['precio_igv']) ? 0     :  floatval($activos['data']['precio_igv']) ),
+          'precio_sin_igv'  => (empty($activos['data']['precio_sin_igv']) ? 0 : floatval($activos['data']['precio_sin_igv']) ),
+          'precio_total'    => (empty($activos['data']['precio_total']) ? 0   : floatval($activos['data']['precio_total']) ),
+          'ficha_tecnica'   => $activos['data']['ficha_tecnica'],
+          'descripcion'     => decodeCadenaHtml($activos['data']['descripcion']),
+          'imagen'          => $activos['data']['imagen'],
+          'estado'          => $activos['data']['estado'],
+          'fecha'           => $activos['data']['created_at'],
+
+          'id_marca'        => $array_marca,
+          'marcas'          => $array_marca_name,
+        ];
+
+        return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];  
+      }       
+    }
+
+    public function buscar_precio_x_marca($idproducto, $marca) {
+      $sql = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto' AND marca = '$marca' ORDER BY iddetalle_compra DESC LIMIT 1;";
+      return ejecutarConsultaSimpleFila($sql);
+    }
+
     public function tblaActivosFijos() {
       $data = [];
       $sql = "SELECT p.idproducto, p.nombre, p.descripcion, p.imagen, p.ficha_tecnica, um.nombre_medida, 
@@ -230,19 +286,31 @@
 
     public function tblaInsumosYActivosFijos() {
       $data = [];
-      $sql = "SELECT p.idproducto, p.nombre, p.descripcion, p.imagen, p.ficha_tecnica, um.nombre_medida, 
+      $sql_1 = "SELECT p.idproducto, p.nombre, p.descripcion, p.imagen, p.ficha_tecnica, um.nombre_medida, 
       ciaf.nombre AS categoria
       FROM producto as p, unidad_medida as um, categoria_insumos_af AS ciaf
       WHERE p.idunidad_medida= um.idunidad_medida  AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND 
       p.estado='1' AND p.estado_delete='1'
       ORDER BY p.nombre ASC;";
-      $producto = ejecutarConsulta($sql); if ($producto['status'] == false){ return $producto; }
+      $producto = ejecutarConsulta($sql_1); if ($producto['status'] == false){ return $producto; }
 
       foreach ($producto['data'] as $key => $value) {
         $id = $value['idproducto'];     
-        $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
-        $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
-  
+        $sql_2 = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
+        $precio = ejecutarConsultaSimpleFila($sql_2);  if ($precio['status'] == false){ return $precio; }
+
+        $sql_3 = "SELECT m.nombre_marca, m.descripcion  FROM detalle_marca as dm, marca as m  WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$id'";
+        $marcas = ejecutarConsultaArray($sql_3);  if ($marcas['status'] == false){ return $marcas; }
+        $html_marcas = '';
+
+        if ( empty($marcas['data']) ) {
+          $html_marcas = '<option value="SIN MARCA">SIN MARCA</option>';
+        } else {
+          foreach ($marcas['data'] as $key2 => $val2) {
+            $html_marcas .= '<option value="'.$val2['nombre_marca'].'">'.$val2['nombre_marca'].'</option>';
+          }
+        }        
+
         $data[] = Array(
           'idproducto'    =>  $value['idproducto'],
           'nombre'        => ( empty($value['nombre']) ? '' : decodeCadenaHtml($value['nombre'])),           
@@ -251,6 +319,8 @@
           'ficha_tecnica' =>  $value['ficha_tecnica'],
           'nombre_medida' =>  $value['nombre_medida'],
           'categoria'     =>  $value['categoria'],
+          'marcas_html'   =>  $html_marcas,
+          'marcas_array'  =>  $marcas['data'],
           'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : number_format(floatval($precio['data']['promedio_precio']), 2, '.', '' ) ) ),                  
         );  
       }

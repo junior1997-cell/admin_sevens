@@ -41,6 +41,9 @@ function validar_response(e) {
             });
             $('.login-btn').html('Ingresar').removeClass('disabled btn-info').addClass('btn-outline-warning');
         } else {
+            localStorage.setItem('nube_usuario', e.data.login);
+            localStorage.setItem('nube_usuario_nombre', e.data.nombres);
+            localStorage.setItem('nube_usuario_img', e.data.imagen_perfil);
             $(document).Toasts('create', {
                 class: 'bg-success',
                 title: 'Bienvenido al sistema "Admin Sevens"',
@@ -50,15 +53,11 @@ function validar_response(e) {
             var redirecinando = varaibles_get();
 
             if (redirecinando.file == '' || redirecinando.file == null ) {
-                //console.log('vacio perrro');
                 $(location).attr("href","escritorio.php");
             } else {
-                //console.log(redirecinando.file);
                 $(location).attr("href",redirecinando.file);                                
-            }
-            //console.log(redirecinando);            
-        }
-        
+            }           
+        }        
     } else {
         $('.login-btn').html('Ingresar').removeClass('disabled btn-info').addClass('btn-outline-warning');
         ver_errores(e); 

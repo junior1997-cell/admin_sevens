@@ -13,7 +13,7 @@ class Compra_insumos
 
   //Implementamos un método para insertar registros
   public function insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante,  $serie_comprobante,$slt2_serie_comprobante, $val_igv,  $descripcion, $glosa,
-    $total_compra, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida,  $nombre_color,
+    $total_compra, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida,  $nombre_color, $nombre_marca,
     $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
 
     $sql_1 = "SELECT ruc FROM proveedor WHERE idproveedor ='$idproveedor';";
@@ -24,8 +24,7 @@ class Compra_insumos
     $sql_2 = "SELECT p.razon_social, p.tipo_documento, p.ruc, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, cpp.glosa, cpp.total, cpp.estado, cpp.estado_delete 
     FROM compra_por_proyecto as cpp, proveedor as p 
     WHERE cpp.idproveedor = p.idproveedor AND p.ruc ='$ruc' AND cpp.tipo_comprobante ='$tipo_comprobante' AND cpp.serie_comprobante = '$serie_comprobante'";
-    $compra_existe = ejecutarConsultaArray($sql_2);
-    if ($compra_existe['status'] == false) { return  $compra_existe;}
+    $compra_existe = ejecutarConsultaArray($sql_2);   if ($compra_existe['status'] == false) { return  $compra_existe;}
 
     if (empty($compra_existe['data']) || $tipo_comprobante == 'Ninguno') {
       $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante,nc_serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion, user_created)
@@ -36,29 +35,29 @@ class Compra_insumos
       $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_por_proyecto','".$idventanew['data']."','Nueva compra proyecto','" . $_SESSION['idusuario'] . "')";
       $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
 
-      $num_elementos = 0;
+      $ii = 0;
       $compra_new = "";
 
       if ( !empty($idventanew['data']) ) {
       
-        while ($num_elementos < count($idproducto)) {
+        while ($ii < count($idproducto)) {
           $id = $idventanew['data'];
-          $subtotal_producto = (floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos])) - $descuento[$num_elementos];
+          $subtotal_producto = (floatval($cantidad[$ii]) * floatval($precio_con_igv[$ii])) - $descuento[$ii];
 
-          // buscando grupo
-          $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$num_elementos]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
+          // buscando grupo para asignar
+          $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$ii]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
           $grupo =  ejecutarConsultaSimpleFila($sql_4); if ($grupo['status'] == false) { return  $grupo;}
           $id_grupo = (empty($grupo['data']) ? 1 : (empty($grupo['data']['idclasificacion_grupo']) ? 1 : $grupo['data']['idclasificacion_grupo'] ) );
 
-          $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, idclasificacion_grupo, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
-          VALUES ('$id','$idproducto[$num_elementos]', '$id_grupo', '$unidad_medida[$num_elementos]',  '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+          $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, idclasificacion_grupo, unidad_medida, color, marca, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
+          VALUES ('$id','$idproducto[$ii]', '$id_grupo', '$unidad_medida[$ii]',  '$nombre_color[$ii]', '$nombre_marca[$ii]', '$cantidad[$ii]', '$precio_sin_igv[$ii]', '$precio_igv[$ii]', '$precio_con_igv[$ii]', '$descuento[$ii]', '$subtotal_producto', '$ficha_tecnica_producto[$ii]','" . $_SESSION['idusuario'] . "')";
           $compra_new =  ejecutarConsulta_retornarID($sql_detalle); if ($compra_new['status'] == false) { return  $compra_new;}
 
           //add registro en nuestra bitacora.
           $sql_bit_d = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('detalle_compra','".$compra_new['data']."','Detalle compra','" . $_SESSION['idusuario'] . "')";
           $bitacora = ejecutarConsulta($sql_bit_d); if ( $bitacora['status'] == false) {return $bitacora; } 
 
-          $num_elementos = $num_elementos + 1;
+          $ii = $ii + 1;
         }
       }
       return $compra_new;
@@ -85,8 +84,8 @@ class Compra_insumos
   }
 
   //Implementamos un método para editar registros
-  public function editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante,  $serie_comprobante,$slt2_serie_comprobante, $val_igv,  
-  $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida,  $nombre_color,
+  public function editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra, $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv,  
+  $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $idproducto, $unidad_medida, $nombre_color, $nombre_marca,
   $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
 
     if ( !empty($idcompra_proyecto) ) {
@@ -104,25 +103,25 @@ class Compra_insumos
       $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_por_proyecto','$idcompra_proyecto','Editar compra proyecto','" . $_SESSION['idusuario'] . "')";
       $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }
 
-      $num_elementos = 0; $detalle_compra = "";
+      $ii = 0; $detalle_compra = "";
 
-      while ($num_elementos < count($idproducto)) {
-        $subtotal_producto = (floatval($cantidad[$num_elementos]) * floatval($precio_con_igv[$num_elementos])) - $descuento[$num_elementos];
+      while ($ii < count($idproducto)) {
+        $subtotal_producto = (floatval($cantidad[$ii]) * floatval($precio_con_igv[$ii])) - $descuento[$ii];
 
         // buscando grupo
-        $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$num_elementos]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
+        $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$ii]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
         $grupo =  ejecutarConsultaSimpleFila($sql_4); if ($grupo['status'] == false) { return  $grupo;}
         $id_grupo = (empty($grupo['data']) ? 1 : (empty($grupo['data']['idclasificacion_grupo']) ? 1 : $grupo['data']['idclasificacion_grupo'] ) );
 
-        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto,	idclasificacion_grupo, unidad_medida, color, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
-        VALUES ('$idcompra_proyecto', '$idproducto[$num_elementos]', '$id_grupo', '$unidad_medida[$num_elementos]', '$nombre_color[$num_elementos]', '$cantidad[$num_elementos]', '$precio_sin_igv[$num_elementos]', '$precio_igv[$num_elementos]', '$precio_con_igv[$num_elementos]', '$descuento[$num_elementos]', '$subtotal_producto', '$ficha_tecnica_producto[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+        $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto,	idclasificacion_grupo, unidad_medida, color, marca, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
+        VALUES ('$idcompra_proyecto', '$idproducto[$ii]', '$id_grupo', '$unidad_medida[$ii]', '$nombre_color[$ii]', '$nombre_marca[$ii]', '$cantidad[$ii]', '$precio_sin_igv[$ii]', '$precio_igv[$ii]', '$precio_con_igv[$ii]', '$descuento[$ii]', '$subtotal_producto', '$ficha_tecnica_producto[$ii]','" . $_SESSION['idusuario'] . "')";
         $detalle_compra = ejecutarConsulta_retornarID($sql_detalle); if ($detalle_compra['status'] == false) { return $detalle_compra; }
 
         //add registro en nuestra bitacora.
         $sql_bit_d = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('detalle_compra','".$detalle_compra['data']."','Detalle editado compra','" . $_SESSION['idusuario'] . "')";
         $bitacora = ejecutarConsulta($sql_bit_d); if ( $bitacora['status'] == false) {return $bitacora; } 
 
-        $num_elementos = $num_elementos + 1;
+        $ii = $ii + 1;
       }
       return $detalle_compra; 
     } else { 
@@ -141,7 +140,7 @@ class Compra_insumos
     if ($compra['status'] == false) { return $compra; }
 
     $sql_2 = "SELECT 	dc.idproducto, dc.ficha_tecnica_producto, dc.cantidad, dc.precio_sin_igv, dc.igv, dc.precio_con_igv,
-		dc.descuento,	p.nombre as nombre_producto, p.imagen, dc.unidad_medida, dc.color, ciaf.nombre AS categoria
+		dc.descuento,	p.nombre as nombre_producto, p.imagen, dc.unidad_medida, dc.color, dc.marca, ciaf.nombre AS categoria
 		FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
 		WHERE p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND  dc.idproducto=p.idproducto AND p.idcolor = c.idcolor 
     AND p.idunidad_medida = um.idunidad_medida and idcompra_proyecto='$id_compras_x_proyecto';";
@@ -151,21 +150,21 @@ class Compra_insumos
 
     $results = [
       "idcompra_x_proyecto" => $compra['data']['idcompra_proyecto'],      
-      "idproyecto" => $compra['data']['idproyecto'],
-      "idproveedor" => $compra['data']['idproveedor'],
-      "fecha_compra" => $compra['data']['fecha_compra'],
-      "tipo_comprobante" => $compra['data']['tipo_comprobante'],
-      "serie_comprobante" => $compra['data']['serie_comprobante'],
-      "nc_serie_comprobante" => $compra['data']['nc_serie_comprobante'],
-      "val_igv" => $compra['data']['val_igv'],
-      "descripcion" => $compra['data']['descripcion'],
-      "glosa" => $compra['data']['glosa'],
-      "subtotal" => $compra['data']['subtotal'],
-      "igv" => $compra['data']['igv'],
-      "total" => $compra['data']['total'],
-      "estado_detraccion" => $compra['data']['estado_detraccion'],
-      "estado" => $compra['data']['estado'],
-      "producto" => $producto['data'],
+      "idproyecto"          => $compra['data']['idproyecto'],
+      "idproveedor"         => $compra['data']['idproveedor'],
+      "fecha_compra"        => $compra['data']['fecha_compra'],
+      "tipo_comprobante"    => $compra['data']['tipo_comprobante'],
+      "serie_comprobante"   => $compra['data']['serie_comprobante'],
+      "nc_serie_comprobante"=> $compra['data']['nc_serie_comprobante'],
+      "val_igv"             => empty($compra['data'])? 0 : (empty($compra['data']['val_igv']) ? 0 : floatval($compra['data']['val_igv']) ) ,
+      "descripcion"         => $compra['data']['descripcion'],
+      "glosa"               => $compra['data']['glosa'],
+      "subtotal"            => empty($compra['data'])? 0 : (empty($compra['data']['subtotal']) ? 0 : floatval($compra['data']['subtotal']) ) ,
+      "igv"                 => empty($compra['data'])? 0 : (empty($compra['data']['igv']) ? 0 : floatval($compra['data']['igv']) ) ,
+      "total"               => empty($compra['data'])? 0 : (empty($compra['data']['total']) ? 0 : floatval($compra['data']['total']) ) ,
+      "estado_detraccion"   => $compra['data']['estado_detraccion'],
+      "estado"              => $compra['data']['estado'],
+      "producto"            => $producto['data'],
     ];
 
     return $retorno = ["status" => true, "message" => 'todo oka', "data" => $results] ;

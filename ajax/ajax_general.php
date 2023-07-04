@@ -487,6 +487,16 @@
       break;
 
       /* ══════════════════════════════════════ P R O D U C T O ══════════════════════════════════════ */
+      case 'mostrar_producto':
+        $rspta = $ajax_general->mostrar_producto($_POST["idproducto"]); 
+        echo json_encode($rspta, true);
+      break;
+
+      case 'buscar_precio_x_marca':
+        $rspta = $ajax_general->buscar_precio_x_marca($_POST["idproducto"], $_POST["marca"]); 
+        echo json_encode($rspta, true);
+      break;
+
       case 'tblaActivosFijos':
           
         $rspta = $ajax_general->tblaActivosFijos(); 
@@ -606,22 +616,22 @@
             } else {
               $img = 'src="../dist/docs/material/img_perfil/' . $reg['imagen'] . '"';
               $img_parametro = $reg['imagen'];
-            }
-  
-            $ficha_tecnica = !empty($reg['ficha_tecnica']) ? ( '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '" data-toggle="tooltip" data-original-title="Ver Ficha Técnica"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>')
-              : ( '<center><span class="text-center" data-toggle="tooltip" data-original-title="Vacío"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
-  
+            }  
+            
+            $data_btn = 'btn-add-producto-'.$reg['idproducto'];
             $datas[] = [
-              "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre'], ENT_QUOTES) . '\', \'' . $reg['categoria'] . '\', \'' . $reg['nombre_medida'] . '\', \'SIN COLOR\', \'' . $reg['promedio_precio'] . '\', 0, \'' . $reg['promedio_precio'] . '\', \'' .  $img_parametro . '\', \'' . $reg['ficha_tecnica'] . '\')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
+              "0" => '<button class="btn btn-warning '.$data_btn.'" onclick="agregarDetalleComprobante(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
               "1" => '<div class="user-block w-250px">'.
                 '<img class="profile-user-img img-responsive img-circle" ' .  $img . ' alt="user image" onerror="' . $imagen_error .  '">'.
                 '<span class="username"><p class="mb-0" >' . $reg['nombre'] . '</p></span>
-                <span class="description"><b>UM: </b>' . $reg['nombre_medida'] . '</span>'.
+                <span class="description"><b>UM: </b>' . $reg['nombre_medida'] . '</span>
+                <span style="display: none;" class="promedio_precio_'.$reg['idproducto'].'">' . $reg['promedio_precio'] . '</span>'.
               '</div>',
-              "2" => $reg['categoria'],
-              "3" => $reg['promedio_precio'],
-              "4" => '<textarea class="form-control textarea_datatable" readonly cols="30" rows="1">' . $reg['descripcion'] . '</textarea>' . $toltip ,
-              "5" => $reg['idproducto'] ,
+              "2" => '<select onchange="buscar_precio_x_marca(this, ' . $reg['idproducto'] . ');" name="marca_table" id="marca_table_'.$reg['idproducto'].'">'.$reg['marcas_html'].'</select>',
+              "3" => $reg['categoria'],
+              "4" => '<span id="precio_table_'.$reg['idproducto'].'">'.$reg['promedio_precio'].'</span>' ,
+              "5" => '<textarea class="form-control textarea_datatable" readonly cols="30" rows="1">' . $reg['descripcion'] . '</textarea>' . $toltip ,
+              "6" => $reg['idproducto'] ,
             ];
           }
   
@@ -692,6 +702,12 @@
       break;
 
       /* ══════════════════════════════════════ C O M P R A   D E   I N S U M O ════════════════════════════ */
+
+      case 'ver_compra_editar':
+        $rspta = $compra_insumos->mostrar_compra_para_editar($_POST["idcompra_proyecto"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);    
+      break;
 
       case 'detalle_compra_de_insumo':
 
@@ -845,29 +861,21 @@
         $retorno = ['status' => true, 'message' => 'todo oka', 'data' => $inputs . $tabla_detalle ];
         echo json_encode( $retorno, true );
 
-      break;
-
-      case 'ver_compra_editar':
-
-        $rspta = $compra_insumos->mostrar_compra_para_editar($_POST["idcompra_proyecto"]);
-        //Codificar el resultado utilizando json
-        echo json_encode($rspta, true);
-    
-      break; 
+      break;       
 
       // :::::::::::::::::::::::::: S E C C I O N   C O M P R A ::::::::::::::::::::::::::
       case 'guardar_y_editar_compra':
         if (empty($idcompra_proyecto)) {
           $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
           $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
-          $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+          $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"]);
           //precio_sin_igv,precio_igv,precio_total
           echo json_encode($rspta, true);
         } else {
-          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
-          $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
-          $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
+          $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
+          $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
     
           echo json_encode($rspta, true);

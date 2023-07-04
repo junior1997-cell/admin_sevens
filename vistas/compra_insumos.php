@@ -20,8 +20,10 @@
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
-        <link rel="stylesheet" href="../dist/css/leyenda.css" />
-        
+        <link rel="stylesheet" href="../dist/css/leyenda.css" />        
+
+        <!-- UI - css -->
+        <link rel="stylesheet" href="../plugins/jquery-ui/jquery-ui.min.css">
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
         <div class="wrapper">
@@ -293,9 +295,9 @@
                                     <div class="form-group">
                                       <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
                                       <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
-                                        <option title="fas fa-hammer" value="MATERIAL">MATERIAL</option>
-                                        <option title="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
-                                        <option title="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
+                                        <option icono="fas fa-hammer" value="MATERIAL">MATERIAL</option>
+                                        <option icono="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
+                                        <option icono="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
                                       </select>
                                     </div> 
                                   </div>
@@ -351,16 +353,19 @@
                                     <div class="col-lg-4 col-xs-12">
                                       <div class="row">
                                         <div class="col-lg-6">
-                                            <label for="" style="color: white;">.</label> <br />
-                                            <a data-toggle="modal" data-target="#modal-elegir-material">
-                                              <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
-                                            </a>
+                                          <label for="" style="color: white;">.</label> <br />
+                                          <a data-toggle="modal" data-target="#modal-elegir-material">
+                                            <button id="btnAgregarArt" type="button" class="btn btn-primary btn-block"><span class="fa fa-plus"></span> Agregar Productos</button>
+                                          </a>
                                         </div>
                                         <div class="col-lg-6">
-                                          <!-- <label for="" style="color: white;">.</label> <br />
-                                          <a data-toggle="modal" data-target="#modal-agregar-material-activos-fijos">
-                                            <button id="btnAgregarArt" type="button" class="btn btn-success btn-block" onclick="limpiar_materiales()"><span class="fa fa-plus"></span> Crear Productos</button>
-                                          </a> -->
+                                          <label for="" >Ingrese el código</label> <br />
+                                          <div class="input-group mb-3">
+                                            <input type="number" id="add_producto_x_codigo" class="form-control">
+                                            <div class="input-group-append cursor-pointer">
+                                              <span class="input-group-text" data-toggle="tooltip" data-original-title="Agregar producto" title="Agregar producto"  onclick="agregar_producto_x_codigo();" ><i class="fa-solid fa-plus"></i></span>
+                                            </div>
+                                          </div> 
                                         </div>
                                       </div>
                                     </div>
@@ -391,9 +396,9 @@
                                         <th>Material</th>
                                         <th>Unidad</th>
                                         <th>Cantidad</th>
-                                        <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" >V/U</th>
+                                        <th class="hidden" data-toggle="tooltip" data-original-title="Valor Unitario" title="Valor Unitario" >V/U</th>
                                         <th class="hidden">IGV</th>
-                                        <th data-toggle="tooltip" data-original-title="Precio Unitario">P/U</th>
+                                        <th data-toggle="tooltip" data-original-title="Precio Unitario" title="Precio Unitario">P/U</th>
                                         <th>Descuento</th>
                                         <th>Subtotal</th>                                        
                                       </thead>
@@ -491,9 +496,9 @@
                                     <th>Acciones</th>
                                     <th data-toggle="tooltip" data-original-title="Forma Pago">Forma</th>
                                     <th>Beneficiario</th>
-                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                    <th data-toggle="tooltip" data-original-title="Fecha Pago" title="Fecha Pago">Fecha P.</th>
                                     <th>Descripción</th>
-                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                    <th data-toggle="tooltip" data-original-title="Número Operación" title="Número Operación">Número Op.</th>
                                     <th>Monto</th>
                                     <th>Vaucher</th>
                                     <th>Estado</th>
@@ -506,9 +511,9 @@
                                     <th>Aciones</th>
                                     <th>Forma</th>
                                     <th>Beneficiario</th>                                     
-                                    <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                    <th data-toggle="tooltip" data-original-title="Fecha Pago" title="Fecha Pago">Fecha P.</th>
                                     <th>Descripción</th>
-                                    <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                    <th data-toggle="tooltip" data-original-title="Número Operación" title="Número Operación">Número Op.</th>
                                     <th style="color: #ff0000; background-color: #45c920;">
                                       <b id="monto_total"></b> <br />
                                       <b id="porcentaje" style="color: black;"></b>
@@ -549,9 +554,9 @@
                                   <th>Acciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
-                                  <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Pago" title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Operación" title="Número Operación">Número Op.</th>
                                   <th>Monto</th>
                                   <th>Vaucher</th>
                                   <th>Estado</th>
@@ -564,9 +569,9 @@
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th>
-                                  <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Pago" title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Operación" title="Número Operación">Número Op.</th>
                                   <th style="color: #ff0000; background-color: #45c920;">
                                     <b id="monto_total_prov"></b> <br />
                                     <b id="porcnt_prove" style="color: black;"></b>
@@ -607,9 +612,9 @@
                                   <th>Acciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th> 
-                                  <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Pago" title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Operación" title="Número Operación">Número Op.</th>
                                   <th>Monto</th>
                                   <th>Vaucher</th>
                                   <th>Estado</th>
@@ -622,9 +627,9 @@
                                   <th>Aciones</th>
                                   <th>Forma pago</th>
                                   <th>Beneficiario</th> 
-                                  <th data-toggle="tooltip" data-original-title="Fecha Pago">Fecha P.</th>
+                                  <th data-toggle="tooltip" data-original-title="Fecha Pago" title="Fecha Pago">Fecha P.</th>
                                   <th>Descripción</th>
-                                  <th data-toggle="tooltip" data-original-title="Número Operación">Número Op.</th>
+                                  <th data-toggle="tooltip" data-original-title="Número Operación" title="Número Operación">Número Op.</th>
                                   <th style="color: #ff0000; background-color: #45c920;">
                                     <b id="monto_total_detracc"></b> <br />
                                     <b id="porcnt_detrcc" style="color: black;"></b>
@@ -692,7 +697,7 @@
                                     <label for="num_documento_prov">N° RUC / DNI <sup class="text-danger">(unico*)</sup></label>
                                     <div class="input-group">
                                       <input type="number" name="num_documento_prov" class="form-control" id="num_documento_prov" placeholder="N° de documento" />
-                                      <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
+                                      <div class="input-group-append" data-toggle="tooltip" data-original-title="Buscar Reniec/SUNAT" title="Buscar Reniec/SUNAT" onclick="buscar_sunat_reniec('_prov');">
                                         <span class="input-group-text" style="cursor: pointer;">
                                           <i class="fas fa-search text-primary" id="search_prov"></i>
                                           <i class="fa fa-spinner fa-pulse fa-fw fa-lg text-primary" id="charge_prov" style="display: none;"></i>
@@ -819,10 +824,11 @@
                             <thead>
                               <th data-toggle="tooltip" data-original-title="Opciones">Op.</th>
                               <th>Nombre Producto</th>
+                              <th>Marcas</th>
                               <th>Clasificación</th>
-                              <th data-toggle="tooltip" data-original-title="Precio Promedio">P/P.</th>
+                              <th data-toggle="tooltip" data-original-title="Precio Promedio" title="Precio Promedio">P/P.</th>
                               <th>Descripción</th>
-                              <th data-toggle="tooltip" data-original-title="Ficha Técnica" >Code</th>
+                              <th data-toggle="tooltip" data-original-title="Ficha Técnica" title="Ficha Técnica" >Code</th>
                             </thead>
                             <tbody></tbody>
                           </table>
@@ -1007,7 +1013,7 @@
                               <br />
                               <h4>Cargando...</h4>
                             </div>
-                          </div>
+                          </div> 
 
                         </div>
                         <div class="modal-footer justify-content-between">
@@ -1338,7 +1344,7 @@
         <script type="text/javascript" src="scripts/compra_insumos.js"></script>   
         <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script>      
 
-        <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
+        <script> $(function () { /* $('[data-toggle="tooltip"]').tooltip(); */ $(document).tooltip({position: { my: "center bottom", at: "center top" }}); }); </script>
         
       </body>
     </html>

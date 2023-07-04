@@ -4,10 +4,10 @@
 
     function enrutamiento($tipo, $file) {
         if ($tipo == 'nube') {
-            $link_host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/vistas/login.html?file='.$file;
+            $link_host = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/vistas/lockscreen.html?file='.$file;
         }else{
             if ($tipo == 'local') {
-                $link_host = "http://localhost/admin_sevens/vistas/login.html?file=".$file;
+                $link_host = "http://localhost/admin_sevens/vistas/lockscreen.html?file=".$file;
             }            
         }
         return $link_host;

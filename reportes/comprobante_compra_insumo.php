@@ -1,30 +1,50 @@
 <?php 
-require '../vendor/autoload.php';
-use Luecano\NumeroALetras\NumeroALetras;
+  require '../vendor/autoload.php';
+  use Luecano\NumeroALetras\NumeroALetras;
 
-if (strlen(session_id()) < 1) {
-  session_start();
-}
-
-if (!isset($_SESSION["nombre"])) {
-  header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-} else {   
-
-  require_once "../modelos/Compra_activos_fijos.php";
-  require_once "../modelos/Compra_insumos.php";  
-  
-  $compra_activos_fijos = new Compra_activos_fijos();
-  $compra_insumo = new Compra_insumos();
-  $numero_a_letra = new NumeroALetras();
-
-  if (empty($_GET)) {
-    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
-  } else if ($_GET['op'] == 'insumo') {
-    $id = $_GET['id'];
-    $rspta = $compra_insumo->ver_detalle_compra($id);
+  if (strlen(session_id()) < 1) {
+    session_start();
   }
-  
-}
+
+  if (!isset($_SESSION["nombre"])) {
+    header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+  } else {   
+
+    require_once "../modelos/Compra_activos_fijos.php";
+    require_once "../modelos/Compra_insumos.php";  
+    
+    $compra_activos_fijos = new Compra_activos_fijos();
+    $compra_insumo = new Compra_insumos();
+    $numero_a_letra = new NumeroALetras();
+
+    $rspta = ''; $html_producto = ''; $cont = 1; 
+
+    if (empty($_GET)) {
+      header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+    } else if ($_GET['op'] == 'insumo') {
+      $id = $_GET['id'];
+      $rspta = $compra_insumo->ver_detalle_compra($id);      
+    }
+
+    foreach ($rspta['data']['detalle_producto'] as $key => $reg) {
+      $html_producto .= '<tr>
+        <td>'.$cont++.'</td>
+        <td>'.$reg['nombre'].'</td>
+        <td>'.$reg['abreviacion'].'</td>
+        <td>'.$reg['cantidad'].'</td>
+        <td>'.number_format($reg['precio_sin_igv'], 2, '.',',').'</td>
+        <td>'.number_format($reg['igv'], 2, '.',',').'</td>
+        <td>'.number_format($reg['precio_con_igv'], 2, '.',',') .'</td>
+        <td>'.number_format($reg['descuento'], 2, '.',',').'</td>
+        <td class="text-right">'.number_format($reg['subtotal'], 2, '.',',').'</td>
+      </tr>';
+    }
+
+    $num_total = $numero_a_letra->toMoney( $rspta['data']['total'], 2, 'soles' );  #echo $num_total; die;
+    $centimos = (isset($decimales_mun[1])? $decimales_mun[1] : '00' ) . '/100 CÉNTIMOS';
+    $con_letra = strtoupper( $num_total .' '. $centimos );  
+    
+  }
 
 ?>
 
@@ -707,89 +727,77 @@ if (!isset($_SESSION["nombre"])) {
             <div class="row">
               <div class="col-12">
                 <h2 class="page-header">
-                  <i class="fas fa-globe"></i> AdminLTE, Inc.
-                  <small class="float-right">Date: 2/10/2014</small>
+                  <i class="fas fa-globe"></i> <?php echo $rspta['data']['razon_social']; ?>
+                  <!-- <small class="float-right">Date: 2/10/2014</small> -->
                 </h2>
               </div>
               <!-- /.col -->
             </div>
             <!-- info row -->
             <div class="row invoice-info">
-              <div class="col-sm-4 invoice-col">
-                From
+              <div class="col-sm-8 invoice-col">                
                 <address>
-                  <strong>Admin, Inc.</strong><br>
-                  795 Folsom Ave, Suite 600<br>
-                  San Francisco, CA 94107<br>
-                  Phone: (804) 123-5432<br>
-                  Email: info@almasaeedstudio.com
+                  <!-- <strong><?php echo $rspta['data']['razon_social']; ?></strong><br> -->
+                  <?php echo $rspta['data']['direccion']; ?><br>                  
                 </address>
               </div>
               <!-- /.col -->
-              <div class="col-sm-4 invoice-col">
-                To
-                <address>
-                  <strong>John Doe</strong><br>
-                  795 Folsom Ave, Suite 600<br>
-                  San Francisco, CA 94107<br>
-                  Phone: (555) 539-1037<br>
-                  Email: john.doe@example.com
+              <div class="col-sm-4 invoice-col text-center border">                
+                <address class="m-1">
+                  <strong><?php echo $rspta['data']['tipo_comprobante']; ?> Electronica</strong><br>
+                  <?php echo $rspta['data']['tipo_documento'] . ': '. $rspta['data']['ruc']; ?><br>
+                  <?php echo $rspta['data']['serie_comprobante']; ?><br>                  
                 </address>
               </div>
+              <div class="col-12"><hr></div>
+              
               <!-- /.col -->
-              <div class="col-sm-4 invoice-col">
-                <b>Invoice #007612</b><br>
-                <br>
-                <b>Order ID:</b> 4F3S8J<br>
-                <b>Payment Due:</b> 2/22/2014<br>
-                <b>Account:</b> 968-34567
+              <div class="col-sm-12 invoice-col">
+                <table>
+                  <tr>
+                    <th>Fecha de Emisión:</th><td><?php echo  date("d/m/Y", strtotime($rspta['data']['fecha_compra'])); ?></td>
+                  </tr>
+                  <tr>
+                    <th>Señor(es):</th><td>SEVENS INGENIEROS S.A.C</td>
+                  </tr>
+                  <tr>
+                    <th>RUC:</th><td>20606456892</td>
+                  </tr>
+                  <tr>
+                    <th>Dirección del Cliente:</th><td>PJ. YUNGAY 151 P.J. SANTA ROSA LAMBAYEQUE-CHICLAYOCHICLAYO </td>
+                  </tr>
+                  <tr>
+                    <th>Tipo de Moneda:</th><td> Soles</td>
+                  </tr>
+                  <tr>
+                    <th>Observación:</th><td><?php echo $rspta['data']['descripcion']; ?></td>
+                  </tr>
+                </table>
+                
               </div>
               <!-- /.col -->
             </div>
             <!-- /.row -->
 
             <!-- Table row -->
-            <div class="row">
+            <div class="row mt-4">
               <div class="col-12 table-responsive">
                 <table class="table table-striped">
                   <thead>
                   <tr>
-                    <th>Qty</th>
-                    <th>Product</th>
-                    <th>Serial #</th>
-                    <th>Description</th>
+                    <th>#</th>
+                    <th>Product0</th>
+                    <th>Abreviacion</th>
+                    <th>Cantidad</th>
+                    <th>PU</th>
+                    <th>IGV</th>
+                    <th>VU</th>
+                    <th>Dscto</th>
                     <th>Subtotal</th>
                   </tr>
                   </thead>
-                  <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Call of Duty</td>
-                    <td>455-981-221</td>
-                    <td>El snort testosterone trophy driving gloves handsome</td>
-                    <td>$64.50</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Need for Speed IV</td>
-                    <td>247-925-726</td>
-                    <td>Wes Anderson umami biodiesel</td>
-                    <td>$50.00</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Monsters DVD</td>
-                    <td>735-845-642</td>
-                    <td>Terry Richardson helvetica tousled street art master</td>
-                    <td>$10.70</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Grown Ups Blue Ray</td>
-                    <td>422-568-642</td>
-                    <td>Tousled lomo letterpress</td>
-                    <td>$25.99</td>
-                  </tr>
+                  <tbody>             
+                    <?php echo $html_producto; ?>                  
                   </tbody>
                 </table>
               </div>
@@ -799,40 +807,37 @@ if (!isset($_SESSION["nombre"])) {
 
             <div class="row">
               <!-- accepted payments column -->
-              <div class="col-6">
-                <p class="lead">Payment Methods:</p>
-                <img src="../../dist/img/credit/visa.png" alt="Visa">
-                <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
-                <img src="../../dist/img/credit/american-express.png" alt="American Express">
-                <img src="../../dist/img/credit/paypal2.png" alt="Paypal">
-
+              <div class="col-8">
+              <p class="lead"><?php echo $con_letra; ?></p>
                 <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                  Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr
-                  jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                Esta es una representación impresa de la factura electrónica, generada en el Sistema de SUNAT. Puede verificarla utilizando su clave SOL
                 </p>
+                
+                <img src="../dist/img/credit/visa.png" alt="Visa">
+                <img src="../dist/img/credit/mastercard.png" alt="Mastercard">
+                <img src="../dist/img/credit/american-express.png" alt="American Express">
+                <img src="../dist/img/credit/paypal2.png" alt="Paypal">
+
+                
               </div>
               <!-- /.col -->
-              <div class="col-6">
-                <p class="lead">Amount Due 2/22/2014</p>
+              <div class="col-4">
+                <!-- <p class="lead">Amount Due 2/22/2014</p> -->
 
                 <div class="table-responsive">
                   <table class="table">
                     <tr>
                       <th style="width:50%">Subtotal:</th>
-                      <td>$250.30</td>
+                      <td class="text-right"><?php echo number_format( $rspta['data']['subtotal'], 2, '.',','); ?></td>
                     </tr>
                     <tr>
-                      <th>Tax (9.3%)</th>
-                      <td>$10.34</td>
+                      <th>IGV (<?php echo ( ( empty($rspta['data']['val_igv']) ? 0 : floatval($rspta['data']['val_igv']) )  * 100 ) ; ?>%)</th>
+                      <td class="text-right"><?php echo number_format( $rspta['data']['igv'], 2, '.',','); ?></td>
                     </tr>
                     <tr>
-                      <th>Shipping:</th>
-                      <td>$5.80</td>
-                    </tr>
-                    <tr>
-                      <th>Total:</th>
-                      <td>$265.24</td>
-                    </tr>
+                      <th>TOTAL:</th>
+                      <td class="text-right"><?php echo number_format( $rspta['data']['total'], 2, '.',','); ?></td>
+                    </tr>                    
                   </table>
                 </div>
               </div>

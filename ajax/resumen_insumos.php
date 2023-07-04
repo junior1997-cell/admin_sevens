@@ -98,12 +98,12 @@
 
               $data[] = [     
                 "0"  => $count++,       
-                "1" => '<button class="btn bg-gradient-dark btn-sm" onclick="agregar_grupos(' . $reg['idproducto'] .', '.$reg['idclasificacion_grupo'] . ')" data-toggle="tooltip" data-original-title="Agregar grupo"><i class="fa-solid fa-layer-group"></i></button>
-                  <button class="btn btn-warning btn-sm" onclick="mostrar_material(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>
-                  <button class="btn btn-info btn-sm" onclick="mostrar_detalle_material(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle insumo"><i class="far fa-eye"></i></button>',       
+                "1" => '<button class="btn bg-gradient-dark btn-sm" onclick="agregar_grupos(' . $reg['idproducto'] .', '.$reg['idclasificacion_grupo'] . ')" data-toggle="tooltip" data-original-title="Agregar grupo" title="Agregar grupo"><i class="fa-solid fa-layer-group"></i></button>
+                  <button class="btn btn-warning btn-sm" onclick="mostrar_material(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Editar" title="Editar"><i class="fas fa-pencil-alt"></i></button>
+                  <button class="btn btn-info btn-sm" onclick="mostrar_detalle_material(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle insumo" title="Ver detalle insumo"><i class="far fa-eye"></i></button>',       
                 "2" => $reg['idproducto'],    
                 "3" => '<div class="user-block"> 
-                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="' . $imagen . '" onclick="ver_img_material(\'' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre_producto']).'\');" alt="User Image" onerror="' .  $imagen_error .  '" data-toggle="tooltip" data-original-title="Ver imagen">
+                  <img class="profile-user-img img-responsive img-circle cursor-pointer" src="' . $imagen . '" onclick="ver_img_material(\'' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre_producto']).'\');" alt="User Image" onerror="' .  $imagen_error .  '" data-toggle="tooltip" data-original-title="Ver imagen" title="Ver imagen">
                   <span class="username"><p class="text-primary m-b-02rem" >' . $reg['nombre_producto'] . '</p></span>
                   <span class="description"> '.(empty($reg['modelo']) ? '' : '<b class="d-none">═</b> <b >Modelo:</b> ' . $reg['modelo'] ).'</span>
                 </div>',
@@ -111,7 +111,7 @@
                 "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['html_marca'] .'</div>',
                 "6" => $reg['abreviacion'],
                 "7" => $reg['cantidad_total'],
-                "8" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproyecto'] . ', ' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre_producto'], ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg['precio_total'], 2, ".", ",") . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                "8" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproyecto'] . ', ' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre_producto'], ENT_QUOTES) . '\', \'' .  $precio_promedio . '\', \'' .  number_format($reg['precio_total'], 2, ".", ",") . '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i> - '.$reg['cant_fact'].'</button>'. $toltip,
                 "9" => $reg['promedio_precio'],
                 "10" => $reg['precio_actual'],
                 "11" => $reg['precio_total'],             
@@ -243,7 +243,7 @@
               $ficha_tecnica = (!empty($reg->ficha_tecnica) ? '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg->ficha_tecnica . '"><i class="far fa-file-pdf fa-2x text-success"></i></a></center>': '<center><span class="text-center"> <i class="far fa-times-circle fa-2x text-danger"></i></span></center>');
               
               $datas[] = [
-                "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' . htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->precio_igv . '\', \'' . $reg->precio_total . '\', \'' . $reg->imagen . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Producto">
+                "0" => '<button class="btn btn-warning" onclick="agregarDetalleComprobante(' . $reg->idproducto . ', \'' . htmlspecialchars($reg->nombre, ENT_QUOTES) . '\', \'' . $reg->nombre_medida . '\', \'' . $reg->nombre_color . '\', \'' . $reg->precio_sin_igv . '\', \'' . $reg->precio_igv . '\', \'' . $reg->precio_total . '\', \'' . $reg->imagen . '\', \'' . $reg->ficha_tecnica . '\')" data-toggle="tooltip" data-original-title="Agregar Producto" title="Agregar Producto">
                   <span class="fa fa-plus"></span>
                 </button>',
                 "1" => '<div class="user-block w-250px"> <img class="profile-user-img img-responsive img-circle" src="' . $img .  '" alt="user image" onerror="' . $imagen_error . '"> 
@@ -284,14 +284,14 @@
           if (empty($idcompra_proyecto)) {
             $rspta = $compra->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
             $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
-            $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+            $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
             $tipo_gravada, $_POST["ficha_tecnica_producto"]);
             //precio_sin_igv,precio_igv,precio_total
             echo json_encode($rspta, true);
           } else {
-            $rspta = $compra->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
-            $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
-            $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+            $rspta = $compra->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
+            $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
+            $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
             $tipo_gravada, $_POST["ficha_tecnica_producto"] );
       
             echo json_encode($rspta, true);
@@ -322,17 +322,17 @@
 
               $data[] = [    
                 "0" => $cont++,
-                "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ', ' .$reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_insumo(' . $reg['idcompra_proyecto'] .  ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
+                "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ', ' .$reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra" title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_insumo(' . $reg['idcompra_proyecto'] .  ')" data-toggle="tooltip" data-original-title="Editar compra" title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
                 "2" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor']. '</span>',    
                 "3" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',  
-                "4" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['html_marca'] .'</div>',
+                "4" => $reg['marca'],
                 "5" => $reg['fecha_compra'],
                 "6" => number_format($reg['cantidad'], 2, ".", ","),
                 "7" =>  number_format($reg['precio_con_igv'], 2, ".", ","),
                 "8" => number_format($reg['descuento'], 2, ".", ""),
                 "9" => number_format($reg['subtotal'], 2, ".", ""),
-                "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idcompra_proyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
+                "10" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(\''.$reg['idcompra_proyecto'].'\', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>'.$toltip,
                 
                 "11" => $reg['tipo_comprobante'],
                 "12" => $reg['serie_comprobante']
@@ -389,7 +389,7 @@
               $data[] = [
                 "0" => $cont,
                 "1" => '<div class="text-nowrap">'.
-                ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.'·'.$cont.' '.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>              
+                ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.'·'.$cont.' '.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>              
                 </div>'.$toltip,
                 "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
                 "3" => $reg->updated_at,

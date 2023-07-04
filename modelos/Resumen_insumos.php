@@ -32,6 +32,12 @@ class ResumenInsumos
       $html_marca = "";
       foreach ($marcas['data'] as $key => $value2) { $html_marca .=  '<li >'.$value2['nombre_marca'].'. </li>'; }
 
+      $sql = "SELECT  AVG(dc.precio_con_igv) AS promedio_precio, COUNT(dc.idcompra_proyecto) as cantidad 
+      FROM detalle_compra as dc, compra_por_proyecto as cpp 
+      WHERE dc.idcompra_proyecto = cpp.idcompra_proyecto AND dc.idproducto='$id' AND cpp.idproyecto ='$idproyecto' 
+      AND cpp.estado = '1' AND cpp.estado_delete = '1';";
+      $cant_fact = ejecutarConsultaSimpleFila($sql);  if ($cant_fact['status'] == false){ return $cant_fact; }
+
       $resumen_producto[] = [
         'idproyecto'        => $value['idproyecto'],
         'idcompra_proyecto' => $value['idcompra_proyecto'],
@@ -52,6 +58,8 @@ class ResumenInsumos
         'precio_total'      => $value['precio_total'],
         'count_productos'   => $value['count_productos'],
         'promedio_precio'   => $value['promedio_precio'],
+
+        'cant_fact'         => $cant_fact['data']['cantidad'],
         
         'html_marca'        =>'<ol class="pl-3">'.$html_marca. '</ol>'
       ];
@@ -60,8 +68,8 @@ class ResumenInsumos
   }
 
   public function tbla_facturas($idproyecto, $idproducto) {
-    $sql = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
-		dc.idproducto, pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
+    $sql = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante, 
+    dc.ficha_tecnica_producto AS ficha_tecnica, dc.idproducto, pr.nombre AS nombre_producto, dc.cantidad, dc.marca,
 		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor
 		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
@@ -76,19 +84,7 @@ class ResumenInsumos
       $idproducto = $value['idproducto'];
 
       $sql3 = "SELECT COUNT(comprobante) as cant_comprobantes FROM factura_compra_insumo WHERE idcompra_proyecto='$idcompra_proyecto' AND estado='1' AND estado_delete='1'";
-      $cant_comprobantes = ejecutarConsultaSimpleFila($sql3); if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
-
-      //listar detalle_marca
-      $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
-      FROM detalle_marca as dm, marca as m 
-      WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$idproducto' AND dm.estado='1' AND dm.estado_delete='1' ORDER BY dm.iddetalle_marca ASC;";
-      $detalle_marca = ejecutarConsultaArray($sql);   if ($detalle_marca['status'] == false){ return $detalle_marca; }
-      
-      $marcas_html = ""; $datalle_marcas_export = "";
-      foreach ($detalle_marca['data'] as $key => $value2) {
-        $marcas_html .=  '<li >'.$value2['marca'].'</li>';
-        $datalle_marcas_export .=  '<li>  -'.$value2['marca'].'</li>';
-      }
+      $cant_comprobantes = ejecutarConsultaSimpleFila($sql3); if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }      
 
       $data[] = [
         'idproyecto'        => $value['idproyecto'],
@@ -98,6 +94,7 @@ class ResumenInsumos
         'idproducto'        => $value['idproducto'],
         'nombre_producto'   => $value['nombre_producto'],
         'cantidad'          => $value['cantidad'],
+        'marca'             => empty($value['marca']) ? 'SIN MARCA' : $value['marca'],
         'tipo_comprobante'  => $value['tipo_comprobante'],
         'serie_comprobante' => $value['serie_comprobante'],
         'precio_con_igv'    => $value['precio_con_igv'],
@@ -105,8 +102,6 @@ class ResumenInsumos
         'subtotal'          => $value['subtotal'],
         'proveedor'         => $value['proveedor'],
 
-        'html_marca'        => '<ol class="pl-3">'.$marcas_html. '. </ol>',
-        'marca_export'      => $datalle_marcas_export,
         'cant_comprobantes' => empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']),
       ];
     }

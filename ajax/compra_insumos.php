@@ -194,13 +194,13 @@ if (!isset($_SESSION["nombre"])) {
       break;
     
       // :::::::::::::::::::::::::: S E C C I O N   C O M P R A  ::::::::::::::::::::::::::
-      case 'guardaryeditarcompra':
+      case 'guardar_y_editar_compra':
 
         if (empty($idcompra_proyecto)) {
 
           $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
           $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
-          $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+          $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
 
           echo json_encode($rspta, true);
@@ -208,7 +208,7 @@ if (!isset($_SESSION["nombre"])) {
 
           $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
           $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
-          $_POST["nombre_color"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
+          $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
     
           echo json_encode($rspta, true);
@@ -331,11 +331,11 @@ if (!isset($_SESSION["nombre"])) {
             $total = ($reg['tipo_comprobante']=='Nota de Crédito' ? -1*$reg['total'] :$reg['total']);
             $data[] = [
               "0" => $cont,
-              "1" => $reg['estado'] == '1' ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
-                    ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_insumo(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .                  
+              "1" => $reg['estado'] == '1' ? '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra" title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
+                    ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_insumo(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Editar compra" title="Editar compra"><i class="fas fa-pencil-alt"></i></button>' .                  
                     ' <button class="btn btn-danger  btn-sm" onclick="eliminar_compra(' . $reg['idcompra_proyecto'] .', \''.encodeCadenaHtml('<del><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</del> <del>'.$reg['razon_social'].'</del>'). '\')"><i class="fas fa-skull-crossbones"></i> </button>'
-                  : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' .  $reg['idcompra_proyecto'] . ')"data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>' .
-                    ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra"><i class="fas fa-check"></i></button>',
+                  : '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' .  $reg['idcompra_proyecto'] . ')"data-toggle="tooltip" data-original-title="Ver detalle" title="Ver detalle"><i class="fa fa-eye"></i></button>' .
+                    ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra" title="Recuperar Compra"><i class="fas fa-check"></i></button>',
               "2" => $reg['fecha_compra'],
               "3" => '<span class="text-primary font-weight-bold" >' . $reg['razon_social'] . '</span>',
               "4" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',
@@ -344,13 +344,13 @@ if (!isset($_SESSION["nombre"])) {
               // "7" => $list_segun_estado_detracc,
               // "8" => number_format($reg['total_pago_compras'], 2, '.', ','),
               // "9" => number_format($saldo, 2, '.', ','),
-              "7" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.$reg['razon_social'].'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
+              "7" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.$reg['razon_social'].'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
               "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg['descripcion'].'</textarea>',
               "9" => '<div class="custom-control custom-checkbox">
                         <input class="custom-control-input custom-control-input-danger custom-control-input-outline check_add_doc " '.$clss_disabled.' type="checkbox" id="check_descarga_'.$reg['idcompra_proyecto'].'" onchange="add_remove_comprobante( '.$reg['idcompra_proyecto'].', \''.$reg['comprobante'].'\', \'' .encodeCadenaHtml('<b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\')">
                         <label for="check_descarga_'.$reg['idcompra_proyecto'].'" class="custom-control-label check_add_doc cursor-pointer"></label> '.
                         '<i class="cargando_check m-r-10px hidden fas fa-spinner fa-pulse"></i>'.
-                        (empty($reg['cant_comprobantes']) ? '<button class="btn '.$btn_tipo.' btn-xs '.$clss_disabled.'"  data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" ><i class="fas fa-cloud-download-alt"></i></button>' : '<button class="btn '.$btn_tipo.' btn-xs '.$clss_disabled.' descarga_compra_'.$reg['idcompra_proyecto'].'" onclick="download_no_multimple(\''.$reg['idcompra_proyecto'].'\',\''.$cont .'\', \''.removeSpecialChar($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  ' ─ '.$reg['serie_comprobante']).' ─ '.$reg['razon_social']).' ─ '. format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" ><i class="fas fa-cloud-download-alt"></i></button>'). 
+                        (empty($reg['cant_comprobantes']) ? '<button class="btn '.$btn_tipo.' btn-xs '.$clss_disabled.'"  data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" title="'.$descrip_toltip.'" ><i class="fas fa-cloud-download-alt"></i></button>' : '<button class="btn '.$btn_tipo.' btn-xs '.$clss_disabled.' descarga_compra_'.$reg['idcompra_proyecto'].'" onclick="download_no_multimple(\''.$reg['idcompra_proyecto'].'\',\''.$cont .'\', \''.removeSpecialChar($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  ' ─ '.$reg['serie_comprobante']).' ─ '.$reg['razon_social']).' ─ '. format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" title="'.$descrip_toltip.'"><i class="fas fa-cloud-download-alt"></i></button>'). 
                       '</div>'.$toltip,
             ];
             $cont++;
@@ -382,7 +382,7 @@ if (!isset($_SESSION["nombre"])) {
           foreach ($rspta['data'] as $key => $value) {
             $data[] = [
               "0" => $cont++,
-              "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $value['idproveedor'] . ',' . $value['idproyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle"><i class="fa fa-eye"></i></button>',
+              "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $value['idproveedor'] . ',' . $value['idproyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle" title="Ver detalle"><i class="fa fa-eye"></i></button>',
               "2" => $value['razon_social'],
               "3" => '<center>'.$value['cantidad'].'</center>',
               "4" => $value['telefono'],
@@ -414,7 +414,7 @@ if (!isset($_SESSION["nombre"])) {
 
             $data[] = [
               "0" => $cont++,
-              "1" => '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
+              "1" => '<center><button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg->idcompra_proyecto . ')" data-toggle="tooltip" data-original-title="Ver detalle" title="Ver detalle">Ver detalle <i class="fa fa-eye"></i></button></center>',
               "2" => $reg->fecha_compra,
               "3" => $reg->tipo_comprobante,
               "4" => $reg->serie_comprobante,
@@ -450,9 +450,9 @@ if (!isset($_SESSION["nombre"])) {
             $data[] = [
               "0" => $cont,
               "1" => '<div class="text-nowrap">'.
-              ' <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_editar_comprobante(' . $reg->idfactura_compra_insumo .','.$id_compra.', \''.$reg->comprobante.'\', \''.$cont.'. '.date("d/m/Y h:i:s a", strtotime($reg->updated_at)).'\')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.              
-              ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.'·'.$cont.' '.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>' .              
-              ' <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_comprobante_insumo(' . $reg->idfactura_compra_insumo .', \''.encodeCadenaHtml($cont.'. '.date("d/m/Y h:i:s a", strtotime($reg->updated_at))).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button> 
+              ' <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_editar_comprobante(' . $reg->idfactura_compra_insumo .','.$id_compra.', \''.$reg->comprobante.'\', \''.$cont.'. '.date("d/m/Y h:i:s a", strtotime($reg->updated_at)).'\')" data-toggle="tooltip" data-original-title="Editar" title="Editar"><i class="fas fa-pencil-alt"></i></button>'.              
+              ' <a class="btn btn-info btn-sm " href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'"  download="'.$cont_compra.'·'.$cont.' '.removeSpecialChar((empty($reg->serie_comprobante) ?  " " :  ' ─ '.$reg->serie_comprobante).' ─ '.$reg->razon_social).' ─ '. format_d_m_a($reg->fecha_compra).'" data-toggle="tooltip" data-original-title="Descargar" title="Descargar" ><i class="fas fa-cloud-download-alt"></i></a>' .              
+              ' <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_comprobante_insumo(' . $reg->idfactura_compra_insumo .', \''.encodeCadenaHtml($cont.'. '.date("d/m/Y h:i:s a", strtotime($reg->updated_at))).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera" title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button> 
               </div>'.$toltip,
               "2" => '<a class="btn btn-info btn-sm" href="../dist/docs/compra_insumo/comprobante_compra/'.$reg->comprobante.'" target="_blank" rel="noopener noreferrer"><i class="fas fa-receipt"></i></a>' ,
               "3" => $reg->updated_at,

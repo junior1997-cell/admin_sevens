@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-Ingresar | Admin Sevens</title>
+    <!-- Icono Sevens-Ingenieros-SAC -->
+    <link rel="apple-touch-icon" href="../dist/svg/logo-icono.svg">
+    <link rel="shortcut icon" href="../dist/svg/logo-icono.svg">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  </head>
+  <body class="hold-transition lockscreen">
+    <!-- Automatic element centering -->
+    <div class="lockscreen-wrapper">
+      <div class="lockscreen-logo">
+        <a href="index.php"><b>Sevens Ingenieros</b> SAC</a>
+      </div>
+      <!-- User name -->
+      <div class="lockscreen-name mb-4">John Doe</div>
+
+      <!-- START LOCK SCREEN ITEM -->
+      <div class="lockscreen-item">
+        <!-- lockscreen image -->
+        <div class="lockscreen-image">
+          <img class="img-perfil" src="http://admin.sevensingenieros.com/dist/docs/all_trabajador/perfil/11164263836223.png" alt="User Image" onerror="this.src='../dist/svg/user_default.svg';">
+        </div>
+        <!-- /.lockscreen-image -->
+
+        <!-- lockscreen credentials (contains the form) -->
+        <form class="lockscreen-credentials" method="post" id="frmAcceso" autocomplet="off">
+          <div class="input-group">
+            <input type="hidden" id="logina" name="logina"  required />
+            <input type="password" id="clavea" name="clavea" required class="form-control" placeholder="contraseña">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn" data-toggle="tooltip" data-original-title="Ingresar al sistema">
+                <i class="fas fa-arrow-right text-muted"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+        <!-- /.lockscreen credentials -->
+
+      </div>
+      <!-- /.lockscreen-item -->
+      <div class="help-block text-center">
+        Introduce tu contraseña para recuperar tu sesión
+      </div>
+      <div class="text-center">
+        <a href="login.html">O inicie sesión como un usuario diferente</a>
+      </div>
+      <div class="lockscreen-footer text-center" >
+        <small id="copyright">
+          Copyright &copy; 2021 - <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script> 
+          <b><a href="https://sevensingenieros.com" class="text-black">Sevens Ingenieros</a></b><br>
+          Reservados todos los derechos
+        </small>
+        
+      </div>
+    </div>
+    <!-- /.center -->
+
+    <!-- jQuery -->
+    <script src="../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <!-- Toastr -->
+    <script src="../plugins/toastr/toastr.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../dist/js/adminlte.min.js"></script>
+
+    <!-- Funciones Crud -->
+    <script type="text/javascript" src="../dist/js/funcion_crud.js"></script>
+    <!-- Funciones Generales -->
+    <script type="text/javascript" src="../dist/js/funcion_general.js"></script>
+
+    <script>
+      $(function () {
+        var Toast = Swal.mixin({ toast: true, position: "top-end", showConfirmButton: false, timer: 3000, });
+      });
+    </script>
+    <script type="text/javascript" src="scripts/login.js"></script>
+
+    <script >
+      var user_nombre = localStorage.getItem("nube_usuario_nombre") ; 
+      var user = localStorage.getItem("nube_usuario") ; 
+      var name_img = localStorage.getItem("nube_usuario_img") ; 
+      if (user_nombre == null || user_nombre == '' || user_nombre === undefined ) {
+        $(location).attr("href","login.html");
+      }else{
+        $('.lockscreen-name').html(`${user_nombre}`);
+        $('#logina').val(user);           
+        $('.img-perfil').attr(`src`,`../dist/docs/all_trabajador/perfil/${name_img}`);
+      }
+      
+
+      $(function () { $('[data-toggle="tooltip"]').tooltip(); });
+    </script>
+  </body>
+</html>
