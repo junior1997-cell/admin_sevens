@@ -85,7 +85,7 @@ function agregarDetalleComprobante(idproducto) {
 
 function agregar_detalle_comprobante_x_codigo(idproducto) {  
   var cantidad = 1;    
-  $(`.btn-add-producto-${idproducto}`).html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
+  $(`.btn-code-producto`).html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`);
   $.post("../ajax/ajax_general.php?op=mostrar_producto", { idproducto: idproducto }, function (e, status) {
     
     e = JSON.parse(e);  console.log(e);
@@ -106,7 +106,7 @@ function agregar_detalle_comprobante_x_codigo(idproducto) {
 
           var img_p = e.data.imagen == "" || e.data.imagen == null ?  `../dist/docs/material/img_perfil/producto-sin-foto.svg` : `../dist/docs/material/img_perfil/${e.data.image}`; 
           var marca_ = $("#marca_table_" + idproducto).val();
-          var promedio_precio_ = $(".promedio_precio_" + idproducto).text();
+          // var promedio_precio_ = $(".promedio_precio_" + idproducto).text();
           var html_option_marca = '';
           if (e.data.marcas.length === 0) {
             html_option_marca = `<option value="SIN MARCA">SIN MARCA</option>`;
@@ -139,7 +139,7 @@ function agregar_detalle_comprobante_x_codigo(idproducto) {
             <td class="py-1 form-group"><input class="w-100px producto_${idproducto} producto_selecionado cantidad_${cont} form-control" type="number" name="cantidad[]" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="py-1 hidden"><input class="w-135px precio_sin_igv_${cont} input-no-border" type="number" name="precio_sin_igv[]" value="0" readonly min="0" ></td>
             <td class="py-1 hidden"><input class="w-135px precio_igv_${cont} input-no-border" type="number" name="precio_igv[]" value="0" readonly ></td>
-            <td class="py-1 form-group"><input class="w-135px precio_con_igv_${cont} form-control" type="number" name="precio_con_igv[]" value="${(promedio_precio_)}" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
+            <td class="py-1 form-group"><input class="w-135px precio_con_igv_${cont} form-control" type="number" name="precio_con_igv[]" value="0" min="0.01" required onkeyup="modificarSubtotales();" onchange="modificarSubtotales();"></td>
             <td class="py-1 form-group"><input class="w-135px descuento_${cont} form-control" type="number" name="descuento[]" value="0" onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="py-1 text-right"><span class="subtotal_producto_${cont}" >0</span></td>
             <td class="py-1"><button type="button" onclick="modificarSubtotales()" class="btn btn-info btn-sm"><i class="fas fa-sync"></i></button></td>
@@ -164,7 +164,7 @@ function agregar_detalle_comprobante_x_codigo(idproducto) {
     } else {
       ver_errores(e);
     }
-    $(`.btn-add-producto-${idproducto}`).html(`<span class="fa fa-plus"></span>`);
+    $(`.btn-code-producto`).html(`<span class="fa fa-plus"></span>`);
     
   }).fail( function(e) { ver_errores(e); } );
 }

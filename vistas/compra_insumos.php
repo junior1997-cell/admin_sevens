@@ -363,7 +363,7 @@
                                           <div class="input-group mb-3">
                                             <input type="number" id="add_producto_x_codigo" class="form-control">
                                             <div class="input-group-append cursor-pointer">
-                                              <span class="input-group-text" data-toggle="tooltip" data-original-title="Agregar producto" title="Agregar producto"  onclick="agregar_producto_x_codigo();" ><i class="fa-solid fa-plus"></i></span>
+                                              <span class="input-group-text btn-code-producto" data-toggle="tooltip" data-original-title="Agregar producto" title="Agregar producto"  onclick="agregar_producto_x_codigo();" ><i class="fa-solid fa-plus"></i></span>
                                             </div>
                                           </div> 
                                         </div>
