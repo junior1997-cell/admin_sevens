@@ -445,8 +445,17 @@
               <!-- ALMACEN -->
               <li class="nav-item ver-otros-modulos-1">
                 <a href="almacen.php" class="nav-link pl-2" id="lAlmacen">
-                  <i class="fas fa-box-open"></i>
+                  <i class="nav-icon fas fa-box-open"></i>
                   <p>Almacen </p>
+                </a>
+              </li>
+            <?php  }  ?>
+            <?php if ($_SESSION['valorizacion']==1) {  ?>
+              <!-- E.P.P -->
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="epp.php" class="nav-link pl-2" id="lEpp">
+                <i class="nav-icon fas fa-hard-hat"></i>
+                  <p>E.P.P </p>
                 </a>
               </li>
             <?php  }  ?>
