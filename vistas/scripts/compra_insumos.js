@@ -296,10 +296,8 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api = this.api(); var total = api.column( 6 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      
-      $( api.column( 6 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );
-      // console.log('footer: '+total);
+      var api1 = this.api(); var total1 = api1.column( 6 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api1.column( 6 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total1)}</span>` );      
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación

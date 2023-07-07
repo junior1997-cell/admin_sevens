@@ -145,8 +145,8 @@
                                   <th class="text-gray">Sueldo diario</th>                                
                                   <th class="text-gray">Sueldo mensual</th>                                
                                   <th class="text-gray">Sáb.</th>
-                                  <th class="text-center text-gray">Adicional</th>
-                                  <th class="text-nowrap text-right h5 total_acumulado_trabjadores"> S/<i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                  <th class="text-center">0.00</th>
+                                  <th class="text-nowrap h5 "> 0.00</th>
                                   <th class="text-center">Cargo</th>
                                   <th class="text-center">Trabajdor</th>
                                   <th class="text-center">Documento</th>
@@ -157,7 +157,7 @@
 
                           <!-- TBLA- REGISTRO DE ASISTENCIA-->                         
                           <div class="table-responsive p-0" id="ver_asistencia" style="display: none; ">
-                              <input type="hidden" id="tipo_hora">
+                            <input type="hidden" id="tipo_hora">
                             <table class="table table-hover table-head-fixed text-nowrap tabla_sistencia_obrero" style="border: black 1px solid;">
                               <thead class="bg-white" >
                                 <tr class="celda-b-t-1px ">
@@ -569,7 +569,7 @@
                             <!-- ID trabajador por proyecto -->
                             <input type="hidden" name="idtrabajador_por_proyecto" id="idtrabajador_por_proyecto" />   
                             <!-- fecha de quincena o semana -->
-                            <input type="hidden" name="fecha_q_s" id="fecha_q_s" />                                         
+                            <input type="hidden" name="ad_hne" id="ad_hne" />                                         
                             
                             <!-- Descripcion -->
                             <div class="col-md-12 col-lg-12">
@@ -594,6 +594,29 @@
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_adicional_descuento">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - adicinoal / descuento - chargue 9 -->
+                <div class="modal fade" id="modal-adicional-descuento-hne" >
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Adicional / descuento</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">                       
+                        <div class="row" id="html-ad-hne">                                                             
+                          
+                        </div>                          
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>
                     </div>
                   </div>
