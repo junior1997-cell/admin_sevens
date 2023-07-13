@@ -18,7 +18,8 @@
 
       switch ($_GET["op"]) {  
         case 'tabla_almacen':
-          $rspta = $almacen->tbla_principal($_POST["id_proyecto"]);
+          $rspta = $almacen->tbla_principal($_POST["id_proyecto"], $_POST["fip"], $_POST["ffp"], $_POST["fpo"] );
+          // $rspta = $almacen->tbla_principal(6, '2023-04-23', '2023-05-24' );
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;    

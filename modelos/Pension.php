@@ -63,7 +63,7 @@ class Pension
         $info_repetida .= '<li class="text-left font-size-13px">
         <b>Pensión - Razón social: </b>'.$value['razon_social'].'<br>
         <b>Ruc: </b>'.$value['ruc'].'<br>
-        <b>Fecha de cración: </b>'.extr_fecha_creacion($value['created_at']).'<br>
+        <b>Fecha de cración: </b>'.format_d_m_a($value['created_at']).'<br>
         <hr class="m-t-2px m-b-2px">
         </li>';
       }
@@ -160,7 +160,7 @@ class Pension
       foreach ($val_compr['data'] as $key => $value) {
         $info_repetida .= '<li class="text-left font-size-13px">
         <span class="font-size-18px text-danger"><b >'.$value['tipo_comprobante'].': </b> '.$value['numero_comprobante'].'</span><br>
-        <b>Fecha creación: </b>'.extr_fecha_creacion($value['created_at']).'<br>
+        <b>Fecha creación: </b>'.format_d_m_a($value['created_at']).'<br>
         <b>Forma de pago: </b>'.$value['forma_pago'].'<br>
         <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
         <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>

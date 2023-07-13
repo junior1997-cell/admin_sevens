@@ -7,6 +7,8 @@
 localStorage.setItem('nube_idproyecto', 0);
 localStorage.setItem('nube_fecha_inicial_proyecto', '');
 localStorage.setItem('nube_fecha_final_proyecto', '');
+localStorage.setItem('nube_fecha_inicial_actividad', '');
+localStorage.setItem('nube_fecha_final_actividad', '');
 localStorage.setItem('nube_nombre_proyecto', '');
 localStorage.setItem('nube_fecha_pago_obrero', '');
 
