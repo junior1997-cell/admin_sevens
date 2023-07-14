@@ -25,7 +25,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <style>
       .table-container {
-        max-height: 560px;
+        /* max-height: 560px; */
         /* Ajusta la altura máxima según tus necesidades */
         overflow-y: scroll;
       }
@@ -49,7 +49,7 @@ if (!isset($_SESSION["nombre"])) {
 
       .style-head { padding-bottom: 4px !important; padding-top: 4px !important; padding-right: 10px !important; padding-left: 10px !important; }
       .st_tr_style{
-        /* background-color: #fff; */
+        /* background: #fff;  */
         border-bottom: 0;
         box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
         position: -webkit-sticky;
@@ -128,192 +128,190 @@ if (!isset($_SESSION["nombre"])) {
 
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <!-- TABLA - Almacen -->
-                      <div id="div_tabla_almacen" style="display: none;">
-                        <div class="table-container">
-                          <table class="custom-table" style="width: 100%;" role="grid">
-                            <thead class="st_tr_style bg-color-f3e700">
-                              <tr class="thead-f1">
-                                <!-- <th rowspan="4">#</th>
-                                <th rowspan="4">Code</th>
-                                <th rowspan="4">Producto</th>
-                                <th rowspan="4">UND</th>
-                                <th rowspan="4">SALDO <br> ANTERIOR</th>
-                                <th colspan="6">JUNIO</th>
-                                <th colspan="8">JULIO</th>
-                                <th rowspan="4">INGRESO /<br> SALIDA</th>
-                                <th rowspan="4">SALDO</th> -->
-                              </tr>
-                              <tr class="thead-f2">
-                                <!-- <th class="style-head">25</th>
-                                <th class="style-head">26</th>
-                                <th class="style-head">27</th>
-                                <th class="style-head">28</th>
-                                <th class="style-head">29</th>
-                                <th class="style-head">30</th>
-                                <th class="style-head">1</th>
-                                <th class="style-head">2</th>
-                                <th class="style-head">3</th>
-                                <th class="style-head">4</th>
-                                <th class="style-head">5</th>
-                                <th class="style-head">6</th>
-                                <th class="style-head">7</th>
-                                <th class="style-head">8</th> -->
-                              </tr>
+                      <!-- TABLA - Almacen -->                      
+                      <div class="table-container" id="div_tabla_almacen" style="display: none;">
+                        <table class="custom-table tabla_almacen" style="width: 100%;" role="grid">
+                          <thead class="st_tr_style bg-color-ffd146">
+                            <tr class="thead-f1">
+                              <!-- <th rowspan="4">#</th>
+                              <th rowspan="4">Code</th>
+                              <th rowspan="4">Producto</th>
+                              <th rowspan="4">UND</th>
+                              <th rowspan="4">SALDO <br> ANTERIOR</th>
+                              <th colspan="6">JUNIO</th>
+                              <th colspan="8">JULIO</th>
+                              <th rowspan="4">INGRESO /<br> SALIDA</th>
+                              <th rowspan="4">SALDO</th> -->
+                            </tr>
+                            <tr class="thead-f2">
+                              <!-- <th class="style-head">25</th>
+                              <th class="style-head">26</th>
+                              <th class="style-head">27</th>
+                              <th class="style-head">28</th>
+                              <th class="style-head">29</th>
+                              <th class="style-head">30</th>
+                              <th class="style-head">1</th>
+                              <th class="style-head">2</th>
+                              <th class="style-head">3</th>
+                              <th class="style-head">4</th>
+                              <th class="style-head">5</th>
+                              <th class="style-head">6</th>
+                              <th class="style-head">7</th>
+                              <th class="style-head">8</th> -->
+                            </tr>
 
-                              <tr class="thead-f3">
-                                <!-- <th colspan="7">SEMANA 1</th>
-                                <th colspan="7">SEMANA 2</th> -->
-                              </tr>
-                              <tr class="thead-f4">
-                                <!-- <th class="style-head">D</th>
-                                <th class="style-head">L</th>
-                                <th class="style-head">M</th>
-                                <th class="style-head">M</th>
-                                <th class="style-head">J</th>
-                                <th class="style-head">V</th>
-                                <th class="style-head">S</th>
-                                
-                                <th class="style-head">D</th>
-                                <th class="style-head">L</th>
-                                <th class="style-head">M</th>
-                                <th class="style-head">M</th>
-                                <th class="style-head">J</th>
-                                <th class="style-head">V</th>
-                                <th class="style-head">S</th> -->
-                              </tr>
-                            </thead>
-                            <tbody class="data_tbody_almacen">
-                              <!-- <tr>
-                                <td rowspan="2">1</td>
-                                <td rowspan="2">354</td>
-                                <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
-                                <td rowspan="2">UND</td>
-                                <td rowspan="2">100</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                              </tr>
-                              <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                              </tr> -->
-                              <!-- --------- -->
-                              <!-- <tr>
-                                <td rowspan="2">1</td>
-                                <td rowspan="2">354</td>
-                                <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
-                                <td rowspan="2">UND</td>
-                                <td rowspan="2">100</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                              </tr>
-                              <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                              </tr> -->
-                              <!-- ----------- -->
-                              <!-- <tr>
-                                <td rowspan="2">1</td>
-                                <td rowspan="2">354</td>
-                                <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
-                                <td rowspan="2">UND</td>
-                                <td rowspan="2">100</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                              </tr>
-                              <tr>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                                <td>1</td>
-                              </tr> -->
-                              <!-- Agrega más filas según sea necesario -->
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
+                            <tr class="thead-f3">
+                              <!-- <th colspan="7">SEMANA 1</th>
+                              <th colspan="7">SEMANA 2</th> -->
+                            </tr>
+                            <tr class="thead-f4">
+                              <!-- <th class="style-head">D</th>
+                              <th class="style-head">L</th>
+                              <th class="style-head">M</th>
+                              <th class="style-head">M</th>
+                              <th class="style-head">J</th>
+                              <th class="style-head">V</th>
+                              <th class="style-head">S</th>
+                              
+                              <th class="style-head">D</th>
+                              <th class="style-head">L</th>
+                              <th class="style-head">M</th>
+                              <th class="style-head">M</th>
+                              <th class="style-head">J</th>
+                              <th class="style-head">V</th>
+                              <th class="style-head">S</th> -->
+                            </tr>
+                          </thead>
+                          <tbody class="data_tbody_almacen">
+                            <!-- <tr>
+                              <td rowspan="2">1</td>
+                              <td rowspan="2">354</td>
+                              <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
+                              <td rowspan="2">UND</td>
+                              <td rowspan="2">100</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                            </tr> -->
+                            <!-- --------- -->
+                            <!-- <tr>
+                              <td rowspan="2">1</td>
+                              <td rowspan="2">354</td>
+                              <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
+                              <td rowspan="2">UND</td>
+                              <td rowspan="2">100</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                            </tr> -->
+                            <!-- ----------- -->
+                            <!-- <tr>
+                              <td rowspan="2">1</td>
+                              <td rowspan="2">354</td>
+                              <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
+                              <td rowspan="2">UND</td>
+                              <td rowspan="2">100</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                              <td>1</td>
+                            </tr> -->
+                            <!-- Agrega más filas según sea necesario -->
+                          </tbody>
+                        </table>
+                      </div>                      
 
                       <!-- CARGANDO - REGISTRO DE ASISTENCIA -->
                       <div class="row" id="cargando-table-almacen" >   
@@ -347,13 +345,13 @@ if (!isset($_SESSION["nombre"])) {
                       <div class="card-body">
                         <div class="row" id="cargando-1-fomulario">
                           <!-- id trabajador -->
-                          <input type="hidden" name="idtrabajador" id="idtrabajador" />
+                          <input type="hidden" name="idalmacen_x_proyecto" id="idalmacen_x_proyecto" />
 
                           <!-- Tipo de documento -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                             <div class="form-group">
-                              <label for="producto">Producto</label>
-                              <select name="producto" id="producto" class="form-control" placeholder="Producto">                                
+                              <label for="producto">Producto <span class="cargando_productos"></span> </label>
+                              <select name="producto" id="producto" class="form-control" placeholder="Producto" onchange="add_producto(this);">                                
                               </select>
                             </div>
                           </div> 
@@ -362,9 +360,16 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
                               <label for="fecha_ingreso">Fecha</label>
-                              <input type="date" name="fecha_ingreso" class="form-control" id="fecha_ingreso" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" />
+                              <input type="date" name="fecha_ingreso" class="form-control" id="fecha_ingreso" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
+                              <input type="hidden" name="dia_ingreso" id="dia_ingreso" />
                             </div>
-                          </div>                          
+                          </div>   
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12" >
+                            <div class="row" id="html_producto"> 
+                              <span> Seleccione un producto</span>
+                            </div>
+                          </div>                                                 
 
                           <!-- barprogress -->
                           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_almacen_div">
@@ -378,6 +383,100 @@ if (!isset($_SESSION["nombre"])) {
                         </div>
 
                         <div class="row" id="cargando-2-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+                      <button type="submit" style="display: none;" id="submit-form-almacen">Submit</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen();" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen">Guardar Cambios</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL - VER ALMACEN - chargue 3 -->
+            <div class="modal fade" id="modal-ver-almacen">
+              <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Ver almacen x dia</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span class="text-danger" aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+                    <div class="div-tabla-ver-almacen-x-dia">
+                      <table id="tabla-ver-almacen" class="table table-bordered table-striped display" style="width: 100% !important;">
+                        <thead>
+                          <tr>
+                            <th class="text-center">#</th>
+                            <th class="">Aciones</th>
+                            <th>Producto</th>                                
+                            <th>Cant</th>
+                            <th>Marca</th>                                                       
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                          <tr>
+                            <th class="text-center">#</th>
+                            <th class="">Aciones</th>
+                            <th>Producto</th>                                
+                            <th>Cant</th>
+                            <th>Marca</th>                             
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                    
+                    <!-- form start -->
+                    <form id="form-almacenx-dia" name="form-almacenx-dia" method="POST" style="display: none;">
+                      <div class="card-body">
+                        <div class="row" id="cargando-3-fomulario">
+                          <!-- id trabajador -->
+                          <input type="hidden" name="idalmacen_x_proyecto" id="idalmacen_x_proyecto" />
+
+                          <!-- Tipo de documento -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                            <div class="form-group">
+                              <label for="producto">Producto <span class="cargando_productos"></span> </label>
+                              <select name="producto" id="producto" class="form-control" placeholder="Producto" onchange="add_producto(this);">                                
+                              </select>
+                            </div>
+                          </div> 
+
+                          <!-- Correo electronico -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="fecha_ingreso">Fecha</label>
+                              <input type="date" name="fecha_ingreso" class="form-control" id="fecha_ingreso" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
+                              <input type="hidden" name="dia_ingreso" id="dia_ingreso" />
+                            </div>
+                          </div>   
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12" >
+                            <div class="row" id="html_producto"> 
+                              <span> Seleccione un producto</span>
+                            </div>
+                          </div>                                                 
+
+                          <!-- barprogress -->
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_almacen_div">
+                            <div class="progress">
+                              <div id="barra_progress_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                0%
+                              </div>
+                            </div>
+                          </div> 
+
+                        </div>
+
+                        <div class="row" id="cargando-4-fomulario" style="display: none;">
                           <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
                         </div>
                       </div>
