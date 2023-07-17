@@ -7,11 +7,9 @@ var fecha_1_r = "", fecha_2_r = "", id_proveedor_r = "", comprobante_r = "", glo
 //Función que se ejecuta al inicio
 function init() {
   //Activamos el "aside"
-  $("#bloc_LogisticaAdquisiciones").addClass("menu-open");
-
-  $("#mLogisticaAdquisiciones").addClass("active");
-
-  $("#lOtroGasto").addClass("active bg-primary");
+  $("#bloc_Tecnico").addClass("menu-open");
+  $("#mTecnico").addClass("active");
+  $("#lEpp").addClass("active bg-primary");
 
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
   listar_trabajdor();

@@ -143,12 +143,12 @@
                                   <th class="text-gray"><small>Banco</small></th>                                
                                   <th class="text-gray"><small>Cuenta</small></th>
                                   <th class="text-center text-gray"><small>Horas Nrm/Extr</small></th>
-                                  <th class="total_tbla_principal_sabatical"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>                           
+                                  <th class="text-nowrap">0</th>   <!-- sabatical -->                   
                                   <th class="text-center text-gray"><small>Sueldo Mensual</small></th>                                
-                                  <th class="pr-2" ><div class="formato-numero-conta "><span>S/</span> <span class="total_tbla_principal_pago"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>
-                                  <th class="pr-2" ><div class="formato-numero-conta "><span>S/</span> <span class="total_tbla_principal_deposito"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>
-                                  <th class="pr-2" ><div class="formato-numero-conta "><span>S/</span> <span class="total_tbla_principal_saldo"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div></th>
-                                  <th class="text-center"><span class="total_tbla_principal_cant_s_q"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></th>
+                                  <th class="pr-2 text-nowrap" >0.00</th>  <!-- pago a realizar --> 
+                                  <th class="pr-2 text-nowrap" >0.00</th> <!-- pago acumulado -->
+                                  <th class="pr-2 text-nowrap" >0.00</th> <!-- saldo -->
+                                  <th class="text-center text-nowrap">0</th> <!-- cantidad semanas asignadas -->
                                   <th class="text-center text-gray"><small>Fecha inicio</small></th>
                                   <th class="text-center text-gray"><small>Hoy</small></th>
                                   <th class="text-center text-gray"><small>Fecha fin</small></th>        

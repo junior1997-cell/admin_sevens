@@ -113,12 +113,13 @@ ob_start();
               </div>',              
               "3"=> '<center>' . round($value['total_horas_normal'] + $value['total_horas_extras'], 2) . '</center>',
               "4"=> '<center>' . number_format(($value['total_horas_normal'] + $value['total_horas_extras'])/8, 2, '.', ',') . '</center>',
-              "5"=> 'S/ '.$value['sueldo_hora'],
-              "6"=> 'S/ '.$value['sueldo_diario'],
-              "7"=> 'S/ '.number_format($value['sueldo_mensual'], 2, '.', ','),              
+              "5"=> $value['sueldo_hora'],
+              "6"=> $value['sueldo_diario'],
+              "7"=> $value['sueldo_mensual'],              
               "8"=> '<center>' . $value['total_sabatical'] . '</center>',
-              "9"=> 'S/ ' . number_format($value['adicional_descuento'], 2, '.', ','),
-              "10"=> 'S/ ' . number_format($value['pago_quincenal'], 2, '.', ',') ,
+              "9"=>  $value['adicional_descuento'],
+              "10"=>  $value['pago_quincenal'] ,
+
               "11"=> $value['desempenio'] ,
               "12"=> $value['nombre'] ,
               "13"=> $value['tipo_doc'] .': '. $value['num_doc'] ,
@@ -404,20 +405,10 @@ ob_start();
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   A D I C I O N A L   D E S C U E N T O ::::::::::::::::::::::::::::::::::::::
         
         // Agregamos o editamos el detalle adicional de: "resumen_q_s_asistencia"
-        case 'guardaryeditar_adicional_descuento':
+        case 'guardar_y_editar_adicional_descuento':         
 
-          if (empty($_POST["idresumen_q_s_asistencia"])) {
-
-            $rspta = $asistencia_obrero->insertar_detalle_adicional( $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"], $detalle_adicional);
-
-            echo json_encode($rspta, true);
-
-          } else {
-
-            $rspta = $asistencia_obrero->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["idtrabajador_por_proyecto"], $_POST["fecha_q_s"],$_POST["detalle_adicional"]);
-
-            echo json_encode($rspta, true);
-          }
+          $rspta = $asistencia_obrero->editar_detalle_adicionales($_POST["idresumen_q_s_asistencia"], $_POST["ad_hne"],$_POST["detalle_adicional"]);
+          echo json_encode($rspta, true);          
           
         break;
 

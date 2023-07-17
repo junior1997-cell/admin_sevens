@@ -88,15 +88,15 @@
                 "3"=>$value['cuenta_bancaria'],            
                 "4"=>$value['total_hn'].' / '. $value['total_he'],      
                 "5"=>$value['sabatical'],           
-                "6"=>'S/ '.  number_format($value['sueldo_mensual'], 2, '.', ','),               
-                "7"=>'S/ '.  number_format($value['pago_quincenal'], 2, '.', ','),
+                "6"=>$value['sueldo_mensual'],               
+                "7"=>$value['pago_quincenal'],
                 "8"=>'<div class="formato-numero-conta "> 
                   <button class="btn '.$btn_depositos.' btn-sm mr-1" onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' ); table_show_hide(2);">
                     <i class="far fa-eye"></i> Pagar
                   </button> 
                   <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-sm">S/ '.number_format($value['total_deposito'], 2, '.', ',').'</button>
                 </div>',
-                "9"=>'S/ ' . number_format($saldo, 2, '.', ','),
+                "9"=> $saldo,
                 "10"=>$value['sum_estado_envio_contador'], 
                 "11"=>$value['fecha_inicio'],
                 "12"=> $date_actual,
@@ -109,7 +109,7 @@
                 "18"=>$value['numero_documento'],
                 "19"=>$value['total_hn'],
                 "20"=>$value['total_he'],
-                "21"=>'S/ '.number_format($value['total_deposito'], 2, '.', ','),     
+                "21"=>$value['total_deposito'],     
               );
             }
             $results = array(
@@ -344,7 +344,7 @@
                   ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_q_s('.$reg->idpagos_q_s_obrero .')"><i class="fa fa-check"></i></button>',           
                 "2"=>$reg->fecha_pago,
                 "3"=>'<p class="m-b-1px"><b>Forma:</b>'.$reg->forma_de_pago.'</p> <p class="m-b-1px"><b>Cta:</b>'.$reg->cuenta_deposito.'</p>',
-                "4"=>'S/ '. number_format($reg->monto_deposito, 2, ".", ","),
+                "4"=>$reg->monto_deposito,
                 "5"=>$baucher_deposito,
                 "6"=>$recibos_x_honorarios,
                 "7"=>'<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg->descripcion.'</textarea>',

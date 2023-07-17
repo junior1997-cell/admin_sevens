@@ -55,6 +55,24 @@ if (!function_exists('ejecutarConsulta')) {
     return date("d",strtotime( $fecha )  ); 
   }
 
+  function extraer_meses_de_rango( $fecha1, $fecha2 )  {  
+    $data_fecha = [];
+    $start    = new DateTime($fecha1);  $start->modify('first day of this month');
+    $end      = new DateTime($fecha2);  $end->modify('first day of next month');
+    $interval = DateInterval::createFromDateString('1 month');
+    $period   = new DatePeriod($start, $interval, $end);
+    foreach ($period as $dt) { array_push($data_fecha, $dt->format("Y-m-d")); }
+    return $data_fecha; 
+  }
+
+  function extraer_dias_de_rango( $fecha1, $fecha2 )  { 
+    $data_dias  = [];
+    $f1         = new DateTime($fecha1);
+    $f2         = new DateTime($fecha2);
+    while ($f1 <= $f2) { array_push($data_dias, $f1->format("Y-m-d")); $f1->modify('+1 day'); }
+    return $data_dias; 
+  }
+
   function ultimo_dia_mes( $fecha )  {    
     return date("Y-m-t",strtotime( $fecha )  ); 
   }
@@ -150,23 +168,6 @@ if (!function_exists('ejecutarConsulta')) {
     }    
     
     return $diferencia;
-  }
-
-  function extr_fecha_creacion($reg_fecha) {
-    
-    $fecha = "";
-    if ($reg_fecha == '' || $reg_fecha == null || $reg_fecha == '0000-00-00') { $fecha = "-"; } else {
-  
-      $fechaEntera = strtotime($reg_fecha);
-  
-      $anio = date("Y", $fechaEntera);
-      $mes = date("m", $fechaEntera);
-      $dia = date("d", $fechaEntera);
-      
-      $fecha = "$dia-$mes-$anio";
-    } 
-  
-    return $fecha;
   }
 
   function fechas_valorizacion_quincena($fecha_inicial, $fecha_final) {

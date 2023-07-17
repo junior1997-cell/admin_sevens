@@ -455,7 +455,7 @@ class ServicioEquipos
       foreach ($prov['data'] as $key => $value) {
         $info_repetida .= '<li class="text-left font-size-13px">
         <span class="font-size-18px text-danger"><b >N° Factura : </b> '.$value['codigo'].'</span><br>
-        <b>Fecha de creación: </b>'.extr_fecha_creacion($value['created_at']).'<br>
+        <b>Fecha de creación: </b>'.format_d_m_a($value['created_at']).'<br>
         <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
         <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
         <hr class="m-t-2px m-b-2px">

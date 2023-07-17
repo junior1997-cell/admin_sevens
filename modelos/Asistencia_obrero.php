@@ -29,7 +29,7 @@ class Asistencia_obrero
 
       if (empty($idresumen_q_s_asistencia)) {
         # insertamos un nuevo registro
-        $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto,ids_q_asistencia, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_dias_asistidos_hn, sabatical, pago_parcial_hn, adicional_descuento, pago_quincenal_hn, user_created) 
+        $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto,ids_q_asistencia, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_hn, total_dias_asistidos_hn, sabatical, pago_parcial_hn, adicional_descuento_hn, pago_quincenal_hn, user_created) 
 				VALUES ('$idtrabajador', '$ids_q_asistencia', '$num_semana', '" . $key_r['fecha_q_s_inicio'] . "', '" . $key_r['fecha_q_s_fin'] . "', '" . $key_r['total_hn'] . 
         "', '" . $key_r['dias_asistidos_hn'] . "', '" . $key_r['sabatical'] . "', '" . $key_r['pago_parcial_hn'] . "', '" . $key_r['adicional_descuento'] . "', '" .
         $key_r['pago_quincenal_hn'] . "', '".$_SESSION['idusuario']."')";
@@ -73,7 +73,7 @@ class Asistencia_obrero
         $sql_6 = "UPDATE resumen_q_s_asistencia SET  idtrabajador_por_proyecto='$idtrabajador', ids_q_asistencia = '$ids_q_asistencia', numero_q_s='$num_semana', 
         fecha_q_s_inicio='" .  $key_r['fecha_q_s_inicio'] . "', fecha_q_s_fin='" . $key_r['fecha_q_s_fin'] . "', total_hn='" . $key_r['total_hn'] .
         "', total_dias_asistidos_hn='" . $key_r['dias_asistidos_hn'] . "', sabatical='" . $key_r['sabatical'] ."', pago_parcial_hn='" . $key_r['pago_parcial_hn'] . "',
-        adicional_descuento='" . $key_r['adicional_descuento'] . "', pago_quincenal_hn='" . $key_r['pago_quincenal_hn'] ."', user_updated='".$_SESSION['idusuario']."' 
+        adicional_descuento_hn='" . $key_r['adicional_descuento'] . "', pago_quincenal_hn='" . $key_r['pago_quincenal_hn'] ."', user_updated='".$_SESSION['idusuario']."' 
         WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
         $retorno = ejecutarConsulta($sql_6); if ($retorno['status'] == false) {  return $retorno; }
 
@@ -135,9 +135,9 @@ class Asistencia_obrero
 
       if (empty($idresumen_q_s_asistencia)) {
         # insertamos un nuevo registro
-        $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto,ids_q_asistencia, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_he, total_dias_asistidos_he, pago_parcial_he, pago_quincenal_he, user_created) 
+        $sql_5 = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto,ids_q_asistencia, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin, total_he, total_dias_asistidos_he, pago_parcial_he, adicional_descuento_he, pago_quincenal_he, user_created) 
 				VALUES ('$idtrabajador', '$ids_q_asistencia', '$num_semana', '" . $key_r['fecha_q_s_inicio'] . "', '" . $key_r['fecha_q_s_fin'] . "', '" . $key_r['total_he'] . 
-        "', '" . $key_r['dias_asistidos_he'] . "', '" . $key_r['pago_parcial_he'] . "' , '" . $key_r['pago_quincenal_he'] . "', '".$_SESSION['idusuario']."')";
+        "', '" . $key_r['dias_asistidos_he'] . "', '" . $key_r['pago_parcial_he'] . "' , '" .  $key_r['adicional_descuento'] . "' , '" . $key_r['pago_quincenal_he'] . "', '".$_SESSION['idusuario']."')";
         $retorno =  ejecutarConsulta_retornarID($sql_5); if ($retorno['status'] == false) {  return $retorno; }
         $id_rqsa = $retorno['data'];
         //B I T A C O R A -------
@@ -178,7 +178,8 @@ class Asistencia_obrero
         $sql_6 = "UPDATE resumen_q_s_asistencia SET  idtrabajador_por_proyecto='$idtrabajador', ids_q_asistencia = '$ids_q_asistencia', numero_q_s='$num_semana', 
         fecha_q_s_inicio='" . $key_r['fecha_q_s_inicio'] . "', fecha_q_s_fin='" . $key_r['fecha_q_s_fin'] . "', total_he='" . $key_r['total_he'] . "', 
         total_dias_asistidos_he='" . $key_r['dias_asistidos_he'] . "', pago_parcial_he='" . $key_r['pago_parcial_he'] . "', pago_quincenal_he='" . $key_r['pago_quincenal_he'] ."', 
-        user_updated='".$_SESSION['idusuario']."' WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
+        adicional_descuento_he='" . $key_r['adicional_descuento'] . "', user_updated='".$_SESSION['idusuario']."' 
+        WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
         $retorno = ejecutarConsulta($sql_6); if ($retorno['status'] == false) {  return $retorno; }
 
         //B I T A C O R A -------
@@ -230,7 +231,7 @@ class Asistencia_obrero
     $agrupar_trabajdor = ejecutarConsultaArray($sql);  if ($agrupar_trabajdor['status'] == false) {  return $agrupar_trabajdor; }
 
     foreach ($agrupar_trabajdor['data'] as $key => $value) {
-      $sql_2 = "SELECT SUM(adicional_descuento) AS adicional_descuento, SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
+      $sql_2 = "SELECT (SUM(adicional_descuento_hn) + SUM(adicional_descuento_he)) AS adicional_descuento, SUM(sabatical) AS total_sabatical, SUM(total_hn) AS total_hn, SUM(total_he) AS total_he, 
 			SUM((total_dias_asistidos_hn + total_dias_asistidos_he)) AS total_dias_asistidos, SUM(pago_quincenal_hn + pago_quincenal_he) AS pago_quincenal
 			FROM resumen_q_s_asistencia 
 			WHERE  estado = '1' AND estado_delete = '1' AND idtrabajador_por_proyecto = '" . $value['idtrabajador_por_proyecto'] . "';";
@@ -344,7 +345,9 @@ class Asistencia_obrero
 
         // Ocultamos o mostramos segun los buscado
         if ( $show_hide_tpp == true) {
-          $sql3 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos_hn, total_dias_asistidos_he, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento, descripcion_descuento, pago_quincenal_hn, pago_quincenal_he, estado_envio_contador 
+          $sql3 = "SELECT idresumen_q_s_asistencia, idtrabajador_por_proyecto, fecha_q_s_inicio, total_hn, total_he, total_dias_asistidos_hn, 
+          total_dias_asistidos_he, sabatical, sabatical_manual_1, sabatical_manual_2, pago_parcial_hn, pago_parcial_he, adicional_descuento_hn, adicional_descuento_he,
+          descripcion_descuento_hn, descripcion_descuento_he, pago_quincenal_hn, pago_quincenal_he, estado_envio_contador 
           FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_tpp' AND ids_q_asistencia = '$ids_q_asistencia' AND estado = '1' AND estado_delete = '1';";
           $extras = ejecutarConsultaSimpleFila($sql3); if ($extras['status'] == false) {  return $extras; }      
 
@@ -461,8 +464,10 @@ class Asistencia_obrero
             'sabatical_manual_2'        => empty($extras['data']) ? "-": ( empty($extras['data']['sabatical_manual_2']) ?     "" : $extras['data']['sabatical_manual_2']),
             'pago_parcial_hn'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_hn']) ?         0 : floatval($extras['data']['pago_parcial_hn']) ),
             'pago_parcial_he'           => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_parcial_he']) ?         0 : floatval($extras['data']['pago_parcial_he']) ),
-            'adicional_descuento'       => empty($extras['data']) ? 0  : ( empty($extras['data']['adicional_descuento']) ?     0 : floatval($extras['data']['adicional_descuento']) ),
-            'descripcion_descuento'     => empty($extras['data']) ? "" : ( empty($extras['data']['descripcion_descuento']) ?  "" : $extras['data']['descripcion_descuento']),
+            'adicional_descuento_hn'    => empty($extras['data']) ? 0  : ( empty($extras['data']['adicional_descuento_hn']) ?  0 : floatval($extras['data']['adicional_descuento_hn']) ),
+            'adicional_descuento_he'    => empty($extras['data']) ? 0  : ( empty($extras['data']['adicional_descuento_he']) ?  0 : floatval($extras['data']['adicional_descuento_he']) ),
+            'descripcion_descuento_hn'  => empty($extras['data']) ? "" : ( empty($extras['data']['descripcion_descuento_hn']) ? "" : $extras['data']['descripcion_descuento_hn']),
+            'descripcion_descuento_he'  => empty($extras['data']) ? "" : ( empty($extras['data']['descripcion_descuento_he']) ? "" : $extras['data']['descripcion_descuento_he']),
             'pago_quincenal_hn'         => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_quincenal_hn']) ?       0 : floatval($extras['data']['pago_quincenal_hn']) ),
             'pago_quincenal_he'         => empty($extras['data']) ? 0  : ( empty($extras['data']['pago_quincenal_he']) ?       0 : floatval($extras['data']['pago_quincenal_he']) ),
             'estado_envio_contador'     => empty($extras['data']) ? "" : ( empty($extras['data']['estado_envio_contador']) ?  "" : $extras['data']['estado_envio_contador']),
@@ -863,7 +868,7 @@ class Asistencia_obrero
   public function tbla_qs_individual($id) {
     $sql = "SELECT rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, sqa.numero_q_s, sqa.fecha_q_s_inicio, 
 		sqa.fecha_q_s_fin, rqsa.total_hn, rqsa.total_he, (rqsa.total_dias_asistidos_hn + rqsa.total_dias_asistidos_he) as total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, 
-		rqsa.sabatical_manual_2, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, 
+		rqsa.sabatical_manual_2, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, (rqsa.adicional_descuento_hn + rqsa.adicional_descuento_he) as adicional_descuento, 
 		(rqsa.pago_quincenal_hn + rqsa.pago_quincenal_he) as pago_quincenal, rqsa.estado_envio_contador, rqsa.recibos_x_honorarios, rqsa.estado, p.fecha_pago_obrero, 
 		t.nombres AS trabajador, t.tipo_documento, t.numero_documento
 		FROM resumen_q_s_asistencia AS rqsa, s_q_asistencia as sqa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t
@@ -905,21 +910,8 @@ class Asistencia_obrero
 
   // :::::::::::::::::::::::::::::::::::: S E C C I O N   A D I C I O N A L   D E S C U E N T O ::::::::::::::::::::::::::::::::::::::
 
-  public function insertar_detalle_adicional($idtrabajador_por_proyecto, $fecha_registro, $detalle_adicional) {
-    $sql = "INSERT INTO resumen_q_s_asistencia(idtrabajador_por_proyecto, fecha_q_s_inicio, descripcion_descuento, user_created) 
-		VALUES ('$idtrabajador_por_proyecto', '$fecha_registro', '$detalle_adicional', '".$_SESSION['idusuario']."' )";
-    $insert = ejecutarConsulta_retornarID($sql); if ( $insert['status'] == false) {return $insert; }
-
-    //B I T A C O R A -------
-    $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_asistencia', '".$insert['data']."', 'Crear adicional descuento', '".$_SESSION['idusuario']."')";
-    $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
-
-    return $insert;
-  }
-
-  public function editar_detalle_adicionales($idresumen_q_s_asistencia, $idtrabajador_por_proyecto, $fecha_registro, $detalle_adicional) {
-    $sql = "UPDATE resumen_q_s_asistencia 
-		SET  idtrabajador_por_proyecto='$idtrabajador_por_proyecto', fecha_q_s_inicio='$fecha_registro', descripcion_descuento = '$detalle_adicional', user_updated = '".$_SESSION['idusuario']."'
+  public function editar_detalle_adicionales($idresumen_q_s_asistencia, $ad_hne, $detalle_adicional) {
+    $sql = "UPDATE resumen_q_s_asistencia SET descripcion_descuento_$ad_hne = '$detalle_adicional', user_updated = '".$_SESSION['idusuario']."'
 		WHERE idresumen_q_s_asistencia = '$idresumen_q_s_asistencia';";
     $editar = ejecutarConsulta($sql);  if ( $editar['status'] == false) {return $editar; }
 
@@ -931,7 +923,10 @@ class Asistencia_obrero
   }
 
   public function descripcion_adicional_descuento($id_adicional) {
-    $sql = "SELECT descripcion_descuento FROM resumen_q_s_asistencia WHERE idresumen_q_s_asistencia = '$id_adicional';";
+    $sql = "SELECT rqsa.descripcion_descuento_hn, rqsa.descripcion_descuento_he, rqsa.adicional_descuento_hn, rqsa.adicional_descuento_he,
+    t.nombres, t.imagen_perfil, t.tipo_documento, t.numero_documento
+    FROM resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador as t 
+    WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idtrabajador = t.idtrabajador AND rqsa.idresumen_q_s_asistencia = '$id_adicional';";
     return ejecutarConsultaSimpleFila($sql);    
   }
 

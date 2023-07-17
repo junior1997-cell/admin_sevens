@@ -215,11 +215,18 @@ function tbla_principal(nube_idproyecto) {
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api1.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total1)}</span>` );
+      var api2 = this.api(); var total2 = api2.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api2.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total2)}</span>` );      
+    },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
       { targets: [11,12,13], visible: false, searchable: false, },
+      { targets: [5,6,7,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
 
@@ -581,9 +588,8 @@ function mostrar_hne(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_bt
           if (val.idresumen_q_s_asistencia == "") { fechas_adicional = format_a_m_d(f1); } else { fechas_adicional = val.fecha_registro; }
 
           var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> 
-            <span class="span_asist" >${val.adicional_descuento}</span> 
-            <input class="w-50px input_asist hidden adicional_descuento_${val.idtrabajador_por_proyecto}" onkeyup="delay(function(){ adicional_descuento('${e.data.length}', '${val.idtrabajador_por_proyecto}') }, 100 );" type="text" value="${val.adicional_descuento}" autocomplete="off" > 
-            <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '${val.idresumen_q_s_asistencia}', '${val.idtrabajador_por_proyecto}', '${fechas_adicional}');"><i class="far fa-eye"></i></span>
+            <span class="span_asist" >${(val.adicional_descuento_hn + val.adicional_descuento_he)}</span> 
+            <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento_hne( '${val.idresumen_q_s_asistencia}', '${val.idtrabajador_por_proyecto}');"><i class="far fa-eye"></i></span>
           </td>`;
           var pago_total_qs = parseFloat(val.pago_quincenal_hn) + parseFloat(val.pago_quincenal_he); //console.log(pago_total_qs);
           var tabla_bloc_HN_pago_total_10 = `<td rowspan="2" class="text-center center-vertical"> 
@@ -594,14 +600,12 @@ function mostrar_hne(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_bt
 
           // validamos el el envio al contador
           if (val.estado_envio_contador == "") {
-            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;        
-          } else {
-            if (val.estado_envio_contador == "0") {
-              tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;                  
-            } else {
-              tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox" checked id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;                  
-              count_pago_contador_total++;
-            }
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${(val.pago_quincenal_hn + val.pago_quincenal_he)}');"> </td>`;        
+          } else if (val.estado_envio_contador == "0") {            
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${(val.pago_quincenal_hn + val.pago_quincenal_he)}');"> </td>`;                  
+          } else if (val.estado_envio_contador == "1") {  
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox" checked id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${(val.pago_quincenal_hn + val.pago_quincenal_he)}');"> </td>`;                  
+            count_pago_contador_total++;            
           }
 
           // acumulamos el total de pagos
@@ -637,13 +641,15 @@ function mostrar_hne(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_bt
           $(".data_table_body").append(tabla_bloc_HN_1 + tabla_bloc_HE_1);
 
           // asignamos pago al contador a un "array"
-          if (parseFloat(val.pago_quincenal) > 0) {
+          if (parseFloat(val.pago_quincenal_hn + val.pago_quincenal_he) > 0) {
             array_pago_contador.push({           
-              'fechas_adicional':         fechas_adicional,
-              'idtrabajador_por_proyecto':val.idtrabajador_por_proyecto,
-              'nombres':                  val.nombres,
-              'idresumen_q_s_asistencia': val.idresumen_q_s_asistencia,
-              'pago_quincenal':           val.pago_quincenal
+              'fechas_adicional'          : fechas_adicional,
+              'idtrabajador_por_proyecto' : val.idtrabajador_por_proyecto,
+              'nombres'                   : val.nombres,
+              'idresumen_q_s_asistencia'  : val.idresumen_q_s_asistencia,
+              'pago_quincenal_hn'         : val.pago_quincenal_hn,
+              'pago_quincenal_he'         : val.pago_quincenal_he,
+              'pago_quincenal_hne'        : (val.pago_quincenal_hn + val.pago_quincenal_he)
             });
           } 
 
@@ -1030,8 +1036,8 @@ function mostrar_hn(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
           if (val.idresumen_q_s_asistencia == "") { fechas_adicional = format_a_m_d(f1); } else { fechas_adicional = val.fecha_registro; }
 
           var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> 
-            <span class="span_asist" >${val.adicional_descuento}</span> <input class="w-45px input_asist hidden adicional_descuento_${val.idtrabajador_por_proyecto}" onkeyup="delay(function(){ adicional_descuento('${e.data.length}', '${val.idtrabajador_por_proyecto}') }, 100 );" type="text" value="${val.adicional_descuento}" autocomplete="off" > 
-            <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '${val.idresumen_q_s_asistencia}', '${val.idtrabajador_por_proyecto}', '${fechas_adicional}');"><i class="far fa-eye"></i></span>
+            <span class="span_asist" >${val.adicional_descuento_hn}</span> <input class="w-45px input_asist hidden adicional_descuento_${val.idtrabajador_por_proyecto}" onkeyup="adicional_descuento('${e.data.length}', '${val.idtrabajador_por_proyecto}', 'hn');" type="text" value="${val.adicional_descuento_hn}" autocomplete="off" > 
+            <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '${val.idresumen_q_s_asistencia}', '${val.idtrabajador_por_proyecto}', 'hn');"><i class="far fa-eye"></i></span>
           </td>`;
           
           var tabla_bloc_HN_pago_total_10 = `<td rowspan="2" class="text-center center-vertical"> 
@@ -1042,14 +1048,12 @@ function mostrar_hn(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
 
           // validamos el el envio al contador
           if (val.estado_envio_contador == "") {
-            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;        
-          } else {
-            if (val.estado_envio_contador == "0") {
-              tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;                  
-            } else {
-              tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox" checked id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;                  
-              count_pago_contador_total++;
-            }
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal_hn}');"> </td>`;        
+          } else if (val.estado_envio_contador == "0") {            
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal_hn}');"> </td>`;                  
+          } else if (val.estado_envio_contador == "1") {  
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox" checked id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal_hn}');"> </td>`;                  
+            count_pago_contador_total++;            
           }
 
           // acumulamos el total de pagos
@@ -1081,13 +1085,15 @@ function mostrar_hn(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
           $(".data_table_body").append(tabla_bloc_HN_1 + tabla_bloc_HE_1);
 
           // asignamos pago al contador a un "array"
-          if (parseFloat(val.pago_quincenal) > 0) {
+          if (parseFloat(val.pago_quincenal_hn + val.pago_quincenal_he) > 0) {
             array_pago_contador.push({           
-              'fechas_adicional':         fechas_adicional,
-              'idtrabajador_por_proyecto':val.idtrabajador_por_proyecto,
-              'nombres':                  val.nombres,
-              'idresumen_q_s_asistencia': val.idresumen_q_s_asistencia,
-              'pago_quincenal':           val.pago_quincenal
+              'fechas_adicional'          : fechas_adicional,
+              'idtrabajador_por_proyecto' : val.idtrabajador_por_proyecto,
+              'nombres'                   : val.nombres,
+              'idresumen_q_s_asistencia'  : val.idresumen_q_s_asistencia,
+              'pago_quincenal_hn'         : val.pago_quincenal_hn,
+              'pago_quincenal_he'         : val.pago_quincenal_he,
+              'pago_quincenal_hne'        : (val.pago_quincenal_hn + val.pago_quincenal_he)
             });
           } 
 
@@ -1371,7 +1377,11 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
           // validamos si existe una suma_adicional 
           if (val.idresumen_q_s_asistencia == "") { fechas_adicional = format_a_m_d(f1); } else { fechas_adicional = val.fecha_registro; }
 
-          var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical"> <span class="">0</span> </td>`;
+          var tabla_bloc_HN_descuent_9 = `<td rowspan="2" class="text-center center-vertical">
+            <span class="span_asist" >${val.adicional_descuento_he}</span> 
+            <input class="w-45px input_asist hidden adicional_descuento_${val.idtrabajador_por_proyecto}" onkeyup="adicional_descuento('${e.data.length}', '${val.idtrabajador_por_proyecto}', 'he');" type="text" value="${val.adicional_descuento_he}" autocomplete="off" > 
+            <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_adicional_descuento( '${val.idresumen_q_s_asistencia}', '${val.idtrabajador_por_proyecto}', 'he');"><i class="far fa-eye"></i></span>
+          </td>`;
           
           var tabla_bloc_HN_pago_total_10 = `<td rowspan="2" class="text-center center-vertical"> 
             <span  class="val_pago_quincenal_${key+1} pago_quincenal_${val.idtrabajador_por_proyecto}"> ${formato_miles( val.pago_quincenal_he )} </span> 
@@ -1381,14 +1391,12 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
 
           // validamos el el envio al contador
           if (val.estado_envio_contador == "") {
-            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;        
-          } else {
-            if (val.estado_envio_contador == "0") {
-              tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;                  
-            } else {
-              tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox" checked id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal}');"> </td>`;                  
-              count_pago_contador_total++;
-            }
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal_he}');"> </td>`;        
+          } else if (val.estado_envio_contador == "0") {            
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox"  id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal_he}');"> </td>`;                  
+          } else if (val.estado_envio_contador == "1") {  
+            tabla_bloc_envio_contador_11 = `<td rowspan="2" class="text-center bg-color-acc3c7 center-vertical"> <input class="w-xy-20px checkbox_visible" type="checkbox" checked id="checkbox_asignar_pago_contador_${val.idtrabajador_por_proyecto}" onclick="asignar_pago_al_contador('${fechas_adicional}', '${val.idtrabajador_por_proyecto}', '${val.nombres}', '${val.idresumen_q_s_asistencia}', '${val.pago_quincenal_he}');"> </td>`;                  
+            count_pago_contador_total++;            
           }
 
           // acumulamos el total de pagos
@@ -1415,13 +1423,15 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
           $(".data_table_body").append(tabla_bloc_HN_1 + tabla_bloc_HE_1);
 
           // asignamos pago al contador a un "array"
-          if (parseFloat(val.pago_quincenal) > 0) {
+          if (parseFloat(val.pago_quincenal_hn + val.pago_quincenal_he) > 0) {
             array_pago_contador.push({           
-              'fechas_adicional':         fechas_adicional,
-              'idtrabajador_por_proyecto':val.idtrabajador_por_proyecto,
-              'nombres':                  val.nombres,
-              'idresumen_q_s_asistencia': val.idresumen_q_s_asistencia,
-              'pago_quincenal':           val.pago_quincenal
+              'fechas_adicional'          : fechas_adicional,
+              'idtrabajador_por_proyecto' : val.idtrabajador_por_proyecto,
+              'nombres'                   : val.nombres,
+              'idresumen_q_s_asistencia'  : val.idresumen_q_s_asistencia,
+              'pago_quincenal_hn'         : val.pago_quincenal_hn,
+              'pago_quincenal_he'         : val.pago_quincenal_he,
+              'pago_quincenal_hne'        : (val.pago_quincenal_hn + val.pago_quincenal_he)
             });
           } 
 
@@ -1800,7 +1810,8 @@ function guardar_fechas_asistencia_he() {
       'num_semana'            : (parseInt(i_r) + 1),      
       'total_he'              :quitar_formato_miles($(`.total_HE_${val.id_trabajador}`).text()),
       'dias_asistidos_he'     :$(`.dias_asistidos_${val.id_trabajador}`).text(),
-      'pago_parcial_he'       :quitar_formato_miles($(`.pago_parcial_HE_${val.id_trabajador}`).text()),      
+      'pago_parcial_he'       :quitar_formato_miles($(`.pago_parcial_HE_${val.id_trabajador}`).text()),     
+      'adicional_descuento'   :$(`.adicional_descuento_${val.id_trabajador}`).val(), 
       'pago_quincenal_he'     :quitar_formato_miles($(`.pago_quincenal_${val.id_trabajador}`).text()),
       'array_datos_asistencia':array_datos_asistencia
     });
@@ -1962,7 +1973,7 @@ function asignar_todos_pago_al_contador() {
     var trabajdor = "";
 
     array_pago_contador.forEach(element => {
-      trabajdor = trabajdor.concat(`<li class="text-left font-size-13px">${element.nombres} ─ <b>${formato_miles(element.pago_quincenal)}</b></li>`);
+      trabajdor = trabajdor.concat(`<li class="text-left font-size-13px">${element.nombres} ─ <b>${formato_miles(element.pago_quincenal_hne)}</b></li>`);
     });
 
     trabajdor = `<ul>${trabajdor}</ul>`;
@@ -2198,7 +2209,7 @@ function btn_guardar_horas_multiple(flag) {
 }
 
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   A D I C I O N A L   D E S C U E N T O  :::::::::::::::::::::::::::::::::::::::..
-function adicional_descuento(cant_trabajador, id_trabajador) {
+function adicional_descuento(cant_trabajador, id_trabajador, hne) {
 
   var suma_resta = 0; var pago_parcial_HN = 0; pago_parcial_HE = 0;
 
@@ -2207,8 +2218,11 @@ function adicional_descuento(cant_trabajador, id_trabajador) {
   pago_parcial_HE = parseFloat( quitar_formato_miles($(`.pago_parcial_HE_${id_trabajador}`).text()));
 
   if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
-
-    suma_resta = (pago_parcial_HN ) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
+    if (hne == 'hn') {
+      suma_resta = (pago_parcial_HN ) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
+    } else if (hne == 'he') {
+      suma_resta = (pago_parcial_HE ) + parseFloat($(`.adicional_descuento_${id_trabajador}`).val());
+    }    
 
     $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(suma_resta.toFixed(2)));
 
@@ -2229,7 +2243,7 @@ function guardaryeditar_adicional_descuento(e) {
   var formData = new FormData($("#form-adicional-descuento")[0]);
 
   $.ajax({
-    url: "../ajax/asistencia_obrero.php?op=guardaryeditar_adicional_descuento",
+    url: `../ajax/asistencia_obrero.php?op=guardar_y_editar_adicional_descuento`,
     type: "POST",
     data: formData,
     contentType: false,
@@ -2259,14 +2273,14 @@ function guardaryeditar_adicional_descuento(e) {
   });
 }
 
-function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
+function modal_adicional_descuento( id_adicional, id_trabjador, hne) {
 
   $("#cargando-5-fomulario").hide(); 
   $("#cargando-6-fomulario").show();
 
   $("#idresumen_q_s_asistencia").val(id_adicional);
   $("#idtrabajador_por_proyecto").val(id_trabjador);
-  $("#fecha_q_s").val(fecha_q_s);
+  $("#ad_hne").val(hne);
   $("#detalle_adicional").val("");
 
   $("#modal-adicional-descuento").modal("show");
@@ -2275,8 +2289,10 @@ function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
     e = JSON.parse(e);  console.log(e);  
 
     if (e.status == true) {
-      if (e.data.length === 0) { } else {
-        $("#detalle_adicional").val(e.data.descripcion_descuento);
+      if (hne == 'hn') { 
+        $("#detalle_adicional").val(e.data.descripcion_descuento_hn);
+      } else if (hne == 'he') { 
+        $("#detalle_adicional").val(e.data.descripcion_descuento_he);
       }
     }else{
       ver_errores(e);
@@ -2288,6 +2304,44 @@ function modal_adicional_descuento( id_adicional, id_trabjador, fecha_q_s) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
+function modal_adicional_descuento_hne( id_adicional, id_trabjador) {
+
+  $("#html-ad-hne").html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /> <h4>Cargando...</h4> </div>`);   
+
+  $("#modal-adicional-descuento-hne").modal("show");
+
+  $.post("../ajax/asistencia_obrero.php?op=descripcion_adicional_descuento",{"id_adicional":id_adicional}, function(e){
+    e = JSON.parse(e);  console.log(e);  
+
+    if (e.status == true) {
+      $("#html-ad-hne").html(`
+      <div class="col-md-12 col-lg-12 text-center mb-2"><h4>${e.data.nombres}</h4></div>
+      <div class="col-md-12 col-lg-12">
+        <div class="form-group">
+          <label for="nombre">Adicional/descuento de: Hora Normal</label>
+          <p class="form-control" > ${e.data.adicional_descuento_hn == '' || e.data.adicional_descuento_hn == null ? '-' : e.data.adicional_descuento_hn} </p>          
+        </div>
+      </div> 
+      <div class="col-md-12 col-lg-12"> 
+        <div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 62px;" > ${e.data.descripcion_descuento_hn == '' || e.data.descripcion_descuento_hn == null ? '-' : e.data.descripcion_descuento_hn } </div>
+      </div>
+      <div class="col-md-12 col-lg-12"><div class="divider"></div></div>
+      <div class="col-md-12 col-lg-12 mt-3">
+        <div class="form-group">
+          <label for="nombre">Adicional/descuento: Hora Extra</label>
+          <p class="form-control" > ${e.data.adicional_descuento_he == '' || e.data.adicional_descuento_he == null ? '-' : e.data.adicional_descuento_he} </p>
+        </div>
+      </div> 
+      <div class="col-md-12 col-lg-12"> 
+        <div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 62px;" > ${e.data.descripcion_descuento_he == '' || e.data.descripcion_descuento_he == null ? '-' : e.data.descripcion_descuento_he} </div>
+      </div>
+      `);
+    }else{
+      ver_errores(e);
+    }   
+
+  }).fail( function(e) { ver_errores(e); } );
+}
 // .....::::::::::::::::::::::::::::::::::::: S E C C I Ó N   A S I S T E N C I A   I N D I V I D U A L  :::::::::::::::::::::::::::::::::::::::..
 
 // TBLA - ASISTENCIA INDIVIDUAL

@@ -109,7 +109,7 @@
       $hojaActiva->setCellValue('S' . $fila_1, $reg['sueldo_hora']);              # Sueldo hora
       $hojaActiva->setCellValue('T' . $fila_1, $reg['sabatical']);                # Sueldo hora
       $hojaActiva->setCellValue('U' . $fila_1, $reg['pago_parcial_he']);          # Pago parcial
-      $hojaActiva->setCellValue('V' . $fila_1, $reg['adicional_descuento']);      # Adicional descuento
+      $hojaActiva->setCellValue('V' . $fila_1, $reg['adicional_descuento_he']);      # Adicional descuento
       $hojaActiva->setCellValue('W' . $fila_1, $reg['pago_quincenal_he']);        # Pago Semanal
       $spreadsheet->getActiveSheet()->getStyle('W' . $fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));      
       

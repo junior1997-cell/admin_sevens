@@ -190,7 +190,7 @@
     });
   }
 
-  function abrir_proyecto_para_todos_los_modulos(idproyecto, ec_razon_social, nombre_proyecto, fecha_inicial, fecha_final, fecha_pago_obrero) {
+  function abrir_proyecto_para_todos_los_modulos(idproyecto, ec_razon_social, nombre_proyecto, fip, ffp, fia, ffa, fecha_pago_obrero) {
 
     let timerInterval
     Swal.fire({
@@ -211,8 +211,10 @@
         $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
 
         localStorage.setItem('nube_idproyecto', idproyecto);
-        localStorage.setItem('nube_fecha_inicial_proyecto', fecha_inicial);
-        localStorage.setItem('nube_fecha_final_proyecto', fecha_final);
+        localStorage.setItem('nube_fecha_inicial_proyecto', fip);
+        localStorage.setItem('nube_fecha_final_proyecto', ffp);
+        localStorage.setItem('nube_fecha_inicial_actividad', fia);
+        localStorage.setItem('nube_fecha_final_actividad', ffa);
         localStorage.setItem('nube_nombre_proyecto', nombre_proyecto);
         localStorage.setItem('nube_empresa_a_cargo', ec_razon_social);
         localStorage.setItem('nube_fecha_pago_obrero', fecha_pago_obrero);

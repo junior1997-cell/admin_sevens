@@ -80,7 +80,7 @@ class Mano_de_obra
         $info_repetida .= '<li class="text-left font-size-13px">
         <b>Razón social: </b>'.$value['razon_social'].'<br>
         <b>'.$value['tipo_documento'].': </b>'.$value['ruc'].'<br>
-        <b>Fecha de cración: </b>'.extr_fecha_creacion($value['created_at']).'<br>
+        <b>Fecha de cración: </b>'.format_d_m_a($value['created_at']).'<br>
         <b>Periodo: </b>'.format_d_m_a($value['fecha_inicial']) .' - '. format_d_m_a($value['fecha_final']).'<br>
         <hr class="m-t-2px m-b-2px">
         </li>';

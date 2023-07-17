@@ -15,9 +15,11 @@ class PagoObrero
 
     $sql_1 = "SELECT t.idtrabajador, t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento,
 		tt.nombre AS nombre_tipo, o.nombre_ocupacion, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   
-		SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, SUM(rqsa.total_dias_asistidos) AS total_dias_asistidos, SUM(rqsa.sabatical) AS sabatical, 
+		SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, (SUM(rqsa.total_dias_asistidos_hn) + SUM(rqsa.total_dias_asistidos_he)) AS total_dias_asistidos, 
+    SUM(rqsa.sabatical) AS sabatical, 
 		SUM(rqsa.sabatical_manual_1) AS sabatical_manual_1, SUM(rqsa.sabatical_manual_2) AS sabatical_manual_2, SUM(rqsa.pago_parcial_hn) AS pago_parcial_hn, 
-		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, SUM(rqsa.adicional_descuento) AS adicional_descuento,  SUM(rqsa.pago_quincenal) AS pago_quincenal, 
+		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, (SUM(rqsa.adicional_descuento_hn) + SUM(rqsa.adicional_descuento_he)) AS adicional_descuento,  
+    (SUM(rqsa.pago_quincenal_hn) + SUM(rqsa.pago_quincenal_he)) AS pago_quincenal, 
 		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, ocupacion AS o
 		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 	AND tpp.idtrabajador = t.idtrabajador  
@@ -159,8 +161,9 @@ class PagoObrero
     $data = [];
 
     $sql_1 = "SELECT tpp.sueldo_hora, rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto, rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
-		rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, 
-		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, rqsa.pago_quincenal, 
+		rqsa.total_hn, rqsa.total_he, (rqsa.total_dias_asistidos_hn + rqsa.total_dias_asistidos_he) as total_dias_asistidos, rqsa.sabatical, rqsa.sabatical_manual_1, rqsa.sabatical_manual_2, 
+		rqsa.pago_parcial_hn, rqsa.pago_parcial_he, (rqsa.adicional_descuento_hn + rqsa.adicional_descuento_he) as adicional_descuento, rqsa.descripcion_descuento_hn, rqsa.descripcion_descuento_he, 
+    (rqsa.pago_quincenal_hn + rqsa.pago_quincenal_he) as pago_quincenal, 
 		rqsa.estado_envio_contador
 		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp
 		WHERE  rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND rqsa.idtrabajador_por_proyecto = '$idtrabajador_x_proyecto' 
@@ -180,27 +183,28 @@ class PagoObrero
         if ($cant_rh['status'] == false) { return $cant_rh; }
 
         $data[] = [
-          'sueldo_hora' => ( empty($q_s['sueldo_hora']) ? 0 : $q_s['sueldo_hora']),
-          'idresumen_q_s_asistencia' => $q_s['idresumen_q_s_asistencia'],
+          'sueldo_hora'               => ( empty($q_s['sueldo_hora']) ? 0 : $q_s['sueldo_hora']),
+          'idresumen_q_s_asistencia'  => $q_s['idresumen_q_s_asistencia'],
           'idtrabajador_por_proyecto' => $q_s['idtrabajador_por_proyecto'],
-          'numero_q_s' => ( empty($q_s['numero_q_s']) ? 0 : $q_s['numero_q_s']),
-          'fecha_q_s_inicio' => $q_s['fecha_q_s_inicio'],
-          'fecha_q_s_fin' => $q_s['fecha_q_s_fin'],
-          'total_hn' => (empty($q_s['total_hn']) ? 0 : $q_s['total_hn']),
-          'total_he' => (empty($q_s['total_he']) ? 0 : $q_s['total_he']),
-          'total_dias_asistidos' => (empty($q_s['total_dias_asistidos']) ? 0 : $q_s['total_dias_asistidos']),
-          'sabatical' => (empty($q_s['sabatical']) ? 0 : $q_s['sabatical']),
-          'sabatical_manual_1' => $q_s['sabatical_manual_1'],
-          'sabatical_manual_2' => $q_s['sabatical_manual_2'],
-          'pago_parcial_hn' => (empty($q_s['pago_parcial_hn']) ? 0 : $q_s['pago_parcial_hn']),
-          'pago_parcial_he' => (empty($q_s['pago_parcial_he']) ? 0 : $q_s['pago_parcial_he']),
-          'adicional_descuento' => ( empty($q_s['adicional_descuento']) ? 0 : $q_s['adicional_descuento']),
-          'descripcion_descuento' => $q_s['descripcion_descuento'],
-          'pago_quincenal' => ( empty($q_s['pago_quincenal']) ? 0 : $q_s['pago_quincenal']),
-          'estado_envio_contador' => $q_s['estado_envio_contador'],
-          'cant_rh' => (empty($cant_rh['data']) ? 0 : ( empty($cant_rh['data']['cant_rh']) ? 0 : floatval($cant_rh['data']['cant_rh']))),
+          'numero_q_s'                => ( empty($q_s['numero_q_s']) ? 0 : $q_s['numero_q_s']),
+          'fecha_q_s_inicio'          => $q_s['fecha_q_s_inicio'],
+          'fecha_q_s_fin'             => $q_s['fecha_q_s_fin'],
+          'total_hn'                  => (empty($q_s['total_hn']) ? 0 : $q_s['total_hn']),
+          'total_he'                  => (empty($q_s['total_he']) ? 0 : $q_s['total_he']),
+          'total_dias_asistidos'      => (empty($q_s['total_dias_asistidos']) ? 0 : $q_s['total_dias_asistidos']),
+          'sabatical'                 => (empty($q_s['sabatical']) ? 0 : $q_s['sabatical']),
+          'sabatical_manual_1'        => $q_s['sabatical_manual_1'],
+          'sabatical_manual_2'        => $q_s['sabatical_manual_2'],
+          'pago_parcial_hn'           => (empty($q_s['pago_parcial_hn']) ? 0 : $q_s['pago_parcial_hn']),
+          'pago_parcial_he'           => (empty($q_s['pago_parcial_he']) ? 0 : $q_s['pago_parcial_he']),
+          'adicional_descuento'       => ( empty($q_s['adicional_descuento']) ? 0 : floatval($q_s['adicional_descuento'])),
+          'descripcion_descuento_hn'  => $q_s['descripcion_descuento_hn'],
+          'descripcion_descuento_he'  => $q_s['descripcion_descuento_he'],
+          'pago_quincenal'            => ( empty($q_s['pago_quincenal']) ? 0 : $q_s['pago_quincenal']),
+          'estado_envio_contador'     => $q_s['estado_envio_contador'],
+          'cant_rh'                   => (empty($cant_rh['data']) ? 0 : ( empty($cant_rh['data']['cant_rh']) ? 0 : floatval($cant_rh['data']['cant_rh']))),
 
-          'deposito' => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : floatval($depositos['data']['deposito']))),
+          'deposito'                  => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : floatval($depositos['data']['deposito']))),
         ];
       }
     }
@@ -246,17 +250,21 @@ class PagoObrero
   // ::::::::::::::::::::::::::::::::::::::::::::: P A G O S  M U L T P L E S   O B R E R O S ::::::::::::::::::::::::::::::::::::::::::::::
   //listar botones de la quincena o semana
   public function listarquincenas_botones($nube_idproyecto) {
-    $sql = "SELECT p.idproyecto, p.fecha_inicio_actividad AS fecha_inicio, p.fecha_fin_actividad AS fecha_fin, p.plazo_actividad AS plazo, 
-    p.fecha_pago_obrero, p.fecha_valorizacion 
-    FROM proyecto as p WHERE p.idproyecto='$nube_idproyecto'";
-    return ejecutarConsultaSimpleFila($sql);
+    $sql = "SELECT sqa.ids_q_asistencia, sqa.idproyecto, sqa.numero_q_s, sqa.fecha_q_s_inicio, sqa.fecha_q_s_fin
+		FROM s_q_asistencia as sqa WHERE sqa.estado = '1' AND sqa.estado_delete = '1' AND sqa.idproyecto='$nube_idproyecto'";
+    $btn_asistencia =  ejecutarConsultaArray($sql); if ($btn_asistencia['status'] == false) {  return $btn_asistencia; }
+
+    $sql_2 = "SELECT fecha_inicio_actividad, fecha_fin_actividad FROM proyecto WHERE idproyecto = '$nube_idproyecto'";
+    $proyecto =  ejecutarConsultaSimpleFila($sql_2); if ($proyecto['status'] == false) {  return $proyecto; }
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' =>['btn_asistencia' =>$btn_asistencia['data'],'proyecto' => $proyecto['data'] ], ];
   }
 
   public function tabla_obreros_pago($nube_idproyecto, $num_quincena) {
     $data = [];
     $sql = "SELECT  rqsa.idresumen_q_s_asistencia, rqsa.idtrabajador_por_proyecto,  rqsa.numero_q_s, rqsa.fecha_q_s_inicio, rqsa.fecha_q_s_fin, 
-    rqsa.total_hn, rqsa.total_he, rqsa.total_dias_asistidos, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, rqsa.adicional_descuento, rqsa.descripcion_descuento, 
-    rqsa.pago_quincenal, rqsa.numero_comprobante, rqsa.recibos_x_honorarios, t.idtrabajador, t.nombres as trabajador, t.tipo_documento, t.numero_documento, t.imagen_perfil, 
+    rqsa.total_hn, rqsa.total_he, (rqsa.total_dias_asistidos_hn + rqsa.total_dias_asistidos_he) as total_dias_asistidos, rqsa.pago_parcial_hn, rqsa.pago_parcial_he, 
+    (rqsa.adicional_descuento_hn + rqsa.adicional_descuento_he ) as adicional_descuento, rqsa.descripcion_descuento_hn, rqsa.descripcion_descuento_he, 
+    (rqsa.pago_quincenal_hn + rqsa.pago_quincenal_he) as pago_quincenal, rqsa.numero_comprobante, rqsa.recibos_x_honorarios, t.idtrabajador, t.nombres as trabajador, t.tipo_documento, t.numero_documento, t.imagen_perfil, 
      o.nombre_ocupacion , tt.nombre as tipo_trabajador
     FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, trabajador as t, ocupacion AS o, tipo_trabajador as tt
     WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto  AND tpp.idtrabajador = t.idtrabajador  
@@ -283,32 +291,33 @@ class PagoObrero
 
         $data[] = [
           'idresumen_q_s_asistencia' => $trabajador['idresumen_q_s_asistencia'],
-          'idtrabajador_por_proyecto' => $trabajador['idtrabajador_por_proyecto'],
-          'numero_q_s' => ( empty($trabajador['numero_q_s']) ? 0 : $trabajador['numero_q_s']),
-          'fecha_q_s_inicio' => $trabajador['fecha_q_s_inicio'],
-          'fecha_q_s_fin' => $trabajador['fecha_q_s_fin'],
-          'total_hn' => (empty($trabajador['total_hn']) ? 0 : $trabajador['total_hn']),
-          'total_he' => (empty($trabajador['total_he']) ? 0 : $trabajador['total_he']),
-          'total_dias_asistidos' => (empty($trabajador['total_dias_asistidos']) ? 0 : $trabajador['total_dias_asistidos']),
-          'pago_parcial_hn' => (empty($trabajador['pago_parcial_hn']) ? 0 : $trabajador['pago_parcial_hn']),
-          'pago_parcial_he' => (empty($trabajador['pago_parcial_he']) ? 0 : $trabajador['pago_parcial_he']),
-          'adicional_descuento' => ( empty($trabajador['adicional_descuento']) ? 0 : $trabajador['adicional_descuento']),
-          'descripcion_descuento' => $trabajador['descripcion_descuento'],
-          'pago_quincenal' => ( empty($trabajador['pago_quincenal']) ? 0 : $trabajador['pago_quincenal']),
-          'cant_rh' => (empty($cant_rh['data']) ? 0 : ( empty($cant_rh['data']['cant_rh']) ? 0 : floatval($cant_rh['data']['cant_rh']))),
-          'trabajador' => $trabajador['trabajador'],
-          'tipo_documento' => $trabajador['tipo_documento'],
-          'numero_documento' => $trabajador['numero_documento'],
-          'imagen_perfil' => $trabajador['imagen_perfil'],
+          'idtrabajador_por_proyecto'=> $trabajador['idtrabajador_por_proyecto'],
+          'numero_q_s'               => ( empty($trabajador['numero_q_s']) ? 0 : $trabajador['numero_q_s']),
+          'fecha_q_s_inicio'         => $trabajador['fecha_q_s_inicio'],
+          'fecha_q_s_fin'            => $trabajador['fecha_q_s_fin'],
+          'total_hn'                 => (empty($trabajador['total_hn']) ? 0 : $trabajador['total_hn']),
+          'total_he'                 => (empty($trabajador['total_he']) ? 0 : $trabajador['total_he']),
+          'total_dias_asistidos'    => (empty($trabajador['total_dias_asistidos']) ? 0 : $trabajador['total_dias_asistidos']),
+          'pago_parcial_hn'         => (empty($trabajador['pago_parcial_hn']) ? 0 : $trabajador['pago_parcial_hn']),
+          'pago_parcial_he'         => (empty($trabajador['pago_parcial_he']) ? 0 : $trabajador['pago_parcial_he']),
+          'adicional_descuento'     => ( empty($trabajador['adicional_descuento']) ? 0 : $trabajador['adicional_descuento']),
+          'descripcion_descuento_hn'=> $trabajador['descripcion_descuento_hn'],
+          'descripcion_descuento_he'=> $trabajador['descripcion_descuento_he'],
+          'pago_quincenal'          => ( empty($trabajador['pago_quincenal']) ? 0 : $trabajador['pago_quincenal']),
+          'cant_rh'                 => (empty($cant_rh['data']) ? 0 : ( empty($cant_rh['data']['cant_rh']) ? 0 : floatval($cant_rh['data']['cant_rh']))),
+          'trabajador'              => $trabajador['trabajador'],
+          'tipo_documento'          => $trabajador['tipo_documento'],
+          'numero_documento'        => $trabajador['numero_documento'],
+          'imagen_perfil'           => $trabajador['imagen_perfil'],
 
-          'banco'           => (empty($bancos['data']) ? "": $bancos['data']['banco']), 
-          'cuenta_bancaria' => (empty($bancos['data']) ? "" : $bancos['data']['cuenta_bancaria']), 
-          'cci'             => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
+          'banco'                   => (empty($bancos['data']) ? "": $bancos['data']['banco']), 
+          'cuenta_bancaria'         => (empty($bancos['data']) ? "" : $bancos['data']['cuenta_bancaria']), 
+          'cci'                     => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
 
-          'nombre_ocupacion' => $trabajador['nombre_ocupacion'],
-          'tipo_trabajador' => $trabajador['tipo_trabajador'],
+          'nombre_ocupacion'        => $trabajador['nombre_ocupacion'],
+          'tipo_trabajador'         => $trabajador['tipo_trabajador'],
 
-          'deposito' => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : $depositos['data']['deposito'])),
+          'deposito'                => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['deposito']) ? 0 : $depositos['data']['deposito'])),
         ];
       }
     }

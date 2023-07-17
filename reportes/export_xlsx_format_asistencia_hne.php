@@ -138,7 +138,7 @@
       $hojaActiva->setCellValue('U' . $fila_1, floatval($reg['pago_parcial_hn']) + floatval($reg['pago_parcial_he']) );          # Pago parcial
 
       $hojaActiva->mergeCells('V' . $fila_1 . ':V' . $fila_1 + 1);                # unir columnas ---
-      $hojaActiva->setCellValue('V' . $fila_1, $reg['adicional_descuento']);      # Adicional descuento
+      $hojaActiva->setCellValue('V' . $fila_1, ($reg['adicional_descuento_hn'] + $reg['adicional_descuento_he']));      # Adicional descuento
 
       $hojaActiva->mergeCells('W' . $fila_1 . ':W' . $fila_1 + 1);                # unir columnas ---
       $hojaActiva->setCellValue('W' . $fila_1, floatval($reg['pago_quincenal_hn']) + floatval($reg['pago_quincenal_he']));        # Pago Semanal

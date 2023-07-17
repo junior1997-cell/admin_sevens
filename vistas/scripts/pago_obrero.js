@@ -19,8 +19,8 @@ function init() {
   $("#lPagosObrero").addClass("active");
 
   listar_botones_q_s(localStorage.getItem('nube_idproyecto')) ; 
-  sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
-
+  
+  listar_tbla_principal(localStorage.getItem('nube_idproyecto'));
   // efectuamos SUBMIT  registro de: PAGOS POR MES
   $("#guardar_registro_pagos_x_mes").on("click", function (e) { $("#submit-form-pagos-x-mes").submit(); });
 
@@ -153,7 +153,7 @@ function sumas_totales_tabla_principal(id_proyecto) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-// LISTAR TABLA PRINCIPAL
+// LISTAR TABLA PRINCIPAL 
 function listar_tbla_principal(id_proyecto) {   
   
   tabla_principal=$('#tabla-principal').dataTable({
@@ -163,7 +163,9 @@ function listar_tbla_principal(id_proyecto) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } }, { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } } ,      
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,14,15,16,17,18,2,3,19,20,5,6,7,21,9,10,11,12,13], } } ,      
     ],
     ajax:{
       url: `../ajax/pago_obrero.php?op=listar_tbla_principal&nube_idproyecto=${id_proyecto}`,
@@ -187,14 +189,8 @@ function listar_tbla_principal(id_proyecto) {
       // columna: sueldo
       if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
       // columna: pago a realizar
-      if (data[7] != '') {
-        var split = data[7].split(' '); //console.log(split);
-        var quitar_format_mil = quitar_formato_miles( split[1]);
-        if (parseFloat(quitar_format_mil) < 0) {
-          $("td", row).eq(7).addClass('text-right bg-danger');
-        }else{
-          $("td", row).eq(7).addClass('text-right');
-        }        
+      if (data[7] != '') {        
+        if (parseFloat(data[7]) < 0) { $("td", row).eq(7).addClass('text-right bg-danger'); }else{ $("td", row).eq(7).addClass('text-right');  } 
       }
       // columna: pago acumulado
       if (data[8] != '') { $("td", row).eq(8).addClass('text-center'); }  
@@ -214,12 +210,31 @@ function listar_tbla_principal(id_proyecto) {
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 5 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api1.column( 5 ).footer() ).html( `<span class="float-right">${formato_miles(total1)}</span>` ); 
+      
+      var api2 = this.api(); var total2 = api2.column( 7 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api2.column( 7 ).footer() ).html( ` <span >S/</span> <span >${formato_miles(total2)}</span>` );
+
+      var api3 = this.api(); var total3 = api3.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api3.column( 9 ).footer() ).html( ` <span >S/</span> <span >${formato_miles(total3)}</span>` );
+
+      var api4 = this.api(); var total4 = api4.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api4.column( 10 ).footer() ).html( `<span >${formato_miles(total4)}</span>` );
+
+      var api4 = this.api(); var total4 = api4.column( 21 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );   
+      $( api4.column( 8 ).footer() ).html( `<span  class="float-left">S/</span> <span  class="float-right">${formato_miles(total4)}</span>` );   
+      $( api4.column( 21 ).footer() ).html( `<span >S/</span> <span >${formato_miles(total4)}</span>` );
+    },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
       { targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [14,15,16,17,18,19,20,21], visible: false, searchable: false, },    
+      { targets: [14,15,16,17,18,19,20,21], visible: false, searchable: false, },  
+      { targets: [6,7,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
     ],
   }).DataTable(); 
   
@@ -329,7 +344,7 @@ function guardar_y_editar_recibos_x_honorarios(e) {
 
           detalle_q_s_trabajador(id_trabajdor_x_proyecto_r, tipo_pago_r, nombre_trabajador_r, cuenta_bancaria_r);
           trabajador_deuda_q_s(f1_load, f2_load, i_load, cant_dias_asistencia_load);
-          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
+          tabla_principal.ajax.reload(null, false);
           Swal.fire("Correcto!", "Recibo por honorario guardado correctamente", "success");         
           limpiar_form_recibos_x_honorarios();
           $("#modal-recibos-x-honorarios").modal("hide");        
@@ -602,7 +617,7 @@ function guardar_y_editar_pagos_x_q_s(e) {
           if (tabla_ingreso_pagos) {  tabla_ingreso_pagos.ajax.reload(null, false);  }
           if (tabla_pagos_modal) {  tabla_pagos_modal.ajax.reload(null, false); trabajador_deuda_q_s(f1_load, f2_load, i_load, cant_dias_asistencia_load);  }
 
-          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
+          tabla_principal.ajax.reload(null, false);
           Swal.fire("Correcto!", "Pago guardado correctamente", "success");         
           limpiar_pago_q_s();
           $("#modal-agregar-pago-trabajdor").modal("hide");        
@@ -701,7 +716,7 @@ function desactivar_pago_x_q_s(id) {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
-          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
+          tabla_principal.ajax.reload(null, false);
           Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
         } else {
           ver_errores(e);
@@ -727,7 +742,7 @@ function activar_pago_x_q_s(id) {
         e = JSON.parse(e);  console.log(e); 
         if (e.status == true) {
           tabla_ingreso_pagos.ajax.reload(null, false); 
-          sumas_totales_tabla_principal(localStorage.getItem('nube_idproyecto'));
+          tabla_principal.ajax.reload(null, false);
           Swal.fire("ReActivado!", "Tu registro ha sido ReActivado.", "success");
         } else {
           ver_errores(e);
@@ -789,106 +804,47 @@ function listar_botones_q_s(nube_idproyecto) {
   $('.btn_cargando_s_q').show();
 
   //Listar quincenas(botones)
-  $.post("../ajax/pago_obrero.php?op=listarquincenas_botones", { nube_idproyecto: nube_idproyecto }, function (e, status) {
+  $.post("../ajax/pago_obrero.php?op=listarquincenas_botones", { nube_idproyecto: nube_idproyecto }, function (e, status) {     
 
-    e =JSON.parse(e); //console.log(e);
+    e =JSON.parse(e); console.log(e);
+    var id_proyecto = localStorage.getItem('nube_idproyecto');
+    var nube_fecha_pago_obrero = localStorage.getItem('nube_fecha_pago_obrero');
 
-    if (e.status == true) {
-      // validamos la existencia de DATOS
-      if ( e.data.length === 0 ) {
-        $('#btn_quincenas_semanas').html(`<div class="alert alert-danger alert-dismissible">
+    var q_s_btn = "", q_s_dias = '' ;
+    if (nube_fecha_pago_obrero == "quincenal") { q_s_btn = 'Quincena'; q_s_dias ='14'; } else if (nube_fecha_pago_obrero == "semanal") {  q_s_btn = 'Semana'; q_s_dias ='7' }
+
+    if (e.status == true) {      
+      
+      if ( id_proyecto == null || id_proyecto == '' || id_proyecto == '0' ) { // validamos si abrio el proyecto
+        $('#btn_quincenas_semanas').html(`<div class="alert alert-danger alert-dismissible w-450px">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
           <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
-          No has definido las de fechas del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividades.
+          Lo mas probable es que no hayas selecionado un proyecto. <br>Clic en el <span class="bg-color-8eff27 p-1 rounded-lg text-dark"> <i class="fa-solid fa-screwdriver-wrench"></i> boton verde</span> para seleccionar alguno.
         </div>`);        
       } else {
-        if (e.data.fecha_inicio == '0000-00-00' || e.data.fecha_inicio == null || e.data.fecha_fin == '0000-00-00' || e.data.fecha_fin == null) {
-          $('#btn_quincenas_semanas').html(`<div class="alert alert-danger alert-dismissible">
+        var fecha_inicio = e.data.proyecto.fecha_inicio_actividad;  
+        var fecha_fin    = e.data.proyecto.fecha_fin_actividad;
+        if ( fecha_inicio == null || fecha_inicio == '' ||  fecha_fin == null || fecha_fin == '') {  // validamos si tiene las fechas
+          $('#btn_quincenas_semanas').html(`<div class="alert alert-danger alert-dismissible w-450px">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fas fa-times text-white"></i></button>
             <h3><i class="icon fas fa-exclamation-triangle"></i> Alert!</h3>
-            No has definido las de fechas del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividades.
+            No has definido las de <b>fechas de actividad</b> d del proyecto. <br>Clic en el <span class="bg-green p-1 rounded-lg"> <i class="far fa-calendar-alt"></i> boton verde</span> para actualizar las fechas de actividad.
           </div>`);
         } else {        
-        
-          var dia_regular = 0; var weekday_regular = extraer_dia_semana(e.data.fecha_inicio); var estado_regular = false;
-
-          if (weekday_regular == "do") { dia_regular = -1; } else { if (weekday_regular == "lu") { dia_regular = -2; } else { if (weekday_regular == "ma") { dia_regular = -3; } else { if (weekday_regular == "mi") { dia_regular = -4; } else { if (weekday_regular == "ju") { dia_regular = -5; } else { if (weekday_regular == "vi") { dia_regular = -6; } else { if (weekday_regular == "sa") { dia_regular = -7; } } } } } } }
-          // console.log(e.data.fecha_inicio, dia_regular, weekday_regular);
-          if (e.data.fecha_pago_obrero == "quincenal") {
-
-            $('#btn_quincenas_semanas').html('');
-
-            var fecha = format_d_m_a(e.data.fecha_inicio); //console.log(fecha);
-
-            var fecha_i = sumaFecha(0,fecha);   var cal_quincena  = e.data.plazo/14;
-
-            var i=0; var cont=0; 
-
-            while (i <= cal_quincena) {
-
-              cont=cont+1; var fecha_inicio = fecha_i;
-
-              if (estado_regular) {
-                fecha=sumaFecha(13,fecha_inicio);     //console.log(fecha_inicio+'-'+fecha);
-              } else {
-                fecha=sumaFecha(14+dia_regular,fecha_inicio); estado_regular = true;     //console.log(fecha_inicio+'-'+fecha);
-              }
-               
-              if (validarFechaEnRango(format_a_m_d( fecha_inicio), format_a_m_d(fecha), moment().format('YYYY-MM-DD')) == true) {
-                $('#btn_q_s_actual').html(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-success btn-sm text-center " onclick="trabajador_deuda_q_s('${fecha_inicio}', '${fecha}', ${i}, 14); table_show_hide(4); pintar_boton_selecionado_succes(${i});"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`);                
-              } else {
-                $('#btn_quincenas_semanas').append(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="trabajador_deuda_q_s('${fecha_inicio}', '${fecha}', ${i}, 14); table_show_hide(4); pintar_boton_selecionado(${i});"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_inicio} // ${fecha}</button>`);
-              }
-
-              fecha_i =sumaFecha(1,fecha);
-              i++;
+          
+          $('#btn_quincenas_semanas').html('');
+          e.data.btn_asistencia.forEach((val, key) => {
+            if (validarFechaEnRango( val.fecha_q_s_inicio, val.fecha_q_s_fin, moment().format('YYYY-MM-DD')) == true) {
+              $('#btn_q_s_actual').html(` <button type="button" id="boton-${key}" class="mb-2 btn bg-gradient-success btn-sm text-center " onclick="trabajador_deuda_q_s('${val.fecha_q_s_inicio}', '${val.fecha_q_s_fin}', ${key}, 14); table_show_hide(4); pintar_boton_selecionado_succes(${key});"><i class="far fa-calendar-alt"></i> Quincena ${val.numero_q_s}<br>${val.fecha_q_s_inicio} // ${val.fecha_q_s_fin}</button>`);                
+            } else{
+              $('#btn_quincenas_semanas').append(` <button id="boton-${key}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="trabajador_deuda_q_s('${val.fecha_q_s_inicio}', '${val.fecha_q_s_fin}', ${key}, 7); table_show_hide(4); pintar_boton_selecionado(${key});"><i class="far fa-calendar-alt"></i> Semana ${val.numero_q_s}<br>${val.fecha_q_s_inicio} // ${val.fecha_q_s_fin}</button>`);
             }
-          } else {
-            if (e.data.fecha_pago_obrero == "semanal") {
 
-              $('#btn_quincenas_semanas').html('');
-
-              var fecha = format_d_m_a(e.data.fecha_inicio);  var fecha_f = ""; var fecha_i = ""; //e.data.fecha_inicio
-
-              var cal_mes  = false; var i=0;  var cont=0;
-
-              while (cal_mes == false) {
-
-                cont = cont+1; fecha_i = fecha;
-
-                if (estado_regular) {
-                  fecha_f = sumaFecha(6, fecha_i);
-                } else {
-                  fecha_f = sumaFecha(7+dia_regular, fecha_i); estado_regular = true;
-                }            
-
-                let val_fecha_f = new Date( format_a_m_d(fecha_f) ); let val_fecha_proyecto = new Date(e.data.fecha_fin);
-                
-                // console.log(fecha_f + ' - '+e.data.fecha_fin);
-
-                
-                if (validarFechaEnRango(format_a_m_d( fecha_i), format_a_m_d(fecha_f), moment().format('YYYY-MM-DD')) == true) {
-                  $('#btn_q_s_actual').html(` <button type="button" id="boton-${i}" class="mb-2 btn bg-gradient-success btn-sm text-center " onclick="trabajador_deuda_q_s('${fecha_i}', '${fecha_f}', ${i}, 14); table_show_hide(4); pintar_boton_selecionado_succes(${i});"><i class="far fa-calendar-alt"></i> Quincena ${cont}<br>${fecha_i} // ${fecha_f}</button>`);                
-                } else{
-                  $('#btn_quincenas_semanas').append(` <button id="boton-${i}" type="button" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="trabajador_deuda_q_s('${fecha_i}', '${fecha_f}', ${i}, 7); table_show_hide(4); pintar_boton_selecionado(${i});"><i class="far fa-calendar-alt"></i> Semana ${cont}<br>${fecha_i} // ${fecha_f}</button>`);
-                }
-
-                if (val_fecha_f.getTime() >= val_fecha_proyecto.getTime()) { cal_mes = true; }else{ cal_mes = false;}
-                fecha = sumaFecha(1,fecha_f);
-                i++;
-              } 
-            } else { 
-              $('#btn_quincenas_semanas').html(`<div class="info-box shadow-lg w-600px"> 
-                <span class="info-box-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></span> 
-                <div class="info-box-content"> 
-                  <span class="info-box-text">Alerta</span> 
-                  <span class="info-box-number">No has definido los bloques de fechas del proyecto. <br>Ingresa al ESCRITORIO y EDITA tu proyecto selecionado.</span> 
-                </div> 
-              </div>`);
-            }
-          }
+            // $('#lista_quincenas').append(` <button type="button" id="boton-${key}" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="datos_quincena('${val.ids_q_asistencia}', '${format_d_m_a(val.fecha_q_s_inicio)}', '${format_d_m_a(val.fecha_q_s_fin)}', '${key}', ${q_s_dias});"><i class="far fa-calendar-alt"></i> ${q_s_btn} ${val.numero_q_s}<br>${format_d_m_a(val.fecha_q_s_inicio)} // ${format_d_m_a(val.fecha_q_s_fin)}</button>`)
+            
+          });        
         }
-      }
+      }        
     } else {
       ver_errores(e);
     }
@@ -1066,12 +1022,17 @@ function modal_pago_obrero(idresumen_q_s_asistencia, fecha_i, fecha_f, pago_quin
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 4 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api1.column( 4 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total1)}</span>` );     
+    },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
       { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
-      //{ targets: [8,11],  visible: false,  searchable: false,  },
+      { targets: [4], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+
     ],
   }).DataTable();
 }
