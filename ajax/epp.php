@@ -19,68 +19,28 @@
       $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
       
+      $idepp = isset($_POST["idepp"]) ? $_POST["idepp"] : ""; 
       $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
-      $idotro_gasto = isset($_POST["idotro_gasto"]) ? limpiarCadena($_POST["idotro_gasto"]) : "";      
-      $fecha_g = isset($_POST["fecha_g"]) ? limpiarCadena($_POST["fecha_g"]) : "";
-      $forma_pago = isset($_POST["forma_pago"]) ? limpiarCadena($_POST["forma_pago"]) : "";
-      $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
-      $nro_comprobante = isset($_POST["nro_comprobante"]) ? limpiarCadena($_POST["nro_comprobante"]) : "";
-      $subtotal = isset($_POST["subtotal"]) ? limpiarCadena($_POST["subtotal"]) : "";
-      $igv = isset($_POST["igv"]) ? limpiarCadena($_POST["igv"]) : "";
-      $val_igv          = isset($_POST["val_igv"])? limpiarCadena($_POST["val_igv"]):"";
-      $tipo_gravada     = isset($_POST["tipo_gravada"])? limpiarCadena($_POST["tipo_gravada"]):"";  
-      
-      $precio_parcial = isset($_POST["precio_parcial"]) ? limpiarCadena($_POST["precio_parcial"]) : "";
-      $descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+      $idtrabajador_por_proyecto = isset($_POST["idtrabajador_por_proyecto"]) ? limpiarCadena($_POST["idtrabajador_por_proyecto"]) : "";           
+      $fecha_g = isset($_POST["fecha_g"]) ? $_POST["fecha_g"] : "";      
+      $id_insumo = isset($_POST["id_insumo"]) ? $_POST["id_insumo"] : "";      
+      $cantidad = isset($_POST["cantidad"]) ? $_POST["cantidad"] : ""; 
+      $marca = isset($_POST["marca"]) ? $_POST["marca"] : ""; 
 
-      $ruc = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
-      $razon_social = isset($_POST["razon_social"]) ? limpiarCadena($_POST["razon_social"]) : "";
-      $direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
-      $glosa = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
-
-      $foto2 = isset($_POST["doc1"]) ? limpiarCadena($_POST["doc1"]) : "";
+      //$idepp,$idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad
       
       switch ($_GET["op"]) {
         case 'guardaryeditar':
-          // Comprobante
-          if (!file_exists($_FILES['doc1']['tmp_name']) || !is_uploaded_file($_FILES['doc1']['tmp_name'])) {
-      
-            $comprobante = $_POST["doc_old_1"];
-      
-            $flat_ficha1 = false;
-      
-          } else {
-      
-            $ext1 = explode(".", $_FILES["doc1"]["name"]);
-      
-            $flat_ficha1 = true;
-      
-            $comprobante = $date_now .' '.random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
-      
-            move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/otro_gasto/comprobante/" . $comprobante);
-          }
-      
-          if (empty($idotro_gasto)) {
+
+          if (empty($idepp)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $epp->insertar($idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion, $glosa);
+            $rspta = $epp->insertar($idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad,$marca);
             
             echo json_encode($rspta,true);
       
           } else {
-            //validamos si existe comprobante para eliminarlo
-            if ($flat_ficha1 == true) {
-      
-              $datos_ficha1 = $epp->ficha_tec($idotro_gasto);
-      
-              $ficha1_ant = $datos_ficha1['data']->fetch_object()->comprobante;
-      
-              if ($ficha1_ant != "") {
-      
-                unlink("../dist/docs/otro_gasto/comprobante/" . $ficha1_ant);
-              }
-            }
-      
-            $rspta = $epp->editar($idotro_gasto, $idproyecto, $fecha_g, $precio_parcial, $subtotal, $igv,$val_igv,$tipo_gravada, $descripcion, $forma_pago, $tipo_comprobante, $nro_comprobante, $comprobante, $ruc, $razon_social, $direccion,$glosa);
+
+            $rspta = $epp->editar($idepp,$idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad,$marca);
             //var_dump($idotro_gasto,$idproveedor);
             echo json_encode($rspta,true);
           }
@@ -148,41 +108,65 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
         break;
-      
-        case 'total':
-          // $idproyecto,$fecha_1,$fecha_2,$id_proveedor,$comprobante
-          $rspta = $epp->total($_POST['idproyecto'], $_POST['fecha_1'], $_POST['fecha_2'], $_POST['id_proveedor'], $_POST['comprobante'], $_POST['glosa'] );
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta,true);
-      
+        case 'listar_epp_trabajdor':
+          $rspta = $epp->listar_epp_trabajdor($_GET["id_tpp"]);
+          //Vamos a declarar un array
+          $data = [];
+          
+          $cont = 1;
+          if ($rspta['status'] == true) {
+            while ($reg = $rspta['data']->fetch_object()) {
+
+              $data[] = [
+                "0" => $cont++,
+                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idalmacen_x_proyecto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_color(' . $reg->idalmacen_x_proyecto .', \''.encodeCadenaHtml($reg->producto).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
+                "2" => $reg->producto,
+                "3" => $reg->cantidad,
+                "4" => $reg->fecha_ingreso,
+                
+              ];
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
+            ];
+            echo json_encode($results);
+          } else {
+
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
         break;
       
-        // case 'selecct_provedor_og':
+      
+        case 'select_2_insumos_pp':
 
-        //   $rspta = $epp->selecct_provedor_og($_GET['idproyecto']); $cont = 1; $data = "";
+          $rspta = $epp->select_2_insumos_pp($_GET['idproyecto']); $cont = 1; $data = "";
 
-        //   if ($rspta['status'] == true) {
-  
-        //     foreach ($rspta['data'] as $key => $value) {  
+          if ($rspta['status'] == true) {
 
-        //         $data .= '<option value=' .$value['ruc']. '>'.( !empty($value['razon_social']) ? $value['razon_social'].' - ' : '') .$value['ruc'].'</option>';
-    
-        //     }
-  
-        //     $retorno = array(
-        //       'status' => true, 
-        //       'message' => 'Salió todo ok', 
-        //       'data' => '<option value="vacio">Sin proveedor</option>'.$data, 
-        //     );
-    
-        //     echo json_encode($retorno, true);
-  
-        //   } else {
-  
-        //     echo json_encode($rspta, true); 
-        //   }
+            foreach ($rspta['data'] as $key => $value) {  
 
-        // break;
+                $data .= '<option value=' .$value['idproducto']. ' data-nombre="'.$value['nombre_producto'].'" data-marca="'.$value['marca'] .'"  data-modelo="'.$value['modelo'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
+
+            }
+
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => '<option value="vacio">Sin insumo</option>'.$data, 
+            );
+
+            echo json_encode($retorno, true);
+
+          } else {
+
+            echo json_encode($rspta, true); 
+          }
+
+        break;
 
         case 'salir':
           //Limpiamos las variables de sesión
