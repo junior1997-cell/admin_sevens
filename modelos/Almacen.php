@@ -13,13 +13,13 @@ class Almacen
 		$this->id_usr_sesion = $id_usr_sesion;
 	}
 
-  public function insertar_almacen($fecha_ingreso, $dia_ingreso, $idproducto, $cantidad){
+  public function insertar_almacen($fecha_ingreso, $dia_ingreso, $idproducto, $marca, $cantidad){
 
     $ii = 0;
     while ($ii < count($idproducto)) {
       
       $sql_0 = "INSERT INTO almacen_x_proyecto(idproducto, fecha_ingreso, dia_ingreso, cantidad, marca, user_created)
-      VALUES ('$idproducto[$ii]','$fecha_ingreso', '$dia_ingreso',  '$cantidad[$ii]', '','$this->id_usr_sesion')";         
+      VALUES ('$idproducto[$ii]','$fecha_ingreso', '$dia_ingreso',  '$cantidad[$ii]', '$marca[$ii]','$this->id_usr_sesion')";         
       $new_almancen = ejecutarConsulta_retornarID($sql_0); if ( $new_almancen['status'] == false) {return $new_almancen; }  
       $id = $new_almancen['data'];
       //add registro en nuestra bitacora
@@ -32,22 +32,25 @@ class Almacen
     return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
   }
 
-  public function editar_almacen($idalmacen_x_proyecto, $fecha_ingreso, $dia_ingreso, $idproducto, $cantidad){
+  public function editar_almacen($fecha_ingreso, $dia_ingreso, $idproducto, $marca, $cantidad){
 
-    $ii = 0;
-    while ($ii < count($idproducto)) {
+  }
+
+  public function insertar_almacen_x_dia( $producto_xp, $fecha_ingreso_xp, $dia_ingreso_xp, $marca_xp, $cantidad_xp){ 
+
+  }
+
+  public function editar_almacen_x_dia($idalmacen_x_proyecto_xp, $producto_xp, $fecha_ingreso_xp, $dia_ingreso_xp, $marca_xp, $cantidad_xp){    
       
-      $sql_0 = "INSERT INTO almacen_x_proyecto(idproducto, fecha_ingreso, dia_ingreso, cantidad, marca, user_created)
-      VALUES ('$idproducto[$ii]','$fecha_ingreso', '$dia_ingreso',  '$cantidad[$ii]', '','$this->id_usr_sesion')";         
-      $new_almancen = ejecutarConsulta_retornarID($sql_0); if ( $new_almancen['status'] == false) {return $new_almancen; }  
-      $id = $new_almancen['data'];
-      //add registro en nuestra bitacora
-      $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_x_proyecto','$id','Crear registro','$this->id_usr_sesion')";
-      $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }  
-
-      $ii++;
-    }
-   
+    $sql_0 = "UPDATE almacen_x_proyecto SET idproducto='$producto_xp',fecha_ingreso='$fecha_ingreso_xp',dia_ingreso='$dia_ingreso_xp',
+    cantidad='$cantidad_xp',marca='$marca_xp', user_updated='$this->id_usr_sesion' 
+    WHERE idalmacen_x_proyecto='$idalmacen_x_proyecto_xp';";         
+    $new_almancen = ejecutarConsulta($sql_0); if ( $new_almancen['status'] == false) {return $new_almancen; }  
+    
+    //add registro en nuestra bitacora
+    $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_x_proyecto','$idalmacen_x_proyecto_xp','Actualizar registro','$this->id_usr_sesion')";
+    $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }  
+    
     return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
   }
 
@@ -129,7 +132,7 @@ class Almacen
         'idcompra_proyecto' => $val1['idcompra_proyecto'],
         'iddetalle_compra'  => $val1['iddetalle_compra'],
         'idproducto'        => $val1['idproducto'],
-        'cantidad'          => $val1['cantidad'],
+        'cantidad'          => empty($val1['cantidad']) ? 0 : floatval($val1['cantidad']) ,
         'marca'             => $val1['marca'],
         'nombre_medida'     => $val1['nombre_medida'],
         'abreviacion'       => $val1['abreviacion'],
@@ -153,11 +156,54 @@ class Almacen
     ];
   }
 
+  public function ver_almacen( $id_proyecto, $id_almacen, $id_producto,  ) {
+
+    $sql_0 = "SELECT idalmacen_x_proyecto, idproducto, idtrabajador_por_proyecto, fecha_ingreso, dia_ingreso, cantidad, marca 
+    FROM almacen_x_proyecto WHERE idalmacen_x_proyecto = '$id_almacen';";    
+    $almacen = ejecutarConsultaSimpleFila($sql_0);
+
+    $sql_0 = "SELECT  dc.marca,  pr.nombre AS nombre_producto
+		FROM compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
+		WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto     
+    AND cpp.idproyecto = '$id_proyecto' AND dc.idproducto = '$id_producto'
+    AND cpp.estado = '1' AND cpp.estado_delete = '1'  GROUP BY dc.idproducto, dc.marca ORDER BY pr.nombre ASC;";    
+    $marcas = ejecutarConsultaArray($sql_0);
+
+    $data = [
+      'idalmacen_x_proyecto' => $almacen['data']['idalmacen_x_proyecto'],
+      'idproducto'          => $almacen['data']['idproducto'],
+      'idtrabajador_por_proyecto' => $almacen['data']['idtrabajador_por_proyecto'],
+      'fecha_ingreso'       => $almacen['data']['fecha_ingreso'],
+      'dia_ingreso'         => $almacen['data']['dia_ingreso'],
+      'cantidad'            => $almacen['data']['cantidad'],
+      'marca'               => $almacen['data']['marca'],      
+      'marca_array'               => $marcas['data'],      
+    ];
+
+    return $retorno = [
+      'status'  => true, 
+      'data'    => $data , 
+      'message' => 'todo bien'
+    ];
+          
+  }
+
   public function tbla_ver_almacen($fecha, $id_producto) {
 
-    $sql_0 = "SELECT axp.idalmacen_x_proyecto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca, axp.estado, p.nombre as producto, p.imagen
+    $sql_0 = "SELECT axp.idalmacen_x_proyecto, axp.idproducto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca, axp.estado, p.nombre as producto, p.imagen
     FROM almacen_x_proyecto as axp, producto as p
     WHERE axp.idproducto = p.idproducto AND axp.fecha_ingreso = '$fecha' AND axp.idproducto ='$id_producto' AND axp.estado = '1' AND axp.estado_delete = '1' ORDER BY p.nombre ASC;";    
+    return ejecutarConsultaArray($sql_0);
+          
+  }
+
+  public function marcas_x_producto($id_proyecto, $id_producto) {
+
+    $sql_0 = "SELECT  dc.marca,  pr.nombre AS nombre_producto
+		FROM compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
+		WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto     
+    AND cpp.idproyecto = '$id_proyecto' AND dc.idproducto = '$id_producto'
+    AND cpp.estado = '1' AND cpp.estado_delete = '1'  GROUP BY dc.idproducto, dc.marca ORDER BY pr.nombre ASC;";    
     return ejecutarConsultaArray($sql_0);
           
   }

@@ -23,15 +23,36 @@
       $fecha_ingreso	= isset($_POST["fecha_ingreso"])? limpiarCadena($_POST["fecha_ingreso"]):"";
       $dia_ingreso	  = isset($_POST["dia_ingreso"])? limpiarCadena($_POST["dia_ingreso"]):"";
 
+      // ::::::::::::::::::: ALMACEN X DIA ::::::::::::::::::::::::::::::::::::::::::::
+
+      $idalmacen_x_proyecto_xp= isset($_POST["idalmacen_x_proyecto_xp"])? limpiarCadena($_POST["idalmacen_x_proyecto_xp"]):"";      
+      $producto_xp	          = isset($_POST["producto_xp"])? limpiarCadena($_POST["producto_xp"]):"";
+      $fecha_ingreso_xp	      = isset($_POST["fecha_ingreso_xp"])? limpiarCadena($_POST["fecha_ingreso_xp"]):"";
+      $dia_ingreso_xp	        = isset($_POST["dia_ingreso_xp"])? limpiarCadena($_POST["dia_ingreso_xp"]):"";
+      $marca_xp	              = isset($_POST["marca_xp"])? limpiarCadena($_POST["marca_xp"]):"";
+      $cantidad_xp	          = isset($_POST["cantidad_xp"])? limpiarCadena($_POST["cantidad_xp"]):"";
+
       switch ($_GET["op"]) {  
 
         case 'guardar_y_editar_almacen':
 
           if (empty($idalmacen_x_proyecto)) {
-            $rspta = $almacen->insertar_almacen($fecha_ingreso, $dia_ingreso, $_POST["idproducto"], $_POST["cantidad"] );
+            $rspta = $almacen->insertar_almacen($fecha_ingreso, $dia_ingreso, $_POST["idproducto"], $_POST["marca"], $_POST["cantidad"] );
             echo json_encode($rspta, true);
           } else {
-            $rspta = $almacen->editar_almacen($idalmacen_x_proyecto, $fecha_ingreso, $dia_ingreso, $_POST["idproducto"], $_POST["cantidad"]);
+            $rspta = $almacen->editar_almacen($idalmacen_x_proyecto, $fecha_ingreso, $dia_ingreso, $_POST["idproducto"], $_POST["marca"], $_POST["cantidad"]);
+            echo json_encode($rspta, true);
+          }
+          
+        break; 
+
+        case 'guardar_y_editar_almacen_x_dia':
+
+          if (empty($idalmacen_x_proyecto_xp)) {
+            $rspta = $almacen->insertar_almacen_x_dia($producto_xp, $fecha_ingreso_xp, $dia_ingreso_xp, $marca_xp, $cantidad_xp );
+            echo json_encode($rspta, true);
+          } else {
+            $rspta = $almacen->editar_almacen_x_dia($idalmacen_x_proyecto_xp, $producto_xp, $fecha_ingreso_xp, $dia_ingreso_xp, $marca_xp, $cantidad_xp);
             echo json_encode($rspta, true);
           }
           
@@ -42,7 +63,13 @@
           // $rspta = $almacen->tbla_principal(6, '2023-04-18', '2023-04-22', 'semanal' );
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
-        break;   
+        break;  
+
+        case 'ver_almacen':
+          $rspta = $almacen->ver_almacen( $_POST["id_proyecto"], $_POST["id_almacen"], $_POST["id_producto"] );          
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break;    
         
         case 'tbla-ver-almacen':          
 
@@ -53,12 +80,11 @@
 
           if ($rspta['status'] == true) {
 
-            foreach ($rspta['data'] as $key => $val) {             
-              
+            foreach ($rspta['data'] as $key => $val) {               
           
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar('.$val['idalmacen_x_proyecto'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
+                "1"=>'<button class="btn btn-warning btn-sm" onclick="ver_editar_almacen_x_dia('.$val['idalmacen_x_proyecto'].', '. $val['idproducto'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
                   ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$val['idalmacen_x_proyecto'].', \''.encodeCadenaHtml($val['producto']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',
                 "2"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['producto'] .'</p></span> </div>',
                 "3"=> $val['cantidad'],
@@ -95,6 +121,12 @@
             echo json_encode($rspta, true); 
           }
         break;
+
+        case 'marcas_x_producto':
+          $rspta = $almacen->marcas_x_producto($_POST["id_proyecto"], $_POST["id_producto"]);          
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break; 
 
         default: 
           $rspta = ['status'=>'error_code', 'message'=>'Te has confundido en escribir en el <b>swich.</b>', 'data'=>[]]; echo json_encode($rspta, true); 

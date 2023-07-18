@@ -632,6 +632,19 @@ table th { vertical-align: top !important; }
 .font-size-29px{ font-size: 29px; }
 .font-size-30px{ font-size: 30px; }
 
+
+
+/*  ══════════════════════════════════════════ - B O R D E  H R - ══════════════════════════════════════════ */
+/* plomo */
+.borde-arriba-0000001a{ border-top: 1px solid #0000001a; }
+.borde-arriba-plomo{ border-top: 1px solid #8b8b8e; }
+
+/* rojo */
+.borde-arriba-rojo{ border-top: 1px solid #FF0000; }
+
+/* verde */
+.borde-arriba-verde{ border-top: 1px solid #008f39; }
+
 /*  ══════════════════════════════════════════ - B O R D E R   R A D I U S - ══════════════════════════════════════════ */
 .b-radio-0px{ border-radius: 0px; }
 .b-radio-1px{ border-radius: 1px; }

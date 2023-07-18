@@ -356,7 +356,7 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
                           </div> 
 
-                          <!-- Correo electronico -->
+                          <!-- Correo electronico --> 
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
                               <label for="fecha_ingreso">Fecha</label>
@@ -365,8 +365,12 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
                           </div>   
 
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12" >
-                            <div class="row" id="html_producto"> 
+                          <div class="col-12 pl-0">
+                            <div class="text-primary"><label for="">Productos agregados </label></div>
+                          </div>
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                            <div class="row" id="html_producto" > 
                               <span> Seleccione un producto</span>
                             </div>
                           </div>                                                 
@@ -403,13 +407,18 @@ if (!isset($_SESSION["nombre"])) {
               <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Ver almacen x dia</h4>
+                    <h4 class="modal-title">
+                      <button type="button" class="btn bg-gradient-warning btn-regresar" onclick="show_hide_form(1);" style="display: none;" >
+                        <i class="fa-solid fa-arrow-left"></i> Regresar
+                      </button>
+                      Ver almacen x dia</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
                   </div>
 
                   <div class="modal-body">
+                    
                     <div class="div-tabla-ver-almacen-x-dia">
                       <table id="tabla-ver-almacen" class="table table-bordered table-striped display" style="width: 100% !important;">
                         <thead>
@@ -435,40 +444,50 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     
                     <!-- form start -->
-                    <form id="form-almacenx-dia" name="form-almacenx-dia" method="POST" style="display: none;">
+                    <form id="form-almacen-x-dia" name="form-almacen-x-dia" method="POST" style="display: none;">
                       <div class="card-body">
                         <div class="row" id="cargando-3-fomulario">
                           <!-- id trabajador -->
-                          <input type="hidden" name="idalmacen_x_proyecto" id="idalmacen_x_proyecto" />
+                          <input type="hidden" name="idalmacen_x_proyecto_xp" id="idalmacen_x_proyecto_xp" />
 
-                          <!-- Tipo de documento -->
-                          <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                          <!-- Producto -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                             <div class="form-group">
-                              <label for="producto">Producto <span class="cargando_productos"></span> </label>
-                              <select name="producto" id="producto" class="form-control" placeholder="Producto" onchange="add_producto(this);">                                
+                              <label for="producto_xp">Producto <span class="cargando_productos"></span> </label>
+                              <select name="producto_xp" id="producto_xp" class="form-control" placeholder="Producto" >                                
                               </select>
                             </div>
-                          </div> 
+                          </div>                            
 
-                          <!-- Correo electronico -->
+                          <!-- Fecha -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
                               <label for="fecha_ingreso">Fecha</label>
-                              <input type="date" name="fecha_ingreso" class="form-control" id="fecha_ingreso" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
-                              <input type="hidden" name="dia_ingreso" id="dia_ingreso" />
+                              <input type="date" name="fecha_ingreso_xp" id="fecha_ingreso_xp" class="form-control"  placeholder="Fecha"  onchange="obtener_dia_ingreso(this);" />
+                              <input type="hidden" name="dia_ingreso_xp" id="dia_ingreso_xp" />
                             </div>
                           </div>   
 
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12" >
-                            <div class="row" id="html_producto"> 
-                              <span> Seleccione un producto</span>
+                          <!-- Marcas -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="marca_xp">Marcas</label>
+                              <select name="marca_xp" id="marca_xp" class="form-control" ></select>                             
                             </div>
-                          </div>                                                 
+                          </div>  
+
+                          <!-- Cantidad -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="cantidad_xp">Cantidad</label>
+                              <input type="number" name="cantidad_xp" class="form-control" id="cantidad_xp" placeholder="Cantidad" />                              
+                            </div>
+                          </div>                                                                       
 
                           <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_almacen_div">
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_almacen_x_dia_div">
                             <div class="progress">
-                              <div id="barra_progress_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              <div id="barra_progress_almacen_x_dia" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                 0%
                               </div>
                             </div>
@@ -481,12 +500,12 @@ if (!isset($_SESSION["nombre"])) {
                         </div>
                       </div>
                       <!-- /.card-body -->
-                      <button type="submit" style="display: none;" id="submit-form-almacen">Submit</button>
+                      <button type="submit" style="display: none;" id="submit-form-almacen-x-dia">Submit</button>
                     </form>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen();" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen_x_dia();" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen_x_dia" style="display: none;">Guardar Cambios</button>
                   </div>
                 </div>
               </div>
