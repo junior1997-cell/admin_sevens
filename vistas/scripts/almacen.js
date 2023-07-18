@@ -459,8 +459,8 @@ function add_producto(data) {
     if ($(`#html_producto div`).hasClass(`delete_multiple_${idproducto}`)) { // validamos si exte el producto agregado
       toastr_error('Existe!!', `<u>${textproducto}</u>, Este producto ya ha sido agregado`);
     } else {      
-      $('#html_producto').append(`<div class="col-lg-12 borde-arriba-0000001a mt-2 mb-2"> 
-      </div><div class="col-12 col-sm-12 col-md-6 col-lg-6 delete_multiple_${idproducto}" >
+      $('#html_producto').append(`<div class="col-lg-12 borde-arriba-0000001a mt-2 mb-2 delete_multiple_${idproducto}"></div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 delete_multiple_${idproducto}" >
         <input type="hidden" name="idproducto[]" value="${idproducto}" />        
         <div class="form-group">
           <label for="fecha_ingreso">Nombre Producto</label>
