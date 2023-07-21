@@ -44,6 +44,7 @@
             //var_dump($idotro_gasto,$idproveedor);
             echo json_encode($rspta,true);
           }
+
         break;
       
         case 'desactivar':
@@ -64,20 +65,12 @@
       
         case 'mostrar':
       
-          $rspta = $epp->mostrar($idotro_gasto);
+          $rspta = $epp->mostrar($idepp);
           //Codificar el resultado utilizando json
           echo json_encode($rspta,true);
       
         break;
-      
-        case 'verdatos':
-      
-          $rspta = $epp->mostrar($idotro_gasto);
-          //Codificar el resultado utilizando json
-          echo json_encode($rspta,true);
-      
-        break;
-      
+            
         case 'listar_trabajdor':
           $rspta = $epp->trabajador_proyecto($_GET["idproyecto"]);
           //Vamos a declarar un array
@@ -108,6 +101,7 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
         break;
+
         case 'listar_epp_trabajdor':
           $rspta = $epp->listar_epp_trabajdor($_GET["id_tpp"]);
           //Vamos a declarar un array
@@ -120,10 +114,11 @@
               $data[] = [
                 "0" => $cont++,
                 "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idalmacen_x_proyecto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_color(' . $reg->idalmacen_x_proyecto .', \''.encodeCadenaHtml($reg->producto).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_detalle(' . $reg->idalmacen_x_proyecto .', \''.encodeCadenaHtml($reg->producto).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
                 "2" => $reg->producto,
-                "3" => $reg->cantidad,
-                "4" => $reg->fecha_ingreso,
+                "3" => $reg->marca,
+                "4" => $reg->cantidad,
+                "5" => $reg->fecha_ingreso,
                 
               ];
             }
@@ -139,7 +134,6 @@
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }
         break;
-      
       
         case 'select_2_insumos_pp':
 
@@ -166,6 +160,14 @@
             echo json_encode($rspta, true); 
           }
 
+        break;
+
+        case 'marcas_x_insumo':
+      
+          $rspta = $epp->marcas_x_insumo($_POST['id_insumo'], $_POST['idproyecto']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta,true);
+      
         break;
 
         case 'salir':

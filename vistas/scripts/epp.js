@@ -4,6 +4,7 @@ var codigoHTML = '';
 var miArray = [];
 var i_Array = [];
 var fecha_1_r = "", fecha_2_r = "", id_proveedor_r = "", comprobante_r = "", glosa_r = "";
+var marca_edit ='';
 //Función que se ejecuta al inicio
 function init() {
   //Activamos el "aside"
@@ -28,33 +29,19 @@ function init() {
 
 //Función limpiar
 function limpiar() {
-  $("#idotro_gasto").val("");
+
+  $("#idepp").val("");
   $("#fecha_g").val("");
   $("#nro_comprobante").val("");
-  $("#num_documento").val("");
-  $("#razon_social").val("");
-  $("#direccion").val("");
-  $("#subtotal").val("");
-  $("#igv").val("");
-  $("#precio_parcial").val("");
-  $("#descripcion").val("");
-
-  $("#doc_old_1").val("");
-  $("#doc1").val("");
-  $('#doc1_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc1_nombre').html("");
-
-  $("#tipo_comprobante").val("null").trigger("change");
-  $("#forma_pago").val("null").trigger("change");
-  $("#glosa").val("null").trigger("change");
-
-  $("#val_igv").val("");
-  $("#tipo_gravada").val("");
+  $("#select_id_insumo").val("null").trigger("change");
+  miArray = []; i_Array = []; 
+  $('.codigoGenerado').html(`<div class="alert alert-warning alert-dismissible alerta"> <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5> NO TIENES NINGÚN EQUIPO DE PROTECCIÓN PERSONAL SELECCIONADO.  </div>`);
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
   $(".error.invalid-feedback").remove();
+
 }
 
 //Función Listar
@@ -110,9 +97,7 @@ function listar_trabajdor() {
     $(this).css('cursor', 'default');
   }).on('click', 'tr', function () {
     // Eliminar el estilo de fila-seleccionada de la fila anterior
-    if (filaSeleccionadaAnterior !== null) {
-      filaSeleccionadaAnterior.css('background-color', '');
-    }
+    if (filaSeleccionadaAnterior !== null) { filaSeleccionadaAnterior.css('background-color', ''); }
 
     // Aplicar el estilo a la nueva fila seleccionada
     $(this).css('background-color', '#ffe69c');
@@ -122,19 +107,27 @@ function listar_trabajdor() {
     // Obtener los datos de la fila seleccionada
     var datosFila = tabla.row(this).data();
     // Hacer lo que desees con los datos de la fila
-    filaSelecc_tabajador(datosFila[1], datosFila[2], datosFila[3], datosFila[4]);
+    epp_tabajador(datosFila[1], datosFila[2], datosFila[3], datosFila[4]);
 
   });
 
   $(tabla).ready(function () { $('.cargando').hide(); });
 }
 
-function filaSelecc_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
-  $('.alerta_inicial').hide();  $('.tabla_epp_x_tpp').show();
+function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
+
+  $('.alerta_inicial').hide(); $('.tabla_epp_x_tpp').show();
+
   $(".nombre_epp").html(nombres); $(".tallas").html(t_ropa + ' , ' + t_zapato); $(".nombre_trab_modal").html(nombres);
+
   lista_select2(`../ajax/epp.php?op=select_2_insumos_pp&idproyecto=${localStorage.getItem('nube_idproyecto')}`, '#select_id_insumo', null);
-  miArray = []; i_Array = []; $('.codigoGenerado').html("");
+
+  miArray = []; i_Array = []; 
+
+  $('.codigoGenerado').html(`<div class="alert alert-warning alert-dismissible alerta">  <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>  NO TIENES NINGÚN EQUIPO DE PROTECCIÓN PERSONAL SELECCIONADO.</div>`);
+
   $("#idtrabajador_por_proyecto").val(id_tpp)
+
   $(".btn_add_epps").show();
 
   tabla_epp_x_tpp = $("#tabla-epp-x-tpp").dataTable({
@@ -180,7 +173,7 @@ function filaSelecc_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
 }
 
 
-//Función para guardar o editar
+//Función para guardar varios
 function guardaryeditar(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-epp")[0]);
@@ -230,56 +223,31 @@ function guardaryeditar(e) {
   });
 }
 
-function mostrar(idotro_gasto) {
-
+function mostrar(idepp) {
   limpiar();
+  $("#producto_xp").select2({ theme: "bootstrap4", placeholder: "Seleccinar E.P.P", allowClear: true, });
+
+  lista_select2(`../ajax/epp.php?op=select_2_insumos_pp&idproyecto=${localStorage.getItem('nube_idproyecto')}`, '#producto_xp', null);
 
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
 
-  $("#modal-agregar-epp").modal("show");
+  $("#modal-ver-editar-epp").modal("show");
 
-  $.post("../ajax/epp.php?op=mostrar", { idotro_gasto: idotro_gasto }, function (e, status) {
+  $.post("../ajax/epp.php?op=mostrar", { idepp: idepp }, function (e, status) {
 
     e = JSON.parse(e); console.log(e);
     if (e.status == true) {
-      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
-      $("#forma_pago").val(e.data.forma_de_pago).trigger("change");
-      $("#glosa").val(e.data.glosa).trigger("change");
-      $("#idotro_gasto").val(e.data.idotro_gasto);
-      $("#fecha_g").val(e.data.fecha_g);
-      $("#nro_comprobante").val(e.data.numero_comprobante);
-      $("#num_documento").val(e.data.ruc);
-      $("#razon_social").val(e.data.razon_social);
-      $("#direccion").val(e.data.direccion);
+      $("#idalmacen_x_proyecto_xp").val(e.data.idalmacen_x_proyecto);
+      $("#idtrabajador_xp").val(e.data.idtrabajador_por_proyecto);
+      $("#epp_xp").val(e.data.nombre);
+      $("#id_epp_xp").val(e.data.idproducto);
+      // id_product_edit = e.data.idproducto;
+      select_marcas_edit(e.data.idproducto,e.data.marca);
+      $("#fecha_ingreso_xp").val(e.data.fecha_ingreso);
+      $("#cantidad_xp").val(e.data.cantidad);
 
-      $("#subtotal").val(e.data.subtotal);
-      $("#igv").val(e.data.igv);
-      $("#tipo_gravada").val(e.data.tipo_gravada);
-      $("#precio_parcial").val(e.data.costo_parcial);
-      $("#descripcion").val(e.data.descripcion);
-
-      $("#val_igv").val(e.data.val_igv).trigger("change");
-
-
-      if (e.data.comprobante == "" || e.data.comprobante == null) {
-
-        $("#doc1_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
-
-        $("#doc1_nombre").html('');
-
-        $("#doc_old_1").val(""); $("#doc1").val("");
-
-      } else {
-
-        $("#doc_old_1").val(e.data.comprobante);
-
-        $("#doc1_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.comprobante)}</i></div></div>`);
-        // cargamos la imagen adecuada par el archivo
-        $("#doc1_ver").html(doc_view_extencion(e.data.comprobante, 'otro_gasto', 'comprobante', '100%', '210'));
-
-      }
-      $('.jq_image_zoom').zoom({ on: 'grab' });
+      // $("#marca_xp").val(e.data.marca).trigger('change');
 
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
@@ -292,29 +260,66 @@ function mostrar(idotro_gasto) {
   }).fail(function (e) { ver_errores(e); });
 
 }
+function select_producto_edit() { 
 
-function eliminar(idotro_gasto, tipo, numero) {
+ }
+
+function select_marcas_edit(idproducto,marca) {
+
+  var idpro = localStorage.getItem("nube_idproyecto");
+
+  $.post("../ajax/epp.php?op=marcas_x_insumo", { id_insumo: idproducto, idproyecto: idpro }, function (ee, status) {
+
+    $(`#marca_xp`).html("");
+
+    ee = JSON.parse(ee); console.log(ee);
+
+    if (ee.status == true) { 
+      
+      ee.data.forEach(item => { 
+
+        if (item.marca ==marca) {
+          $(`#marca_xp`).append(`<option selected value="${item.marca}">${item.marca}</option>`); 
+          
+        }else{
+
+          $(`#marca_xp`).append(`<option value="${item.marca}">${item.marca}</option>`); 
+        }      
+      
+      });
+
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail(function (e) { ver_errores(e); });
+
+
+
+}
+
+function eliminar_detalle(idalmacen_x_proyecto, producto) {
 
   crud_eliminar_papelera(
     "../ajax/epp.php?op=desactivar",
     "../ajax/epp.php?op=eliminar",
-    idotro_gasto,
+    idalmacen_x_proyecto,
     "!Elija una opción¡",
-    `<b class="text-danger"><del> ${tipo} N° ${numero} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
+    `<b class="text-danger"><del> ${producto} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
     function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
     function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.') },
-    function () { tabla.ajax.reload(null, false); total(fecha_1_r, fecha_2_r, id_proveedor_r, comprobante_r); },
+    function () { tabla_epp_x_tpp.ajax.reload(null, false); },
     false,
     false,
     false,
     false
   );
 }
-//--------------ADD ROW 
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::Capturar JQUERRY:::::::::::::::::::::::::::::::::::::::::::::
 
 function add_row(el) {
+  var idproyec = localStorage.getItem("nube_idproyecto");
   codigoHTML = '';
   var id_insumo = $('#select_id_insumo').val();
 
@@ -343,30 +348,40 @@ function add_row(el) {
 
         codigoHTML = `<hr class="id_${i}">
                   <div class="row id_${i}" >
-                    <div class="col-12 col-sm-12 col-md-2 col-lg-1">
-                        <div class="form-group"> 
-                          <button type="button" class="btn bg-gradient-danger cursor-pointer" aria-hidden="true" data-toggle="tooltip" data-original-title="Eliminar" onclick="eliminar_item(${i});"><i class="fas fa-plus-circle"></i></button>
-                        </div>
-                      </div>
+
                       <!-- Nombre Producto -->
-                      <div class="col-12 col-sm-12 col-md-7 col-lg-8">
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="form-group">
-
-                          <input type="hidden" name="id_insumo[]" class="form-control" id="id_insumo" value="${id_insumo}"/>
-
-                          <p class="mb-0"><strong> Nombre:</strong>${nombre}</p> 
-                          <input type="hidden" name="marca[]" class="form-control" id="marca" value="${marca}"/>
-                          <span><strong> Marca:</strong> ${marca}  <strong>| Modelo :</strong> ${modelo}</span>
-
+                        <label for="fecha_ingreso">Nombre Producto</label>
+                        <input type="hidden" name="id_insumo[]" class="form-control" id="id_insumo" value="${id_insumo}"/>
+                          <span class="form-control-mejorado"> ${nombre} </span>  
                         </div>
                       </div>
-                      <!-- cantidad -->
+
+                      <!-- MARCA -->
                       <div class="col-12 col-sm-12 col-md-3 col-lg-3">
                         <div class="form-group">
+                          <label for="fecha_ingreso">Marca</label>
+                          <select name="marca[]" id="marca_select_${id_insumo}" class="form-control"> <option value="">Seleccionar</option>  </select>
+                        </div>
+                      </div> 
+
+                      <!-- cantidad -->
+                      <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+                        <div class="form-group">
+                          <label for="fecha_ingreso">Cantidad</label>
                           <input type="text" name="cantidad[]" class="form-control" id="cantidad" placeholder="Cantidad"/>
                         </div>
                       </div> 
-                      </div>`;
+
+                      <div class="col-12 col-sm-12 col-md-1 col-lg-1">
+                        <div class="form-group"> 
+                          <label class="text-white">.</label> <br>
+                          <button type="button" class="btn bg-gradient-danger cursor-pointer" aria-hidden="true" data-toggle="tooltip" data-original-title="Eliminar" onclick="eliminar_item(${i});"><i class="far fa-trash-alt"></i></button>
+                        </div>
+                      </div>
+
+                  </div>`;
 
 
       }
@@ -376,6 +391,25 @@ function add_row(el) {
     }
 
     $('.codigoGenerado').append(codigoHTML); // Agregar el contenido 
+
+    $.post("../ajax/epp.php?op=marcas_x_insumo", { id_insumo: id_insumo, idproyecto: idproyec }, function (e, status) {
+
+      e = JSON.parse(e); console.log(e);
+      if (e.status == true) {
+
+        // Iterar sobre los datos y agregar las opciones al select utilizando jQuery
+        e.data.forEach(item => {
+          $(`#marca_select_${id_insumo}`).append(`<option value="${item.marca}">${item.marca}</option>`);
+        });
+
+
+      } else {
+        ver_errores(e);
+      }
+
+    }).fail(function (e) { ver_errores(e); });
+
+
   }
 
   // console.log(miArray);
