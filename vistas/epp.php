@@ -59,8 +59,8 @@ if (!isset($_SESSION["nombre"])) {
                               </tr>
                               <tr>
                                 <th class="text-center">#</th>
-                                <th class="text-center">Code</th>
-                                <th class="">INSUMOS</th>
+                                <th class="text-center">CODE</th>
+                                <th class="">INSUMOS - MARCA</th>
                                 <th class="">UND</th>
                                 <th class="">CANTIDAD REPARTIDA</th>
                                 <th class="">E.P.P</th>
@@ -71,8 +71,8 @@ if (!isset($_SESSION["nombre"])) {
                             <tfoot>
                               <tr>
                                 <th class="text-center">#</th>
-                                <th class="text-center">Code</th>
-                                <th class="">INSUMOS</th>
+                                <th class="text-center">CODE</th>
+                                <th class="">INSUMOS - MARCA</th>
                                 <th class="">UND</th>
                                 <th class="">CANTIDAD REPARTIDA</th>
                                 <th class="">E.P.P</th>
@@ -265,18 +265,18 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="modal-body">
 
                       <!-- form start -->
-                      <form id="form-almacen-x-dia" name="form-almacen-x-dia" method="POST">
+                      <form id="form-editar-x-epp" name="form-editar-x-epp" method="POST">
                         <div class="card-body">
                           <div class="row" id="cargando-3-fomulario">
                             <!-- id trabajador -->
-                            <input type="hidden" name="idalmacen_x_proyecto_xp" id="idalmacen_x_proyecto_xp" />
-                            <input type="hidden" name="idtrabajador_xp" id="idtrabajador_xp" />
-
+                            <input type="text" name="idalmacen_x_proyecto_xp" id="idalmacen_x_proyecto_xp" />
+                            <input type="text" name="idtrabajador_xp" id="idtrabajador_xp" />
+                            <!-- idalmacen_x_proyecto_xp, idtrabajador_xp, id_producto_xp, fecha_ingreso_xp, marca_xp, cantidad_xp  -->
                             <!-- Producto -->
                             <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                               <div class="form-group">
                                 <label for="producto_xp">Seleccionar E.P.P <span class="cargando_productos"></span> </label>
-                                <select name="producto_xp" id="producto_xp" class="form-control" placeholder="Producto">
+                                <select name="producto_xp" id="producto_xp" class="form-control" onchange="select_producto_edit(this);" placeholder="Producto">
                                 </select>
                               </div>
                             </div>
@@ -285,7 +285,7 @@ if (!isset($_SESSION["nombre"])) {
                               <div class="form-group">
                                 <label for="epp_xp">E.P.P</label>
                                 <input type="text" id="epp_xp" class="form-control" placeholder="E.P.P" onchange="obtener_dia_ingreso(this);" readonly />
-                                <input type="hidden" name="id_producto_xp" id="id_producto_xp" />
+                                <input type="text" name="id_producto_xp" id="id_producto_xp" />
                               </div>
                             </div>
                             
@@ -315,9 +315,9 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
 
                             <!-- barprogress -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_almacen_x_dia_div">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_epp_xp_div">
                               <div class="progress">
-                                <div id="barra_progress_almacen_x_dia" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                <div id="barra_progress_epp_xp" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                   0%
                                 </div>
                               </div>
@@ -332,12 +332,12 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
                         </div>
                         <!-- /.card-body -->
-                        <button type="submit" style="display: none;" id="submit-form-almacen-x-dia">Submit</button>
+                        <button type="submit" style="display: none;" id="submit-form-editar-x-epp">Submit</button>
                       </form>
                     </div>
                     <div class="modal-footer justify-content-between">
                       <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen_x_dia();" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-success" id="guardar_registro_almacen_x_dia" style="display: none;">Guardar Cambios</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_epp_xp" >Guardar Cambios</button>
                     </div>
                   </div>
                 </div>

@@ -28,9 +28,18 @@
       $marca = isset($_POST["marca"]) ? $_POST["marca"] : ""; 
 
       //$idepp,$idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad
+      //------E D I T A R -----
+       // <!-- $idalmacen_x_proyecto_xp, $idtrabajador_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp  -->
+      $idalmacen_x_proyecto_xp= isset($_POST["idalmacen_x_proyecto_xp"]) ? $_POST["idalmacen_x_proyecto_xp"] : ""; 
+      $idtrabajador_xp= isset($_POST["idtrabajador_xp"]) ? $_POST["idtrabajador_xp"] : ""; 
+      $id_producto_xp= isset($_POST["id_producto_xp"]) ? $_POST["id_producto_xp"] : ""; 
+      $fecha_ingreso_xp= isset($_POST["fecha_ingreso_xp"]) ? $_POST["fecha_ingreso_xp"] : ""; 
+      $marca_xp= isset($_POST["marca_xp"]) ? $_POST["marca_xp"] : ""; 
+      $cantidad_xp =isset($_POST["cantidad_xp"]) ? $_POST["cantidad_xp"] : ""; 
+
       
       switch ($_GET["op"]) {
-        case 'guardaryeditar':
+        case 'guardar_epp':
 
           if (empty($idepp)) {
             //var_dump($idproyecto,$idproveedor);
@@ -40,12 +49,28 @@
       
           } else {
 
-            $rspta = $epp->editar($idepp,$idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad,$marca);
-            //var_dump($idotro_gasto,$idproveedor);
-            echo json_encode($rspta,true);
+            $rspta ='ERROR';
+            echo $rspta;
           }
 
         break;
+
+        case 'editar_epp':
+
+          if (isset($idalmacen_x_proyecto_xp)) {
+            //var_dump($idproyecto,$idproveedor);
+            $rspta = $epp->editar($idalmacen_x_proyecto_xp, $idtrabajador_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp);
+            
+            echo json_encode($rspta,true);
+      
+          } else {
+
+            $rspta ='ERROR';
+            echo $rspta;
+          }
+
+        break;
+
       
         case 'desactivar':
       
@@ -169,6 +194,40 @@
           echo json_encode($rspta,true);
       
         break;
+        //resumen
+        case'tabla_resumen_epp':
+          $rspta = $epp->tabla_resumen_epp($_GET["idproyecto"]);
+          //Vamos a declarar un array
+          $data = [];
+          
+          $cont = 1;
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data'] as $key => $value) {    
+
+              $data[] = [
+                "0" => $cont++,
+                "1" =>$value['idproducto'],
+                "2" =>$value['nombre'].' - '.$value['marca'],
+                "3" =>$value['abreviacion'],
+                "4" =>$value['cantidad_rapartida'],
+                "5" =>'-',
+                "6" =>'-',
+                
+              ];
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
+            ];
+            echo json_encode($results);
+          } else {
+
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+
+        break;
 
         case 'salir':
           //Limpiamos las variables de sesión
@@ -191,4 +250,3 @@
   }
 
   ob_end_flush();
-?>

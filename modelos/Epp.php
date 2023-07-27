@@ -45,31 +45,16 @@ class Epp
   }
 
   //Implementamos un método para editar registros
-  public function editar($idepp,$idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad)
+  public function editar($idalmacen_x_proyecto_xp, $idtrabajador_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp)
   {
+    $dia = extraer_dia($fecha_ingreso_xp);
 
-  //   if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else { $ruc =''; $razon_social =''; $direccion =''; }
-    
-  //   $sql = "UPDATE almacen_x_proyecto SET 
-	// 	idproyecto='$idproyecto',
-	// 	fecha_g='$fecha_g',
-	// 	costo_parcial='$precio_parcial',
-	// 	subtotal='$subtotal',
-	// 	igv='$igv',
-	// 	val_igv='$val_igv',
-	// 	tipo_gravada='$tipo_gravada',
-	// 	descripcion='$descripcion',
-	// 	forma_de_pago='$forma_pago',
-	// 	tipo_comprobante='$tipo_comprobante',
-	// 	numero_comprobante='$nro_comprobante',
-	// 	comprobante='$comprobante',
-  //   ruc='$ruc',
-  //   razon_social='$razon_social',
-  //   direccion='$direccion',
-  //   glosa='$glosa'
+    $sql ="UPDATE almacen_x_proyecto 
+    SET idproducto='$id_producto_xp',idtrabajador_por_proyecto='$idtrabajador_xp', fecha_ingreso='$fecha_ingreso_xp',dia_ingreso='$dia',
+    cantidad='$cantidad_xp',marca='$marca_xp', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idalmacen_x_proyecto='$idalmacen_x_proyecto_xp'";
+    return ejecutarConsulta($sql);
 
-	// 	WHERE idalmacen_x_proyecto='$idalmacen_x_proyecto'";
-  //   return ejecutarConsulta($sql);
+
    }
 
   //Implementamos un método para desactivar categorías
@@ -152,6 +137,18 @@ class Epp
     
   }
 
+  //===============================RESUMEN //==================================
+
+function tabla_resumen_epp($idproyecto) {
+  $sql="SELECT p.idproducto, p.nombre, ap.marca, um.nombre_medida,um.abreviacion, sum(ap.cantidad) as cantidad_rapartida FROM almacen_x_proyecto as ap, trabajador_por_proyecto as tpp, producto AS p, unidad_medida as um
+  WHERE ap.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND ap.idproducto = p.idproducto AND um.idunidad_medida=p.idunidad_medida
+  AND tpp.idproyecto='$idproyecto' and ap.estado=1  AND ap.estado_delete=1  GROUP by ap.marca,ap.idproducto;";
+  return ejecutarConsultaArray($sql);
+}
+
+
+
+
 }
 
 function extraer_dia($fecha){
@@ -162,13 +159,6 @@ function extraer_dia($fecha){
 
   return $nombreDia;
   
-}
-
-//===============================RESUMEN //==================================
-
-function t_resumen_epp() {
-  $sql="SELECT p.nombre, COUNT(ap.cantidad) FROM `almacen_x_proyecto` as ap, trabajador_por_proyecto as tpp, producto AS p WHERE ap.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND ap.idproducto = p.idproducto AND tpp.idproyecto=7 GROUP by p.idproducto;";
-  return ejecutarConsultaArray($sql);
 }
 
 
