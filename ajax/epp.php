@@ -210,8 +210,42 @@
                 "2" =>$value['nombre'].' - '.$value['marca'],
                 "3" =>$value['abreviacion'],
                 "4" =>$value['cantidad_rapartida'],
-                "5" =>'-',
-                "6" =>'-',
+                "5" => '<button class="btn btn-info btn-sm mb-2" onclick="tabla_detalle_epp(' . $value['idproducto'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                "6" =>$value['cantidad_q_queda'],
+                
+              ];
+            }
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
+            ];
+            echo json_encode($results);
+          } else {
+
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+
+        break;
+        //detalle por epp reparidos
+        case'tbla_detalle_epp':
+          $rspta = $epp->tbl_detalle_epp($_GET["idproducto"],$_GET["idproyecto"],$_GET["marca"]);
+          //Vamos a declarar un array
+          $data = [];
+          
+          $cont = 1;
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data'] as $key => $value) {    
+              /*ap.idalmacen_x_proyecto,ap.idproducto,ap.idtrabajador_por_proyecto,ap.fecha_ingreso,ap.dia_ingreso,
+              ap.cantidad,ap.marca,t.nombres */
+              $data[] = [
+                "0" => $cont++,
+                "1" =>$value['nombres'],
+                "2" =>$value['cantidad'],
+                "3" =>$value['fecha_ingreso'],
+                //"5" => '<button class="btn btn-info btn-sm mb-2" onclick="tbl_detalle_epp(' . $value['idproducto'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                //"6" =>$value['cantidad_q_queda'],
                 
               ];
             }

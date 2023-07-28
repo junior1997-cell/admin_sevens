@@ -52,34 +52,71 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="card-body">
                       <div class="tab-content" id="custom-tabs-one-tabContent">
                         <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                          <table id="tabla-resumen-epp-x-tpp" class="table table-bordered table-striped display" style="width: 100% !important;">
-                            <thead>
-                              <tr>
-                                <th colspan="7" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-                              </tr>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-center">CODE</th>
-                                <th class="">INSUMOS - MARCA</th>
-                                <th class="">UND</th>
-                                <th class="">CANTIDAD REPARTIDA</th>
-                                <th class="">E.P.P</th>
-                                <th class="">CANTIDAD EN ALMACÉN</th>
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-center">CODE</th>
-                                <th class="">INSUMOS - MARCA</th>
-                                <th class="">UND</th>
-                                <th class="">CANTIDAD REPARTIDA</th>
-                                <th class="">E.P.P</th>
-                                <th class="">CANTIDAD EN ALMACÉN</th>
-                              </tr>
-                            </tfoot>
-                          </table>
+                          <div class="card-header">
+                            <h3 class="card-title regresar" style="display: none;">
+                              <button type="button" class="btn bg-gradient-warning" onclick="table_show_hide(1);">
+                                <i class="fas fa-arrow-left"></i> Regresar
+                              </button> <strong class="nombre_produc" style="font-size: 22px;"></strong> - <span class="marca_produc" style="font-size: 18px;"></span>
+
+                            </h3>
+                          </div>
+                          <div class="tbl_resumen_epp_x_tpp">
+                            <table id="tabla-resumen-epp-x-tpp" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th colspan="7" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                </tr>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center">CODE</th>
+                                  <th class="">INSUMOS - MARCA</th>
+                                  <th class="">UND</th>
+                                  <th class="">CANTIDAD REPARTIDA</th>
+                                  <th class="">E.P.P</th>
+                                  <th class="">CANTIDAD EN ALMACÉN</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center">CODE</th>
+                                  <th class="">INSUMOS - MARCA</th>
+                                  <th class="">UND</th>
+                                  <th class="">CANTIDAD REPARTIDA</th>
+                                  <th class="">E.P.P</th>
+                                  <th class="">CANTIDAD EN ALMACÉN</th>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <div class="tbl_detalle_epp" style="display: none;">
+
+                            <table id="tbla_detalle_epp" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th colspan="4" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                </tr>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center">NOMBRE</th>
+                                  <th class="">CANTIDAD</th>
+                                  <th class="">FECHA</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="text-center">NOMBRE</th>
+                                  <th class="">CANTIDAD</th>
+                                  <th class="">FECHA</th>
+                                </tr>
+                              </tfoot>
+                            </table>
+
+                          </div>
+
                         </div>
                         <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
                           <div class="row">
@@ -288,7 +325,7 @@ if (!isset($_SESSION["nombre"])) {
                                 <input type="text" name="id_producto_xp" id="id_producto_xp" />
                               </div>
                             </div>
-                            
+
                             <!-- Fecha -->
                             <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                               <div class="form-group">
@@ -337,7 +374,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="modal-footer justify-content-between">
                       <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen_x_dia();" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-success" id="guardar_registro_epp_xp" >Guardar Cambios</button>
+                      <button type="submit" class="btn btn-success" id="guardar_registro_epp_xp">Guardar Cambios</button>
                     </div>
                   </div>
                 </div>

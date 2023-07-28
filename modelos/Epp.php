@@ -139,17 +139,54 @@ class Epp
 
   //===============================RESUMEN //==================================
 
-function tabla_resumen_epp($idproyecto) {
-  $sql="SELECT p.idproducto, p.nombre, ap.marca, um.nombre_medida,um.abreviacion, sum(ap.cantidad) as cantidad_rapartida FROM almacen_x_proyecto as ap, trabajador_por_proyecto as tpp, producto AS p, unidad_medida as um
-  WHERE ap.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND ap.idproducto = p.idproducto AND um.idunidad_medida=p.idunidad_medida
-  AND tpp.idproyecto='$idproyecto' and ap.estado=1  AND ap.estado_delete=1  GROUP by ap.marca,ap.idproducto;";
-  return ejecutarConsultaArray($sql);
+  function tabla_resumen_epp($idproyecto) {
+    $data = [];
+
+    $sql="SELECT p.idproducto, p.nombre, ap.marca, um.nombre_medida,um.abreviacion, sum(ap.cantidad) as cantidad_rapartida 
+    FROM almacen_x_proyecto as ap, trabajador_por_proyecto as tpp, producto AS p, unidad_medida as um
+    WHERE ap.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND ap.idproducto = p.idproducto AND um.idunidad_medida=p.idunidad_medida
+    AND tpp.idproyecto='$idproyecto' and ap.estado=1  AND ap.estado_delete=1  GROUP by ap.marca,ap.idproducto;";
+
+    $data_resumen = ejecutarConsultaArray($sql); if ($data_resumen['status'] == false) { return  $data_resumen;}
+
+    foreach ($data_resumen['data'] as $key => $value) {
+      $idproducto = $value['idproducto'];
+      $marca = $value['marca'];
+
+      $sql_detalle="SELECT idproducto,marca, SUM(cantidad) as cantidad FROM detalle_compra WHERE idproducto='$idproducto' and marca ='$marca';";
+
+      $total_cantidad = ejecutarConsultaSimpleFila($sql_detalle); if ($total_cantidad['status'] == false) { return  $total_cantidad;}
+      $total_c = (empty($total_cantidad['data']) ? 0 : ( empty($total_cantidad['data']['cantidad']) ? 0 : floatval($total_cantidad['data']['cantidad'])) ); 
+      $calculando=$total_c-$value['cantidad_rapartida']; 
+
+      $data[] = Array(
+        'idproducto'         => $value['idproducto'],
+        'nombre'             => $value['nombre'],
+        'marca'              => $value['marca'],
+        'nombre_medida'      => $value['nombre_medida'],
+        'abreviacion'        => $value['abreviacion'],
+        'cantidad_rapartida' => $value['cantidad_rapartida'],
+        'cantidad_q_queda'   => $calculando,
+      ); 
+
+    }
+    // var_dump($data);die();
+    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];
+
+  }
+
+  function tbl_detalle_epp($proyecto,$idproyecto,$marca) {
+    $sql ="SELECT ap.idalmacen_x_proyecto,ap.idproducto,ap.idtrabajador_por_proyecto,ap.fecha_ingreso,ap.dia_ingreso,
+    cantidad,ap.marca,t.nombres 
+    FROM almacen_x_proyecto as ap, trabajador_por_proyecto as tpp, trabajador as t 
+    WHERE tpp.idtrabajador_por_proyecto = ap.idtrabajador_por_proyecto AND tpp.idtrabajador=t.idtrabajador and 
+    tpp.idproyecto = '$idproyecto' and idproducto='$proyecto' and marca='$marca';";
+    return ejecutarConsultaArray($sql);
+    
+  }
+
 }
 
-
-
-
-}
 
 function extraer_dia($fecha){
 

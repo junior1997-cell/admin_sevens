@@ -1,6 +1,7 @@
 var tabla;
 var tabla_epp_x_tpp;
 var tabla_resumen_epp;
+var tbl_detalle_epp;
 var codigoHTML = '';
 var miArray = [];
 var i_Array = [];
@@ -29,6 +30,23 @@ function init() {
   $("[data-mask]").inputmask();
 
 }
+function table_show_hide(estado) {
+  
+  if (estado==1) {
+    $(".regresar").hide();
+    $(".tbl_resumen_epp_x_tpp").show();
+    $(".tbl_detalle_epp").hide();
+    
+  }
+  if (estado==2) {
+    $(".regresar").show();
+    $(".tbl_resumen_epp_x_tpp").hide();
+    $(".tbl_detalle_epp").show();
+    
+  }
+
+}
+
 
 //Función limpiar
 function limpiar() {
@@ -92,7 +110,6 @@ function tabla_resumen_epp() {
 
   $(tabla).ready(function () { $('.cargando').hide(); });
 }
-
 
 //Función Listar
 function listar_trabajdor() {
@@ -216,12 +233,71 @@ function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+
+    ],
   }).DataTable();
 
 
 
 }
+//
+//------------------EPP--------------------
+//detalle por epp
+function tabla_detalle_epp(idproducto,nombre,marca) { 
+  table_show_hide(2);
+  $(".nombre_produc").html('   <i class="fa-solid fa-helmet-safety"></i> '+nombre);  $(".marca_produc").html(marca);
 
+  var idproyecto = localStorage.getItem("nube_idproyecto");
+
+  tbl_detalle_epp = $("#tbla_detalle_epp").dataTable({
+    responsive: true,
+    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2], }, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: "colvis" },
+    ],
+    ajax: {
+      url: `../ajax/epp.php?op=tbla_detalle_epp&idproducto=${idproducto}&idproyecto=${idproyecto}&marca=${marca}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
+      // columna: fecha
+      if (data[1] != "") { $("td", row).eq(5).addClass("text-nowrap text-center"); }
+      //Columna _: talla
+      if (data[2] != "") { $("td", row).eq(5).addClass("text-nowrap text-center"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+
+    ],
+  }).DataTable();
+
+  $(tabla).ready(function () { $('.cargando').hide(); });
+
+  
+}
+  
 
 //Función para guardar varios
 function guardar_epp(e) {
@@ -239,7 +315,7 @@ function guardar_epp(e) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
           Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
-          tabla_epp_x_tpp.ajax.reload(null, false);
+          tabla_epp_x_tpp.ajax.reload(null, false); tabla_resumen_epp.ajax.reload(null, false); tbl_detalle_epp.ajax.reload(null, false);
           limpiar();
           $("#modal-agregar-epp").modal("hide");
 
@@ -272,6 +348,7 @@ function guardar_epp(e) {
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
+
 //-----------------------------------------------------
 //-----------------------EDITAR------------------------
 //-----------------------------------------------------
@@ -371,7 +448,6 @@ function select_marcas_edit(idproducto,marca) {
 
 }
 
-//Función para guardar varios
 function editar_epp(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-editar-x-epp")[0]);
@@ -387,8 +463,8 @@ function editar_epp(e) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
           Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
-          tabla_resumen_epp.ajax.reload(null, false);
-          tabla_epp_x_tpp.ajax.reload(null, false);
+          tabla_epp_x_tpp.ajax.reload(null, false); tabla_resumen_epp.ajax.reload(null, false); tbl_detalle_epp.ajax.reload(null, false);
+
           limpiar_edit_epp();
           $("#modal-ver-editar-epp").modal("hide");
 
@@ -422,9 +498,6 @@ function editar_epp(e) {
   });
 }
 
-
-
-
 function eliminar_detalle(idalmacen_x_proyecto, producto) {
 
   crud_eliminar_papelera(
@@ -442,6 +515,8 @@ function eliminar_detalle(idalmacen_x_proyecto, producto) {
     false
   );
 }
+
+///add varios elementos para guardar 
 
 function add_row(el) {
   var idproyec = localStorage.getItem("nube_idproyecto");
@@ -573,8 +648,6 @@ function agregarElemento(id) {
     toastr.warning("NO ES POSIBLE AGREGAR NUEVAMENTE !!");
   }
 }
-
-
 
 init();
 
