@@ -56,7 +56,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprobante compra</title>
+    <title>Comprobante compra - <?php echo $rspta['data']['tipo_comprobante'] . '-' . $rspta['data']['serie_comprobante']; ?></title>
 
     <link rel="apple-touch-icon" href="../dist/svg/logo-icono.svg">
     <link rel="shortcut icon" href="../dist/svg/logo-icono.svg">
@@ -786,8 +786,8 @@
                   <thead>
                   <tr>
                     <th>#</th>
-                    <th>Product0</th>
-                    <th>Abreviacion</th>
+                    <th>Producto</th>
+                    <th>Abreviación</th>
                     <th>Cantidad</th>
                     <th>PU</th>
                     <th>IGV</th>
