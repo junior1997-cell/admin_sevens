@@ -8,7 +8,7 @@ class Epp
   public function __construct()
   {
   }
-  //$idotro_gasto,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
+  //$idalmacen_x_proyecto,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
   public function insertar($idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad,$marca)
   {
@@ -45,52 +45,37 @@ class Epp
   }
 
   //Implementamos un método para editar registros
-  public function editar($idepp,$idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad)
+  public function editar($idalmacen_x_proyecto_xp, $idtrabajador_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp)
   {
+    $dia = extraer_dia($fecha_ingreso_xp);
 
-  //   if ($tipo_comprobante =='Factura' || $tipo_comprobante =='Boleta' ) { } else { $ruc =''; $razon_social =''; $direccion =''; }
-    
-  //   $sql = "UPDATE otro_gasto SET 
-	// 	idproyecto='$idproyecto',
-	// 	fecha_g='$fecha_g',
-	// 	costo_parcial='$precio_parcial',
-	// 	subtotal='$subtotal',
-	// 	igv='$igv',
-	// 	val_igv='$val_igv',
-	// 	tipo_gravada='$tipo_gravada',
-	// 	descripcion='$descripcion',
-	// 	forma_de_pago='$forma_pago',
-	// 	tipo_comprobante='$tipo_comprobante',
-	// 	numero_comprobante='$nro_comprobante',
-	// 	comprobante='$comprobante',
-  //   ruc='$ruc',
-  //   razon_social='$razon_social',
-  //   direccion='$direccion',
-  //   glosa='$glosa'
+    $sql ="UPDATE almacen_x_proyecto 
+    SET idproducto='$id_producto_xp',idtrabajador_por_proyecto='$idtrabajador_xp', fecha_ingreso='$fecha_ingreso_xp',dia_ingreso='$dia',
+    cantidad='$cantidad_xp',marca='$marca_xp', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idalmacen_x_proyecto='$idalmacen_x_proyecto_xp'";
+    return ejecutarConsulta($sql);
 
-	// 	WHERE idotro_gasto='$idotro_gasto'";
-  //   return ejecutarConsulta($sql);
+
    }
 
   //Implementamos un método para desactivar categorías
-  public function desactivar($idotro_gasto)
+  public function desactivar($idalmacen_x_proyecto)
   {
-    $sql = "UPDATE otro_gasto SET estado='0' WHERE idotro_gasto ='$idotro_gasto'";
+    $sql = "UPDATE almacen_x_proyecto SET estado='0' WHERE idalmacen_x_proyecto ='$idalmacen_x_proyecto'";
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para desactivar categorías
-  public function eliminar($idotro_gasto)
+  public function eliminar($idalmacen_x_proyecto)
   {
-    $sql = "UPDATE otro_gasto SET estado_delete='0' WHERE idotro_gasto ='$idotro_gasto'";
+    $sql = "UPDATE almacen_x_proyecto SET estado_delete='0' WHERE idalmacen_x_proyecto ='$idalmacen_x_proyecto'";
     return ejecutarConsulta($sql);
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
-  public function mostrar($idotro_gasto)
+  public function mostrar($idalmacen_x_proyecto)
   {
-    $sql = "SELECT*FROM otro_gasto   
-		WHERE idotro_gasto ='$idotro_gasto'";
+    $sql = "SELECT axp.idalmacen_x_proyecto, axp.idproducto, axp.idtrabajador_por_proyecto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca, p.nombre FROM almacen_x_proyecto as axp, producto as p 
+    WHERE axp.idproducto=p.idproducto and axp.idalmacen_x_proyecto ='$idalmacen_x_proyecto';"; 
     return ejecutarConsultaSimpleFila($sql);
   }
 
@@ -111,39 +96,58 @@ class Epp
   }
 
   //--------------------------
-    //Implementar un método para listar los registros
-    public function select_2_insumos_pp($idproyecto) {
+  //Implementar un método para listar los registros
+  public function select_2_insumos_pp($idproyecto) {
 
-      $resumen_producto = [];
-      $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida,  um.nombre_medida, um.abreviacion,
-      pr.nombre AS nombre_producto, pr.modelo, dc.marca, cg.idclasificacion_grupo, cg.nombre as grupo
-      
-      FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, clasificacion_grupo AS cg, unidad_medida AS um 
-      WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto
-      AND um.idunidad_medida  = pr.idunidad_medida AND dc.idclasificacion_grupo = cg.idclasificacion_grupo
-      AND cpp.idproyecto = '$idproyecto'  AND pr.idcategoria_insumos_af = '1' 
-      AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";
-  
-      $producto = ejecutarConsultaArray($sql); if ($producto['status'] == false) { return $producto; }
-  
-      foreach ($producto['data'] as $key => $value) {
-  
-        $resumen_producto[] = [
-          'idproyecto'        => $value['idproyecto'],
-          'idcompra_proyecto' => $value['idcompra_proyecto'],
-          'iddetalle_compra'  => $value['iddetalle_compra'],
-          'idproducto'        => $value['idproducto'],
-          'nombre_medida'     => $value['nombre_medida'],
-          'abreviacion'       => $value['abreviacion'],
-          'nombre_producto'   => $value['nombre_producto'],
-          'modelo'            => $value['modelo'],
-          'marca'             => $value['marca'],
-          'idclasificacion_grupo'=> $value['idclasificacion_grupo'],
-          'grupo'             => $value['grupo'],
-        ];
-      }
-      return $retorno = ['status' => true, 'data' => $resumen_producto, 'message' => 'todo bien'];
+    $resumen_producto = [];
+    $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida,  um.nombre_medida, um.abreviacion,
+    pr.nombre AS nombre_producto, pr.modelo, dc.marca, cg.idclasificacion_grupo, cg.nombre as grupo
+    
+    FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, clasificacion_grupo AS cg, unidad_medida AS um 
+    WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto
+    AND um.idunidad_medida  = pr.idunidad_medida AND dc.idclasificacion_grupo = cg.idclasificacion_grupo
+    AND cpp.idproyecto = '$idproyecto'  AND pr.idcategoria_insumos_af = '1' 
+    AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";
+
+    $producto = ejecutarConsultaArray($sql); if ($producto['status'] == false) { return $producto; }
+
+    foreach ($producto['data'] as $key => $value) {
+
+      $resumen_producto[] = [
+        'idproyecto'        => $value['idproyecto'],
+        'idcompra_proyecto' => $value['idcompra_proyecto'],
+        'iddetalle_compra'  => $value['iddetalle_compra'],
+        'idproducto'        => $value['idproducto'],
+        'nombre_medida'     => $value['nombre_medida'],
+        'abreviacion'       => $value['abreviacion'],
+        'nombre_producto'   => $value['nombre_producto'],
+        'modelo'            => $value['modelo'],
+        'marca'             => $value['marca'],
+        'idclasificacion_grupo'=> $value['idclasificacion_grupo'],
+        'grupo'             => $value['grupo'],
+      ];
     }
+    return $retorno = ['status' => true, 'data' => $resumen_producto, 'message' => 'todo bien'];
+  }
+
+  function marcas_x_insumo($id_insumo, $idproyecto){
+    $sql ="SELECT DISTINCT dc.marca, dc.unidad_medida FROM detalle_compra as dc, compra_por_proyecto as cpp 
+    WHERE dc.idcompra_proyecto =cpp.idcompra_proyecto and dc.idproducto='$id_insumo' and cpp.idproyecto='$idproyecto';";
+    return ejecutarConsultaArray($sql);
+    
+  }
+
+  //===============================RESUMEN //==================================
+
+function tabla_resumen_epp($idproyecto) {
+  $sql="SELECT p.idproducto, p.nombre, ap.marca, um.nombre_medida,um.abreviacion, sum(ap.cantidad) as cantidad_rapartida FROM almacen_x_proyecto as ap, trabajador_por_proyecto as tpp, producto AS p, unidad_medida as um
+  WHERE ap.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND ap.idproducto = p.idproducto AND um.idunidad_medida=p.idunidad_medida
+  AND tpp.idproyecto='$idproyecto' and ap.estado=1  AND ap.estado_delete=1  GROUP by ap.marca,ap.idproducto;";
+  return ejecutarConsultaArray($sql);
+}
+
+
+
 
 }
 
@@ -156,5 +160,6 @@ function extraer_dia($fecha){
   return $nombreDia;
   
 }
+
 
 ?>
