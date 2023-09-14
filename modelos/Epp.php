@@ -38,6 +38,8 @@ class Epp
 
       return $sw;
 
+      // var_dump($sw);
+
     } else {
       echo '$id_insumo es un array vacío o no es un array.';
     }
@@ -74,8 +76,9 @@ class Epp
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idalmacen_x_proyecto)
   {
-    $sql = "SELECT axp.idalmacen_x_proyecto, axp.idproducto, axp.idtrabajador_por_proyecto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca, p.nombre FROM almacen_x_proyecto as axp, producto as p 
-    WHERE axp.idproducto=p.idproducto and axp.idalmacen_x_proyecto ='$idalmacen_x_proyecto';"; 
+    $sql = "SELECT axp.idalmacen_x_proyecto, axp.idproducto, axp.idtrabajador_por_proyecto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca, p.nombre , um.nombre_medida, um.abreviacion
+    FROM almacen_x_proyecto as axp, producto as p,  unidad_medida as um
+    WHERE axp.idproducto=p.idproducto AND  um.idunidad_medida  = p.idunidad_medida and axp.idalmacen_x_proyecto ='$idalmacen_x_proyecto';"; 
     return ejecutarConsultaSimpleFila($sql);
   }
 
@@ -89,9 +92,9 @@ class Epp
   }
 
   function listar_epp_trabajdor($id_tpp){
-    $sql="SELECT ap.idalmacen_x_proyecto, ap.idproducto, ap.idtrabajador_por_proyecto, ap.fecha_ingreso, ap.dia_ingreso, ap.cantidad, ap.marca, p.nombre as producto
-    FROM almacen_x_proyecto as ap, producto as p 
-    WHERE ap.idproducto=p.idproducto AND ap.idtrabajador_por_proyecto='$id_tpp' AND ap.estado=1 AND ap.estado_delete=1;";
+    $sql="SELECT ap.idalmacen_x_proyecto, ap.idproducto, ap.idtrabajador_por_proyecto, ap.fecha_ingreso, ap.dia_ingreso, ap.cantidad, ap.marca, p.nombre as producto, um.nombre_medida, um.abreviacion
+    FROM almacen_x_proyecto as ap, producto as p ,unidad_medida AS um 
+    WHERE ap.idproducto=p.idproducto AND  um.idunidad_medida  = p.idunidad_medida AND ap.idtrabajador_por_proyecto='$id_tpp' AND ap.estado=1 AND ap.estado_delete=1;";
     return ejecutarConsulta($sql);
   }
 

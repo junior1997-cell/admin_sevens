@@ -41,11 +41,12 @@ while ($fechaInicio <= $fechaFin) {
   }  
 
   $hojaActiva = $spreadsheet->setActiveSheetIndex($contador);
+  
   // $hojaActiva = $spreadsheet->getActiveSheet();
 
   // ══════════════════════════════════════════ - P L A N T I L L A - ══════════════════════════════════════════
   plantilla_stylo_header($spreadsheet, $fecha_pago_obrero);
-  plantilla($spreadsheet, $fecha_pago_obrero);
+  // plantilla($spreadsheet, $fecha_pago_obrero);
 
   // ══════════════════════════════════════════ - INSERTAMOS LOS NOMBRES DE LOS HEADS - ══════════════════════════════════════════
   plantilla_nombre_head($hojaActiva, $fecha_pago_obrero);
@@ -174,99 +175,99 @@ function sumaFecha($d, $fecha) {
 }
 
 
-function plantilla($hoja, $fecha_pago_obrero) {
-  //FILAS A1 HASTA S4
-  $hoja->getActiveSheet()->getSheetView()->setZoomScale(95);
-  $hoja->getActiveSheet()->getStyle('A:Z')->getAlignment()->setVertical('center');    
+// function plantilla($hoja, $fecha_pago_obrero) {
+//   //FILAS A1 HASTA S4
+//   $hoja->getActiveSheet()->getSheetView()->setZoomScale(95);
+//   $hoja->getActiveSheet()->getStyle('A:Z')->getAlignment()->setVertical('center');    
 
-  //INICIO FILAS A5 A6 A7 HASTA S5 S6 S7
-  $hoja->getActiveSheet()->mergeCells('A5:C5'); //PROYECTO
-  $hoja->getActiveSheet()->mergeCells('A6:C6'); //UBICACIÓN
-  $hoja->getActiveSheet()->mergeCells('A7:C7'); //EMPRESA  
+//   //INICIO FILAS A5 A6 A7 HASTA S5 S6 S7
+//   $hoja->getActiveSheet()->mergeCells('A5:C5'); //PROYECTO
+//   $hoja->getActiveSheet()->mergeCells('A6:C6'); //UBICACIÓN
+//   $hoja->getActiveSheet()->mergeCells('A7:C7'); //EMPRESA  
 
-  // ══════════════════════════════════════════ - FILAS A8 A9 A10 - ══════════════════════════════════════════
-  //DIMENCIONES
-  $hoja->getActiveSheet()->getColumnDimension('A')->setWidth(5);  # N°
-  $hoja->getActiveSheet()->getColumnDimension('D')->setWidth(25); # nombre
-  $hoja->getActiveSheet()->getColumnDimension('E')->setWidth(15); # dni
-  $hoja->getActiveSheet()->getColumnDimension('F')->setWidth(15); # fecha de ingreso
-  $hoja->getActiveSheet()->getColumnDimension('G')->setWidth(20); # ocupacion   
-  // MERGE
-  $hoja->getActiveSheet()->mergeCells('A8:A10'); # N°
-  $hoja->getActiveSheet()->mergeCells('B8:D10'); # NOMBRES Y APELLIDOS
-  $hoja->getActiveSheet()->mergeCells('E8:E10'); # DNI
-  $hoja->getActiveSheet()->mergeCells('F8:F10'); # FECHA INGRESO
-  $hoja->getActiveSheet()->mergeCells('G8:G10'); # OCUPACIÓN
+//   // ══════════════════════════════════════════ - FILAS A8 A9 A10 - ══════════════════════════════════════════
+//   //DIMENCIONES
+//   $hoja->getActiveSheet()->getColumnDimension('A')->setWidth(5);  # N°
+//   $hoja->getActiveSheet()->getColumnDimension('D')->setWidth(25); # nombre
+//   $hoja->getActiveSheet()->getColumnDimension('E')->setWidth(15); # dni
+//   $hoja->getActiveSheet()->getColumnDimension('F')->setWidth(15); # fecha de ingreso
+//   $hoja->getActiveSheet()->getColumnDimension('G')->setWidth(20); # ocupacion   
+//   // MERGE
+//   $hoja->getActiveSheet()->mergeCells('A8:A10'); # N°
+//   $hoja->getActiveSheet()->mergeCells('B8:D10'); # NOMBRES Y APELLIDOS
+//   $hoja->getActiveSheet()->mergeCells('E8:E10'); # DNI
+//   $hoja->getActiveSheet()->mergeCells('F8:F10'); # FECHA INGRESO
+//   $hoja->getActiveSheet()->mergeCells('G8:G10'); # OCUPACIÓN
 
-  if ($fecha_pago_obrero == 'semanal') {
-    $hoja->getActiveSheet()->mergeCells('D1:S2'); //NOMBRE EMPRESA
-    $hoja->getActiveSheet()->mergeCells('D3:S4'); //VACIO
+//   if ($fecha_pago_obrero == 'semanal') {
+//     $hoja->getActiveSheet()->mergeCells('D1:S2'); //NOMBRE EMPRESA
+//     $hoja->getActiveSheet()->mergeCells('D3:S4'); //VACIO
 
-    $hoja->getActiveSheet()->mergeCells('D5:S5'); //GET PROYECTO
-    $hoja->getActiveSheet()->mergeCells('D6:S6'); //GET UBICACIÓN
-    $hoja->getActiveSheet()->mergeCells('D7:S7'); //GET UBICACIÓN
+//     $hoja->getActiveSheet()->mergeCells('D5:S5'); //GET PROYECTO
+//     $hoja->getActiveSheet()->mergeCells('D6:S6'); //GET UBICACIÓN
+//     $hoja->getActiveSheet()->mergeCells('D7:S7'); //GET UBICACIÓN
 
-    //DIMENCIONES PARA LOS DÍAS
-    $hoja->getActiveSheet()->getColumnDimension('H')->setWidth(5); # D
-    $hoja->getActiveSheet()->getColumnDimension('I')->setWidth(5); # L
-    $hoja->getActiveSheet()->getColumnDimension('J')->setWidth(5); # M
-    $hoja->getActiveSheet()->getColumnDimension('K')->setWidth(5); # M
-    $hoja->getActiveSheet()->getColumnDimension('L')->setWidth(5); # J
-    $hoja->getActiveSheet()->getColumnDimension('M')->setWidth(5); # V  
+//     //DIMENCIONES PARA LOS DÍAS
+//     $hoja->getActiveSheet()->getColumnDimension('H')->setWidth(5); # D
+//     $hoja->getActiveSheet()->getColumnDimension('I')->setWidth(5); # L
+//     $hoja->getActiveSheet()->getColumnDimension('J')->setWidth(5); # M
+//     $hoja->getActiveSheet()->getColumnDimension('K')->setWidth(5); # M
+//     $hoja->getActiveSheet()->getColumnDimension('L')->setWidth(5); # J
+//     $hoja->getActiveSheet()->getColumnDimension('M')->setWidth(5); # V  
 
-    $hoja->getActiveSheet()->mergeCells('H8:M8');  # fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
+//     $hoja->getActiveSheet()->mergeCells('H8:M8');  # fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
 
-    $hoja->getActiveSheet()->getColumnDimension('O')->setWidth(7); # dia
-    $hoja->getActiveSheet()->getColumnDimension('P')->setWidth(15);# sueldo x mes
-    $hoja->getActiveSheet()->getColumnDimension('Q')->setWidth(15);# pago x dia
-    $hoja->getActiveSheet()->getColumnDimension('R')->setWidth(20);# pago semanal
-    $hoja->getActiveSheet()->getColumnDimension('S')->setWidth(15);# sueldo quicenal o semanal  
+//     $hoja->getActiveSheet()->getColumnDimension('O')->setWidth(7); # dia
+//     $hoja->getActiveSheet()->getColumnDimension('P')->setWidth(15);# sueldo x mes
+//     $hoja->getActiveSheet()->getColumnDimension('Q')->setWidth(15);# pago x dia
+//     $hoja->getActiveSheet()->getColumnDimension('R')->setWidth(20);# pago semanal
+//     $hoja->getActiveSheet()->getColumnDimension('S')->setWidth(15);# sueldo quicenal o semanal  
 
-    $hoja->getActiveSheet()->mergeCells('N8:N10'); # HORAS
-    $hoja->getActiveSheet()->mergeCells('O8:O10'); # DÍA
-    $hoja->getActiveSheet()->mergeCells('P8:P10'); # SUELDO
-    $hoja->getActiveSheet()->mergeCells('Q8:Q10'); # PAGO X DIA
-    $hoja->getActiveSheet()->mergeCells('R8:R10'); # pago semanal
-    $hoja->getActiveSheet()->mergeCells('S8:S10'); # SUELDO
-  } else if ($fecha_pago_obrero == 'quincenal') {
-    $hoja->getActiveSheet()->mergeCells('D1:Z2'); //NOMBRE EMPRESA
-    $hoja->getActiveSheet()->mergeCells('D3:Z4'); //VACIO
+//     $hoja->getActiveSheet()->mergeCells('N8:N10'); # HORAS
+//     $hoja->getActiveSheet()->mergeCells('O8:O10'); # DÍA
+//     $hoja->getActiveSheet()->mergeCells('P8:P10'); # SUELDO
+//     $hoja->getActiveSheet()->mergeCells('Q8:Q10'); # PAGO X DIA
+//     $hoja->getActiveSheet()->mergeCells('R8:R10'); # pago semanal
+//     $hoja->getActiveSheet()->mergeCells('S8:S10'); # SUELDO
+//   } else if ($fecha_pago_obrero == 'quincenal') {
+//     $hoja->getActiveSheet()->mergeCells('D1:Z2'); //NOMBRE EMPRESA
+//     $hoja->getActiveSheet()->mergeCells('D3:Z4'); //VACIO
 
-    $hoja->getActiveSheet()->mergeCells('D5:Z5'); //GET PROYECTO
-    $hoja->getActiveSheet()->mergeCells('D6:Z6'); //GET UBICACIÓN
-    $hoja->getActiveSheet()->mergeCells('D7:Z7'); //GET UBICACIÓN
+//     $hoja->getActiveSheet()->mergeCells('D5:Z5'); //GET PROYECTO
+//     $hoja->getActiveSheet()->mergeCells('D6:Z6'); //GET UBICACIÓN
+//     $hoja->getActiveSheet()->mergeCells('D7:Z7'); //GET UBICACIÓN
 
-    //DIMENCIONES PARA LOS DÍAS
-    $hoja->getActiveSheet()->getColumnDimension('H')->setWidth(5); # D
-    $hoja->getActiveSheet()->getColumnDimension('I')->setWidth(5); # L
-    $hoja->getActiveSheet()->getColumnDimension('J')->setWidth(5); # M
-    $hoja->getActiveSheet()->getColumnDimension('K')->setWidth(5); # M
-    $hoja->getActiveSheet()->getColumnDimension('L')->setWidth(5); # J
-    $hoja->getActiveSheet()->getColumnDimension('M')->setWidth(5); # V
-    $hoja->getActiveSheet()->getColumnDimension('N')->setWidth(5); # S
-    $hoja->getActiveSheet()->getColumnDimension('O')->setWidth(5); # D
-    $hoja->getActiveSheet()->getColumnDimension('P')->setWidth(5); # L
-    $hoja->getActiveSheet()->getColumnDimension('Q')->setWidth(5); # M
-    $hoja->getActiveSheet()->getColumnDimension('R')->setWidth(5); # M
-    $hoja->getActiveSheet()->getColumnDimension('S')->setWidth(5); # J 
-    $hoja->getActiveSheet()->getColumnDimension('T')->setWidth(5); # V    
+//     //DIMENCIONES PARA LOS DÍAS
+//     $hoja->getActiveSheet()->getColumnDimension('H')->setWidth(5); # D
+//     $hoja->getActiveSheet()->getColumnDimension('I')->setWidth(5); # L
+//     $hoja->getActiveSheet()->getColumnDimension('J')->setWidth(5); # M
+//     $hoja->getActiveSheet()->getColumnDimension('K')->setWidth(5); # M
+//     $hoja->getActiveSheet()->getColumnDimension('L')->setWidth(5); # J
+//     $hoja->getActiveSheet()->getColumnDimension('M')->setWidth(5); # V
+//     $hoja->getActiveSheet()->getColumnDimension('N')->setWidth(5); # S
+//     $hoja->getActiveSheet()->getColumnDimension('O')->setWidth(5); # D
+//     $hoja->getActiveSheet()->getColumnDimension('P')->setWidth(5); # L
+//     $hoja->getActiveSheet()->getColumnDimension('Q')->setWidth(5); # M
+//     $hoja->getActiveSheet()->getColumnDimension('R')->setWidth(5); # M
+//     $hoja->getActiveSheet()->getColumnDimension('S')->setWidth(5); # J 
+//     $hoja->getActiveSheet()->getColumnDimension('T')->setWidth(5); # V    
 
-    $hoja->getActiveSheet()->mergeCells('H8:T8');  # fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
+//     $hoja->getActiveSheet()->mergeCells('H8:T8');  # fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
 
-    $hoja->getActiveSheet()->getColumnDimension('U')->setWidth(7); # dia
-    $hoja->getActiveSheet()->getColumnDimension('W')->setWidth(15);# sueldo x mes
-    $hoja->getActiveSheet()->getColumnDimension('X')->setWidth(15);# pago x dia
-    $hoja->getActiveSheet()->getColumnDimension('Y')->setWidth(20);# pago semanal
-    $hoja->getActiveSheet()->getColumnDimension('Z')->setWidth(15);# sueldo quicenal o semanal  
+//     $hoja->getActiveSheet()->getColumnDimension('U')->setWidth(7); # dia
+//     $hoja->getActiveSheet()->getColumnDimension('W')->setWidth(15);# sueldo x mes
+//     $hoja->getActiveSheet()->getColumnDimension('X')->setWidth(15);# pago x dia
+//     $hoja->getActiveSheet()->getColumnDimension('Y')->setWidth(20);# pago semanal
+//     $hoja->getActiveSheet()->getColumnDimension('Z')->setWidth(15);# sueldo quicenal o semanal  
 
-    $hoja->getActiveSheet()->mergeCells('U8:U10'); # HORAS
-    $hoja->getActiveSheet()->mergeCells('V8:V10'); # DÍA
-    $hoja->getActiveSheet()->mergeCells('W8:W10'); # SUELDO
-    $hoja->getActiveSheet()->mergeCells('X8:X10'); # PAGO X DIA
-    $hoja->getActiveSheet()->mergeCells('Y8:Y10'); # pago semanal
-    $hoja->getActiveSheet()->mergeCells('Z8:Z10'); # SUELDO
-  }  
-}
+//     $hoja->getActiveSheet()->mergeCells('U8:U10'); # HORAS
+//     $hoja->getActiveSheet()->mergeCells('V8:V10'); # DÍA
+//     $hoja->getActiveSheet()->mergeCells('W8:W10'); # SUELDO
+//     $hoja->getActiveSheet()->mergeCells('X8:X10'); # PAGO X DIA
+//     $hoja->getActiveSheet()->mergeCells('Y8:Y10'); # pago semanal
+//     $hoja->getActiveSheet()->mergeCells('Z8:Z10'); # SUELDO
+//   }  
+// }
 
 function plantilla_stylo_header($hoja, $fecha_pago_obrero) {
 
