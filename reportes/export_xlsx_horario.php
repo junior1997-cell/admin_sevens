@@ -82,9 +82,9 @@
   // $fila_1 = 10;
 
   // foreach ($rspta['data'] as $key => $reg) { 
-    #$spreadsheet->getActiveSheet()->getStyle('A1:P8')->getAlignment()->setHorizontal('center');
-    #$spreadsheet->getActiveSheet()->getStyle('B2:H8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-    #$spreadsheet->getActiveSheet()->getStyle('J2:P8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('A1:P8')->getAlignment()->setHorizontal('center');
+    $spreadsheet->getActiveSheet()->getStyle('B2:H8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('J2:P8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     // $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     // $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
      
