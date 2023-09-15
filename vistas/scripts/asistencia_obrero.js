@@ -23,16 +23,17 @@ function init() {
   $("#lAsistencia").addClass("active bg-primary");
 
   $("#idproyecto").val(localStorage.getItem('nube_idproyecto'));
+  $("#idproyecto_horario").val(localStorage.getItem('nube_idproyecto'));
 
   tbla_principal(localStorage.getItem('nube_idproyecto'));
   listar_botones_q_s(localStorage.getItem('nube_idproyecto')); 
+  mostrar_horario(); 
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_adicional_descuento").on("click", function (e) { $("#submit-form-adicional-descuento").submit(); });
-
   $("#guardar_registro_justificacion").on("click", function (e) { $("#submit-form-justificacion").submit(); });
-
   $("#guardar_registro_fechas_actividades").on("click", function (e) { $("#submit-form-fechas-actividades").submit(); });
+  $("#guardar_registro_horario").on("click", function (e) { $("#submit-form-horario-proyecto").submit(); });
 
   $(".horas-multiples").on("click", function (e) { $("#form-horas-multiples").submit(); }); 
   $(".horas-por-dia-multiples").on("click", function (e) { $("#submit-form-horas-por-dia-multiples").submit(); });  
@@ -51,6 +52,7 @@ function init() {
 
   // Formato para telefono
   $("[data-mask]").inputmask();
+  
 }
 
 // click input group para habilitar: datepiker
@@ -63,11 +65,8 @@ $("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) })
 
 // Eliminamos el doc 1
 function doc1_eliminar() {
-
 	$("#doc1").val("");
-
 	$("#doc1_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
-
 	$("#doc1_nombre").html("");
 }
 
@@ -250,7 +249,7 @@ function listar_botones_q_s(nube_idproyecto) {
   //Listar quincenas(botones)
   $.post("../ajax/asistencia_obrero.php?op=listar_s_q_botones", { nube_idproyecto: nube_idproyecto }, function (e, status) {
 
-    e =JSON.parse(e); console.log(e);
+    e =JSON.parse(e); //console.log(e);
     var id_proyecto = localStorage.getItem('nube_idproyecto');
     var nube_fecha_pago_obrero = localStorage.getItem('nube_fecha_pago_obrero');
 
@@ -1565,23 +1564,25 @@ function calcular_hn( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
     var val_input_hn = $(`.input_HN_${id_trabajador}_${index}`).val() == 0 || $(`.input_HN_${id_trabajador}_${index}`).val() == '' || $(`.input_HN_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HN_${id_trabajador}_${index}`).val());
     var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val());
     if (val_input_hn > 0 ) { 
-      suma_hn = suma_hn + val_input_hn;
-      // console.log(`dias_asistidos: ${dias_asistidos} | dias_asistidos_ant:${dias_asistidos_ant} | suma_hn: ${suma_hn} | dias_separados: ${dias_separados} | pago_parcial_v2:${pago_parcial_v2}`);   
+      suma_hn = suma_hn + val_input_hn;      
       if (index == 0) {  sueldo_ant = val_sueldo;  }    
       if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } 
     }
-    //console.log(`sueldo_ant: ${sueldo_ant} | sueldo_ant: ${val_sueldo} | dias_1_sueldo: ${dias_1_sueldo}`);  
+    console.log(`dias_asistidos: ${dias_asistidos}  | suma_hn: ${suma_hn} sueldo_ant: ${sueldo_ant} | sueldo_ant: ${val_sueldo} | dias_1_sueldo: ${dias_1_sueldo}`);  
   }  
   
   if (domingo_1 >=4 && suma_hn>=30 ) { dias_asistidos = redondear_mas((suma_hn / 8)); } else if (suma_hn>=36 ) { dias_asistidos = roundToHalf((suma_hn / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_hn / 8)); }  
-
-  dias_2_sueldo = dias_asistidos - dias_1_sueldo;
-  if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
+  
+  dias_2_sueldo = dias_asistidos - dias_1_sueldo; console.log(`${dias_asistidos} - ${dias_1_sueldo} = dias_2_sueldo: ${dias_2_sueldo}`);
+  if ( dias_asistidos >= 0.5 && dias_asistidos <= 1) {
     pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
+  } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
+    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); console.log(` pago_parcial_v2: ${pago_parcial_v2} + ( ${dias_asistidos} * ${sueldo_1} )`);
   } else {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1);
-  }  
-  pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2);
+    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); console.log(` pago_parcial_v2: ${pago_parcial_v2} + ( ${dias_1_sueldo} * ${sueldo_1} )`);
+  }    
+  
+  pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); console.log(` pago_parcial_v2: ${pago_parcial_v2} + ( ${dias_2_sueldo} * ${sueldo_2} )`);
   //  pago_parcial_HN_1
   $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(1));  
   
@@ -1593,6 +1594,8 @@ function calcular_hn( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
   // calculamos el pago quincenal con: Pago parcial,	Adicional/descuento
   var pago_quincenal_v2 = pago_parcial_v2 + adicional_descuento;
   $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2));
+  console.log(pago_quincenal_v2);
+
 
   var suma_total_quincena = 0;
 
@@ -2870,6 +2873,273 @@ function guardar_y_editar_fechas_actividades(e) {
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: S E C C I O N   D E   H O R A R I O  :::::::::::::::::::::::::::::::::::::::..
+
+function mostrar_horario() {
+  $('.title-horario').html(`Horario: <b>${localStorage.getItem('nube_nombre_proyecto')}</b>`);
+  $.post("../ajax/asistencia_obrero.php?op=mostrar_horario", { 'id_proyecto' : localStorage.getItem('nube_idproyecto') }, function (e, textStatus, jqXHR) {
+    e = JSON.parse(e);  console.log(e);
+    if (e.status == true){
+      if (e.data.h_normal.length === 0) {
+        console.log('no hay horario'); 
+      
+        $('#tabla-hora-normal').html(`
+          <thead>
+            <tr class="text-center">
+              <th colspan="7" class="py-1" >HORARIO NORMAL 
+                <input type="hidden" name="nombre_horario[]" value="HORARIO NORMAL"> <input type="hidden" name="nombre_horario[]" value="HORARIO NORMAL"> 
+                <input type="hidden" name="nombre_horario[]" value="HORARIO NORMAL"> <input type="hidden" name="nombre_horario[]" value="HORARIO NORMAL"> 
+              </th>
+            </tr>
+            <tr>
+              <th ></th>
+              <th class="text-center">DOMINGO</th>  <th >LUNES</th> <th >MARTES</th> <th >MIÉRCOLES</th>  <th >JUEVES</th>  <th >VIERNES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-nowrap">
+              <th class="py-1"><span >MAÑANA</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="MAÑANA">
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+            </tr>
+            <tr  class="text-nowrap">
+              <th class="py-1"><span >ALMUERZO</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="ALMUERZO">               
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+            </tr>
+            <tr class="text-nowrap">
+              <th class="py-1"><span >TARDE</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="TARDE">
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+            </tr>
+            <tr  >
+              <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
+                <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">              
+              </th>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="domingo_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="lunes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="martes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="miercoles_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="jueves_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="viernes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+            </tr>
+            <tr >                                  
+              <td colspan="6" class="py-1 text-center" > <span class="total_horario_hn" >-</span> </td>                                  
+            </tr>
+          </tbody>
+        `);
+
+        $('#tabla-hora-extra').html(`
+          <thead>
+            <tr class="text-center">
+              <th colspan="7" class="py-1" >HORARIO EXTRA 
+              <input type="hidden" name="nombre_horario[]" value="HORARIO EXTRA"> <input type="hidden" name="nombre_horario[]" value="HORARIO EXTRA"> 
+              <input type="hidden" name="nombre_horario[]" value="HORARIO EXTRA"> <input type="hidden" name="nombre_horario[]" value="HORARIO EXTRA"> 
+              </th>
+            </tr>
+            <tr>
+              <th ></th>
+              <th class="text-center">DOMINGO</th>  <th >LUNES</th> <th >MARTES</th> <th >MIÉRCOLES</th>  <th >JUEVES</th>  <th >VIERNES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-nowrap">
+              <th class="py-1"><span >TARDE</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="TARDE">
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+            </tr>
+            <tr  class="text-nowrap">
+              <th class="py-1"><span >CENA</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="CENA">
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+            </tr>
+            <tr class="text-nowrap">
+              <th class="py-1"><span >NOCHE</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="NOCHE">
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+            </tr>
+            <tr  >
+              <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
+                <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">
+              </th>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="domingo_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="lunes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="martes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="miercoles_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="jueves_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="viernes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+            </tr>
+            <tr >                                  
+              <td colspan="6" class="py-1 text-center" > <span class="total_horario_he" >-</span>  </td>                                  
+            </tr>
+          </tbody>
+        `);
+      }else{
+        var input_dia_html = ''; var input_nombre_html = ''; var nombre_html = ''; var total_horas = 0;
+        e.data.h_normal.forEach((val, key) => {           
+          
+          input_nombre_html += `<input type="hidden" name="nombre_horario[]" value="${val.nombre}">`;
+          nombre_html =  val.nombre;
+
+          if (val.turno == 'HORAS ACUMULADAS') {
+            input_dia_html += `<tr  >
+              <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
+                <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">
+              </th>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="number" class="form-control w-120px input_horario ha_hn" name="domingo_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="number" class="form-control w-120px input_horario ha_hn" name="lunes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="number" class="form-control w-120px input_horario ha_hn" name="martes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="number" class="form-control w-120px input_horario ha_hn" name="miercoles_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="number" class="form-control w-120px input_horario ha_hn" name="jueves_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="number" class="form-control w-120px input_horario ha_hn" name="viernes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+            </tr>`;
+            total_horas = parseFloat(val.domingo) + parseFloat(val.lunes) + parseFloat(val.martes) + parseFloat(val.miercoles) + parseFloat(val.jueves) + parseFloat(val.viernes);
+          }else{
+            input_dia_html += `<tr class="text-nowrap">
+              <th class="py-1"  ><span >${val.turno}</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="${val.turno}">
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="text" class="form-control w-120px input_horario" name="domingo_h[]" style="display: none;"> </td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="text" class="form-control w-120px input_horario" name="lunes_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="text" class="form-control w-120px input_horario" name="martes_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="text" class="form-control w-120px input_horario" name="miercoles_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="text" class="form-control w-120px input_horario" name="jueves_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="text" class="form-control w-120px input_horario" name="viernes_h[]" style="display: none;"></td>
+            </tr>`;
+          }
+        });
+
+        $('#tabla-hora-normal').html(`
+          <thead>
+            <tr class="text-center">
+              <th colspan="7" class="py-1" > ${nombre_html} ${input_nombre_html} </th>
+            </tr>
+            <tr>
+              <th ></th>
+              <th class="text-center">DOMINGO</th>  <th >LUNES</th> <th >MARTES</th> <th >MIÉRCOLES</th>  <th >JUEVES</th>  <th >VIERNES</th>
+            </tr>
+          </thead>
+          <tbody>             
+            ${input_dia_html}
+            <tr >                                  
+              <td colspan="6" class="py-1 text-center" > <span class="total_horario_hn" >${total_horas}</span> </td>                                  
+            </tr>
+          </tbody>
+        `);
+
+        var input_dia_html_2 = ''; var input_nombre_html_2 = ''; var nombre_html_2 = ''; var total_horas_2 = 0; 
+        e.data.h_extra.forEach((val, key) => {           
+          
+          input_nombre_html_2 += `<input type="hidden" name="nombre_horario[]" value="${val.nombre}">`;
+          nombre_html_2 =  val.nombre;
+
+          if (val.turno == 'HORAS ACUMULADAS') {
+            input_dia_html_2 += `<tr  >
+              <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
+                <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">
+              </th>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="number" class="form-control w-120px input_horario ha_he" name="domingo_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="number" class="form-control w-120px input_horario ha_he" name="lunes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="number" class="form-control w-120px input_horario ha_he" name="martes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="number" class="form-control w-120px input_horario ha_he" name="miercoles_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="number" class="form-control w-120px input_horario ha_he" name="jueves_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="number" class="form-control w-120px input_horario ha_he" name="viernes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+            </tr>`;
+            total_horas_2 = parseFloat(val.domingo) + parseFloat(val.lunes) + parseFloat(val.martes) + parseFloat(val.miercoles) + parseFloat(val.jueves) + parseFloat(val.viernes);
+          }else{
+            input_dia_html_2 += `<tr class="text-nowrap">
+              <th class="py-1"  ><span >${val.turno}</span> 
+                <input type="text" name="turno_h[]" style="display: none;" value="${val.turno}">
+              </th>
+              <td class="p-1 text-center"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="text" class="form-control w-120px input_horario" name="domingo_h[]" style="display: none;"> </td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="text" class="form-control w-120px input_horario" name="lunes_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="text" class="form-control w-120px input_horario" name="martes_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="text" class="form-control w-120px input_horario" name="miercoles_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="text" class="form-control w-120px input_horario" name="jueves_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="text" class="form-control w-120px input_horario" name="viernes_h[]" style="display: none;"></td>
+            </tr>`;
+          }
+        });
+
+        $('#tabla-hora-extra').html(`
+          <thead>
+            <tr class="text-center">
+              <th colspan="7" class="py-1" > ${nombre_html_2} ${input_nombre_html_2} </th>
+            </tr>
+            <tr>
+              <th ></th>
+              <th class="text-center">DOMINGO</th>  <th >LUNES</th> <th >MARTES</th> <th >MIÉRCOLES</th>  <th >JUEVES</th>  <th >VIERNES</th>
+            </tr>
+          </thead>
+          <tbody>             
+            ${input_dia_html_2}
+            <tr >                                  
+              <td colspan="6" class="py-1 text-center" > <span class="total_horario_he" >${total_horas_2}</span> </td>                                  
+            </tr>
+          </tbody>
+        `);
+      }
+
+      $('.input_horario').inputmask('99:99 - 99:99', { 'placeholder': 'hh:mm - hh:mm' });
+    }else{
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function sumar_hn_horario() {
+  var data_h = $('.ha_hn'); var hora = 0;
+  data_h.each(function(val, key) { 
+    hora +=  $(this).val() == null || $(this).val() == '' || $(this).val() == 0 ? 0 : parseFloat($(this).val());    
+    console.log( hora );     
+  });
+  $('.total_horario_hn').html(hora);
+}
+
+function sumar_he_horario() {
+  var data_h = $('.ha_he'); var hora = 0;
+  data_h.each(function(val, key) { 
+    hora +=  $(this).val() == null || $(this).val() == '' || $(this).val() == 0 ? 0 : parseFloat($(this).val());    
+    console.log( hora );     
+  });
+  $('.total_horario_he').html(hora);
+}
+
 function show_hide_form_horario(flag) {
   if (flag == 1) { // tabla
     $('.input_horario').hide();
@@ -2887,6 +3157,53 @@ function show_hide_form_horario(flag) {
     $('#guardar_registro_horario').show();
   }
 }
+
+function guardar_y_editar_horario(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-horario-proyecto")[0]);
+
+  $.ajax({
+    url: "../ajax/asistencia_obrero.php?op=guardar_y_editar_horario",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) { 
+          Swal.fire("Correcto!", "Horario guardado correctamente", "success");
+          show_hide_form_horario(1);
+          mostrar_horario(); 
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+
+      $("#guardar_registro_horario").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_horario").css({"width": percentComplete+'%'}).text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_horario").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_horario").css({ width: "0%",  }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_horario").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M S  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {    
@@ -2907,19 +3224,15 @@ $(function () {
     errorElement: "span",
 
     errorPlacement: function (error, element) {
-
       error.addClass("invalid-feedback");
-
       element.closest(".form-group").append(error);
     },
 
     highlight: function (element, errorClass, validClass) {
-
       $(element).addClass("is-invalid").removeClass("is-valid");
     },
 
     unhighlight: function (element, errorClass, validClass) {
-
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
 
@@ -3054,6 +3367,39 @@ $(function () {
 
     submitHandler: function (form) {      
       agregar_horas_por_dia_multiples(form);
+    },
+  });
+
+  $("#form-horario-proyecto").validate({
+    
+    rules: {      
+      'idproyecto_horario':  { required: true,},
+      // horas_xd: { required: true, number: true, min:0, max:12},
+    },
+
+    messages: {
+      'idproyecto_horario':  { required: "Campo requerido", min: "Mayor a 0."},
+      // horas_xd: { required: "Este campo es requerido",  min:"Escriba almenos 1 digito positivo.", max:"No explote a sus obreros." },
+    },  
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").addClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (form) {      
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_horario(form);
     },
   });
 });

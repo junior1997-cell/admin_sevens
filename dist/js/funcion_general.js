@@ -508,6 +508,14 @@ function removeCaracterEspecial(str) {
   return string;
 }
 
+function removeCaracterEspecial_v2(str) {
+  var string = "";
+  if (str == "" || str == null || str === undefined) { } else {     
+    string = str.replace(/[`~!@#$%^&*()_|+\-=?;:°'",.<>\{\}\[\]\\\/ ]/g, '');
+  }
+  return string;
+}
+
 function preservarNumeroLetra(str) {
   var string = "";
   if (str == "" || str == null || str === undefined) { } else {     

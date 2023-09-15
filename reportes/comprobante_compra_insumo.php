@@ -755,22 +755,22 @@
               <div class="col-sm-12 invoice-col">
                 <table>
                   <tr>
-                    <th>Fecha de Emisión:</th><td><?php echo  date("d/m/Y", strtotime($rspta['data']['fecha_compra'])); ?></td>
+                    <th>Fecha de Emisión</th><td>: <?php echo  date("d/m/Y", strtotime($rspta['data']['fecha_compra'])); ?></td>
                   </tr>
                   <tr>
-                    <th>Señor(es):</th><td>SEVENS INGENIEROS S.A.C</td>
+                    <th>Señor(es)</th><td>: SEVENS INGENIEROS S.A.C</td>
                   </tr>
                   <tr>
-                    <th>RUC:</th><td>20606456892</td>
+                    <th>RUC</th><td>: 20606456892</td>
                   </tr>
                   <tr>
-                    <th>Dirección del Cliente:</th><td>PJ. YUNGAY 151 P.J. SANTA ROSA LAMBAYEQUE-CHICLAYOCHICLAYO </td>
+                    <th>Dirección del Cliente</th><td>: PJ. YUNGAY 151 P.J. SANTA ROSA LAMBAYEQUE-CHICLAYOCHICLAYO </td>
                   </tr>
                   <tr>
-                    <th>Tipo de Moneda:</th><td> Soles</td>
+                    <th>Tipo de Moneda</th><td>: Soles</td>
                   </tr>
                   <tr>
-                    <th>Observación:</th><td><?php echo $rspta['data']['descripcion']; ?></td>
+                    <th>Observación</th><td>: <?php echo $rspta['data']['descripcion']; ?></td>
                   </tr>
                 </table>
                 

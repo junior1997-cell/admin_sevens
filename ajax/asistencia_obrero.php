@@ -425,7 +425,6 @@ ob_start();
 
         // :::::::::::::::::::::::::::::::::::: S E C C I O N   F E C H A S   A C T I V I D A D ::::::::::::::::::::::::::::::::::::::
         case 'fechas_actividad':
-
           $rspta=$asistencia_obrero->fechas_actividad($_POST["id_proyecto"]);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
@@ -448,6 +447,21 @@ ob_start();
             echo json_encode($rspta, true);
           }
 
+        break;
+
+        // :::::::::::::::::::::::::::::::::::: S E C C I O N   D E   H O R A R I O ::::::::::::::::::::::::::::::::::::::
+
+        case 'guardar_y_editar_horario':
+          $rspta=$asistencia_obrero->guardar_y_editar_horario($_POST["idproyecto_horario"] ,$_POST["nombre_horario"], 
+          $_POST["turno_h"], $_POST["domingo_h"], $_POST["lunes_h"], $_POST["martes_h"], $_POST["miercoles_h"], $_POST["jueves_h"], $_POST["viernes_h"]  );
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
+        break;
+
+        case 'mostrar_horario':
+          $rspta=$asistencia_obrero->mostrar_horario($_POST["id_proyecto"]);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true);
         break;
 
         default: 

@@ -82,71 +82,71 @@
   // $fila_1 = 10;
 
   // foreach ($rspta['data'] as $key => $reg) { 
-    $spreadsheet->getActiveSheet()->getStyle('A1:P8')->getAlignment()->setHorizontal('center');
-    $spreadsheet->getActiveSheet()->getStyle('B2:H8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-    $spreadsheet->getActiveSheet()->getStyle('J2:P8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    #$spreadsheet->getActiveSheet()->getStyle('A1:P8')->getAlignment()->setHorizontal('center');
+    #$spreadsheet->getActiveSheet()->getStyle('B2:H8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    #$spreadsheet->getActiveSheet()->getStyle('J2:P8')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     // $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     // $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
      
-    $hojaActiva->setCellValue('C4', '8:00 - 12:00');
-    $hojaActiva->setCellValue('D4', '7:30 - 12:00');
-    $hojaActiva->setCellValue('E4', '7:30 - 12:00');
-    $hojaActiva->setCellValue('F4', '7:30 - 12:00');
-    $hojaActiva->setCellValue('G4', '7:30 - 12:00');
-    $hojaActiva->setCellValue('H4', '7:30 - 12:00');
+    // $hojaActiva->setCellValue('C4', '8:00 - 12:00');
+    // $hojaActiva->setCellValue('D4', '7:30 - 12:00');
+    // $hojaActiva->setCellValue('E4', '7:30 - 12:00');
+    // $hojaActiva->setCellValue('F4', '7:30 - 12:00');
+    // $hojaActiva->setCellValue('G4', '7:30 - 12:00');
+    // $hojaActiva->setCellValue('H4', '7:30 - 12:00');
 
-    $hojaActiva->setCellValue('C5', '');
-    $hojaActiva->setCellValue('D5', '12:00 - 1:00');
-    $hojaActiva->setCellValue('E5', '12:00 - 1:00');
-    $hojaActiva->setCellValue('F5', '12:00 - 1:00');
-    $hojaActiva->setCellValue('G5', '12:00 - 1:00');
-    $hojaActiva->setCellValue('H5', '12:00 - 1:00');
+    // $hojaActiva->setCellValue('C5', '');
+    // $hojaActiva->setCellValue('D5', '12:00 - 1:00');
+    // $hojaActiva->setCellValue('E5', '12:00 - 1:00');
+    // $hojaActiva->setCellValue('F5', '12:00 - 1:00');
+    // $hojaActiva->setCellValue('G5', '12:00 - 1:00');
+    // $hojaActiva->setCellValue('H5', '12:00 - 1:00');
 
-    $hojaActiva->setCellValue('C6', '');
-    $hojaActiva->setCellValue('D6', '1:00 - 5:30');
-    $hojaActiva->setCellValue('E6', '1:00 - 5:30');
-    $hojaActiva->setCellValue('F6', '1:00 - 5:30');
-    $hojaActiva->setCellValue('G6', '1:00 - 5:30');
-    $hojaActiva->setCellValue('H6', '1:00 - 4:30');
+    // $hojaActiva->setCellValue('C6', '');
+    // $hojaActiva->setCellValue('D6', '1:00 - 5:30');
+    // $hojaActiva->setCellValue('E6', '1:00 - 5:30');
+    // $hojaActiva->setCellValue('F6', '1:00 - 5:30');
+    // $hojaActiva->setCellValue('G6', '1:00 - 5:30');
+    // $hojaActiva->setCellValue('H6', '1:00 - 4:30');
 
-    $hojaActiva->setCellValue('C7', '4');
-    $hojaActiva->setCellValue('D7', '9');
-    $hojaActiva->setCellValue('E7', '9');
-    $hojaActiva->setCellValue('F7', '9');
-    $hojaActiva->setCellValue('G7', '9');
-    $hojaActiva->setCellValue('H7', '8');
-    $hojaActiva->setCellValue('C8', '48');
+    // $hojaActiva->setCellValue('C7', '4');
+    // $hojaActiva->setCellValue('D7', '9');
+    // $hojaActiva->setCellValue('E7', '9');
+    // $hojaActiva->setCellValue('F7', '9');
+    // $hojaActiva->setCellValue('G7', '9');
+    // $hojaActiva->setCellValue('H7', '8');
+    // $hojaActiva->setCellValue('C8', '48');
 
-    // horario extra
+    // // horario extra
 
-    $hojaActiva->setCellValue('K4', '1:00 - 5:00');
-    $hojaActiva->setCellValue('L4', '');
-    $hojaActiva->setCellValue('M4', '');
-    $hojaActiva->setCellValue('N4', '');
-    $hojaActiva->setCellValue('O4', '');
-    $hojaActiva->setCellValue('P4', '');
+    // $hojaActiva->setCellValue('K4', '1:00 - 5:00');
+    // $hojaActiva->setCellValue('L4', '');
+    // $hojaActiva->setCellValue('M4', '');
+    // $hojaActiva->setCellValue('N4', '');
+    // $hojaActiva->setCellValue('O4', '');
+    // $hojaActiva->setCellValue('P4', '');
 
-    $hojaActiva->setCellValue('K5', '5:00 - 6:00');
-    $hojaActiva->setCellValue('L5', '');
-    $hojaActiva->setCellValue('N5', '');
-    $hojaActiva->setCellValue('M5', '');
-    $hojaActiva->setCellValue('O5', '');
-    $hojaActiva->setCellValue('P5', '');
+    // $hojaActiva->setCellValue('K5', '5:00 - 6:00');
+    // $hojaActiva->setCellValue('L5', '');
+    // $hojaActiva->setCellValue('N5', '');
+    // $hojaActiva->setCellValue('M5', '');
+    // $hojaActiva->setCellValue('O5', '');
+    // $hojaActiva->setCellValue('P5', '');
 
-    $hojaActiva->setCellValue('K6', '6:00 - 10:00');
-    $hojaActiva->setCellValue('L6', '6:00 - 10:00');
-    $hojaActiva->setCellValue('N6', '6:00 - 10:00');
-    $hojaActiva->setCellValue('M6', '6:00 - 10:00');
-    $hojaActiva->setCellValue('O6', '6:00 - 10:00');
-    $hojaActiva->setCellValue('P6', '6:30 - 10:30');
+    // $hojaActiva->setCellValue('K6', '6:00 - 10:00');
+    // $hojaActiva->setCellValue('L6', '6:00 - 10:00');
+    // $hojaActiva->setCellValue('N6', '6:00 - 10:00');
+    // $hojaActiva->setCellValue('M6', '6:00 - 10:00');
+    // $hojaActiva->setCellValue('O6', '6:00 - 10:00');
+    // $hojaActiva->setCellValue('P6', '6:30 - 10:30');
 
-    $hojaActiva->setCellValue('K7', '4');
-    $hojaActiva->setCellValue('L7', '4');
-    $hojaActiva->setCellValue('N7', '4');
-    $hojaActiva->setCellValue('M7', '4');
-    $hojaActiva->setCellValue('O7', '4');
-    $hojaActiva->setCellValue('P7', '8');
-    $hojaActiva->setCellValue('K8', '28');
+    // $hojaActiva->setCellValue('K7', '4');
+    // $hojaActiva->setCellValue('L7', '4');
+    // $hojaActiva->setCellValue('N7', '4');
+    // $hojaActiva->setCellValue('M7', '4');
+    // $hojaActiva->setCellValue('O7', '4');
+    // $hojaActiva->setCellValue('P7', '8');
+    // $hojaActiva->setCellValue('K8', '28');
     
     // $spreadsheet->getActiveSheet()->getStyle('M'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 

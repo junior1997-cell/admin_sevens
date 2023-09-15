@@ -1016,7 +1016,35 @@ class Asistencia_obrero
     return $fecha;
   }
 
-  // :::::::::::::::::::::::::::::::::::: S E C C I O N   O B T E N E R   I M G ::::::::::::::::::::::::::::::::::::::
+  // :::::::::::::::::::::::::::::::::::: S E C C I O N   D E   H O R A R I O ::::::::::::::::::::::::::::::::::::::
+
+  public function guardar_y_editar_horario($idproyecto,$nombre_horario, $turno_h,$domingo_h,$lunes_h,$martes_h,$miercoles_h,$jueves_h,$viernes_h) {
+    $data = [];
+
+    $sql_2 = "DELETE FROM horario WHERE idproyecto='$idproyecto'";
+    $delete = ejecutarConsulta($sql_2); if ( $delete['status'] == false) {return $delete; }
+    
+    foreach ($nombre_horario as $key => $val) {
+      
+      $sql_2 = "INSERT INTO horario( idproyecto, nombre, turno, domingo, lunes, martes, miercoles, jueves, viernes, user_created) VALUES 
+      ('$idproyecto','$val','$turno_h[$key]','$domingo_h[$key]','$lunes_h[$key]','$martes_h[$key]','$miercoles_h[$key]','$jueves_h[$key]','$viernes_h[$key]', '".$_SESSION['idusuario']."' )";
+      $data = ejecutarConsulta($sql_2); if ( $data['status'] == false) {return $data; }
+    }    
+    
+    return $data;
+  }
+
+  public function mostrar_horario($id) {
+    $sql_1 = "SELECT * FROM horario WHERE idproyecto = '$id' and nombre = 'HORARIO NORMAL'";
+    $h_normal =  ejecutarConsultaArray($sql_1);
+
+    $sql_2 = "SELECT * FROM horario WHERE idproyecto = '$id' and nombre = 'HORARIO EXTRA'";
+    $h_extra = ejecutarConsultaArray($sql_2);
+
+    return  $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => [ 'h_normal' => $h_normal['data'], 'h_extra' => $h_extra['data']   ]];
+  }
+
+  // :::::::::::::::::::::::::::::::::::: D O C   J U S T I F I C A C I O N  ::::::::::::::::::::::::::::::::::::::
 
   // obtebnemos los "DOC JUSTIFICACION para eliminar
   public function imgJustificacion($id) {

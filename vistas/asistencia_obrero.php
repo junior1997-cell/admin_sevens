@@ -54,7 +54,7 @@
                         <button type="button" class="btn bg-gradient-success btn-sm" data-toggle="modal" data-target="#modal-agregar-fechas-actividades" onclick="limpiar_form_fechas_actividades();">
                           <i class="far fa-calendar-alt"></i> Fechas de Actividades
                         </button>
-                        <button type="button" class="btn bg-gradient-fuchsia btn-sm" data-toggle="modal" data-target="#modal-agregar-horario" onclick="">
+                        <button type="button" class="btn bg-gradient-fuchsia btn-sm" data-toggle="modal" data-target="#modal-agregar-horario" onclick="mostrar_horario();">
                           <i class="far fa-clock"></i> Horario
                         </button>
                         <a type="button" class="btn bg-gradient-gray btn-sm" id="btn-export-qs" href="#" onclick="toastr_error('No hay datos!!', 'Seleccione una quincena o semana para exportar.');">
@@ -407,7 +407,7 @@
                   </div>
                 </div>
 
-                <!-- MODAL - editar asistencia - chargue 1 - :::::::::::::::::::::::::::::::::::: NO SE SE USA -->
+                <!-- MODAL - editar asistencia - chargue 1,2 - :::::::::::::::::::::::::::::::::::: NO SE SE USA -->
                 <div class="modal fade" id="modal-editar-asistencia">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -462,7 +462,7 @@
                   </div>
                 </div>
 
-                <!-- MODAL - justificar asistencia - chargue 3 -->
+                <!-- MODAL - justificar asistencia - chargue 3,4 -->
                 <div class="modal fade" id="modal-justificar-asistencia">
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -548,7 +548,7 @@
                   </div>
                 </div> 
                 
-                <!-- MODAL - adicinoal / descuento - chargue 5 -->
+                <!-- MODAL - adicinoal / descuento - chargue 5,6 -->
                 <div class="modal fade" id="modal-adicional-descuento" >
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -599,7 +599,7 @@
                   </div>
                 </div>
 
-                <!-- MODAL - adicinoal / descuento - chargue 9 -->
+                <!-- MODAL - adicinoal / descuento - chargue 9,10 -->
                 <div class="modal fade" id="modal-adicional-descuento-hne" >
                   <div class="modal-dialog modal-dialog-scrollable modal-md">
                     <div class="modal-content">
@@ -652,7 +652,7 @@
                   </div>
                 </div>
 
-                <!-- MODAL - Fechas de Actividades - chargue 7 -->
+                <!-- MODAL - Fechas de Actividades - chargue 7,8 -->
                 <div class="modal fade" id="modal-agregar-fechas-actividades">
                   <div class="modal-dialog /*modal-dialog-scrollable*/ modal-md">
                     <div class="modal-content">
@@ -865,144 +865,44 @@
                   </div>
                 </div>
 
-                <!-- MODAL - Horario de Trabajd - chargue 8 -->
+                <!-- MODAL - HORARIO  -->
                 <div class="modal fade" id="modal-agregar-horario">
-                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Horario</h4>
+                        <h4 class="modal-title title-horario">Horario</h4> 
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
                       </div>
 
-                      <div class="modal-body">
-                        
+                      <div class="modal-body">                        
                         <!-- form start -->                        
-                        <form id="form-fechas-actividades" name="form-fechas-actividades" method="POST">
-                          <div class="row" id="cargando-7-fomulario">
+                        <form id="form-horario-proyecto" name="form-horario-proyecto" method="POST">
+                          <input type="hidden" name="idproyecto_horario" id="idproyecto_horario">
+                          <div class="row" >
                             <div class="col-12 table-responsive">
-                              <table class="table table-bordered table-hover">
-                                <thead>
-                                  <tr class="text-center"><th colspan="7" class="py-1" >HORARIO</th></tr>
-                                  <tr>
-                                    <th ></th>
-                                    <th class="text-center">DOMINGO</th>  <th >LUNES</th> <th >MARTES</th> <th >MIÉRCOLES</th>  <th >JUEVES</th>  <th >VIERNES</th>
-                                  </tr>
-                                </thead>
+                              <table class="table table-bordered table-hover" id="tabla-hora-normal">
                                 <tbody>
-                                  <tr class="text-nowrap">
-                                    <th class="py-1"><span >MAÑANA</span>  <input type="text" name="turno_h[]" style="display: none;" value="MAÑANA"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_m_h">8:00 - 12:00</span><input type="text" class="form-control input_horario" name="domingo_h[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_m_h">7:30 - 12:00</span><input type="text" class="form-control input_horario" name="lunes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_m_h">7:30 - 12:00</span><input type="text" class="form-control input_horario" name="martes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_m_h">7:30 - 12:00</span><input type="text" class="form-control input_horario" name="miercoles_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_m_h">7:30 - 12:00</span><input type="text" class="form-control input_horario" name="jueves_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_m_h">7:30 - 12:00</span><input type="text" class="form-control input_horario" name="viernes_h[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr  class="text-nowrap">
-                                    <th class="py-1"><span >ALMUERZO</span>  <input type="text" name="turno_h[]" style="display: none;" value="ALMUERZO"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_a_h">---</span><input type="text" class="form-control input_horario" name="domingo_h[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_a_h">12:00 - 1:00</span><input type="text" class="form-control input_horario" name="lunes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_a_h">12:00 - 1:00</span><input type="text" class="form-control input_horario" name="martes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_a_h">12:00 - 1:00</span><input type="text" class="form-control input_horario" name="miercoles_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_a_h">12:00 - 1:00</span><input type="text" class="form-control input_horario" name="jueves_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_a_h">12:00 - 1:00</span><input type="text" class="form-control input_horario" name="viernes_h[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr class="text-nowrap">
-                                    <th class="py-1"><span >TARDE</span>  <input type="text" name="turno_h[]" style="display: none;" value="TARDE"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_t_h">---</span><input type="text" class="form-control input_horario" name="domingo_h[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_t_h">1:00 - 5:30</span><input type="text" class="form-control input_horario" name="lunes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_t_h">1:00 - 5:30</span><input type="text" class="form-control input_horario" name="martes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_t_h">1:00 - 5:30</span><input type="text" class="form-control input_horario" name="miercoles_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_t_h">1:00 - 5:30</span><input type="text" class="form-control input_horario" name="jueves_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_t_h">1:00 - 4:30</span><input type="text" class="form-control input_horario" name="viernes_h[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr  >
-                                    <th rowspan="2" ><span >HORAS ACUMULADAS</span>  <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_ha_h">4</span><input type="text" class="form-control input_horario" name="domingo_h[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_ha_h">9</span><input type="text" class="form-control input_horario" name="lunes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_ha_h">9</span><input type="text" class="form-control input_horario" name="martes_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_ha_h">9</span><input type="text" class="form-control input_horario" name="miercoles_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_ha_h">9</span><input type="text" class="form-control input_horario" name="jueves_h[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_ha_h">8</span><input type="text" class="form-control input_horario" name="viernes_h[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr >                                  
-                                    <td colspan="6" class="py-1 text-center" > 48 </td>                                  
-                                  </tr>
+                                  <tr > <td class="text-center"> <i class="fas fa-spinner fa-pulse fa-6x"></i><br /> <br /> <h4>Cargando...</h4> </td> </tr>
                                 </tbody>
                               </table>
                             </div>
-                            <div class="col-12 table-responsive">
-                              <table class="table table-bordered table-hover">
-                                <thead>
-                                  <tr class="text-center"><th colspan="7" class="py-1" >HORARIO EXTRA</th></tr>
-                                  <tr>
-                                    <th ></th>
-                                    <th class="text-center">DOMINGO</th>  <th >LUNES</th> <th >MARTES</th> <th >MIÉRCOLES</th>  <th >JUEVES</th>  <th >VIERNES</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr class="text-nowrap">
-                                    <th class="py-1"><span >TARDE</span>  <input type="text" name="turno_he[]" style="display: none;" value="MAÑANA"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_m_he">1:00 - 5:00</span><input type="text" class="form-control input_horario" name="domingo_he[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_m_he">---</span><input type="text" class="form-control input_horario" name="lunes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_m_he">---</span><input type="text" class="form-control input_horario" name="martes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_m_he">---</span><input type="text" class="form-control input_horario" name="miercoles_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_m_he">---</span><input type="text" class="form-control input_horario" name="jueves_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_m_he">---</span><input type="text" class="form-control input_horario" name="viernes_he[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr  class="text-nowrap">
-                                    <th class="py-1"><span >CENA</span>  <input type="text" name="turno_he[]" style="display: none;" value="ALMUERZO"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_a_he">5:00 - 6:00</span><input type="text" class="form-control input_horario" name="domingo_he[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_a_he">---</span><input type="text" class="form-control input_horario" name="lunes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_a_he">---</span><input type="text" class="form-control input_horario" name="martes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_a_he">---</span><input type="text" class="form-control input_horario" name="miercoles_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_a_he">---</span><input type="text" class="form-control input_horario" name="jueves_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_a_he">---</span><input type="text" class="form-control input_horario" name="viernes_he[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr class="text-nowrap">
-                                    <th class="py-1"><span >NOCHE</span>  <input type="text" name="turno_he[]" style="display: none;" value="TARDE"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="domingo_he[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="lunes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="martes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="miercoles_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_t_he">6:00 - 10:00</span><input type="text" class="form-control input_horario" name="jueves_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_t_he">6:30 - 10:30</span><input type="text" class="form-control input_horario" name="viernes_he[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr  >
-                                    <th rowspan="2" ><span >HORAS ACUMULADAS</span>  <input type="text" name="turno_he[]" style="display: none;" value="HORAS ACUMULADAS"></th>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_domingo_ha_he">4</span><input type="text" class="form-control input_horario" name="domingo_he[]" style="display: none;"> </td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_lunes_ha_he">4</span><input type="text" class="form-control input_horario" name="lunes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_martes_ha_he">4</span><input type="text" class="form-control input_horario" name="martes_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_miercoles_ha_he">4</span><input type="text" class="form-control input_horario" name="miercoles_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_jueves_ha_he">4</span><input type="text" class="form-control input_horario" name="jueves_he[]" style="display: none;"></td>
-                                    <td class="p-1 text-center"><span class="span_horario" id="s_viernes_ha_he">8</span><input type="text" class="form-control input_horario" name="viernes_he[]" style="display: none;"></td>
-                                  </tr>
-                                  <tr >                                  
-                                    <td colspan="6" class="py-1 text-center" > 28 </td>                                  
-                                  </tr>
-                                </tbody>
+                            <div class="col-12 table-responsive mt-4">
+                              <table class="table table-bordered table-hover" id="tabla-hora-extra">
+                                <tr > <td class="text-center"> <i class="fas fa-spinner fa-pulse fa-6x"></i><br /> <br /> <h4>Cargando...</h4> </td> </tr>
                               </table>
                             </div>
-                          </div>
-
-                          <div class="row" id="cargando-8-fomulario" style="display: none;">
-                            <div class="col-lg-12 text-center">
-                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                              <br />
-                              <h4>Cargando...</h4>
-                            </div>
-                          </div>
+                          </div>                          
                           <!-- /.card-body -->
-                          <button type="submit" style="display: none;" id="submit-form-fechas-actividades">Submit</button>
+                          <button type="submit" style="display: none;" id="submit-form-horario-proyecto">Submit</button>
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         <a type="submit" class="btn bg-gradient-gray" id="bnt-exportar-horario" href="../reportes/export_xlsx_horario.php"><i class="fa-regular fa-file-excel"></i> Exportar</a>
-                        <button type="submit" class="btn btn-warning" id="btn-editar-horario" style="display: none;" onclick="show_hide_form_horario(2);">Editar</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_horario" style="display: none;" onclick="show_hide_form_horario(1);">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-warning" id="btn-editar-horario" onclick="show_hide_form_horario(2);">Editar</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_horario" style="display: none;">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
