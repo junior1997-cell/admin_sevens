@@ -317,7 +317,88 @@
                               <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-controlEPP_trabajador"> <i class="fa-regular fa-file-excel"></i> export </a>
                               <div class="table-responsive pb-3">
                                   <!--TABLA EXPORT controlEPP TRABAJADOR-->
-                                  <h1>CONTROL DE E.P.P POR TRABJADOR</h1>
+                                  <div class="content">
+                                    <table class="table table-bordered table-striped" style="width: 100% !important;">
+                                    <thead>
+                                      <tr>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px text-center" rowspan="3"><img src="../dist/img/logo-principal.png" alt="logo Admin Sevens" width="100px" ></th> 
+                                        <!-- <th class="p-y-2px text-center"  rowspan="3"><img src="../dist/img/logo-principal.png" alt="logo Admin Sevens" width="100px" ></th>  -->
+                                        <th class="p-y-2px text-center" colspan="17">REGISTRO DE EQUIPOS DE SEGURIDAD O EMERGENCIA</th> 
+                                        <th class="p-y-2px text-center" colspan="2">REVISIÓN</th> 
+                                        <!-- <th class="p-y-2px">---</th> -->
+                                      </tr>
+                                      <tr>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px text-center" rowspan="2" colspan="17"  >SEVEN´S INGENIEROS S.A.C.</th>  
+                                        <th class="p-y-2px" >FECHA</th> 
+                                        <th class="p-y-2px">---</th>
+                                      </tr>
+                                      <tr>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px">N° REGISTRO</th> 
+                                        <th class="p-y-2px">---</th>
+                                      </tr>
+                                      <tr> 
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px"></th>
+                                        <th class="p-y-2px" colspan="3"> RAZÓN SOCIAL O DENOMINACIÓN SOCIAL</th>
+                                        <th class="p-y-2px"> <!--SEVEN´S INGENIEROS SELVA S.A.C.--></th>
+                                        <th class="p-y-2px"> <!--RUC:--> </th>
+                                        <th class="p-y-2px"> <!--20609935651--> </th>
+                                        <th class="p-y-2px" > <!--Lugar:--> </th>
+                                        <th class="p-y-2px"> </th>
+                                        <th class="p-y-2px"> <!--N° DE REGISTRO:--> </th>
+                                        <th class="p-y-2px"> <!-------> </th> 
+                                      </tr>
+                                      <tr>
+                                        <th class="p-y-10px" colspan="9"></th>
+                                      </tr>
+                                      <tr colspan="5"> 
+                                        <th class="p-y-2px " > N°</th>
+                                        <th class="p-y-2px" colspan="3">DESCRIPCIÓN</th>
+                                        <th class="p-y-2px" colspan="2">TALLA</th>
+                                        <th class="p-y-2px">CANTIDAD</th> 
+                                        <th class="p-y-2px" colspan="2">FECHA</th>
+                                        <th class="p-y-2px" colspan="2">Firma</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <!-- aqui va el detalle del la tabla -->
+                                      <?php
+                                      // Aquí puedes agregar el código PHP para generar filas de datos dinámicamente
+                                      for ($i = 1; $i <= 5; $i++) {
+                                          echo '<tr>';
+                                          echo '<td>' . $i . '</td>';
+                                          echo '<td></td>';
+                                          echo '<td></td>';
+                                          echo '<td></td>';
+                                          echo '<td></td>';
+                                          echo '<td></td>';
+                                          echo '<td></td>';
+                                          echo '<td></td>';
+                                          // Agrega más celdas de datos aquí según sea necesario
+                                          echo '</tr>';
+                                      }
+                                      ?>
+                                    </tbody>
+                                  </table>
+                                </div>
                               </div>
                               <!-- /.table-responsive -->                                
                             </div>

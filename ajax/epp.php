@@ -142,8 +142,9 @@
                 ' <button class="btn btn-danger btn-sm" onclick="eliminar_detalle(' . $reg->idalmacen_x_proyecto .', \''.encodeCadenaHtml($reg->producto).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
                 "2" => $reg->producto,
                 "3" => $reg->marca,
-                "4" => $reg->cantidad,
-                "5" => $reg->fecha_ingreso,
+                "4" => $reg->abreviacion,
+                "5" => $reg->cantidad,
+                "6" => $reg->fecha_ingreso,
                 
               ];
             }
@@ -168,7 +169,7 @@
 
             foreach ($rspta['data'] as $key => $value) {  
 
-                $data .= '<option value=' .$value['idproducto']. ' data-nombre="'.$value['nombre_producto'].'" data-marca="'.$value['marca'] .'"  data-modelo="'.$value['modelo'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
+                $data .= '<option value=' .$value['idproducto']. ' data-nombre=" \''.encodeCadenaHtml($value['nombre_producto']).'\'" data-marca="'.$value['marca'] .'"  data-modelo="'.$value['modelo'].'" data-abreviacion="'.$value['abreviacion'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
 
             }
 

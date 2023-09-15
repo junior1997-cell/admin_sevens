@@ -58,20 +58,20 @@
   $hojaActiva->mergeCells('C3:H4'); #tarea a realizar
   $hojaActiva->mergeCells('I1:J2'); #Revision
   // --------------------------------
-  $hojaActiva->mergeCells('A5:J5'); #Espaio vacio  
-
-  //HEAD 
-  $hojaActiva->mergeCells('A6:C7'); #NOMBRE EMPRESA
-  $hojaActiva->mergeCells('D6:D7'); #NOMBRE RUC
-  $hojaActiva->mergeCells('E6:F7'); #NOMBRE DOMICILIO
-  $hojaActiva->mergeCells('G6:H7'); #NOMBRE TIPO
-  $hojaActiva->mergeCells('I6:J7'); #NOMBRE TRABAJADORES
-  //SELDAS PARA LLENAR LA INFO
-  $hojaActiva->mergeCells('A8:C9'); # EMPRESA
-  $hojaActiva->mergeCells('D8:D9'); #RUC
-  $hojaActiva->mergeCells('E8:F9'); #DOMICILIO
-  $hojaActiva->mergeCells('G8:H9'); #TIPO
-  $hojaActiva->mergeCells('I8:J9'); #TRABAJADORES
+  $hojaActiva->mergeCells('A5:B5'); #Proyecto
+  $hojaActiva->mergeCells('C5:J5'); #Proyecto nombre
+  $hojaActiva->mergeCells('A6:B6'); #Ubicacion
+  $hojaActiva->mergeCells('C6:J6'); #Ubicacion nombre
+  $hojaActiva->mergeCells('A7:B7'); #Empresa
+  $hojaActiva->mergeCells('C7:J7'); #Empresa nombre
+  $hojaActiva->mergeCells('A8:B8'); #Nombre
+  $hojaActiva->mergeCells('C8:J8'); #
+  $hojaActiva->mergeCells('A9:B9'); #Talla
+  $hojaActiva->mergeCells('C9:J9'); #
+  $hojaActiva->mergeCells('B11:E11'); #aprellidos y nombres
+  $hojaActiva->mergeCells('A10:J10'); #Espaio vacio
+  $hojaActiva->mergeCells('I11:J11'); #FECHA
+  
 
   $hojaActiva->setCellValue('C1', 'CONTROL DE E.P.P POR TRABAJADOR');
   $hojaActiva->getStyle('C1')->getFont()->setSize(13);
@@ -83,21 +83,18 @@
   $hojaActiva->setCellValue('I3', 'FECHA');
   $hojaActiva->setCellValue('I4', 'N° REGISTRO');
 
-  $hojaActiva->setCellValue('A5', 'DATOS DEL EMPLEADOR PRINCIPAL:');
-  $hojaActiva->setCellValue('A6', 'RAZÓN SOCIAL O DENOMINACIÓN SOCIAL');
-  $hojaActiva->setCellValue('D6', 'RUC');
-  $hojaActiva->setCellValue('E6', 'DOMICILIO:');
-  $hojaActiva->setCellValue('G6', 'ACTIVIDAD ECONÓMICA:');
-  $hojaActiva->setCellValue('I6', 'N° TRABAJADORES:');
+  $hojaActiva->setCellValue('A5', 'PROYECTO:');
+  $hojaActiva->setCellValue('A6', 'UBICACIÓN:');
+  $hojaActiva->setCellValue('A7', 'EMPRESA:');
+  $hojaActiva->setCellValue('A8', 'NOMBRE:');
+  $hojaActiva->setCellValue('A9', 'TALLA:');
 
   $hojaActiva->setCellValue('A11', 'N°');
-  $hojaActiva->setCellValue('B11', 'CANT.');
-  $hojaActiva->setCellValue('C11', 'UND.');
-  $hojaActiva->setCellValue('D11', 'EQUIPOS DE SEGURIDAD ENTREGADOS');
-  $hojaActiva->setCellValue('F11', '');
-  $hojaActiva->setCellValue('G11', '');
-  $hojaActiva->setCellValue('H11', "FECHA ENTREGA");
-  $hojaActiva->setCellValue('I11', "FIRMA");
+  $hojaActiva->setCellValue('B11', 'DESCRIPCIÓN');
+  $hojaActiva->setCellValue('F11', 'TALLA');
+  $hojaActiva->setCellValue('G11', 'CANTIDAD');
+  $hojaActiva->setCellValue('H11', "FECHA");
+  $hojaActiva->setCellValue('I11', "FECHA");
 
 
 

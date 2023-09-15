@@ -174,6 +174,7 @@ if (!isset($_SESSION["nombre"])) {
                                       <th class="text-center">Acciones</th>
                                       <th class="text-center">Descripción</th>
                                       <th class="text-center">Marca</th>
+                                      <th class="text-center">U.M</th>
                                       <th class="">Cantidad</th>
                                       <th class="">Fecha</th>
                                     </tr>
@@ -185,6 +186,7 @@ if (!isset($_SESSION["nombre"])) {
                                       <th class="text-center">Acciones</th>
                                       <th class="text-center">Descripción</th>
                                       <th class="text-center">Marca</th>
+                                      <th class="text-center">U.M</th>
                                       <th class="">Cantidad</th>
                                       <th class="">Fecha</th>
                                     </tr>
@@ -209,7 +211,7 @@ if (!isset($_SESSION["nombre"])) {
 
               <!-- Modal agregar otros epp -->
               <div class="modal fade" id="modal-agregar-epp">
-                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title"><b>Agregar:</b> E.P.P PARA <b class="nombre_trab_modal text-primary"></b> </h5>
@@ -287,7 +289,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
               </div>
 
-              <!-- MODAL - VER ALMACEN - chargue 3 -->
+              <!-- MODAL - editar EPP - chargue 3 -->
               <div class="modal fade" id="modal-ver-editar-epp">
                 <div class="modal-dialog modal-dialog-scrollable modal-lg">
                   <div class="modal-content">
@@ -306,8 +308,8 @@ if (!isset($_SESSION["nombre"])) {
                         <div class="card-body">
                           <div class="row" id="cargando-3-fomulario">
                             <!-- id trabajador -->
-                            <input type="text" name="idalmacen_x_proyecto_xp" id="idalmacen_x_proyecto_xp" />
-                            <input type="text" name="idtrabajador_xp" id="idtrabajador_xp" />
+                            <input type="hidden" name="idalmacen_x_proyecto_xp" id="idalmacen_x_proyecto_xp" />
+                            <input type="hidden" name="idtrabajador_xp" id="idtrabajador_xp" />
                             <!-- idalmacen_x_proyecto_xp, idtrabajador_xp, id_producto_xp, fecha_ingreso_xp, marca_xp, cantidad_xp  -->
                             <!-- Producto -->
                             <div class="col-12 col-sm-12 col-md-6 col-lg-12">
@@ -322,7 +324,7 @@ if (!isset($_SESSION["nombre"])) {
                               <div class="form-group">
                                 <label for="epp_xp">E.P.P</label>
                                 <input type="text" id="epp_xp" class="form-control" placeholder="E.P.P" onchange="obtener_dia_ingreso(this);" readonly />
-                                <input type="text" name="id_producto_xp" id="id_producto_xp" />
+                                <input type="hidden" name="id_producto_xp" id="id_producto_xp" />
                               </div>
                             </div>
 
@@ -336,10 +338,17 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
 
                             <!-- Marcas -->
-                            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3">
                               <div class="form-group">
                                 <label for="marca_xp">Marcas</label>
                                 <select name="marca_xp" id="marca_xp" class="form-control"></select>
+                              </div>
+                            </div>
+                            <!-- um -->
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                              <div class="form-group">
+                                <label for="marca_xp">U.M</label>
+                                <input type="text" id="unidad_m" class="form-control" placeholder="U.M" readonly />
                               </div>
                             </div>
 

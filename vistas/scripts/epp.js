@@ -204,9 +204,9 @@ function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2], }, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2,3], } },
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2,3], } },
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis" },
     ],
     ajax: {
@@ -234,7 +234,7 @@ function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [6], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
 
     ],
   }).DataTable();
@@ -312,11 +312,16 @@ function guardar_epp(e) {
     processData: false,
     success: function (e) {
       try {
-        e = JSON.parse(e); console.log(e);
+        e = JSON.parse(e); console.log(e.status);
         if (e.status == true) {
           Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
-          tabla_epp_x_tpp.ajax.reload(null, false); tabla_resumen_epp.ajax.reload(null, false); tbl_detalle_epp.ajax.reload(null, false);
+          console.log('aqui');
+          tabla_epp_x_tpp.ajax.reload(null, false); 
+          tabla_resumen_epp.ajax.reload(null, false); 
+          // tbl_detalle_epp.ajax.reload(null, false);
+
           limpiar();
+          
           $("#modal-agregar-epp").modal("hide");
 
         } else {
@@ -373,11 +378,12 @@ function mostrar(idepp) {
 
   $.post("../ajax/epp.php?op=mostrar", { idepp: idepp }, function (e, status) {
 
-    e = JSON.parse(e); console.log(e);
+    e = JSON.parse(e); console.log('laaaaaaaaaa'); console.log(e);
     if (e.status == true) {
       $("#idalmacen_x_proyecto_xp").val(e.data.idalmacen_x_proyecto);
       $("#idtrabajador_xp").val(e.data.idtrabajador_por_proyecto);
       $("#epp_xp").val(e.data.nombre);
+      $("#unidad_m").val(e.data.abreviacion);
       $("#id_producto_xp").val(e.data.idproducto);
       // id_product_edit = e.data.idproducto;
       select_marcas_edit(e.data.idproducto,e.data.marca);
@@ -403,11 +409,13 @@ function select_producto_edit(el) {
    console.log(id_insumo+'  .....................');
   $("#id_producto_xp").val($('#producto_xp').val());
 
-  var nombre = "", marca = "", modelo = "";
+  var nombre = "", marca = "", modelo = ""; abreviacion="";
 
   marca = $('option:selected', el).attr('data-marca');
+  //abreviacion = $('option:selected', el).attr('data-abreviacion');
 
   $("#epp_xp").val( $('option:selected', el).attr('data-nombre'));
+  $("#unidad_m").val( $('option:selected', el).attr('data-abreviacion'));
 
   select_marcas_edit(id_insumo,marca);
 
@@ -463,7 +471,7 @@ function editar_epp(e) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
           Swal.fire("Correcto!", "El registro se guardo correctamente.", "success");
-          tabla_epp_x_tpp.ajax.reload(null, false); tabla_resumen_epp.ajax.reload(null, false); tbl_detalle_epp.ajax.reload(null, false);
+          tabla_epp_x_tpp.ajax.reload(null, false); tabla_resumen_epp.ajax.reload(null, false); //tbl_detalle_epp.ajax.reload(null, false);
 
           limpiar_edit_epp();
           $("#modal-ver-editar-epp").modal("hide");
@@ -525,9 +533,11 @@ function add_row(el) {
 
   var nombre = "", marca = "", modelo = "";
 
-  nombre = $('option:selected', el).attr('data-nombre');
-  marca = $('option:selected', el).attr('data-marca');
-  modelo = $('option:selected', el).attr('data-modelo');
+  nombre      = $('option:selected', el).attr('data-nombre');
+  marca       = $('option:selected', el).attr('data-marca');
+  modelo      = $('option:selected', el).attr('data-modelo');
+  abreviacion = $('option:selected', el).attr('data-abreviacion');
+  
 
   if (id_insumo == null) {
   } else {
@@ -550,16 +560,22 @@ function add_row(el) {
                   <div class="row id_${i}" >
 
                       <!-- Nombre Producto -->
-                      <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-5">
                         <div class="form-group">
                         <label for="fecha_ingreso">Nombre Producto</label>
                         <input type="hidden" name="id_insumo[]" class="form-control" id="id_insumo" value="${id_insumo}"/>
                           <span class="form-control-mejorado"> ${nombre} </span>  
                         </div>
                       </div>
-
+                      <!-- unidad -->
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+                        <div class="form-group">
+                          <label for="fecha_ingreso">U.M</label>
+                          <span class="form-control-mejorado"> ${abreviacion} </span>  
+                        </div>
+                      </div> 
                       <!-- MARCA -->
-                      <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-2">
                         <div class="form-group">
                           <label for="fecha_ingreso">Marca</label>
                           <select name="marca[]" id="marca_select_${id_insumo}" class="form-control"> <option value="">Seleccionar</option>  </select>
@@ -567,7 +583,7 @@ function add_row(el) {
                       </div> 
 
                       <!-- cantidad -->
-                      <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-2">
                         <div class="form-group">
                           <label for="fecha_ingreso">Cantidad</label>
                           <input type="text" name="cantidad[]" class="form-control" id="cantidad" placeholder="Cantidad"/>
@@ -582,7 +598,6 @@ function add_row(el) {
                       </div>
 
                   </div>`;
-
 
       }
 
