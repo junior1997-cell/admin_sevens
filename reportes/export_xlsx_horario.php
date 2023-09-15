@@ -39,7 +39,7 @@
   $spreadsheet->getActiveSheet()->getColumnDimension('O')->setWidth(12); #JUEVES
   $spreadsheet->getActiveSheet()->getColumnDimension('P')->setWidth(12); #VIERNES
 
-  // $spreadsheet->getActiveSheet()->getStyle('A1:M9')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+  $spreadsheet->getActiveSheet()->getStyle('A1:M9')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
   $hojaActiva = $spreadsheet->getActiveSheet();
 
   $hojaActiva->mergeCells('B2:H2'); #HORARIO 
