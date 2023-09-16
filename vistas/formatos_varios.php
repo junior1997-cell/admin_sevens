@@ -321,62 +321,50 @@
                                     <table class="table table-bordered table-striped" style="width: 100% !important;">
                                     <thead>
                                       <tr>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px text-center" rowspan="3"><img src="../dist/img/logo-principal.png" alt="logo Admin Sevens" width="100px" ></th> 
-                                        <!-- <th class="p-y-2px text-center"  rowspan="3"><img src="../dist/img/logo-principal.png" alt="logo Admin Sevens" width="100px" ></th>  -->
+                                        <th class="p-y-2px text-center" style="width: 10px;" colspan="3" rowspan="3"><img src="../dist/img/logo-principal.png" alt="logo Admin Sevens" width="80px" ></th>
                                         <th class="p-y-2px text-center" colspan="17">REGISTRO DE EQUIPOS DE SEGURIDAD O EMERGENCIA</th> 
                                         <th class="p-y-2px text-center" colspan="2">REVISIÓN</th> 
                                         <!-- <th class="p-y-2px">---</th> -->
                                       </tr>
                                       <tr>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
                                         <th class="p-y-2px text-center" rowspan="2" colspan="17"  >SEVEN´S INGENIEROS S.A.C.</th>  
                                         <th class="p-y-2px" >FECHA</th> 
                                         <th class="p-y-2px">---</th>
                                       </tr>
                                       <tr>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
                                         <th class="p-y-2px">N° REGISTRO</th> 
                                         <th class="p-y-2px">---</th>
                                       </tr>
                                       <tr> 
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px"></th>
-                                        <th class="p-y-2px" colspan="3"> RAZÓN SOCIAL O DENOMINACIÓN SOCIAL</th>
-                                        <th class="p-y-2px"> <!--SEVEN´S INGENIEROS SELVA S.A.C.--></th>
-                                        <th class="p-y-2px"> <!--RUC:--> </th>
-                                        <th class="p-y-2px"> <!--20609935651--> </th>
-                                        <th class="p-y-2px" > <!--Lugar:--> </th>
-                                        <th class="p-y-2px"> </th>
-                                        <th class="p-y-2px"> <!--N° DE REGISTRO:--> </th>
-                                        <th class="p-y-2px"> <!-------> </th> 
+                                        <th class="p-y-2px text-center" colspan="22" style="background-color: #7c8585;"> DATOS DEL EMPLEADOR PRINCIPAL:</th>
+                                      </tr>
+                                      <tr> 
+                                        <th class="p-y-2px text-center" colspan="4"> RAZÓN SOCIAL O DENOMINACIÓN SOCIAL:</th>
+                                        <th class="p-y-2px text-center" colspan="2">RUC</th>
+                                        <th class="p-y-2px text-center" colspan="6">DOMICILIO</th>
+                                        <th class="p-y-2px text-center" colspan="6">ACTIVIDAD ECONÓMICA</th>
+                                        <th class="p-y-2px text-center" colspan="6">N° TRABAJADORES</th>
+                                      </tr>
+                                      <tr> 
+                                        <th class="p-y-2px text-center" colspan="4">------------------------------</th>
+                                        <th class="p-y-2px text-center" colspan="2">------------------------------</th>
+                                        <th class="p-y-2px text-center" colspan="6">------------------------------</th>
+                                        <th class="p-y-2px text-center" colspan="6">------------------------------</th>
+                                        <th class="p-y-2px text-center" colspan="6">------------------------------</th>
                                       </tr>
                                       <tr>
-                                        <th class="p-y-10px" colspan="9"></th>
+                                        <th class="p-y-10px" colspan="4">APELLIDOS Y NOMBRES : </th>
+                                        <th class="p-y-10px" colspan="18"></th>
                                       </tr>
-                                      <tr colspan="5"> 
-                                        <th class="p-y-2px " > N°</th>
-                                        <th class="p-y-2px" colspan="3">DESCRIPCIÓN</th>
-                                        <th class="p-y-2px" colspan="2">TALLA</th>
-                                        <th class="p-y-2px">CANTIDAD</th> 
-                                        <th class="p-y-2px" colspan="2">FECHA</th>
-                                        <th class="p-y-2px" colspan="2">Firma</th>
+                                      <tr> 
+                                        <th class="p-y-2px text-center" style="width: 30px;" > N°</th>
+                                        <th class="p-y-2px text-center" style="width: 30px;">CANT.</th>
+                                        <th class="p-y-2px text-center" style="width: 30px;">UND.</th>
+                                        <th class="p-y-2px text-center" colspan="12">EQUIPOS DE SEGURIDAD ENTREGADOS</th> 
+                                        <th class="p-y-2px text-center" colspan="4">FECHA ENTREGA</th>
+                                        <th class="p-y-2px text-center" colspan="8">FIRMA</th>
                                       </tr>
+                                      
                                     </thead>
                                     <tbody>
                                       <!-- aqui va el detalle del la tabla -->
@@ -387,11 +375,9 @@
                                           echo '<td>' . $i . '</td>';
                                           echo '<td></td>';
                                           echo '<td></td>';
-                                          echo '<td></td>';
-                                          echo '<td></td>';
-                                          echo '<td></td>';
-                                          echo '<td></td>';
-                                          echo '<td></td>';
+                                          echo '<td colspan="12"></td>';
+                                          echo '<td colspan="4"></td>';
+                                          echo '<td colspan="8"></td>';
                                           // Agrega más celdas de datos aquí según sea necesario
                                           echo '</tr>';
                                       }

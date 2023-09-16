@@ -81,7 +81,8 @@
   $hojaActiva->mergeCells('G8:H10'); #TIPO
   $hojaActiva->mergeCells('I8:J10'); #TRABAJADORES
 
-  $hojaActiva->mergeCells('A11:J11'); #Espaio vacio  
+  $hojaActiva->mergeCells('A11:C11'); #Espacio vacio  
+  $hojaActiva->mergeCells('D11:J11'); #Espacio vacio  
   $hojaActiva->mergeCells('D12:G12'); #DESCRIPCION
   $hojaActiva->mergeCells('I12:J12'); #FECHA
 
@@ -113,7 +114,7 @@
   $hojaActiva->setCellValue('I12', "FIRMA");
 
 
-
+  //========D A T O S  P R O Y E C T O===========
   require_once "../modelos/Formatos_varios.php"; 
   $formatos_varios=new FormatosVarios();  
 
@@ -123,10 +124,19 @@
   $hojaActiva->setCellValue('D8', $rspta['proyecto']['numero_documento']);
   $hojaActiva->setCellValue('E8', $rspta['proyecto']['ubicacion']);
   $hojaActiva->setCellValue('G8', $rspta['proyecto']['nombre_proyecto']);
-  //ESTILOS 
-  // Establecer el valor de la celda
-  $hojaActiva->setCellValue('A8', $rspta['proyecto']['empresa']);
+  //========N O M B R E  T R A B A J A D O R ===========
+  require_once "../modelos/Epp_exportar.php"; 
+  $epp_x_trabajador=new Epp_exportar();  
 
+  $rspta_Epp_x_tpp=$epp_x_trabajador->datos_epp_x_trabajador_unico($_GET["id_proyecto"],$_GET["id_tpp"]);
+  // var_dump($rspta_Epp_x_tpp['e']['data']['nombres']); die();
+
+  // // Establecer el valor de la celda
+  $hojaActiva->setCellValue('D11', $rspta_Epp_x_tpp['e']['data']['nombres']);
+
+  //ESTILOS
+  $spreadsheet->getActiveSheet()->getStyle('A11')->getFont()->setBold(true);
+  $spreadsheet->getActiveSheet()->getStyle('A11:J11')->getAlignment()->setVertical('center');
   // Aplicar ajuste de texto automático a la celda
   $hojaActiva->getStyle('A8')->getAlignment()->setWrapText(true);
   $hojaActiva->getStyle('E8')->getAlignment()->setWrapText(true);
@@ -138,29 +148,43 @@
   $hojaActiva->getStyle('G8')->getFont()->setSize(8); 
 
   $fila_1 = 13;
-
-  for ($key=0; $key < 10 ; $key++) { 
+  $key=0;
+//  var_dump($rspta_Epp_x_tpp['ee']['data']); die();
+  foreach ($rspta_Epp_x_tpp['ee']['data'] as &$valor) {
+    //echo $valor['producto']."<br>";
+    $key=$key+1;
     $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':J'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, '')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
     
   
     $hojaActiva->mergeCells('D'.$fila_1.':G'.$fila_1); #aprellidos y nombres
     $hojaActiva->mergeCells('I'.$fila_1.':J'.$fila_1); #aprellidos y nombres
-    $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
-    $hojaActiva->setCellValue('D'.$fila_1, '');
+    $hojaActiva->setCellValue('A'.$fila_1, ($key));
+    $hojaActiva->setCellValue('B'.$fila_1, ($valor['cantidad']));
+    $hojaActiva->setCellValue('C'.$fila_1, ($valor['abreviacion']));
+    $hojaActiva->setCellValue('D'.$fila_1, ($valor['producto']));
+    $hojaActiva->setCellValue('H'.$fila_1, (date("d/m/Y", strtotime($valor['fecha_ingreso'])) ));
     $spreadsheet->getActiveSheet()->getStyle('J'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+
+    // Obtén el estilo de la celda
+    $estiloCelda = $hojaActiva->getStyle('D'.$fila_1);
+
+    // Configura la alineación a la izquierda
+    $estiloCelda->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
     $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
     $fila_1++;
     
   }
 
+  $nombreArchivo = "CONTROL_EPP_" . $rspta_Epp_x_tpp['e']['data']['nombres'] . ".xlsx";
+
   // redirect output to client browser
   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  header('Content-Disposition: attachment;filename="Formato_EPP_Trabajador.xlsx"');
+  header('Content-Disposition: attachment;filename="' . $nombreArchivo . '"');
   header('Cache-Control: max-age=0');
 
   $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
