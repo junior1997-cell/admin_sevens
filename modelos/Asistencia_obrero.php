@@ -287,6 +287,7 @@ class Asistencia_obrero
 
   //ver detalle quincena
   public function ver_detalle_quincena($ids_q_asistencia, $f1, $f2, $nube_idproyect, $n_f_i_p, $n_f_f_p) {
+    //var_dump($ids_q_asistencia, $f1, $f2, $nube_idproyect, $n_f_i_p, $n_f_f_p);die();
     // Regulamos los dias
     $fecha_array = [];
     $fechaInicio      = new DateTime($f1);

@@ -10,111 +10,101 @@ $spreadsheet = new Spreadsheet();
 $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Asistencia de obreros");
 
 // ══════════════════════════════════════════ - D A T O S   D E L   T R A B A J A D O R - ══════════════════════════════════════════
-$Colum_Semana = array('H', 'I', 'J', 'K', 'L', 'M');
-$fechas = array();
+
 require_once "../modelos/Formatos_varios.php";
 $formatos_varios = new FormatosVarios();
 
 $proyecto = $formatos_varios->datos_proyecto($_GET["id_proyecto"]);
-// var_dump($proyecto['ee']['data']); die();
-$n_f_i_p          = $proyecto['e']['data']['fecha_inicio'];
-$n_f_f_p          = $proyecto['e']['data']['fecha_fin'];
+
+$f1               = $proyecto['data']['fecha_inicio'];
+$f2               = $proyecto['data']['fecha_fin'];
 $id_proyecto      = $_GET["id_proyecto"];
-$fecha_pago_obrero= $proyecto['e']['data']['fecha_pago_obrero'];
+$fecha_pago_obrero= $proyecto['data']['fecha_pago_obrero'];
+
+// Convertir las fechas a objetos DateTime
+$fechaInicio      = new DateTime($f1);
+$fechaFin         = new DateTime($f2);
 
 $num_quincena = 1; $contador = 0;
 
 $dia_regular = 0; $estado_regular = false;
 
 // Generar hojas por quincena
-foreach ($proyecto['ee']['data'] as $key => $reg){
-
-  $ids_q_asistencia =$reg['ids_q_asistencia']; 
-  $numero_q_s =$reg['numero_q_s']; 
-  // solo el dia ejem: 06 
-  $f_i_dia               = date("d", strtotime($reg['fecha_q_s_inicio']));
-  $f_f_dia               = date("d", strtotime($reg['fecha_q_s_fin']));
-  //FECHA SIMPLE SIN CAMBIOS
-  $fechaInicio_sc     = date("Y-m-d", strtotime($reg['fecha_q_s_inicio']));
-  $fechaFin_sc     = date("Y-m-d", strtotime($reg['fecha_q_s_fin']));
-
-  // Convertir las fechas a objetos DateTime 
-  $fechaInicio      = new DateTime($reg['fecha_q_s_inicio']);
-  $fechaFin         = new DateTime($reg['fecha_q_s_fin']);
-
-
+while ($fechaInicio <= $fechaFin) {
   // Crear una hoja por cada quincena
   if ($contador > 0) { $spreadsheet->createSheet(); }
 
   if ($fecha_pago_obrero == 'semanal') {
-    $spreadsheet->setActiveSheetIndex($contador)->setTitle('S' . $numero_q_s);
+    $spreadsheet->setActiveSheetIndex($contador)->setTitle('S' . $num_quincena);
   } else if ($fecha_pago_obrero == 'quincenal') {
-    $spreadsheet->setActiveSheetIndex($contador)->setTitle('Q' . $numero_q_s);
+    $spreadsheet->setActiveSheetIndex($contador)->setTitle('Q' . $num_quincena);
   }  
 
   $hojaActiva = $spreadsheet->setActiveSheetIndex($contador);
+  
+  // $hojaActiva = $spreadsheet->getActiveSheet();
 
-  // ══════════════════════════════════════════ - P L A N T I L L A - ═════════════════════════════════════
+  // ══════════════════════════════════════════ - P L A N T I L L A - ══════════════════════════════════════════
   plantilla_stylo_header($spreadsheet, $fecha_pago_obrero);
-  plantilla($spreadsheet, $fecha_pago_obrero);
+  // plantilla($spreadsheet, $fecha_pago_obrero);
 
-  // ════════════════════- INSERTAMOS LOS NOMBRES DE LOS HEADS - ══════════════════════════════════════════
+  // ══════════════════════════════════════════ - INSERTAMOS LOS NOMBRES DE LOS HEADS - ══════════════════════════════════════════
   plantilla_nombre_head($hojaActiva, $fecha_pago_obrero);
   $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
   
 
-  $hojaActiva->setCellValue('D5', $proyecto['e']['data']['nombre_proyecto']);
-  $hojaActiva->setCellValue('D6', $proyecto['e']['data']['ubicacion']);
-  $hojaActiva->setCellValue('D7', $proyecto['e']['data']['empresa']);
+  $hojaActiva->setCellValue('D5', $proyecto['data']['nombre_proyecto']);
+  $hojaActiva->setCellValue('D6', $proyecto['data']['ubicacion']);
+  $hojaActiva->setCellValue('D7', $proyecto['data']['empresa']);
 
-  // ══════════════════════════════════════════ - L O G O - ════════════════════════════════════════════════
+  // ══════════════════════════════════════════ - L O G O - ══════════════════════════════════════════
   plantilla_logo($spreadsheet);
   $hojaActiva->mergeCells('A1:C4'); #imagen
 
-  // ═════════════════════════════════ - D A T O  S   D E L   T R A B A J A D O R - ══════════════════════════════════════════
-
-  $fila_1 = 11;
+  // ══════════════════════════════════════════ - D A T O  S   D E L   T R A B A J A D O R - ══════════════════════════════════════════
   
-  if ($fecha_pago_obrero == 'semanal') {  
-    //NOMBRE DEL MES
-    $mes_f_i = nombre_mes($fechaInicio->format("Y-m-d")); 
-    $mes_f_f = nombre_mes($fechaFin->format("Y-m-d"));   
+  $fila_1 = 11;
 
-    $hojaActiva->setCellValue('H8',"$f_i_dia de $mes_f_i AL $f_f_dia DE $mes_f_f"); //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
+  $weekday_regular = $fechaInicio->format("w");
+  if ($weekday_regular == "0") { $dia_regular = -1; 
+  } else if ($weekday_regular == "1") { $dia_regular = -2;       
+  } else if ($weekday_regular == "2") { $dia_regular = -3;         
+  } else if ($weekday_regular == "3") { $dia_regular = -4;           
+  } else if ($weekday_regular == "4") { $dia_regular = -5;           
+  } else if ($weekday_regular == "5") { $dia_regular = -6;            
+  } else if ($weekday_regular == "6") { $dia_regular = -7; }
+  
+  if ($fecha_pago_obrero == 'semanal') {   
 
-    $rspta_t = $formatos_varios->ver_detalle_sem_quin($ids_q_asistencia,$fechaInicio_sc, $fechaFin_sc, $id_proyecto, $n_f_i_p, $n_f_f_p);  #echo json_encode($rspta_t) ; die();
+    $f_i = nombre_mes($fechaInicio->format("Y-m-d")); 
+    $fechaInicio->modify('+1 weeks'); # sumar 7 dias
+    $f_f = nombre_mes($fechaInicio->format("Y-m-d"));    
+    $hojaActiva->setCellValue('H8',"23 de $f_i AL de DE $f_f"); //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
+
+    $rspta_t = $formatos_varios->ver_datos_trabajador($f1, $f2, $id_proyecto, $num_quincena, 7);  #echo json_encode($rspta_t) ; die();
+
+    $fechaInicio->modify('+1 day'); # sumar 1 dias
 
     foreach ($rspta_t['data'] as $key => $reg) {
-      // var_dump($reg['asistencia']); die();
-
-      $total_h = $reg['total_hn']+$reg['total_he'];
-      $Pago = $reg['sueldo_diario']*$reg['total_dias_asistidos_hn'];
-
+      
       $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1)->getAlignment()->setHorizontal('center');
       $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1 . ':S' . $fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-
+      // $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1, ($key + 1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      // $spreadsheet->getActiveSheet()->getStyle('B' . $fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+  
       $hojaActiva->setCellValue('A' . $fila_1, ($key + 1));                 # Auto increment
       $hojaActiva->mergeCells('B' . $fila_1 . ':D' . $fila_1);              # unir columnas - apellidos y nombres
-      $hojaActiva->setCellValue('B' . $fila_1, $reg['nombres']);            # apellidos y nombres   
+      $hojaActiva->setCellValue('B' . $fila_1, $reg['nombres_trabajador']); # apellidos y nombres   
       $hojaActiva->setCellValue('E' . $fila_1, $reg['numero_documento']);   # DNI
       $hojaActiva->setCellValue('F' . $fila_1, $reg['fecha_inicio_t']);     # Fecha incio trabajo
       $hojaActiva->setCellValue('G' . $fila_1, $reg['nombre_ocupacion']);   # Ocupacion
-
-
-      foreach ($reg['asistencia'] as $indice => $val) {
-        $fila_actual = $fila_1; // Utiliza una variable diferente para la fila actual
-
-        $hojaActiva->setCellValue('M' . $fila_actual, $val['horas_normal_dia']);
-        $fila_actual++;
-      }
-
   
-      $hojaActiva->setCellValue('N' . $fila_1, $total_h);   # total HN
-      $hojaActiva->setCellValue('O' . $fila_1, $reg['total_dias_asistidos_hn']);   # Total dias
+      $hojaActiva->setCellValue('N' . $fila_1, $reg['total_hn']);   # total HN
+      $hojaActiva->setCellValue('O' . $fila_1, $reg['total_dias_asistidos']);   # Total dias
       $hojaActiva->setCellValue('P' . $fila_1, $reg['sueldo_mensual']);   # Sueldo Mensual
       $hojaActiva->setCellValue('Q' . $fila_1, $reg['sueldo_diario']);   # Sueldo diario
       $hojaActiva->setCellValue('R' . $fila_1, $reg['sueldo_semanal']);   # Sueldo Semanal
-      $hojaActiva->setCellValue('S' . $fila_1, $Pago);   # Pago Semanl o Quincenal
+      $hojaActiva->setCellValue('S' . $fila_1, $reg['pago_quincenal']);   # Pago Semanl o Quincenal
       $spreadsheet->getActiveSheet()->getStyle('S' . $fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
   
       $fila_1++;
@@ -128,13 +118,10 @@ foreach ($proyecto['ee']['data'] as $key => $reg){
     $hojaActiva->setCellValue('H8',"$d_i de $f_i AL $d_f de $f_f"); //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
 
     $rspta_t = $formatos_varios->ver_datos_trabajador($f_ii, $f_ff, $id_proyecto, $num_quincena, 14);  echo json_encode($rspta_t) ; die();
-    var_dump($rspta_t);die();
+
     $fechaInicio->modify('+1 day'); # sumar 1 dias
 
     foreach ($rspta_t['data'] as $key => $reg) {
-
-      // var_dump();('q '.$reg['nombres_trabajador']);die();
-
       $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1)->getAlignment()->setHorizontal('center');
       $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1 . ':Z' . $fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
       // $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1, ($key + 1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
@@ -160,7 +147,7 @@ foreach ($proyecto['ee']['data'] as $key => $reg){
   }
 
   // Incrementar variables
-  // $num_quincena++;
+  $num_quincena++;
   $contador++;  
 }
 
@@ -346,7 +333,3 @@ function plantilla_logo($hoja) {
   $drawing->getShadow()->setDirection(45);
   $drawing->setWorksheet($hoja->getActiveSheet());
 }
-
-
-
-
