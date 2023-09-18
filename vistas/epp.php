@@ -152,8 +152,10 @@ if (!isset($_SESSION["nombre"])) {
                                 <div class="modal-header">
                                   <h6> TRABAJADOR:<strong class="nombre_epp"> <i class="fas fa-exclamation-triangle text-warning"></i> </strong> </h6>
                                   <h6> Talla:<strong class="tallas"> <i class="fas fa-exclamation-triangle text-warning"></i> </strong> </h6>
-                                  <button type="button" class="btn bg-gradient-primary btn-sm btn_add_epps" style="display: none;" data-toggle="modal" data-target="#modal-agregar-epp" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button></button>
-                                </div>
+
+                                  <a type="button" class="btn bg-gradient-gray btn-sm " id="btn_export_eppxt" style="display: none;"> <i class="fa-regular fa-file-excel"></i> export </a>                              
+
+                                  <button type="button" class="btn bg-gradient-primary btn-sm btn_add_epps" style="display: none;" data-toggle="modal" data-target="#modal-agregar-epp" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
                               </div>
 
                               <div class="alert alert-secondary alerta_inicial" role="alert" style=" background-color: #ffe69c; border-color: #ffe69c; color: black;">

@@ -183,9 +183,12 @@ function listar_trabajdor() {
 
 function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
 
-  $('.alerta_inicial').hide(); $('.tabla_epp_x_tpp').show();
+  
+  $('.alerta_inicial').hide(); $('.tabla_epp_x_tpp').show();   $("#btn_export_eppxt").show();
 
   $(".nombre_epp").html(nombres); $(".tallas").html(t_ropa + ' , ' + t_zapato); $(".nombre_trab_modal").html(nombres);
+  $('#btn_export_eppxt').attr('href', `../reportes/export_xlsx_control_eppxt.php?id_proyecto=${localStorage.getItem('nube_idproyecto')}&id_tpp=${id_tpp}`);
+
 
   lista_select2(`../ajax/epp.php?op=select_2_insumos_pp&idproyecto=${localStorage.getItem('nube_idproyecto')}`, '#select_id_insumo', null);
 
