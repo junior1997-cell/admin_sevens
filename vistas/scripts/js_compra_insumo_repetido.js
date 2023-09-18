@@ -26,7 +26,7 @@ function agregarDetalleComprobante(idproducto) {
           modificarSubtotales();
         } else {          
 
-          var img_p = e.data.imagen == "" || e.data.imagen == null ?  `../dist/docs/material/img_perfil/producto-sin-foto.svg` : `../dist/docs/material/img_perfil/${e.data.image}`; 
+          var img_p = e.data.imagen == "" || e.data.imagen == null ?  `../dist/docs/material/img_perfil/producto-sin-foto.svg` : `../dist/docs/material/img_perfil/${e.data.imagen}`; 
           var marca_ = $("#marca_table_" + idproducto).val();
           var promedio_precio_ = $(".promedio_precio_" + idproducto).text();
           var fila = `
@@ -41,14 +41,13 @@ function agregarDetalleComprobante(idproducto) {
               <div class="user-block text-nowrap">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img_p}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img_p}', '${encodeHtml(e.data.nombre)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}">${e.data.nombre}</p></span>
-                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${e.data.categoria} | <b>Marca: </b> ${marca_}</span>
+                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${e.data.categoria} | <b>Marca: </b> <select name="nombre_marca[]" id="nombre_marca_${cont}" >${e.data.marca_html_option}</select></span>
               </div>
             </td>
             <td class="py-1">
               <span class="unidad_medida_${cont}">${e.data.nombre_medida}</span> 
               <input type="hidden" name="unidad_medida[]" value="${e.data.nombre_medida}">
-              <input type="hidden" name="nombre_color[]" value="${e.data.nombre_color}">
-              <input type="hidden" name="nombre_marca[]" value="${marca_}">
+              <input type="hidden" name="nombre_color[]" value="${e.data.nombre_color}">              
             </td>
             <td class="py-1 form-group"><input class="w-100px producto_${idproducto} producto_selecionado cantidad_${cont} form-control" type="number" name="cantidad[]" value="${cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="py-1 hidden"><input class="w-135px precio_sin_igv_${cont} input-no-border" type="number" name="precio_sin_igv[]" value="0" readonly min="0" ></td>
@@ -66,6 +65,9 @@ function agregarDetalleComprobante(idproducto) {
           array_class_compra.push({ id_cont: cont });
 
           modificarSubtotales();
+
+          // selecionamos la marca
+          $(`#nombre_marca_${cont} option[value='${marca_}']`).prop('selected', true);
           
           // toastr_success("Agregado!!",`Material: ${nombre} agregado !!`, 700);
 
@@ -548,11 +550,7 @@ function mostrar_compra_insumo(idcompra_proyecto) {
 
           var img = "";
 
-          if (val.imagen == "" || val.imagen == null) {
-            img = `../dist/docs/material/img_perfil/producto-sin-foto.svg`;
-          } else {
-            img = `../dist/docs/material/img_perfil/${val.imagen}`;
-          }
+          if (val.imagen == "" || val.imagen == null) { img = `../dist/docs/material/img_perfil/producto-sin-foto.svg`; } else { img = `../dist/docs/material/img_perfil/${val.imagen}`;  }
 
           var fila = `
           <tr class="filas" id="fila${cont}">
@@ -566,14 +564,13 @@ function mostrar_compra_insumo(idcompra_proyecto) {
               <div class="user-block text-nowrap">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer img_perfil_${cont}" src="${img}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_img_material('${img}', '${encodeHtml(val.nombre_producto)}')">
                 <span class="username"><p class="mb-0 nombre_producto_${cont}" >${val.nombre_producto}</p></span>
-                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${val.categoria} | <b>Marca: </b> ${val.marca==''||val.marca==null?'-':val.marca}</span>
+                <span class="description clasificacion_${cont}"><b>Clasificación: </b>${val.categoria} | <b>Marca: </b><select name="nombre_marca[]" id="nombre_marca_${cont}" >${val.marca_html_option}</select> </span>
               </div>
             </td>
             <td class="py-1"> 
               <span class="unidad_medida_${cont}">${val.unidad_medida}</span> 
               <input type="hidden" name="unidad_medida[]" value="${val.unidad_medida}"> 
               <input type="hidden" name="nombre_color[]" value="${val.color}">
-              <input type="hidden" name="nombre_marca[]" value="${val.marca==''||val.marca==null?'':val.marca}">
             </td>
             <td class="py-1 form-group"><input class="w-100px form-control producto_${val.idproducto} producto_selecionado cantidad_${cont} " type="number" name="cantidad[]" value="${val.cantidad}" min="0.01" required onkeyup="modificarSubtotales()" onchange="modificarSubtotales()"></td>
             <td class="py-1 hidden"><input class="w-135px input-no-border precio_sin_igv_${cont}" type="number" name="precio_sin_igv[]" value="${val.precio_sin_igv}" readonly ></td>

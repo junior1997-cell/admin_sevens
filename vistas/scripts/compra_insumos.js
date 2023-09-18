@@ -121,6 +121,13 @@ function templateGlosa (state) {
   return $state;
 }
 
+function ver_incono_glosa() {
+  if ($("#glosa").val() == null || $("#glosa").val() == '' ) {  } else {
+    var icon = $('#glosa').select2('data')[0].element.attributes.icono.value; console.log(icon);
+    $("#select2-glosa-container").prepend(`<i class="${icon} mr-1"></i>`);
+  }
+}
+
 //vaucher - pago
 $("#doc3_i").click(function () { $("#doc3").trigger("click"); });
 $("#doc3").change(function (e) { addImageApplication(e, $("#doc3").attr("id")); });
@@ -1978,6 +1985,7 @@ function ver_img_material(img, nombre) {
   $("#ver_img_material").attr("src", `${img}`);
   $(".nombre-img-material").html(nombre);
   $("#modal-ver-img-material").modal("show");
+  $(`.jq_image_zoom`).zoom({ on:'grab' });
 }
 
 

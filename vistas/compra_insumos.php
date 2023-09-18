@@ -166,7 +166,7 @@
                                   <th>Fecha</th>
                                   <th>Proveedor</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
-                                  <th data-toggle="tooltip" data-original-title="Detraccion">Detrac.</th>
+                                  <th data-toggle="tooltip" data-original-title="Glosa">Glosa</th>
                                   <th>Total</th>
                                   <th data-toggle="tooltip" data-original-title="Comprobantes">CFDI.</th>
                                   <th>Descripción</th>
@@ -181,7 +181,7 @@
                                   <th>Fecha</th>
                                   <th>Proveedor</th>
                                   <th data-toggle="tooltip" data-original-title="Tipo y Número Comprobante">Tipo</th>
-                                  <th>Detrac.</th>
+                                  <th>Glosa</th>
                                   <th>Total</th>
                                   <th>CFDI.</th>
                                   <th>Descripción</th>
@@ -294,7 +294,7 @@
                                   <div class="col-lg-3">
                                     <div class="form-group">
                                       <label for="glosa">Glosa <sup class="text-danger">*</sup></label>
-                                      <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa"> 
+                                      <select id="glosa" name="glosa" class="form-control select2" data-live-search="true" required title="Seleccione glosa" onchange="ver_incono_glosa();"> 
                                         <option icono="fas fa-hammer" value="MATERIAL">MATERIAL</option>
                                         <option icono="fas fa-gas-pump" value="COMBUSTIBLE">COMBUSTIBLE</option>
                                         <option icono="fas fa-snowplow" value="EQUIPOS">EQUIPOS</option>
@@ -1154,7 +1154,7 @@
                   </div> 
 
                   <!-- Modal ver grande img producto -->
-                  <div class="modal fade" id="modal-ver-img-material">
+                  <div class="modal fade bg-color-02020280" id="modal-ver-img-material">
                     <div class="modal-dialog modal-dialog-scrollable modal-md shadow-0px1rem3rem-rgb-0-0-0-50 rounded">
                       <div class="modal-content bg-color-0202022e shadow-none border-0" >
                         <div class="modal-header">
@@ -1165,9 +1165,9 @@
                         </div>
                         <div class="modal-body">
                           <div class="class-style" style="text-align: center;">
-                            
-                            <img onerror="this.src='../dist/svg/404-v2.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
-                            
+                            <span class="jq_image_zoom" >
+                              <img onerror="this.src='../dist/svg/404-v2.svg';" src="" class="img-thumbnail " id="ver_img_material" style="cursor: pointer !important;" width="auto" />
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -1266,7 +1266,7 @@
 
                                 <!-- Ficha tecnica -->
                                 <div class="col-md-6 col-lg-6">
-                                  <label for="doc2_i" >Comprobante <small><b class="text-danger">(Imagen o PDF)</b></small>  </label>  
+                                  <label for="doc2_i" >Ficha técnica <small><b class="text-danger">(Imagen o PDF)</b></small>  </label>  
                                   <div class="row text-center">                               
                                     <!-- Subir documento -->
                                     <div class="col-6 col-md-6 text-center">
@@ -1330,7 +1330,7 @@
         <!-- table export EXCEL -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
-        <script src="../plugins/export-xlsx/tableexport.min.js"></script>
+        <script src="../plugins/export-xlsx/tableexport.min.js"></script> 
 
         <!-- ZIP -->
         <script src="../plugins/jszip/jszip.js"></script>

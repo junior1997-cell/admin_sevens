@@ -330,14 +330,14 @@ if (!isset($_SESSION["nombre"])) {
 
             <!-- MODAL - AGREGAR ALMACEN - chargue 1 -->
             <div class="modal fade" id="modal-agregar-almacen">
-              <div class="modal-dialog modal-dialog-scrollable modal-lg">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
-                  <div class="modal-header">
+                  <div class="modal-header"> 
                     <h4 class="modal-title">Agregar salida de producto</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
-                  </div>
+                  </div> 
 
                   <div class="modal-body">
                     <!-- form start -->

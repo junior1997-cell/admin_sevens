@@ -754,6 +754,23 @@ table th { vertical-align: top !important; }
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.form-control-mejorado-sm{
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0.25rem 0.5rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.2rem;
+  box-shadow: inset 0 0 0 rgb(0 0 0 / 0%);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
 /*  ══════════════════════════════════════════ - Z O O M   J Q U E R Y - ══════════════════════════════════════════ */
 
 /* styles unrelated to zoom */          
@@ -860,9 +877,7 @@ select[readonly].select2-hidden-accessible + .select2-container .select2-selecti
 
 
 /* clase que nos permite modificar el car en view modulos en papelera */
-
 .bb-m{ border-bottom: 1px;}
-.cur_point {  cursor: pointer;}
 
 /*  ══════════════════════════════════════════ - @ M E D I A  - M I N - ══════════════════════════════════════════ */
 /* min-width = como minimo ─|──────── */

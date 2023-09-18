@@ -172,7 +172,7 @@
     /* ══════════════════════════════════════ P R O D U C T O  ══════════════════════════════════════ */
     //Implementar un método para mostrar los datos de un registro a modificar
     public function mostrar_producto($idproducto)  {
-      $data = []; $array_marca = []; $array_marca_name = [];
+      $data = []; $array_marca_id = []; $array_marca = []; $marca_html_option = ""; $array_marca_name = [];
 
       $sql = "SELECT p.idproducto, p.idunidad_medida, p.idcolor, p.idcategoria_insumos_af, p.nombre, p.modelo, p.serie,  p.estado_igv, 
       p.precio_unitario, p.precio_igv, p.precio_sin_igv, p.precio_total, p.ficha_tecnica, p.descripcion, p.imagen, p.estado, p.created_at,
@@ -188,8 +188,17 @@
         $sql3 = "SELECT dm.iddetalle_marca, m.idmarca, m.nombre_marca FROM detalle_marca as dm, marca as m WHERE dm.idmarca=m.idmarca AND dm.idproducto = '$idproducto';";
         $detalle_marca = ejecutarConsultaArray($sql3); if ($detalle_marca['status'] == false) { return  $detalle_marca;}
 
-        foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca, $value['idmarca'] ); }
-        foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca_name, $value['nombre_marca'] ); }
+        if ( empty($detalle_marca['data']) ) { 
+          array_push($array_marca_id, '1' );
+          $array_marca[] = [ 'id' => 1, 'nombre' => 'SIN MARCA', 'selected' => 'selected' ];
+          $marca_html_option = '<option value="SIN MARCA" selected >SIN MARCA</option>';
+          array_push($array_marca_name, 'SIN MARCA' );
+        } else {        
+          foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca_id, $value['idmarca'] ); }
+          foreach ($detalle_marca['data'] as $key => $value) { $array_marca[] = [ 'id' => $value['idmarca'], 'nombre' => $value['nombre_marca'] ]; }
+          foreach ($detalle_marca['data'] as $key => $value) { $marca_html_option .= '<option value="'.$value['nombre_marca'].'">'.$value['nombre_marca'].'</option>'; }
+          foreach ($detalle_marca['data'] as $key => $value) { array_push($array_marca_name, $value['nombre_marca'] ); }
+        }
         
         $data = [
           'idproducto'      => $activos['data']['idproducto'],
@@ -213,8 +222,10 @@
           'estado'          => $activos['data']['estado'],
           'fecha'           => $activos['data']['created_at'],
 
-          'id_marca'        => $array_marca,
+          'id_marca'        => $array_marca_id,
           'marcas'          => $array_marca_name,
+          'array_marcas'    => $array_marca,
+          'marca_html_option'=> $marca_html_option,
         ];
 
         return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];  

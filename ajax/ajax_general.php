@@ -612,9 +612,9 @@
             $img_parametro = ""; $img = "";  $color_stock = "";
   
             if (empty($reg['imagen'])) {
-              $img = 'src="../dist/docs/material/img_perfil/producto-sin-foto.svg"';
+              $img = '../dist/docs/material/img_perfil/producto-sin-foto.svg';
             } else {
-              $img = 'src="../dist/docs/material/img_perfil/' . $reg['imagen'] . '"';
+              $img = '../dist/docs/material/img_perfil/' . $reg['imagen'] ;
               $img_parametro = $reg['imagen'];
             }  
             
@@ -622,7 +622,7 @@
             $datas[] = [
               "0" => '<button class="btn btn-warning '.$data_btn.'" onclick="agregarDetalleComprobante(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
               "1" => '<div class="user-block w-250px">'.
-                '<img class="profile-user-img img-responsive img-circle" ' .  $img . ' alt="user image" onerror="' . $imagen_error .  '">'.
+                '<img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img.'" onclick="ver_img_material(\''.$img.'\', \''.encodeCadenaHtml($reg['nombre']).'\')" alt="user image" onerror="' . $imagen_error .  '">'.
                 '<span class="username"><p class="mb-0" >' . $reg['nombre'] . '</p></span>
                 <span class="description"><b>UM: </b>' . $reg['nombre_medida'] . '</span>
                 <span style="display: none;" class="promedio_precio_'.$reg['idproducto'].'">' . $reg['promedio_precio'] . '</span>'.

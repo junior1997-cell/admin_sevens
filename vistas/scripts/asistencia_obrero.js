@@ -50,6 +50,8 @@ function init() {
 
   $('#fecha_pago_obrero_f').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true });
 
+  $('#bnt-exportar-horario').attr('href', `../reportes/export_xlsx_horario.php?id_proyecto=${localStorage.getItem('nube_idproyecto')}`);
+
   // Formato para telefono
   $("[data-mask]").inputmask();
   
@@ -1573,16 +1575,16 @@ function calcular_hn( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
   
   if (domingo_1 >=4 && suma_hn>=30 ) { dias_asistidos = redondear_mas((suma_hn / 8)); } else if (suma_hn>=36 ) { dias_asistidos = roundToHalf((suma_hn / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_hn / 8)); }  
   
-  dias_2_sueldo = dias_asistidos - dias_1_sueldo; console.log(`${dias_asistidos} - ${dias_1_sueldo} = dias_2_sueldo: ${dias_2_sueldo}`);
+  dias_2_sueldo = dias_asistidos - dias_1_sueldo; 
   if ( dias_asistidos >= 0.5 && dias_asistidos <= 1) {
     pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
   } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); console.log(` pago_parcial_v2: ${pago_parcial_v2} + ( ${dias_asistidos} * ${sueldo_1} )`);
+    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); 
   } else {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); console.log(` pago_parcial_v2: ${pago_parcial_v2} + ( ${dias_1_sueldo} * ${sueldo_1} )`);
+    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); 
   }    
   
-  pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); console.log(` pago_parcial_v2: ${pago_parcial_v2} + ( ${dias_2_sueldo} * ${sueldo_2} )`);
+  pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); 
   //  pago_parcial_HN_1
   $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(1));  
   
@@ -1627,7 +1629,9 @@ function calcular_he( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
   if (domingo_1 >=4 && suma_he>=30 ) { dias_asistidos = redondear_mas((suma_he / 8)); } else if (suma_he>=36 ) { dias_asistidos = roundToHalf((suma_he / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_he / 8)); }  
 
   dias_2_sueldo = dias_asistidos - dias_1_sueldo;
-  if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
+  if ( dias_asistidos >= 0.5 && dias_asistidos <= 1) {
+    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
+  }else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
     pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
   } else {
     pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1);
@@ -2183,12 +2187,12 @@ function agregar_horas_por_dia_multiples(e) {
 
 function calcular_todos_hn(horas, fecha, id_trabajador, cant_dias_asistencia, sueldo_diario, sueldo_hora, cant_trabajador , sabatical_manual_1, sabatical_manual_2, tipo_hora) {
   /* para que corra una bala */ 
-  var suma_hn = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) { adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val()); } else { adicional_descuento = 0; toastr.error(`El dato adicional/descuento:: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`); } var domingo_1 = $(`.input_HN_${id_trabajador}_0`).val(); for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { var val_input_hn = $(`.input_HN_${id_trabajador}_${index}`).val() == 0 || $(`.input_HN_${id_trabajador}_${index}`).val() == '' || $(`.input_HN_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HN_${id_trabajador}_${index}`).val()); var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val()); if (val_input_hn > 0 ) { suma_hn = suma_hn + val_input_hn; if (index == 0) {  sueldo_ant = val_sueldo;  } if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } } } if (domingo_1 >=4 && suma_hn>=30 ) { dias_asistidos = redondear_mas((suma_hn / 8)); } else if (suma_hn>=36 ) { dias_asistidos = roundToHalf((suma_hn / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_hn / 8)); } dias_2_sueldo = dias_asistidos - dias_1_sueldo; if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); } pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(1)); $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`); $(`.pago_parcial_HN_${id_trabajador}`).html(formato_miles(pago_parcial_v2)); var pago_quincenal_v2 = pago_parcial_v2 + adicional_descuento; $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2)); var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) { suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena)); return true;
+  var suma_hn = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) { adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val()); } else { adicional_descuento = 0; toastr.error(`El dato adicional/descuento:: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`); } var domingo_1 = $(`.input_HN_${id_trabajador}_0`).val(); for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { var val_input_hn = $(`.input_HN_${id_trabajador}_${index}`).val() == 0 || $(`.input_HN_${id_trabajador}_${index}`).val() == '' || $(`.input_HN_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HN_${id_trabajador}_${index}`).val()); var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val()); if (val_input_hn > 0 ) { suma_hn = suma_hn + val_input_hn; if (index == 0) {  sueldo_ant = val_sueldo;  } if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } } } if (domingo_1 >=4 && suma_hn>=30 ) { dias_asistidos = redondear_mas((suma_hn / 8)); } else if (suma_hn>=36 ) { dias_asistidos = roundToHalf((suma_hn / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_hn / 8)); } dias_2_sueldo = dias_asistidos - dias_1_sueldo; if ( dias_asistidos >= 0.5 && dias_asistidos <= 1) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); } pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(1)); $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`); $(`.pago_parcial_HN_${id_trabajador}`).html(formato_miles(pago_parcial_v2)); var pago_quincenal_v2 = pago_parcial_v2 + adicional_descuento; $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2)); var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) { suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena)); return true;
 }
 
 function calcular_todos_he( horas, fecha, id_trabajador, cant_dias_asistencia, sueldo_diario, sueldo_hora, cant_trabajador , sabatical_manual_1, sabatical_manual_2, tipo_hora) {
   /* para que corra una bala */
-  var suma_he = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; var domingo_1 = $(`.input_HE_${id_trabajador}_0`).val(); for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { var val_input_he = $(`.input_HE_${id_trabajador}_${index}`).val() == 0 || $(`.input_HE_${id_trabajador}_${index}`).val() == '' || $(`.input_HE_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HE_${id_trabajador}_${index}`).val()); var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val()); if (val_input_he > 0 ) { suma_he = suma_he + val_input_he; if (index == 0) {  sueldo_ant = val_sueldo;  } if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } } } if (domingo_1 >=4 && suma_he>=30 ) { dias_asistidos = redondear_mas((suma_he / 8)); } else if (suma_he>=36 ) { dias_asistidos = roundToHalf((suma_he / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_he / 8)); } dias_2_sueldo = dias_asistidos - dias_1_sueldo; if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); } pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); $(`.total_HE_${id_trabajador}`).html(suma_he.toFixed(1)); $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`); $(`.pago_parcial_HE_${id_trabajador}`).html(formato_miles(pago_parcial_v2));  var pago_quincenal_v2 = pago_parcial_v2 ; $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2)); var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) { suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena)); return true;
+  var suma_he = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; var domingo_1 = $(`.input_HE_${id_trabajador}_0`).val(); for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { var val_input_he = $(`.input_HE_${id_trabajador}_${index}`).val() == 0 || $(`.input_HE_${id_trabajador}_${index}`).val() == '' || $(`.input_HE_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HE_${id_trabajador}_${index}`).val()); var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val()); if (val_input_he > 0 ) { suma_he = suma_he + val_input_he; if (index == 0) {  sueldo_ant = val_sueldo;  } if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } } } if (domingo_1 >=4 && suma_he>=30 ) { dias_asistidos = redondear_mas((suma_he / 8)); } else if (suma_he>=36 ) { dias_asistidos = roundToHalf((suma_he / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_he / 8)); } dias_2_sueldo = dias_asistidos - dias_1_sueldo; if ( dias_asistidos >= 0.5 && dias_asistidos <= 1) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); } pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); $(`.total_HE_${id_trabajador}`).html(suma_he.toFixed(1)); $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`); $(`.pago_parcial_HE_${id_trabajador}`).html(formato_miles(pago_parcial_v2));  var pago_quincenal_v2 = pago_parcial_v2 ; $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2)); var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) { suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena)); return true;
 }
 
 function select_dia_multiple(fecha_i, fecha_f) {
@@ -2900,45 +2904,45 @@ function mostrar_horario() {
               <th class="py-1"><span >MAÑANA</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="MAÑANA">
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>
             <tr  class="text-nowrap">
               <th class="py-1"><span >ALMUERZO</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="ALMUERZO">               
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>
             <tr class="text-nowrap">
               <th class="py-1"><span >TARDE</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="TARDE">
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>
             <tr  >
               <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
                 <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">              
               </th>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="domingo_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"> </td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="lunes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="martes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="miercoles_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="jueves_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_hn" name="viernes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_hn" name="domingo_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_hn" name="lunes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_hn" name="martes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_hn" name="miercoles_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_hn" name="jueves_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_hn" name="viernes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" onClick="this.select();" min="0"></td>
             </tr>
             <tr >                                  
               <td colspan="6" class="py-1 text-center" > <span class="total_horario_hn" >-</span> </td>                                  
@@ -2964,45 +2968,45 @@ function mostrar_horario() {
               <th class="py-1"><span >TARDE</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="TARDE">
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>
             <tr  class="text-nowrap">
               <th class="py-1"><span >CENA</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="CENA">
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>
             <tr class="text-nowrap">
               <th class="py-1"><span >NOCHE</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="NOCHE">
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
-              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-140px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >-</span><input type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>
             <tr  >
               <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
                 <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">
               </th>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="domingo_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"> </td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="lunes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="martes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="miercoles_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="jueves_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-140px input_horario ha_he" name="viernes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_he" name="domingo_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_he" name="lunes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_he" name="martes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_he" name="miercoles_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_he" name="jueves_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >-</span><input type="number" class="form-control w-145px input_horario ha_he" name="viernes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" onClick="this.select();" min="0"></td>
             </tr>
             <tr >                                  
               <td colspan="6" class="py-1 text-center" > <span class="total_horario_he" >-</span>  </td>                                  
@@ -3021,12 +3025,12 @@ function mostrar_horario() {
               <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
                 <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">
               </th>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="number" class="form-control w-120px input_horario ha_hn" name="domingo_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"> </td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="number" class="form-control w-120px input_horario ha_hn" name="lunes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="number" class="form-control w-120px input_horario ha_hn" name="martes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="number" class="form-control w-120px input_horario ha_hn" name="miercoles_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="number" class="form-control w-120px input_horario ha_hn" name="jueves_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="number" class="form-control w-120px input_horario ha_hn" name="viernes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="number" class="form-control w-145px input_horario ha_hn" name="domingo_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="number" class="form-control w-145px input_horario ha_hn" name="lunes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="number" class="form-control w-145px input_horario ha_hn" name="martes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="number" class="form-control w-145px input_horario ha_hn" name="miercoles_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="number" class="form-control w-145px input_horario ha_hn" name="jueves_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="number" class="form-control w-145px input_horario ha_hn" name="viernes_h[]" onkeyup="sumar_hn_horario();" onchange="sumar_hn_horario();" style="display: none;" min="0"></td>
             </tr>`;
             total_horas = parseFloat(val.domingo) + parseFloat(val.lunes) + parseFloat(val.martes) + parseFloat(val.miercoles) + parseFloat(val.jueves) + parseFloat(val.viernes);
           }else{
@@ -3034,12 +3038,12 @@ function mostrar_horario() {
               <th class="py-1"  ><span >${val.turno}</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="${val.turno}">
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="text" class="form-control w-120px input_horario" name="domingo_h[]" style="display: none;"> </td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="text" class="form-control w-120px input_horario" name="lunes_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="text" class="form-control w-120px input_horario" name="martes_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="text" class="form-control w-120px input_horario" name="miercoles_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="text" class="form-control w-120px input_horario" name="jueves_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="text" class="form-control w-120px input_horario" name="viernes_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>`;
           }
         });
@@ -3073,12 +3077,12 @@ function mostrar_horario() {
               <th rowspan="2" ><span >HORAS ACUMULADAS</span>  
                 <input type="text" name="turno_h[]" style="display: none;" value="HORAS ACUMULADAS">
               </th>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="number" class="form-control w-120px input_horario ha_he" name="domingo_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"> </td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="number" class="form-control w-120px input_horario ha_he" name="lunes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="number" class="form-control w-120px input_horario ha_he" name="martes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="number" class="form-control w-120px input_horario ha_he" name="miercoles_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="number" class="form-control w-120px input_horario ha_he" name="jueves_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
-              <td class="p-1 text-center form-group"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="number" class="form-control w-120px input_horario ha_he" name="viernes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="number" class="form-control w-145px input_horario ha_he" name="domingo_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"> </td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="number" class="form-control w-145px input_horario ha_he" name="lunes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="number" class="form-control w-145px input_horario ha_he" name="martes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="number" class="form-control w-145px input_horario ha_he" name="miercoles_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="number" class="form-control w-145px input_horario ha_he" name="jueves_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
+              <td class="p-1 text-center form-group"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="number" class="form-control w-145px input_horario ha_he" name="viernes_h[]" onkeyup="sumar_he_horario();" onchange="sumar_he_horario();" style="display: none;" min="0"></td>
             </tr>`;
             total_horas_2 = parseFloat(val.domingo) + parseFloat(val.lunes) + parseFloat(val.martes) + parseFloat(val.miercoles) + parseFloat(val.jueves) + parseFloat(val.viernes);
           }else{
@@ -3086,12 +3090,12 @@ function mostrar_horario() {
               <th class="py-1"  ><span >${val.turno}</span> 
                 <input type="text" name="turno_h[]" style="display: none;" value="${val.turno}">
               </th>
-              <td class="p-1 text-center"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="text" class="form-control w-120px input_horario" name="domingo_h[]" style="display: none;"> </td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="text" class="form-control w-120px input_horario" name="lunes_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="text" class="form-control w-120px input_horario" name="martes_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="text" class="form-control w-120px input_horario" name="miercoles_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="text" class="form-control w-120px input_horario" name="jueves_h[]" style="display: none;"></td>
-              <td class="p-1 text-center"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="text" class="form-control w-120px input_horario" name="viernes_h[]" style="display: none;"></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.domingo}</span><input value="${val.domingo}" type="text" class="form-control w-145px input_horario" name="domingo_h[]" style="display: none;" onClick="this.select();" > </td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.lunes}</span><input value="${val.lunes}" type="text" class="form-control w-145px input_horario" name="lunes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.martes}</span><input value="${val.martes}" type="text" class="form-control w-145px input_horario" name="martes_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.miercoles}</span><input value="${val.miercoles}" type="text" class="form-control w-145px input_horario" name="miercoles_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.jueves}</span><input value="${val.jueves}" type="text" class="form-control w-145px input_horario" name="jueves_h[]" style="display: none;" onClick="this.select();" ></td>
+              <td class="p-1 text-center"><span class="span_horario" >${val.viernes}</span><input value="${val.viernes}" type="text" class="form-control w-145px input_horario" name="viernes_h[]" style="display: none;" onClick="this.select();" ></td>
             </tr>`;
           }
         });

@@ -130,23 +130,60 @@ class Compra_insumos
   }
 
   public function mostrar_compra_para_editar($id_compras_x_proyecto) {
-
+    $data_producto = []; 
     $sql = "SELECT  cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante,cpp.nc_serie_comprobante, cpp.val_igv, 
     cpp.descripcion, cpp.glosa, cpp.subtotal, cpp.igv, cpp.total, cpp.estado_detraccion, cpp.estado
     FROM compra_por_proyecto as cpp
     WHERE idcompra_proyecto='$id_compras_x_proyecto';";
-
-    $compra = ejecutarConsultaSimpleFila($sql);
-    if ($compra['status'] == false) { return $compra; }
+    $compra = ejecutarConsultaSimpleFila($sql);  if ($compra['status'] == false) { return $compra; }
 
     $sql_2 = "SELECT 	dc.idproducto, dc.ficha_tecnica_producto, dc.cantidad, dc.precio_sin_igv, dc.igv, dc.precio_con_igv,
 		dc.descuento,	p.nombre as nombre_producto, p.imagen, dc.unidad_medida, dc.color, dc.marca, ciaf.nombre AS categoria
 		FROM detalle_compra AS dc, producto AS p, unidad_medida AS um, color AS c, categoria_insumos_af AS ciaf
 		WHERE p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af  AND  dc.idproducto=p.idproducto AND p.idcolor = c.idcolor 
     AND p.idunidad_medida = um.idunidad_medida and idcompra_proyecto='$id_compras_x_proyecto';";
+    $producto = ejecutarConsultaArray($sql_2);   if ($producto['status'] == false) { return $producto;  }
 
-    $producto = ejecutarConsultaArray($sql_2);
-    if ($producto['status'] == false) { return $producto;  }
+    foreach ($producto['data'] as $key => $val) {
+      $id = $val['idproducto']; $marca = $val['marca']; $array_marca_id = []; $array_marca = []; $marca_html_option = ""; $array_marca_name = [];
+      
+      $sql3 = "SELECT dm.iddetalle_marca, m.idmarca, m.nombre_marca FROM detalle_marca as dm, marca as m WHERE dm.idmarca=m.idmarca AND dm.idproducto = '$id';";
+      $detalle_marca = ejecutarConsultaArray($sql3); if ($detalle_marca['status'] == false) { return  $detalle_marca;}
+      if ( empty($detalle_marca['data']) ) { 
+        array_push($array_marca_id, '1' );
+        $array_marca[] = [ 'id' => 1, 'nombre' => 'SIN MARCA', 'selected' => 'selected' ];
+        $marca_html_option = '<option value="SIN MARCA" selected >SIN MARCA</option>';
+        array_push($array_marca_name, 'SIN MARCA' );
+      } else { 
+        foreach ($detalle_marca['data'] as $key => $val2) { array_push($array_marca_id, $val2['idmarca'] ); }
+        foreach ($detalle_marca['data'] as $key => $val2) { $array_marca[] = [ 'id' => $val2['idmarca'], 'nombre' => $val2['nombre_marca'], 'selected' => ( $marca == $val2['nombre_marca'] ? 'selected' : '' ) ]; }
+        foreach ($detalle_marca['data'] as $key => $val2) { $marca_html_option .= '<option value="'.$val2['nombre_marca'].'" '.( $marca == $val2['nombre_marca'] ? 'selected' : '' ).' >'.$val2['nombre_marca'].'</option>'; }
+        foreach ($detalle_marca['data'] as $key => $val2) { array_push($array_marca_name, $val2['nombre_marca'] ); }
+      }
+      
+      
+
+      $data_producto[] = [
+        "idproducto"      => $val['idproducto'],
+        "ficha_tecnica_producto" => $val['ficha_tecnica_producto'],
+        "cantidad"        => $val['cantidad'],
+        "precio_sin_igv"  => $val['precio_sin_igv'],
+        "igv"             => $val['igv'],
+        "precio_con_igv"  => $val['precio_con_igv'],
+        "descuento"       => $val['descuento'],
+        "nombre_producto" => $val['nombre_producto'],
+        "imagen"          => $val['imagen'],
+        "unidad_medida"   => $val['unidad_medida'],
+        "color"           => $val['color'],
+        "marca"           => $val['marca'],
+        "categoria"       => $val['categoria'],
+
+        'id_marca'        => $array_marca_id,
+        'marcas'          => $array_marca_name,
+        'array_marcas'    => $array_marca,
+        'marca_html_option'=> $marca_html_option,
+      ];
+    }   
 
     $results = [
       "idcompra_x_proyecto" => $compra['data']['idcompra_proyecto'],      
@@ -164,7 +201,7 @@ class Compra_insumos
       "total"               => empty($compra['data'])? 0 : (empty($compra['data']['total']) ? 0 : floatval($compra['data']['total']) ) ,
       "estado_detraccion"   => $compra['data']['estado_detraccion'],
       "estado"              => $compra['data']['estado'],
-      "producto"            => $producto['data'],
+      "producto"            => $data_producto,
     ];
 
     return $retorno = ["status" => true, "message" => 'todo oka', "data" => $results] ;
@@ -233,7 +270,7 @@ class Compra_insumos
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
     $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.idproveedor, cpp.fecha_compra, cpp.tipo_comprobante, cpp.serie_comprobante,	
-    cpp.descripcion, cpp.total, cpp.comprobante, cpp.estado_detraccion, p.razon_social, p.telefono,	cpp.estado 
+    cpp.descripcion, cpp.total, cpp.comprobante, cpp.estado_detraccion, cpp.glosa, p.razon_social, p.telefono,	cpp.estado 
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproyecto='$nube_idproyecto' AND cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' $filtro_proveedor $filtro_comprobante $filtro_fecha
 		ORDER BY cpp.fecha_compra DESC ";
@@ -251,20 +288,21 @@ class Compra_insumos
       if ($cant_comprobantes['status'] == false) { return $cant_comprobantes; }
 
       $data[] = [
-        'idproyecto' => $value['idproyecto'],
+        'idproyecto'        => $value['idproyecto'],
         'idcompra_proyecto' => $value['idcompra_proyecto'],
-        'idproveedor' => $value['idproveedor'],
-        'fecha_compra' => $value['fecha_compra'],
-        'tipo_comprobante' => $value['tipo_comprobante'],
+        'idproveedor'       => $value['idproveedor'],
+        'fecha_compra'      => $value['fecha_compra'],
+        'tipo_comprobante'  => $value['tipo_comprobante'],
         'serie_comprobante' => $value['serie_comprobante'],
-        'descripcion' => $value['descripcion'],
-        'total' => $value['total'],
-        'comprobante' => $value['comprobante'],
+        'descripcion'       => $value['descripcion'],
+        'total'             => $value['total'],
+        'comprobante'       => $value['comprobante'],
         'estado_detraccion' => $value['estado_detraccion'],
-        'razon_social' => $value['razon_social'],
-        'telefono' => $value['telefono'],
-        'estado'  => $value['estado'],
-        'total_pago_compras' => (empty($pagos['data']['total_pago_compras']) ? 0 : floatval($pagos['data']['total_pago_compras']) ),
+        'glosa'             => $value['glosa'],
+        'razon_social'      => $value['razon_social'],
+        'telefono'          => $value['telefono'],
+        'estado'            => $value['estado'],
+        'total_pago_compras'=> (empty($pagos['data']['total_pago_compras']) ? 0 : floatval($pagos['data']['total_pago_compras']) ),
         'cant_comprobantes' => (empty($cant_comprobantes['data']['cant_comprobantes']) ? 0 : floatval($cant_comprobantes['data']['cant_comprobantes']) ),
       ];
     }

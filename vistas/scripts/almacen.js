@@ -125,7 +125,7 @@ function todos_almacen() {
           var numeros = '', acumulado = 0;
           if (val2.data.length === 0) { numeros='0'; } else { val2.data.forEach((val3, key3) => { key3 == 0 ? numeros = parseFloat(val3.cantidad) : numeros = numeros + ', ' + parseFloat(val3.cantidad); acumulado += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
           html_dias = html_dias.concat(`<td>${numeros}</td>`);
-          html_dias_sum = html_dias_sum.concat(`<td>${acumulado} <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');"><i class="far fa-eye"></i></span></td>`);
+          html_dias_sum = html_dias_sum.concat(`<td class="cursor-pointer" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado} </td>`);
         });
         var saldo = val1.cantidad - total_x_producto;
         codigoHTMLbodyProducto = `
@@ -146,6 +146,7 @@ function todos_almacen() {
 
       $('#div_tabla_almacen').show();
       $('#cargando-table-almacen').hide();
+      $('[data-toggle="tooltip"]').tooltip();
       scroll_tabla_asistencia();
     } else {
       ver_errores(e);
@@ -456,17 +457,24 @@ function add_producto(data) {
 
   if (idproducto == null || idproducto == '' || idproducto === undefined) { } else {
     var textproducto = $('#producto').select2('data')[0].text;
+    var unidad_medida = $('#producto').select2('data')[0].element.attributes.unidad_medida.value
     if ($(`#html_producto div`).hasClass(`delete_multiple_${idproducto}`)) { // validamos si exte el producto agregado
       toastr_error('Existe!!', `<u>${textproducto}</u>, Este producto ya ha sido agregado`);
     } else {      
       $('#html_producto').append(`<div class="col-lg-12 borde-arriba-0000001a mt-2 mb-2 delete_multiple_${idproducto}"></div>
-      <div class="col-12 col-sm-12 col-md-6 col-lg-6 delete_multiple_${idproducto}" >
+      <div class="col-12 col-sm-12 col-md-6 col-lg-4 delete_multiple_${idproducto}" >
         <input type="hidden" name="idproducto[]" value="${idproducto}" />        
         <div class="form-group">
           <label for="fecha_ingreso">Nombre Producto</label>
           <span class="form-control-mejorado"> ${textproducto} </span>                                  
         </div>
       </div> 
+      <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}">
+        <div class="form-group">
+          <label for="marca">U.M.</label>
+          <span class="form-control-mejorado">${unidad_medida} </span>
+        </div>      
+      </div>
       <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${idproducto}">
         <div class="form-group">
           <label for="marca">Marca <span class="cargando-marca-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span></label>

@@ -900,7 +900,7 @@
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <a type="submit" class="btn bg-gradient-gray" id="bnt-exportar-horario" href="../reportes/export_xlsx_horario.php"><i class="fa-regular fa-file-excel"></i> Exportar</a>
+                        <a type="submit" class="btn bg-gradient-gray" id="bnt-exportar-horario" href="#"><i class="fa-regular fa-file-excel"></i> Exportar</a>
                         <button type="submit" class="btn btn-warning" id="btn-editar-horario" onclick="show_hide_form_horario(2);">Editar</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_horario" style="display: none;">Guardar Cambios</button>
                       </div>

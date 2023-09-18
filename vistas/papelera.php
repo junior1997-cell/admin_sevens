@@ -219,7 +219,7 @@
                   <div class="modal-body"> 
 
                       <!-- CARD - Acceso --------------------------------------------- -->
-                      <div class="card card-outline collapsed-card cur_point" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
+                      <div class="card card-outline collapsed-card cursor-pointer" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
                         <div class="card-header bb-m"><h3 class="card-title">1. <i class="nav-icon fas fa-shield-alt"></i> Acceso</h3></div>
                         <!-- /.card-header -->
                         <div class="card-body"><p class="ml-4">1.1. <i class="nav-icon fas fa-users-cog"></i> Usuario</p></div>
@@ -227,7 +227,7 @@
                       </div>
 
                       <!-- CARD - Acceso --------------------------------------------- -->
-                      <div class="card card-outline collapsed-card cur_point" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
+                      <div class="card card-outline collapsed-card cursor-pointer" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
                         <div class="card-header bb-m">
                           <h3 class="card-title">2. <i class="nav-icon fas fa-project-diagram"></i> Recursos</h3>
                           <!-- <div class="card-tools">
@@ -256,7 +256,7 @@
                       <div class="card-header bb-m"><h3 class="card-title">4. <i class="nav-icon fas fa-receipt"></i> Otra_factura ( Otras faturas )</h3></div>
 
                       <!-- CARD - Técnico --------------------------------------------- -->
-                      <div class="card card-outline collapsed-card cur_point" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
+                      <div class="card card-outline collapsed-card cursor-pointer" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
                         <div class="card-header bb-m">
                           <h3 class="card-title">5. <i class="nav-icon far fa-circle"></i> Técnico</h3>
                       </div>
@@ -271,7 +271,7 @@
                       </div>
 
                       <!-- CARD - Logística y Adquisiciones --------------------------------------------- -->
-                      <div class="card card-outline collapsed-card cur_point" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
+                      <div class="card card-outline collapsed-card cursor-pointer" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
                         <div class="card-header bb-m">
                             <h3 class="card-title">6. <i class="nav-icon far fa-circle"></i> Logística y Adquisiciones</h3>
                         </div>
@@ -315,7 +315,7 @@
                       </div>
 
                       <!-- CARD - Técnico --------------------------------------------- -->
-                      <div class="card card-outline collapsed-card cur_point" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
+                      <div class="card card-outline collapsed-card cursor-pointer" style="box-shadow:none; margin-bottom:0%" data-card-widget="collapse">
                         <div class="card-header bb-m">
                             <h3 class="card-title">7. <i class="nav-icon far fa-circle"></i> Contable y financiero</h3>
                         </div>

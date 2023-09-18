@@ -109,7 +109,7 @@
           
           if ($rspta['status'] == true) {  
             foreach ($rspta['data'] as $key => $value) {   
-              $data .= '<option value="' . $value['idproducto'] . '" >' . $value['nombre_producto'] .'</option>';
+              $data .= '<option value="' . $value['idproducto'] . '" unidad_medida="' . $value['nombre_medida'] . '" >' . $value['nombre_producto'] .'</option>';
             }  
             $retorno = array(
               'status' => true, 
