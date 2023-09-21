@@ -109,7 +109,7 @@
                                     <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
                                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
-                                    <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                                    <input type="date" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
                                   </div>
                                 </div>                                
                               </div>
@@ -122,7 +122,7 @@
                                     <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
                                       <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                     </div>
-                                    <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                                    <input type="date" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
                                   </div>
                                 </div> 
                               </div>

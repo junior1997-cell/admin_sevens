@@ -1,4 +1,4 @@
-var tabla_x_dia;
+var tabla_x_dia, tabla_saldo_anterior;
 var array_doc = [];
 
 //Función que se ejecuta al inicio
@@ -79,6 +79,22 @@ function listar_botones_q_s(nube_idproyecto) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
+function show_hide_input(flag) {
+  if (flag==1) {
+    $('.span_s').show();
+    $('.input_s').hide();
+
+    $('.btn_guardar_s').hide();
+    $('.btn_editar_s').show();
+  } else if (flag==2) {
+    $('.span_s').hide();
+    $('.input_s').show();
+
+    $('.btn_guardar_s').show();
+    $('.btn_editar_s').hide();
+  }
+}
+
 function todos_almacen() {
   $('.data_tbody_almacen').html('');
   pintar_boton_selecionado(0);
@@ -100,18 +116,21 @@ function todos_almacen() {
       var fpo =  localStorage.getItem("nube_fecha_pago_obrero"), nombre_sq = '', cant_sq = ''; 
 
       e.data.fechas.forEach((val1, key1) => {
-        codigoHTMLhead1 = codigoHTMLhead1.concat(`<th colspan="${val1.cantidad_dias}">${extraer_nombre_mes(val1.mes)}</th>`);
+        codigoHTMLhead1 = codigoHTMLhead1.concat(`<th colspan="${val1.cantidad_dias*2}">${extraer_nombre_mes(val1.mes)}</th>`);
         val1.dia.forEach((val2, key2) => {
-          codigoHTMLhead2 = codigoHTMLhead2.concat(`<th class="style-head">${extraer_dia_mes(val2)}</th>`);
-          codigoHTMLhead4 = codigoHTMLhead4.concat(`<th class="style-head">${extraer_dia_semana(val2)}</th>`);          
+          codigoHTMLhead2 = codigoHTMLhead2.concat(`<th colspan="2" class="style-head">${extraer_dia_mes(val2)}</th>`);
+          codigoHTMLhead4 = codigoHTMLhead4.concat(`<th colspan="2" class="style-head">${extraer_dia_semana(val2)}</th>`);          
         });        
       });
       e.data.data_sq.forEach((val1, key1) => {
-        codigoHTMLhead3 = codigoHTMLhead3.concat(`<th colspan="${val1.colspan}">${val1.nombre_sq} ${val1.num_sq}</th>`);
+        codigoHTMLhead3 = codigoHTMLhead3.concat(`<th colspan="${val1.colspan*2}">${val1.nombre_sq} ${val1.num_sq}</th>`);
       });      
 
       $('.thead-f1').html(`<th rowspan="4">#</th> <th rowspan="4">Code</th> <th rowspan="4">Producto</th>
-      <th rowspan="4">UND</th> <th rowspan="4">SALDO <br> ANTERIOR</th> ${codigoHTMLhead1}
+      <th rowspan="4">UND</th> 
+      <th rowspan="4">SALDO <br> ANTERIOR <br> <br> <button class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
+      <th rowspan="4">INGRESO <br> COMPRAS</th> 
+      ${codigoHTMLhead1}
       <th rowspan="4">INGRESO /<br> SALIDA</th> <th rowspan="4">SALDO</th>`);
 
       $('.thead-f2').html(`${codigoHTMLhead2}`);
@@ -122,10 +141,11 @@ function todos_almacen() {
         
         var html_dias = '', html_dias_sum = ''; var total_x_producto = 0;
         val1.almacen.forEach((val2, key2) => {
-          var numeros = '', acumulado = 0;
-          if (val2.data.length === 0) { numeros='0'; } else { val2.data.forEach((val3, key3) => { key3 == 0 ? numeros = parseFloat(val3.cantidad) : numeros = numeros + ', ' + parseFloat(val3.cantidad); acumulado += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
-          html_dias = html_dias.concat(`<td>${numeros}</td>`);
-          html_dias_sum = html_dias_sum.concat(`<td class="cursor-pointer" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado} </td>`);
+          var salida = '', entrada = '', acumulado_s = 0, acumulado_e = 0 ;
+          if (val2.salida.length === 0) { salida='0'; } else { val2.salida.forEach((val3, key3) => { key3 == 0 ? salida = parseFloat(val3.cantidad) : salida = salida + ', ' + parseFloat(val3.cantidad); acumulado_s += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
+          if (val2.entrada.length === 0) { entrada='0'; } else { val2.entrada.forEach((val3, key3) => { key3 == 0 ? entrada = parseFloat(val3.cantidad) : entrada = entrada + ', ' + parseFloat(val3.cantidad); acumulado_e += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
+          html_dias = html_dias.concat(`<td>${entrada}</td><td>${salida}</td>`);
+          html_dias_sum = html_dias_sum.concat(`<td colspan="2" class="cursor-pointer" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s} </td>`);
         });
         var saldo = val1.cantidad - total_x_producto;
         codigoHTMLbodyProducto = `
@@ -134,6 +154,7 @@ function todos_almacen() {
           <td rowspan="2">${val1.idproducto}</td>
           <td class="text_producto text-nowrap" rowspan="2">${val1.nombre_producto} <br> <small><b>Clasf:</b> ${val1.clasificacion} </small></td>
           <td rowspan="2">${val1.abreviacion}</td>
+          <td rowspan="2"> <span class="span_s" >-</span> <input class="input_s w-70px" type="number" name="saldo_anterior[]" style="display:none;" > <br> <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior();"><i class="far fa-eye"></i></span> </td>
           <td rowspan="2">${formato_miles(val1.cantidad)}</td>
           ${html_dias}
           <td rowspan="2">${total_x_producto}</td>
@@ -173,8 +194,7 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
 
     if (e.status == true) {
       var codigoHTMLbody="", codigoHTMLbodyProducto ='', codigoHTMLbodyDias=""; 
-      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="" ;
-      
+      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="" ;      
 
       e.data.fechas.forEach((val1, key1) => {
         codigoHTMLhead1 = codigoHTMLhead1.concat(`<th colspan="${val1.cantidad_dias}">${extraer_nombre_mes(val1.mes)}</th>`);
@@ -188,7 +208,7 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
       });      
 
       $('.thead-f1').html(`<th rowspan="4">#</th> <th rowspan="4">Code</th> <th rowspan="4">Producto</th>
-      <th rowspan="4">UND</th> <th rowspan="4">SALDO <br> ANTERIOR</th> ${codigoHTMLhead1}
+      <th rowspan="4">UND</th> <th rowspan="4">SALDO <br> ANTERIOR <br> <button class="btn btn-sm btn-warning">Editar</button> <button class="btn btn-sm btn-success">Guardar</button></th> ${codigoHTMLhead1}
       <th rowspan="4">INGRESO /<br> SALIDA</th> <th rowspan="4">SALDO</th>`);
 
       $('.thead-f2').html(`${codigoHTMLhead2}`);
@@ -201,7 +221,7 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
           var numeros = '', acumulado = 0;
           if (val2.data.length === 0) { numeros='0'; } else { val2.data.forEach((val3, key3) => { key3 == 0 ? numeros = parseFloat(val3.cantidad) : numeros = numeros + ', ' + parseFloat(val3.cantidad); acumulado += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
           html_dias = html_dias.concat(`<td>${numeros}</td>`);
-          html_dias_sum = html_dias_sum.concat(`<td>${acumulado} <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');"><i class="far fa-eye"></i></span></td>`);
+          html_dias_sum = html_dias_sum.concat(`<td class="cursor-pointer" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado} </td>`);
         });
         var saldo = val1.cantidad - total_x_producto;
 
@@ -211,7 +231,7 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
           <td rowspan="2">${val1.idproducto}</td>
           <td class="text_producto text-nowrap" rowspan="2">${val1.nombre_producto} <br> <small><b>Clasf:</b> ${val1.clasificacion} </small></td>
           <td rowspan="2">${val1.abreviacion}</td>
-          <td rowspan="2">${formato_miles(val1.cantidad)}</td>
+          <td rowspan="2">${formato_miles(val1.cantidad)} <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_ver_almacen();"><i class="far fa-eye"></i></span></td>
           ${html_dias}
           <td rowspan="2">${total_x_producto}</td>
           <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}">${saldo}</td>
@@ -224,11 +244,20 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
 
       $('#div_tabla_almacen').show();
       $('#cargando-table-almacen').hide();
+      $('[data-toggle="tooltip"]').tooltip();
       scroll_tabla_asistencia();
     } else {
       ver_errores(e);
     }
   }).fail(function (e) { ver_errores(e); });
+}
+
+function calcular_saldo() {
+  var data_input = $('.input_s');
+  data_input.each(function(val, key) { 
+    hora +=  $(this).val() == null || $(this).val() == '' || $(this).val() == 0 ? 0 : parseFloat($(this).val());    
+    console.log( hora );     
+  });
 }
 
 // .....::::::::::::::::::::::::::::::::::::: E D I T A R   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
@@ -517,6 +546,49 @@ function remove_producto(id) {
   }   
 }
 
+// .....::::::::::::::::::::::::::::::::::::: S A L D O S   A N T E R I O R E S  :::::::::::::::::::::::::::::::::::::::..
+
+function modal_saldo_anterior(idproyecto) {
+  $('#modal-saldo-anterior').modal('show');
+
+  tabla_saldo_anterior = $('#tabla-saldo-anterior').dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } },  
+    ],
+    ajax:{
+      url: `../ajax/almacen.php?op=tbla-ver-almacen&fecha=&id_producto=`,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);  ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); } 
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [9, 10, 11, 12, 13, 14, 15, 16,17], visible: false, searchable: false, }, 
+    ],
+  }).DataTable();
+}
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -595,12 +667,12 @@ $(function () {
 // .....::::::::::::::::::::::::::::::::::::: O T R A S   F U N C I O N E S  :::::::::::::::::::::::::::::::::::::::..
 
 function scroll_tabla_asistencia() {
-  var height_tabla = $('#div_tabla_almacen').height(); console.log('Alto pantalla: '+height_tabla);
-  var width_tabla = $('#div_tabla_almacen').width(); console.log('Ancho pantalla: '+width_tabla);
+  var height_tabla = $('#div_tabla_almacen').height(); //console.log('Alto pantalla: '+height_tabla);
+  var width_tabla = $('#div_tabla_almacen').width(); //console.log('Ancho pantalla: '+width_tabla);
   if (height_tabla <= 600) {
     $('#div_tabla_almacen').css({'height':`${redondearExp((height_tabla+50),0)}px`});
   } else {
-    var alto_real = (width_tabla/2) - 100; console.log('Result pantalla: '+alto_real);
+    var alto_real = (width_tabla/2) - 100; //console.log('Result pantalla: '+alto_real);
     $('#div_tabla_almacen').css({'height':`${redondearExp(alto_real,0)}px`});
   }
 }
