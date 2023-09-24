@@ -14,9 +14,9 @@ if (!isset($_SESSION["nombre"])) {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title> Almacen | Admin Sevens </title>
+    <title> Almacén | Admin Sevens </title>
 
-    <?php $title = "Almacen";
+    <?php $title = "Almacén";
     require 'head.php'; ?>
 
     <!--CSS  switch_MATERIALES-->
@@ -81,13 +81,13 @@ if (!isset($_SESSION["nombre"])) {
             <div class="container-fluid">
               <div class="row mb-2">
                 <div class="col-sm-6">
-                  <h1 class="m-0">Almacen</h1> 
+                  <h1 class="m-0"><i class="nav-icon fas fa-box-open"></i> Almacén</h1>  
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="compra_insumos.php">Home</a></li>
-                    <li class="breadcrumb-item active">Almacen</li>
+                    <li class="breadcrumb-item active">Almacén</li>
                   </ol>
                 </div>
                 <!-- /.col -->
@@ -143,7 +143,7 @@ if (!isset($_SESSION["nombre"])) {
                               <th rowspan="4">INGRESO /<br> SALIDA</th>
                               <th rowspan="4">SALDO</th> -->
                             </tr>
-                            <tr class="thead-f2">
+                            <tr class="thead-f2"> 
                               <!-- <th class="style-head">25</th>
                               <th class="style-head">26</th>
                               <th class="style-head">27</th>
@@ -506,6 +506,53 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen_x_dia();" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success" id="guardar_registro_almacen_x_dia" style="display: none;">Guardar Cambios</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL - VER SALDOS ANTERIORES -  -->
+            <div class="modal fade" id="modal-saldo-anterior">
+              <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">
+                      <button type="button" class="btn bg-gradient-warning btn-regresar" onclick="show_hide_form(1);" style="display: none;" >
+                        <i class="fa-solid fa-arrow-left"></i> Regresar
+                      </button>
+                      Saldos Anteriores</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span class="text-danger" aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">                    
+                    
+                    <table id="tabla-saldo-anterior" class="table table-bordered table-striped display" style="width: 100% !important;">
+                      <thead>
+                        <tr>
+                          <th class="text-center">#</th>
+                          <th class="">Aciones</th>
+                          <th>Producto</th>                                
+                          <th>Cant</th>
+                          <th>Marca</th>                                                       
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                      <tfoot>
+                        <tr>
+                          <th class="text-center">#</th>
+                          <th class="">Aciones</th>
+                          <th>Producto</th>                                
+                          <th>Cant</th>
+                          <th>Marca</th>                             
+                        </tr>
+                      </tfoot>
+                    </table>                                       
+                    
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>                    
                   </div>
                 </div>
               </div>

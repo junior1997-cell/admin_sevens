@@ -81,8 +81,8 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE FILTROS ══════════════════════════════════════
   
   // Inicializar - Date picker  
-  $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
-  $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  // $('#filtro_fecha_inicio').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
+  // $('#filtro_fecha_fin').datepicker({ format: "dd-mm-yyyy", clearBtn: true, language: "es", autoclose: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
 
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
   $('#precio_unitario_p').number( true, 2 );
@@ -96,8 +96,11 @@ function init() {
   //filtros();
 }
 
-$('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
-$('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
+// $('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
+// $('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
+
+$('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').click(); });
+$('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').click(); });
 
 function templateBanco (state) {
   //console.log(state);
@@ -1948,8 +1951,11 @@ function filtros() {
   var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
 
   // filtro de fechas
-  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
-  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+  //if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = format_a_m_d(fecha_1) == '-'? '': format_a_m_d(fecha_1);}
+  //if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = format_a_m_d(fecha_2) == '-'? '': format_a_m_d(fecha_2);} 
+
+  if (fecha_1 == "" || fecha_1 == null) { fecha_1 = ""; } else{ fecha_1 = fecha_1 == '-'? '': fecha_1;}
+  if (fecha_2 == "" || fecha_2 == null) { fecha_2 = ""; } else{ fecha_2 = fecha_2 == '-'? '': fecha_2;} 
 
   // filtro de proveedor
   if (id_proveedor == '' || id_proveedor == 0 || id_proveedor == null) { id_proveedor = ""; nombre_proveedor = ""; }

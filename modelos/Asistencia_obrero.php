@@ -351,13 +351,14 @@ class Asistencia_obrero
           descripcion_descuento_hn, descripcion_descuento_he, pago_quincenal_hn, pago_quincenal_he, estado_envio_contador 
           FROM resumen_q_s_asistencia WHERE idtrabajador_por_proyecto = '$id_tpp' AND ids_q_asistencia = '$ids_q_asistencia' AND estado = '1' AND estado_delete = '1';";
           $extras = ejecutarConsultaSimpleFila($sql3); if ($extras['status'] == false) {  return $extras; }      
-
+          $sueldo_diario = "";  $sueldo_estado = true;
           if ( empty($extras['data']) ) {
             foreach ($fecha_array as $key1 => $val1) {
 
               $dia_bloqueado = true; $i_sueldo = 0;
-              foreach ($sueldo['data'] as $key0 => $val_s) { // Buscamos si esta dentro de la semana
+              foreach ($sueldo['data'] as $key0 => $val_s) { // Buscamos si esta dentro de la semana                
                 if ( fecha_dentro_de_rango($val1['fecha_dia'], $val_s['fecha_desde'], $val_s['fecha_hasta'])  ) {
+                  if ($sueldo_estado) {  $sueldo_diario = $val_s['sueldo_diario'] ; $sueldo_estado = false; } #bsucamos el sueldo a mostrar
                   $dia_bloqueado = false; $i_sueldo = $val_s['sueldo_diario']; break;
                 } 
               }
@@ -393,8 +394,9 @@ class Asistencia_obrero
               foreach ($asistencia['data'] as $key3 => $val3) { if ($val2['fecha_dia'] == $val3['fecha_asistencia'] ) { $fecha_encontrado = true; $indice_encontrado = $key3; } }
               
               $dia_bloqueado = true; $i_sueldo = 0;
-              foreach ($sueldo['data'] as $key0 => $val_s) { // Buscamos si esta dentro de la semana
+              foreach ($sueldo['data'] as $key0 => $val_s) { // Buscamos si esta dentro de la semana               
                 if ( fecha_dentro_de_rango($val2['fecha_dia'], $val_s['fecha_desde'], $val_s['fecha_hasta'])  ) {
+                  if ($sueldo_estado) {  $sueldo_diario = $val_s['sueldo_diario'] ; $sueldo_estado = false; } #bsucamos el sueldo a mostrar
                   $dia_bloqueado = false; $i_sueldo =  $val_s['sueldo_diario']; break;
                 } 
               }
@@ -447,7 +449,7 @@ class Asistencia_obrero
             "imagen_perfil"             => $key['imagen_perfil'],
             "sueldo_mensual"            => $key['sueldo_mensual'],
             "sueldo_semanal"            => $key['sueldo_semanal'],
-            "sueldo_diario"             => $key['sueldo_diario'],
+            "sueldo_diario"             => empty( $sueldo_diario ) ? $key['sueldo_diario'] : $sueldo_diario,
             "sueldo_hora"               => $key['sueldo_hora'],
             "estado_trabajador"         => $key['estado'],
             "fecha_inicio_t"            => $key['fecha_inicio'],

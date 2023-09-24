@@ -121,10 +121,16 @@ class Almacen
         $sql_1 = "SELECT axp.idalmacen_x_proyecto, axp.idproducto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca
         FROM almacen_x_proyecto AS axp
         WHERE axp.idproducto = '$idproducto' AND axp.fecha_ingreso = '$val2' AND axp.estado = '1' AND axp.estado_delete = '1';";
-        $almacen = ejecutarConsultaArray($sql_1); if ($almacen['status'] == false) { return $almacen; }
+        $salida = ejecutarConsultaArray($sql_1); if ($salida['status'] == false) { return $salida; }
+
+        $sql_1 = "SELECT dc.idproducto, dc.cantidad FROM compra_por_proyecto as cpp, detalle_compra as dc 
+        WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.fecha_compra = '$val2'AND cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idproducto = '$idproducto';";
+        $entrada = ejecutarConsultaArray($sql_1); if ($entrada['status'] == false) { return $entrada; }
+
         $data_almacen[] =  [
           'fecha'=> $val2, 
-          'data'=> $almacen['data'],          
+          'salida'=> $salida['data'],          
+          'entrada'=> $entrada['data'],          
         ];
       }      
 
