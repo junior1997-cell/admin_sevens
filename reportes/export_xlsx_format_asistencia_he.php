@@ -10,16 +10,13 @@
   $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Asistencia de obreros");
 
   // ══════════════════════════════════════════ - D A T O S   D E L   T R A B A J A D O R - ══════════════════════════════════════════
-
   require_once "../modelos/Formatos_varios.php";
-  require_once "../modelos/Asistencia_obrero.php";
 
   $formatos_varios = new FormatosVarios();
-  $asistencia_obrero=new Asistencia_obrero(); 
 
   $proyecto = $formatos_varios->datos_proyecto($_GET["idproyecto"]);
 
-  $data_asistencia = $asistencia_obrero->ver_detalle_quincena($_GET["ids_q_asistencia"], $_GET["f1"],$_GET["f2"],$_GET["idproyecto"], $_GET["n_f_i_p"], $_GET["n_f_f_p"]);
+  $data_asistencia = $formatos_varios->ver_detalle_sem_quin($_GET["ids_q_asistencia"], $_GET["f1"],$_GET["f2"],$_GET["idproyecto"], $_GET["n_f_i_p"], $_GET["n_f_f_p"]);
 
   $f1               = $_GET["f1"];
   $f2               = $_GET["f2"];
