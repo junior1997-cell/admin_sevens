@@ -168,7 +168,7 @@ class Epp
   }
 
   function tbl_detalle_epp($idproducto,$idproyecto,$marca) {
-    // var_dump();die();
+
     $sql ="SELECT ap.idepp_x_proyecto ,ap.idtrabajador_por_proyecto, ar.idproducto , ap.fecha_ingreso, ap.dia_ingreso, ap.cantidad, ap.marca, t.nombres 
     FROM epp_x_proyecto as ap 
     INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen=ap.idalmacen_resumen 
