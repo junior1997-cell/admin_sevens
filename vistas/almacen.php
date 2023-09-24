@@ -130,187 +130,192 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="card-body">
                       <!-- TABLA - Almacen -->                      
                       <div class="table-container" id="div_tabla_almacen" style="display: none;">
-                        <table class="custom-table tabla_almacen" style="width: 100%;" role="grid">
-                          <thead class="st_tr_style bg-color-ffd146">
-                            <tr class="thead-f1">
-                              <!-- <th rowspan="4">#</th>
-                              <th rowspan="4">Code</th>
-                              <th rowspan="4">Producto</th>
-                              <th rowspan="4">UND</th>
-                              <th rowspan="4">SALDO <br> ANTERIOR</th>
-                              <th colspan="6">JUNIO</th>
-                              <th colspan="8">JULIO</th>
-                              <th rowspan="4">INGRESO /<br> SALIDA</th>
-                              <th rowspan="4">SALDO</th> -->
-                            </tr>
-                            <tr class="thead-f2"> 
-                              <!-- <th class="style-head">25</th>
-                              <th class="style-head">26</th>
-                              <th class="style-head">27</th>
-                              <th class="style-head">28</th>
-                              <th class="style-head">29</th>
-                              <th class="style-head">30</th>
-                              <th class="style-head">1</th>
-                              <th class="style-head">2</th>
-                              <th class="style-head">3</th>
-                              <th class="style-head">4</th>
-                              <th class="style-head">5</th>
-                              <th class="style-head">6</th>
-                              <th class="style-head">7</th>
-                              <th class="style-head">8</th> -->
-                            </tr>
+                        <form id="form-almacen-saldo-anterior" name="form-almacen-saldo-anterior" method="POST">                        
+                          <table class="custom-table tabla_almacen" style="width: 100%;" role="grid">
+                            <thead class="st_tr_style bg-color-ffd146">
+                              <tr class="thead-f1">
+                                <!-- <th rowspan="4">#</th>
+                                <th rowspan="4">Code</th>
+                                <th rowspan="4">Producto</th>
+                                <th rowspan="4">UND</th>
+                                <th rowspan="4">SALDO <br> ANTERIOR</th>
+                                <th colspan="6">JUNIO</th>
+                                <th colspan="8">JULIO</th>
+                                <th rowspan="4">INGRESO /<br> SALIDA</th>
+                                <th rowspan="4">SALDO</th> -->
+                              </tr>
+                              <tr class="thead-f2"> 
+                                <!-- <th class="style-head">25</th>
+                                <th class="style-head">26</th>
+                                <th class="style-head">27</th>
+                                <th class="style-head">28</th>
+                                <th class="style-head">29</th>
+                                <th class="style-head">30</th>
+                                <th class="style-head">1</th>
+                                <th class="style-head">2</th>
+                                <th class="style-head">3</th>
+                                <th class="style-head">4</th>
+                                <th class="style-head">5</th>
+                                <th class="style-head">6</th>
+                                <th class="style-head">7</th>
+                                <th class="style-head">8</th> -->
+                              </tr>
 
-                            <tr class="thead-f3">
-                              <!-- <th colspan="7">SEMANA 1</th>
-                              <th colspan="7">SEMANA 2</th> -->
-                            </tr>
-                            <tr class="thead-f4">
-                              <!-- <th class="style-head">D</th>
-                              <th class="style-head">L</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">J</th>
-                              <th class="style-head">V</th>
-                              <th class="style-head">S</th>
-                              
-                              <th class="style-head">D</th>
-                              <th class="style-head">L</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">M</th>
-                              <th class="style-head">J</th>
-                              <th class="style-head">V</th>
-                              <th class="style-head">S</th> -->
-                            </tr>
-                          </thead>
-                          <tbody class="data_tbody_almacen">
-                            <!-- <tr>
-                              <td rowspan="2">1</td>
-                              <td rowspan="2">354</td>
-                              <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
-                              <td rowspan="2">UND</td>
-                              <td rowspan="2">100</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                            </tr>
-                            <tr>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                            </tr> -->
-                            <!-- --------- -->
-                            <!-- <tr>
-                              <td rowspan="2">1</td>
-                              <td rowspan="2">354</td>
-                              <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
-                              <td rowspan="2">UND</td>
-                              <td rowspan="2">100</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                            </tr>
-                            <tr>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                            </tr> -->
-                            <!-- ----------- -->
-                            <!-- <tr>
-                              <td rowspan="2">1</td>
-                              <td rowspan="2">354</td>
-                              <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
-                              <td rowspan="2">UND</td>
-                              <td rowspan="2">100</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                            </tr>
-                            <tr>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                            </tr> -->
-                            <!-- Agrega más filas según sea necesario -->
-                          </tbody>
-                        </table>
+                              <tr class="thead-f3">
+                                <!-- <th colspan="7">SEMANA 1</th>
+                                <th colspan="7">SEMANA 2</th> -->
+                              </tr>
+                              <tr class="thead-f4">
+                                <!-- <th class="style-head">D</th>
+                                <th class="style-head">L</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">J</th>
+                                <th class="style-head">V</th>
+                                <th class="style-head">S</th>
+                                
+                                <th class="style-head">D</th>
+                                <th class="style-head">L</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">M</th>
+                                <th class="style-head">J</th>
+                                <th class="style-head">V</th>
+                                <th class="style-head">S</th> -->
+                              </tr>
+                              <tr class="thead-f5">                              
+                              </tr>
+                            </thead>
+                            <tbody class="data_tbody_almacen">
+                              <!-- <tr>
+                                <td rowspan="2">1</td>
+                                <td rowspan="2">354</td>
+                                <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
+                                <td rowspan="2">UND</td>
+                                <td rowspan="2">100</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                              </tr>
+                              <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                              </tr> -->
+                              <!-- --------- -->
+                              <!-- <tr>
+                                <td rowspan="2">1</td>
+                                <td rowspan="2">354</td>
+                                <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
+                                <td rowspan="2">UND</td>
+                                <td rowspan="2">100</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                              </tr>
+                              <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                              </tr> -->
+                              <!-- ----------- -->
+                              <!-- <tr>
+                                <td rowspan="2">1</td>
+                                <td rowspan="2">354</td>
+                                <td rowspan="2">ACEITE SAE 20W50 X 1GLN</td>
+                                <td rowspan="2">UND</td>
+                                <td rowspan="2">100</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                              </tr>
+                              <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                              </tr> -->
+                              <!-- Agrega más filas según sea necesario -->
+                            </tbody>
+                          </table>
+                          <button type="submit" style="display: none;" id="submit-form-almacen-sa">Submit</button>
+                        </form>
                       </div>                      
 
                       <!-- CARGANDO - REGISTRO DE ASISTENCIA -->
@@ -339,18 +344,24 @@ if (!isset($_SESSION["nombre"])) {
                     </button>
                   </div> 
 
-                  <div class="modal-body">
+                  <div class="modal-body"> 
                     <!-- form start -->
                     <form id="form-almacen" name="form-almacen" method="POST">
                       <div class="card-body">
                         <div class="row" id="cargando-1-fomulario">
-                          <!-- id trabajador -->
-                          <input type="hidden" name="idalmacen_x_proyecto" id="idalmacen_x_proyecto" />
+                          <!-- idalmacen_resumen -->
+                          <input type="hidden" name="idalmacen_resumen" id="idalmacen_resumen" />
+                          <!-- idalmacen_resumen -->
+                          <input type="hidden" name="idproyecto" id="idproyecto" />
 
                           <!-- Tipo de documento -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                             <div class="form-group">
-                              <label for="producto">Producto <span class="cargando_productos"></span> </label>
+                              <label for="producto"> 
+                                <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_producto_todos();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                Producto <small class="comprado_todos">(comprado)</small> <span class="cargando_productos"></span> 
+                              </label>
                               <select name="producto" id="producto" class="form-control" placeholder="Producto" onchange="add_producto(this);">                                
                               </select>
                             </div>
@@ -436,7 +447,7 @@ if (!isset($_SESSION["nombre"])) {
                             <th class="text-center">#</th>
                             <th class="">Aciones</th>
                             <th>Producto</th>                                
-                            <th>Cant</th>
+                            <th class="text-center" >Cant</th>
                             <th>Marca</th>                             
                           </tr>
                         </tfoot>
@@ -447,14 +458,16 @@ if (!isset($_SESSION["nombre"])) {
                     <form id="form-almacen-x-dia" name="form-almacen-x-dia" method="POST" style="display: none;">
                       <div class="card-body">
                         <div class="row" id="cargando-3-fomulario">
-                          <!-- id trabajador -->
-                          <input type="hidden" name="idalmacen_x_proyecto_xp" id="idalmacen_x_proyecto_xp" />
+                          <!-- id  -->
+                          <input type="hidden" name="idalmacen_salida_xp" id="idalmacen_salida_xp" />
+                          <input type="hidden" name="idalmacen_resumen_xp" id="idalmacen_resumen_xp" />
+                          <input type="hidden" name="idproyecto_xp" id="idproyecto_xp" />
 
                           <!-- Producto -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-12">
                             <div class="form-group">
                               <label for="producto_xp">Producto <span class="cargando_productos"></span> </label>
-                              <select name="producto_xp" id="producto_xp" class="form-control" placeholder="Producto" >                                
+                              <select name="producto_xp" id="producto_xp" class="form-control" placeholder="Producto" onchange="cambiar_producto_salida(this);" >                                
                               </select>
                             </div>
                           </div>                            
@@ -471,7 +484,7 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- Marcas -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                              <label for="marca_xp">Marcas</label>
+                              <label for="marca_xp">Marcas <small class="chargue_edit_marca"></small> </label>
                               <select name="marca_xp" id="marca_xp" class="form-control" ></select>                             
                             </div>
                           </div>  
@@ -516,11 +529,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">
-                      <button type="button" class="btn bg-gradient-warning btn-regresar" onclick="show_hide_form(1);" style="display: none;" >
-                        <i class="fa-solid fa-arrow-left"></i> Regresar
-                      </button>
-                      Saldos Anteriores</h4>
+                    <h4 class="modal-title title_saldo_anterior">Saldos:</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
@@ -532,19 +541,19 @@ if (!isset($_SESSION["nombre"])) {
                       <thead>
                         <tr>
                           <th class="text-center">#</th>
-                          <th class="">Aciones</th>
-                          <th>Producto</th>                                
-                          <th>Cant</th>
-                          <th>Marca</th>                                                       
+                          <th class="">Producto</th>
+                          <th>Entrada</th>                                
+                          <th>Salida</th> 
+                          <th>Saldo</th>                                                       
                         </tr>
                       </thead>
                       <tbody></tbody>
                       <tfoot>
                         <tr>
                           <th class="text-center">#</th>
-                          <th class="">Aciones</th>
-                          <th>Producto</th>                                
-                          <th>Cant</th>
+                          <th class="">Producto</th>
+                          <th>Entrada</th>                                
+                          <th>Salida</th>
                           <th>Marca</th>                             
                         </tr>
                       </tfoot>

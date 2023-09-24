@@ -1,6 +1,6 @@
 var tabla_x_dia, tabla_saldo_anterior;
 var array_doc = [];
-
+var id_almacen_s_r = '';
 //Función que se ejecuta al inicio
 function init() {
 
@@ -12,17 +12,23 @@ function init() {
   listar_botones_q_s(idproyecto);
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
-  lista_select2(`../ajax/almacen.php?op=select2Productos&idproyecto=${idproyecto}`, '#producto', null, '.cargando_productos');
-  lista_select2(`../ajax/almacen.php?op=select2Productos&idproyecto=${idproyecto}`, '#producto_xp', null, '.cargando_productos');
+  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto', null, '.cargando_productos');
+  lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${idproyecto}`, '#producto_xp', null, '.cargando_productos');
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen").submit(); });
   $("#guardar_registro_almacen_x_dia").on("click", function (e) { $("#submit-form-almacen-x-dia").submit(); });
+  $(".btn_guardar_s").on("click", function (e) { $("#submit-form-almacen-sa").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#producto").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
   $("#producto_xp").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
 
+  $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
+  $("#idproyecto_xp").val(localStorage.getItem("nube_idproyecto"));
+
+  $("#fecha_ingreso_xp").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
+  $("#fecha_ingreso").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
   // Formato para telefono
   $("[data-mask]").inputmask();
 
@@ -79,24 +85,8 @@ function listar_botones_q_s(nube_idproyecto) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function show_hide_input(flag) {
-  if (flag==1) {
-    $('.span_s').show();
-    $('.input_s').hide();
-
-    $('.btn_guardar_s').hide();
-    $('.btn_editar_s').show();
-  } else if (flag==2) {
-    $('.span_s').hide();
-    $('.input_s').show();
-
-    $('.btn_guardar_s').show();
-    $('.btn_editar_s').hide();
-  }
-}
-
 function todos_almacen() {
-  $('.data_tbody_almacen').html('');
+  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
   pintar_boton_selecionado(0);
   var idproyecto =  localStorage.getItem("nube_idproyecto");
   var fip =  localStorage.getItem("nube_fecha_inicial_actividad");
@@ -112,7 +102,7 @@ function todos_almacen() {
 
     if (e.status == true) {
       var codigoHTMLbody="", codigoHTMLbodyProducto ='', codigoHTMLbodyDias="", html_dias = ''; 
-      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="" ;
+      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="", codigoHTMLhead5="" ;
       var fpo =  localStorage.getItem("nube_fecha_pago_obrero"), nombre_sq = '', cant_sq = ''; 
 
       e.data.fechas.forEach((val1, key1) => {
@@ -120,42 +110,52 @@ function todos_almacen() {
         val1.dia.forEach((val2, key2) => {
           codigoHTMLhead2 = codigoHTMLhead2.concat(`<th colspan="2" class="style-head">${extraer_dia_mes(val2)}</th>`);
           codigoHTMLhead4 = codigoHTMLhead4.concat(`<th colspan="2" class="style-head">${extraer_dia_semana(val2)}</th>`);          
+          codigoHTMLhead5 = codigoHTMLhead5.concat(`<th class="style-head">Entrada</th> <th class="style-head">Salida</th>`);          
         });        
       });
       e.data.data_sq.forEach((val1, key1) => {
         codigoHTMLhead3 = codigoHTMLhead3.concat(`<th colspan="${val1.colspan*2}">${val1.nombre_sq} ${val1.num_sq}</th>`);
       });      
 
-      $('.thead-f1').html(`<th rowspan="4">#</th> <th rowspan="4">Code</th> <th rowspan="4">Producto</th>
-      <th rowspan="4">UND</th> 
-      <th rowspan="4">SALDO <br> ANTERIOR <br> <br> <button class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
-      <th rowspan="4">INGRESO <br> COMPRAS</th> 
+      $('.thead-f1').html(`<th rowspan="5">#</th> 
+      <th rowspan="5">Code</th> 
+      <th rowspan="5">Producto</th>
+      <th rowspan="5">UND</th> 
+      <th rowspan="5">SALDO <br> ANTERIOR <br> <br> <button type="button" class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
+      <th rowspan="5">INGRESO <br> COMPRAS</th> 
       ${codigoHTMLhead1}
-      <th rowspan="4">INGRESO /<br> SALIDA</th> <th rowspan="4">SALDO</th>`);
+      <th rowspan="5">SALIDA</th> 
+      <th rowspan="5">SALDO</th>`);
 
       $('.thead-f2').html(`${codigoHTMLhead2}`);
       $('.thead-f3').html(`${codigoHTMLhead3}`);
       $('.thead-f4').html(`${codigoHTMLhead4}`);
+      $('.thead-f5').html(`${codigoHTMLhead5}`);
 
       e.data.producto.forEach((val1, key1) => {
-        
+        var color_filas =  (key1%2==0 ? 'bg-color-e9e9e9' : '') ;
         var html_dias = '', html_dias_sum = ''; var total_x_producto = 0;
         val1.almacen.forEach((val2, key2) => {
           var salida = '', entrada = '', acumulado_s = 0, acumulado_e = 0 ;
           if (val2.salida.length === 0) { salida='0'; } else { val2.salida.forEach((val3, key3) => { key3 == 0 ? salida = parseFloat(val3.cantidad) : salida = salida + ', ' + parseFloat(val3.cantidad); acumulado_s += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
-          if (val2.entrada.length === 0) { entrada='0'; } else { val2.entrada.forEach((val3, key3) => { key3 == 0 ? entrada = parseFloat(val3.cantidad) : entrada = entrada + ', ' + parseFloat(val3.cantidad); acumulado_e += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
+          if (val2.entrada.length === 0) { entrada='0'; } else { val2.entrada.forEach((val3, key3) => { key3 == 0 ? entrada = parseFloat(val3.cantidad) : entrada = entrada + ', ' + parseFloat(val3.cantidad); acumulado_e += parseFloat(val3.cantidad);  }); } 
           html_dias = html_dias.concat(`<td>${entrada}</td><td>${salida}</td>`);
-          html_dias_sum = html_dias_sum.concat(`<td colspan="2" class="cursor-pointer" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s} </td>`);
+          html_dias_sum = html_dias_sum.concat(`<td class="${color_filas}" >${acumulado_e}</td> <td class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s} </td>`);
         });
-        var saldo = val1.cantidad - total_x_producto;
+        var saldo = val1.entrada_total - total_x_producto;
         codigoHTMLbodyProducto = `
-        <tr class="text-nowrap">
+        <tr class="text-nowrap ${color_filas}">
           <td rowspan="2">${(key1 +1)}</td>
           <td rowspan="2">${val1.idproducto}</td>
-          <td class="text_producto text-nowrap" rowspan="2">${val1.nombre_producto} <br> <small><b>Clasf:</b> ${val1.clasificacion} </small></td>
-          <td rowspan="2">${val1.abreviacion}</td>
-          <td rowspan="2"> <span class="span_s" >-</span> <input class="input_s w-70px" type="number" name="saldo_anterior[]" style="display:none;" > <br> <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior();"><i class="far fa-eye"></i></span> </td>
-          <td rowspan="2">${formato_miles(val1.cantidad)}</td>
+          <td class="text_producto text-nowrap" rowspan="2"> <span class="name_producto_${val1.idproducto}">${val1.nombre_producto}</span> <br> <small><b>Clasf:</b> ${val1.categoria} </small></td>
+          <td rowspan="2">${val1.abreviacion_um}</td>
+          <td rowspan="2"> 
+            <span class="span_s" >${val1.saldo_anterior}</span> 
+            <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="${val1.saldo_anterior}" style="display:none;" > <br> 
+            <input type="hidden" name="idproducto_sa[]" value="${val1.idproducto}" > <input type="hidden" name="idproyecto_sa[]" value="${val1.idproyecto}" >
+            <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior('${idproyecto}', '${val1.idproducto}');"><i class="far fa-eye"></i></span> 
+          </td>
+          <td rowspan="2">${formato_miles(val1.entrada_total)}</td>
           ${html_dias}
           <td rowspan="2">${total_x_producto}</td>
           <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}">${saldo}</td>
@@ -177,7 +177,7 @@ function todos_almacen() {
 }
 
 function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dias ) {
-  $('.data_tbody_almacen').html('');
+  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
   pintar_boton_selecionado(i);
   var idproyecto =  localStorage.getItem("nube_idproyecto");
   var fip =  fecha_q_s_inicio
@@ -194,52 +194,62 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
 
     if (e.status == true) {
       var codigoHTMLbody="", codigoHTMLbodyProducto ='', codigoHTMLbodyDias=""; 
-      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="" ;      
+      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="", codigoHTMLhead5="" ;      
 
       e.data.fechas.forEach((val1, key1) => {
-        codigoHTMLhead1 = codigoHTMLhead1.concat(`<th colspan="${val1.cantidad_dias}">${extraer_nombre_mes(val1.mes)}</th>`);
+        codigoHTMLhead1 = codigoHTMLhead1.concat(`<th colspan="${val1.cantidad_dias*2}">${extraer_nombre_mes(val1.mes)}</th>`);
         val1.dia.forEach((val2, key2) => {
-          codigoHTMLhead2 = codigoHTMLhead2.concat(`<th class="style-head">${extraer_dia_mes(val2)}</th>`);
-          codigoHTMLhead4 = codigoHTMLhead4.concat(`<th class="style-head">${extraer_dia_semana(val2)}</th>`);          
+          codigoHTMLhead2 = codigoHTMLhead2.concat(`<th colspan="2" class="style-head">${extraer_dia_mes(val2)}</th>`);
+          codigoHTMLhead4 = codigoHTMLhead4.concat(`<th colspan="2" class="style-head">${extraer_dia_semana(val2)}</th>`);          
+          codigoHTMLhead5 = codigoHTMLhead5.concat(`<th class="style-head">Entrada</th> <th class="style-head">Salida</th>`);          
         });        
       });
       e.data.data_sq.forEach((val1, key1) => {
-        codigoHTMLhead3 = codigoHTMLhead3.concat(`<th colspan="${e.data.cant_dias}">${val1.nombre_sq} ${i}</th>`);
+        codigoHTMLhead3 = codigoHTMLhead3.concat(`<th colspan="${e.data.cant_dias*2}">${val1.nombre_sq} ${i}</th>`);
       });      
 
-      $('.thead-f1').html(`<th rowspan="4">#</th> <th rowspan="4">Code</th> <th rowspan="4">Producto</th>
-      <th rowspan="4">UND</th> <th rowspan="4">SALDO <br> ANTERIOR <br> <button class="btn btn-sm btn-warning">Editar</button> <button class="btn btn-sm btn-success">Guardar</button></th> ${codigoHTMLhead1}
-      <th rowspan="4">INGRESO /<br> SALIDA</th> <th rowspan="4">SALDO</th>`);
+      $('.thead-f1').html(`<th rowspan="5">#</th> 
+      <th rowspan="5">Code</th> 
+      <th rowspan="5">Producto</th>
+      <th rowspan="5">UND</th> 
+      <th rowspan="5">SALDO <br> ANTERIOR <br> <br> <button class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
+      <th rowspan="5">INGRESO <br> COMPRAS</th> 
+      ${codigoHTMLhead1}
+      <th rowspan="5">SALIDA</th> 
+      <th rowspan="5">SALDO</th>`);
 
       $('.thead-f2').html(`${codigoHTMLhead2}`);
       $('.thead-f3').html(`${codigoHTMLhead3}`);
       $('.thead-f4').html(`${codigoHTMLhead4}`);
+      $('.thead-f5').html(`${codigoHTMLhead5}`);
 
       e.data.producto.forEach((val1, key1) => {
+        var color_filas =  (key1%2==0 ? 'bg-color-e9e9e9' : '') ;
         var html_dias = '', html_dias_sum = ''; var total_x_producto = 0;
         val1.almacen.forEach((val2, key2) => {
-          var numeros = '', acumulado = 0;
-          if (val2.data.length === 0) { numeros='0'; } else { val2.data.forEach((val3, key3) => { key3 == 0 ? numeros = parseFloat(val3.cantidad) : numeros = numeros + ', ' + parseFloat(val3.cantidad); acumulado += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
-          html_dias = html_dias.concat(`<td>${numeros}</td>`);
-          html_dias_sum = html_dias_sum.concat(`<td class="cursor-pointer" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado} </td>`);
+          var salida = '', entrada = '', acumulado_s = 0, acumulado_e = 0 ;
+          if (val2.salida.length === 0) { salida='0'; } else { val2.salida.forEach((val3, key3) => { key3 == 0 ? salida = parseFloat(val3.cantidad) : salida = salida + ', ' + parseFloat(val3.cantidad); acumulado_s += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
+          if (val2.entrada.length === 0) { entrada='0'; } else { val2.entrada.forEach((val3, key3) => { key3 == 0 ? entrada = parseFloat(val3.cantidad) : entrada = entrada + ', ' + parseFloat(val3.cantidad); acumulado_e += parseFloat(val3.cantidad); }); } 
+          html_dias = html_dias.concat(`<td>${entrada}</td><td>${salida}</td>`);
+          html_dias_sum = html_dias_sum.concat(`<td class="${color_filas}">${acumulado_e}</td><td  class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s} </td>`);
         });
-        var saldo = val1.cantidad - total_x_producto;
-
+        var saldo = val1.entrada_total - total_x_producto;
         codigoHTMLbodyProducto = `
-        <tr>
+        <tr class="text-nowrap ${color_filas}">
           <td rowspan="2">${(key1 +1)}</td>
           <td rowspan="2">${val1.idproducto}</td>
-          <td class="text_producto text-nowrap" rowspan="2">${val1.nombre_producto} <br> <small><b>Clasf:</b> ${val1.clasificacion} </small></td>
-          <td rowspan="2">${val1.abreviacion}</td>
-          <td rowspan="2">${formato_miles(val1.cantidad)} <span class="badge badge-info float-right cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Por descuento" onclick="modal_ver_almacen();"><i class="far fa-eye"></i></span></td>
+          <td class="text_producto text-nowrap" rowspan="2">${val1.nombre_producto} <br> <small><b>Clasf:</b> ${val1.categoria} </small></td>
+          <td rowspan="2">${val1.abreviacion_um}</td>
+          <td rowspan="2"> <span class="span_s" >-</span> <input class="input_s w-70px" type="number" name="saldo_anterior[]" style="display:none;" > <br> <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior();"><i class="far fa-eye"></i></span> </td>
+          <td rowspan="2">${formato_miles(val1.entrada_total)}</td>
           ${html_dias}
           <td rowspan="2">${total_x_producto}</td>
           <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}">${saldo}</td>
         </tr>`;
 
         $('.data_tbody_almacen').append(`${codigoHTMLbodyProducto} <tr>${html_dias_sum} </tr>`); // Agregar el contenido
-        
-      });
+        html_dias ='';
+      }); 
        
 
       $('#div_tabla_almacen').show();
@@ -307,7 +317,7 @@ function modal_ver_almacen(fecha, id_producto) {
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } },  
     ],
     ajax:{
-      url: `../ajax/almacen.php?op=tbla-ver-almacen&fecha=${fecha}&id_producto=${id_producto}`,
+      url: `../ajax/almacen.php?op=tbla-ver-almacen&idproyecto=${localStorage.getItem("nube_idproyecto")}&fecha=${fecha}&id_producto=${id_producto}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -319,11 +329,17 @@ function modal_ver_almacen(fecha, id_producto) {
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); } 
       // columna: 1
       if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
+      // columna: 3
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-center'); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 3 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api1.column( 3 ).footer() ).html( `<span class="text-center">${formato_miles(total1)}</span>` );      
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
@@ -334,14 +350,17 @@ function modal_ver_almacen(fecha, id_producto) {
   }).DataTable();
 }
 
-function ver_editar_almacen_x_dia(idalmacen, idproducto) {
+function ver_editar_almacen_x_dia(id_almacen_s, idproducto) {
+  id_almacen_s_r = id_almacen_s;
   $("#cargando-1-fomulario").hide();
   $("#cargando-2-fomulario").show();
+  $('.chargue_edit_marca').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`); $('#marca_xp').html('');
   show_hide_form(2); limpiar_form_almacen_x_dia();
-  $.post(`../ajax/almacen.php?op=ver_almacen`, {'id_proyecto': localStorage.getItem("nube_idproyecto"), 'id_almacen': idalmacen, 'id_producto': idproducto }, function (e, textStatus, jqXHR) {
+  $.post(`../ajax/almacen.php?op=ver_almacen`, {'id_proyecto': localStorage.getItem("nube_idproyecto"), 'id_almacen_s': id_almacen_s, 'id_producto': idproducto }, function (e, textStatus, jqXHR) {
     e = JSON.parse(e);   console.log(e);
     if (e.status == true) {
-      $('#idalmacen_x_proyecto_xp').val(e.data.idalmacen_x_proyecto);
+      $('#idalmacen_salida_xp').val(e.data.idalmacen_salida);
+      $('#idalmacen_resumen_xp').val(e.data.idalmacen_resumen);
       $('#producto_xp').val(e.data.idproducto).trigger('change');
       $('#fecha_ingreso_xp').val(e.data.fecha_ingreso);
       $('#dia_ingreso_xp').val(e.data.dia_ingreso);
@@ -354,13 +373,36 @@ function ver_editar_almacen_x_dia(idalmacen, idproducto) {
           $('#marca_xp').append(`<option value="${val.marca}">${val.marca}</option>`);          
         }        
       });
-
+      $('.chargue_edit_marca').html('');
       $("#cargando-1-fomulario").show();
       $("#cargando-2-fomulario").hide();
     } else {
       ver_errores(e);
     }
   }).fail( function(e) { ver_errores(e); });
+}
+
+function cambiar_producto_salida(val_input) {
+  var idproducto = $(val_input).val();
+  $('.chargue_edit_marca').html(`<i class="fas fa-spinner fa-pulse fa-lg"></i>`); $('#marca_xp').html('');
+  if (idproducto == '' || idproducto == null ) { } else {
+    $.post(`../ajax/almacen.php?op=ver_almacen`, {'id_proyecto': localStorage.getItem("nube_idproyecto"), 'id_almacen_s': id_almacen_s_r, 'id_producto': idproducto }, function (e, textStatus, jqXHR) {
+      e = JSON.parse(e);   console.log(e);
+      if (e.status == true) {          
+        e.data.marca_array.forEach((val, key) => {
+          if (val.marca == e.data.marca ) {
+            $('#marca_xp').append(`<option selected value="${val.marca}">${val.marca}</option>`);
+          } else {
+            $('#marca_xp').append(`<option value="${val.marca}">${val.marca}</option>`);          
+          }        
+        });
+        $('.chargue_edit_marca').html('');
+        
+      } else {
+        ver_errores(e);
+      }
+    }).fail( function(e) { ver_errores(e); });
+  }  
 }
 
 //Función para guardar o editar
@@ -413,6 +455,22 @@ function guardar_y_editar_almacen_x_dia(e) {
 }
 
 // .....::::::::::::::::::::::::::::::::::::: A G R E G A R   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
+
+function show_hide_input(flag) {
+  if (flag==1) {
+    $('.span_s').show();
+    $('.input_s').hide();
+
+    $('.btn_guardar_s').hide();
+    $('.btn_editar_s').show();
+  } else if (flag==2) {
+    $('.span_s').hide();
+    $('.input_s').show();
+
+    $('.btn_guardar_s').show();
+    $('.btn_editar_s').hide();
+  }
+}
 
 function limpiar_form_almacen() {
 
@@ -548,8 +606,9 @@ function remove_producto(id) {
 
 // .....::::::::::::::::::::::::::::::::::::: S A L D O S   A N T E R I O R E S  :::::::::::::::::::::::::::::::::::::::..
 
-function modal_saldo_anterior(idproyecto) {
+function modal_saldo_anterior(idproyecto, idproducto) {
   $('#modal-saldo-anterior').modal('show');
+  $(`.title_saldo_anterior`).html(`Saldos: ${$(`.name_producto_${idproducto}`).text()}`);
 
   tabla_saldo_anterior = $('#tabla-saldo-anterior').dataTable({
     responsive: true,
@@ -562,7 +621,7 @@ function modal_saldo_anterior(idproyecto) {
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } },  
     ],
     ajax:{
-      url: `../ajax/almacen.php?op=tbla-ver-almacen&fecha=&id_producto=`,
+      url: `../ajax/almacen.php?op=tbla_saldos_anteriores&idproyecto=${idproyecto}&idproducto=${idproducto}`,
       type : "get",
       dataType : "json",						
       error: function(e){
@@ -587,6 +646,53 @@ function modal_saldo_anterior(idproyecto) {
       // { targets: [9, 10, 11, 12, 13, 14, 15, 16,17], visible: false, searchable: false, }, 
     ],
   }).DataTable();
+}
+
+//Función para guardar o editar
+function guardar_y_editar_saldo_anterior(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-almacen-saldo-anterior")[0]);
+
+  $.ajax({
+    url: "../ajax/almacen.php?op=guardar_y_editar_saldo_anterior",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) { 
+          todos_almacen();
+          Swal.fire("Correcto!", "Guardado correctamente", "success");      
+          show_hide_input(1);             
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+
+      $("#guardar_registro_almacen").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_almacen").css({"width": percentComplete+'%'}).text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_almacen").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_almacen").css({ width: "0%",  }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_almacen").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
 }
 
 init();
@@ -659,6 +765,34 @@ $(function () {
     },
   });
 
+  $("#form-almacen-saldo-anterior").validate({
+    ignore: '.select2-input, .select2-focusser',
+    rules: {
+      saldo_anterior: { min: 0,  },        
+    },
+    messages: {
+      saldo_anterior: { min: "Minimo 0", },      
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    submitHandler: function (e) {
+      guardar_y_editar_saldo_anterior(e);
+    },
+  });
+
   no_select_tomorrow("#fecha_ingreso");
   no_select_tomorrow("#fecha_ingreso_xp");
   $("#producto_xp").rules('add', { required: true, messages: {  required: "Campo requerido" } });
@@ -694,3 +828,6 @@ function pintar_boton_selecionado(i) {
 function obtener_dia_ingreso(datos) {
   $('#dia_ingreso').val( extraer_dia_semana_completo($(datos).val()) ); 
 }
+
+function reload_producto_todos(){ $('.comprado_todos').html(`(todos)`); lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto', null, '.cargando_productos'); }
+function reload_producto_comprados(){ $('.comprado_todos').html(`(comprado)`);  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto', null, '.cargando_productos'); }
