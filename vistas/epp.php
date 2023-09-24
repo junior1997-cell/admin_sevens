@@ -61,6 +61,7 @@ if (!isset($_SESSION["nombre"])) {
                             </h3>
                           </div>
                           <div class="tbl_resumen_epp_x_tpp">
+                            
                             <table id="tabla-resumen-epp-x-tpp" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
@@ -71,9 +72,10 @@ if (!isset($_SESSION["nombre"])) {
                                   <th class="text-center">CODE</th>
                                   <th class="">INSUMOS - MARCA</th>
                                   <th class="">UND</th>
-                                  <th class="">CANTIDAD REPARTIDA</th>
+                                  <th class="">CANT. REPARTIDA</th>
+                                  <th class="">CANT. TOTAL</th>
+                                  <th class="">CANT. NO REPARTIDA</th>
                                   <th class="">E.P.P</th>
-                                  <th class="">CANTIDAD EN ALMACÉN</th>
                                 </tr>
                               </thead>
                               <tbody></tbody>
@@ -83,9 +85,10 @@ if (!isset($_SESSION["nombre"])) {
                                   <th class="text-center">CODE</th>
                                   <th class="">INSUMOS - MARCA</th>
                                   <th class="">UND</th>
-                                  <th class="">CANTIDAD REPARTIDA</th>
+                                  <th class="">CANT. REPARTIDA</th>
+                                  <th class="">CANT. TOTAL</th>
+                                  <th class="">CANT. NO REPARTIDA</th>
                                   <th class="">E.P.P</th>
-                                  <th class="">CANTIDAD EN ALMACÉN</th>
                                 </tr>
                               </tfoot>
                             </table>
@@ -122,6 +125,8 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="row">
 
                             <div class="col-4">
+
+                              <a type="button" class="btn btn-block btn-outline-info" id="#"> <i class="fa-regular fa-file-excel"></i> EXPORTAR EPPS DE TODOS LOS TRABAJADORES </a>   <br>                            
 
                               <table id="tabla-epp" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
@@ -312,6 +317,7 @@ if (!isset($_SESSION["nombre"])) {
                             <!-- id trabajador -->
                             <input type="hidden" name="idalmacen_x_proyecto_xp" id="idalmacen_x_proyecto_xp" />
                             <input type="hidden" name="idtrabajador_xp" id="idtrabajador_xp" />
+                            <input type="hidden" name="idalmacen_resumen_xp" id="idalmacen_resumen_xp" />
                             <!-- idalmacen_x_proyecto_xp, idtrabajador_xp, id_producto_xp, fecha_ingreso_xp, marca_xp, cantidad_xp  -->
                             <!-- Producto -->
                             <div class="col-12 col-sm-12 col-md-6 col-lg-12">
@@ -325,7 +331,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                               <div class="form-group">
                                 <label for="epp_xp">E.P.P</label>
-                                <input type="text" id="epp_xp" class="form-control" placeholder="E.P.P" onchange="obtener_dia_ingreso(this);" readonly />
+                                <input type="text" id="epp_xp" class="form-control" placeholder="E.P.P" readonly />
                                 <input type="hidden" name="id_producto_xp" id="id_producto_xp" />
                               </div>
                             </div>
@@ -334,7 +340,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                               <div class="form-group">
                                 <label for="fecha_ingreso">Fecha</label>
-                                <input type="date" name="fecha_ingreso_xp" id="fecha_ingreso_xp" class="form-control" placeholder="Fecha" onchange="obtener_dia_ingreso(this);" />
+                                <input type="date" name="fecha_ingreso_xp" id="fecha_ingreso_xp" class="form-control" placeholder="Fecha"/>
                                 <!-- <input type="hidden" name="dia_ingreso_xp" id="dia_ingreso_xp" /> -->
                               </div>
                             </div>
@@ -384,7 +390,7 @@ if (!isset($_SESSION["nombre"])) {
                       </form>
                     </div>
                     <div class="modal-footer justify-content-between">
-                      <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen_x_dia();" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-danger" onclick="limpiar_edit_epp();" data-dismiss="modal">Close</button>
                       <button type="submit" class="btn btn-success" id="guardar_registro_epp_xp">Guardar Cambios</button>
                     </div>
                   </div>

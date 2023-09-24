@@ -8,11 +8,10 @@ class Epp
   public function __construct()
   {
   }
-  //$idalmacen_x_proyecto,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
+  //$idepp_x_proyecto,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
-  public function insertar($idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad,$marca)
+  public function insertar($idproyecto,$idtrabajador_por_proyecto,$data_idalmacen_resumen,$fecha_g,$id_insumo,$cantidad,$marca)
   {
-
     $dia = extraer_dia($fecha_g);
 
     // Verificar si $id_insumo es un array y si contiene datos
@@ -24,12 +23,12 @@ class Epp
 
       while ($num_elementos < count($id_insumo)) {
 
-        $sql_detalle = "INSERT INTO almacen_x_proyecto(idproducto, idtrabajador_por_proyecto, fecha_ingreso, dia_ingreso, cantidad, marca,user_created) 
-        VALUES ('$id_insumo[$num_elementos]','$idtrabajador_por_proyecto','$fecha_g','$dia','$cantidad[$num_elementos]','$marca[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+        $sql_detalle = "INSERT INTO epp_x_proyecto(idtrabajador_por_proyecto,idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca,user_created) 
+        VALUES ('$idtrabajador_por_proyecto','$data_idalmacen_resumen[$num_elementos]','$fecha_g','$dia','$cantidad[$num_elementos]','$marca[$num_elementos]','" . $_SESSION['idusuario'] . "')";
         $sw = ejecutarConsulta_retornarID($sql_detalle); if ($sw['status'] == false) {    return $sw ; }
 
         //add registro en nuestra bitacora
-        $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_x_proyecto','".$sw['data']."','Registro de EPP con num  ".$sw['data']."','" . $_SESSION['idusuario'] . "')";
+        $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('epp_x_proyecto','".$sw['data']."','Registro de EPP con num  ".$sw['data']."','" . $_SESSION['idusuario'] . "')";
         $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
 
         $num_elementos = $num_elementos + 1;
@@ -47,38 +46,40 @@ class Epp
   }
 
   //Implementamos un método para editar registros
-  public function editar($idalmacen_x_proyecto_xp, $idtrabajador_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp)
+  public function editar($idepp_x_proyecto_xp, $idtrabajador_xp,$idalmacen_resumen_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp)
   {
     $dia = extraer_dia($fecha_ingreso_xp);
 
-    $sql ="UPDATE almacen_x_proyecto 
-    SET idproducto='$id_producto_xp',idtrabajador_por_proyecto='$idtrabajador_xp', fecha_ingreso='$fecha_ingreso_xp',dia_ingreso='$dia',
-    cantidad='$cantidad_xp',marca='$marca_xp', user_updated= '" . $_SESSION['idusuario'] . "' WHERE idalmacen_x_proyecto='$idalmacen_x_proyecto_xp'";
+    $sql ="UPDATE epp_x_proyecto SET idtrabajador_por_proyecto='$idtrabajador_xp',idalmacen_resumen='$idalmacen_resumen_xp',
+    fecha_ingreso='$fecha_ingreso_xp',dia_ingreso='$dia',cantidad='$cantidad_xp',marca='$marca_xp',user_updated= '" . $_SESSION['idusuario'] . "'
+    WHERE idepp_x_proyecto='$idepp_x_proyecto_xp'";
     return ejecutarConsulta($sql);
-
 
    }
 
   //Implementamos un método para desactivar categorías
-  public function desactivar($idalmacen_x_proyecto)
+  public function desactivar($idepp_x_proyecto)
   {
-    $sql = "UPDATE almacen_x_proyecto SET estado='0' WHERE idalmacen_x_proyecto ='$idalmacen_x_proyecto'";
+    $sql = "UPDATE epp_x_proyecto SET estado='0' WHERE idepp_x_proyecto ='$idepp_x_proyecto'";
     return ejecutarConsulta($sql);
   }
 
   //Implementamos un método para desactivar categorías
-  public function eliminar($idalmacen_x_proyecto)
+  public function eliminar($idepp_x_proyecto)
   {
-    $sql = "UPDATE almacen_x_proyecto SET estado_delete='0' WHERE idalmacen_x_proyecto ='$idalmacen_x_proyecto'";
+    $sql = "UPDATE epp_x_proyecto SET estado_delete='0' WHERE idepp_x_proyecto ='$idepp_x_proyecto'";
     return ejecutarConsulta($sql);
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
-  public function mostrar($idalmacen_x_proyecto)
+  public function mostrar($idepp_x_proyecto)
   {
-    $sql = "SELECT axp.idalmacen_x_proyecto, axp.idproducto, axp.idtrabajador_por_proyecto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca, p.nombre , um.nombre_medida, um.abreviacion
-    FROM almacen_x_proyecto as axp, producto as p,  unidad_medida as um
-    WHERE axp.idproducto=p.idproducto AND  um.idunidad_medida  = p.idunidad_medida and axp.idalmacen_x_proyecto ='$idalmacen_x_proyecto';"; 
+    $sql = "SELECT axp.idepp_x_proyecto,axp.idalmacen_resumen, ar.idproducto, axp.idtrabajador_por_proyecto, axp.fecha_ingreso, axp.dia_ingreso, axp.cantidad, axp.marca, p.nombre , um.nombre_medida, um.abreviacion
+    FROM epp_x_proyecto as axp
+    INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen=axp.idalmacen_resumen
+    INNER JOIN producto as p on p.idproducto=ar.idproducto
+    INNER JOIN unidad_medida as um on um.idunidad_medida=p.idunidad_medida
+    WHERE axp.idepp_x_proyecto ='$idepp_x_proyecto';"; 
     return ejecutarConsultaSimpleFila($sql);
   }
 
@@ -91,10 +92,13 @@ class Epp
     return ejecutarConsulta($sql);
   }
 
-  function listar_epp_trabajdor($id_tpp){
-    $sql="SELECT ap.idalmacen_x_proyecto, ap.idproducto, ap.idtrabajador_por_proyecto, ap.fecha_ingreso, ap.dia_ingreso, ap.cantidad, ap.marca, p.nombre as producto, um.nombre_medida, um.abreviacion
-    FROM almacen_x_proyecto as ap, producto as p ,unidad_medida AS um 
-    WHERE ap.idproducto=p.idproducto AND  um.idunidad_medida  = p.idunidad_medida AND ap.idtrabajador_por_proyecto='$id_tpp' AND ap.estado=1 AND ap.estado_delete=1;";
+  function listar_epp_trabajdor($id_tpp,$proyecto){
+    $sql="SELECT epp.idepp_x_proyecto, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha_ingreso
+    FROM epp_x_proyecto as epp 
+    INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
+    INNER JOIN producto AS p ON P.idproducto=ar.idproducto
+    INNER JOIN unidad_medida AS um ON UM.idunidad_medida = P.idunidad_medida
+    WHERE epp.idtrabajador_por_proyecto='$id_tpp' AND ar.idproyecto='$proyecto'and epp.estado='1' and epp.estado_delete='1';";
     return ejecutarConsulta($sql);
   }
 
@@ -102,35 +106,13 @@ class Epp
   //Implementar un método para listar los registros
   public function select_2_insumos_pp($idproyecto) {
 
-    $resumen_producto = [];
-    $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida,  um.nombre_medida, um.abreviacion,
-    pr.nombre AS nombre_producto, pr.modelo, dc.marca, cg.idclasificacion_grupo, cg.nombre as grupo
-    
-    FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, clasificacion_grupo AS cg, unidad_medida AS um 
-    WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto
-    AND um.idunidad_medida  = pr.idunidad_medida AND dc.idclasificacion_grupo = cg.idclasificacion_grupo
-    AND cpp.idproyecto = '$idproyecto'  AND pr.idcategoria_insumos_af = '1' 
-    AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";
+    $sql = "SELECT ar.idalmacen_resumen, ar.idproyecto,p.idproducto, ar.saldo, p.nombre as nombre_producto, um.abreviacion,  p.modelo    
+    FROM almacen_resumen as ar
+    inner join producto as p on ar.idproducto =p.idproducto 
+    inner join unidad_medida as um on um.idunidad_medida = p.idunidad_medida
+    WHERE ar.idproyecto = '$idproyecto' ORDER BY p.nombre ASC;";
 
-    $producto = ejecutarConsultaArray($sql); if ($producto['status'] == false) { return $producto; }
-
-    foreach ($producto['data'] as $key => $value) {
-
-      $resumen_producto[] = [
-        'idproyecto'        => $value['idproyecto'],
-        'idcompra_proyecto' => $value['idcompra_proyecto'],
-        'iddetalle_compra'  => $value['iddetalle_compra'],
-        'idproducto'        => $value['idproducto'],
-        'nombre_medida'     => $value['nombre_medida'],
-        'abreviacion'       => $value['abreviacion'],
-        'nombre_producto'   => $value['nombre_producto'],
-        'modelo'            => $value['modelo'],
-        'marca'             => $value['marca'],
-        'idclasificacion_grupo'=> $value['idclasificacion_grupo'],
-        'grupo'             => $value['grupo'],
-      ];
-    }
-    return $retorno = ['status' => true, 'data' => $resumen_producto, 'message' => 'todo bien'];
+    return ejecutarConsultaArray($sql); 
   }
 
   function marcas_x_insumo($id_insumo, $idproyecto){
@@ -145,30 +127,37 @@ class Epp
   function tabla_resumen_epp($idproyecto) {
     $data = [];
 
-    $sql="SELECT p.idproducto, p.nombre, ap.marca, um.nombre_medida,um.abreviacion, sum(ap.cantidad) as cantidad_rapartida 
-    FROM almacen_x_proyecto as ap, trabajador_por_proyecto as tpp, producto AS p, unidad_medida as um
-    WHERE ap.idtrabajador_por_proyecto=tpp.idtrabajador_por_proyecto AND ap.idproducto = p.idproducto AND um.idunidad_medida=p.idunidad_medida
-    AND tpp.idproyecto='$idproyecto' and ap.estado=1  AND ap.estado_delete=1  GROUP by ap.marca,ap.idproducto;";
+    $sql="SELECT epp.idalmacen_resumen,P.idproducto , p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, SUM(epp.cantidad) AS cantidad
+    FROM epp_x_proyecto as epp 
+    INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
+    INNER JOIN producto AS p ON P.idproducto=ar.idproducto
+    INNER JOIN unidad_medida AS um ON UM.idunidad_medida = P.idunidad_medida
+    WHERE ar.idproyecto='$idproyecto'and epp.estado='1' and epp.estado_delete='1' GROUP BY epp.marca,p.idproducto;";
 
     $data_resumen = ejecutarConsultaArray($sql); if ($data_resumen['status'] == false) { return  $data_resumen;}
 
     foreach ($data_resumen['data'] as $key => $value) {
-      $idproducto = $value['idproducto'];
+
+      $idalmacen_resumen = $value['idalmacen_resumen'];
       $marca = $value['marca'];
 
-      $sql_detalle="SELECT idproducto,marca, SUM(cantidad) as cantidad FROM detalle_compra WHERE idproducto='$idproducto' and marca ='$marca';";
+      $sql_detalle="SELECT SUM(cantidad) as total_salida FROM almacen_salida as al where al.idalmacen_resumen='$idalmacen_resumen' and al.marca='$marca'";
+      
+      $total_cant_salida = ejecutarConsultaSimpleFila($sql_detalle); if ($total_cant_salida['status'] == false) { return  $total_cant_salida;}
 
-      $total_cantidad = ejecutarConsultaSimpleFila($sql_detalle); if ($total_cantidad['status'] == false) { return  $total_cantidad;}
-      $total_c = (empty($total_cantidad['data']) ? 0 : ( empty($total_cantidad['data']['cantidad']) ? 0 : floatval($total_cantidad['data']['cantidad'])) ); 
-      $calculando=$total_c-$value['cantidad_rapartida']; 
+      $total_c = (empty($total_cant_salida['data']) ? 0 : ( empty($total_cant_salida['data']['total_salida']) ? 0 : floatval($total_cant_salida['data']['total_salida'])) ); 
+
+      $calculando=$total_c- floatval($value['cantidad']); 
 
       $data[] = Array(
+        'idalmacen_resumen'  => $value['idalmacen_resumen'],
         'idproducto'         => $value['idproducto'],
-        'nombre'             => $value['nombre'],
+        'nombre'             => $value['producto'],
         'marca'              => $value['marca'],
-        'nombre_medida'      => $value['nombre_medida'],
+        'nombre_medida'      => $value['nombre_und'],
         'abreviacion'        => $value['abreviacion'],
-        'cantidad_rapartida' => $value['cantidad_rapartida'],
+        'cantidad_rapartida' => $value['cantidad'],
+        'cantidad_total'     => $total_c,
         'cantidad_q_queda'   => $calculando,
       ); 
 
@@ -179,9 +168,10 @@ class Epp
   }
 
   function tbl_detalle_epp($proyecto,$idproyecto,$marca) {
-    $sql ="SELECT ap.idalmacen_x_proyecto,ap.idproducto,ap.idtrabajador_por_proyecto,ap.fecha_ingreso,ap.dia_ingreso,
+    
+    $sql ="SELECT ap.idepp_x_proyecto,ap.idproducto,ap.idtrabajador_por_proyecto,ap.fecha_ingreso,ap.dia_ingreso,
     cantidad,ap.marca,t.nombres 
-    FROM almacen_x_proyecto as ap, trabajador_por_proyecto as tpp, trabajador as t 
+    FROM epp_x_proyecto as ap, trabajador_por_proyecto as tpp, trabajador as t 
     WHERE tpp.idtrabajador_por_proyecto = ap.idtrabajador_por_proyecto AND tpp.idtrabajador=t.idtrabajador and 
     tpp.idproyecto = '$idproyecto' and idproducto='$proyecto' and marca='$marca';";
     return ejecutarConsultaArray($sql);

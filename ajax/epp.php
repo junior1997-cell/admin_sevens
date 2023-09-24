@@ -22,6 +22,7 @@
       $idepp = isset($_POST["idepp"]) ? $_POST["idepp"] : ""; 
       $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idtrabajador_por_proyecto = isset($_POST["idtrabajador_por_proyecto"]) ? limpiarCadena($_POST["idtrabajador_por_proyecto"]) : "";           
+      $data_idalmacen_resumen = isset($_POST["data_idalmacen_resumen"]) ? $_POST["data_idalmacen_resumen"] : "";      
       $fecha_g = isset($_POST["fecha_g"]) ? $_POST["fecha_g"] : "";      
       $id_insumo = isset($_POST["id_insumo"]) ? $_POST["id_insumo"] : "";      
       $cantidad = isset($_POST["cantidad"]) ? $_POST["cantidad"] : ""; 
@@ -32,10 +33,12 @@
        // <!-- $idalmacen_x_proyecto_xp, $idtrabajador_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp  -->
       $idalmacen_x_proyecto_xp= isset($_POST["idalmacen_x_proyecto_xp"]) ? $_POST["idalmacen_x_proyecto_xp"] : ""; 
       $idtrabajador_xp= isset($_POST["idtrabajador_xp"]) ? $_POST["idtrabajador_xp"] : ""; 
+      $idalmacen_resumen_xp =isset($_POST["idalmacen_resumen_xp"]) ? $_POST["idalmacen_resumen_xp"] : ""; 
       $id_producto_xp= isset($_POST["id_producto_xp"]) ? $_POST["id_producto_xp"] : ""; 
       $fecha_ingreso_xp= isset($_POST["fecha_ingreso_xp"]) ? $_POST["fecha_ingreso_xp"] : ""; 
       $marca_xp= isset($_POST["marca_xp"]) ? $_POST["marca_xp"] : ""; 
       $cantidad_xp =isset($_POST["cantidad_xp"]) ? $_POST["cantidad_xp"] : ""; 
+      
 
       
       switch ($_GET["op"]) {
@@ -43,7 +46,7 @@
 
           if (empty($idepp)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $epp->insertar($idproyecto,$idtrabajador_por_proyecto,$fecha_g,$id_insumo,$cantidad,$marca);
+            $rspta = $epp->insertar($idproyecto,$idtrabajador_por_proyecto,$data_idalmacen_resumen,$fecha_g,$id_insumo,$cantidad,$marca);
             
             echo json_encode($rspta,true);
       
@@ -59,7 +62,7 @@
 
           if (isset($idalmacen_x_proyecto_xp)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $epp->editar($idalmacen_x_proyecto_xp, $idtrabajador_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp);
+            $rspta = $epp->editar($idalmacen_x_proyecto_xp, $idtrabajador_xp,$idalmacen_resumen_xp, $id_producto_xp, $fecha_ingreso_xp, $marca_xp, $cantidad_xp);
             
             echo json_encode($rspta,true);
       
@@ -128,7 +131,7 @@
         break;
 
         case 'listar_epp_trabajdor':
-          $rspta = $epp->listar_epp_trabajdor($_GET["id_tpp"]);
+          $rspta = $epp->listar_epp_trabajdor($_GET["id_tpp"], $_GET["proyecto"]);
           //Vamos a declarar un array
           $data = [];
           
@@ -138,8 +141,8 @@
 
               $data[] = [
                 "0" => $cont++,
-                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idalmacen_x_proyecto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_detalle(' . $reg->idalmacen_x_proyecto .', \''.encodeCadenaHtml($reg->producto).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
+                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idepp_x_proyecto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar_detalle(' . $reg->idepp_x_proyecto .', \''.encodeCadenaHtml($reg->producto).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
                 "2" => $reg->producto,
                 "3" => $reg->marca,
                 "4" => $reg->abreviacion,
@@ -169,8 +172,8 @@
 
             foreach ($rspta['data'] as $key => $value) {  
 
-                $data .= '<option value=' .$value['idproducto']. ' data-nombre=" \''.encodeCadenaHtml($value['nombre_producto']).'\'" data-marca="'.$value['marca'] .'"  data-modelo="'.$value['modelo'].'" data-abreviacion="'.$value['abreviacion'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
-
+                $data .= '<option value=' .$value['idproducto']. ' data-nombre=" \''.encodeCadenaHtml($value['nombre_producto']).'\'" data-idalmacen_resumen="'.$value['idalmacen_resumen'].'" data-modelo="'.$value['modelo'].'" data-abreviacion="'.$value['abreviacion'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
+                //data-marca="'.$value['marca'] .'"
             }
 
             $retorno = array(
@@ -211,8 +214,10 @@
                 "2" =>$value['nombre'].' - '.$value['marca'],
                 "3" =>$value['abreviacion'],
                 "4" =>$value['cantidad_rapartida'],
-                "5" => '<button class="btn btn-info btn-sm mb-2" onclick="tabla_detalle_epp(' . $value['idproducto'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                "5" =>$value['cantidad_total'],
                 "6" =>$value['cantidad_q_queda'],
+                "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tabla_detalle_epp(' . $value['idproducto'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                
                 
               ];
             }

@@ -65,7 +65,7 @@ function limpiar() {
 
 }
 
-//Función Listar
+//TABLA PRINCIPAL QUE SE MUESTRA AL CARGAR LOS DATOS
 function tabla_resumen_epp() {
 
   var idproyecto = localStorage.getItem("nube_idproyecto");
@@ -93,10 +93,15 @@ function tabla_resumen_epp() {
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
-      // columna: fecha
-      if (data[1] != "") { $("td", row).eq(5).addClass("text-nowrap text-center"); }
-      //Columna _: talla
+      // columna: 
+      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap text-center"); }
+      //Columna _: 
       if (data[2] != "") { $("td", row).eq(5).addClass("text-nowrap text-center"); }
+      if (data[3] != "") { $("td", row).eq(3).addClass("text-nowrap text-center"); }
+      if (data[4] != "") { $("td", row).eq(4).addClass("text-nowrap text-center"); }
+      if (data[5] != "") { $("td", row).eq(5).addClass("text-nowrap text-center"); }
+      if (data[6] != "") { $("td", row).eq(6).addClass("text-nowrap text-center"); }
+      if (data[7] != "") { $("td", row).eq(7).addClass("text-nowrap text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_",
@@ -111,7 +116,8 @@ function tabla_resumen_epp() {
   $(tabla).ready(function () { $('.cargando').hide(); });
 }
 
-//Función Listar
+//VISTA DETALLE -LISTA DE TRABAJADORES
+
 function listar_trabajdor() {
 
   var idproyecto = localStorage.getItem("nube_idproyecto");
@@ -183,7 +189,6 @@ function listar_trabajdor() {
 
 function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
 
-  
   $('.alerta_inicial').hide(); $('.tabla_epp_x_tpp').show();   $("#btn_export_eppxt").show();
 
   $(".nombre_epp").html(nombres); $(".tallas").html(t_ropa + ' , ' + t_zapato); $(".nombre_trab_modal").html(nombres);
@@ -213,7 +218,7 @@ function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
       { extend: "colvis" },
     ],
     ajax: {
-      url: `../ajax/epp.php?op=listar_epp_trabajdor&id_tpp=${id_tpp}`,
+      url: `../ajax/epp.php?op=listar_epp_trabajdor&id_tpp=${id_tpp}&proyecto=${localStorage.getItem("nube_idproyecto")}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -245,7 +250,7 @@ function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
 
 
 }
-//
+
 //------------------EPP--------------------
 //detalle por epp
 function tabla_detalle_epp(idproducto,nombre,marca) { 
@@ -292,15 +297,12 @@ function tabla_detalle_epp(idproducto,nombre,marca) {
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-
     ],
   }).DataTable();
 
   $(tabla).ready(function () { $('.cargando').hide(); });
-
   
-}
-  
+}  
 
 //Función para guardar varios
 function guardar_epp(e) {
@@ -381,10 +383,11 @@ function mostrar(idepp) {
 
   $.post("../ajax/epp.php?op=mostrar", { idepp: idepp }, function (e, status) {
 
-    e = JSON.parse(e); console.log('laaaaaaaaaa'); console.log(e);
+    e = JSON.parse(e); //console.log('laaaaaaaaaa'); console.log(e);
     if (e.status == true) {
-      $("#idalmacen_x_proyecto_xp").val(e.data.idalmacen_x_proyecto);
+      $("#idalmacen_x_proyecto_xp").val(e.data.idepp_x_proyecto);
       $("#idtrabajador_xp").val(e.data.idtrabajador_por_proyecto);
+      $("#idalmacen_resumen_xp").val(e.data.idalmacen_resumen);
       $("#epp_xp").val(e.data.nombre);
       $("#unidad_m").val(e.data.abreviacion);
       $("#id_producto_xp").val(e.data.idproducto);
@@ -412,11 +415,12 @@ function select_producto_edit(el) {
    console.log(id_insumo+'  .....................');
   $("#id_producto_xp").val($('#producto_xp').val());
 
-  var nombre = "", marca = "", modelo = ""; abreviacion="";
+  var nombre = "", marca = "", modelo = "", abreviacion="",  data_idalmacen_resumen="";
 
   marca = $('option:selected', el).attr('data-marca');
   //abreviacion = $('option:selected', el).attr('data-abreviacion');
-
+  console.log($('option:selected', el).attr('data-idalmacen_resumen'));
+  $("#idalmacen_resumen_xp").val( $('option:selected', el).attr('data-idalmacen_resumen'));
   $("#epp_xp").val( $('option:selected', el).attr('data-nombre'));
   $("#unidad_m").val( $('option:selected', el).attr('data-abreviacion'));
 
@@ -534,10 +538,10 @@ function add_row(el) {
   codigoHTML = '';
   var id_insumo = $('#select_id_insumo').val();
 
-  var nombre = "", marca = "", modelo = "";
+  var nombre = "", data_idalmacen_resumen = "", modelo = "";
 
   nombre      = $('option:selected', el).attr('data-nombre');
-  marca       = $('option:selected', el).attr('data-marca');
+  data_idalmacen_resumen       = $('option:selected', el).attr('data-idalmacen_resumen');
   modelo      = $('option:selected', el).attr('data-modelo');
   abreviacion = $('option:selected', el).attr('data-abreviacion');
   
@@ -567,6 +571,7 @@ function add_row(el) {
                         <div class="form-group">
                         <label for="fecha_ingreso">Nombre Producto</label>
                         <input type="hidden" name="id_insumo[]" class="form-control" id="id_insumo" value="${id_insumo}"/>
+                        <input type="hidden" name="data_idalmacen_resumen[]" class="form-control" id="data_idalmacen_resumen" value="${data_idalmacen_resumen}"/>
                           <span class="form-control-mejorado"> ${nombre} </span>  
                         </div>
                       </div>
