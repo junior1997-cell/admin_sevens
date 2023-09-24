@@ -167,13 +167,14 @@ class Epp
 
   }
 
-  function tbl_detalle_epp($proyecto,$idproyecto,$marca) {
-    
-    $sql ="SELECT ap.idepp_x_proyecto,ap.idproducto,ap.idtrabajador_por_proyecto,ap.fecha_ingreso,ap.dia_ingreso,
-    cantidad,ap.marca,t.nombres 
-    FROM epp_x_proyecto as ap, trabajador_por_proyecto as tpp, trabajador as t 
-    WHERE tpp.idtrabajador_por_proyecto = ap.idtrabajador_por_proyecto AND tpp.idtrabajador=t.idtrabajador and 
-    tpp.idproyecto = '$idproyecto' and idproducto='$proyecto' and marca='$marca';";
+  function tbl_detalle_epp($idproducto,$idproyecto,$marca) {
+    // var_dump();die();
+    $sql ="SELECT ap.idepp_x_proyecto ,ap.idtrabajador_por_proyecto, ar.idproducto , ap.fecha_ingreso, ap.dia_ingreso, ap.cantidad, ap.marca, t.nombres 
+    FROM epp_x_proyecto as ap 
+    INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen=ap.idalmacen_resumen 
+    INNER JOIN trabajador_por_proyecto as tpp on tpp.idtrabajador_por_proyecto = ap.idtrabajador_por_proyecto 
+    INNER JOIN trabajador as t on t.idtrabajador=tpp.idtrabajador 
+    where ar.idproyecto='$idproyecto' AND ar.idproducto='$idproducto' AND ap.marca='$marca';";
     return ejecutarConsultaArray($sql);
     
   }
