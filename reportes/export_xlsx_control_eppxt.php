@@ -129,7 +129,7 @@
   $epp_x_trabajador=new Epp_exportar();  
 
   $rspta_Epp_x_tpp=$epp_x_trabajador->datos_epp_x_trabajador_unico($_GET["id_proyecto"],$_GET["id_tpp"]);
-  // var_dump($rspta_Epp_x_tpp['e']['data']['nombres']); die();
+  //  var_dump($rspta_Epp_x_tpp['e']['data']['nombres']); die();
 
   // // Establecer el valor de la celda
   $hojaActiva->setCellValue('D11', $rspta_Epp_x_tpp['e']['data']['nombres']);

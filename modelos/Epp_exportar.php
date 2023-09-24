@@ -19,10 +19,14 @@ class Epp_exportar
     WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$idproyecto' and tpp.idtrabajador_por_proyecto='$id_tpp' ";
     $datostrabajador =  ejecutarConsultaSimpleFila($sql1); if ($datostrabajador['status'] == false) { return $datostrabajador; }
 
-    $sql2="SELECT ap.idalmacen_x_proyecto, ap.idproducto, ap.idtrabajador_por_proyecto, ap.fecha_ingreso, ap.dia_ingreso, ap.cantidad, ap.marca, p.nombre as producto, um.nombre_medida, um.abreviacion
-    FROM almacen_x_proyecto as ap, producto as p ,unidad_medida AS um 
-    WHERE ap.idproducto=p.idproducto AND  um.idunidad_medida  = p.idunidad_medida AND ap.idtrabajador_por_proyecto='$id_tpp' AND ap.estado=1 AND ap.estado_delete=1;";
-    $datos_EPP= ejecutarConsultaArray($sql2); if ($datos_EPP['status'] == false) { return $datos_EPP; }
+    $sql2="SELECT epp.idepp_x_proyecto, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha_ingreso
+    FROM epp_x_proyecto as epp 
+    INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
+    INNER JOIN producto AS p ON P.idproducto=ar.idproducto
+    INNER JOIN unidad_medida AS um ON UM.idunidad_medida = P.idunidad_medida
+    WHERE epp.idtrabajador_por_proyecto='$id_tpp' AND ar.idproyecto='$idproyecto'and epp.estado='1' and epp.estado_delete='1'; ";
+
+    $datos_EPP= ejecutarConsultaArray($sql2); if ($datos_EPP['status'] == false) { return $datos_EPP; }  
 
     return $retorno = ['status' => true, 'e' => $datostrabajador, 'ee' => $datos_EPP, 'message' => 'todo bien'];
 
