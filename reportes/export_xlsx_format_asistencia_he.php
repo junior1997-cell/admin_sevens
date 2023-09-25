@@ -15,13 +15,13 @@
   $formatos_varios = new FormatosVarios();
 
   $proyecto = $formatos_varios->datos_proyecto($_GET["idproyecto"]);
-
+  //echo json_encode($proyecto); die();
   $data_asistencia = $formatos_varios->ver_detalle_sem_quin($_GET["ids_q_asistencia"], $_GET["f1"],$_GET["f2"],$_GET["idproyecto"], $_GET["n_f_i_p"], $_GET["n_f_f_p"]);
 
   $f1               = $_GET["f1"];
   $f2               = $_GET["f2"];
   $id_proyecto      = $_GET["idproyecto"];
-  $fecha_pago_obrero= $proyecto['data']['fecha_pago_obrero'];
+  $fecha_pago_obrero= $proyecto['data']['datos_proyecto']['fecha_pago_obrero'];
   $num_qs           = floatval($_GET["i"]) ;
 
   // Convertir las fechas a objetos DateTime
@@ -39,10 +39,10 @@
   $hojaActiva->getStyle('D1')->getFont()->setBold(true);
   $hojaActiva->getStyle('D1')->getFont()->setSize(16);
   
-  $hojaActiva->setCellValue('D1', $proyecto['data']['empresa_acargo']);
-  $hojaActiva->setCellValue('D5', $proyecto['data']['nombre_proyecto']);
-  $hojaActiva->setCellValue('D6', $proyecto['data']['ubicacion']);
-  $hojaActiva->setCellValue('D7', $proyecto['data']['empresa']);
+  $hojaActiva->setCellValue('D1', $proyecto['data']['datos_proyecto']['empresa_acargo']);
+  $hojaActiva->setCellValue('D5', $proyecto['data']['datos_proyecto']['nombre_proyecto']);
+  $hojaActiva->setCellValue('D6', $proyecto['data']['datos_proyecto']['ubicacion']);
+  $hojaActiva->setCellValue('D7', $proyecto['data']['datos_proyecto']['empresa']);
 
   // ══════════════════════════════════════════ - L O G O - ══════════════════════════════════════════
   plantilla_logo($spreadsheet);
@@ -67,8 +67,9 @@
     }
     
     foreach ($data_asistencia['data'] as $key => $reg) {
-
-      if ( !empty($reg['imagen_perfil']) ) {
+      $file_perfil = '../dist/docs/all_trabajador/perfil/'.$reg['imagen_perfil'];
+      
+      if ( file_exists($file_perfil) ) {
         // Add png image to comment background
         $drawing = $drawing = new PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
         $drawing->setName($reg['nombres']);

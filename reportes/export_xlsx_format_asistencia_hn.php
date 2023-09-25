@@ -24,7 +24,7 @@
   $f1               = $_GET["f1"];
   $f2               = $_GET["f2"];
   $id_proyecto      = $_GET["idproyecto"];
-  $fecha_pago_obrero= $proyecto['data']['fecha_pago_obrero'];
+  $fecha_pago_obrero= $proyecto['data']['datos_proyecto']['fecha_pago_obrero'];
   $num_qs           = floatval($_GET["i"]) ;
 
   // Convertir las fechas a objetos DateTime
@@ -42,10 +42,10 @@
   $hojaActiva->getStyle('D1')->getFont()->setBold(true);
   $hojaActiva->getStyle('D1')->getFont()->setSize(16);
   
-  $hojaActiva->setCellValue('D1', $proyecto['data']['empresa_acargo']);
-  $hojaActiva->setCellValue('D5', $proyecto['data']['nombre_proyecto']);
-  $hojaActiva->setCellValue('D6', $proyecto['data']['ubicacion']);
-  $hojaActiva->setCellValue('D7', $proyecto['data']['empresa']);
+  $hojaActiva->setCellValue('D1', $proyecto['data']['datos_proyecto']['empresa_acargo']);
+  $hojaActiva->setCellValue('D5', $proyecto['data']['datos_proyecto']['nombre_proyecto']);
+  $hojaActiva->setCellValue('D6', $proyecto['data']['datos_proyecto']['ubicacion']);
+  $hojaActiva->setCellValue('D7', $proyecto['data']['datos_proyecto']['empresa']);
 
   // ══════════════════════════════════════════ - L O G O - ══════════════════════════════════════════
   plantilla_logo($spreadsheet);

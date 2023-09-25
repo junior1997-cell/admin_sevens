@@ -119,13 +119,19 @@ class FormatosVarios
     WHERE p.idempresa_a_cargo = ep.idempresa_a_cargo AND p.idproyecto='$nube_idproyecto'";
     $datos_proyecto = ejecutarConsultaSimpleFila($sql); if ($datos_proyecto['status'] == false) {  return $datos_proyecto; }  
 
-    $sql1 = "SELECT ids_q_asistencia,idproyecto,numero_q_s,fecha_q_s_inicio,fecha_q_s_fin 
+    $sql1 = "SELECT ids_q_asistencia, idproyecto, numero_q_s, fecha_q_s_inicio, fecha_q_s_fin 
     FROM s_q_asistencia 
     where idproyecto='$nube_idproyecto' AND estado ='1' AND estado_delete='1';";
     $datos_s_q_asistencia = ejecutarConsultaArray($sql1); if ($datos_s_q_asistencia['status'] == false) {  return $datos_s_q_asistencia; }  
     
-    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'e' => $datos_proyecto,'ee' => $datos_s_q_asistencia];
-    
+    return $retorno = [
+      'status' => true, 
+      'message' => 'todo oka ps', 
+      'data' => [
+        'datos_proyecto' => $datos_proyecto['data'],
+        's_q_asistencia' => $datos_s_q_asistencia['data']
+      ]  
+    ];    
   }
 
   // //ver detalle quincenal o semanal

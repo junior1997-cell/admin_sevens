@@ -293,7 +293,7 @@ function guardar_y_editar_proyecto(e) {
           tabla.ajax.reload(null, false);	
           Swal.fire("Correcto!", "Proyecto guardado correctamente", "success");	          
           limpiar(); tablero(); box_proyecto();
-          $("#modal-agregar-proyecto").modal("hide"); 
+          $("#modal-agregar-proyecto").modal("hide");           
         }else{
           ver_errores(e);				 
         }

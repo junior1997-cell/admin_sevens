@@ -142,7 +142,7 @@ function todos_almacen() {
           html_dias = html_dias.concat(`<td>${entrada}</td><td>${salida}</td>`);
           html_dias_sum = html_dias_sum.concat(`<td class="${color_filas}" >${acumulado_e}</td> <td class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s} </td>`);
         });
-        var saldo = val1.entrada_total - total_x_producto;
+        var saldo = (val1.entrada_total + val1.saldo_anterior) - total_x_producto;
         codigoHTMLbodyProducto = `
         <tr class="text-nowrap ${color_filas}">
           <td rowspan="2">${(key1 +1)}</td>
@@ -151,14 +151,14 @@ function todos_almacen() {
           <td rowspan="2">${val1.abreviacion_um}</td>
           <td rowspan="2"> 
             <span class="span_s" >${val1.saldo_anterior}</span> 
-            <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="${val1.saldo_anterior}" style="display:none;" > <br> 
+            <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="${val1.saldo_anterior}" style="display:none;" onchange="calcular_saldo(this, ${val1.idproducto});" onkeyup="calcular_saldo(this, ${val1.idproducto});" > <br> 
             <input type="hidden" name="idproducto_sa[]" value="${val1.idproducto}" > <input type="hidden" name="idproyecto_sa[]" value="${val1.idproyecto}" >
             <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior('${idproyecto}', '${val1.idproducto}');"><i class="far fa-eye"></i></span> 
           </td>
-          <td rowspan="2">${formato_miles(val1.entrada_total)}</td>
+          <td rowspan="2"> <span class="entrada_total_${val1.idproducto}">${formato_miles(val1.entrada_total)}</span> </td>
           ${html_dias}
-          <td rowspan="2">${total_x_producto}</td>
-          <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}">${saldo}</td>
+          <td rowspan="2"><span class="salida_total_${val1.idproducto}">${formato_miles(total_x_producto)}</span></td>
+          <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}"><span class="saldo_total_${val1.idproducto}">${formato_miles(saldo)}</span></td>
         </tr>`;
 
         $('.data_tbody_almacen').append(`${codigoHTMLbodyProducto} <tr>${html_dias_sum} </tr>`); // Agregar el contenido
@@ -212,7 +212,7 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
       <th rowspan="5">Code</th> 
       <th rowspan="5">Producto</th>
       <th rowspan="5">UND</th> 
-      <th rowspan="5">SALDO <br> ANTERIOR <br> <br> <button class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
+      <th rowspan="5">SALDO <br> ANTERIOR <br> <br> <button type="button" class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
       <th rowspan="5">INGRESO <br> COMPRAS</th> 
       ${codigoHTMLhead1}
       <th rowspan="5">SALIDA</th> 
@@ -233,18 +233,23 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
           html_dias = html_dias.concat(`<td>${entrada}</td><td>${salida}</td>`);
           html_dias_sum = html_dias_sum.concat(`<td class="${color_filas}">${acumulado_e}</td><td  class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="Ver detallle" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s} </td>`);
         });
-        var saldo = val1.entrada_total - total_x_producto;
+        var saldo = (val1.entrada_total + val1.saldo_anterior) - total_x_producto;
         codigoHTMLbodyProducto = `
         <tr class="text-nowrap ${color_filas}">
           <td rowspan="2">${(key1 +1)}</td>
           <td rowspan="2">${val1.idproducto}</td>
           <td class="text_producto text-nowrap" rowspan="2">${val1.nombre_producto} <br> <small><b>Clasf:</b> ${val1.categoria} </small></td>
           <td rowspan="2">${val1.abreviacion_um}</td>
-          <td rowspan="2"> <span class="span_s" >-</span> <input class="input_s w-70px" type="number" name="saldo_anterior[]" style="display:none;" > <br> <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior();"><i class="far fa-eye"></i></span> </td>
-          <td rowspan="2">${formato_miles(val1.entrada_total)}</td>
+          <td rowspan="2"> 
+            <span class="span_s" >${val1.saldo_anterior}</span> 
+            <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="${val1.saldo_anterior}" style="display:none;" onchange="calcular_saldo(this, ${val1.idproducto});" onkeyup="calcular_saldo(this, ${val1.idproducto});" > <br> 
+            <input type="hidden" name="idproducto_sa[]" value="${val1.idproducto}" > <input type="hidden" name="idproyecto_sa[]" value="${val1.idproyecto}" >
+            <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior('${idproyecto}', '${val1.idproducto}');"><i class="far fa-eye"></i></span> 
+          </td>
+          <td rowspan="2"> <span class="entrada_total_${val1.idproducto}">${formato_miles(val1.entrada_total)}</span> </td>
           ${html_dias}
-          <td rowspan="2">${total_x_producto}</td>
-          <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}">${saldo}</td>
+          <td rowspan="2"><span class="salida_total_${val1.idproducto}">${formato_miles(total_x_producto)}</span></td>
+          <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}"><span class="saldo_total_${val1.idproducto}">${formato_miles(saldo)}</span></td>
         </tr>`;
 
         $('.data_tbody_almacen').append(`${codigoHTMLbodyProducto} <tr>${html_dias_sum} </tr>`); // Agregar el contenido
@@ -262,12 +267,17 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
   }).fail(function (e) { ver_errores(e); });
 }
 
-function calcular_saldo() {
-  var data_input = $('.input_s');
-  data_input.each(function(val, key) { 
-    hora +=  $(this).val() == null || $(this).val() == '' || $(this).val() == 0 ? 0 : parseFloat($(this).val());    
-    console.log( hora );     
-  });
+function calcular_saldo(input, id) {
+  var input_sa = $(input).val() == '' || $(input).val() == null ? 0 :  quitar_formato_miles($(input).val() ) ;
+  var input_et = $(`.entrada_total_${id}`).text() == '' || $(`.entrada_total_${id}`).text() == null ? 0 : quitar_formato_miles($(`.entrada_total_${id}`).text()) ;
+  var input_st = $(`.salida_total_${id}`).text() == '' || $(`.salida_total_${id}`).text() == null ? 0 : quitar_formato_miles($(`.salida_total_${id}`).text()) ;
+ 
+  var calculo  = (input_sa + input_et) - input_st ; //console.log(`${calculo}  = (${input_sa} + ${input_et}) - ${input_st}`);
+  $(`.saldo_total_${id}`).html( formato_miles(calculo) );
+  // data_input.each(function(val, key) { 
+  //   hora +=  $(this).val() == null || $(this).val() == '' || $(this).val() == 0 ? 0 : parseFloat($(this).val());    
+  //   console.log( hora );     
+  // });
 }
 
 // .....::::::::::::::::::::::::::::::::::::: E D I T A R   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
@@ -694,6 +704,8 @@ function guardar_y_editar_saldo_anterior(e) {
     error: function (jqXhr) { ver_errores(jqXhr); },
   });
 }
+
+
 
 init();
 
