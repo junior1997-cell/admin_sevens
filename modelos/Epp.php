@@ -97,7 +97,7 @@ class Epp
     FROM epp_x_proyecto as epp 
     INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
     INNER JOIN producto AS p ON p.idproducto=ar.idproducto
-    INNER JOIN unidad_medida AS um ON UM.idunidad_medida = p.idunidad_medida
+    INNER JOIN unidad_medida AS um ON um.idunidad_medida = p.idunidad_medida
     WHERE epp.idtrabajador_por_proyecto='$id_tpp' AND ar.idproyecto='$proyecto'and epp.estado='1' and epp.estado_delete='1';";
     return ejecutarConsulta($sql);
   }
@@ -106,7 +106,7 @@ class Epp
   //Implementar un método para listar los registros
   public function select_2_insumos_pp($idproyecto) {
 
-    $sql = "SELECT ar.idalmacen_resumen, ar.idproyecto,p.idproducto, ar.saldo, p.nombre as nombre_producto, um.abreviacion,  p.modelo    
+    $sql = "SELECT ar.idalmacen_resumen, ar.idproyecto,p.idproducto, p.nombre as nombre_producto, um.abreviacion,  p.modelo    
     FROM almacen_resumen as ar
     inner join producto as p on ar.idproducto =p.idproducto 
     inner join unidad_medida as um on um.idunidad_medida = p.idunidad_medida
@@ -127,11 +127,11 @@ class Epp
   function tabla_resumen_epp($idproyecto) {
     $data = [];
 
-    $sql="SELECT epp.idalmacen_resumen,P.idproducto , p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, SUM(epp.cantidad) AS cantidad
+    $sql="SELECT epp.idalmacen_resumen,p.idproducto , p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, SUM(epp.cantidad) AS cantidad
     FROM epp_x_proyecto as epp 
     INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
-    INNER JOIN producto AS p ON P.idproducto=ar.idproducto
-    INNER JOIN unidad_medida AS um ON UM.idunidad_medida = P.idunidad_medida
+    INNER JOIN producto AS p ON p.idproducto=ar.idproducto
+    INNER JOIN unidad_medida AS um ON um.idunidad_medida = p.idunidad_medida
     WHERE ar.idproyecto='$idproyecto'and epp.estado='1' and epp.estado_delete='1' GROUP BY epp.marca,p.idproducto;";
 
     $data_resumen = ejecutarConsultaArray($sql); if ($data_resumen['status'] == false) { return  $data_resumen;}
