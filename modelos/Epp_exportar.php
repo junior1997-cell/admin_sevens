@@ -22,8 +22,8 @@ class Epp_exportar
     $sql2="SELECT epp.idepp_x_proyecto, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha_ingreso
     FROM epp_x_proyecto as epp 
     INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
-    INNER JOIN producto AS p ON P.idproducto=ar.idproducto
-    INNER JOIN unidad_medida AS um ON UM.idunidad_medida = P.idunidad_medida
+    INNER JOIN producto AS p ON p.idproducto=ar.idproducto
+    INNER JOIN unidad_medida AS um ON um.idunidad_medida = p.idunidad_medida
     WHERE epp.idtrabajador_por_proyecto='$id_tpp' AND ar.idproyecto='$idproyecto'and epp.estado='1' and epp.estado_delete='1'; ";
 
     $datos_EPP= ejecutarConsultaArray($sql2); if ($datos_EPP['status'] == false) { return $datos_EPP; }  
@@ -47,7 +47,7 @@ class Epp_exportar
             FROM epp_x_proyecto as epp 
             INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
             INNER JOIN producto AS p ON P.idproducto=ar.idproducto
-            INNER JOIN unidad_medida AS um ON UM.idunidad_medida = P.idunidad_medida
+            INNER JOIN unidad_medida AS um ON um.idunidad_medida = p.idunidad_medida
             WHERE epp.idtrabajador_por_proyecto='$id_tpp' AND ar.idproyecto='$idproyecto'and epp.estado='1' and epp.estado_delete='1';";
       
       $epps = ejecutarConsultaArray($sql_detalle); if ($epps['status'] == false) { return  $epps;}

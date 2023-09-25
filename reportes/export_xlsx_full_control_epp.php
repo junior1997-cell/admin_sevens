@@ -26,7 +26,7 @@
   $full_epp_trabajadores=$full_epp_trabajadores->datos_epp_trabajador_full($_GET["id_proyecto"]);
 
   // echo json_encode($full_epp_trabajadores['data'],true);die();
-  
+  //var_dump
   $contador = 0;
 
   foreach ($full_epp_trabajadores['data'] as $key => $reg) {
