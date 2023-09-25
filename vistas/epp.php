@@ -126,7 +126,7 @@ if (!isset($_SESSION["nombre"])) {
 
                             <div class="col-4">
 
-                              <a type="button" class="btn btn-block btn-outline-info" id="#"> <i class="fa-regular fa-file-excel"></i> EXPORTAR EPPS DE TODOS LOS TRABAJADORES </a>   <br>                            
+                              <a type="button" class="btn btn-block btn-outline-info" id="btn_export_epp_full"> <i class="fa-regular fa-file-excel"></i> EXPORTAR EPPS DE TODOS LOS TRABAJADORES </a>   <br>                            
 
                               <table id="tabla-epp" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
@@ -158,7 +158,7 @@ if (!isset($_SESSION["nombre"])) {
                                   <h6> TRABAJADOR:<strong class="nombre_epp"> <i class="fas fa-exclamation-triangle text-warning"></i> </strong> </h6>
                                   <h6> Talla:<strong class="tallas"> <i class="fas fa-exclamation-triangle text-warning"></i> </strong> </h6>
 
-                                  <a type="button" class="btn bg-gradient-gray btn-sm " id="btn_export_eppxt" style="display: none;"> <i class="fa-regular fa-file-excel"></i> export </a>                              
+                                  <a type="button" class="btn bg-gradient-gray btn-sm " id="btn_export_eppxt" style="display: none;"> <i class="fa-regular fa-file-excel"></i> Exportar EPP </a>                              
 
                                   <button type="button" class="btn bg-gradient-primary btn-sm btn_add_epps" style="display: none;" data-toggle="modal" data-target="#modal-agregar-epp" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
                               </div>
