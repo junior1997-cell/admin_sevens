@@ -83,9 +83,9 @@ if (!isset($_SESSION["nombre"])) {
                 <div class="col-sm-6">
                   <h1 class="m-0">
                     <i class="nav-icon fas fa-box-open"></i> Almacén
-                    <a type="button" class="btn bg-gradient-gray btn-sm" id="btn-export-qs" href="#" onclick="toastr_error('No hay datos!!', 'Seleccione una quincena o semana para exportar.');">
+                    <!-- <a type="button" class="btn bg-gradient-gray btn-sm" id="btn-export-qs" href="#" onclick="toastr_error('No hay datos!!', 'Seleccione una quincena o semana para exportar.');">
                       <i class="fa-regular fa-file-excel"></i> Export
-                    </a> 
+                    </a>  -->
                   </h1>  
                 </div>
                 <!-- /.col -->

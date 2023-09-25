@@ -67,9 +67,9 @@
     }
     
     foreach ($data_asistencia['data'] as $key => $reg) {
-      $file_perfil = '../dist/docs/all_trabajador/perfil/'.$reg['imagen_perfil'];
+      //$file_perfil = '../dist/docs/all_trabajador/perfil/'.$reg['imagen_perfil'];
       
-      if ( file_exists($file_perfil) ) {
+      if ( !empty($reg['imagen_perfil']) ) {
         // Add png image to comment background
         $drawing = $drawing = new PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
         $drawing->setName($reg['nombres']);
