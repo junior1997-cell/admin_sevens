@@ -18,17 +18,17 @@ $formatos_varios = new FormatosVarios();
 
 $proyecto = $formatos_varios->datos_proyecto($_GET["id_proyecto"]);
 // var_dump($proyecto['ee']['data']); die();
-$n_f_i_p          = $proyecto['e']['data']['fecha_inicio'];
-$n_f_f_p          = $proyecto['e']['data']['fecha_fin'];
+$n_f_i_p          = $proyecto['data']['datos_proyecto']['fecha_inicio'];
+$n_f_f_p          = $proyecto['data']['datos_proyecto']['fecha_fin'];
 $id_proyecto      = $_GET["id_proyecto"];
-$fecha_pago_obrero= $proyecto['e']['data']['fecha_pago_obrero'];
+$fecha_pago_obrero= $proyecto['data']['datos_proyecto']['fecha_pago_obrero'];
 // var_dump($fecha_pago_obrero); die();
 $num_quincena = 1; $contador = 0;
 
 $dia_regular = 0; $estado_regular = false;
 
 // Generar hojas por quincena
-foreach ($proyecto['ee']['data'] as $key => $reg){
+foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
 
   $ids_q_asistencia =$reg['ids_q_asistencia']; 
   $numero_q_s =$reg['numero_q_s']; 
@@ -64,9 +64,9 @@ foreach ($proyecto['ee']['data'] as $key => $reg){
   $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
   
 
-  $hojaActiva->setCellValue('D5', $proyecto['e']['data']['nombre_proyecto']);
-  $hojaActiva->setCellValue('D6', $proyecto['e']['data']['ubicacion']);
-  $hojaActiva->setCellValue('D7', $proyecto['e']['data']['empresa']);
+  $hojaActiva->setCellValue('D5', $proyecto['data']['datos_proyecto']['nombre_proyecto']);
+  $hojaActiva->setCellValue('D6', $proyecto['data']['datos_proyecto']['ubicacion']);
+  $hojaActiva->setCellValue('D7', $proyecto['data']['datos_proyecto']['empresa']);
 
   // ══════════════════════════════════════════ - L O G O - ════════════════════════════════════════════════
   plantilla_logo($spreadsheet);

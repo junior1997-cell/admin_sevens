@@ -30,7 +30,39 @@ class Epp_exportar
 
     return $retorno = ['status' => true, 'e' => $datostrabajador, 'ee' => $datos_EPP, 'message' => 'todo bien'];
 
+  }
 
+  function datos_epp_trabajador_full($idproyecto) {
+    $data = [];
+    $sql="SELECT t.idtrabajador, t.nombres,t.numero_documento, tpp.idtrabajador_por_proyecto
+    FROM trabajador_por_proyecto as tpp, trabajador as t 
+    WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$idproyecto' AND tpp.estado='1' AND tpp.estado_delete='1' ORDER BY tpp.orden_trabajador ASC;";
+    $datos_EPP= ejecutarConsultaArray($sql); if ($datos_EPP['status'] == false) { return $datos_EPP; } 
+    
+    foreach ($datos_EPP['data'] as $key => $reg) {
+      
+      $id_tpp = $reg['idtrabajador_por_proyecto'];
+
+      $sql_detalle="SELECT epp.idepp_x_proyecto, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha_ingreso
+            FROM epp_x_proyecto as epp 
+            INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
+            INNER JOIN producto AS p ON P.idproducto=ar.idproducto
+            INNER JOIN unidad_medida AS um ON UM.idunidad_medida = P.idunidad_medida
+            WHERE epp.idtrabajador_por_proyecto='$id_tpp' AND ar.idproyecto='$idproyecto'and epp.estado='1' and epp.estado_delete='1';";
+      
+      $epps = ejecutarConsultaArray($sql_detalle); if ($epps['status'] == false) { return  $epps;}
+      
+      $data[] = Array(
+        'idtrabajador'              => $reg['idtrabajador'],
+        'nombres'                   => $reg['nombres'],
+        'numero_documento'          => $reg['numero_documento'],
+        'idtrabajador_por_proyecto' => $reg['idtrabajador_por_proyecto'],
+        'detalle_epp'               => $epps,
+      );
+
+    }
+    // var_dump($data);die();
+    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];
   }
 
 

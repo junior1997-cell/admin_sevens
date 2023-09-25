@@ -121,6 +121,7 @@ function tabla_resumen_epp() {
 function listar_trabajdor() {
 
   var idproyecto = localStorage.getItem("nube_idproyecto");
+  $('#btn_export_epp_full').attr('href', `../reportes/export_xlsx_full_control_epp.php?id_proyecto=${localStorage.getItem('nube_idproyecto')}`);
 
   tabla = $("#tabla-epp").dataTable({
     responsive: true,
