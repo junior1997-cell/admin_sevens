@@ -124,7 +124,7 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
 
         $fila_2=$fila_1+1;
 
-        for ($i = $cont; $i < $cont+5; $i++) {
+        for ($i = $cont; $i < $cont+10; $i++) {
 
           $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
           $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':O' . $fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
@@ -199,7 +199,7 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
 
         $fila_2=$fila_1+1;
 
-        for ($i = $cont; $i < $cont+5; $i++) {
+        for ($i = $cont; $i < $cont+10; $i++) {
 
           $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
           $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':V' . $fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
