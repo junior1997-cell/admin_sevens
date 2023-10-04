@@ -138,8 +138,7 @@ class Almacen
 
     while ($estado == true) {        
       if ( $sumando < $cant_dias ) {   
-        $data_sq[] = ['colspan'  => $colspan, 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];
-        
+        $data_sq[] = ['colspan'  => $colspan, 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];        
       } else {   
         $data_sq[] = ['colspan'  => ($cant_dias - ($sumando - $cant_sq) ), 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];
         $estado = false;
@@ -147,16 +146,25 @@ class Almacen
       $count_sq += 1;  $colspan = $cant_sq; $sumando += $cant_sq;            
     }
 
-    $sql_0 = "SELECT ar.idalmacen_resumen, ar.idproyecto, ar.idproducto, ar.saldo_anterior, p.nombre as producto, 
-    um.nombre_medida as unidad_medida, um.abreviacion as abreviacion_um, ciaf.nombre as categoria
-    FROM almacen_resumen as ar, producto as p, unidad_medida as um, categoria_insumos_af as ciaf
-    WHERE ar.idproducto = p.idproducto AND p.idunidad_medida = um.idunidad_medida AND p.idcategoria_insumos_af = ciaf.idcategoria_insumos_af
-    AND ar.estado = '1' AND ar.estado_delete = '1' AND ar.idproyecto = '$idproyecto' ORDER BY p.nombre ASC;";    
+    $sql_0 = "SELECT cpp.idcompra_proyecto, cpp.idproyecto, dc.iddetalle_compra, dc.idproducto, sum(dc.cantidad) as cantidad, dc.marca,
+    um.nombre_medida, um.nombre_medida, um.abreviacion, pr.nombre AS nombre_producto, pr.modelo, ci.nombre as clasificacion    
+		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, categoria_insumos_af AS ci, unidad_medida AS um 
+		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto
+    AND um.idunidad_medida  = pr.idunidad_medida AND pr.idcategoria_insumos_af = ci.idcategoria_insumos_af
+    AND cpp.idproyecto = '$idproyecto'
+    AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";    
     $producto = ejecutarConsultaArray($sql_0); if ($producto['status'] == false) { return $producto; }   
 
-    foreach ($producto['data'] as $key1 => $val1) {      
-      $id_r   = $val1['idalmacen_resumen']; 
-      $id_p   = $val1['idproducto']; 
+    foreach ($producto['data'] as $key1 => $val1) { 
+
+      $id_p   = $val1['idproducto'];
+
+      $sql_1 = "SELECT idalmacen_resumen, idproyecto, idproducto, saldo_anterior 
+      FROM almacen_resumen WHERE estado = '1' AND estado_delete = '1' AND idproducto = '$id_p' AND idproyecto = '$idproyecto';";   
+      $sal_ant = ejecutarConsultaSimpleFila($sql_1); if ($sal_ant['status'] == false) { return $sal_ant; }
+
+      $id_r    = empty($sal_ant['data']) ? 0 : (empty($sal_ant['data']['idalmacen_resumen']) ? 0 : $sal_ant['data']['idalmacen_resumen']); 
+       
       $data_almacen = [];
       foreach ($dias_rango as $key2 => $val2) {
         
@@ -175,20 +183,20 @@ class Almacen
         ];
       }  
       
-      $sql_3 = "SELECT SUM(dc.cantidad) AS cantidad  FROM compra_por_proyecto as cpp, detalle_compra as dc 
-      WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.idproyecto = '$idproyecto' AND dc.idproducto = '$id_p';";
-      $entrada = ejecutarConsultaSimpleFila($sql_3); if ($entrada['status'] == false) { return $entrada; }
+      // $sql_3 = "SELECT SUM(dc.cantidad) AS cantidad  FROM compra_por_proyecto as cpp, detalle_compra as dc 
+      // WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.idproyecto = '$idproyecto' AND dc.idproducto = '$id_p';";
+      // $entrada = ejecutarConsultaSimpleFila($sql_3); if ($entrada['status'] == false) { return $entrada; }
 
       $resumen_producto[] = [
-        'idalmacen_resumen' => $val1['idalmacen_resumen'],
+        'idalmacen_resumen' => empty($sal_ant['data']) ? '' : (empty($sal_ant['data']['idalmacen_resumen']) ? '' : $sal_ant['data']['idalmacen_resumen']),
         'idproyecto'        => $val1['idproyecto'],
         'idproducto'        => $val1['idproducto'],
-        'saldo_anterior'    => empty($val1['saldo_anterior']) ? 0 : floatval($val1['saldo_anterior']) ,
-        'entrada_total'     => empty($entrada['data']) ? 0 : (empty($entrada['data']['cantidad']) ? 0 : floatval($entrada['data']['cantidad'])) ,
-        'nombre_producto'   => $val1['producto'],
-        'unidad_medida'     => $val1['unidad_medida'],
-        'abreviacion_um'    => $val1['abreviacion_um'],
-        'categoria'         => $val1['categoria'],
+        'saldo_anterior'    => empty($sal_ant['data']) ? 0 : (empty($sal_ant['data']['saldo_anterior']) ? 0 : floatval($sal_ant['data']['saldo_anterior'])) ,
+        'entrada_total'     => empty($val1['cantidad']) ? 0 :  floatval($val1['cantidad'] ) ,
+        'nombre_producto'   => $val1['nombre_producto'],
+        'unidad_medida'     => $val1['nombre_medida'],
+        'abreviacion_um'    => $val1['abreviacion'],
+        'categoria'         => $val1['clasificacion'],
         'almacen'           => $data_almacen,        
       ];
     }

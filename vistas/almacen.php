@@ -133,6 +133,10 @@ if (!isset($_SESSION["nombre"])) {
 
                     <!-- /.card-header -->
                     <div class="card-body">
+                      <div class="div-tabla-principal">
+                        
+                      </div>
+                      
                       <!-- TABLA - Almacen -->                      
                       <div class="table-container" id="div_tabla_almacen" style="display: none;">
                         <form id="form-almacen-saldo-anterior" name="form-almacen-saldo-anterior" method="POST">                        
@@ -186,9 +190,7 @@ if (!isset($_SESSION["nombre"])) {
                                 <th class="style-head">J</th>
                                 <th class="style-head">V</th>
                                 <th class="style-head">S</th> -->
-                              </tr>
-                              <tr class="thead-f5">                              
-                              </tr>
+                              </tr>                              
                             </thead>
                             <tbody class="data_tbody_almacen">
                               <!-- <tr>

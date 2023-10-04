@@ -13,8 +13,10 @@
     if ($_SESSION['compra_insumos'] == 1) {
 
       require_once "../modelos/Almacen.php";
+      require_once "../modelos/Resumen_insumos.php";
 
       $almacen = new Almacen($_SESSION['idusuario']);
+      $resumen_insumos = new ResumenInsumos($_SESSION['idusuario']);
 
       $imagen_error = "this.src='../dist/svg/user_default.svg'";
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';

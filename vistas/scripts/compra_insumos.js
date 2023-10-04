@@ -185,7 +185,8 @@ function doc2_eliminar() {
 
 //Función limpiar
 function limpiar_form_compra() {
-  $(".tooltip").removeClass("show").addClass("hidde");
+  $(".tooltip").remove();
+  $('.ui-tooltip').remove();
 
   $("#idcompra_proyecto").val("");
   $("#idproveedor").val("null").trigger("change");
