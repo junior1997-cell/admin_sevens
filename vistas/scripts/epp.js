@@ -416,12 +416,12 @@ function select_producto_edit(el) {
    console.log(id_insumo+'  .....................');
   $("#id_producto_xp").val($('#producto_xp').val());
 
-  var nombre = "", marca = "", modelo = "", abreviacion="",  data_idalmacen_resumen="";
+  var nombre = "", marca = "", modelo = "", abreviacion="",  idProduc_almacen_resumen="";
 
   marca = $('option:selected', el).attr('data-marca');
   //abreviacion = $('option:selected', el).attr('data-abreviacion');
-  console.log($('option:selected', el).attr('data-idalmacen_resumen'));
-  $("#idalmacen_resumen_xp").val( $('option:selected', el).attr('data-idalmacen_resumen'));
+  console.log($('option:selected', el).attr('data-idProduc_almacen_resu'));
+  $("#idalmacen_resumen_xp").val( $('option:selected', el).attr('data-idProduc_almacen_resu'));
   $("#epp_xp").val( $('option:selected', el).attr('data-nombre'));
   $("#unidad_m").val( $('option:selected', el).attr('data-abreviacion'));
 
@@ -539,10 +539,10 @@ function add_row(el) {
   codigoHTML = '';
   var id_insumo = $('#select_id_insumo').val();
 
-  var nombre = "", data_idalmacen_resumen = "", modelo = "";
+  var nombre = "", idProduc_almacen_resumen = "", modelo = "";
 
   nombre      = $('option:selected', el).attr('data-nombre');
-  data_idalmacen_resumen       = $('option:selected', el).attr('data-idalmacen_resumen');
+  idProduc_almacen_resumen = $('option:selected', el).attr('data-idProduc_almacen_resu');
   modelo      = $('option:selected', el).attr('data-modelo');
   abreviacion = $('option:selected', el).attr('data-abreviacion');
   
@@ -572,7 +572,7 @@ function add_row(el) {
                         <div class="form-group">
                         <label for="fecha_ingreso">Nombre Producto</label>
                         <input type="hidden" name="id_insumo[]" class="form-control" id="id_insumo" value="${id_insumo}"/>
-                        <input type="hidden" name="data_idalmacen_resumen[]" class="form-control" id="data_idalmacen_resumen" value="${data_idalmacen_resumen}"/>
+                        <input type="text" name="idProduc_almacen_resumen[]" class="form-control" id="idProduc_almacen_resumen" value="${idProduc_almacen_resumen}"/>
                           <span class="form-control-mejorado"> ${nombre} </span>  
                         </div>
                       </div>

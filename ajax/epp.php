@@ -22,7 +22,7 @@
       $idepp = isset($_POST["idepp"]) ? $_POST["idepp"] : ""; 
       $idproyecto = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
       $idtrabajador_por_proyecto = isset($_POST["idtrabajador_por_proyecto"]) ? limpiarCadena($_POST["idtrabajador_por_proyecto"]) : "";           
-      $data_idalmacen_resumen = isset($_POST["data_idalmacen_resumen"]) ? $_POST["data_idalmacen_resumen"] : "";      
+      $idProduc_almacen_resumen = isset($_POST["idProduc_almacen_resumen"]) ? $_POST["idProduc_almacen_resumen"] : "";      
       $fecha_g = isset($_POST["fecha_g"]) ? $_POST["fecha_g"] : "";      
       $id_insumo = isset($_POST["id_insumo"]) ? $_POST["id_insumo"] : "";      
       $cantidad = isset($_POST["cantidad"]) ? $_POST["cantidad"] : ""; 
@@ -46,7 +46,7 @@
 
           if (empty($idepp)) {
             //var_dump($idproyecto,$idproveedor);
-            $rspta = $epp->insertar($idproyecto,$idtrabajador_por_proyecto,$data_idalmacen_resumen,$fecha_g,$id_insumo,$cantidad,$marca);
+            $rspta = $epp->insertar($idproyecto,$idtrabajador_por_proyecto,$idProduc_almacen_resumen,$fecha_g,$id_insumo,$cantidad,$marca);
             
             echo json_encode($rspta,true);
       
@@ -172,7 +172,7 @@
 
             foreach ($rspta['data'] as $key => $value) {  
 
-                $data .= '<option value=' .$value['idproducto']. ' data-nombre=" \''.encodeCadenaHtml($value['nombre_producto']).'\'" data-idalmacen_resumen="'.$value['idalmacen_resumen'].'" data-modelo="'.$value['modelo'].'" data-abreviacion="'.$value['abreviacion'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
+                $data .= '<option value=' .$value['idproducto']. ' data-nombre=" \''.encodeCadenaHtml($value['nombre_producto']).'\'" data-idProduc_almacen_resu="'.$value['idproducto'].'" data-modelo="'.$value['modelo'].'" data-abreviacion="'.$value['abreviacion'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
                 //data-marca="'.$value['marca'] .'"
             }
 

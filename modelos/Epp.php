@@ -10,7 +10,7 @@ class Epp
   }
   //$idepp_x_proyecto,$idproyecto,$fecha_viaje,$tipo_viajero,$tipo_ruta,$cantidad,$precio_unitario,$precio_parcial,$ruta,$descripcion,$foto2
   //Implementamos un método para insertar registros
-  public function insertar($idproyecto,$idtrabajador_por_proyecto,$data_idalmacen_resumen,$fecha_g,$id_insumo,$cantidad,$marca)
+  public function insertar($idproyecto,$idtrabajador_por_proyecto,$idProduc_almacen_resumen,$fecha_g,$id_insumo,$cantidad,$marca)
   {
     $dia = extraer_dia($fecha_g);
 
@@ -23,13 +23,58 @@ class Epp
 
       while ($num_elementos < count($id_insumo)) {
 
-        $sql_detalle = "INSERT INTO epp_x_proyecto(idtrabajador_por_proyecto,idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca,user_created) 
-        VALUES ('$idtrabajador_por_proyecto','$data_idalmacen_resumen[$num_elementos]','$fecha_g','$dia','$cantidad[$num_elementos]','$marca[$num_elementos]','" . $_SESSION['idusuario'] . "')";
-        $sw = ejecutarConsulta_retornarID($sql_detalle); if ($sw['status'] == false) {    return $sw ; }
+        $sql_1=" SELECT idalmacen_resumen FROM almacen_resumen WHERE idproyecto='$idproyecto' AND idproducto='$idProduc_almacen_resumen[$num_elementos]';";
+        $idalmacen_resumen = ejecutarConsultaSimpleFila($sql_1); if ($idalmacen_resumen['status'] == false) { return  $idalmacen_resumen;}
 
-        //add registro en nuestra bitacora
-        $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('epp_x_proyecto','".$sw['data']."','Registro de EPP con num  ".$sw['data']."','" . $_SESSION['idusuario'] . "')";
-        $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+        if(isset($idalmacen_resumen['data'])){
+
+         //============================id almacen_resumen=======
+          $id=$idalmacen_resumen['data']['idalmacen_resumen'];
+
+          //============================EPP=====================
+          $sql_detalle = "INSERT INTO epp_x_proyecto(idtrabajador_por_proyecto,idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca,user_created) 
+          VALUES ('$idtrabajador_por_proyecto','$id','$fecha_g','$dia','$cantidad[$num_elementos]','$marca[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+          $sw = ejecutarConsulta_retornarID($sql_detalle); if ($sw['status'] == false) {    return $sw ; }
+  
+          //add registro en nuestra bitacora
+          $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('epp_x_proyecto','".$sw['data']."','Registro de EPP con num  ".$sw['data']."','" . $_SESSION['idusuario'] . "')";
+          $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+          
+          //============================ALMACEN==================
+          $sql_0 = "INSERT INTO almacen_salida( idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca, user_created)
+          VALUES ('$id', '$fecha_g', '$dia',  '$cantidad[$num_elementos]', '$marca[$num_elementos]', '" . $_SESSION['idusuario'] . "')";         
+          $new_salida = ejecutarConsulta_retornarID($sql_0); if ( $new_salida['status'] == false) {return $new_salida; }  
+          $id_s = $new_salida['data'];
+          //add registro en nuestra bitacora
+          $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_salida','$id_s','Crear registro','" . $_SESSION['idusuario'] . "')";
+          $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }
+
+        }else{
+
+          //============================almacen_resumen============
+          $sql_2 ="INSERT INTO almacen_resumen(idproyecto, idproducto,user_created) VALUES ('$idproyecto','$idProduc_almacen_resumen[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+          $registro_alm_resu = ejecutarConsulta_retornarID($sql_2); if ($registro_alm_resu['status'] == false) {    return $registro_alm_resu ; }
+          $id=$registro_alm_resu['data'];
+          
+          //============================EPP========================
+          $sql_detalle = "INSERT INTO epp_x_proyecto(idtrabajador_por_proyecto,idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca,user_created) 
+          VALUES ('$idtrabajador_por_proyecto','$id','$fecha_g','$dia','$cantidad[$num_elementos]','$marca[$num_elementos]','" . $_SESSION['idusuario'] . "')";
+          $sw = ejecutarConsulta_retornarID($sql_detalle); if ($sw['status'] == false) {    return $sw ; }
+  
+          //add registro en nuestra bitacora
+          $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('epp_x_proyecto','".$sw['data']."','Registro de EPP con num  ".$sw['data']."','" . $_SESSION['idusuario'] . "')";
+          $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }  
+
+          //============================ALMACEN=====================
+          $sql_0 = "INSERT INTO almacen_salida( idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca, user_created)
+          VALUES ('$id', '$fecha_g', '$dia',  '$cantidad[$num_elementos]', '$marca[$num_elementos]', '" . $_SESSION['idusuario'] . "')";         
+          $new_salida = ejecutarConsulta_retornarID($sql_0); if ( $new_salida['status'] == false) {return $new_salida; }  
+          $id_s = $new_salida['data'];
+          //add registro en nuestra bitacora
+          $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_salida','$id_s','Crear registro','" . $_SESSION['idusuario'] . "')";
+          $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }
+
+        }
 
         $num_elementos = $num_elementos + 1;
 
@@ -106,11 +151,12 @@ class Epp
   //Implementar un método para listar los registros
   public function select_2_insumos_pp($idproyecto) {
 
-    $sql = "SELECT ar.idalmacen_resumen, ar.idproyecto,p.idproducto, p.nombre as nombre_producto, um.abreviacion,  p.modelo    
-    FROM almacen_resumen as ar
-    inner join producto as p on ar.idproducto =p.idproducto 
-    inner join unidad_medida as um on um.idunidad_medida = p.idunidad_medida
-    WHERE ar.idproyecto = '$idproyecto' ORDER BY p.nombre ASC;";
+    $sql = " SELECT Distinct '' as idalmacen_resumen, dc.idproducto , cpp.idproyecto,p.nombre as nombre_producto,um.abreviacion,  p.modelo
+    FROM detalle_compra as dc 
+    INNER JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto= cpp.idcompra_proyecto
+    INNER JOIN producto as p on dc.idproducto=p.idproducto
+    INNER JOIN unidad_medida as um on um.idunidad_medida=p.idunidad_medida
+    WHERE idclasificacion_grupo='11' AND cpp.idproyecto='$idproyecto';";
 
     return ejecutarConsultaArray($sql); 
   }
