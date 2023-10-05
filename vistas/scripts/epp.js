@@ -26,6 +26,9 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#select_id_insumo").select2({ theme: "bootstrap4", placeholder: "Seleccinar", allowClear: true, });
 
+  $("#fecha_ingreso_xp").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
+  $("#fecha_g").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
+
   // Formato para telefono
   $("[data-mask]").inputmask();
 
@@ -413,7 +416,6 @@ function mostrar(idepp) {
 
 function select_producto_edit(el) { 
    var id_insumo = $('#producto_xp').val();
-   console.log(id_insumo+'  .....................');
   $("#id_producto_xp").val($('#producto_xp').val());
 
   var nombre = "", marca = "", modelo = "", abreviacion="",  idProduc_almacen_resumen="";
@@ -422,7 +424,7 @@ function select_producto_edit(el) {
   //abreviacion = $('option:selected', el).attr('data-abreviacion');
   console.log($('option:selected', el).attr('data-idProduc_almacen_resu'));
   $("#idalmacen_resumen_xp").val( $('option:selected', el).attr('data-idProduc_almacen_resu'));
-  $("#epp_xp").val( $('option:selected', el).attr('data-nombre'));
+  $("#epp_xp").val( $('#producto_xp').val()==null ? '': $('#producto_xp').select2('data')[0].text );
   $("#unidad_m").val( $('option:selected', el).attr('data-abreviacion'));
 
   select_marcas_edit(id_insumo,marca);
@@ -541,7 +543,8 @@ function add_row(el) {
 
   var nombre = "", idProduc_almacen_resumen = "", modelo = "";
 
-  nombre      = $('option:selected', el).attr('data-nombre');
+
+  nombre      = $('#select_id_insumo').val()==null ? '':$('#select_id_insumo').select2('data')[0].text ;
   idProduc_almacen_resumen = $('option:selected', el).attr('data-idProduc_almacen_resu');
   modelo      = $('option:selected', el).attr('data-modelo');
   abreviacion = $('option:selected', el).attr('data-abreviacion');
@@ -570,31 +573,31 @@ function add_row(el) {
                       <!-- Nombre Producto -->
                       <div class="col-12 col-sm-12 col-md-6 col-lg-5">
                         <div class="form-group">
-                        <label for="fecha_ingreso">Nombre Producto</label>
+                        <label for="">Nombre Producto</label>
                         <input type="hidden" name="id_insumo[]" class="form-control" id="id_insumo" value="${id_insumo}"/>
-                        <input type="text" name="idProduc_almacen_resumen[]" class="form-control" id="idProduc_almacen_resumen" value="${idProduc_almacen_resumen}"/>
+                        <input type="hidden" name="idProduc_almacen_resumen[]" class="form-control" id="idProduc_almacen_resumen" value="${idProduc_almacen_resumen}"/>
                           <span class="form-control-mejorado"> ${nombre} </span>  
                         </div>
                       </div>
                       <!-- unidad -->
                       <div class="col-12 col-sm-12 col-md-6 col-lg-2">
                         <div class="form-group">
-                          <label for="fecha_ingreso">U.M</label>
+                          <label for="">U.M</label>
                           <span class="form-control-mejorado"> ${abreviacion} </span>  
                         </div>
                       </div> 
                       <!-- MARCA -->
                       <div class="col-12 col-sm-12 col-md-6 col-lg-2">
                         <div class="form-group">
-                          <label for="fecha_ingreso">Marca</label>
-                          <select name="marca[]" id="marca_select_${id_insumo}" class="form-control"> <option value="">Seleccionar</option>  </select>
+                          <label for="">Marca</label>
+                          <select name="marca[]" id="marca_select_${id_insumo}" class="form-control"></select>
                         </div>
                       </div> 
 
                       <!-- cantidad -->
                       <div class="col-12 col-sm-12 col-md-6 col-lg-2">
                         <div class="form-group">
-                          <label for="fecha_ingreso">Cantidad</label>
+                          <label for="">Cantidad</label>
                           <input type="text" name="cantidad[]" class="form-control" id="cantidad" placeholder="Cantidad"/>
                         </div>
                       </div> 
@@ -760,7 +763,7 @@ $(function () {
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
 
-no_select_tomorrow("#fecha_g");
+// no_select_tomorrow("#fecha_g");
 
 
 function cargando_search() {

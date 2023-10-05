@@ -184,10 +184,10 @@ class Epp
 
     foreach ($data_resumen['data'] as $key => $value) {
 
-      $idalmacen_resumen = $value['idalmacen_resumen'];
+      $idalmacen_resumen = $value['idproducto'];
       $marca = $value['marca'];
 
-      $sql_detalle="SELECT SUM(cantidad) as total_salida FROM almacen_salida as al where al.idalmacen_resumen='$idalmacen_resumen' and al.marca='$marca'";
+      $sql_detalle="SELECT SUM(`cantidad`) AS total_salida FROM `detalle_compra` WHERE `idproducto`='$idalmacen_resumen' AND `marca`='$marca';";
       
       $total_cant_salida = ejecutarConsultaSimpleFila($sql_detalle); if ($total_cant_salida['status'] == false) { return  $total_cant_salida;}
 
