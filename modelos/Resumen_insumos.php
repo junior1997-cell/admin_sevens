@@ -4,10 +4,14 @@ require "../config/Conexion_v2.php";
 
 class ResumenInsumos
 {
+  //Implementamos nuestro variable global
+	public $id_usr_sesion;
+
   //Implementamos nuestro constructor
-  public function __construct()
-  {
-  }
+	public function __construct($id_usr_sesion = 0)
+	{
+		$this->id_usr_sesion = $id_usr_sesion;
+	}
 
   //Implementar un método para listar los registros
   public function tbla_principal($idproyecto) {

@@ -175,6 +175,15 @@
                   <p>All-Calendario</p>
                 </a>
               </li>
+
+              <!-- Calendario de la empresa -->
+              <li class="nav-item ">
+                <a href="almacen_general.php" class="nav-link" id="lAlmacenGeneral">
+                  <i class="nav-icon fas fa-box-open"></i>
+                  <p>Almacenes</p>
+                </a>
+              </li>
+
               <!-- Datos Generales Bancos y color -->
               <li class="nav-item ">
                 <a href="otros.php" class="nav-link" id="lOtros">
