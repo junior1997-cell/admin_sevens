@@ -57,10 +57,13 @@
     $hojaActiva->setCellValue('D11', $reg['nombres']);
     $fila_1 = 13;
     $k=0;
-
+    $cont=0;
+    $totalCant = count($reg['detalle_epp']['data']);
+    // echo json_encode($totalCantidad,true);die();
     foreach ($reg['detalle_epp']['data'] as $key => $val) {
 
       $k=$k+1;
+      $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(45);
       $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
       $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':J'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
       $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
@@ -80,6 +83,31 @@
   
       // Configura la alineación a la izquierda
       $estiloCelda->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+
+      //PROCESO PARA PINTAR FILAS VACIAS
+      if ($k==$totalCant) {
+
+        $fila_2=$fila_1+1;
+
+        for ($i = $k; $i < $k+13; $i++) {
+
+          $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
+          $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(45);
+          $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':J' . $fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    
+          $hojaActiva->mergeCells('D'.$fila_2.':G'.$fila_2); #aprellidos y nombres
+          $hojaActiva->mergeCells('I'.$fila_2.':J'.$fila_2); #aprellidos y nombres
+          $hojaActiva->setCellValue('A'.$fila_2, ($i+1));
+          $hojaActiva->setCellValue('B'.$fila_2, "");
+          $hojaActiva->setCellValue('C'.$fila_2, "");
+          $hojaActiva->setCellValue('D'.$fila_2, "");
+          $hojaActiva->setCellValue('H'.$fila_2, "");
+
+          $fila_2++;
+        }
+
+      }
   
       $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
       $fila_1++;

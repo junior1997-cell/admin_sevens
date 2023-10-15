@@ -95,6 +95,14 @@
   // $hojaActiva->mergeCells('W5:Z5'); # N° TRABAJADORES EN EL TRABAJO
   // $hojaActiva->mergeCells('W6:Z6'); #
   // $hojaActiva->mergeCells('AA5:AD6'); # vACIO
+  $spreadsheet->getActiveSheet()->getRowDimension(1)->setRowHeight(20);
+  $spreadsheet->getActiveSheet()->getRowDimension(2)->setRowHeight(20);
+  $spreadsheet->getActiveSheet()->getRowDimension(3)->setRowHeight(20);
+  $spreadsheet->getActiveSheet()->getRowDimension(4)->setRowHeight(40);
+  $spreadsheet->getActiveSheet()->getRowDimension(5)->setRowHeight(40);
+  $spreadsheet->getActiveSheet()->getRowDimension(6)->setRowHeight(40);
+  $spreadsheet->getActiveSheet()->getRowDimension(7)->setRowHeight(60);
+  $spreadsheet->getActiveSheet()->getRowDimension(8)->setRowHeight(25);
 
   $hojaActiva->mergeCells('B7:F7'); # VERIFICACIÓN DE EQUIPOS DE SEGURIDAD
   $hojaActiva->mergeCells('G7:H7'); # CASCO
@@ -189,20 +197,49 @@
   $hojaActiva->getStyle('K6')->getAlignment()->setWrapText(true);
 
   $fila_1 = 9;
-
+  $k=0;
+  $totalCant = count($rspta['data']);
   foreach ($rspta['data'] as $key => $reg) {   
-    
+    $k=$k+1;
     $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
+    // $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1)->getAlignment()->setHorizontal('center');
+    $estiloCelda = $hojaActiva->getStyle('B'.$fila_1);
+    $estiloCelda->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+    $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(40);
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':AD'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($k))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
     
     $hojaActiva->mergeCells('B'.$fila_1.':F'.$fila_1); #aprellidos y nombres
-    $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
+    $hojaActiva->setCellValue('A'.$fila_1, ($k));
     $hojaActiva->setCellValue('B'.$fila_1, $reg['trabajador']);
     $spreadsheet->getActiveSheet()->getStyle('AD'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    
+    //PROCESO PARA PINTAR FILAS VACIAS
+    if ($k==$totalCant) {
 
+      $fila_2=$fila_1+1;
+
+      for ($i = $k; $i < $k+10; $i++) {
+        $estiloCelda = $hojaActiva->getStyle('B'.$fila_2);
+        $estiloCelda->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+        $spreadsheet->getActiveSheet()->getStyle('A'.$fila_2)->getAlignment()->setHorizontal('center');
+        $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(40);
+        $spreadsheet->getActiveSheet()->getStyle('B'.$fila_2.':AD'.$fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+        $spreadsheet->getActiveSheet()->getStyle('A'.$fila_2, ($i+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+        $spreadsheet->getActiveSheet()->getStyle('B'.$fila_2, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    
+        $hojaActiva->mergeCells('B'.$fila_2.':F'.$fila_2); #aprellidos y nombres
+        $hojaActiva->setCellValue('A'.$fila_2, ($i+1));
+        $hojaActiva->setCellValue('B'.$fila_2, "");
+
+        $fila_2++;
+      }
+
+    }
     $fila_1++;  
     // $hojaActiva->setCellValue('W6', '---');  
   }

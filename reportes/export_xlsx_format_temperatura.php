@@ -22,7 +22,10 @@
   $spreadsheet->getActiveSheet()->getStyle('J8')->getFont()->setBold(true);
   $spreadsheet->getActiveSheet()->getStyle('A9:M9')->getFont()->setBold(true);
   
-  $spreadsheet->getActiveSheet()->getRowDimension('9')->setRowHeight(35);
+  $spreadsheet->getActiveSheet()->getRowDimension('9')->setRowHeight(50);
+  $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+  $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+  $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(30);
   $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(12);
   $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(12);
   $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(12);
@@ -30,6 +33,11 @@
   $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(12);
   $spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(12);
   $spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(12);
+
+  $spreadsheet->getActiveSheet()->getRowDimension(5)->setRowHeight(40);
+  $spreadsheet->getActiveSheet()->getRowDimension(6)->setRowHeight(40);
+  $spreadsheet->getActiveSheet()->getRowDimension(7)->setRowHeight(40);
+  $spreadsheet->getActiveSheet()->getRowDimension(8)->setRowHeight(40);
 
   $spreadsheet->getActiveSheet()->getStyle('A1:M9')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
   $hojaActiva = $spreadsheet->getActiveSheet();
@@ -106,21 +114,43 @@
   $hojaActiva->setCellValue('C6', $rspta['proyecto']['ubicacion']);
 
   $fila_1 = 10;
+  $cont=0;
+  $k=0;
+  $totalCant = count($rspta['data']);
 
   foreach ($rspta['data'] as $key => $reg) { 
+    $k=$k+1;
     $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':M'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($k))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, $reg['trabajador'])->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-
-    
   
     $hojaActiva->mergeCells('B'.$fila_1.':E'.$fila_1); #aprellidos y nombres
-    $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
+    $hojaActiva->setCellValue('A'.$fila_1, ($k));
     $hojaActiva->setCellValue('B'.$fila_1, $reg['trabajador']);
     $spreadsheet->getActiveSheet()->getStyle('M'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
-    $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
+    //PROCESO PARA PINTAR FILAS VACIAS
+    if ($k==$totalCant) {
+
+      $fila_2=$fila_1+1;
+
+      for ($i = $k; $i < $k+16; $i++) {
+
+        $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
+        $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(50);
+        $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($i+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+        $spreadsheet->getActiveSheet()->getStyle('A'.$fila_2.':M'.$fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+
+        $hojaActiva->mergeCells('B'.$fila_2.':E'.$fila_2); #aprellidos y nombres
+        $hojaActiva->setCellValue('A'.$fila_2, ($i+1));
+        $hojaActiva->setCellValue('B'.$fila_2, "");
+
+        $fila_2++;
+      }
+
+    }
+    $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(50);
     $fila_1++;
     
   }

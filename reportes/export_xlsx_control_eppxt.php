@@ -149,16 +149,18 @@
 
   $fila_1 = 13;
   $key=0;
+  $cont=0;
+  $totalCant = count($rspta_Epp_x_tpp['ee']['data']);
+  // echo json_encode($totalCant,true);die();
 //  var_dump($rspta_Epp_x_tpp['ee']['data']); die();
   foreach ($rspta_Epp_x_tpp['ee']['data'] as &$valor) {
     //echo $valor['producto']."<br>";
+    $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(45);
     $key=$key+1;
     $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':J'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, '')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-
-    
   
     $hojaActiva->mergeCells('D'.$fila_1.':G'.$fila_1); #aprellidos y nombres
     $hojaActiva->mergeCells('I'.$fila_1.':J'.$fila_1); #aprellidos y nombres
@@ -174,6 +176,30 @@
 
     // Configura la alineación a la izquierda
     $estiloCelda->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+    //PROCESO PARA PINTAR FILAS VACIAS
+    if ($key==$totalCant) {
+
+      $fila_2=$fila_1+1;
+
+      for ($i = $key; $i < $key+13; $i++) {
+
+        $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
+        $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(45);
+        $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':J' . $fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+  
+        $hojaActiva->mergeCells('D'.$fila_2.':G'.$fila_2); #aprellidos y nombres
+        $hojaActiva->mergeCells('I'.$fila_2.':J'.$fila_2); #aprellidos y nombres
+        $hojaActiva->setCellValue('A'.$fila_2, ($i+1));
+        $hojaActiva->setCellValue('B'.$fila_2, "");
+        $hojaActiva->setCellValue('C'.$fila_2, "");
+        $hojaActiva->setCellValue('D'.$fila_2, "");
+        $hojaActiva->setCellValue('H'.$fila_2, "");
+
+        $fila_2++;
+      }
+
+    }
 
     $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
     $fila_1++;

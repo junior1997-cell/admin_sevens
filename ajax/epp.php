@@ -213,8 +213,8 @@
                 "1" =>$value['idproducto'],
                 "2" =>$value['nombre'].' - '.$value['marca'],
                 "3" =>$value['abreviacion'],
-                "4" =>$value['cantidad_rapartida'],
-                "5" =>$value['cantidad_total'],
+                "4" =>$value['cantidad_total'],
+                "5" =>$value['cantidad_rapartida'],                
                 "6" =>$value['cantidad_q_queda'],
                 "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tabla_detalle_epp(' . $value['idproducto'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
                 

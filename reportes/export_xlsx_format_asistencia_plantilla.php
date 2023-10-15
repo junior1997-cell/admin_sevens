@@ -62,6 +62,10 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
   // ════════════════════- INSERTAMOS LOS NOMBRES DE LOS HEADS - ══════════════════════════════════════════
   plantilla_nombre_head($hojaActiva, $fecha_pago_obrero);
   $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
+
+  $spreadsheet->getActiveSheet()->getRowDimension(5)->setRowHeight(34);
+  $spreadsheet->getActiveSheet()->getRowDimension(6)->setRowHeight(34);
+  $spreadsheet->getActiveSheet()->getRowDimension(7)->setRowHeight(34);
   
 
   $hojaActiva->setCellValue('D5', $proyecto['data']['datos_proyecto']['nombre_proyecto']);
@@ -104,6 +108,14 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
     foreach ($rspta_t['data'] as $key => $reg) {
       $cont=$key + 1;
       $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1)->getAlignment()->setHorizontal('center');
+      $spreadsheet->getActiveSheet()->getStyle('B' . $fila_1)->getAlignment()->setVertical('center');
+      $spreadsheet->getActiveSheet()->getStyle('C' . $fila_1)->getAlignment()->setVertical('center');
+      $spreadsheet->getActiveSheet()->getStyle('D' . $fila_1)->getAlignment()->setVertical('center');
+      $spreadsheet->getActiveSheet()->getStyle('E' . $fila_1)->getAlignment()->setVertical('center');
+      $spreadsheet->getActiveSheet()->getStyle('F' . $fila_1)->getAlignment()->setVertical('center');
+      $spreadsheet->getActiveSheet()->getStyle('G' . $fila_1)->getAlignment()->setVertical('center');
+
+      $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(34);
       $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1 . ':O' . $fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
       $hojaActiva->setCellValue('A' . $fila_1, ($cont));                 # Auto increment
@@ -127,6 +139,7 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
         for ($i = $cont; $i < $cont+10; $i++) {
 
           $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
+          $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(34);
           $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':O' . $fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     
           // echo json_encode($fila_1,true);die();

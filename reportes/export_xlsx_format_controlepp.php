@@ -139,21 +139,19 @@
 
   $fila_1 = 13;
 
-  for ($key=0; $key < 10 ; $key++) { 
+  for ($key=0; $key < 17 ; $key++) { 
     $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1)->getAlignment()->setHorizontal('center');
     $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1.':J'.$fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     $spreadsheet->getActiveSheet()->getStyle('A'.$fila_1, ($key+1))->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-    $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, '')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-
-    
+    $spreadsheet->getActiveSheet()->getStyle('B'.$fila_1, '')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));   
   
     $hojaActiva->mergeCells('D'.$fila_1.':G'.$fila_1); #aprellidos y nombres
     $hojaActiva->mergeCells('I'.$fila_1.':J'.$fila_1); #aprellidos y nombres
     $hojaActiva->setCellValue('A'.$fila_1, ($key+1));
     $hojaActiva->setCellValue('D'.$fila_1, '');
-    $spreadsheet->getActiveSheet()->getStyle('J'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+    $spreadsheet->getActiveSheet()->getStyle('J'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));  
 
-    $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(30);
+    $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(45);
     $fila_1++;
     
   }

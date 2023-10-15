@@ -72,9 +72,9 @@ if (!isset($_SESSION["nombre"])) {
                                   <th class="text-center">CODE</th>
                                   <th class="">INSUMOS - MARCA</th>
                                   <th class="">UND</th>
-                                  <th class="">CANT. REPARTIDA</th>
                                   <th class="">CANT. TOTAL</th>
-                                  <th class="">CANT. NO REPARTIDA</th>
+                                  <th class="">CANT. REPARTIDA</th>                                  
+                                  <th class="">SALDO</th>
                                   <th class="">E.P.P</th>
                                 </tr>
                               </thead>
@@ -85,9 +85,9 @@ if (!isset($_SESSION["nombre"])) {
                                   <th class="text-center">CODE</th>
                                   <th class="">INSUMOS - MARCA</th>
                                   <th class="">UND</th>
-                                  <th class="">CANT. REPARTIDA</th>
                                   <th class="">CANT. TOTAL</th>
-                                  <th class="">CANT. NO REPARTIDA</th>
+                                  <th class="">CANT. REPARTIDA</th>                                  
+                                  <th class="">SALDO</th>
                                   <th class="">E.P.P</th>
                                 </tr>
                               </tfoot>
