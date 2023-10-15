@@ -102,9 +102,7 @@ class Almacen
   //Implementar un método para listar los registros
   public function tbla_principal($idproyecto, $fip, $ffp, $fpo) {
 
-    $resumen_producto = []; $data_meses= []; $data_dias = []; $data_sq = [];
-
-    
+    $resumen_producto = []; $data_meses= []; $data_dias = [];  $data_num_dia = []; $data_nombre_dia = []; $data_nombre_abrev_dia = []; $data_sq = [];    
     
     $meses_rango= extraer_meses_de_rango( $fip, $ffp );
     $dias_rango = extraer_dias_de_rango( $fip, $ffp);
@@ -112,10 +110,14 @@ class Almacen
     foreach ($meses_rango as $key1 => $val1) {
       foreach ($dias_rango as $key2 => $val2) {
         if ( date('m',strtotime($val1)) == date('m',strtotime($val2)) ) {
-          array_push($data_dias, $val2);
+          $data_dias[] = ['num_dia'  =>  date('d',strtotime($val2)), 'nombre_abrev_dia'  => nombre_dia_semana_v1($val2)];
+          // array_push($data_dias, $val2);
+          // array_push($data_num_dia,  );
+          // array_push($data_nombre_dia,  nombre_dia_semana($val2) );
+          // array_push($data_nombre_abrev_dia,    );
         }
       }    
-      $data_meses[] = ['mes'  => $val1, 'dia'  => $data_dias, 'cantidad_dias'  => count($data_dias) , ]; #asigamos las fechas a un mes
+      $data_meses[] = ['mes'  => $val1, 'dia'  => $data_dias,  'cantidad_dias'  => count($data_dias) , ]; #asigamos las fechas a un mes
       $data_dias    = []; #limpiamos para volver a llenar las fechas
     }
 
@@ -171,15 +173,23 @@ class Almacen
         $sql_1 = "SELECT idalmacen_salida, idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca 
         FROM almacen_salida WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_r' AND fecha_ingreso = '$val2';";
         $salida = ejecutarConsultaArray($sql_1); if ($salida['status'] == false) { return $salida; }
+        $sql_1_1 = "SELECT SUM( cantidad ) as cantidad
+        FROM almacen_salida WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_r' AND fecha_ingreso = '$val2';";
+        $salida_sum = ejecutarConsultaSimpleFila($sql_1_1); if ($salida_sum['status'] == false) { return $salida_sum; }
 
         $sql_2 = "SELECT dc.idproducto, dc.cantidad FROM compra_por_proyecto as cpp, detalle_compra as dc 
-        WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.fecha_compra = '$val2'AND cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idproducto = '$id_p';";
+        WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.fecha_compra = '$val2' AND cpp.idproyecto = '$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idproducto = '$id_p';";
         $entrada = ejecutarConsultaArray($sql_2); if ($entrada['status'] == false) { return $entrada; }
+        $sql_2_1 = "SELECT SUM( dc.cantidad ) as cantidad FROM compra_por_proyecto as cpp, detalle_compra as dc 
+        WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.fecha_compra = '$val2' AND cpp.idproyecto = '$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idproducto = '$id_p';";
+        $entrada_sum = ejecutarConsultaSimpleFila($sql_2_1); if ($entrada_sum['status'] == false) { return $entrada_sum; }
 
         $data_almacen[] =  [
           'fecha'=> $val2, 
           'salida'=> $salida['data'],          
+          'salida_sum'=> empty($salida_sum['data']) ? 0 : (empty($salida_sum['data']['cantidad']) ? 0 : floatval($salida_sum['data']['cantidad']) ) ,
           'entrada'=> $entrada['data'],          
+          'entrada_sum'=> empty($entrada_sum['data']) ? 0 : (empty($entrada_sum['data']['cantidad']) ? 0 : floatval($entrada_sum['data']['cantidad']) ) ,      
         ];
       }  
       
@@ -205,14 +215,14 @@ class Almacen
       'data'    => [
         'producto'      => $resumen_producto, 
         'fechas'        => $data_meses, 
-        'dias'          => $dias_rango, 
+        #'dias'          => $dias_rango, 
         'cant_dias'     => count($dias_rango) ,   
         'num_dia_regular'=> $dia_regular ,   
         'data_sq'       => $data_sq
       ] , 
       'message' => 'todo bien'
     ];
-  }
+  }  
 
   public function ver_almacen( $id_proyecto, $id_almacen_s, $id_producto ) {
 
@@ -267,6 +277,37 @@ class Almacen
     return ejecutarConsultaArray($sql_0);
           
   }
+
+  //Implementamos un método para desactivar almacen_salida
+	public function desactivar_x_dia($idalmacen_salida)
+	{
+		$sql="UPDATE almacen_salida SET estado='0' ,user_trash= '$this->id_usr_sesion' WHERE idalmacen_salida='$idalmacen_salida'";
+		$desactivar= ejecutarConsulta($sql);	if ($desactivar['status'] == false) {  return $desactivar; }
+		
+		//add registro en nuestra bitacora
+		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_salida','$idalmacen_salida','Almacen salida desactivado','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+		
+		return $desactivar;
+	}
+
+	//Implementamos un método para activar almacen_salida
+	public function activar_x_dia($idalmacen_salida){
+		$sql="UPDATE almacen_salida SET estado='1' WHERE idalmacen_salida='$idalmacen_salida'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para eliminar almacen_salida
+	public function eliminar_x_dia($idalmacen_salida)	{
+		$sql="UPDATE almacen_salida SET estado_delete='0',user_delete= '$this->id_usr_sesion' WHERE idalmacen_salida='$idalmacen_salida'";
+		$eliminar =  ejecutarConsulta($sql); if ( $eliminar['status'] == false) {return $eliminar; }  
+		
+		//add registro en nuestra bitacora
+		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_salida','$idalmacen_salida','Almacen salida Eliminado','$this->id_usr_sesion')";
+		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
+		
+		return $eliminar;
+	}
 
   // ══════════════════════════════════════ O T R O S   S A L D O S ══════════════════════════════════════
   public function guardar_y_editar_saldo_anterior( $idproyecto_sa, $idproducto_sa, $saldo_anterior ) {
@@ -363,7 +404,7 @@ class Almacen
 		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto
     AND um.idunidad_medida  = pr.idunidad_medida AND pr.idcategoria_insumos_af = ci.idcategoria_insumos_af
     AND cpp.idproyecto = '$idproyecto'
-    AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";    
+    AND cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idclasificacion_grupo != '11' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";    
     return ejecutarConsultaArray($sql_0);
   }
 

@@ -71,6 +71,15 @@
         break;  
 
         // ══════════════════════════════════════ A L M A C E N   X   D I A ══════════════════════════════════════
+        case 'desactivar_x_dia':
+          $rspta = $almacen->desactivar_x_dia($_GET["id_tabla"]);
+          echo json_encode( $rspta, true) ;
+        break;
+  
+        case 'eliminar_x_dia':
+          $rspta = $almacen->eliminar_x_dia($_GET["id_tabla"]);
+          echo json_encode( $rspta, true) ;
+        break;
 
         case 'ver_almacen':
           $rspta = $almacen->ver_almacen( $_POST["id_proyecto"], $_POST["id_almacen_s"], $_POST["id_producto"] );          
@@ -92,7 +101,7 @@
               $data[]=array(
                 "0"=>$cont++,
                 "1"=>'<button class="btn btn-warning btn-sm" onclick="ver_editar_almacen_x_dia('.$val['idalmacen_salida'].', '. $val['idproducto'].')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>'.
-                  ' <button class="btn btn-danger btn-sm" onclick="eliminar('.$val['idalmacen_salida'].', \''.encodeCadenaHtml($val['producto']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',
+                  ' <button class="btn btn-danger btn-sm" onclick="eliminar_x_dia('.$val['idalmacen_salida'].', \''.$val['cantidad'].'\', \''.encodeCadenaHtml($val['producto']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',
                 "2"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['producto'] .'</p></span> </div>',
                 "3"=> $val['cantidad'],
                 "4"=> $val['marca'],              

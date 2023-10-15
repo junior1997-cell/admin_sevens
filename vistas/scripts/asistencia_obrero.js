@@ -51,6 +51,7 @@ function init() {
   $('#fecha_pago_obrero_f').select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true });
 
   $('#bnt-exportar-horario').attr('href', `../reportes/export_xlsx_horario.php?id_proyecto=${localStorage.getItem('nube_idproyecto')}`);
+  $('#btn-export-qs-todos').attr('href', `../reportes/export_xlsx_format_asistencia.php?id_proyecto=${localStorage.getItem('nube_idproyecto')}`);
 
   // Formato para telefono
   $("[data-mask]").inputmask();

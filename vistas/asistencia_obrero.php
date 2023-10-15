@@ -57,6 +57,9 @@
                         <button type="button" class="btn bg-gradient-fuchsia btn-sm" data-toggle="modal" data-target="#modal-agregar-horario" onclick="mostrar_horario();">
                           <i class="far fa-clock"></i> Horario
                         </button>
+                        <a type="button" class="btn bg-gradient-gray btn-sm" id="btn-export-qs-todos" href="#" target="_blank" >
+                          <i class="fa-regular fa-file-excel"></i> Export todo
+                        </a>
                         <a type="button" class="btn bg-gradient-gray btn-sm" id="btn-export-qs" href="#" target="_blank" onclick="toastr_error('No hay datos!!', 'Seleccione una quincena o semana para exportar.');">
                           <i class="fa-regular fa-file-excel"></i> Export
                         </a> 
