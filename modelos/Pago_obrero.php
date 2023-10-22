@@ -13,71 +13,34 @@ class PagoObrero
   public function listar_tbla_principal($nube_idproyecto) {
     $data = [];
 
-    $sql_1 = "SELECT t.idtrabajador, t.nombres AS nombres_trabajador, p.fecha_pago_obrero, t.telefono, t.imagen_perfil, t.tipo_documento, t.numero_documento,
-		tt.nombre AS nombre_tipo, o.nombre_ocupacion, tpp.idtrabajador_por_proyecto, tpp.fecha_inicio, tpp.fecha_fin,  tpp.sueldo_mensual,   
-		SUM(rqsa.total_hn) AS total_hn, SUM(rqsa.total_he) AS total_he, (SUM(rqsa.total_dias_asistidos_hn) + SUM(rqsa.total_dias_asistidos_he)) AS total_dias_asistidos, 
-    SUM(rqsa.sabatical) AS sabatical, 
-		SUM(rqsa.sabatical_manual_1) AS sabatical_manual_1, SUM(rqsa.sabatical_manual_2) AS sabatical_manual_2, SUM(rqsa.pago_parcial_hn) AS pago_parcial_hn, 
-		SUM(rqsa.pago_parcial_he) AS pago_parcial_he, (SUM(rqsa.adicional_descuento_hn) + SUM(rqsa.adicional_descuento_he)) AS adicional_descuento,  
-    (SUM(rqsa.pago_quincenal_hn) + SUM(rqsa.pago_quincenal_he)) AS pago_quincenal, 
-		SUM(rqsa.estado_envio_contador) AS sum_estado_envio_contador
-		FROM resumen_q_s_asistencia AS rqsa, trabajador_por_proyecto AS tpp, proyecto AS p, trabajador AS t, tipo_trabajador AS tt, ocupacion AS o
-		WHERE rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto 	AND tpp.idtrabajador = t.idtrabajador  
-    AND t.idocupacion = o.idocupacion AND t.idtipo_trabajador = tt.idtipo_trabajador  
-		AND p.idproyecto = tpp.idproyecto AND rqsa.estado_envio_contador = '1' AND rqsa.estado = '1' AND rqsa.estado_delete = '1' 
-		AND tpp.idproyecto = '$nube_idproyecto'  
-		GROUP BY rqsa.idtrabajador_por_proyecto ORDER BY t.nombres;";
-    $trabajdor = ejecutarConsultaArray($sql_1);  if ($trabajdor['status'] == false) { return $trabajdor; }
+    $sql_1 = "SELECT sqa.ids_q_asistencia,rqs.numero_q_s, sqa.fecha_q_s_inicio, sqa.fecha_q_s_fin, (SUM( rqs.pago_quincenal_hn)+SUM( rqs.pago_quincenal_he)) as total_pago  
+    FROM resumen_q_s_asistencia as rqs
+    inner join s_q_asistencia  as  sqa on rqs.ids_q_asistencia =sqa.ids_q_asistencia
+    WHERE sqa.idproyecto='$nube_idproyecto' and rqs.estado_envio_contador='1' GROUP by rqs.numero_q_s;";
 
+    $pago_programado = ejecutarConsultaArray($sql_1);  if ($pago_programado['status'] == false) { return $pago_programado; }
      
-    foreach ($trabajdor['data'] as $key => $value) {
-      $id = $value['idtrabajador_por_proyecto'];
+    foreach ($pago_programado['data'] as $key => $value) {
 
-      $sql_2 = "SELECT SUM(pqso.monto_deposito) AS total_deposito
-      FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero  AS pqso 
-      WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia
-      AND rqsa.estado = '1' AND rqsa.estado_delete = '1' AND pqso.estado = '1' AND pqso.estado_delete = '1' 
-      AND tpp.idtrabajador_por_proyecto = '$id';";
+      $ids_q_asistencia = $value['ids_q_asistencia'];
+
+      $sql_2 = "SELECT SUM( pqs.monto_deposito) as total_deposito  
+      FROM pagos_q_s_obrero pqs
+      inner JOIN resumen_q_s_asistencia rqs on pqs.idresumen_q_s_asistencia= rqs.idresumen_q_s_asistencia
+      where rqs.ids_q_asistencia='$ids_q_asistencia';";
+
       $depositos = ejecutarConsultaSimpleFila($sql_2);  if ($depositos['status'] == false) { return $depositos; }
 
-      $idtrabajador = $value['idtrabajador'];
-      $sql_3 = "SELECT cbt.idcuenta_banco_trabajador, cbt.idtrabajador, cbt.idbancos, cbt.cuenta_bancaria, cbt.cci, cbt.banco_seleccionado, b.nombre as banco
-      FROM cuenta_banco_trabajador as cbt, bancos as b
-      WHERE cbt.idbancos = b.idbancos AND cbt.banco_seleccionado ='1' AND cbt.idtrabajador='$idtrabajador' ;";
-      $bancos = ejecutarConsultaSimpleFila($sql_3); if ($bancos['status'] == false) { return  $bancos;}
+      $saldo = (empty($value['total_pago']) ? 0 : ( empty($value['total_pago']) ? 0 : floatval($value['total_pago']) ))-(empty($depositos['data']) ? 0 : ( empty($depositos['data']['total_deposito']) ? 0 : floatval($depositos['data']['total_deposito']) ));
 
       $data[] = [
-        'idtrabajador' => $value['idtrabajador'],
-        'nombres_trabajador' => $value['nombres_trabajador'],
-        'fecha_pago_obrero' => $value['fecha_pago_obrero'],
-        'telefono' => $value['telefono'],
-        'imagen_perfil' => $value['imagen_perfil'],
-        'tipo_documento' => $value['tipo_documento'],
-        'numero_documento' => $value['numero_documento'],
-
-        'banco'           => (empty($bancos['data']) ? "": $bancos['data']['banco']), 
-        'cuenta_bancaria' => (empty($bancos['data']) ? "" : $bancos['data']['cuenta_bancaria']), 
-        'cci'             => (empty($bancos['data']) ? "" : $bancos['data']['cci']), 
-
-        'nombre_tipo' => $value['nombre_tipo'],
-        'nombre_ocupacion' => $value['nombre_ocupacion'],
-        'idtrabajador_por_proyecto' => $value['idtrabajador_por_proyecto'],
-        'fecha_inicio' => $value['fecha_inicio'],
-        'fecha_fin' => $value['fecha_fin'],
-        'sueldo_mensual' => ( empty($value['sueldo_mensual']) ? 0 : $value['sueldo_mensual']),
-        'total_hn' => ( empty($value['total_hn']) ? 0 : $value['total_hn']),
-        'total_he' => ( empty($value['total_he']) ? 0 : $value['total_he']),
-        'total_dias_asistidos' => ( empty($value['total_dias_asistidos']) ? 0 : $value['total_dias_asistidos']),
-        'sabatical' => ( empty($value['sabatical']) ? 0 : $value['sabatical']),
-        'sabatical_manual_1' => $value['sabatical_manual_1'],
-        'sabatical_manual_2' => $value['sabatical_manual_2'],
-        'pago_parcial_hn' => ( empty($value['pago_parcial_hn']) ? 0 : $value['pago_parcial_hn']),
-        'pago_parcial_he' => ( empty($value['pago_parcial_he']) ? 0 : $value['pago_parcial_he']),
-        'adicional_descuento' => ( empty($value['adicional_descuento']) ? 0 : $value['adicional_descuento']),
-        'pago_quincenal' => ( empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
-        'sum_estado_envio_contador' => ( empty($value['sum_estado_envio_contador']) ? 0 : $value['sum_estado_envio_contador']),
-
-        'total_deposito' => ( empty($depositos['data']) ? 0 : ( empty($depositos['data']['total_deposito']) ? 0 : $depositos['data']['total_deposito'])),
+        'ids_q_asistencia' => $value['ids_q_asistencia'],
+        'numero_q_s'       => $value['numero_q_s'],
+        'fecha_q_s_inicio' => $value['fecha_q_s_inicio'],
+        'fecha_q_s_fin'    => $value['fecha_q_s_fin'],
+        'total_programado' => (empty($value['total_pago']) ? 0 : ( empty($value['total_pago']) ? 0 : floatval($value['total_pago']) )),     
+        'total_deposito'   => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['total_deposito']) ? 0 : floatval($depositos['data']['total_deposito']) )),
+        'saldo'            =>$saldo
       ];
     }   
 
@@ -324,6 +287,50 @@ class PagoObrero
 
     return $retorno = ['status'=> true, 'message'=> 'todo oka bro', 'data'=> $data,];
   }
+/**==================================================================================================
+ *                              PAGOS EN BLOQUE DE A LOS OBREROS 
+ * =================================================================================================*/
+
+ public function insertar_vocuher_pagos_q_s($ids_q_asistencia_vou,$monto_vou,$fecha_pago_vou,$descripcion_vou,$doc3){
+    $sql="INSERT INTO voucher_pago_s_q(ids_q_asistencia, fecha, monto, descripcion, voucher_pago_q_s,user_created) 
+    VALUES ('$ids_q_asistencia_vou','$fecha_pago_vou','$monto_vou','$descripcion_vou','$doc3','" . $_SESSION['idusuario'] . "')";
+    return ejecutarConsulta($sql);
+  }
+
+  public function editar_vocuher_pagos_q_s($idvoucher_pago_s_q,$ids_q_asistencia_vou,$monto_vou,$fecha_pago_vou,$descripcion_vou,$doc3){
+    $sql="UPDATE voucher_pago_s_q 
+    SET ids_q_asistencia='$ids_q_asistencia_vou',fecha='$fecha_pago_vou',monto='$monto_vou',
+    descripcion='$descripcion_vou',voucher_pago_q_s='$doc3',user_updated='" . $_SESSION['idusuario'] . "' 
+    WHERE idvoucher_pago_s_q='$idvoucher_pago_s_q';";
+    return ejecutarConsulta($sql);
+  }
+
+  public function mostrar_vocuher_pagos_q_s($idvoucher_pago_s_q){
+    $sql="SELECT idvoucher_pago_s_q, ids_q_asistencia, fecha, monto, descripcion, voucher_pago_q_s FROM voucher_pago_s_q WHERE idvoucher_pago_s_q='$idvoucher_pago_s_q';";
+    return ejecutarConsultaSimpleFila($sql);    
+  }
+
+  public function desactivar_vocuher_pagos_q_s($idvoucher_pago_s_q) {
+    $sql = "UPDATE voucher_pago_s_q SET estado='0' WHERE idvoucher_pago_s_q='$idvoucher_pago_s_q'";
+    return ejecutarConsulta($sql);
+  }
+
+  public function tabla_vocuher_pagos_q_s($ids_q_asistencia) {
+    $sql = "SELECT idvoucher_pago_s_q, ids_q_asistencia, fecha, monto, descripcion, voucher_pago_q_s, estado
+    FROM voucher_pago_s_q WHERE ids_q_asistencia = '$ids_q_asistencia' AND estado = '1' AND estado_delete = '1';";
+    
+    return ejecutarConsultaArray($sql);
+
+  }
+
+    // obtebnemos los "BAUCHER DE DEPOSITOS - RECIBO X HONORARIO" para eliminar
+    public function obtenerVoucher($id) {
+      $sql = "SELECT voucher_pago_q_s FROM voucher_pago_s_q WHERE ids_q_asistencia = '$id'";
+  
+      return ejecutarConsulta($sql);
+    }
+  
+
     
 }
 

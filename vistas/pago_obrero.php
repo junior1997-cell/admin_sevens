@@ -106,61 +106,29 @@
                         <div class="card-body">
 
                           <!-- tabla: principal -->
-                          <div class="row row-horizon disenio-scroll pb-3" id="tbl-principal">
+                          <div class="pb-3" id="tbl-principal">
                             <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr> 
                                   <th class="text-center">#</th> 
-                                  <th>Trabajdor</th>                              
-                                  <th>Banco</th>                                
-                                  <th>Cuenta</th>   
-                                  <th class="text-center">Horas <br> Normal/Extra</th>
-                                  <th data-toggle="tooltip" data-original-title="Sabatical">Sab.</th>                              
-                                  <th >Sueldo Mensual</th>                                
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Pagos que a estado acumulando con sus dias de asistencia.">Pago a <br> realizar</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Despositos que se ha estado enviando a trabajador.">Pago <br> Acumulado</th>
-                                  <th>Saldo</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Cantidad de semanas enviadas a pagar.">Cant <br> S/Q</th>
-                                  <th>Fecha inicio</th>
-                                  <th>Hoy</th>
-                                  <th class="text-center">Fecha <br> culminacion</th>
-
-                                  <th>Trabajador</th>  
-                                  <th>Cargo</th>
-                                  <th>Tipo</th>
-                                  <th>Tipo Doc</th>
-                                  <th>Num. Doc.</th>
-                                  <th>Hora Normal</th>
-                                  <th>Hora Extra</th>
-                                  <th>Pago Acumulado</th>
+                                  <th>N° Semana</th>                              
+                                  <th>Fecha</th>  
+                                  <th class="text-center">Monto</th>
+                                  <th>Monto Pagado</th>                             
+                                  <th>Saldo</th>                             
+                                  <th>Voucher General</th>                             
                                 </tr>
                               </thead>
                               <tbody id="tbody-tabla-principal">   </tbody>
                               <tfoot>
                                 <tr> 
                                   <th class="text-center text-gray"><small>#</small></th>                                 
-                                  <th class="text-gray"><small>Trabajdor</small></th>                                                              
-                                  <th class="text-gray"><small>Banco</small></th>                                
-                                  <th class="text-gray"><small>Cuenta</small></th>
-                                  <th class="text-center text-gray"><small>Horas Nrm/Extr</small></th>
-                                  <th class="text-nowrap">0</th>   <!-- sabatical -->                   
-                                  <th class="text-center text-gray"><small>Sueldo Mensual</small></th>                                
-                                  <th class="pr-2 text-nowrap" >0.00</th>  <!-- pago a realizar --> 
-                                  <th class="pr-2 text-nowrap" >0.00</th> <!-- pago acumulado -->
-                                  <th class="pr-2 text-nowrap" >0.00</th> <!-- saldo -->
-                                  <th class="text-center text-nowrap">0</th> <!-- cantidad semanas asignadas -->
-                                  <th class="text-center text-gray"><small>Fecha inicio</small></th>
-                                  <th class="text-center text-gray"><small>Hoy</small></th>
-                                  <th class="text-center text-gray"><small>Fecha fin</small></th>        
-                                  
-                                  <th>Trabajador</th>
-                                  <th>Cargo</th>
-                                  <th>Tipo</th>
-                                  <th>Tipo Doc</th>
-                                  <th>Num. Doc.</th>
-                                  <th>Hora Normal</th>
-                                  <th>Hora Extra</th> 
-                                  <th ><span>S/</span> <span class="total_tbla_principal_deposito"></span></th>
+                                  <th class="text-gray"><small>N° Semana</small></th>                                                              
+                                  <th class="text-gray"><small>Fecha</small></th> 
+                                  <th class="text-center text-gray">Monto</th>
+                                  <th class="text-nowrap">Monto Pagado</th>             
+                                  <th class="text-nowrap">Saldo</th>             
+                                  <th class="text-nowrap">Voucher General</th>             
                                 </tr>
                               </tfoot>
                             </table>
@@ -665,6 +633,166 @@
                     </div>
                   </div>
                 </div>
+
+                <!--....................................-->
+                <!-- MODAL - TABLA VOUCHES PAGOS GENERALES -->
+                <div class="modal fade" id="modal-tabla-pagos_s_q">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-comprobante-compra">Lista de Comprobantes del <strong class='del_al'></strong></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body ">
+                        <div class="row">
+                          <div class="col-12">
+                            <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-voucher-pago-general" onclick="limpiar_form_voucher_s_q_pagos();" >Agregar</button>
+                          </div>
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
+                            <table id="tabla-pagos-general-s-q-modal" class="table table-bordered table-striped display " style="width: 100% !important;">
+                              <thead>
+                                <tr> 
+                                  <th class="text-center">#</th> 
+                                  <th>Op.</th> 
+                                  <th>Fecha Deposito</th> 
+                                  <th>Monto</th>
+                                  <th>Voucher</th>
+                                  <th>Descripcion</th>                                                   
+                                </tr>
+                              </thead>
+                              <tbody>  </tbody>
+                              <tfoot>
+                                <tr> 
+                                  <th class="text-center">#</th> 
+                                  <th>Op.</th> 
+                                  <th>Fecha Deposito</th>
+                                  <th>Monto</th>
+                                  <th>Voucher</th>
+                                  <th>Descripcion</th>                   
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                      </div> 
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- MODAL - agregar PAGOS GENERAL X QUINCENA O SEMANA -->
+                <div class="modal fade bg-color-02020280" id="modal-agregar-voucher-pago-general">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg shadow-0px1rem3rem-rgb-0-0-0-50 rounded">
+                    <div class="modal-content shadow-none border-0">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Registrar Voucher Pago</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      
+                      <div class="modal-body">
+                        <!-- form start -->
+                        <form class="mx-2" id="form-voucher_s_q_pagos" name="form-voucher_s_q_pagos"  method="POST" >                      
+                          
+                          <div class="row" id="cargando-5-fomulario">
+
+                            <!-- id idvoucher_pago_s_q  -->
+                            <input type="hidden" name="idvoucher_pago_s_q" id="idvoucher_pago_s_q" />
+                            
+                            <!-- id ids_q_asistencia -->
+                            <input type="hidden" name="ids_q_asistencia_vou" id="ids_q_asistencia_vou" />
+
+                            <!-- Descripcion Pensión-->
+                            <div class="col-12 pl-0">
+                              <div class="text-primary"><label for="">DETALLES PAGO</label></div>
+                            </div>
+                            <div class="card col-12 px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                              <div class="row">
+                                <!-- Monto (de cantidad a depositado) -->
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label for="monto_vou">Monto <small> (Monto Depositado) </small> </label>                               
+                                    <input type="number" name="monto_vou" id="monto_vou" class="form-control"  placeholder="Monto"> 
+                                  </div>                                                        
+                                </div>
+
+                                <!-- Fecha de deposito -->
+                                <div class="col-lg-6">
+                                  <div class="form-group">
+                                    <label for="fecha_pago_vou">Fecha de deposito </label>                               
+                                    <input class="form-control" type="date" id="fecha_pago_vou" name="fecha_pago_vou" /> 
+                                  </div>                                                        
+                                </div>
+
+                                <!-- Descripcion-->
+                                <div class="col-lg-12">
+                                  <div class="form-group">
+                                    <label for="descripcion_vou">Descripción </label> <br>
+                                    <textarea name="descripcion_vou" id="descripcion_vou" class="form-control" rows="2"></textarea>
+                                  </div>                                                        
+                                </div>
+
+                              </div>
+                            </div>
+                            
+                            <!-- Pdf 1 -->
+                            <div class="col-md-6" >                               
+                              <div class="row text-center">
+                                <div class="col-md-12 p-t-15px p-b-5px" >
+                                  <label for="doc3_i" class="control-label" > Baucher de deposito </label>
+                                </div>
+                                <div class="col-6 col-md-6 text-center">
+                                  <button type="button" class="btn btn-success btn-block btn-xs" id="doc3_i"><i class="fas fa-upload"></i> Subir. </button>
+                                  <input type="hidden" id="doc_old_3" name="doc_old_3" />
+                                  <input style="display: none;" id="doc3" type="file" name="doc3" accept="application/pdf, image/*" class="docpdf" /> 
+                                </div>
+                                <div class="col-6 col-md-6 text-center">
+                                  <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(3,'voucher_pago_s_q', 'voucher_s_q');">
+                                  <i class="fas fa-redo"></i> Recargar.
+                                  </button>
+                                </div>
+                              </div>                              
+                              <div id="doc3_ver" class="text-center mt-4">
+                                <img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >
+                              </div>
+                              <div class="text-center" id="doc3_nombre"><!-- aqui va el nombre del pdf --></div>
+                            </div>
+
+
+                            <!-- barprogress -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                              <div class="progress" id="barra_progress_voucher_s_q_div">
+                                <div id="barra_progress_voucher_s_q" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  0%
+                                </div>
+                              </div>
+                            </div>                                          
+
+                          </div>  
+
+                          <div class="row" id="cargando-6-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                              <h4>Cargando...</h4>
+                            </div>
+                          </div>              
+                          <button type="submit" style="display: none;" id="submit-form-voucher_s_q_pagos">Submit</button>                      
+                        </form>
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success" id="guardar_registro_voucher_s_q_pagos">Guardar Cambios</button>
+                      </div>                  
+                    </div>
+                  </div>
+                </div>  
+
 
               </section>
               <!-- /.content -->

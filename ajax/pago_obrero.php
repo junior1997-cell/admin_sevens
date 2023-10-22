@@ -37,6 +37,17 @@
       $doc_old_2 		    = isset($_POST['doc_old_2'])? $_POST['doc_old_2']:"";
       $doc2 	                      = isset($_POST['doc2'])? $_POST['doc2']:"";
 
+      //DATS - VOUCHERS PAGOS EN BLOQUE
+
+      $idvoucher_pago_s_q 	  = isset($_POST['idvoucher_pago_s_q'])? $_POST['idvoucher_pago_s_q']:"";
+      $ids_q_asistencia_vou   = isset($_POST['ids_q_asistencia_vou'])? $_POST['ids_q_asistencia_vou']:"";
+      $monto_vou 		          = isset($_POST['monto_vou'])? $_POST['monto_vou']:"";
+      $fecha_pago_vou 		    = isset($_POST['fecha_pago_vou'])? $_POST['fecha_pago_vou']:"";
+      $descripcion_vou 		    = isset($_POST['descripcion_vou'])? $_POST['descripcion_vou']:"";
+
+      $doc_old_3 		          = isset($_POST['doc_old_3'])? $_POST['doc_old_3']:"";
+      $doc3 	                = isset($_POST['doc3'])? $_POST['doc3']:"";
+//$idvoucher_pago_s_q,$ids_q_asistencia_vou,$monto_vou,$fecha_pago_vou,$descripcion_vou,$doc3
       // DATA - recibos por honorarios
       $numero_comprobante_rh	      = isset($_POST["numero_comprobante_rh"])? limpiarCadena($_POST["numero_comprobante_rh"]):"";
       $idresumen_q_s_asistencia_rh	= isset($_POST["idresumen_q_s_asistencia_rh"])? limpiarCadena($_POST["idresumen_q_s_asistencia_rh"]):"";
@@ -61,55 +72,28 @@
           if ($rspta['status'] == true) {
             
             foreach ( $rspta['data'] as $key => $value) {
-              $btn_depositos = "";
-              $saldo = floatval($value['pago_quincenal']) - floatval($value['total_deposito']);
+                // Convertir las fechas a objetos DateTime 
+              $fechaInicio      = new DateTime($value['fecha_q_s_inicio']);
+              $fechaFin         = new DateTime($value['fecha_q_s_fin']);
 
-              // Pintamos el bonton depositos segun las cantidades            
-              if ( floatval($value['total_deposito']) == 0) {
-                $btn_depositos = "btn-danger";
-              } else {
-                if ( floatval($value['total_deposito']) > 0 && floatval($value['total_deposito'])  < floatval($value['pago_quincenal'])) {
-                  $btn_depositos = "btn-warning";
-                } else {
-                  if ( floatval($value['total_deposito']) >= floatval($value['pago_quincenal'])) {
-                    $btn_depositos = "btn-success";
-                  }
-                }              
-              }
+              // solo el dia ejem: 06 
+              $f_i_dia               = date("d", strtotime($value['fecha_q_s_inicio']));
+              $f_f_dia               = date("d", strtotime($value['fecha_q_s_fin']));
+
+              $mes_f_i = nombre_mes($fechaInicio->format("Y-m-d")); 
+              $mes_f_f = nombre_mes($fechaFin->format("Y-m-d"));   
+          
+              $del_al="$f_i_dia de $mes_f_i al $f_f_dia de $mes_f_f"; //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
 
               $data[]=array(
-                "0"=>$cont++,
-                "1"=>'<div class="user-block">
-                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
-                  <span class="username"><p class="text-primary m-b-02rem" >'. $value['nombres_trabajador'] .'</p></span>
-                  <span class="description">'. $value['nombre_tipo'].' / '.$value['nombre_ocupacion'] .' ─ '. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>                  
-                </div>',                
-                "2"=>$value['banco'],
-                "3"=>$value['cuenta_bancaria'],            
-                "4"=>$value['total_hn'].' / '. $value['total_he'],      
-                "5"=>$value['sabatical'],           
-                "6"=>$value['sueldo_mensual'],               
-                "7"=>$value['pago_quincenal'],
-                "8"=>'<div class="formato-numero-conta "> 
-                  <button class="btn '.$btn_depositos.' btn-sm mr-1" onclick="detalle_q_s_trabajador( '.$value['idtrabajador_por_proyecto'] .', \'' . $value['fecha_pago_obrero'] .  '\', \'' . $value['nombres_trabajador'] . '\', \'' .  $value['cuenta_bancaria'] . '\' ); table_show_hide(2);">
-                    <i class="far fa-eye"></i> Pagar
-                  </button> 
-                  <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-sm">S/ '.number_format($value['total_deposito'], 2, '.', ',').'</button>
-                </div>',
-                "9"=> $saldo,
-                "10"=>$value['sum_estado_envio_contador'], 
-                "11"=>$value['fecha_inicio'],
-                "12"=> $date_actual,
-                "13"=>$value['fecha_fin'],    
+                "0"=>$cont++,             
+                "1"=>$value['numero_q_s'],
+                "2"=>$del_al,               
+                "3"=>$value['total_programado'],           
+                "4"=>$value['total_deposito'], 
+                "5"=>$value['saldo'], 
+                "6"=>'<button class="btn btn-warning btn-sm" onclick="tabla_vocuher_pagos_q_s('.$value['ids_q_asistencia'].', \''.encodeCadenaHtml($del_al).'\')"><i class="fas fa-pencil-alt"></i></button>'
 
-                "14"=>$value['nombres_trabajador'], 
-                "15"=>$value['nombre_tipo'], 
-                "16"=>$value['nombre_ocupacion'],   
-                "17"=>$value['tipo_documento'],
-                "18"=>$value['numero_documento'],
-                "19"=>$value['total_hn'],
-                "20"=>$value['total_he'],
-                "21"=>$value['total_deposito'],     
               );
             }
             $results = array(
@@ -364,6 +348,93 @@
           
           
         break;
+
+        // :::::::::::::::::::::::::: P A G O S  E N B L O Q U E   O B R E R O S :::::::::::::::::::::::::::::::::::::::::::::
+
+        case 'guardar_y_editar_vocuher_pagos_q_s':
+          	
+          //*DOC 3*//
+          if (!file_exists($_FILES['doc3']['tmp_name']) || !is_uploaded_file($_FILES['doc3']['tmp_name'])) {
+            $flat_doc3 = false;
+            $doc3      = $_POST["doc_old_3"];
+          } else {
+            $flat_doc3 = true;
+            $ext_doc3  = explode(".", $_FILES["doc3"]["name"]);              
+            $doc3 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext_doc3);
+            move_uploaded_file($_FILES["doc3"]["tmp_name"], "../dist/docs/voucher_pago_s_q/voucher_s_q/" . $doc3);            
+          }	
+
+          // registramos un nuevo: pago x mes
+          if (empty($idvoucher_pago_s_q)){
+
+            $rspta=$pagoobrero->insertar_vocuher_pagos_q_s($ids_q_asistencia_vou,$monto_vou,$fecha_pago_vou,$descripcion_vou,$doc3);
+            
+            echo json_encode( $rspta, true);
+
+          }else {
+
+            // validamos si existe el "baucher" para eliminarlo
+            if ($flat_doc3 == true) {
+              $datos_f3 = $pagoobrero->obtenerVoucher($idvoucher_pago_s_q);
+              $doc3_ant = $datos_f3['data']->fetch_object()->voucher_pago_q_s;
+              if ($doc3_ant != "") { unlink("../dist/docs/voucher_pago_s_q/voucher_s_q/" . $doc3_ant); }
+            }            
+            // editamos un pago x mes existente
+            $rspta=$pagoobrero->editar_vocuher_pagos_q_s($idvoucher_pago_s_q,$ids_q_asistencia_vou,$monto_vou,$fecha_pago_vou,$descripcion_vou,$doc3);
+            
+            echo json_encode( $rspta, true);
+          }
+
+        break;
+
+        case 'desactivar_vocuher_pagos_q_s':
+
+          $rspta=$pagoobrero->desactivar_vocuher_pagos_q_s( $_POST['idvoucher_pago_s_q'] );
+
+          echo json_encode( $rspta, true);
+
+        break;
+
+        case 'mostrar_vocuher_pagos_q_s':
+
+          $rspta=$pagoobrero->mostrar_vocuher_pagos_q_s($_POST["idvoucher_pago_s_q"]);
+          //Codificar el resultado utilizando json
+          echo json_encode( $rspta, true);
+
+        break;
+
+        case 'listar_tabla_vocuher_pagos_q_s':
+
+          $rspta=$pagoobrero->tabla_vocuher_pagos_q_s($_GET["ids_q_asistencia"]);          
+          // echo json_encode($rspta['data'],true);die();
+          //Vamos a declarar un array
+          $data= Array();   $cont=1;
+          foreach ( $rspta['data'] as $key => $reg) {
+            $voucher_pago_q_s = empty($reg['voucher_pago_q_s']) ? ( '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ( '<center><a target="_blank" href="../dist/docs/voucher_pago_s_q/voucher_s_q/' . $reg['voucher_pago_q_s'] . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
+            //$recibos_x_honorarios = empty($reg->recibos_x_honorarios) ? ( '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ( '<center><a target="_blank" href="../dist/docs/pago_administrador/recibos_x_honorarios/' . $reg->recibos_x_honorarios . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
+            
+            $data[]=array(
+              "0"=>$cont++,   
+              "1"=>'<button class="btn btn-warning btn-sm" onclick="mostrar_pagos_vocuher_pagos_q_s('.$reg['idvoucher_pago_s_q'] .')"><i class="fas fa-pencil-alt"></i></button>'.
+              ' <button class="btn btn-danger btn-sm" onclick="desactivar_vocuher_pagos_q_s('.$reg['idvoucher_pago_s_q'] .')"><i class="far fa-trash-alt"></i></button>',           
+              "2"=> '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">'.$reg['descripcion'].'</textarea>',
+              "3"=> $reg['fecha'],
+              "4"=> number_format($reg['monto'], 2, ".", ","),
+              "5"=> $voucher_pago_q_s
+            );
+          }
+
+          $results = array(
+            "sEcho"=>1, //Información para el datatables
+            "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+            "data"=>$data
+          );
+
+          echo json_encode($results);
+        break;
+        
+
 
         // :::::::::::::::::::::::::: R E C I B O S   P O R   H O N O R A R I O ::::::::::::::::::::::::::::::::::::::::::::::
 

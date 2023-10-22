@@ -1,4 +1,4 @@
-var tabla_principal; var tabla_ingreso_pagos; var tabla_pagos_modal;
+var tabla_principal; var tabla_ingreso_pagos; var tabla_pagos_modal; var tabla_voucher_pagos_general;
 
 var id_trabajdor_x_proyecto_r = "", tipo_pago_r = "", nombre_trabajador_r = "", cuenta_bancaria_r = "";
 
@@ -27,6 +27,9 @@ function init() {
   // efectuamos SUBMIT  registro de: RECIBOS POR HONORARIOS
   $("#guardar_registro_recibo_x_honorario").on("click", function (e) { $("#submit-form-recibo-x-honorario").submit(); });
 
+  // efectuamos SUBMIT  registro de: voucher_s_q_pagos
+  $("#guardar_registro_voucher_s_q_pagos").on("click", function (e) { $("#submit-form-voucher_s_q_pagos").submit(); });
+
   //Initialize Select2 unidad
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Seleccinar una forma de pago", allowClear: true, });
 
@@ -43,6 +46,8 @@ $("#doc1").change(function(e) {  addImageApplication(e,$("#doc1").attr("id")) })
 $("#doc2_i").click(function() {  $('#doc2').trigger('click'); });
 $("#doc2").change(function(e) {  addImageApplication(e,$("#doc2").attr("id")) });
 
+$("#doc3_i").click(function() {  $('#doc3').trigger('click'); });
+$("#doc3").change(function(e) {  addImageApplication(e,$("#doc3").attr("id")) });
 // Eliminamos el doc 1
 function doc1_eliminar() {
 
@@ -61,6 +66,16 @@ function doc2_eliminar() {
 	$("#doc2_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
 	$("#doc2_nombre").html("");
+}
+
+// Eliminamos el doc 3
+function doc3_eliminar() {
+
+	$("#doc3").val("");
+
+	$("#doc3_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+	$("#doc3_nombre").html("");
 }
 
 function table_show_hide(flag) {
@@ -179,31 +194,14 @@ function listar_tbla_principal(id_proyecto) {
       // columna:# 0
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }  
       // columna: banco
-      if (data[2] != '') { $("td", row).eq(2).addClass('text-center'); }         
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-center'); }         
+      //if (data[2] != '') { $("td", row).eq(2).addClass('text-center'); }         
       // columna: cuyenta bancaria  
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center'); }
       // columna: total hn / total he
       if (data[4] != '') { $("td", row).eq(4).addClass('text-center');  }
-      // columna: Psabatical
-      if (data[5] != '') { $("td", row).eq(5).addClass('text-center'); }
-      // columna: sueldo
-      if (data[6] != '') { $("td", row).eq(6).addClass('text-right'); }
-      // columna: pago a realizar
-      if (data[7] != '') {        
-        if (parseFloat(data[7]) < 0) { $("td", row).eq(7).addClass('text-right bg-danger'); }else{ $("td", row).eq(7).addClass('text-right');  } 
-      }
-      // columna: pago acumulado
-      if (data[8] != '') { $("td", row).eq(8).addClass('text-center'); }  
-      // columna: saldo
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }
-      // columna: cantidad de pago al contador
-      if (data[10] != '') { $("td", row).eq(10).addClass('text-center'); } 
-      // columna: fecha inicio
-      if (data[11] != '') { $("td", row).eq(11).addClass('text-center'); }
-      // columna: fecha hoy
-      if (data[12] != '') { $("td", row).eq(12).addClass('text-center'); }
-      // columna: fecha fin
-      if (data[13] != '') { $("td", row).eq(13).addClass('text-center'); }   
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-center');  }
+
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -211,29 +209,22 @@ function listar_tbla_principal(id_proyecto) {
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api1 = this.api(); var total1 = api1.column( 5 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
-      $( api1.column( 5 ).footer() ).html( `<span class="float-right">${formato_miles(total1)}</span>` ); 
+      var api1 = this.api(); var total1 = api1.column( 4 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api1.column( 4 ).footer() ).html( `<span class="float-right">${formato_miles(total1)}</span>` ); 
+
+      var api2 = this.api(); var total2 = api2.column( 5 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api2.column( 5 ).footer() ).html( `<span class="float-right">${formato_miles(total2)}</span>` ); 
       
-      var api2 = this.api(); var total2 = api2.column( 7 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
-      $( api2.column( 7 ).footer() ).html( ` <span >S/</span> <span >${formato_miles(total2)}</span>` );
-
-      var api3 = this.api(); var total3 = api3.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
-      $( api3.column( 9 ).footer() ).html( ` <span >S/</span> <span >${formato_miles(total3)}</span>` );
-
-      var api4 = this.api(); var total4 = api4.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
-      $( api4.column( 10 ).footer() ).html( `<span >${formato_miles(total4)}</span>` );
-
-      var api4 = this.api(); var total4 = api4.column( 21 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );   
-      $( api4.column( 8 ).footer() ).html( `<span  class="float-left">S/</span> <span  class="float-right">${formato_miles(total4)}</span>` );   
-      $( api4.column( 21 ).footer() ).html( `<span >S/</span> <span >${formato_miles(total4)}</span>` );
+      var api3 = this.api(); var total3 = api3.column( 3 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api3.column( 3 ).footer() ).html( `<span class="float-right">${formato_miles(total3)}</span>` ); 
+      
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [14,15,16,17,18,19,20,21], visible: false, searchable: false, },  
-      { targets: [6,7,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+     // { targets: [2,3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      { targets: [3,4,5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
 
     ],
   }).DataTable(); 
@@ -1037,6 +1028,206 @@ function modal_pago_obrero(idresumen_q_s_asistencia, fecha_i, fecha_f, pago_quin
   }).DataTable();
 }
 
+// :::::::::::::::::::::::::: VOOUCHERS DE PAGOS ::::::::::::::::::::::::::::::::::::::::::::::
+
+function limpiar_form_voucher_s_q_pagos() {  
+
+  $('#idvoucher_pago_s_q').val("");
+  $('#monto_vou').val("");
+  $('#fecha_pago_vou').val("");
+  $('#descripcion_vou').val("");
+
+  $("#doc_old_3").val("");
+  $("#doc3").val("");  
+  $('#doc3_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
+  $('#doc3_nombre').html("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".is-invalid").removeClass("error is-invalid");
+}
+
+function tabla_vocuher_pagos_q_s(ids_q_asistencia,del_al) {
+ 
+  $("#modal-tabla-pagos_s_q").modal('show');
+
+  $(".del_al").html(del_al);
+
+  $("#ids_q_asistencia_vou").val(ids_q_asistencia);
+
+  tabla_voucher_pagos_general=$('#tabla-pagos-general-s-q-modal').dataTable({
+    responsive: true,
+    lengthMenu: [[5, 10, 25, 75, 100, 200, -1], [5, 10, 25, 75, 100, 200, "Todos"]],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5', 'pdf', "colvis"],
+    ajax:{
+      url: '../ajax/pago_obrero.php?op=listar_tabla_vocuher_pagos_q_s&ids_q_asistencia='+ids_q_asistencia,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: opciones
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }
+      // columna: opciones
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
+      // columna: fecha
+      if (data[2] != '') {$("td", row).eq(2).addClass('text-nowrap');}
+      // columna: deposito
+      if (data[4] != '') { $("td", row).eq(4).addClass('text-right text-nowrap'); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();
+
+  
+}
+
+function guardar_y_editar_vocuher_pagos_q_s(e) {
+  
+  //e.preventDefault(); //No se activará la acción predeterminada del evento
+
+  $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+  var formData = new FormData($("#form-voucher_s_q_pagos")[0]);
+
+  $.ajax({
+    url: "../ajax/pago_obrero.php?op=guardar_y_editar_vocuher_pagos_q_s",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {  
+      try {
+        e = JSON.parse(e);
+        if (e.status == true) {
+
+          Swal.fire("Correcto!", "Voucher guardado correctamente", "success");        
+           
+          limpiar_form_voucher_s_q_pagos();
+
+          tabla_voucher_pagos_general.ajax.reload(null, false);
+
+          $("#modal-agregar-voucher-pago-general").modal('hide');
+
+        }else{
+          ver_errores(e);			 
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); } 
+      
+      $("#guardar_registro_voucher_s_q_pagos").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_voucher_s_q").css({"width": percentComplete+'%'});
+          $("#barra_progress_voucher_s_q").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_voucher_s_q_pagos").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_voucher_s_q").css({ width: "0%",  });
+      $("#barra_progress_voucher_s_q").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_voucher_s_q").css({ width: "0%", });
+      $("#barra_progress_voucher_s_q").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+function mostrar_pagos_vocuher_pagos_q_s(idvoucher_pago_s_q) {
+
+  limpiar_form_voucher_s_q_pagos();
+
+  $("#cargando-5-fomulario").hide();
+  $("#cargando-6-fomulario").show();
+  $("#modal-agregar-voucher-pago-general").modal('show');
+
+  $.post("../ajax/pago_obrero.php?op=mostrar_vocuher_pagos_q_s", { 'idvoucher_pago_s_q': idvoucher_pago_s_q }, function (e, status) {
+
+    e = JSON.parse(e);  console.log(e); 
+    if (e.status == true) {
+      $("#cargando-5-fomulario").show();
+      $("#cargando-6-fomulario").hide();
+
+      $('#idvoucher_pago_s_q').val(e.data.idvoucher_pago_s_q);
+      $('#ids_q_asistencia_vou').val(e.data.ids_q_asistencia);
+      $('#monto_vou').val(e.data.monto);
+      $('#fecha_pago_vou').val(e.data.fecha);
+      $('#descripcion_vou').val(e.data.descripcion);
+    
+      //validamoos BAUCHER - DOC 1
+      if (e.data.voucher_pago_q_s == "" || e.data.voucher_pago_q_s == null  ) {
+
+        $("#doc3_ver").html('<img src="../dist/svg/doc_uploads.svg" alt="" width="50%" >');
+
+        $("#doc3_nombre").html('');
+
+        $("#doc_old_3").val(""); $("#doc3").val("");
+
+      } else {
+
+        $("#doc_old_3").val(e.data.voucher_pago_q_s); 
+
+        $("#doc3_nombre").html(`<div class="row"> <div class="col-md-12"><i>Baucher.${extrae_extencion(e.data.voucher_pago_q_s)}</i></div></div>`);
+        // cargamos la imagen adecuada par el archivo
+        $("#doc3_ver").html(doc_view_extencion(e.data.voucher_pago_q_s, 'voucher_pago_s_q', 'voucher_s_q', '100%', '210'));        
+              
+      }   
+
+    } else {
+      ver_errores(e);
+    }
+  }).fail( function(e) { ver_errores(e); } ); 
+}
+
+function desactivar_vocuher_pagos_q_s(idvoucher_pago_s_q) {  
+
+  Swal.fire({
+    title: "¿Está Seguro de ANULAR el pago?",
+    text: "Al anularlo este pago, el monto NO se contara como un deposito realizado.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, desactivar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/pago_obrero.php?op=desactivar_vocuher_pagos_q_s", { 'idvoucher_pago_s_q': idvoucher_pago_s_q }, function (e) {
+        e = JSON.parse(e);  console.log(e); 
+        if (e.status == true) {
+          tabla_voucher_pagos_general.ajax.reload(null, false); 
+          // tabla_principal.ajax.reload(null, false);
+          Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
+        } else {
+          ver_errores(e);
+        }        
+      }).fail( function(e) { ver_errores(e); } );      
+    }
+  });  
+}
+
+
 init();
 
 $(function () {
@@ -1106,6 +1297,39 @@ $(function () {
     submitHandler: function (e) { 
       $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
       guardar_y_editar_recibos_x_honorarios(e);
+    },
+  });
+
+  $("#form-voucher_s_q_pagos").validate({
+    rules: {
+      monto_vou:      {required: true, minlength: 1 },
+      fecha_pago_vou: {required: true, },
+      descripcion_vou:{ minlength: 4 },
+    },
+    messages: {
+      monto_vou:      { required: "Campo requerido.",   minlength: "MINIMO 1 dígito.", },
+      fecha_pago_vou: { required: "Campo requerido.", },
+      descripcion_vou:{ minlength: "MINIMO 4 caracteres.", },
+    },
+    
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");             
+    },
+
+    submitHandler: function (e) { 
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_vocuher_pagos_q_s(e);
     },
   });
 
