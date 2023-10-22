@@ -666,6 +666,16 @@
             
             <?php if ($_SESSION['pago_valorizacion']==1) {  ?>
               <li class="nav-item ver-otros-modulos-1">
+                <a href="pago_impuesto.php" class="nav-link pl-2" id="lrecibo">             
+                  <!-- <i class="fa-regular fa-registered nav-icon"></i> -->
+                  <i class="fa-solid fa-i nav-icon"></i>
+                  <p>Pago Impuestos </p>
+                </a>
+              </li>
+            <?php  }  ?>
+
+            <?php if ($_SESSION['pago_valorizacion']==1) {  ?>
+              <li class="nav-item ver-otros-modulos-1">
                 <a href="recibo.php" class="nav-link pl-2" id="lrecibo">             
                   <i class="fa-regular fa-registered nav-icon"></i>
                   <p>Recibos Honorario </p>
