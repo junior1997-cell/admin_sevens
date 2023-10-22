@@ -156,7 +156,7 @@ function tabla_detalle(id_categoria) {
       { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,10,4,5,11,7,8], } },      
     ],
     ajax: {
-      url: `../ajax/almacen_general.php?op=tabla_detalle&id_categoria=${id_categoria}`,
+      url: `../ajax/almacen_general.php?op=tabla_detalle&id_almacen=${id_categoria}&id_proyecto=${localStorage.getItem("nube_idproyecto")}`,
       type: "get",
       dataType: "json",
       error: function (e) {

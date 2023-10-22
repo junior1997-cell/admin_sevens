@@ -112,20 +112,20 @@
                                             <thead> 
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
+                                                <th class="">Proyecto</th>
+                                                <th class="">Fecha</th>
                                                 <th class="">Nombre producto</th>
                                                 <th class="">Cantidad</th>
-                                                <th class="text-center" >Proyecto</th>
                                               </tr>
                                             </thead>
                                             <tbody></tbody>
                                             <tfoot>
                                               <tr>
                                                 <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
+                                                <th class="">Proyecto</th>
+                                                <th class="">Fecha</th>
                                                 <th class="">Nombre producto</th>
                                                 <th class="">Cantidad</th>
-                                                <th class="text-center" >Proyecto</th>
                                               </tr>
                                             </tfoot>
                                           </table>

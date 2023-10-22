@@ -115,13 +115,22 @@ if (!isset($_SESSION["nombre"])) {
                         <div class="row">
                           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="card-header">
-                              <h3 class="card-title">
-                                <button type="button" class="btn bg-gradient-success mr-2" data-toggle="modal" data-target="#modal-agregar-almacen" onclick="limpiar_form_almacen();" >
-                                  <i class="fas fa-plus-circle"></i> Agregar
+                              <h3 class="card-title mr-2">
+                                <button type="button" class="btn bg-gradient-warning btn-regresar" style="display: none;" onclick="show_hide_tablas(1);">
+                                  <i class="fas fa-arrow-left"></i> 
+                                </button>
+                              </h3>
+                              <h3 class="card-title mr-2">
+                                
+                                <button type="button" class="btn bg-gradient-success p-y-2px btn-sm btn-block btn-general" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar_form_otro_almacen();" >
+                                  <i class="fas fa-plus-circle"></i> General
+                                </button>
+                                <button type="button" class="btn bg-gradient-success p-y-2px btn-sm btn-block btn-salida" data-toggle="modal" data-target="#modal-agregar-almacen" onclick="limpiar_form_almacen();" >
+                                  <i class="fas fa-plus-circle"></i> Salida
                                 </button>
                               </h3>
                               <!-- Botones de quincenas -->
-                              <div id="lista_quincenas" class="row-horizon disenio-scroll" >
+                              <div id="lista_quincenas" class="row-horizon disenio-scroll ml-2" >
                                 <div class="my-3" ><i class="fas fa-spinner fa-pulse fa-2x"></i>&nbsp;&nbsp;&nbsp;Cargando...</div>
                               </div>                              
                             </div>
@@ -133,8 +142,41 @@ if (!isset($_SESSION["nombre"])) {
 
                     <!-- /.card-header -->
                     <div class="card-body">
-                      <div class="div-tabla-principal">
-                        
+                      <div class="" id="div_tabla_principal">
+                        <div class="row">                                        
+                          <div class="col-12">
+                            <table id="tabla-almacen-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
+                              <thead> 
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="">Acciones</th>
+                                  <th class="">Código</th>
+                                  <th class="">Nombre almacen</th>
+                                  <th class="text-center" >UND</th>
+                                  <th class="text-center" >Otro almacen</th>
+                                  <th class="text-center" >Saldo anterior</th>
+                                  <th class="text-center" >Entrada / Salida</th>
+                                  <th class="text-center" >Saldo</th>
+                                </tr>
+                              </thead>
+                              <tbody></tbody> 
+                              <tfoot>
+                                <tr>
+                                  <th class="text-center">#</th>
+                                  <th class="">Acciones</th>
+                                  <th class="">Código</th>
+                                  <th class="">Nombre almacen</th>
+                                  <th class="text-center" >UND</th>
+                                  <th class="text-center" >Otro almacen</th>
+                                  <th class="text-center" >Saldo anterior</th>
+                                  <th class="text-center" >Entrada / Salida</th>
+                                  <th class="text-center" >Saldo</th>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <!-- /.col -->
+                        </div>
                       </div>
                       
                       <!-- TABLA - Almacen -->                      
@@ -326,7 +368,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>                      
 
                       <!-- CARGANDO - REGISTRO DE ASISTENCIA -->
-                      <div class="row" id="cargando-table-almacen" >   
+                      <div class="row" id="cargando-table-almacen" style="display: none;">   
                         <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>                     
                       </div>
                       <!-- /.card-body -->
@@ -340,7 +382,7 @@ if (!isset($_SESSION["nombre"])) {
               <!-- /.container-fluid -->
             </div>
 
-            <!-- MODAL - AGREGAR ALMACEN - chargue 1 -->
+            <!-- MODAL - AGREGAR ALMACEN - chargue 1-2 -->
             <div class="modal fade" id="modal-agregar-almacen">
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
@@ -420,7 +462,86 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <!-- MODAL - VER ALMACEN - chargue 3 -->
+            <!-- MODAL - AGREGAR OTROS ALMACEN - chargue 5-6 -->
+            <div class="modal fade" id="modal-agregar-otro-almacen">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header"> 
+                    <h4 class="modal-title">Agregar a otro almacen</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span class="text-danger" aria-hidden="true">&times;</span>
+                    </button>
+                  </div> 
+
+                  <div class="modal-body"> 
+                    <!-- form start -->
+                    <form id="form-otro-almacen" name="form-otro-almacen" method="POST">
+                      <div class="card-body">
+                        <div class="row" id="cargando-1-fomulario">
+                          <!-- idalmacen_resumen -->
+                          <input type="hidden" name="idalmacen_resumen_ag" id="idalmacen_resumen_ag" />
+                          <!-- idalmacen_resumen -->
+                          <input type="hidden" name="idproyecto_ag" id="idproyecto_ag" />
+
+                          <!-- Tipo de documento --> 
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                            <div class="form-group">
+                              <label for="producto_ag">                                 
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                Producto <small >(comprado)</small> <span class="cargando_productos_ag"></span> 
+                              </label>
+                              <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">                                
+                              </select>
+                            </div>
+                          </div> 
+
+                          <!-- Correo electronico --> 
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="fecha_ingreso_ag">Fecha</label>
+                              <input type="date" name="fecha_ingreso_ag" class="form-control" id="fecha_ingreso_ag" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
+                              <input type="hidden" name="dia_ingreso_ag" id="dia_ingreso_ag" />
+                            </div>
+                          </div>   
+
+                          <div class="col-12 pl-0">
+                            <div class="text-primary"><label for="">Productos agregados </label></div>
+                          </div>
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                            <div class="row" id="html_producto_ag" > 
+                              <span> Seleccione un producto</span>
+                            </div>
+                          </div>                                                 
+
+                          <!-- barprogress -->
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_otro_almacen_div">
+                            <div class="progress">
+                              <div id="barra_progress_otro_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                0%
+                              </div>
+                            </div>
+                          </div> 
+
+                        </div>
+
+                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
+                        </div>
+                      </div>
+                      <!-- /.card-body -->
+                      <button type="submit" style="display: none;" id="submit-form-otro-almacen">Submit</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" onclick="limpiar_form_otro_almacen();" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="guardar_registro_otro_almacen">Guardar Cambios</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL - VER ALMACEN - chargue 3-4 -->
             <div class="modal fade" id="modal-ver-almacen">
               <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">

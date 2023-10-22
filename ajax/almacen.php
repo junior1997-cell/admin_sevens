@@ -37,6 +37,12 @@
       $marca_xp	            = isset($_POST["marca_xp"])? limpiarCadena($_POST["marca_xp"]):"";
       $cantidad_xp	        = isset($_POST["cantidad_xp"])? limpiarCadena($_POST["cantidad_xp"]):"";
 
+      // ::::::::::::::::::: ALMACEN GENERAL ::::::::::::::::::::::::::::::::::::::::::::
+      $idalmacen_resumen_ag     = isset($_POST["idalmacen_resumen_ag"])? limpiarCadena($_POST["idalmacen_resumen_ag"]):"";      
+      $idproyecto_ag     = isset($_POST["idproyecto_ag"])? limpiarCadena($_POST["idproyecto_ag"]):"";      
+      $fecha_ingreso_ag	= isset($_POST["fecha_ingreso_ag"])? limpiarCadena($_POST["fecha_ingreso_ag"]):"";
+      $dia_ingreso_ag	  = isset($_POST["dia_ingreso_ag"])? limpiarCadena($_POST["dia_ingreso_ag"]):"";
+
       switch ($_GET["op"]) {  
 
         case 'guardar_y_editar_almacen':
@@ -69,6 +75,60 @@
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;  
+
+        // ══════════════════════════════════════  A L M A C E N E S   G E N E R A L E S ══════════════════════════════════════
+        case 'guardar_y_editar_almacen_general':
+
+          if (empty($idalmacen_resumen_ag)) {
+            $rspta = $almacen->crear_producto_ag($idproyecto_ag, $fecha_ingreso_ag, $dia_ingreso, $_POST["idproducto_ag"], $_POST["id_ar_ag"], $_POST["almacen_general_ag"], $_POST["cantidad_ag"] );
+            echo json_encode($rspta, true);
+          } else {
+            $rspta = $almacen->editar_producto_ag();
+            echo json_encode($rspta, true);
+          }
+          
+        break;
+
+        case 'otros_almacenes':
+          $rspta = $almacen->otros_almacenes();
+          echo json_encode( $rspta, true) ;
+        break;
+
+        case 'tabla-almacen-resumen':          
+
+          $rspta=$almacen->tbla_principal_resumen($_GET["id_proyecto"], $_GET["fip"], $_GET["ffp"], $_GET["fpo"]);
+          
+          //Vamos a declarar un array
+          $data= Array(); $cont=1;
+
+          if ($rspta['status'] == true) {
+
+            foreach ($rspta['data']['producto'] as $key => $val) {               
+          
+              $data[]=array(
+                "0"=>$cont++,
+                "1"=>'<button class="btn btn-warning btn-sm" onclick="modal_ver_almacen(null, '. $val['idproducto'].')" data-toggle="tooltip" data-original-title="Ver detalles"><i class="fas fa-eye"></i></button>'.
+                  ' <button class="btn btn-info btn-sm" onclick="modal_ver_almacen_general('.$val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver almacen general"><i class="fa-solid fa-warehouse"></i></button>',
+                "2"=> $val['idproducto'],
+                "3"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['nombre_producto'] .'</p></span> </div>',
+                "4"=> $val['abreviacion_um'],
+                "5"=> '<span data-toggle="tooltip" data-original-title="'.$val['cant_group_oa'].'" >'.$val['cant_sum_oa'].'</span>',
+                "6"=> $val['saldo_anterior'],
+                "7"=> ($val['entrada_sum'] + $val['saldo_anterior']) .' / '. $val['salida_sum'] . $toltip,              
+                "8"=> ($val['entrada_sum'] + $val['saldo_anterior']) - $val['salida_sum'],              
+              );
+            }
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data);
+            echo json_encode($results, true);
+
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }
+        break;
 
         // ══════════════════════════════════════ A L M A C E N   X   D I A ══════════════════════════════════════
         case 'desactivar_x_dia':
@@ -119,7 +179,7 @@
           }
         break;
 
-        // ══════════════════════════════════════ O T R O S   S A L D O S ══════════════════════════════════════
+        // ══════════════════════════════════════  S A L D O S  A N T E R I O R E S ══════════════════════════════════════
         case 'guardar_y_editar_saldo_anterior':
 
           if (empty($idalmacen_resumen)) {
@@ -190,7 +250,7 @@
           
           if ($rspta['status'] == true) {  
             foreach ($rspta['data'] as $key => $value) {   
-              $data .= '<option value="' . $value['idproducto'] . '" unidad_medida="' . $value['nombre_medida'] . '" >' . $value['nombre_producto'] .' - '. $value['clasificacion'] .'</option>';
+              $data .= '<option value="' . $value['idproducto'] . '" id_ar = "'.$value['idalmacen_resumen'].'" unidad_medida="' . $value['unidad_medida'] . '" >' . $value['nombre_producto'] .' - '. $value['categoria'] .' - Saldo: '. $value['saldo'] .'</option>';
             }  
             $retorno = array(
               'status' => true, 

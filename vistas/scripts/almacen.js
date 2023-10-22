@@ -1,4 +1,4 @@
-var tabla_x_dia, tabla_saldo_anterior;
+var tbla_resumen, tabla_x_dia, tabla_saldo_anterior;
 var array_doc = [];
 var id_almacen_s_r = '';
 //Función que se ejecuta al inicio
@@ -10,22 +10,26 @@ function init() {
 
   var idproyecto =  localStorage.getItem("nube_idproyecto");
   listar_botones_q_s(idproyecto);
-
+  tabla_resumen();
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto', null, '.cargando_productos');
+  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto_ag', null, '.cargando_productos_oa');
   lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${idproyecto}`, '#producto_xp', null, '.cargando_productos');
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen").submit(); });
   $("#guardar_registro_almacen_x_dia").on("click", function (e) { $("#submit-form-almacen-x-dia").submit(); });
+  $("#guardar_registro_otro_almacen").on("click", function (e) { $("#submit-form-otro-almacen").submit(); });
   $(".btn_guardar_s").on("click", function (e) { $("#submit-form-almacen-sa").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#producto").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
+  $("#producto_ag").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
   $("#producto_xp").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
 
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
   $("#idproyecto_xp").val(localStorage.getItem("nube_idproyecto"));
+  $("#idproyecto_ag").val(localStorage.getItem("nube_idproyecto"));
 
   $("#fecha_ingreso_xp").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
   $("#fecha_ingreso").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
@@ -34,8 +38,18 @@ function init() {
 
 }
 
-function show_hide_tablas(params) {
-  
+function show_hide_tablas(flag) {
+  if (flag == 1) {
+    $("#div_tabla_principal").show();
+    $("#div_tabla_almacen").hide();
+    $("#cargando-table-almacen").hide();
+    $(".btn-regresar").hide();
+  } else if (flag == 2) {
+    $("#div_tabla_principal").hide();
+    $("#div_tabla_almacen").hide();
+    $("#cargando-table-almacen").show();
+    $(".btn-regresar").show();
+  }
 }
 
 function listar_botones_q_s(nube_idproyecto) {
@@ -78,7 +92,7 @@ function listar_botones_q_s(nube_idproyecto) {
 
           $('#lista_quincenas').html(`<button type="button" id="boton-0" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="todos_almacen();"><i class="far fa-calendar-alt"></i><br> Todos</button> 
           ${htm_btn}`);  
-          todos_almacen();   
+          // todos_almacen();   
         }
       }        
     } else {
@@ -89,16 +103,195 @@ function listar_botones_q_s(nube_idproyecto) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-function todos_almacen() {
-  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
-  pintar_boton_selecionado(0);
+// .....:::::::::::::::::::::::::::::::::::::  A L M A C E N  R E S U M E N   :::::::::::::::::::::::::::::::::::::::..
+
+function tabla_resumen() {
+
   var idproyecto =  localStorage.getItem("nube_idproyecto");
   var fip =  localStorage.getItem("nube_fecha_inicial_actividad");
   var ffp =  localStorage.getItem("nube_fecha_final_actividad");
   var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
 
-  $('#div_tabla_almacen').hide();
-  $('#cargando-table-almacen').show().html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
+  tbla_resumen = $('#tabla-almacen-resumen').dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+    ],
+    ajax:{
+      url: `../ajax/almacen.php?op=tabla-almacen-resumen&id_proyecto=${idproyecto}&fip=${fip}&ffp=${ffp}&fpo=${fpo}`,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);  ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); } 
+      // columna: 1
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [9, 10, 11, 12, 13, 14, 15, 16,17], visible: false, searchable: false, }, 
+    ],
+  }).DataTable();
+}
+
+function limpiar_form_otro_almacen() {
+
+  $('#producto_ag').val('').trigger("change");;
+  $('#fecha_ingreso_ag').val('');
+  $('#html_producto_ag').html(`<div class="col-12 delete_multiple_alerta_oa">
+    <div class="alert alert-warning alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+      NO TIENES NINGÚN PRODUCTO SELECCIONADO.
+    </div>
+  </div>`);
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
+//Función para guardar o editar
+function guardar_y_editar_almacen_general(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-otro-almacen")[0]);
+
+  $.ajax({
+    url: "../ajax/almacen.php?op=guardar_y_editar_almacen_general",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) { 
+          reload_producto_comprados_ag()
+          tbla_resumen.ajax.reload(null, false);   
+          limpiar_form_otro_almacen();
+          Swal.fire("Correcto!", "Almacen General guardado correctamente", "success");          
+         
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+
+      $("#guardar_registro_otro_almacen").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_otro_almacen").css({"width": percentComplete+'%'}).text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_otro_almacen").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_otro_almacen").css({ width: "0%",  }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_otro_almacen").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+function add_producto_ag(data) {
+  var idproducto = $(data).select2('val'); console.log('goooooooooooooooo');
+  $('.delete_multiple_alerta_oa').remove();
+
+  if (idproducto == null || idproducto == '' || idproducto === undefined) { } else {
+    var textproducto = $('#producto_ag').select2('data')[0].text;
+    var unidad_medida = $('#producto_ag').select2('data')[0].element.attributes.unidad_medida.value
+    var id_ar = $('#producto_ag').select2('data')[0].element.attributes.id_ar.value
+    if ($(`#html_producto_ag div`).hasClass(`delete_multiple_${idproducto}`)) { // validamos si exte el producto agregado
+      toastr_error('Existe!!', `<u>${textproducto}</u>, Este producto ya ha sido agregado`);
+    } else {      
+      $('#html_producto_ag').append(`<div class="col-lg-12 borde-arriba-0000001a mt-2 mb-2 delete_multiple_${idproducto}"></div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 delete_multiple_${idproducto}" >
+        <input type="hidden" name="idproducto_ag[]" value="${idproducto}" />        
+        <input type="hidden" name="id_ar_ag[]" value="${id_ar}" />        
+        <div class="form-group">
+          <label for="fecha_ingreso">Nombre Producto</label>
+          <span class="form-control-mejorado"> ${textproducto} </span>                                  
+        </div>
+      </div> 
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${idproducto}">
+        <div class="form-group">
+          <label for="almacen_general_${idproducto}">Almacen general <span class="cargando-almacen-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span></label>
+          <select name="almacen_general_ag[]" id="almacen_general_${idproducto}" class="form-control" placeholder="Almacen general"> </select>
+        </div>      
+      </div> 
+      <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}"">
+        <div class="form-group">
+          <label for="cantidad_${idproducto}">Cantidad</label>
+          <input type="number" name="cantidad_ag[]" class="form-control" id="cantidad_${idproducto}" placeholder="cantidad" required min="0" />
+        </div>      
+      </div> 
+      <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${idproducto}">      
+        <label class="text-white">.</label> <br>
+        <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_producto_ag(${idproducto});"><i class="far fa-trash-alt"></i></button>      
+      </div> `);
+      $(`#cantidad_${idproducto}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", } });  
+
+      $.post(`../ajax/almacen.php?op=otros_almacenes`, function (e, status, jqXHR) {
+        e = JSON.parse(e);   //console.log(e);
+        if (e.status == true) {
+          e.data.forEach((val, key) => {
+            $(`#almacen_general_${idproducto}`).append(`<option value="${val.idalmacen_general}">${val.nombre_almacen}</option>`);
+          });
+          $(`.cargando-almacen-${idproducto}`).html('');
+        } else {
+          ver_errores(e);
+        }
+      }).fail( function(e) { ver_errores(e); });
+    }
+  }
+}
+
+function remove_producto_ag(id) {
+  $(`.delete_multiple_${id}`).remove(); 
+  if ($("#html_producto_ag").children().length == 0) {
+    $('#html_producto_ag').html(`<div class="col-12 delete_multiple_alerta_oa">
+      <div class="alert alert-warning alert-dismissible"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5> NO TIENES NINGÚN PRODUCTO SELECCIONADO. </div>
+    </div>`);
+  }   
+}
+
+// .....::::::::::::::::::::::::::::::::::::: A L M A C E N   D E T A L L E S  :::::::::::::::::::::::::::::::::::::::..
+
+
+function todos_almacen() {
+  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
+  pintar_boton_selecionado(0); show_hide_tablas(2);
+  var idproyecto =  localStorage.getItem("nube_idproyecto");
+  var fip =  localStorage.getItem("nube_fecha_inicial_actividad");
+  var ffp =  localStorage.getItem("nube_fecha_final_actividad");
+  var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
+  
+  $('#cargando-table-almacen').html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
   
   $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
 
@@ -725,8 +918,6 @@ function guardar_y_editar_saldo_anterior(e) {
   });
 }
 
-
-
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -760,6 +951,35 @@ $(function () {
     },
     submitHandler: function (e) {
       guardar_y_editar_almacen(e);
+    },
+  });
+
+  $("#form-otro-almacen").validate({
+    ignore: '.select2-input, .select2-focusser',
+    rules: {
+      fecha_ingreso_ag:  { required: true,  },      
+    },
+    messages: {
+      fecha_ingreso_ag:  { required: "Campo requerido.", },    
+      // 'cantidad[]':   { min: "Mínimo 0", required: "Campo requerido"},  
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    submitHandler: function (e) {
+      guardar_y_editar_almacen_general(e);
     },
   });
 
@@ -834,9 +1054,9 @@ $(function () {
 
 function scroll_tabla_asistencia() {
   var height_tabla = $('#div_tabla_almacen').height(); //console.log('Alto pantalla: '+height_tabla);
-  var width_tabla = $('#div_tabla_almacen').width(); //console.log('Ancho pantalla: '+width_tabla);
-  if (height_tabla <= 600) {
-    $('#div_tabla_almacen').css({'height':`${redondearExp((height_tabla+50),0)}px`});
+  var width_tabla = $('#div_tabla_almacen').width(); console.log('Ancho pantalla: '+width_tabla);
+  if (width_tabla <= 600) {
+    $('#div_tabla_almacen').css({'height':`${redondearExp((width_tabla*2),0)}px`});
   } else {
     var alto_real = (width_tabla/2) - 100; //console.log('Result pantalla: '+alto_real);
     $('#div_tabla_almacen').css({'height':`${redondearExp(alto_real,0)}px`});
@@ -859,7 +1079,9 @@ function pintar_boton_selecionado(i) {
 
 function obtener_dia_ingreso(datos) {
   $('#dia_ingreso').val( extraer_dia_semana_completo($(datos).val()) ); 
+  $('#dia_ingreso_ag').val( extraer_dia_semana_completo($(datos).val()) ); 
 }
 
 function reload_producto_todos(){ $('.comprado_todos').html(`(todos)`); lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto', null, '.cargando_productos'); }
 function reload_producto_comprados(){ $('.comprado_todos').html(`(comprado)`);  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto', null, '.cargando_productos'); }
+function reload_producto_comprados_ag(){ $('.comprado_todos_ag').html(`(comprado)`);  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto_ag', null, '.cargando_productos_ag'); }

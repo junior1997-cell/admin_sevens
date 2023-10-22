@@ -107,6 +107,17 @@ class Almacen_general
    return ejecutarConsulta($sql);    
   }
 
+   //Implementar un método para listar los registros
+   public function tabla_detalle( $id_proyecto, $id_almacen ) {        
+    $sql = "SELECT apg.idalmacen_producto_guardado, apg.idalmacen_general, apg.idalmacen_resumen, apg.fecha_envio, apg.cantidad, prd.nombre as producto, 
+    pry.nombre_codigo as proyecto
+    FROM almacen_producto_guardado as apg, almacen_resumen as ar, producto as prd, proyecto as pry
+    WHERE apg.idalmacen_resumen = ar.idalmacen_resumen AND ar.idproducto = prd.idproducto AND ar.idproyecto = pry.idproyecto 
+    AND apg.estado = '1' AND apg.estado_delete = '1' AND ar.estado = '1' AND ar.estado_delete = '1'
+    ORDER BY pry.nombre_codigo ASC;";
+   return ejecutarConsulta($sql);    
+  }
+
   //Seleccionar Trabajador Select2
   public function lista_de_categorias() {
     $sql = "SELECT idalmacen_general as idcategoria, nombre_almacen as nombre 

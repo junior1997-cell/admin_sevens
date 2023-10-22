@@ -71,12 +71,11 @@
                 "0"=>$cont++,
                 "1" => $reg['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idalmacen_general'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
                   ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg['idalmacen_general'] .', \''.encodeCadenaHtml($reg['nombre_almacen']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'. 
-                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg['idalmacen_general'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
+                  ' <!-- <button class="btn btn-info btn-sm" onclick="verdatos('.$reg['idalmacen_general'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button> -->':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idalmacen_general'] . ')"><i class="fa fa-pencil-alt"></i></button>' .
                   ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg['idalmacen_general'] . ')"><i class="fa fa-check"></i></button>',
                 "2" => $reg['nombre_almacen'],
-                "3" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['descripcion'] . '</textarea>',
-                
+                "3" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['descripcion'] . '</textarea>',                
               ];
             }
   
@@ -95,7 +94,7 @@
         break;    
         
         case 'tabla_detalle':
-          $rspta = $almacen_general->tabla_principal($_GET["id_categoria"]);
+          $rspta = $almacen_general->tabla_detalle($_GET["id_proyecto"], $_GET["id_almacen"] );
           //Vamos a declarar un array
           $data = [];         
           $cont=1;          
@@ -105,15 +104,10 @@
               
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idalmacen_general'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg['idalmacen_general'] .', \''.encodeCadenaHtml($reg['nombre_almacen']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'. 
-                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg['idalmacen_general'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
-                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idalmacen_general'] . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg['idalmacen_general'] . ')"><i class="fa fa-check"></i></button>',
-                "2" => $reg['nombre_almacen'],
-                "3" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['descripcion'] . '</textarea>',
-                "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['descripcion'] . '</textarea>',
-                
+                "1" => $reg['proyecto'],
+                "2" => $reg['fecha_envio'],
+                "3" =>  $reg['producto'] ,
+                "4" =>  $reg['cantidad'] ,                
               ];
             }
   
