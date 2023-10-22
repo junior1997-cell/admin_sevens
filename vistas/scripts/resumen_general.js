@@ -1189,7 +1189,7 @@ function tbla_obrero(idproyecto, fecha_filtro_1, fecha_filtro_2, id_trabajador, 
    
   $.post("../ajax/resumen_general.php?op=tbla_obrero", { 'idproyecto': idproyecto, 'fecha_filtro_1':fecha_filtro_1, 'fecha_filtro_2':fecha_filtro_2, 'id_trabajador':id_trabajador, 'deuda':deuda }, function (e, status) {
     
-    e = JSON.parse(e); //  console.log(data);
+    e = JSON.parse(e); //console.log('.......................');  console.log(e);
     
     $("#monto_obrero").html(formato_miles(e.data.t_monto.toFixed(2)));
     $("#pago_obrero").html(formato_miles(e.data.t_pagos.toFixed(2)));

@@ -1336,80 +1336,94 @@
           $t_saldo = 0;   
           $saldo_x_fila = 0;
 
-          $rspta = $resumen_general->tabla_obrero($_POST['idproyecto'], $_POST['id_trabajador']);
+          $rspta = $resumen_general->tabla_obrero($_POST['idproyecto'], $_POST['fecha_filtro_1'], $_POST['fecha_filtro_2']);
           
           foreach ($rspta['data'] as $key => $value) {
 
-            $saldo_x_fila = floatval($value['pago_quincenal']) - floatval($value['deposito']);
+            // Convertir las fechas a objetos DateTime 
+            $fechaInicio      = new DateTime($value['fecha_q_s_inicio']);
+            $fechaFin         = new DateTime($value['fecha_q_s_fin']);
+
+            // solo el dia ejem: 06 
+            $f_i_dia          = date("d", strtotime($value['fecha_q_s_inicio']));
+            $f_f_dia          = date("d", strtotime($value['fecha_q_s_fin']));
+
+            $mes_f_i = nombre_mes($fechaInicio->format("Y-m-d")); 
+            $mes_f_f = nombre_mes($fechaFin->format("Y-m-d"));   
+        
+            $del_al="$f_i_dia de $mes_f_i al $f_f_dia de $mes_f_f"; //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
+
+            $s_q= $value['fecha_pago_obrero']=='semanal'? 'Semana N° : ':'Quincena N° : ';
 
             if ($deuda == '' || $deuda == null || $deuda == 'todos') {
+
               $datatable[] = array(
                 '0' => $key+1, 
-                '1' => $value['nombres'],
-                '2' => '- - -',
+                '1' => $s_q.''. $value['numero_q_s'],
+                '2' =>  $del_al,
                 '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
-                '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
-                '6' => number_format($value['deposito'], 2, '.', ',' ),
-                '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                '4' => '<button class="btn btn-info btn-sm" onclick="" readonly><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                '5' => number_format($value['total_programado'], 2, '.', ',' ),
+                '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                '7' => number_format($value['saldo'] , 2, '.', ',' ),
               );
     
-              $t_monto += floatval($value['pago_quincenal']);
-              $t_pagos += floatval($value['deposito']);
-              $t_saldo += floatval($saldo_x_fila);
+              $t_monto += floatval($value['total_programado']);
+              $t_pagos += floatval($value['total_deposito']);
+              $t_saldo += floatval($value['saldo']);
             } else {
               if ($deuda == 'sindeuda') {
-                if ($saldo_x_fila == 0) {
+                if ($value['saldo'] == 0) {
                   $datatable[] = array(
                     '0' => $key+1, 
-                    '1' => $value['nombres'],
-                    '2' => '- - -',
+                    '1' => $s_q.''. $value['numero_q_s'],
+                    '2' =>  $del_al,
                     '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
-                    '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
-                    '6' => number_format($value['deposito'], 2, '.', ',' ),
-                    '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                    '4' => '<button class="btn btn-info btn-sm" onclick="" readonly><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                    '5' => number_format($value['total_programado'], 2, '.', ',' ),
+                    '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                    '7' => number_format($value['saldo'] , 2, '.', ',' ),
                   );
         
-                  $t_monto += floatval($value['pago_quincenal']);
-                  $t_pagos += floatval($value['deposito']);
-                  $t_saldo += floatval($saldo_x_fila);
+                  $t_monto += floatval($value['total_programado']);
+                  $t_pagos += floatval($value['total_deposito']);
+                  $t_saldo += floatval($value['saldo']);
                 }
               } else {
                 if ($deuda == 'condeuda') {
-                  if ($saldo_x_fila > 0) {
+                  if ($value['saldo'] > 0) {
                     $datatable[] = array(
                       '0' => $key+1, 
-                      '1' => $value['nombres'],
-                      '2' => '- - -',
+                      '1' => $s_q.''. $value['numero_q_s'],
+                      '2' =>  $del_al,
                       '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
-                      '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
-                      '6' => number_format($value['deposito'], 2, '.', ',' ),
-                      '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                      '4' => '<button class="btn btn-info btn-sm" onclick="" readonly><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                      '5' => number_format($value['total_programado'], 2, '.', ',' ),
+                      '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                      '7' => number_format($value['saldo'] , 2, '.', ',' ),
                     );
           
-                    $t_monto += floatval($value['pago_quincenal']);
-                    $t_pagos += floatval($value['deposito']);
-                    $t_saldo += floatval($saldo_x_fila);
+                    $t_monto += floatval($value['total_programado']);
+                    $t_pagos += floatval($value['total_deposito']);
+                    $t_saldo += floatval($value['saldo']);
                   }
                 }else{
                   if ($deuda == 'conexcedente') {
-                    if ($saldo_x_fila < 0) {
+                    if ($value['saldo'] < 0) {
                       $datatable[] = array(
                         '0' => $key+1, 
-                        '1' => $value['nombres'],
-                        '2' => '- - -',
+                        '1' => $s_q.''. $value['numero_q_s'],
+                        '2' =>  $del_al,
                         '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                        '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_obrero('.$value['idtrabajador_por_proyecto'].', \'' .$value['nombres']. '\')"><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
-                        '5' => number_format($value['pago_quincenal'], 2, '.', ',' ),
-                        '6' => number_format($value['deposito'], 2, '.', ',' ),
-                        '7' => number_format($saldo_x_fila , 2, '.', ',' ),
+                        '4' => '<button class="btn btn-info btn-sm" onclick="" readonly><i class="fas fa-file-invoice fa-lg btn-info nav-icon"></i></button>',
+                        '5' => number_format($value['total_programado'], 2, '.', ',' ),
+                        '6' => number_format($value['total_deposito'], 2, '.', ',' ),
+                        '7' => number_format($value['saldo'] , 2, '.', ',' ),
                       );
             
-                      $t_monto += floatval($value['pago_quincenal']);
-                      $t_pagos += floatval($value['deposito']);
-                      $t_saldo += floatval($saldo_x_fila);
+                      $t_monto += floatval($value['total_programado']);
+                      $t_pagos += floatval($value['total_deposito']);
+                      $t_saldo += floatval($value['saldo']);
                     }
                   }
                 }

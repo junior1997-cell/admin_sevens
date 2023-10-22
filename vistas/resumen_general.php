@@ -543,7 +543,7 @@
                                   </tr>
                                   <tr>
                                     <th class="text-center clas_pading">#</th>
-                                    <th class="text-center w-300px clas_pading">TRABAJADOR</th>
+                                    <th class="text-center w-300px clas_pading">Semana/Quincena</th>
                                     <th class="text-center clas_pading">FECHA</th>
                                     <th class="text-center clas_pading">DESCRIPCIÓN</th>
                                     <th class="text-center clas_pading">DETALLE</th>

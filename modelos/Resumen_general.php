@@ -546,59 +546,102 @@ class Resumen_general
     return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $detalle_pagos_adm];
   }  
 
-  // TABLA - PAGO OBRERO
-  public function tabla_obrero($idproyecto, $id_trabajador)  {
+  // TABLA - TOTAL DE OBRREROS POR s_q PAGO OBRERO
+  public function tabla_obrero($idproyecto, $fecha_filtro_1,$fecha_filtro_2)  {
 
     $obrero = Array();
 
     $total_deposito_obrero = 0;
 
-    $consulta_filtro = "";
+    $filtro_fecha = "";
 
-    if (empty($id_trabajador) || $id_trabajador == 0) {
-      $consulta_filtro = "GROUP by tpp.idtrabajador_por_proyecto";
+    if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
+      $filtro_fecha = "AND ('$fecha_filtro_1' BETWEEN sqa.fecha_q_s_inicio AND sqa.fecha_q_s_fin OR '$fecha_filtro_2' BETWEEN sqa.fecha_q_s_inicio AND sqa.fecha_q_s_fin) ";
     } else {
-      $consulta_filtro = "AND ra.idtrabajador_por_proyecto = '$id_trabajador'";
-    }
-
-    $sql = "SELECT ra.idresumen_q_s_asistencia,ra.idtrabajador_por_proyecto, t.nombres, SUM(ra.pago_quincenal) as pago_quincenal 
-		FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
-		WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' 
-		AND tpp.idtrabajador=t.idtrabajador AND ra.estado_envio_contador = '1'  AND ra.estado = '1' AND ra.estado_delete='1' $consulta_filtro  ";
-    $trabaj_obrero = ejecutarConsultaArray($sql);
-    if ($trabaj_obrero['status'] == false) {  return $trabaj_obrero;}
-
-    if (!empty($trabaj_obrero['data'])) {
-      
-      foreach ($trabaj_obrero['data'] as $key => $value) {
-
-        if ( !empty($value['idtrabajador_por_proyecto']) ) {
-
-          $idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
-
-          $sql_2 = "SELECT SUM(pqso.monto_deposito) AS total_deposito 
-					FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero AS pqso 
-					WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
-          AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
-          $total_deposito = ejecutarConsultaSimpleFila($sql_2);
-          if ($total_deposito['status'] == false) {  return $total_deposito;}
-
-          $total_deposito_obrero = empty($total_deposito['data']) ? 0 : ($retVal_1 = empty($total_deposito['data']['total_deposito']) ? 0 : floatval($total_deposito['data']['total_deposito']));
-
-          $obrero[] = array(
-            "idresumen_q_s_asistencia"  => $value['idresumen_q_s_asistencia'],
-            "idtrabajador_por_proyecto" => $value['idtrabajador_por_proyecto'],
-            "nombres"                   => $value['nombres'],
-            "pago_quincenal"            => ( empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
-
-            "deposito"                  => ( empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
-          );
-        }
+      if (!empty($fecha_filtro_1)) {
+        $ff=
+        $filtro_fecha = "AND '$fecha_filtro_1' BETWEEN sqa.fecha_q_s_inicio AND sqa.fecha_q_s_fin";
+      }else{
+        if (!empty($fecha_filtro_2)) {
+          $filtro_fecha = "AND '$fecha_filtro_2' BETWEEN sqa.fecha_q_s_inicio AND sqa.fecha_q_s_fin";
+        }     
       }      
     }
+    
+    //=========================================================================
+    $sql_1 = "SELECT sqa.ids_q_asistencia,rqs.numero_q_s, sqa.fecha_q_s_inicio, sqa.fecha_q_s_fin, (SUM( rqs.pago_quincenal_hn)+SUM( rqs.pago_quincenal_he)) as total_pago, p.fecha_pago_obrero
+    FROM resumen_q_s_asistencia as rqs
+    inner join s_q_asistencia  as  sqa on rqs.ids_q_asistencia =sqa.ids_q_asistencia
+    inner join proyecto as p on sqa.idproyecto=p.idproyecto
+    WHERE sqa.idproyecto='$idproyecto' $filtro_fecha and rqs.estado_envio_contador='1' GROUP by rqs.numero_q_s;";
+
+    $pago_programado = ejecutarConsultaArray($sql_1);  if ($pago_programado['status'] == false) { return $pago_programado; }
+     
+    foreach ($pago_programado['data'] as $key => $value) {
+
+      $ids_q_asistencia = $value['ids_q_asistencia'];
+
+      $sql_2 = "SELECT SUM( pqs.monto_deposito) as total_deposito  
+      FROM pagos_q_s_obrero pqs
+      inner JOIN resumen_q_s_asistencia rqs on pqs.idresumen_q_s_asistencia= rqs.idresumen_q_s_asistencia
+      where rqs.ids_q_asistencia='$ids_q_asistencia';";
+
+      $depositos = ejecutarConsultaSimpleFila($sql_2);  if ($depositos['status'] == false) { return $depositos; }
+
+      $saldo = (empty($value['total_pago']) ? 0 : ( empty($value['total_pago']) ? 0 : floatval($value['total_pago']) ))-(empty($depositos['data']) ? 0 : ( empty($depositos['data']['total_deposito']) ? 0 : floatval($depositos['data']['total_deposito']) ));
+
+      $obrero[] = [
+        'ids_q_asistencia' => $value['ids_q_asistencia'],
+        'numero_q_s'       => $value['numero_q_s'],
+        'fecha_pago_obrero'=> $value['fecha_pago_obrero'],
+        'fecha_q_s_inicio' => $value['fecha_q_s_inicio'],
+        'fecha_q_s_fin'    => $value['fecha_q_s_fin'],
+        'total_programado' => (empty($value['total_pago']) ? 0 : ( empty($value['total_pago']) ? 0 : floatval($value['total_pago']) )),     
+        'total_deposito'   => (empty($depositos['data']) ? 0 : ( empty($depositos['data']['total_deposito']) ? 0 : floatval($depositos['data']['total_deposito']) )),
+        'saldo'            =>$saldo
+      ];
+    } 
+
+    // //=========================================================================
+    // $sql = "SELECT ra.idresumen_q_s_asistencia,ra.idtrabajador_por_proyecto, t.nombres, SUM(ra.pago_quincenal) as pago_quincenal 
+		// FROM resumen_q_s_asistencia as ra, trabajador_por_proyecto as tpp, trabajador as t 
+		// WHERE ra.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto AND tpp.idproyecto ='$idproyecto' 
+		// AND tpp.idtrabajador=t.idtrabajador AND ra.estado_envio_contador = '1'  AND ra.estado = '1' AND ra.estado_delete='1' $consulta_filtro  ";
+    // $trabaj_obrero = ejecutarConsultaArray($sql);
+    // if ($trabaj_obrero['status'] == false) {  return $trabaj_obrero;}
+
+    // if (!empty($trabaj_obrero['data'])) {
+      
+    //   foreach ($trabaj_obrero['data'] as $key => $value) {
+
+    //     if ( !empty($value['idtrabajador_por_proyecto']) ) {
+
+    //       $idtrabajador_por_proyecto = $value['idtrabajador_por_proyecto'];
+
+    //       $sql_2 = "SELECT SUM(pqso.monto_deposito) AS total_deposito 
+		// 			FROM trabajador_por_proyecto AS tpp, resumen_q_s_asistencia AS rqsa, pagos_q_s_obrero AS pqso 
+		// 			WHERE tpp.idtrabajador_por_proyecto = rqsa.idtrabajador_por_proyecto AND rqsa.idresumen_q_s_asistencia = pqso.idresumen_q_s_asistencia 
+    //       AND pqso.estado = '1' AND tpp.idtrabajador_por_proyecto = '$idtrabajador_por_proyecto'";
+    //       $total_deposito = ejecutarConsultaSimpleFila($sql_2);
+    //       if ($total_deposito['status'] == false) {  return $total_deposito;}
+
+    //       $total_deposito_obrero = empty($total_deposito['data']) ? 0 : ($retVal_1 = empty($total_deposito['data']['total_deposito']) ? 0 : floatval($total_deposito['data']['total_deposito']));
+
+    //       $obrero[] = array(
+    //         "idresumen_q_s_asistencia"  => $value['idresumen_q_s_asistencia'],
+    //         "idtrabajador_por_proyecto" => $value['idtrabajador_por_proyecto'],
+    //         "nombres"                   => $value['nombres'],
+    //         "pago_quincenal"            => ( empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
+
+    //         "deposito"                  => ( empty($value['pago_quincenal']) ? 0 : $value['pago_quincenal']),
+    //       );
+    //     }
+    //   }      
+    // }
 
     return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $obrero];
-
+    //echo json_encode($obrero, true); die();
+    //var_dump($obrero);die();
   }
 
   // DETALLE por cada obrero
