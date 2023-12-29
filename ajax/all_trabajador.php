@@ -240,7 +240,7 @@
                 "2"=>'<div class="user-block">
                   <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'' . $imagen . '\', \''.encodeCadenaHtml($value['trabajador']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['trabajador'] .'</p></span>
-                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' | <i class="fa-solid fa-shoe-prints"></i> '.$value['talla_ropa'].' | <i class="fa-solid fa-shirt"></i> '.$value['talla_zapato'].' </span>
+                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' | <i class="fa-solid fa-shirt"></i> '.$value['talla_ropa'].' | <i class="fa-solid  fa-shoe-prints"></i> '.$value['talla_zapato'].' </span>
                   </div>',
                 "3"=> $value['nombre_tipo'],
                 "4"=> $value['nombre_ocupacion'],
