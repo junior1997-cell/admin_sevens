@@ -29,7 +29,7 @@ class Proyecto
     // CREAMOS FECHAS DE VALORIZACION ----------------------------------------------------------
     if ($fecha_valorizacion == "quincenal") {
       
-      $fechas_val = fechas_valorizacion_quincena($fecha_inicio, $fecha_fin,);
+      $fechas_val = fechas_valorizacion_quincena($fecha_inicio, $fecha_fin);
       
       foreach ($fechas_val as $key => $val) {
         $sql_2 = "INSERT INTO resumen_q_s_valorizacion(idproyecto, numero_q_s, fecha_inicio, fecha_fin, fecha_inicio_oculto, fecha_fin_oculto, monto_programado, monto_valorizado, monto_gastado, user_created) 

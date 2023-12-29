@@ -30,33 +30,34 @@ class Resumen_general
       }      
     }    
 
-    $sql = "SELECT cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.total, p.razon_social, cpp.descripcion 
+    $sql = "SELECT cpp.idcompra_proyecto, cpp.idproyecto, cpp.idproveedor, cpp.fecha_compra, cpp.total, p.razon_social, cpp.tipo_comprobante, cpp.descripcion 
 		FROM compra_por_proyecto as cpp, proveedor as p
 		WHERE cpp.idproyecto='$idproyecto' AND cpp.idproveedor=p.idproveedor $filtro_fecha $filtro_proveedor AND cpp.estado='1' AND cpp.estado_delete='1' 
 		ORDER by cpp.fecha_compra DESC";
-
-    $compras = ejecutarConsultaArray($sql);
-    if ($compras['status'] == false) {  return $compras;}
+    $compras = ejecutarConsultaArray($sql);   if ($compras['status'] == false) {  return $compras;}
 
     if (!empty($compras['data'])) {
       foreach ($compras['data'] as $key => $value) {
-        $idcompra = $value['idcompra_proyecto'];
+
+        $idcompra     = $value['idcompra_proyecto'];
+
+        $total_valid  = ( empty($value['total']) ? 0 : $value['total']);
+        $total        = ($value['tipo_comprobante']=='Nota de Crédito' ? -1 * $total_valid : $total_valid);
 
         $sql_2 = "SELECT SUM(pc.monto) as total_p FROM pago_compras as pc WHERE pc.idcompra_proyecto='$idcompra' AND pc.estado='1' GROUP BY idcompra_proyecto";
-        $t_monto = ejecutarConsultaSimpleFila($sql_2);
-        if ($t_monto['status'] == false) {  return $t_monto;}
+        $t_monto = ejecutarConsultaSimpleFila($sql_2);  if ($t_monto['status'] == false) {  return $t_monto;}
 
         $Arraycompras[] = [
           "idcompra_proyecto" => $value['idcompra_proyecto'],
-          "idproyecto" => $value['idproyecto'],
-          "idproveedor" => $value['idproveedor'],
-          "fecha_compra" => $value['fecha_compra'],
-          "monto_total" => ($retVal_1 = empty($value['total']) ? 0 : $value['total']),
-          "proveedor" => $value['razon_social'],
-          "descripcion" => $value['descripcion'],
+          "idproyecto"        => $value['idproyecto'],
+          "idproveedor"       => $value['idproveedor'],
+          "fecha_compra"      => $value['fecha_compra'],
+          "monto_total"       => $total,
+          "proveedor"         => $value['razon_social'],
+          "descripcion"       => $value['descripcion'],
 
           //"monto_pago_total" => ($retVal_2 = empty($t_monto['data']) ? 0 : ($retVal_3 = empty($t_monto['data']['total_p']) ? 0 : $t_monto['data']['total_p'])),
-          "monto_pago_total" => ($retVal_1 = empty($value['total']) ? 0 : $value['total']),
+          "monto_pago_total" => $total,
         ];
       }
     }
