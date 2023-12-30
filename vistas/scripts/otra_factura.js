@@ -133,7 +133,9 @@ function tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprob
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,2,12,13,4,6,7,8,9,11], } }, { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,2,12,13,4,6,7,8,9,11], } }, { extend: 'pdfHtml5', footer: false,  exportOptions: { columns: [0,3,2,12,13,4,6,7,8,9,11], } }, {extend: "colvis"} ,
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9,10,11], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6,7,8,9,10,11], } }, 
+      { extend: 'pdfHtml5', footer: false,  exportOptions: { columns: [0,2,3,4,5,6,7,8,9,10,11], } }, {extend: "colvis"} ,
     ],
     ajax: {
       url: `../ajax/otra_factura.php?op=tbla_principal&empresa_a_cargo=${empresa_a_cargo}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}`,
@@ -149,13 +151,16 @@ function tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprob
       // columna: sub acciones
       if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: sub fecha
-      if (data[2] != "") { $("td", row).eq(2).addClass("text-nowrap"); }
+      if (data[2] != "") { $("td", row).eq(2).addClass("text-nowrap text-center"); }
+      if (data[3] != "") { $("td", row).eq(3).addClass("text-nowrap text-center"); }
+      if (data[4] != "") { $("td", row).eq(4).addClass("text-nowrap text-left"); }
+
       // columna: sub total
-      if (data[6] != "") { $("td", row).eq(6).addClass("text-nowrap"); }
+      if (data[7] != "") { $("td", row).eq(7).addClass("text-nowrap text-right"); }
       // columna: igv
-      if (data[7] != "") { $("td", row).eq(7).addClass("text-nowrap"); }
+      if (data[8] != "") { $("td", row).eq(8).addClass("text-nowrap text-right"); }
       // columna: total
-      if (data[8] != "") { $("td", row).eq(8).addClass("text-nowrap"); }
+      if (data[9] != "") { $("td", row).eq(9).addClass("text-nowrap text-right"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -163,18 +168,25 @@ function tbla_principal(empresa_a_cargo, fecha_1, fecha_2, id_proveedor, comprob
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
     footerCallback: function( tfoot, data, start, end, display ) {
-      var api = this.api(); var total = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      var api = this.api(); var subtotal = api.column( 7 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 7 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(subtotal)}</span>` );
+      //--------------
+      var api = this.api(); var igv = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      $( api.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
+      //--------------
+      var api = this.api(); var total = api.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       
-      $( api.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );
+      $( api.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );
       // console.log('footer: '+total);
+      
     },
     bDestroy: true,
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [12,13], visible: false, searchable: false, },    
-      { targets: [6,7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      // { targets: [13,14], visible: false, searchable: false, },    
+      { targets: [7,8,9], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
 
     ],
   }).DataTable();

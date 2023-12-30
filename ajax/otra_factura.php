@@ -107,7 +107,7 @@
         case 'tbla_principal':
           $rspta = $otra_factura->tbla_principal($_GET["empresa_a_cargo"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
           //Vamos a declarar un array
-          $data = []; $cont = 1;
+          $data = []; $cont = 1; $abr="";
 
           if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
@@ -117,28 +117,28 @@
               $subtotal = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->subtotal :$reg->subtotal);
               $igv = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->igv :$reg->igv);
               $total = ($reg->tipo_comprobante=='Nota de Crédito' ? -1*$reg->costo_parcial :$reg->costo_parcial);
+              
+              if ($reg->tipo_comprobante=='Ninguno') { $abr="NI"; } else if ($reg->tipo_comprobante=='Boleta') {$abr="BV";
+              } else if ($reg->tipo_comprobante=='Factura') {$abr="FT";} else if ($reg->tipo_comprobante=='Nota de Crédito') {
+                $abr="NC";} else{$abr="NV";}
+              
               $data[] = [
                 "0" => $cont++,
                 "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotra_factura. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
                     ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $reg->idotra_factura. ', \''. $reg->tipo_comprobante.' '.(empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>'. 
                     ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg->idotra_factura.')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
-                    '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotra_factura. ')"><i class="fa fa-pencil-alt"></i></button>' .
-                    ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg->idotra_factura. ')"><i class="fa fa-check"></i></button>',
+                    '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idotra_factura. ')"><i class="fa fa-pencil-alt"></i></button>',
                 "2" => $reg->fecha_emision,
-                "3" => $reg->razon_social,
-                "4" => $reg->forma_de_pago,
-                "5" =>'<div class="user-block">
-                    <span class="username ml-0" > <p class="text-primary m-b-02rem" >' . $reg->tipo_comprobante . '</p> </span>
-                    <span class="description ml-0" >N° ' . (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) . '</span>         
-                  </div>',
-                "6" => $subtotal,
-                "7" => $igv,
-                "8" => $total,
-                "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
-                "10" => $comprobante . $toltip,
+                "3" => $abr,
+                "4" => (empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante),
+                "5" => $reg->ruc,
+                "6" => '<div class="w-150px recorte-text text-bold text-primary" data-toggle="tooltip" data-original-title="'. $reg->razon_social .'">'. $reg->razon_social .'</div>', 
+                "7" => $subtotal,
+                "8" => $igv,
+                "9" => $total,
+                "10" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "11" => $reg->glosa,
-                "12" => $reg->tipo_comprobante,
-                "13" => $reg->numero_comprobante,
+                "12" => $comprobante . $toltip,
               ];
             }
             $results = [

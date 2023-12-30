@@ -133,38 +133,36 @@
                               </tr>
                               <tr>
                                 <th class="text-center">#</th>
-                                <th class="">Acciones</th>
+                                <th class="">Acc.</th>
                                 <th>Fecha</th>                                
-                                <th>Proveedor</th>
-                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma Pago</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
-                                <th>Subtotal</th>
+                                <th>Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Documento">Documento</th>
+                                <th data-toggle="tooltip" data-original-title="RUC">R.U.C</th>
+                                <th>Razon Social</th>
+                                <th>SubTotoal</th>
                                 <th>IGV</th>
                                 <th>Monto Total</th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Compr.</th>
-                                <th>Glosa</th>
-                                <th>Comprobante</th>
-                                <th>Numero</th>
+                                <th>Glosa.</th>
+                                <th>Doc.</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
                             <tfoot>
                               <tr>
                                 <th class="text-center">#</th>
-                                <th class="">Acciones</th>
+                                <th class="">Acc.</th>
                                 <th>Fecha</th>                                
-                                <th>Proveedor</th>
-                                <th data-toggle="tooltip" data-original-title="Forma Pago">Forma P.</th>
-                                <th data-toggle="tooltip" data-original-title="Tipo Comprobante">Tipo Comprob</th>
-                                <th>Subtotal</th>
+                                <th>Comprob</th>
+                                <th data-toggle="tooltip" data-original-title="Documento">Documento</th>
+                                <th data-toggle="tooltip" data-original-title="RUC">R.U.C</th>
+                                <th>Razon Social</th>
+                                <th>SubTotoal</th>
                                 <th>IGV</th>
-                                <th class="text-nowrap px-2"><div class="formato-numero-conta"> <span>S/</span><span id="total_monto">0.00</span></div></th>
+                                <th>Monto Total</th>
                                 <th>Descripción</th>
-                                <th data-toggle="tooltip" data-original-title="Comprobante">Compr.</th>
-                                <th>Glosa</th>
-                                <th>Comprobante</th>
-                                <th>Numero</th>
+                                <th>Glosa.</th>
+                                <th>Doc.</th>
                               </tr>
                             </tfoot>
                           </table>
