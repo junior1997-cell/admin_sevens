@@ -101,6 +101,8 @@ function lista_de_items() {
 
 //Función Listar
 function tabla_principal(id_categoria) {
+  $('.btn_add_almacen').show();
+  $('.btn_add_prod_almacen').hide();
   tabla_almacen_resumen = $("#tabla-almacen").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
@@ -144,6 +146,8 @@ function tabla_principal(id_categoria) {
 }
 
 function tabla_detalle(id_categoria) {
+  $('.btn_add_almacen').hide();
+  $('.btn_add_prod_almacen').show();
   tabla_almacen_detalle = $("#tabla-detalle-almacen").dataTable({
     responsive: true,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar

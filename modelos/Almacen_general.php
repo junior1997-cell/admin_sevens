@@ -113,7 +113,7 @@ class Almacen_general
     pry.nombre_codigo as proyecto
     FROM almacen_producto_guardado as apg, almacen_resumen as ar, producto as prd, proyecto as pry
     WHERE apg.idalmacen_resumen = ar.idalmacen_resumen AND ar.idproducto = prd.idproducto AND ar.idproyecto = pry.idproyecto 
-    AND apg.estado = '1' AND apg.estado_delete = '1' AND ar.estado = '1' AND ar.estado_delete = '1'
+    AND apg.idalmacen_general='$id_almacen' AND apg.estado = '1' AND apg.estado_delete = '1' AND ar.estado = '1' AND ar.estado_delete = '1'
     ORDER BY pry.nombre_codigo ASC;";
    return ejecutarConsulta($sql);    
   }
