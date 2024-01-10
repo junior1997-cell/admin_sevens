@@ -16,7 +16,7 @@
       $prestamo = new Prestamos();
 
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      $date_now = date("d_m_Y__h_i_s_A");
 
       $idprestamo = isset($_POST["idprestamo"]) ? limpiarCadena($_POST["idprestamo"]) : "";
       $id_proyecto_prestamo = isset($_POST["id_proyecto_prestamo"]) ? limpiarCadena($_POST["id_proyecto_prestamo"]) : "";
@@ -236,7 +236,7 @@
 
             $flat_img1 = true;
 
-            $imagen1 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $imagen1 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/pago_prestamo/" . $imagen1);
           }
@@ -512,7 +512,7 @@
       
             $flat_img2 = true;
       
-            $imagen2 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $imagen2 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
       
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/pago_credito/" . $imagen2);
           }

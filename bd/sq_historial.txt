@@ -1,0 +1,6 @@
+:::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_resumen ::::::::::::::::::::::
+INSERT INTO almacen_resumen(idproyecto, idproducto, tipo, total_stok, total_ingreso) 
+SELECT cpp.idproyecto as idproyecto, dc.idproducto as idproducto, CASE dc.idclasificacion_grupo WHEN 11 THEN 'EPP' ELSE 'PN' END as tipo,
+SUM( dc.cantidad) as total_stok, SUM( dc.cantidad) as total_ingreso 
+from detalle_compra as dc inner JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto =cpp.idcompra_proyecto 
+GROUP BY cpp.idproyecto, dc.idproducto;

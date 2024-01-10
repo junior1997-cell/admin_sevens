@@ -17,7 +17,7 @@
      $movimiento_tierra = new Movimiento_tierra();
      $compra_insumos = new Compra_insumos();
 
-      date_default_timezone_set('America/Lima'); $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima'); $date_now = date("d_m_Y__h_i_s_A");
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       // :::::::::::::::::::::::::: S E C C I O N   G R U P O  ::::::::::::::::::::::::::

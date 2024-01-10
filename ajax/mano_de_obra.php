@@ -18,7 +18,7 @@
 
       $mano_de_obra=new Mano_de_obra();
       
-      date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
 
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 

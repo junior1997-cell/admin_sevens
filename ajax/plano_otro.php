@@ -19,7 +19,7 @@
 
       $plano_otro = new PlanoOtro();
 
-      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");  
+      date_default_timezone_set('America/Lima');   $date_now = date("d_m_Y__h_i_s_A");  
       $imagen_error = "this.src='../dist/svg/user_default.svg'";
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
@@ -61,7 +61,7 @@
 						$imagen1=$_POST["doc_old_1"]; $flat_img1 = false;
 					} else {
 						$ext1 = explode(".", $_FILES["doc1"]["name"]); $flat_img1 = true;	
-            $imagen1 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $imagen1 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/plano_otro/archivos/" . $imagen1);						
 					}
 

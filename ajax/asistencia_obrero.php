@@ -16,7 +16,7 @@ ob_start();
 
       $asistencia_obrero=new Asistencia_obrero();  
       
-      date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       // :::::::::::::::::::::::::::::::::::: D A T O S  A S I S T E N C I A ::::::::::::::::::::::::::::::::::::::   
@@ -280,7 +280,7 @@ ob_start();
 
             $ext_doc1  = explode(".", $_FILES["doc1"]["name"]);
               
-            $doc1 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext_doc1);
+            $doc1 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext_doc1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/asistencia_obrero/justificacion/" . $doc1);
             

@@ -16,7 +16,7 @@
 
       $materiales = new Materiales();
 
-      date_default_timezone_set('America/Lima'); $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima'); $date_now = date("d_m_Y__h_i_s_A");
 
       $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
 
@@ -56,7 +56,7 @@
 
             $flat_img1 = true;
 
-            $imagen1 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $imagen1 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["imagen1"]["tmp_name"], "../dist/docs/material/img_perfil/" . $imagen1);
           }
@@ -74,7 +74,7 @@
 
             $flat_ficha1 = true;
 
-            $ficha_tecnica = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $ficha_tecnica = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica);
           }

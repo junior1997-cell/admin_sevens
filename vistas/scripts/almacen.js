@@ -374,7 +374,7 @@ function todos_almacen() {
 
 function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dias ) {
   $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
-  pintar_boton_selecionado(i);
+  pintar_boton_selecionado(i); show_hide_tablas(2);
   var idproyecto =  localStorage.getItem("nube_idproyecto");
   var fip =  fecha_q_s_inicio
   var ffp =  fecha_q_s_fin

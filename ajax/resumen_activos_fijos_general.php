@@ -26,7 +26,7 @@
       $compra = new Compra_insumos();
 
       date_default_timezone_set('America/Lima');
-      $date_now = date("d-m-Y h.i.s A");
+      $date_now = date("d_m_Y__h_i_s_A");
 
       $op_general = "ActivosFijos";
       $op_proyecto = "Insumos";
@@ -535,7 +535,7 @@
 
             $flat_img1 = true;
 
-            $img_pefil_p = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $img_pefil_p = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/material/img_perfil/" . $img_pefil_p);
           }
@@ -550,7 +550,7 @@
 
             $flat_ficha1 = true;
 
-            $ficha_tecnica_p = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $ficha_tecnica_p = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica_p);
           }

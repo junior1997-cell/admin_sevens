@@ -328,7 +328,6 @@ class Almacen
         <span class="font-size-18px text-danger"><b >Almacen</b> '.$val1['nombre_almacen'].'</span><br>
         <b>Producto: </b>'.$val1['producto'].'<br>
         <b>Fecha: </b>'.$val1['fecha_envio'].'<br>
-        <b>Fecha: </b>'.format_d_m_a($val1['fecha_comida']).'<br>
         <b>Cantidad: </b>'.$val1['cantidad'].'<br>
         <b>Papelera: </b>'.( $val1['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
         <b>Eliminado: </b>'. ($val1['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>

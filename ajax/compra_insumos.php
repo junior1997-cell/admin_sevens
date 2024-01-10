@@ -19,7 +19,7 @@ if (!isset($_SESSION["nombre"])) {
     $proveedor = new AllProveedor();
     $insumos = new Materiales();      
     
-    date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
+    date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
     $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
@@ -114,7 +114,7 @@ if (!isset($_SESSION["nombre"])) {
     
           $flat_img1 = true;
     
-          $img_pefil_p = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+          $img_pefil_p = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
     
           move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/material/img_perfil/" . $img_pefil_p);
         }
@@ -132,7 +132,7 @@ if (!isset($_SESSION["nombre"])) {
     
           $flat_ficha1 = true;
     
-          $ficha_tecnica_p = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+          $ficha_tecnica_p = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
     
           move_uploaded_file($_FILES["doc2"]["tmp_name"], "../dist/docs/material/ficha_tecnica/" . $ficha_tecnica_p);
         }
@@ -482,7 +482,7 @@ if (!isset($_SESSION["nombre"])) {
 
           $ext1 = explode(".", $_FILES["doc1"]["name"]);
           $flat_comprob = true;    
-          $doc_comprobante = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);    
+          $doc_comprobante = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);    
           move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/compra_insumo/comprobante_compra/" . $doc_comprobante);
         }        
 

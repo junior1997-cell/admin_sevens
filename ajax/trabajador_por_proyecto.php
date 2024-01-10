@@ -20,7 +20,7 @@
       $trabajadorproyecto=new TrabajadorPorProyecto($_SESSION['idusuario']);
       $all_trabajador=new AllTrabajador();
 
-      date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");
+      date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
 
       $imagen_error = "this.src='../dist/svg/user_default.svg'";
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
@@ -214,7 +214,7 @@
 						$imagen1=$_POST["foto1_actual"]; $flat_img1 = false;
 					} else {
 						$ext1 = explode(".", $_FILES["foto1"]["name"]); $flat_img1 = true;
-            $imagen1 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $imagen1 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
             move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/docs/all_trabajador/perfil/" . $imagen1);						
 					}
 
@@ -223,7 +223,7 @@
 						$imagen2=$_POST["foto2_actual"]; $flat_img2 = false;
 					} else {
 						$ext2 = explode(".", $_FILES["foto2"]["name"]); $flat_img2 = true;
-            $imagen2 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext2);
+            $imagen2 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext2);
             move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/all_trabajador/dni_anverso/" . $imagen2);						
 					}
 
@@ -232,7 +232,7 @@
 						$imagen3=$_POST["foto3_actual"]; $flat_img3 = false;
 					} else {
 						$ext3 = explode(".", $_FILES["foto3"]["name"]); $flat_img3 = true;            
-            $imagen3 = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
+            $imagen3 = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
             move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/docs/all_trabajador/dni_reverso/" . $imagen3);						
 					}
 
@@ -241,7 +241,7 @@
             $cv_documentado=$_POST["doc_old_4"]; $flat_cv1 = false;
           } else {
             $ext3 = explode(".", $_FILES["doc4"]["name"]); $flat_cv1 = true;            
-            $cv_documentado = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
+            $cv_documentado = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
             move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/all_trabajador/cv_documentado/" .  $cv_documentado);            
           }
 
@@ -250,7 +250,7 @@
             $cv_nodocumentado=$_POST["doc_old_5"]; $flat_cv2 = false;
           } else {
             $ext3 = explode(".", $_FILES["doc5"]["name"]); $flat_cv2 = true;            
-            $cv_nodocumentado = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
+            $cv_nodocumentado = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
             move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/all_trabajador/cv_no_documentado/" . $cv_nodocumentado);            
           }
 

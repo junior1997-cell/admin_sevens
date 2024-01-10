@@ -15,7 +15,7 @@
 
       $transporte = new Transporte();
       
-      date_default_timezone_set('America/Lima');   $date_now = date("d-m-Y h.i.s A");   
+      date_default_timezone_set('America/Lima');   $date_now = date("d_m_Y__h_i_s_A");   
 
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
@@ -54,7 +54,7 @@
             $ext1 = explode(".", $_FILES["doc1"]["name"]);
             $flat_ficha1 = true;
 
-            $comprobante = $date_now .' '. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
+            $comprobante = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
 
             move_uploaded_file($_FILES["doc1"]["tmp_name"], "../dist/docs/transporte/comprobante/" . $comprobante);
           }

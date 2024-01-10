@@ -15,7 +15,7 @@
 
       $epp = new Epp();
             
-      date_default_timezone_set('America/Lima');  $date_now = date("d-m-Y h.i.s A");   
+      date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");   
       $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
       
