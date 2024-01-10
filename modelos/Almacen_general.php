@@ -137,6 +137,37 @@ class Almacen_general
     return ejecutarConsulta($sql);
   }
 
+ // ADD PRODUCTOS DE PROYECTOS A UN ALMACEN GENERAL
+
+  public function marcas_x_producto($id_proyecto, $id_producto) {
+
+    $sql_0 = "SELECT  dc.marca,  pr.nombre AS nombre_producto
+		FROM compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
+		WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto     
+    AND cpp.idproyecto = '$id_proyecto' AND dc.idproducto = '$id_producto'
+    AND cpp.estado = '1' AND cpp.estado_delete = '1'  GROUP BY dc.idproducto, dc.marca ORDER BY pr.nombre ASC;";    
+    return ejecutarConsultaArray($sql_0);
+          
+  }
+
+
+  public function select2_proyect(){
+    $sql = "SELECT idproyecto,nombre_proyecto,nombre_codigo FROM proyecto;";
+    return ejecutarConsultaArray($sql);
+  }
+
+  public function select2_recursos_almacen($idproyecto){
+
+    $sql="SELECT ar.idalmacen_resumen,ar.idproyecto,ar.idproducto,ar.tipo,ar.saldo_anterior,ar.total_stok, p.nombre as nombre_producto, 
+    um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
+    FROM almacen_resumen as ar
+    INNER JOIN producto as p on ar.idproducto=p.idproducto
+    INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
+    INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
+    where ar.idproyecto='8' and ar.total_stok<>'0';";
+    return ejecutarConsultaArray($sql);
+  }
+
 }
 
 ?>
