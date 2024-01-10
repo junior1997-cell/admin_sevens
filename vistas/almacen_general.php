@@ -243,16 +243,12 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- idalmacen_resumen -->
                           <input type="hidden" name="idalmacen_resumen_ag" id="idalmacen_resumen_ag" />
                           <!-- idalmacen_resumen -->
-                          <input type="hidden" name="idproyecto_ag" id="idproyecto_ag" />
 
-                          <!-- Recurso -->
-                          <div class="col-12 col-sm-12 col-md-5 col-lg-6">
+                          <!-- Proyecto -->
+                          <div class="col-12 col-sm-12 col-md-5 col-lg-4">
                             <div class="form-group">
-                              <label for="producto_ag">
-                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span>
-                                Producto <small>(comprado)</small> <span class="cargando_productos_ag"></span>
-                              </label>
-                              <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">
+                              <label for="proyecto_ag"> Proyecto <sup class="text-danger">*</sup></label>
+                              <select name="proyecto_ag" id="proyecto_ag" class="form-control" placeholder="Proyecto" onchange="reload_proyect_ag(this);">
                               </select>
                             </div>
                           </div>
@@ -266,25 +262,44 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
                           </div>
 
-                          <!-- Proyecto -->
-                          <div class="col-12 col-sm-12 col-md-5 col-lg-4">
-                            <div class="form-group">
+                          <!-- Recurso  style="display: none; padding-left: 2px;"-->
+                          <div class="col-12 col-sm-12 col-md-5 col-lg-6 ">
+                            <div class="form-group select_recurso" style="display: none; padding-left: 2px;">
                               <label for="producto_ag">
                                 <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span>
                                 Producto <small>(comprado)</small> <span class="cargando_productos_ag"></span>
+
                               </label>
                               <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">
                               </select>
                             </div>
-                          </div>
 
+                            <div class="form-group select_init_recurso" >
+                              <label for="producto_ag">
+                                <span class="badge badge-danger cursor-pointer" data-toggle="tooltip" data-original-title="Selecciona un proyecto"><i class="fa-solid fa-rotate-right"></i></span>
+                                Producto <small>(comprado)</small> <span class="cargando_productos_ag"></span>
+                               
+                              </label>
+                              <p class="text-warning m-b-01rem" style="margin-top: 7px" > <strong>SELECCIONAR PROYECTO</strong> </p>
+                              <!-- <input type="text" class="text-info form-control" placeholder="Seleccionar proyecto" desabled> -->
+
+                              </select>
+                            </div>
+
+                          </div>
 
                           <div class="col-12 pl-0">
                             <div class="text-primary"><label for="">Productos agregados </label></div>
                           </div>
 
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
-                            <div class="row" id="html_producto_ag">
+                            <div class="row head_list" style="display: none;">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6">Nombre Producto</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3">Proyecto</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-2">Cantidad</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1"><i class="far fa-trash-alt"></i></div>
+                            </div>
+                          <div class="row" id="html_producto_ag">
                               <span> Seleccione un producto</span>
                             </div>
                           </div>
