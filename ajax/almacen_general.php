@@ -206,44 +206,6 @@ if (!isset($_SESSION["nombre"])) {
       echo json_encode($rspta, true);
       break;
 
-
-<<<<<<< HEAD
-      date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
-      $imagen_error = "this.src='../dist/svg/404-v2.svg'";
-      $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
-
-      $scheme_host =  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
-
-      // input no usados        
-      $idalmacen_general  = isset($_POST["idalmacen_general"]) ? limpiarCadena($_POST["idalmacen_general"]) : "" ;    
-      $nombre_almacen     = isset($_POST["nombre_almacen"]) ? limpiarCadena($_POST["nombre_almacen"]) : "" ;    
-      $descripcion        = isset($_POST["descripcion"]) ? encodeCadenaHtml($_POST["descripcion"]) : "" ;   
-
-      switch ($_GET["op"]) {
-
-        case 'guardar_y_editar_almacen':         
-
-          if (empty($idalmacen_general)) {
-            //var_dump($idproyecto,$idproveedor);
-            $rspta = $almacen_general->insertar( $nombre_almacen, $descripcion );            
-            echo json_encode( $rspta, true);
-          } else {            
-            $rspta = $almacen_general->editar( $idalmacen_general, $nombre_almacen, $descripcion);
-            //var_dump($idactivos_fijos,$idproveedor);
-            echo json_encode( $rspta, true);
-          }
-=======
-      case 'salir':
-        //Limpiamos las variables de sesión
-        session_unset();
-        //Destruìmos la sesión
-        session_destroy();
-        //Redireccionamos al login
-        header("Location: ../index.php");
->>>>>>> 776e34144ba5dde48f0f0e44cf3f51d92e3c3f78
-
-        break;
-
       default:
         $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
         echo json_encode($rspta, true);
