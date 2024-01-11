@@ -224,8 +224,6 @@ class Almacen
     ];
   }  
 
-  
-
   public function ver_almacen( $id_proyecto, $id_almacen_s, $id_producto ) {
 
     $sql_0 = "SELECT als.idalmacen_salida, als.idalmacen_resumen, ar.idproducto, als.fecha_ingreso, als.dia_ingreso, als.cantidad, als.marca

@@ -72,8 +72,89 @@
         case 'tabla_almacen':
           $rspta = $almacen->tbla_principal($_POST["id_proyecto"], $_POST["fip"], $_POST["ffp"], $_POST["fpo"] );
           // $rspta = $almacen->tbla_principal(6, '2023-04-18', '2023-04-22', 'semanal' );
+
+          $codigoHTMLbodyProducto =''; 
+          $codigoHTMLhead1=""; $codigoHTMLhead2=""; $codigoHTMLhead3=""; $codigoHTMLhead4=""; $codigoHTMLhead5="" ;          
+
+          foreach ($rspta['data']['fechas'] as $key => $val) {
+            $codigoHTMLhead1 = '<th colspan="'.$val['cantidad_dias'].'">'.nombre_mes($val['mes']).'</th>';
+            foreach ($val['dia'] as $key => $val2) {
+              $codigoHTMLhead2 .= '<th class="style-head">'.$val2['num_dia'].'</th>';     
+              $codigoHTMLhead4 .= '<th class="style-head">'.$val2['nombre_abrev_dia'].'</th>';
+            }
+          }
+
+          foreach ($rspta['data']['data_sq'] as $key => $val) {
+            $codigoHTMLhead3 .= '<th colspan="'.$val['colspan'].'">'.$val['nombre_sq'].' '. $val['num_sq'].'</th>';
+          }
+
+          echo '<thead class="st_tr_style bg-color-ffd146">
+          <tr class="thead-f1">
+            <th rowspan="4">#</th> 
+            <th rowspan="4">Code</th> 
+            <th rowspan="4">Producto</th>
+            <th rowspan="4">UND</th> 
+            <th rowspan="4">SALDO <br> ANTERIOR <br> <br> <button type="button" class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th>           
+            '.$codigoHTMLhead1.'
+            <th rowspan="4">ENTRADA/ <br> SALIDA</th> 
+            <th rowspan="4">SALDO</th>
+          </tr>';
+
+          echo '<tr class="thead-f2">'. $codigoHTMLhead2 . '</tr>';
+          echo '<tr class="thead-f3">'. $codigoHTMLhead3 . '</tr>';
+          echo '<tr class="thead-f4">'. $codigoHTMLhead4 . '</tr>';
+          // echo $codigoHTMLhead5;                                             
+          echo '</thead>';
+
+          echo '<tbody class="data_tbody_almacen"> ';       
+
+          foreach ($rspta['data']['producto'] as $key => $val) {
+            $color_filas =  ($key%2==0 ? 'bg-color-e9e9e9' : '') ;
+            $html_dias = ''; $html_dias_sum = ''; $total_x_producto = 0;
+            foreach ($val['almacen'] as $key2 => $val2) {
+              $salida = ''; $entrada = ''; $acumulado_s = 0; $acumulado_e = 0 ;
+              if ( count($val2['salida']) === 0) { $salida='0'; } else { 
+                foreach ($val2['salida'] as $key3 => $val3) {
+                  $key3 == 0 ? $salida = floatval($val3['cantidad']) : $salida = $salida . ', ' . floatval($val3['cantidad']); 
+                  $acumulado_s += floatval($val3['cantidad']); $total_x_producto += floatval($val3['cantidad']);
+                }                
+              } 
+              if ( count($val2['entrada']) === 0) { $entrada='0'; } else { 
+                foreach ($val2['entrada'] as $key3 => $val3) {
+                  $key3 == 0 ? $entrada = floatval($val3['cantidad']) : $entrada = $entrada . ', ' . floatval($val3['cantidad']); 
+                  $acumulado_e += floatval($val3['cantidad']); 
+                }                
+              } 
+              $html_dias .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$entrada.'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idproducto'].'\');">'.$acumulado_e.'</td>';
+              $html_dias_sum .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$salida.'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idproducto'].'\');">'.$acumulado_s.'</td>';
+            }
+
+            $saldo = ($val['entrada_total'] + $val['saldo_anterior']) - $total_x_producto;
+            $codigoHTMLbodyProducto = '<tr class="text-nowrap '.$color_filas.'">
+              <td rowspan="2">'.($key +1).'</td>
+              <td rowspan="2">'.$val['idproducto'].'</td> 
+              <td class="text_producto text-nowrap" rowspan="2"> <span class="name_producto_'.$val['idproducto'].'">'.$val['nombre_producto'].'</span> <br> <small><b>Clasf:</b> '.$val['categoria'].' </small></td>
+              <td rowspan="2">'.$val['abreviacion_um'].'</td>
+              <td rowspan="2"> 
+                <span class="span_s" >'.$val['saldo_anterior'].'</span> 
+                <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="'.$val['saldo_anterior'].'" style="display:none;" onchange="calcular_saldo(this, '.$val['idproducto'].');" onkeyup="calcular_saldo(this, '.$val['idproducto'].');" > <br> 
+                <input type="hidden" name="idproducto_sa[]" value="'.$val['idproducto'].'" > <input type="hidden" name="idproyecto_sa[]" value="'.$val['idproyecto'].'" >
+                <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior(\''.$idproyecto.'\', \''.$val['idproducto'].'\');"><i class="far fa-eye"></i></span> 
+              </td>          
+              '.$html_dias.'          
+              <td> <span class="entrada_total_'.$val['idproducto'].'">'.number_format(($val['entrada_total'] + $val['saldo_anterior']), 2,',','.').'</span> </td>
+              <td rowspan="2" class="'.($saldo < 0 ? 'text-danger' : '').'"><span class="saldo_total_'.$val['idproducto'].'">'.number_format($saldo, 2,',','.').'</span></td>
+            </tr>';
+
+            echo $codigoHTMLbodyProducto .' <tr>'.$html_dias_sum.'<td class="'.$color_filas.'"><span class="salida_total_'.$val['idproducto'].'">'.number_format($total_x_producto, 2,',','.').'</span></td> </tr>'; 
+            $html_dias ='';            
+
+          }
+
+          echo '</tbody>';
+
           //Codificar el resultado utilizando json
-          echo json_encode($rspta, true);
+          // echo json_encode($rspta, true);
         break;  
 
         // ══════════════════════════════════════  A L M A C E N E S   G E N E R A L E S ══════════════════════════════════════

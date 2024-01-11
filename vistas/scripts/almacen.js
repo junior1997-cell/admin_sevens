@@ -282,8 +282,32 @@ function remove_producto_ag(id) {
 
 // .....::::::::::::::::::::::::::::::::::::: A L M A C E N   D E T A L L E S  :::::::::::::::::::::::::::::::::::::::..
 
-
 function todos_almacen() {
+  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
+  pintar_boton_selecionado(0); show_hide_tablas(2);
+  var idproyecto =  localStorage.getItem("nube_idproyecto");
+  var fip =  localStorage.getItem("nube_fecha_inicial_actividad");
+  var ffp =  localStorage.getItem("nube_fecha_final_actividad");
+  var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
+  
+  $('#cargando-table-almacen').html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
+  
+  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
+
+    // e = JSON.parse(e); console.log(e);
+
+    $('.tabla_almacen').html(e);        
+
+    $('#div_tabla_almacen').show();
+    $('#cargando-table-almacen').hide();
+    $('[data-toggle="tooltip"]').tooltip();
+    scroll_tabla_asistencia();
+   
+  }).fail(function (e) { ver_errores(e); });
+  
+}
+
+function todos_almacen_tttt() {
   $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
   pintar_boton_selecionado(0); show_hide_tablas(2);
   var idproyecto =  localStorage.getItem("nube_idproyecto");
@@ -373,6 +397,30 @@ function todos_almacen() {
 }
 
 function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dias ) {
+  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
+  pintar_boton_selecionado(i); show_hide_tablas(2);
+  var idproyecto =  localStorage.getItem("nube_idproyecto");
+  var fip =  fecha_q_s_inicio
+  var ffp =  fecha_q_s_fin
+  var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
+
+  $('#div_tabla_almacen').hide();
+  $('#cargando-table-almacen').show().html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
+  
+  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
+
+    // e = JSON.parse(e); console.log(e);
+    $('.tabla_almacen').html(e); 
+
+    $('#div_tabla_almacen').show();
+    $('#cargando-table-almacen').hide();
+    $('[data-toggle="tooltip"]').tooltip();
+    scroll_tabla_asistencia();
+
+  }).fail(function (e) { ver_errores(e); });
+}
+
+function por_fecha_ttt(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dias ) {
   $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
   pintar_boton_selecionado(i); show_hide_tablas(2);
   var idproyecto =  localStorage.getItem("nube_idproyecto");
