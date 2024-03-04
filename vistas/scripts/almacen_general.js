@@ -1,9 +1,12 @@
 var tabla_almacen_resumen;
 var tabla_almacen_detalle;
-
+var idproyecto = "";
+var textproyecto = "";
+var nombre_almacen_transf="";
+var id_almacen_transf="";
 //Función que se ejecuta al inicio
 function init() {
-
+// console.log(Date.now());
   $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
   $("#mRecurso").addClass("active");
   $("#lAlmacenGeneral").addClass("active");
@@ -13,13 +16,15 @@ function init() {
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2("../ajax/almacen_general.php?op=select2_proyect", '#proyecto_ag', null);
+  // lista_select2(`../ajax/almacen_general.php?op=select_lista_almacenes&id_alm_origen='0'`, '#name_alm_origen', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen-general").submit(); });
+  $("#guardar_registro_otro_almacen").on("click", function (e) { $("#submit-form-otro-almacen").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════ 
   $("#proyecto_ag").select2({ theme: "bootstrap4", placeholder: "Seleccinar proyecto", allowClear: true, });
-  // $("#producto_ag").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
+  // $("#name_alm_origen").select2({theme: "bootstrap4", placeholder: "Selecione almacen", allowClear: true, });
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
   // $('#precio_unitario').number( true, 2 );
 }
@@ -32,8 +37,9 @@ function templateColor(state) {
 }
 
 function reload_proyect_ag(pry) {
-  var idproyecto = $(pry).select2('val');
-  // console.log(proyecto_ag);
+  idproyecto = $(pry).select2('val');
+ 
+  // console.log('textproyecto '+textproyecto);
 
   if (idproyecto == null || idproyecto == '') {
     $('.select_init_recurso').show();
@@ -50,6 +56,25 @@ function reload_proyect_ag(pry) {
 
 
 }
+// function reload_transf_almacen(id_alm_o){
+//   var id_alm_origen = $(id_alm_o).select2('val');
+// console.log(id_alm_origen);
+//   if (id_alm_origen == null || id_alm_origen == '') {
+//       // Poner el atributo 'disabled'
+//       $("#name_alm_destino").prop("disabled", true);
+//       $("#name_prod_alm_origen").prop("disabled", true);
+//       // name_alm_origen
+
+//   } else {
+//       // Quitar el atributo 'disabled'
+//       $("#name_alm_destino").prop("disabled", false);
+//       $("#name_prod_alm_origen").prop("disabled", false);
+//     lista_select2(`../ajax/almacen_general.php?op=select_lista_almacenes&id_alm_origen=${id_alm_origen}`, '#name_alm_destino', null, null);
+
+//     $("#name_alm_destino").select2({ theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
+//   }
+
+// }
 
 //Función limpiar
 function limpiar() {
@@ -103,7 +128,7 @@ function lista_de_items() {
       e.data.forEach((val, index) => {
         data_html = data_html.concat(`
         <li class="nav-item">
-          <a class="nav-link" onclick="delay(function(){tabla_detalle('${val.idcategoria}')}, 50 );" id="tabs-for-detalle-tab" data-toggle="pill" href="#tabs-for-detalle" role="tab" aria-controls="tabs-for-detalle" aria-selected="false">${val.nombre}</a>
+          <a class="nav-link" onclick="delay(function(){tabla_detalle('${val.idcategoria}','${val.nombre}')}, 50 );" id="tabs-for-detalle-tab" data-toggle="pill" href="#tabs-for-detalle" role="tab" aria-controls="tabs-for-detalle" aria-selected="false">${val.nombre}</a>
         </li>`);
       });
 
@@ -165,9 +190,15 @@ function tabla_principal(id_categoria) {
   }).DataTable();
 }
 
-function tabla_detalle(id_categoria) {
+function tabla_detalle(id_categoria,nombre) {
+  nombre_almacen_transf=nombre;
+  id_almacen_transf=id_categoria;
+  $('#idalmacen_general_ag').val(id_categoria);
+  $('.nombre_almacen_g').html(nombre);
+  // 
   $('.btn_add_almacen').hide();
   $('.btn_add_prod_almacen').show();
+  
   tabla_almacen_detalle = $("#tabla-detalle-almacen").dataTable({
     responsive: true,
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
@@ -191,9 +222,9 @@ function tabla_detalle(id_categoria) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
       // columna: op
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
-      // columna: code
       if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+      // columna: code
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -316,16 +347,18 @@ function eliminar(idproducto, nombre) {
 
 function limpiar_form_otro_almacen() {
 
-  $('#producto_ag').val('').trigger("change");;
+  $('#producto_ag').val('').trigger("change");
+  $('#proyecto_ag').val('').trigger("change");
   $('#fecha_ingreso_ag').val('');
-  $('#html_producto_ag').html(`<div class="col-12 delete_multiple_alerta_oa">
+  $('#idalmacen_producto_guardado').val('');
+  $('#html_producto_ag').html(`<div class="col-12 html_mensaje">
     <div class="alert alert-warning alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
       NO TIENES NINGÚN PRODUCTO SELECCIONADO.
     </div>
   </div>`);
-
+  $('.head_list').hide();
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
@@ -338,7 +371,7 @@ function guardar_y_editar_almacen_general(e) {
   var formData = new FormData($("#form-otro-almacen")[0]);
 
   $.ajax({
-    url: "../ajax/almacen.php?op=guardar_y_editar_almacen_general",
+    url: "../ajax/almacen_general.php?op=guardar_y_editar_almacen_general",
     type: "POST",
     data: formData,
     contentType: false,
@@ -347,9 +380,13 @@ function guardar_y_editar_almacen_general(e) {
       try {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
-          reload_producto_comprados_ag()
-          tbla_resumen.ajax.reload(null, false);
+          
+          tabla_almacen_detalle.ajax.reload(null, false);
+          // lista_de_items();
+          $("#modal-agregar-otro-almacen").modal("hide");
           limpiar_form_otro_almacen();
+          // reload_producto_comprados_ag()
+
           Swal.fire("Correcto!", "Almacen General guardado correctamente", "success");
 
         } else {
@@ -383,48 +420,54 @@ function guardar_y_editar_almacen_general(e) {
 
 function add_producto_ag(data) {
 
-  var idproducto = $(data).select2('val'); console.log('goooooooooooooooo');
-  
-  $('.delete_multiple_alerta_oa').remove();
+  var idproducto = $(data).select2('val'); 
+  textproyecto = $('#proyecto_ag').select2('data')[0].text;
+
 
   if (idproducto == null || idproducto == '' || idproducto === undefined) { } else {
-
+    $('.html_mensaje').remove();
     var textproducto = $('#producto_ag').select2('data')[0].text;
     var unidad_medida = $('#producto_ag').select2('data')[0].element.attributes.unidad_medida.value
     var id_ar = $('#producto_ag').select2('data')[0].element.attributes.id_ar.value
+    var stok = $('#producto_ag').select2('data')[0].element.attributes.stok.value
 
-    if ($(`#html_producto_ag div`).hasClass(`delete_multiple_${idproducto}`)) { // validamos si exte el producto agregado
+    if ($(`#html_producto_ag div`).hasClass(`delete_multiple_${idproducto}_${idproyecto}`)) { // validamos si exte el producto agregado
 
       toastr_error('Existe!!', `<u>${textproducto}</u>, Este producto ya ha sido agregado`);
-
+      // borde-arriba-0000001a mt-2 mb-2
     } else {
-
-      $('#html_producto_ag').append(`<div class="col-lg-12 borde-arriba-0000001a mt-2 mb-2 delete_multiple_${idproducto}"></div>
-      <div class="col-12 col-sm-12 col-md-6 col-lg-6 delete_multiple_${idproducto}" >
+      $('.head_list').show();
+      $('#html_producto_ag').append(`<div class="col-lg-12 delete_multiple_${idproducto}_${idproyecto}"></div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 delete_multiple_${idproducto}_${idproyecto}" >
         <input type="hidden" name="idproducto_ag[]" value="${idproducto}" />        
+        <input type="hidden" name="idproyecto_ag[]" value="${idproyecto}" />        
         <input type="hidden" name="id_ar_ag[]" value="${id_ar}" />        
         <div class="form-group">
         <!--<label for="fecha_ingreso">Nombre Producto</label>-->
-          <span class="form-control-mejorado"> ${textproducto} </span>                                  
+          <textarea class="form-control textarea_datatable" rows="1"> ${textproducto} </textarea>                                  
         </div>
       </div> 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${idproducto}">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${idproducto}_${idproyecto}">
         <div class="form-group">
-        <!--<label for="almacen_general_${idproducto}">Almacen general <span class="cargando-almacen-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span></label>-->
-          <select name="almacen_general_ag[]" id="almacen_general_${idproducto}" class="form-control" placeholder="Almacen general"> </select>
+        <!--<label for="almacen_general_${idproducto}">Almacen general <span class="cargando-almacen-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span></label>
+          <select name="almacen_general_ag[]" id="almacen_general_${idproducto}" class="form-control" placeholder="Almacen general"> </select>-->
+           <input type="hidden" name="proyecto_ag[]" class="form-control" id="proyecto_${idproducto}" value="${idproyecto}"  placeholder="Proyecto" required min="0" />
+           <!--<span class="form-control-mejorado"> ${textproyecto} </span>-->
+          <textarea class="form-control textarea_datatable" rows="1"> ${textproyecto} </textarea>                                  
+
         </div>      
       </div> 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}"">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}_${idproyecto}">
         <div class="form-group">
           <!--<label for="cantidad_${idproducto}">Cantidad</label>-->
-          <input type="number" name="cantidad_ag[]" class="form-control" id="cantidad_${idproducto}" placeholder="cantidad" required min="0" />
+          <input type="number" name="cantidad_ag[]" class="form-control" id="cantidad_${idproducto}" placeholder="cantidad" required min="0" step="0.01" max="${stok}"/>
         </div>      
       </div> 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${idproducto}">      
+      <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${idproducto}_${idproyecto}">      
       <!--<label class="text-white">.</label> <br>-->
-        <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_producto_ag(${idproducto});"><i class="far fa-trash-alt"></i></button>      
+        <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_producto_ag(${idproducto},${idproyecto});"><i class="far fa-trash-alt"></i></button>      
       </div> `);
-      $(`#cantidad_${idproducto}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", } });
+      $(`#cantidad_${idproducto}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
 
       $.post(`../ajax/almacen.php?op=otros_almacenes`, function (e, status, jqXHR) {
         e = JSON.parse(e);   //console.log(e);
@@ -441,15 +484,32 @@ function add_producto_ag(data) {
   }
 }
 
-function remove_producto_ag(id) {
-  $(`.delete_multiple_${id}`).remove();
+function remove_producto_ag(id,idproy) {
+  $(`.delete_multiple_${id}_${idproy}`).remove();
   if ($("#html_producto_ag").children().length == 0) {
-    $('#html_producto_ag').html(`<div class="col-12 delete_multiple_alerta_oa">
+    $('#html_producto_ag').html(`<div class="col-12 html_mensaje">
       <div class="alert alert-warning alert-dismissible"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5> NO TIENES NINGÚN PRODUCTO SELECCIONADO. </div>
     </div>`);
+    $('.head_list').hide();
   }
 }
 
+function transferencia(id,producto,cantidad) {
+
+  lista_select2(`../ajax/almacen_general.php?op=select_lista_almacenes&id_alm_origen=${id_almacen_transf}`, '#name_alm_destino', null, null);
+
+  $("#name_alm_destino").select2({ theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
+
+   console.log(nombre_almacen_transf +"  "+ id + " "+ producto+ " " +cantidad);
+  $("#name_alm_origen").val(nombre_almacen_transf);
+  $("#name_prod_alm_origen").val(producto +" - cant. "+ cantidad);
+  // name_prod_alm_origen
+  $("#cantidad_alm_trans").rules("add", { required: true, min: 0,max: cantidad, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
+
+  $("#modal-transferencia").modal("show");
+  
+  
+}
 
 
 init();
@@ -488,9 +548,69 @@ $(function () {
     },
   });
 
+  $("#form-otro-almacen").validate({
+    ignore: '.select2-input, .select2-focusser',
+    rules: {
+      fecha_ingreso_ag:  { required: true,  },      
+    },
+    messages: {
+      fecha_ingreso_ag:  { required: "Campo requerido.", },    
+      // 'cantidad[]':   { min: "Mínimo 0", required: "Campo requerido"},  
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    submitHandler: function (e) {
+      guardar_y_editar_almacen_general(e);
+    },
+  });
+
+  $("#form-transf_almacen").validate({
+    ignore: '.select2-input, .select2-focusser',
+    rules: {
+      name_alm_destino:  { required: true,  },      
+    },
+    messages: {
+      name_alm_destino:  { required: "Campo requerido.", },    
+      // 'cantidad[]':   { min: "Mínimo 0", required: "Campo requerido"},  
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    submitHandler: function (e) {
+      guardar_y_editar_almacen_general(e);
+    },
+  });
+
   //$('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..
-function reload_producto_comprados_ag() { $('.comprado_todos_ag').html(`(comprado)`); lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto_ag', null, '.cargando_productos_ag'); }
+function reload_producto_comprados_ag() { $('.comprado_todos_ag').html(`(comprado)`); lista_select2(`../ajax/almacen_general.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto_ag', null, '.cargando_productos_ag'); }
 
+  function obtener_dia_ingreso(datos) { $('#dia_ingreso_ag').val( extraer_dia_semana_completo($(datos).val()) ); }
+  
