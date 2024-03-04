@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="../plugins/bootstrap-table/dist/bootstrap-table.min.css">
         <!-- <link rel="stylesheet" href="../plugins/excel-preview/css/excel-preview.css"> -->
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php

@@ -16,7 +16,7 @@
         <?php $title = "Permisos";  require 'head.php'; ?>
         
       </head>
-      <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+      <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php

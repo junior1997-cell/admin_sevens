@@ -46,15 +46,14 @@ class ChartCompraInsumo
     $producto_mas_vendido_nombre = Array(); $producto_mas_vendido_cantidad = Array();
 
     $factura_total = 0; $factura_aceptadas = 0; $factura_rechazadas = 0; $factura_eliminadas = 0; $factura_rechazadas_eliminadas = 0;
-
+    $total_material = 0; $total_combustible = 0; $total_equipo = 0;
     $factura_total_gasto = 0; $factura_total_pago = 0;
 
     $productos_mas_vendidos = [];
 
     if ($year_filtro == null || $year_filtro == '' || $mes_filtro == null || $mes_filtro == null) {
       for ($i=1; $i <= 12 ; $i++) { 
-        $sql_1 = "SELECT idproveedor, SUM(total) as total_gasto , ELT(MONTH(fecha_compra), 'En.', 'Febr.', 'Mzo.', 'Abr.', 'My.', 'Jun.', 'Jul.', 'Agt.', 'Sept.', 'Oct.', 'Nov.', 'Dic.') as mes_name_abreviado, 
-        ELT(MONTH(fecha_compra), 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre') as mes_name, fecha_compra 
+        $sql_1 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total_gasto 
         FROM compra_por_proyecto  WHERE MONTH(fecha_compra)='$i' AND   YEAR(fecha_compra) = '$year_filtro' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
         $mes = ejecutarConsultaSimpleFila($sql_1); if ($mes['status'] == false) { return $mes; }
         array_push($data_gasto, (empty($mes['data']) ? 0 : (empty($mes['data']['total_gasto']) ? 0 : floatval($mes['data']['total_gasto']) ) ));
@@ -82,8 +81,7 @@ class ChartCompraInsumo
       $factura_rechazadas_eliminadas = ejecutarConsultaSimpleFila($sql_7); if ($factura_rechazadas_eliminadas['status'] == false) { return $factura_rechazadas_eliminadas; }
 
       // -------------------------
-      $sql_8 = "SELECT idproveedor, SUM(total) as factura_total_gasto , ELT(MONTH(fecha_compra), 'En.', 'Febr.', 'Mzo.', 'Abr.', 'My.', 'Jun.', 'Jul.', 'Agt.', 'Sept.', 'Oct.', 'Nov.', 'Dic.') as mes_name_abreviado, 
-      ELT(MONTH(fecha_compra), 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre') as mes_name, fecha_compra 
+      $sql_8 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as factura_total_gasto
       FROM compra_por_proyecto  WHERE  YEAR(fecha_compra) = '$year_filtro' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
       $factura_total_gasto = ejecutarConsultaSimpleFila($sql_8); if ($factura_total_gasto['status'] == false) { return $factura_total_gasto; }
 
@@ -91,6 +89,19 @@ class ChartCompraInsumo
       FROM pago_compras as pg, compra_por_proyecto as cpp 
       WHERE pg.idcompra_proyecto = cpp.idcompra_proyecto  AND  YEAR(pg.fecha_pago) = '$year_filtro' AND cpp.idproyecto='$id_proyecto' AND cpp.estado='1' AND cpp.estado_delete='1';";
       $factura_total_pago = ejecutarConsultaSimpleFila($sql_9); if ($factura_total_pago['status'] == false) { return $factura_total_pago; }
+
+      // -----------------------
+      $sql_11 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total
+      FROM compra_por_proyecto  WHERE  YEAR(fecha_compra) = '$year_filtro' AND glosa = 'MATERIAL' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
+      $total_material = ejecutarConsultaSimpleFila($sql_11); if ($total_material['status'] == false) { return $total_material; }
+
+      $sql_11 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total
+      FROM compra_por_proyecto  WHERE  YEAR(fecha_compra) = '$year_filtro' AND glosa = 'COMBUSTIBLE' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
+      $total_combustible = ejecutarConsultaSimpleFila($sql_11); if ($total_combustible['status'] == false) { return $total_combustible; }
+
+      $sql_11 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total
+      FROM compra_por_proyecto  WHERE  YEAR(fecha_compra) = '$year_filtro' AND glosa = 'EQUIPOS' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
+      $total_equipo = ejecutarConsultaSimpleFila($sql_11); if ($total_equipo['status'] == false) { return $total_equipo; }
 
       // -----------------------
       $sql_10 = "SELECT dt.idproducto,p.nombre as producto, p.imagen, p.precio_total as precio_referencial, SUM(dt.cantidad) AS cantidad_vendida, p.descripcion
@@ -110,8 +121,7 @@ class ChartCompraInsumo
 
     }else{
       for ($i=1; $i <= $dias_filtro ; $i++) {
-        $sql_1 = "SELECT idproveedor, SUM(total) as total_gasto , ELT(MONTH(fecha_compra), 'En.', 'Febr.', 'Mzo.', 'Abr.', 'My.', 'Jun.', 'Jul.', 'Agt.', 'Sept.', 'Oct.', 'Nov.', 'Dic.') as mes_name_abreviado, 
-        ELT(MONTH(fecha_compra), 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre') as mes_name, fecha_compra 
+        $sql_1 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total_gasto 
         FROM compra_por_proyecto  WHERE DAY(fecha_compra)='$i' AND MONTH(fecha_compra)='$mes_filtro' AND YEAR(fecha_compra) = '$year_filtro' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
         $mes = ejecutarConsultaSimpleFila($sql_1); if ($mes['status'] == false) { return $mes; }
         array_push($data_gasto, (empty($mes['data']) ? 0 : (empty($mes['data']['total_gasto']) ? 0 : floatval($mes['data']['total_gasto']) ) ));
@@ -139,17 +149,27 @@ class ChartCompraInsumo
       $factura_rechazadas_eliminadas = ejecutarConsultaSimpleFila($sql_7); if ($factura_rechazadas_eliminadas['status'] == false) { return $factura_rechazadas_eliminadas; }
 
       // -------------------------
-      $sql_8 = "SELECT idproveedor, SUM(total) as factura_total_gasto , ELT(MONTH(fecha_compra), 'En.', 'Febr.', 'Mzo.', 'Abr.', 'My.', 'Jun.', 'Jul.', 'Agt.', 'Sept.', 'Oct.', 'Nov.', 'Dic.') as mes_name_abreviado, 
-      ELT(MONTH(fecha_compra), 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre') as mes_name, fecha_compra 
+      $sql_8 = "SELECT  SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as factura_total_gasto 
       FROM compra_por_proyecto  WHERE  MONTH(fecha_compra)='$mes_filtro' AND YEAR(fecha_compra) = '$year_filtro' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
-      $factura_total_gasto = ejecutarConsultaSimpleFila($sql_8);
-      if ($factura_total_gasto['status'] == false) { return $factura_total_gasto; }
+      $factura_total_gasto = ejecutarConsultaSimpleFila($sql_8);  if ($factura_total_gasto['status'] == false) { return $factura_total_gasto; }
 
       $sql_9 = "SELECT SUM(pg.monto) as factura_total_pago  
       FROM pago_compras as pg, compra_por_proyecto as cpp 
       WHERE pg.idcompra_proyecto = cpp.idcompra_proyecto  AND MONTH(pg.fecha_pago)='$mes_filtro' AND YEAR(pg.fecha_pago) = '$year_filtro' AND cpp.idproyecto='$id_proyecto' AND cpp.estado='1' AND cpp.estado_delete='1';";
-      $factura_total_pago = ejecutarConsultaSimpleFila($sql_9);
-      if ($factura_total_pago['status'] == false) { return $factura_total_pago; }
+      $factura_total_pago = ejecutarConsultaSimpleFila($sql_9);  if ($factura_total_pago['status'] == false) { return $factura_total_pago; }
+
+      // -----------------------
+      $sql_11 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total
+      FROM compra_por_proyecto  WHERE MONTH(fecha_compra)='$mes_filtro' AND YEAR(fecha_compra) = '$year_filtro' AND glosa = 'MATERIAL' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
+      $total_material = ejecutarConsultaSimpleFila($sql_11); if ($total_material['status'] == false) { return $total_material; }
+
+      $sql_11 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total
+      FROM compra_por_proyecto  WHERE MONTH(fecha_compra)='$mes_filtro' AND YEAR(fecha_compra) = '$year_filtro' AND glosa = 'COMBUSTIBLE' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
+      $total_combustible = ejecutarConsultaSimpleFila($sql_11); if ($total_combustible['status'] == false) { return $total_combustible; }
+
+      $sql_11 = "SELECT SUM(CASE WHEN tipo_comprobante = 'Nota de Crédito' THEN -total ELSE total END) as total
+      FROM compra_por_proyecto  WHERE MONTH(fecha_compra)='$mes_filtro' AND YEAR(fecha_compra) = '$year_filtro' AND glosa = 'EQUIPOS' AND idproyecto='$id_proyecto' AND estado='1' AND estado_delete='1';";
+      $total_equipo = ejecutarConsultaSimpleFila($sql_11); if ($total_equipo['status'] == false) { return $total_equipo; }
 
       // -----------------------
       $sql_10 = "SELECT dt.idproducto,p.nombre as producto, p.imagen, p.precio_total as precio_referencial, SUM(dt.cantidad) AS cantidad_vendida, p.descripcion
@@ -158,8 +178,7 @@ class ChartCompraInsumo
       GROUP BY dt.idproducto
       ORDER BY SUM(dt.cantidad) DESC
       LIMIT 0 , 6;";
-      $productos_mas_vendidos = ejecutarConsultaArray($sql_10);
-      if ($productos_mas_vendidos['status'] == false) { return $productos_mas_vendidos; }
+      $productos_mas_vendidos = ejecutarConsultaArray($sql_10);  if ($productos_mas_vendidos['status'] == false) { return $productos_mas_vendidos; }
 
       if ( !empty($productos_mas_vendidos['data']) ) {
         foreach ($productos_mas_vendidos['data'] as $key => $value) {
@@ -173,21 +192,25 @@ class ChartCompraInsumo
     return $retorno = [
       'status'=> true, 'message' => 'Salió todo ok,', 
       'data' => [
-        'total_gasto'=>$data_gasto, 
+        'total_gasto'   =>$data_gasto, 
         'total_deposito'=>$data_pagos, 
 
-        'factura_total'=>(empty($factura_total['data']) ? 0 : (empty($factura_total['data']['factura_total']) ? 0 : floatval($factura_total['data']['factura_total']) ) ), 
-        'factura_aceptadas'=>(empty($factura_aceptadas['data']) ? 0 : (empty($factura_aceptadas['data']['factura_aceptadas']) ? 0 : floatval($factura_aceptadas['data']['factura_aceptadas']) ) ), 
-        'factura_rechazadas'=>(empty($factura_rechazadas['data']) ? 0 : (empty($factura_rechazadas['data']['factura_rechazadas']) ? 0 : floatval($factura_rechazadas['data']['factura_rechazadas']) ) ), 
-        'factura_eliminadas'=>(empty($factura_eliminadas['data']) ? 0 : (empty($factura_eliminadas['data']['factura_eliminadas']) ? 0 : floatval($factura_eliminadas['data']['factura_eliminadas']) ) ),
+        'factura_total'       =>(empty($factura_total['data']) ? 0 : (empty($factura_total['data']['factura_total']) ? 0 : floatval($factura_total['data']['factura_total']) ) ), 
+        'factura_aceptadas'   =>(empty($factura_aceptadas['data']) ? 0 : (empty($factura_aceptadas['data']['factura_aceptadas']) ? 0 : floatval($factura_aceptadas['data']['factura_aceptadas']) ) ), 
+        'factura_rechazadas'  =>(empty($factura_rechazadas['data']) ? 0 : (empty($factura_rechazadas['data']['factura_rechazadas']) ? 0 : floatval($factura_rechazadas['data']['factura_rechazadas']) ) ), 
+        'factura_eliminadas'  =>(empty($factura_eliminadas['data']) ? 0 : (empty($factura_eliminadas['data']['factura_eliminadas']) ? 0 : floatval($factura_eliminadas['data']['factura_eliminadas']) ) ),
         'factura_rechazadas_eliminadas'=>(empty($factura_rechazadas_eliminadas['data']) ? 0 : (empty($factura_rechazadas_eliminadas['data']['factura_rechazadas_eliminadas']) ? 0 : floatval($factura_rechazadas_eliminadas['data']['factura_rechazadas_eliminadas']) ) ), 
         
-        'factura_total_gasto'=>(empty($factura_total_gasto['data']) ? 0 : (empty($factura_total_gasto['data']['factura_total_gasto']) ? 0 : floatval($factura_total_gasto['data']['factura_total_gasto']) ) ),
-        'factura_total_pago'=>(empty($factura_total_pago['data']) ? 0 : (empty($factura_total_pago['data']['factura_total_pago']) ? 0 : floatval($factura_total_pago['data']['factura_total_pago']) ) ),
+        'factura_total_gasto' =>(empty($factura_total_gasto['data']) ? 0 : (empty($factura_total_gasto['data']['factura_total_gasto']) ? 0 : floatval($factura_total_gasto['data']['factura_total_gasto']) ) ),
+        'factura_total_pago'  =>(empty($factura_total_pago['data']) ? 0 : (empty($factura_total_pago['data']['factura_total_pago']) ? 0 : floatval($factura_total_pago['data']['factura_total_pago']) ) ),
+        
+        'total_material'      =>(empty($total_material['data']) ? 0 : (empty($total_material['data']['total']) ? 0 : floatval($total_material['data']['total']) ) ),
+        'total_combustible'   =>(empty($total_combustible['data']) ? 0 : (empty($total_combustible['data']['total']) ? 0 : floatval($total_combustible['data']['total']) ) ),
+        'total_equipo'        =>(empty($total_equipo['data']) ? 0 : (empty($total_equipo['data']['total']) ? 0 : floatval($total_equipo['data']['total']) ) ),
 
-        'productos_mas_vendidos'=>$productos_mas_vendidos['data'], 
-        'producto_mas_vendido_nombre'=>$producto_mas_vendido_nombre, 
-        'producto_mas_vendido_cantidad'=>$producto_mas_vendido_cantidad, 
+        'productos_mas_vendidos'        =>$productos_mas_vendidos['data'], 
+        'producto_mas_vendido_nombre'   =>$producto_mas_vendido_nombre, 
+        'producto_mas_vendido_cantidad' =>$producto_mas_vendido_cantidad, 
       ]  
     ];
   }

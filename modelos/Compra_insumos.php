@@ -61,7 +61,7 @@ class Compra_insumos
           // buscamos el tipo
           $tipo =  ($id_grupo == '11' ? 'EPP' : 'PN' ) ;
           if( empty($r_a['data']) ) {            
-            $sql = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok, total_ingreso, user_created) 
+            $sql = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok, total_ingreso) 
             VALUES ('$idproyecto', '$idproducto[$ii]', '$tipo', '$cantidad[$ii]', '$cantidad[$ii]' )";
             $ar = ejecutarConsulta($sql); if ( $ar['status'] == false) {return $ar; }
           }else{

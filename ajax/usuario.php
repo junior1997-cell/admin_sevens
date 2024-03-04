@@ -1,8 +1,6 @@
 <?php
   ob_start();
-  if (strlen(session_id()) < 1) {
-    session_start(); //Validamos si existe o no la sesión
-  }
+  if (strlen(session_id()) < 1) { session_start(); }//Validamos si existe o no la sesión
 
   switch ($_GET["op"]) {
 
@@ -22,15 +20,17 @@
       if ( $rspta['status'] == true ) {
         if ( !empty($rspta['data']) ) {
           //Declaramos las variables de sesión
-          $_SESSION['idusuario'] = $rspta['data']['idusuario'];
-          $_SESSION['nombre'] = $rspta['data']['nombres'];
-          $_SESSION['imagen'] = $rspta['data']['imagen_perfil'];
-          $_SESSION['login'] = $rspta['data']['login'];
-          $_SESSION['cargo'] = $rspta['data']['cargo'];
+          $_SESSION['idusuario']      = $rspta['data']['idusuario'];
+          $_SESSION['nombre']         = $rspta['data']['nombres'];
+          $_SESSION['imagen']         = $rspta['data']['imagen_perfil'];
+          $_SESSION['login']          = $rspta['data']['login'];
+          $_SESSION['cargo']          = $rspta['data']['cargo'];
           $_SESSION['tipo_documento'] = $rspta['data']['tipo_documento'];
-          $_SESSION['num_documento'] = $rspta['data']['numero_documento'];
-          $_SESSION['telefono'] = $rspta['data']['telefono'];
-          $_SESSION['email'] = $rspta['data']['email'];
+          $_SESSION['num_documento']  = $rspta['data']['numero_documento'];
+          $_SESSION['telefono']       = $rspta['data']['telefono'];
+          $_SESSION['email']          = $rspta['data']['email'];
+
+          $_SESSION['idproyecto']      = 0;
 
           //Obtenemos los permisos del usuario
           $marcados = $usuario->listarmarcados($rspta['data']['idusuario']);
@@ -38,11 +38,8 @@
           //Declaramos el array para almacenar todos los permisos marcados
           $valores = [];
 
-          if ($rspta['status'] == true) {
-            //Almacenamos los permisos marcados en el array
-            foreach ($marcados['data'] as $key => $value) {
-              array_push($valores, $value['idpermiso']);
-            }
+          if ($rspta['status'] == true) { //Almacenamos los permisos marcados en el array            
+            foreach ($marcados['data'] as $key => $value) { array_push($valores, $value['idpermiso']); }
             echo json_encode($rspta);
           }else{
             echo json_encode($marcados);
@@ -190,15 +187,10 @@
       }
 
       if (empty($idusuario)) {
-
         $rspta = $usuario->insertar($trabajador, $cargo, $login, $clavehash, $permiso);
-
         echo json_encode($rspta, true);
-
       } else {
-
         $rspta = $usuario->editar($idusuario, $trabajador_old, $trabajador, $cargo, $login, $clavehash, $permiso);
-
         echo json_encode($rspta, true);
       }
     break;
@@ -339,21 +331,16 @@
     break;    
 
     case 'select2Trabajador':
-
       $rspta = $usuario->select2_trabajador();  $data = "";
-
       if ($rspta['status'] == true) {
-
         foreach ($rspta['data'] as $key => $value) {
           $data  .= '<option value=' . $value['id'] . ' title="'.$value['imagen_perfil'].'">' . $value['nombre'] . ' - ' . $value['numero_documento'] . '</option>';
-        }
-    
+        }    
         $retorno = array(
           'status' => true, 
           'message' => 'Salió todo ok', 
           'data' => $data, 
         );
-
         echo json_encode($retorno, true);
       } else {
         echo json_encode($rspta, true);
@@ -365,87 +352,54 @@
 
       // imgen de perfil
       if (!file_exists($_FILES['foto1']['tmp_name']) || !is_uploaded_file($_FILES['foto1']['tmp_name'])) {
-
         $imagen1=$_POST["foto1_actual"]; $flat_img1 = false;
-
       } else {
-
-        $ext1 = explode(".", $_FILES["foto1"]["name"]); $flat_img1 = true;						
-
+        $ext1 = explode(".", $_FILES["foto1"]["name"]); $flat_img1 = true;
         $imagen1 = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext1);
-
-        move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/docs/all_trabajador/perfil/" . $imagen1);
-        
+        move_uploaded_file($_FILES["foto1"]["tmp_name"], "../dist/docs/all_trabajador/perfil/" . $imagen1);        
       }
 
       // imgen DNI ANVERSO
       if (!file_exists($_FILES['foto2']['tmp_name']) || !is_uploaded_file($_FILES['foto2']['tmp_name'])) {
-
         $imagen2=$_POST["foto2_actual"]; $flat_img2 = false;
-
       } else {
-
         $ext2 = explode(".", $_FILES["foto2"]["name"]); $flat_img2 = true;
-
         $imagen2 = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext2);
-
-        move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/all_trabajador/dni_anverso/" . $imagen2);
-        
+        move_uploaded_file($_FILES["foto2"]["tmp_name"], "../dist/docs/all_trabajador/dni_anverso/" . $imagen2);        
       }
 
       // imgen DNI REVERSO
       if (!file_exists($_FILES['foto3']['tmp_name']) || !is_uploaded_file($_FILES['foto3']['tmp_name'])) {
-
         $imagen3=$_POST["foto3_actual"]; $flat_img3 = false;
-
       } else {
-
-        $ext3 = explode(".", $_FILES["foto3"]["name"]); $flat_img3 = true;
-        
+        $ext3 = explode(".", $_FILES["foto3"]["name"]); $flat_img3 = true;        
         $imagen3 = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
-
-        move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/docs/all_trabajador/dni_reverso/" . $imagen3);
-        
+        move_uploaded_file($_FILES["foto3"]["tmp_name"], "../dist/docs/all_trabajador/dni_reverso/" . $imagen3);        
       }
 
       // cv documentado
       if (!file_exists($_FILES['doc4']['tmp_name']) || !is_uploaded_file($_FILES['doc4']['tmp_name'])) {
-
         $cv_documentado=$_POST["doc_old_4"]; $flat_cv1 = false;
-
       } else {
-
-        $ext3 = explode(".", $_FILES["doc4"]["name"]); $flat_cv1 = true;
-        
+        $ext3 = explode(".", $_FILES["doc4"]["name"]); $flat_cv1 = true;        
         $cv_documentado = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
-
-        move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/all_trabajador/cv_documentado/" .  $cv_documentado);
-        
+        move_uploaded_file($_FILES["doc4"]["tmp_name"], "../dist/docs/all_trabajador/cv_documentado/" .  $cv_documentado);        
       }
 
       // cv  no documentado
       if (!file_exists($_FILES['doc5']['tmp_name']) || !is_uploaded_file($_FILES['doc5']['tmp_name'])) {
-
         $cv_nodocumentado=$_POST["doc_old_5"]; $flat_cv2 = false;
-
       } else {
-
-        $ext3 = explode(".", $_FILES["doc5"]["name"]); $flat_cv2 = true;
-        
+        $ext3 = explode(".", $_FILES["doc5"]["name"]); $flat_cv2 = true;        
         $cv_nodocumentado = random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext3);
-
-        move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/all_trabajador/cv_no_documentado/" . $cv_nodocumentado);
-        
+        move_uploaded_file($_FILES["doc5"]["tmp_name"], "../dist/docs/all_trabajador/cv_no_documentado/" . $cv_nodocumentado);        
       }
 
       if (empty($idtrabajador)){
-
         $rspta=$alltrabajador->insertar( $nombre_trab, $tipo_documento_trab, $num_documento_trab, $direccion_trab, $telefono_trab, 
         format_a_m_d($nacimiento_trab), $edad, $email_trab, $banco_seleccionado, $banco, $cta_bancaria, $cci, $titular_cuenta_trab, $tipo_trab, 
-        $_POST["desempenio_trab"], $ocupacion_trab, $ruc_trab, $talla_ropa_trab,$talla_zapato_trab, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);
-        
+        $_POST["desempenio_trab"], $ocupacion_trab, $ruc_trab, $talla_ropa_trab,$talla_zapato_trab, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado);        
         echo json_encode($rspta, true);
-
       }else {            
         $rspta = array( 'status' => false, 'message' => 'No hay editar usuario en este modulo', );      
         echo json_encode($rspta, true);

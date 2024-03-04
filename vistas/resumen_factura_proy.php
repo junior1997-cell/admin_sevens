@@ -16,7 +16,7 @@
         <?php $title = "Resumen de Activos Fijos"; require 'head.php'; ?>
         
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed ">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Preloader - new -->
         <div class="reload-all" id="reload-all" style="display: none;"><img src="../dist/svg/reload.svg" class="rounded-circle" width="80px"> </div>
         

@@ -27,7 +27,7 @@
         * sidebar-collapse
         * sidebar-mini
       -->
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <div class="wrapper">
           <?php
             require 'nav.php';
@@ -151,44 +151,88 @@
 
                     <div class="row">
 
-                      <div class="col-lg-12">
+                      <div class="col-lg-6">
                         <div class="card">
-                          <div class="card-header border-0 ">
-                            <div class=" d-flex justify-content-center ">
-                              <h3 class="card-title font-weight-bold">Compras y Pagos por Mes</h3>
-                              <!-- <a href="javascript:void(0);">View Report</a> -->
+                          <div class="card-header border-0 ">                            
+                            <h3 class="card-title font-weight-bold">Compras y Pagos por Mes</h3>
+                            <!-- <a href="javascript:void(0);">View Report</a> -->                            
+                            <div class="card-tools">
+                              <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                              <div class="btn-group">
+                                <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
+                                  <i class="fas fa-wrench"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                  <button class="dropdown-item btn-download-cpxm-png"><i class="fa-solid fa-image"></i> Descargar .png</button>
+                                  <button class="dropdown-item btn-download-cpxm-xlsx"><i class="fa-regular fa-file-excel"></i> Descargar .xlsx</button>
+                                  <a href="compra_insumos.php" class="dropdown-item"><i class="fa-solid fa-link"></i> Ir a compras</a>                                  
+                                  <a class="dropdown-divider"></a>
+                                  <a href="resumen_insumos.php" class="dropdown-item"><i class="fa-solid fa-link"></i> Ir a resumen</a>
+                                </div>
+                              </div>
                             </div>
                           </div>
                           <div class="card-body">
-                            <!-- <div class="d-flex">
-                              <p class="d-flex flex-column">
-                                <span class="text-bold text-lg">820</span>
-                                <span>Visitors Over Time</span>
-                              </p>
-                              <p class="ml-auto d-flex flex-column text-right">
-                                <span class="text-success">
-                                  <i class="fas fa-arrow-up"></i> 12.5%
-                                </span>
-                                <span class="text-muted">Since last week</span>
-                              </p>
-                            </div> -->
-                            <!-- /.d-flex -->
-
                             <div class="position-relative mb-4">
-                              <canvas id="visitors-chart" height="350">
-                                
-                              </canvas>
-                              
+                              <canvas id="visitors-chart" height="350"> </canvas>                              
                             </div>
-
                             <div class="d-flex flex-row justify-content-end">
-                              <span class="mr-2">
-                                <i class="fas fa-square text-primary"></i>Compra
-                              </span>
+                              <span class="mr-2"><i class="fas fa-square text-primary"></i>Compra</span>
+                              <span><i class="fas fa-square text-gray"></i> Pago</span>
+                            </div>
+                          </div>
+                          <div class="card-footer">
+                            <div class="row">
+                              <div class="col-sm-4 col-6">
+                                <div class="description-block border-right border-left">
+                                  <span class="description-percentage total_material_p"><i class="fas fa-caret-up"></i> -</span>
+                                  <h5 class="description-header total_material"><i class="fas fa-spinner fa-pulse fa-lg"></i></h5>
+                                  <span class="description-text">TOTAL MATERIAL</span>
+                                </div>
+                                <!-- /.description-block -->
+                              </div>
+                              <!-- /.col -->
+                              <div class="col-sm-4 col-6">
+                                <div class="description-block border-right">
+                                  <span class="description-percentage total_combustible_p"><i class="fas fa-caret-up"></i> -</span>
+                                  <h5 class="description-header total_combustible"><i class="fas fa-spinner fa-pulse fa-lg"></i></h5>
+                                  <span class="description-text">TOTAL COMBUSTIBLE</span>
+                                </div>
+                                <!-- /.description-block -->
+                              </div>
+                              <!-- /.col -->
+                              <div class="col-sm-4 col-6">
+                                <div class="description-block border-right">
+                                  <span class="description-percentage total_equipo_p"><i class="fas fa-caret-up"></i> -</span>
+                                  <h5 class="description-header total_equipo"><i class="fas fa-spinner fa-pulse fa-lg"></i></h5>
+                                  <span class="description-text">TOTAL EQUIPO</span>
+                                </div>
+                                <!-- /.description-block -->
+                              </div>
+                              <!-- /.col -->                              
+                            </div>
+                            <!-- /.row -->
+                          </div>
+                        </div>
+                        <!-- /.card -->
+                      </div>
 
-                              <span>
-                                <i class="fas fa-square text-gray"></i> Pago
-                              </span>
+                      <div class="col-lg-6">
+                        <div class="card">
+                          <div class="card-header border-0 ">                            
+                            <h3 class="card-title font-weight-bold">Compras y Pagos por Mes</h3>
+                            <!-- <a href="javascript:void(0);">View Report</a> -->                            
+                            <div class="card-tools">
+                              <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="position-relative mb-4">
+                              <canvas id="sales-chart" height="350"></canvas>
+                            </div>
+                            <div class="d-flex flex-row justify-content-end">
+                              <span class="mr-2"> <i class="fas fa-square text-primary"></i> Compra </span>
+                              <span> <i class="fas fa-square text-gray"></i> Pago </span>
                             </div>
                           </div>
                         </div>
@@ -206,33 +250,7 @@
                           <div class="card-body">
                             <div class="row">
                               <div class="col-md-8">
-                                <!-- <div class="d-flex">
-                                  <p class="d-flex flex-column">
-                                    <span class="text-bold text-lg">$18,230.00</span>
-                                    <span>Sales Over Time</span>
-                                  </p>
-                                  <p class="ml-auto d-flex flex-column text-right">
-                                    <span class="text-success">
-                                      <i class="fas fa-arrow-up"></i> 33.1%
-                                    </span>
-                                    <span class="text-muted">Since last month</span>
-                                  </p>
-                                </div> -->
-                                <!-- /.d-flex -->
-
-                                <div class="position-relative mb-4">
-                                  <canvas id="sales-chart" height="350"></canvas>
-                                </div>
-
-                                <div class="d-flex flex-row justify-content-end">
-                                  <span class="mr-2">
-                                    <i class="fas fa-square text-primary"></i> Compra
-                                  </span>
-
-                                  <span>
-                                    <i class="fas fa-square text-gray"></i> Pago
-                                  </span>
-                                </div>
+                                
                               </div>
                               <div class="col-md-4">
                                 <p class="text-center">
@@ -340,23 +358,18 @@
                           <div class="card-header border-0">
                             <h3 class="card-title text-center">Productos mas usados</h3>
                             <div class="card-tools">                              
-                              <a class="btn btn-tool btn-sm" id="btn-download-chart-pie-productos-mas-usados">
-                                <i class="fas fa-download"></i>
-                              </a>
+                              <button class="btn btn-tool btn-sm btn-download-pmu-png" > <i class="fas fa-download"></i> </button>
                               <!-- <a href="#" class="btn btn-tool btn-sm"> <i class="fas fa-bars"></i>  </a> -->
                             </div> 
                           </div>
                           <div class="card-body bg-white" id="div-download-chart-pie-productos-mas-usados">
                             <div class="row">
-                              <div class="col-md-8">
+                              <div class="col-md-12">
                                 <div class="chart-responsive">
-                                  <canvas id="chart_pie_productos_mas_usados" height="250"></canvas>
+                                  <canvas id="chart_pie_productos_mas_usadoss" height="250"></canvas>
                                 </div>
                               </div>
-                              <div class="col-md-4">
-                                <ul class="chart-legend clearfix leyenda-pai-productos-mas-usados" >
-                                </ul>
-                              </div>
+                              <!-- <div class="col-md-4"> <ul class="chart-legend clearfix leyenda-pai-productos-mas-usados" > </ul> </div> -->
                             </div>                            
                           </div>
                         </div>
@@ -468,13 +481,18 @@
 
         <?php require 'script.php'; ?>
         
+        
         <!-- OPTIONAL SCRIPTS -->
-        <script src="../plugins/chart.js/Chart.min.js"></script>
+        <!-- <script src="../plugins/chart.js/Chart.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>        
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
         <!-- AdminLTE for demo purposes -->
         <script src="../dist/js/demo.js"></script>
         
         <!-- html2canvas -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+        <script src="../plugins/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 
         <!-- table export EXCEL -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>

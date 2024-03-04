@@ -22,7 +22,7 @@
           #sortable li span { position: absolute !important; margin-left: -1.3em !important; }
         </style>
       </head> 
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php

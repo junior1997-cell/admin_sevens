@@ -4,3 +4,10 @@ SELECT cpp.idproyecto as idproyecto, dc.idproducto as idproducto, CASE dc.idclas
 SUM( dc.cantidad) as total_stok, SUM( dc.cantidad) as total_ingreso 
 from detalle_compra as dc inner JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto =cpp.idcompra_proyecto 
 GROUP BY cpp.idproyecto, dc.idproducto;
+
+:::::::::::::::::::::: ACTUALIZAR FECHAS NOMBRE compra_por_proyecto: DIA - MES - AÑO ::::::::::::::::::::::
+SET lc_time_names = 'es_ES';
+UPDATE compra_por_proyecto as v, compra_por_proyecto  as vp
+SET v.day_name= CONCAT(UPPER(LEFT(DAYNAME(vp.fecha_compra),1)),SUBSTR(DAYNAME(vp.fecha_compra),2)), 
+v.month_name=CONCAT(UPPER(LEFT(MONTHNAME(vp.fecha_compra),1)),SUBSTR(MONTHNAME(vp.fecha_compra),2)), 
+v.year_name=YEAR(vp.fecha_compra) WHERE  v.idcompra_proyecto = vp.idcompra_proyecto;

@@ -1,6 +1,6 @@
-var chart_linea ;
-var chart_barras;
-var chart_pie_productos_mas_vendidos;
+var chart_linea ; var chart_linea_ ;
+var chart_barras; var chart_barras_;
+var pieChart;
 var color_char_pie = ['text-danger','text-success','text-warning','text-info','text-primary','text-indigo',]
 //Función que se ejecuta al inicio
 function init() {
@@ -85,6 +85,29 @@ function chart_linea_barra(idnubeproyecto) {
   $.post("../ajax/chart_compra_insumo.php?op=chart_linea", { 'idnubeproyecto': idnubeproyecto , 'year_filtro': year_filtro, 'month_filtro':month_filtro, 'dias_por_mes':dias_por_mes }, function (e, status) {
     e = JSON.parse(e);   console.log(e);
     if (e.status == true) {
+      // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   S E G U N: MATERIAL COMBUSTIBLE EQUIPOS ::::::::::::::::::::::::::::::::::::
+      $('.total_material').html(`${formato_miles(e.data.total_material)}`);
+      $('.total_combustible').html(`${formato_miles(e.data.total_combustible)}`);
+      $('.total_equipo').html(`${formato_miles(e.data.total_equipo)}`);
+      var total_material = (e.data.total_material/e.data.factura_total_gasto)*100;
+      var total_combustible = (e.data.total_combustible/e.data.factura_total_gasto)*100;
+      var total_equipo = (e.data.total_equipo/e.data.factura_total_gasto)*100;
+      if (total_material < 0) {
+        $('.total_material_p').html(`<i class="fa-solid fa-caret-down"></i> ${formato_miles(total_material)}%`).removeClass('text-success text-danger').addClass('text-danger');
+      } else {
+        $('.total_material_p').html(`<i class="fas fa-caret-up"></i> ${formato_miles(total_material)}%`).removeClass('text-success text-danger').addClass('text-success');
+      }
+      if (total_combustible < 0) {
+        $('.total_combustible_p').html(`<i class="fa-solid fa-caret-down"></i> ${formato_miles(total_combustible)}%`).removeClass('text-success text-danger').addClass('text-danger');
+      } else {
+        $('.total_combustible_p').html(`<i class="fas fa-caret-up"></i> ${formato_miles(total_combustible)}%`).removeClass('text-success text-danger').addClass('text-success');
+      }
+      if (total_equipo < 0) {
+        $('.total_equipo_p').html(`<i class="fa-solid fa-caret-down"></i> ${formato_miles(total_equipo)}%`).removeClass('text-success text-danger').addClass('text-danger');
+      } else {
+        $('.total_equipo_p').html(`<i class="fas fa-caret-up"></i> ${formato_miles(total_equipo)}%`).removeClass('text-success text-danger').addClass('text-success');
+      }      
+      
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T    P R O G R E S ::::::::::::::::::::::::::::::::::::
       $('.cant_ft_aceptadas').html(`<b>${e.data.factura_aceptadas}</b>/${e.data.factura_total}`);
       $('.cant_ft_rechazadas').html(`<b>${e.data.factura_rechazadas}</b>/${e.data.factura_total}`);
@@ -99,9 +122,9 @@ function chart_linea_barra(idnubeproyecto) {
       $('.progress_ft_eliminadas').css({ width: `${eliminadas.toFixed(2)}%`, });
       $('.progress_ft_rechazadas_eliminadas').css({ width: `${rechazadas_eliminadas.toFixed(2)}%`, });
 
-      $('.monto_pagado').html(`<b><small>S/.</small> ${formato_miles(e.data.factura_total_pago)}</b>/ <small>S/.</small> ${formato_miles(e.data.factura_total_gasto)}`);
+      $('.monto_pagado').html(`<b> ${formato_miles(e.data.factura_total_pago)}</b>/ ${formato_miles(e.data.factura_total_gasto)}`);
       var no_pagado = e.data.factura_total_gasto - e.data.factura_total_pago;
-      $('.monto_no_pagado').html(`<b><small>S/.</small> ${ formato_miles(no_pagado)}</b>/ <small>S/.</small> ${formato_miles(e.data.factura_total_gasto)}`);
+      $('.monto_no_pagado').html(`<b> ${ formato_miles(no_pagado)}</b>/  ${formato_miles(e.data.factura_total_gasto)}`);
       var monto_pagado = (e.data.factura_total_pago/e.data.factura_total_gasto)*100;
       var monto_no_pagado = (no_pagado/e.data.factura_total_gasto)*100;
       $('.progress_monto_pagado').css({ width: `${monto_pagado.toFixed(2)}%`, });
@@ -109,7 +132,7 @@ function chart_linea_barra(idnubeproyecto) {
 
       // :::::::::::::::::::::::::::::::::::::::::::: C H A R T   L I N E A ::::::::::::::::::::::::::::::::::::
       
-      var $chart_linea = $('#visitors-chart');
+      var $chart_linea = document.getElementById('visitors-chart');
       if (chart_linea) {  chart_linea.destroy();  } 
       // eslint-disable-next-line no-unused-vars
       chart_linea = new Chart($chart_linea, {
@@ -120,7 +143,7 @@ function chart_linea_barra(idnubeproyecto) {
               type: 'line', data: e.data.total_gasto, 
               backgroundColor: 'transparent', borderColor: '#007bff',
               pointBorderColor: '#007bff', pointBackgroundColor: '#007bff',
-              fill: false, label: 'Compras',
+              fill: false, label: 'Compras', tension: 0.4
               // pointHoverBackgroundColor: '#007bff',
               // pointHoverBorderColor    : '#007bff'
             },
@@ -129,7 +152,7 @@ function chart_linea_barra(idnubeproyecto) {
               data: e.data.total_deposito,
               backgroundColor: 'tansparent', borderColor: '#ced4da',
               pointBorderColor: '#ced4da', pointBackgroundColor: '#ced4da',
-              fill: false, label: 'Pago',
+              fill: false, label: 'Pago', tension: 0.5
               // pointHoverBackgroundColor: '#ced4da',
               // pointHoverBorderColor    : '#ced4da'
             }
@@ -137,29 +160,48 @@ function chart_linea_barra(idnubeproyecto) {
         },
         options: {
           maintainAspectRatio: false,
-          tooltips: { mode: mode,  intersect: intersect },
-          hover: { mode: mode, intersect: intersect },
-          legend: { display: true,  },
-          scales: {
-            yAxes: [{
+          interaction: { mode: 'index', intersect: true, },          
+          plugins: {
+            tooltip: { enabled: true, mode: 'index',  intersect: intersect,
+              callbacks: {              
+                label: function( e) {                      
+                  let label = e.dataset.label || '';
+                  if (label) { label += ': ';  }
+                  if (e.parsed.y !== null) { label += new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(e.parsed.y); }
+                  return label;                  
+                },      
+                footer: function( e) { 
+                  let sum = 0;
+                  e.forEach(function(tooltipItem) { sum += tooltipItem.parsed.y;  });
+                  return 'Sum: ' +  new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(sum);
+                },        
+              } 
+            },
+            hover: { mode: mode, intersect: intersect },
+            legend: { display: true,  },
+          },          
+         
+          scales: {            
+            y: {              
               display: true,
+              beginAtZero: true,
               gridLines: { display: false, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
-              ticks: $.extend({ beginAtZero: true, suggestedMax: 200 }, ticksStyle)
-            }],
-            xAxes: [{ 
+              ticks: $.extend({ beginAtZero: true, suggestedMax: 200, callback: function (value, index, values) { return  Number(value).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');  }, }, ticksStyle)
+            },
+            x: {               
               display: true, 
               gridLines: { display: false, },
               ticks: ticksStyle
-            }]
+            }
           }
         }
       });
 
       // ::::::::::::::::::::::::::::::::::::::::::::  C H A R T  B A R R A S   ::::::::::::::::::::::::::::::::::::
-      var $chart_barras = $('#sales-chart');
+      var chart_barras_ = $('#sales-chart');
       if (chart_barras) {  chart_barras.destroy();  }
       // eslint-disable-next-line no-unused-vars
-      chart_barras = new Chart($chart_barras, {
+      chart_barras = new Chart(chart_barras_, {
         type: 'bar',
         data: {
           labels: mes_o_dia(year_filtro, month_filtro),
@@ -170,27 +212,31 @@ function chart_linea_barra(idnubeproyecto) {
         },
         options: {
           maintainAspectRatio: false,
-          tooltips: {  mode: mode, intersect: intersect },
+          tooltip: {  mode: mode, intersect: intersect, 
+            callbacks: {              
+              label: function(tooltipItems, data) {     
+                console.log(tooltipItems);   console.log(data);             
+                return `${data.datasets[tooltipItems.datasetIndex]['label']}: S/ ` +  Number(tooltipItems.yLabel).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') ;
+              },          
+            }
+          },
           hover: { mode: mode, intersect: intersect },
           legend: { display: true  },
           scales: {
-            yAxes: [{
+            y: {
               // display: false,
               gridLines: { display: true, lineWidth: '4px', color: 'rgba(0, 0, 0, .2)', zeroLineColor: 'transparent' },
               ticks: $.extend({
                 beginAtZero: true,
                 // Include a dollar sign in the ticks
-                callback: function (value) {
-                  if (value >= 1000) { value /= 1000; value += 'k'; }
-                  return '$' + value;
-                }
+                callback: function (value) { if (value >= 1000) { value /= 1000; value += 'k'; } return 'S/.' + value; }
               }, ticksStyle)
-            }],
-            xAxes: [{
+            },
+            x: {
               display: true,
               gridLines: { display: false },
               ticks: ticksStyle
-            }]
+            }
           }
         }
       });
@@ -201,18 +247,18 @@ function chart_linea_barra(idnubeproyecto) {
         colores_leyenda = colores_leyenda.concat(`<li><i class="fas fa-circle ${color_char_pie[indice]}"></i> ${key.producto}</li>`);
         productos_mas_vendidos = productos_mas_vendidos.concat(`
           <tr>
-            <td>              
+            <td class="py-1">              
               <div class="user-block">
                 <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/${key.imagen}" alt="user image" onerror="this.src='../dist/svg/404-v2.svg';" onclick="ver_perfil('../dist/docs/material/img_perfil/${key.imagen}', '${encodeHtml(key.producto)}');" data-toggle="tooltip" data-original-title="Ver imagen">
-                <span class="username"><p class="mb-0" >${key.producto}</p></span>
+                <span class="username"><p class="mb-0 font-size-14px" >${key.producto}</p></span>
                 <span class="description">${key.descripcion}</span>
               </div>
             </td>
-            <td class="text-right">S/ ${formato_miles(key.precio_referencial)}</td>
-            <td>              
+            <td class="py-1 text-right">S/ ${formato_miles(key.precio_referencial)}</td>
+            <td class="py-1">              
               ${formato_miles(key.cantidad_vendida)}
             </td>
-            <td class="text-right">
+            <td class="py-1 text-right">
               <a href="resumen_insumos.php" class="text-muted"> <i class="fas fa-search"></i> </a>
             </td>
           </tr>
@@ -225,13 +271,10 @@ function chart_linea_barra(idnubeproyecto) {
        
       // :::::::::::::::::::::::::::::::::::::::::::: PIE CHART - P R O D U C T O S   M A S   V E N D I D O S ::::::::::::::::::::::::::::::::::::
 
-      // Get context with jQuery - using jQuery's .get() method.
-      chart_pie_productos_mas_vendidos = $('#chart_pie_productos_mas_usados').get(0).getContext('2d');     
-      
-      // Create pie or douhnut chart
-      // You can switch between pie and douhnut using the method below.
-      // eslint-disable-next-line no-unused-vars
-      var pieChart = new Chart(chart_pie_productos_mas_vendidos, {
+      // Get context with jQuery - using jQuery's .get() method.       
+      const ctx = document.getElementById('chart_pie_productos_mas_usadoss').getContext('2d');
+      if (pieChart) {  pieChart.destroy();  }
+      pieChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels:  e.data.producto_mas_vendido_nombre,
@@ -243,58 +286,33 @@ function chart_linea_barra(idnubeproyecto) {
           ]
         },
         options: {
-          legend: {  display: false, position:'right'   },
-          events: false,
-          animation: {
-            duration: 500,
-            easing: "easeOutQuart",
-            onComplete: function () {
-              var ctx = this.chart.ctx;
-              ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'bottom';        
-              this.data.datasets.forEach(function (dataset) {        
-                for (var i = 0; i < dataset.data.length; i++) {
-                  var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
-                      total = dataset._meta[Object.keys(dataset._meta)[0]].total,
-                      mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
-                      start_angle = model.startAngle,
-                      end_angle = model.endAngle,
-                      mid_angle = start_angle + (end_angle - start_angle)/2;
-        
-                  var x = mid_radius * Math.cos(mid_angle);
-                  var y = mid_radius * Math.sin(mid_angle);
-        
-                  ctx.fillStyle = '#fff';
-                  if (i == 3){ // Darker text color for lighter background
-                    ctx.fillStyle = '#444';
-                  }
-                  var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
-                  ctx.fillText(dataset.data[i], model.x + x, model.y + y);
-                  // Display percent in another line, line break doesn't work for fillText
-                  ctx.fillText(percent, model.x + x, model.y + y + 15);
-                }
-              });               
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false, }, 
+          plugins: {
+            tooltip: { enabled: true, mode: 'index',  intersect: false,
+              callbacks: {              
+                label: function( e) {                  
+                  return  new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(e.parsed);                  
+                },      
+                footer: function( e) { 
+                  let label = Math.round(e[0].parsed / e[0].dataset.data.map(Number).reduce((a, b) => a + b, 0) * 100) + '%';  return 'Porcentaje: ' +  label;
+                },        
+              } 
+            },
+            legend: {  display: true, position:'right'   },          
+            datalabel: {
+              formatter: (value, context) => { console.log(value);
+                  var sum = context.dataset.data.reduce((a, b) => a + b);
+                  var percentage = (value * 100 / sum).toFixed(2) + "%";
+                  return percentage;
+              },
+              color: 'white', // Color del texto
+              display: true
             }
-          }
+          },
+             
         }
-      });
-
-      // dowload - imagen chart PIE
-      //var image = pieChart.toBase64Image(); // console.log(image);
-
-      // dowload - imagen chart PIE
-      //var image = pieChart.toBase64Image();  console.log(image);
-      var element = $("#div-download-chart-pie-productos-mas-usados"); // global variable
-      var getCanvas; //global variable
-      html2canvas(element, { onrendered: function (canvas) { getCanvas = canvas; } });
-
-      $("#btn-download-chart-pie-productos-mas-usados").on('click', function () {
-        var imgageData = getCanvas.toDataURL("image/jpg");
-        //Now browser starts downloading it instead of just showing it
-        var newData = imgageData.replace(/^data:image\/jpg/, "data:application/octet-stream");
-        $("#btn-download-chart-pie-productos-mas-usados").attr("download", "productos-mas-usados.jpg").attr("href", newData);
-      });
+      });      
 
     } else {
       ver_errores(e);
@@ -302,6 +320,39 @@ function chart_linea_barra(idnubeproyecto) {
   });  
 }
 
+$(".btn-download-cpxm-png").on('click', function () {
+  var chart = document.getElementById('visitors-chart');  
+  chart.toBlob(function(blob) {// Obtén el lienzo como Blob    
+    var link = document.createElement('a');// Crea un enlace de descarga
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'grafico_lineas.png'; // Nombre del archivo a descargar
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+});
+
+$(".btn-download-cpxm-xlsx").on('click', function () {  
+  var chartData = chart_linea.data; console.log(chartData);// Obtén los datos del gráfico   
+  var wb = XLSX.utils.book_new();// Crea un nuevo libro de trabajo (workbook)  
+  // Formatea los datos para json_to_sheet
+  var formattedData = chartData.labels.map(function(label, index) { return { label: label, data: chartData.datasets[0].data[index] }; });
+  var ws = XLSX.utils.json_to_sheet(formattedData, { header: ['label', 'data'] });  // Crea una hoja de trabajo (worksheet) con los datos del gráfico
+  XLSX.utils.book_append_sheet(wb, ws, 'Gráfico');// Añade la hoja de trabajo al libro de trabajo  
+  XLSX.writeFile(wb, 'grafico_lineas.xlsx');// Descarga el archivo XLSX
+});
+
+$(".btn-download-pmu-png").on('click', function () {
+  var chart = document.getElementById('chart_pie_productos_mas_usadoss');  
+  chart.toBlob(function(blob) {// Obtén el lienzo como Blob    
+    var link = document.createElement('a');// Crea un enlace de descarga
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'grafico_torta.png'; // Nombre del archivo a descargar
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+});
 
 init();
 
@@ -312,10 +363,7 @@ function mes_o_dia(data_anio, data_mes) {
   } else {
     var array_cant_dias = [];
     var cant_dias = cant_dias_mes(data_anio, data_mes);
-    for (var dia = 1; dia <= cant_dias; dia++) {
-      array_cant_dias.push(dia);
-      
-    }
+    for (var dia = 1; dia <= cant_dias; dia++) { array_cant_dias.push(dia);  }
     return array_cant_dias;
   } 
 }
