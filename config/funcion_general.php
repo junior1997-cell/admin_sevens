@@ -20,11 +20,8 @@ if (!function_exists('ejecutarConsulta')) {
   }
 
   function nombre_mes( $fecha_entrada ) {
-
-    $fecha_parse = new FechaEs($fecha_entrada);
-    
+    $fecha_parse = new FechaEs($fecha_entrada);    
     $mes_nombre = $fecha_parse->getMMMM().PHP_EOL;
-
     return $mes_nombre;
   }
 

@@ -10,50 +10,24 @@ class FechaEs {
     private $D_en = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
 
 
-    public function __construct($mFecha)
-    {
-        $this->objFecha=DateTime::createFromFormat('Y-m-d', $mFecha);
-    }
+    public function __construct($mFecha) { $this->objFecha=DateTime::createFromFormat('Y-m-d', $mFecha); }
+    #nombre de dia de semana
+    public function getDDDD() { $nombreDia=$this->objFecha->format('l'); return str_replace($this->D_en,$this->D_es,$nombreDia); }    
+    #nombre de dia de semana
+    public function getDDDD_v1() { $nombreDia=$this->objFecha->format('l'); return str_replace($this->D_en,$this->D_es_v1,$nombreDia); } 
 
-    public function getDDDD() { #nombre de dia de semana
-        $nombreDia=$this->objFecha->format('l');
-        return str_replace($this->D_en,$this->D_es,$nombreDia);    
-    }    
-    
-    public function getDDDD_v1() { #nombre de dia de semana
-        $nombreDia=$this->objFecha->format('l');
-        return str_replace($this->D_en,$this->D_es_v1,$nombreDia);    
-    } 
+    #nombre de dia de semana
+    public function getDDDD_v2() { $nombreDia=$this->objFecha->format('l'); return str_replace($this->D_en,$this->D_es_v2,$nombreDia); } 
 
-    public function getDDDD_v2() { #nombre de dia de semana
-        $nombreDia=$this->objFecha->format('l');
-        return str_replace($this->D_en,$this->D_es_v2,$nombreDia);    
-    } 
+    public function getMM() { return $this->objFecha->format('m'); }
 
-    public function getMM()
-    {
-        return $this->objFecha->format('m');    
-    }
+    public function getMMMM(){ $nombreMes=$this->objFecha->format('F'); return str_replace($this->M_en,$this->M_es,$nombreMes); }
 
-    public function getMMMM(){
-        $nombreMes=$this->objFecha->format('F');
-        return str_replace($this->M_en,$this->M_es,$nombreMes);    
-    }
+    public function getYYYY() { return $this->objFecha->format('Y'); }
 
-    public function getYYYY()
-    {
-        return $this->objFecha->format('Y');    
-    }
+    public function getYY() { return $this->objFecha->format('y'); }
 
-    public function getYY()
-    {
-        return $this->objFecha->format('y');    
-    }
-
-    public function getdd()
-    {
-        return $this->objFecha->format('d');    
-    }
+    public function getdd() { return $this->objFecha->format('d'); }
 
     // public function getHora12()
     // {

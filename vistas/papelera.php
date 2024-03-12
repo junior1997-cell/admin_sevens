@@ -16,7 +16,7 @@
         <?php $title = "Papelera"; require 'head.php'; ?>
         
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed ">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         
         <div class="wrapper">
           <!-- Preloader -->

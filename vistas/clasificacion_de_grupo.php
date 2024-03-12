@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
       </head>
-      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed">
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <div class="reload-all" id="reload-all" style="display: none;"><img src="../dist/svg/reload.svg" class="rounded-circle" width="80px"> </div>
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">

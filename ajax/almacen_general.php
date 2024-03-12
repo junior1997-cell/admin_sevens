@@ -148,13 +148,10 @@ if (!isset($_SESSION["nombre"])) {
       case 'guardar_y_editar_almacen_general':
 
         if ( empty($idalmacen_producto_guardado) && !empty($idalmacen_general_ag)) {
-          $rspta = $almacen_general->insertar_alm_general($idalmacen_producto_guardado,$idalmacen_general_ag, 
-          $fecha_ingreso_ag, $dia_ingreso_ag, $_POST["idproducto_ag"], $_POST["id_ar_ag"], $_POST["cantidad_ag"]);
+          $rspta = $almacen_general->insertar_alm_general($idalmacen_producto_guardado,$idalmacen_general_ag, $fecha_ingreso_ag, $dia_ingreso_ag, $_POST["idproducto_ag"], $_POST["id_ar_ag"], $_POST["cantidad_ag"]);
           echo json_encode($rspta, true);
         } else {
-           $retorno = ['status' => 'error_ing_pool', 'message' => 'No se puede editar', 'data' => '', 'user' => $_SESSION["nombre"]];
-          
-           json_encode($retorno, true);
+          echo json_encode(['status' => true, 'message' => 'todo oka ps', 'data' => ''], true);
         }
 
       break;

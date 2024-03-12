@@ -203,74 +203,49 @@ class Almacen_general
     INNER JOIN producto as p on ar.idproducto=p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    where ar.idproyecto='$idproyecto' and ar.total_stok>'0';";
+    where ar.idproyecto='$idproyecto' and ar.total_stok<>'0';";
     return ejecutarConsultaArray($sql);
   }
 
   //----------- Insertar productos a almacen general
-  public function insertar_alm_general(
-    $idalmacen_producto_guardado,
-    $idalmacen_general_ag,
-    $fecha_ingreso_ag,
-    $dia_ingreso,
-    $idproducto_ag,
-    $id_ar_ag,
-    $cantidad_ag
-  ) {
-    // var_dump( count($idproducto_ag));die();
-    $sw = true;
+  public function insertar_alm_general($idalmacen_producto_guardado, $idalmacen_general_ag, $fecha_ingreso_ag, $dia_ingreso, $idproducto_ag, $id_ar_ag, $cantidad_ag)
+  {
     $ii = 0;
-
+    
     if (!empty($id_ar_ag)) {
 
       while ($ii < count($idproducto_ag)) {
-
         //ACTUALIZAMOS EL ALMACEN_RESUMEN
         $sql = "UPDATE almacen_resumen SET  total_stok= total_stok - $cantidad_ag[$ii] , total_egreso= total_egreso + $cantidad_ag[$ii], user_updated='$this->id_usr_sesion'
           WHERE idalmacen_resumen='$id_ar_ag[$ii]';";
         $ar = ejecutarConsulta($sql);
         if ($ar['status'] == false) {
-          $sw = false;
-        } else {
-          $sw = true;
+          return $ar;
         }
 
         //add registro en nuestra bitacora.
         $sql_bit_d = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_resumen','" . $id_ar_ag[$ii] . "','Actualizacion x por envio a almacen general','$this->id_usr_sesion')";
         $bitacora = ejecutarConsulta($sql_bit_d);
         if ($bitacora['status'] == false) {
-          $sw = false;
-        } else {
-          $sw = true;
+          return $bitacora;
         }
-// var_dump($idalmacen_general_ag[$ii].' ----- '.$id_ar_ag[$ii].'---'.$fecha_ingreso_ag.'---'.$cantidad_ag[$ii]); die();
+
         //INSERTAMOS A UN ALMACEN_GENERAL
-        $sql_0 = " INSERT INTO almacen_producto_guardado( idalmacen_general, idalmacen_resumen, fecha_envio, cantidad) 
+          $sql_0 = " INSERT INTO almacen_producto_guardado( idalmacen_general, idalmacen_resumen, fecha_envio, cantidad) 
           VALUES ('$idalmacen_general_ag','$id_ar_ag[$ii]','$fecha_ingreso_ag', '$cantidad_ag[$ii]')";
-        $creando = ejecutarConsulta_retornarID($sql_0);
-        if ($creando['status'] == false) {
-          $sw = false;
-        } else {
-          $sw = true;
-        }
-
-        $id = $creando['data'];
-
-        //add registro en nuestra bitacora
-        $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_producto_guardado','$id','Crear registro','$this->id_usr_sesion')";
-        $bitacora = ejecutarConsulta($sql_5);
-        if ($bitacora['status'] == false) {
-          $sw = false;
-        } else {
-          $sw = true;
-        }
+          $creando = ejecutarConsulta_retornarID($sql_0); if ($creando['status'] == false) { return $creando; }  
+          $id = $creando['data'];
+          //add registro en nuestra bitacora
+          $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_producto_guardado','$id','Crear registro','$this->id_usr_sesion')";
+          $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }
 
         $ii = $ii + 1;
       }
-      return $retorno = ['status' => $sw, 'message' => 'todo oka ps', 'data' => ''];
-    } else {
-      return $retorno = ['status' => 'error_ing_pool', 'message' => 'No hay Productos seleccionados', 'data' => '', 'user' => $_SESSION["nombre"]];
+      return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
     }
+
+
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
   }
 
   //------------------------------------------------------------------------------------
@@ -281,14 +256,16 @@ class Almacen_general
   //SELECT ALMACEN ORIGEN, DESTINO
   public function select_lista_almacenes($id_alm_origen)
   {
-    $id = "";
-    if (!empty($id_alm_origen) && $id_alm_origen == '0') {
-      $id = "";
-    } elseif (!empty($id_alm_origen) && $id_alm_origen != '0') {
-      $id = " AND idalmacen_general <> $id_alm_origen ";
+    $id="";
+    if (!empty($id_alm_origen) && $id_alm_origen =='0' ) {
+      $id =""; 
+    } elseif(!empty($id_alm_origen) && $id_alm_origen !='0'){
+      $id =" AND idalmacen_general <> $id_alm_origen "; 
+      
     }
     $sql = "SELECT idalmacen_general, nombre_almacen as nombre 
     FROM almacen_general WHERE estado='1' AND estado_delete='1' $id ; ";
     return ejecutarConsultaArray($sql);
   }
+
 }

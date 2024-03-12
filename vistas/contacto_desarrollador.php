@@ -203,11 +203,10 @@
     }).then((result) => { 
       
       if (result.dismiss === Swal.DismissReason.timer) { 
-
+        
+        $.post("../ajax/ajax_general.php?op=update_id_sesion", {idproyecto: idproyecto}, function (e, textStatus, jqXHR) {  e = JSON.parse(e); console.log(e); });
         if ($("#foo" ).hasClass('className')) { $( "#foo" ).removeClass( 'className'); } else { $( "#foo" ).addClass( 'className'); }
-
         if ( localStorage.getItem('nube_idproyecto') ) { $("#icon_folder_"+localStorage.getItem('nube_idproyecto')).html('<i class="fas fa-folder"></i>'); }
-
         $("#icon_folder_"+idproyecto).html('<i class="fas fa-folder-open"></i>')
 
         localStorage.setItem('nube_idproyecto', idproyecto);

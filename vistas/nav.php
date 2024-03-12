@@ -82,7 +82,7 @@
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item dropdown-footer"> <small>Más informacion cominicarse con el administrador </small>  </a>
             <!-- /.row -->
-            <a href="../ajax/usuario.php?op=salir&file=<?php echo basename($_SERVER['PHP_SELF']); ?> " class="btn btn-danger btn-block">Cerrar sesion</a>
+            <a href="../ajax/usuario.php?op=salir&file=<?php echo basename($_SERVER['PHP_SELF']); ?>" class="btn btn-danger btn-block">Cerrar sesion</a>
           </div>
           <div class="card-footer py-1 text-center ">
             <a class="hove-negrita" href="javascript:void(0)" onclick="abrir_calculadora()"><i class="fas fa-calculator"></i> Abrir calculadora</a>

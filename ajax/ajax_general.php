@@ -47,24 +47,24 @@
 
       // buscar datos de RENIEC
       case 'reniec':
-
         $dni = $_POST["dni"];
-
         $rspta = $ajax_general->datos_reniec($dni);
-
         echo json_encode($rspta);
-
       break;
       
       // buscar datos de SUNAT
       case 'sunat':
-
         $ruc = $_POST["ruc"];
-
         $rspta = $ajax_general->datos_sunat($ruc);
-
         echo json_encode($rspta, true);
+      break;
 
+      // Update idsesion Proyecto
+      case 'update_id_sesion':        
+        $_SESSION['idproyecto'] = isset($_POST["idproyecto"]) ? $_POST["idproyecto"] : 0;        
+
+        $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => [], );
+        echo json_encode($retorno, true);
       break;
       
       /* ══════════════════════════════════════ T R A B A J A D O R  ══════════════════════════════════════ */
