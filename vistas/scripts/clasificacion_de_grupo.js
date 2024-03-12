@@ -27,6 +27,8 @@ function init() {
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_grupo").on("click", function (e) { $("#submit-form-grupo").submit(); });
   $("#guardar_registro_concreto").on("click", function (e) { $("#submit-form-concreto").submit(); });
+  $(".btn-add-proyecto").on("click", function (e) { $("#submit-form-grupo-proyecto").submit(); });
+  $("#form-grupo-proyecto").on("submit", function (e) { guardar_y_editar_proyecto_grupo(e); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
   $("#idproveedor").select2({ theme: "bootstrap4", placeholder: "Selecione proveedor", allowClear: true, });
@@ -79,6 +81,24 @@ function limpiar_form_grupo() {
   $(".error.invalid-feedback").remove();
 }
 
+function show_hide_form_table(flag) {
+  if (flag == 1) {
+    $('#div-tabla-grupo').show();
+    $('#div-form-proyectos').hide();
+
+    $('.btn-add-grupo').show();
+    $('.btn-regresar').hide();
+    $('.btn-add-proyecto').hide();
+  } else if (flag == 2) {  
+    $('#div-tabla-grupo').hide();
+    $('#div-form-proyectos').show();
+
+    $('.btn-add-grupo').hide();
+    $('.btn-regresar').show();
+    $('.btn-add-proyecto').show();
+  }
+}
+
 //Función Listar
 function tbla_principal_grupo(id_proyecto) {
   tabla_item = $("#tabla-grupo").dataTable({
@@ -88,6 +108,7 @@ function tbla_principal_grupo(id_proyecto) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate" data-toggle="tooltip" data-original-title="Recargar"></i>', className: "bg-gradient-info", action: function ( e, dt, node, config ) { if (tabla_item) {  tabla_item.ajax.reload(null, false); toastr_success('Exito!!', 'Actualizando tabla', 400);}   } },
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3], } }, 
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3], }, title: 'Grupos - Concreto y Agregado' },      
     ],
@@ -203,7 +224,6 @@ function mostrar_grupo(idclasificacion_grupo) {
   }).fail( function(e) { ver_errores(e); } );
 }
 
-
 //Función para desactivar registros
 function eliminar_grupo(idclasificacion_grupo, nombre) {
 
@@ -221,6 +241,91 @@ function eliminar_grupo(idclasificacion_grupo, nombre) {
     false,
     false
   );
+}
+
+//Función para desactivar registros
+function activar_grupo(idclasificacion_grupo, nombre) {
+
+  crud_simple_alerta(
+    "../ajax/clasificacion_de_grupo.php?op=activar_grupo",
+    idclasificacion_grupo, 
+    "!Elija una opción¡", 
+    `<b class="text-success">${nombre}</b> <br> Este registro sera visible! `, 
+    'Si, recuperar',
+    function(){ sw_success('Activado!', 'Tu registro ha sido recuperado.' ) }, 
+    function(){ tabla_item.ajax.reload(null, false); lista_de_grupo(localStorage.getItem('nube_idproyecto')); },
+    false, 
+    false, 
+    false,
+    false
+  );
+}
+
+
+function mostrar_proyectos_asignados(id) {
+  $('#idclasificacion_grupo_p').val(id);
+  $('#div-form-proyectos-form').html(`<div class="row" > <div class="col-lg-12 text-center"> <i class="fas fa-spinner fa-pulse fa-6x"></i><br /> <br /> <h4>Cargando...</h4></div></div>`);
+  show_hide_form_table(2);
+  $.post(`../ajax/clasificacion_de_grupo.php?op=proyectos_asignados`, {id:id},  function (e, textStatus, jqXHR) {
+    $('#div-form-proyectos-form').html(e);
+    // e = JSON.parse(e); console.log(e);
+    // if (e.status == true) {
+      
+    // } else {
+    //   ver_errores(e);
+    // }
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+function guardar_y_editar_proyecto_grupo(e) {
+  e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-grupo-proyecto")[0]);
+
+  $.ajax({
+    url: "../ajax/clasificacion_de_grupo.php?op=guardar_y_editar_proyecto_grupo",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) {
+
+          Swal.fire("Correcto!", "Grupo guardado correctamente", "success");
+          tabla_item.ajax.reload(null, false);
+          lista_de_grupo(localStorage.getItem('nube_idproyecto'));          
+          
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }      
+
+      $(".btn-add-proyecto").html('Guardar').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_grupo_proyecto").css({"width": percentComplete+'%'});
+          $("#barra_progress_grupo_proyecto").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $(".btn-add-proyecto").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_grupo_proyecto").css({ width: "0%",  });
+      $("#barra_progress_grupo_proyecto").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_grupo_proyecto").css({ width: "0%", });
+      $("#barra_progress_grupo_proyecto").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
 }
 
 // :::::::::::::::::::::::::: S E C C I O N   C O M P R A   Y   S U B C O N T R A T O ::::::::::::::::::::::::::
@@ -547,6 +652,7 @@ function ver_detalle_subcontrato(id) {
 
   }).fail( function(e) { ver_errores(e); } );
 }
+
 // :::::::::::::::::::::::::: S E C C I O N    R E S U M E N ::::::::::::::::::::::::::
 //Función Listar
 function tbla_principal_resumen(idproyecto) {

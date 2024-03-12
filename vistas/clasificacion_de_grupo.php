@@ -245,38 +245,58 @@
                         <h4 class="modal-title titulo-comprobante-compra">Lista de Grupos</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
-                        </button>
+                        </button>                        
                       </div>
 
-                      <div class="modal-body row">
-                        <div class="col-12">
-                          <button  class="btn btn-success btn-sm" data-toggle="modal"  data-target="#modal-agregar-grupo" onclick="limpiar_form_grupo();" >Agregar Item</button>
+                      <div class="modal-body ">
+                        <div class="row">                        
+                          <div class="col-12">
+                            <button type="button" class="btn btn-success btn-sm btn-add-grupo" data-toggle="modal"  data-target="#modal-agregar-grupo" onclick="limpiar_form_grupo();" >Agregar Item</button>
+                            <button type="button" class="btn btn-warning btn-sm btn-regresar" data-toggle="tooltip" data-original-title="Regresar" data-placement="top" onclick="show_hide_form_table(1);" style="display: none;"><i class="fa-solid fa-arrow-left"></i></button>
+                            <button type="button" class="btn btn-success btn-sm btn-add-proyecto"  style="display: none;" >Guardar</button>
+                          </div>
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3" id="div-tabla-grupo">
+                            <table id="tabla-grupo" class="table table-bordered table-striped display " style="width: 100% !important;">
+                              <thead>
+                                <tr>
+                                  <th class="">#</th>
+                                  <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                  <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
+                                  <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
+                                  <th >Estado</th>
+                                                          
+                                </tr>
+                              </thead>
+                              <tbody></tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="">#</th>
+                                  <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                  <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
+                                  <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
+                                  <th >Estado</th>                                  
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3" id="div-form-proyectos" style="display: none;"> 
+                            <form id="form-grupo-proyecto" name="form-grupo-proyecto" method="POST">
+                              <input type="hidden" name="idclasificacion_grupo_p" id="idclasificacion_grupo_p">
+                              <div id="div-form-proyectos-form">                            
+                                <div class="row" > <div class="col-lg-12 text-center"> <i class="fas fa-spinner fa-pulse fa-6x"></i><br /> <br /> <h4>Cargando...</h4> </div> </div>
+                              </div>  
+                              <button type="submit" style="display: none;" id="submit-form-grupo-proyecto">Submit</button>   
+                              <!-- barprogress -->
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                <div class="progress" id="barra_progress_grupo_proyecto_div">
+                                  <div id="barra_progress_grupo_proyecto" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                    0%
+                                  </div>
+                                </div>
+                              </div>                         
+                            </form>
+                          </div>
                         </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3">
-                          <table id="tabla-grupo" class="table table-bordered table-striped display " style="width: 100% !important;">
-                            <thead>
-                              <tr>
-                                <th class="">#</th>
-                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
-                                <th >Estado</th>
-                                                        
-                              </tr>
-                            </thead>
-                            <tbody></tbody>
-                            <tfoot>
-                              <tr>
-                                <th class="">#</th>
-                                <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
-                                <th >Estado</th>                                  
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-
                       </div>
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

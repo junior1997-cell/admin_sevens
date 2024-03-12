@@ -30,6 +30,9 @@
       $idclasificacion_grupo    = isset($_POST["idclasificacion_grupo"]) ? limpiarCadena($_POST["idclasificacion_grupo"]) : "";
       $nombre_grupo      = isset($_POST["nombre_grupo"]) ? encodeCadenaHtml($_POST["nombre_grupo"] ) : "";
       $descripcion_grupo = isset($_POST["descripcion_grupo"]) ? encodeCadenaHtml($_POST["descripcion_grupo"] ) : "";
+
+      // :::::::::::::::::::::::::: S E C C I O N   A S I G N A C I O N   D E   P R O Y E C T O  ::::::::::::::::::::::::::
+      $id_proyecto_grupo = isset($_POST["id_proyecto_grupo"]) ? $_POST["id_proyecto_grupo"]  : "";
       
       switch ($_GET["op"]) {
         // :::::::::::::::::::::::::: S E C C I O N   G R U P O  ::::::::::::::::::::::::::
@@ -50,27 +53,23 @@
         break;
     
         case 'desactivar_grupo':
-
           $rspta = $clasificacion_de_grupo->desactivar_grupo( $_GET["id_tabla"] );
-
           echo json_encode( $rspta, true) ;
-
         break;      
 
         case 'eliminar_grupo':
-
           $rspta = $clasificacion_de_grupo->eliminar_grupo( $_GET["id_tabla"] );
-
           echo json_encode( $rspta, true) ;
+        break;
 
+        case 'activar_grupo':
+          $rspta = $clasificacion_de_grupo->activar_grupo( $_GET["id_tabla"] );
+          echo json_encode( $rspta, true) ;
         break;
     
         case 'mostrar_grupo':
-
-          $rspta = $clasificacion_de_grupo->mostrar_grupo($idclasificacion_grupo);
-          //Codificar el resultado utilizando json
+          $rspta = $clasificacion_de_grupo->mostrar_grupo($idclasificacion_grupo);          
           echo json_encode( $rspta, true) ;
-
         break;
     
         case 'tbla_principal_grupo':
@@ -86,9 +85,10 @@
               $message_tooltip = ($reg->idclasificacion_grupo == 1 ? 'No se puede eliminar' : 'Eliminar o papelera');
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg->estado ? '<button class="btn btn-warning btn-sm" onclick="mostrar_grupo(' . $reg->idclasificacion_grupo. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm '. $disabed_uso_general.' " onclick="'.$funcion_eliminar.'" data-toggle="tooltip" data-original-title="'.$message_tooltip.'"><i class="fas fa-skull-crossbones"></i></button>' : 
-                '<button class="btn btn-warning btn-sm" onclick="mostrar_grupo(' . $reg->idclasificacion_grupo . ')"><i class="fa fa-pencil-alt"></i></button>',
+                "1" =>  ' <button class="btn bg-gradient-dark btn-sm" onclick="mostrar_proyectos_asignados(' . $reg->idclasificacion_grupo. ');" data-toggle="tooltip" data-original-title="Asignar a un proyecto"><i class="fa-solid fa-file-import"></i></button>' .
+                ' <button class="btn btn-warning btn-sm" onclick="mostrar_grupo(' . $reg->idclasificacion_grupo. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ($reg->estado ? ' <button class="btn btn-danger btn-sm '. $disabed_uso_general.' " onclick="'.$funcion_eliminar.'" data-toggle="tooltip" data-original-title="'.$message_tooltip.'"><i class="fas fa-skull-crossbones"></i></button>' : 
+                ' <button class="btn btn-success btn-sm" onclick="activar_grupo(' . $reg->idclasificacion_grupo .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Activar"><i class="fa-solid fa-check"></i></button>'),
                 "2" => $reg->nombre,                
                 "3" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activo</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . $toltip,
@@ -115,6 +115,59 @@
           //Codificar el resultado utilizando json
           echo json_encode( $rspta, true) ;
 
+        break;
+
+        case 'proyectos_asignados':
+          //Obtenemos todos los permisos de la tabla permisos          
+          $rspta = $clasificacion_de_grupo->lista_de_proyectos();
+      
+          //Obtener los permisos asignados al usuario
+          $id = $_POST['id'];
+          $marcados = $clasificacion_de_grupo->proyectos_y_grupos($id);
+          //Declaramos el array para almacenar todos los permisos marcados
+          $proyecto_array = array();
+      
+          //Almacenar los permisos asignados al usuario en el array
+          while ($per = $marcados['data']->fetch_object()) {
+            array_push($proyecto_array, $per->idproyecto);
+          }
+      
+          //Mostramos la lista de permisos en la vista y si están o no marcados
+          echo '<div class="card"><div class="card-body" style="overflow-x: auto;"><div class="row" >';
+          foreach ($rspta['data'] as $key => $val) {
+            $estado = "";
+            if ($val['estado'] == '2') {  
+              $estado = '<span class="text-center badge badge-danger">No empezado</span>';              
+            } else if ($val['estado'] == '1') {  
+              $estado = '<span class="text-center badge badge-warning">En proceso</span>';              
+            } else {  
+              $estado = '<span class="text-center badge badge-success">Terminado</span>';              
+            }
+            if ($key % 7 === 0) {   echo '<div class="col-md-12 col-lg-12 col-xl-12" >';   } # abrimos el: col-lg-2      
+            
+            $sw = in_array($val['idproyecto'], $proyecto_array) ? 'checked' : '';
+      
+            echo '<div class="form-group">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="id_proyecto_grupo_' . $val['idproyecto'] . '" name="id_proyecto_grupo[]" value="' . $val['idproyecto'] . '" ' . $sw . '>
+                <label class="custom-control-label" for="id_proyecto_grupo_' . $val['idproyecto'] . '">' . $val['nombre_codigo'] .' '. $estado . '</label>
+              </div>
+            </div> ';
+            if (($key + 1) % 7 === 0 || $key === count($rspta['data']) - 1) { echo "</div>"; } # cerramos el: col-lg-2
+          }
+          echo '</div></div></div>';
+        break;
+
+        case 'guardar_y_editar_proyecto_grupo':
+          
+          if (!empty($_POST["idclasificacion_grupo_p"]) && !empty($id_proyecto_grupo)) {            
+            $rspta = $clasificacion_de_grupo->asigar_grupo_a_proyecto($_POST["idclasificacion_grupo_p"],$_POST["id_proyecto_grupo"]);            
+            echo json_encode( $rspta, true);
+
+          } else {             
+            $retorno = ['status' => 'error_ing_pool', 'message' => 'Los datos no estan completos.', 'data' =>[], 'user' =>$_SESSION["nombre"]];            
+            echo json_encode( $retorno, true) ;
+          }
         break;
 
         // :::::::::::::::::::::::::: S E C C I O N    C O M P R A   Y   S U B C O N T R A T O ::::::::::::::::::::::::::

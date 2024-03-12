@@ -71,14 +71,17 @@ class Clasificacion_de_grupo
 
   //Implementar un método para listar los registros
   public function tbla_principal_grupo($id_proyecto) {
-    $sql = "SELECT * FROM clasificacion_grupo WHERE estado_delete='1'  AND estado='1' ORDER BY nombre ASC";
+    $sql = "SELECT * FROM clasificacion_grupo WHERE estado_delete='1' ORDER BY estado DESC, nombre ASC";
     return ejecutarConsulta($sql);
   }
   
   //Implementar un método para listar los registros
   public function lista_de_grupo($id_proyecto) {
     $data_array = [];
-    $sql = "SELECT * FROM clasificacion_grupo WHERE estado_delete='1' AND estado='1' ORDER BY nombre ASC";
+    $sql = "SELECT cg.*
+    FROM clasificacion_grupo as cg
+    INNER JOIN detalle_p_cg as dpcg ON dpcg.idclasificacion_grupo = cg.idclasificacion_grupo
+    WHERE dpcg.idproyecto = '$id_proyecto' AND cg.estado_delete='1' AND cg.estado='1' ORDER BY cg.nombre ASC";
     $grupo =  ejecutarConsultaArray($sql); if ($grupo['status'] == false) { return $grupo; }
 
     foreach ($grupo['data'] as $key => $value) {
@@ -103,6 +106,39 @@ class Clasificacion_de_grupo
     }
 
     return $retorno = ['status' => true, 'message' => 'todo ok pe.', 'data' =>$data_array] ;   
+  }
+
+  //Implementar un método para listar los registros
+  public function proyectos_y_grupos($id) {    
+    $sql = "SELECT dpcg.* 
+    FROM detalle_p_cg as dpcg
+    INNER JOIN proyecto as p ON p.idproyecto = dpcg.idproyecto
+    INNER JOIN clasificacion_grupo as cg ON cg.idclasificacion_grupo = dpcg.idclasificacion_grupo
+    WHERE dpcg.estado = '1' AND dpcg.estado_delete = '1' AND dpcg.idclasificacion_grupo = '$id'; ";
+    return  ejecutarConsulta($sql);
+  }
+
+  //Implementar un método para listar los registros
+  public function lista_de_proyectos() {    
+    $sql = "SELECT * FROM proyecto ORDER BY estado DESC";
+    return  ejecutarConsultaArray($sql);
+  }
+
+  //Implementar un método para listar los registros
+  public function asigar_grupo_a_proyecto($idgrupo, $proyecto) {    
+    $sql = "DELETE FROM detalle_p_cg WHERE idclasificacion_grupo = '$idgrupo'";
+    $delete = ejecutarConsulta($sql);
+
+    $ii = 0;
+    while ($ii < count($proyecto)) {
+      
+      $sql_detalle = "INSERT INTO detalle_p_cg(idproyecto, idclasificacion_grupo) VALUES ('$proyecto[$ii]', '$idgrupo')";
+      $new_asig =  ejecutarConsulta_retornarID($sql_detalle); if ($new_asig['status'] == false) { return  $new_asig;}      
+
+      $ii = $ii + 1;
+    }
+
+    return $delete;
   }
   
   // :::::::::::::::::::::::::: S E C C I O N   C O M P R A   Y   S U B C O N T R A T O ::::::::::::::::::::::::::
@@ -231,7 +267,10 @@ class Clasificacion_de_grupo
 
     $data = [];
 
-    $sql_0 = "SELECT idclasificacion_grupo, nombre, descripcion FROM clasificacion_grupo WHERE estado = '1' and estado_delete = '1' ORDER BY nombre ASC;";
+    $sql_0 = "SELECT cg.idclasificacion_grupo, cg.nombre, cg.descripcion 
+    FROM clasificacion_grupo as cg
+    INNER JOIN detalle_p_cg as dpcg ON dpcg.idclasificacion_grupo = cg.idclasificacion_grupo
+    WHERE dpcg.idproyecto = '$idproyecto' AND cg.estado = '1' and cg.estado_delete = '1' ORDER BY cg.nombre ASC;";
     $grupo = ejecutarConsultaArray($sql_0); if ($grupo['status'] == false) { return $grupo; }
 
     foreach ($grupo['data'] as $key => $value) {
