@@ -21,6 +21,7 @@ function init() {
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen-general").submit(); });
   $("#guardar_registro_otro_almacen").on("click", function (e) { $("#submit-form-otro-almacen").submit(); });
+  $("#guardar_registro_trans_almacen").on("click", function (e) { $("#submit-form-trans-almacen-general").submit(); });
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════ 
   $("#proyecto_ag").select2({ theme: "bootstrap4", placeholder: "Seleccinar proyecto", allowClear: true, });
@@ -344,6 +345,8 @@ function eliminar(idproducto, nombre) {
 
 }
 //------------------------------------------------------------------
+//---------GUARDAR REGISTOS EN UN ALMACEN GENERAL-------------------
+//------------------------------------------------------------------
 
 function limpiar_form_otro_almacen() {
 
@@ -494,21 +497,85 @@ function remove_producto_ag(id,idproy) {
   }
 }
 
-function transferencia(id,producto,cantidad) {
+//------------------------------------------------------------------
+//-----TRANFERENCIA DE PRODUCTOS ENTRE ALMACENES GENERALES----------
+//------------------------------------------------------------------
+
+function limpiar_Transferencia(){
+  $("#fecha_transf").val("");
+  $("#cantidad_alm_trans").val("");
+  $("#name_alm_destino").val("").trigger("change");
+}
+
+function transferencia(idalmacen_resumen,idprod_guar,producto,cantidad) {
 
   lista_select2(`../ajax/almacen_general.php?op=select_lista_almacenes&id_alm_origen=${id_almacen_transf}`, '#name_alm_destino', null, null);
 
   $("#name_alm_destino").select2({ theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
 
-   console.log(nombre_almacen_transf +"  "+ id + " "+ producto+ " " +cantidad);
+   console.log(nombre_almacen_transf +"  "+ idprod_guar + " "+ producto+ " " +cantidad);
   $("#name_alm_origen").val(nombre_almacen_transf);
-  $("#name_prod_alm_origen").val(producto +" - cant. "+ cantidad);
+  $("#name_prod_alm_origen_transf").val(producto +" - cant. "+ cantidad);
+  $("#idalmacen_prod_guar").val(idprod_guar);
+  $("#alm_resumen_original").val(idalmacen_resumen);
   // name_prod_alm_origen
   $("#cantidad_alm_trans").rules("add", { required: true, min: 0,max: cantidad, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
 
   $("#modal-transferencia").modal("show");
   
-  
+}
+
+//Función para guardar o editar
+function guardar_tranf_almacenes_generales(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-transf_almacen")[0]);
+
+  $.ajax({
+    url: "../ajax/almacen_general.php?op=guardar_transf_almacen",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
+          
+          tabla_almacen_detalle.ajax.reload(null, false);
+          // lista_de_items();
+          $("#modal-transferencia").modal("hide");
+          limpiar_Transferencia();
+          // reload_producto_comprados_ag()
+
+          Swal.fire("Correcto!", "Transferencia guardado correctamente", "success");
+
+        } else {
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!", 'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }
+
+      $("#guardar_registro_trans_almacen").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total) * 100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_trans_almacen").css({ "width": percentComplete + '%' }).text(percentComplete.toFixed(2) + " %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#barra_progress_trans_almacen").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
 }
 
 
@@ -517,6 +584,7 @@ init();
 $(function () {
 
   //$('#unidad_medida').on('change', function() { $(this).trigger('blur'); });
+   $('#name_alm_destino').on('change', function() { $(this).trigger('blur'); });
 
   $("#form-almacen-general").validate({
     rules: {
@@ -580,10 +648,12 @@ $(function () {
   $("#form-transf_almacen").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      name_alm_destino:  { required: true,  },      
+      name_alm_destino:  { required: true,  },  
+      fecha_transf    :  { required: true,  }, 
     },
     messages: {
       name_alm_destino:  { required: "Campo requerido.", },    
+      fecha_transf    :  { required: "Campo requerido.", },    
       // 'cantidad[]':   { min: "Mínimo 0", required: "Campo requerido"},  
     },
 
@@ -602,11 +672,12 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
     submitHandler: function (e) {
-      guardar_y_editar_almacen_general(e);
+      guardar_tranf_almacenes_generales(e);
     },
   });
 
   //$('#unidad_medida').rules('add', { required: true, messages: {  required: "Campo requerido" } });
+  $('#name_alm_destino').rules('add', { required: true, messages: {  required: "Campo requerido" } });
 });
 
 // .....::::::::::::::::::::::::::::::::::::: F U N C I O N E S    A L T E R N A S  :::::::::::::::::::::::::::::::::::::::..

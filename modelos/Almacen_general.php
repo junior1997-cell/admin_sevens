@@ -147,6 +147,7 @@ class Almacen_general
     FROM almacen_producto_guardado as apg, almacen_resumen as ar, producto as prd, proyecto as pry
     WHERE apg.idalmacen_resumen = ar.idalmacen_resumen AND ar.idproducto = prd.idproducto AND ar.idproyecto = pry.idproyecto 
     AND apg.idalmacen_general='$id_almacen' AND apg.estado = '1' AND apg.estado_delete = '1' AND ar.estado = '1' AND ar.estado_delete = '1'
+    AND apg.cantidad>'0'
     ORDER BY pry.nombre_codigo ASC;";
     return ejecutarConsulta($sql);
   }
@@ -203,7 +204,7 @@ class Almacen_general
     INNER JOIN producto as p on ar.idproducto=p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    where ar.idproyecto='$idproyecto' and ar.total_stok<>'0';";
+    where ar.idproyecto='$idproyecto' and ar.total_stok>'0';";
     return ejecutarConsultaArray($sql);
   }
 
@@ -211,7 +212,7 @@ class Almacen_general
   public function insertar_alm_general($idalmacen_producto_guardado, $idalmacen_general_ag, $fecha_ingreso_ag, $dia_ingreso, $idproducto_ag, $id_ar_ag, $cantidad_ag)
   {
     $ii = 0;
-    
+
     if (!empty($id_ar_ag)) {
 
       while ($ii < count($idproducto_ag)) {
@@ -231,13 +232,19 @@ class Almacen_general
         }
 
         //INSERTAMOS A UN ALMACEN_GENERAL
-          $sql_0 = " INSERT INTO almacen_producto_guardado( idalmacen_general, idalmacen_resumen, fecha_envio, cantidad) 
-          VALUES ('$idalmacen_general_ag','$id_ar_ag[$ii]','$fecha_ingreso_ag', '$cantidad_ag[$ii]')";
-          $creando = ejecutarConsulta_retornarID($sql_0); if ($creando['status'] == false) { return $creando; }  
-          $id = $creando['data'];
-          //add registro en nuestra bitacora
-          $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_producto_guardado','$id','Crear registro','$this->id_usr_sesion')";
-          $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }
+        $sql_0 = " INSERT INTO almacen_producto_guardado( idalmacen_general, idalmacen_resumen, fecha_envio, cantidad,tipo_movimiento) 
+          VALUES ('$idalmacen_general_ag','$id_ar_ag[$ii]','$fecha_ingreso_ag', '$cantidad_ag[$ii]','ID')";
+        $creando = ejecutarConsulta_retornarID($sql_0);
+        if ($creando['status'] == false) {
+          return $creando;
+        }
+        $id = $creando['data'];
+        //add registro en nuestra bitacora
+        $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_producto_guardado','$id','Crear registro','$this->id_usr_sesion')";
+        $bitacora = ejecutarConsulta($sql_5);
+        if ($bitacora['status'] == false) {
+          return $bitacora;
+        }
 
         $ii = $ii + 1;
       }
@@ -256,16 +263,45 @@ class Almacen_general
   //SELECT ALMACEN ORIGEN, DESTINO
   public function select_lista_almacenes($id_alm_origen)
   {
-    $id="";
-    if (!empty($id_alm_origen) && $id_alm_origen =='0' ) {
-      $id =""; 
-    } elseif(!empty($id_alm_origen) && $id_alm_origen !='0'){
-      $id =" AND idalmacen_general <> $id_alm_origen "; 
-      
+    $id = "";
+    if (!empty($id_alm_origen) && $id_alm_origen == '0') {
+      $id = "";
+    } elseif (!empty($id_alm_origen) && $id_alm_origen != '0') {
+      $id = " AND idalmacen_general <> $id_alm_origen ";
     }
     $sql = "SELECT idalmacen_general, nombre_almacen as nombre 
     FROM almacen_general WHERE estado='1' AND estado_delete='1' $id ; ";
     return ejecutarConsultaArray($sql);
   }
 
+  public function guardar_transf_almacen($name_alm_destino, $idalmacen_prod_guar, $cantidad_alm_trans, $fecha_transf, $alm_resumen_original)
+  {
+   // var_dump('$name_alm_destino :'. $name_alm_destino.' $idalmacen_prod_guar :'. $idalmacen_prod_guar.'$cantidad_alm_trans : '.$cantidad_alm_trans); die();
+
+    //ACTUALIZAMOS EL ALMACEN_RESUMEN
+    $sql = "UPDATE almacen_producto_guardado SET cantidad=cantidad-'$cantidad_alm_trans' WHERE idalmacen_producto_guardado='$idalmacen_prod_guar'";
+    $update_alm = ejecutarConsulta($sql);
+
+    if ($update_alm['status'] == false) {
+      return $update_alm;
+    }
+
+    //INSERTAMOS A UN ALMACEN_GENERAL
+    $sql_0 = " INSERT INTO almacen_producto_guardado( idalmacen_general, idalmacen_resumen, fecha_envio, cantidad,tipo_movimiento) 
+            VALUES ('$name_alm_destino','$alm_resumen_original','$fecha_transf', '$cantidad_alm_trans','TEA')";
+    $creando = ejecutarConsulta_retornarID($sql_0);
+    if ($creando['status'] == false) {
+      return $creando;
+    }
+    $id = $creando['data'];
+    //add registro en nuestra bitacora
+    $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_producto_guardado','$id','Crear registro','$this->id_usr_sesion')";
+    $bitacora = ejecutarConsulta($sql_5);
+    if ($bitacora['status'] == false) {
+      return $bitacora;
+    }
+
+
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
+  }
 }

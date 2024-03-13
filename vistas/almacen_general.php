@@ -343,7 +343,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            
+
             <!-- MODAL - TRNASFERENCIA -->
             <div class="modal fade" id="modal-transferencia">
               <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -359,7 +359,7 @@ if (!isset($_SESSION["nombre"])) {
                     <!-- form start -->
                     <form id="form-transf_almacen" name="form-transf_almacen" method="POST">
                       <div class="card-body">
-                        <div class="row" id="cargando-1-fomulario">
+                        <div class="row" id="cargando-3-fomulario">
 
                           <!-- Nombre -->
                           <div class="col-12 col-sm-6 col-md-6 col-lg-6">
@@ -372,7 +372,7 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-12 col-sm-6 col-md-6 col-lg-6">
                             <div class="form-group">
                               <label for="name_alm_destino">Almacen Destino <sup class="text-danger">(*)</sup></label>
-                              <select name="name_alm_destino" id="name_alm_destino" class="form-control" placeholder="Almacen destino " >
+                              <select name="name_alm_destino" id="name_alm_destino" class="form-control" placeholder="Almacen destino ">
                               </select>
                             </div>
                           </div>
@@ -380,22 +380,32 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- Nombre -->
                           <div class="col-12 col-sm-9 col-md-9 col-lg-9">
                             <div class="form-group">
-                              <label for="name_prod_alm_origen">Producto <sup class="text-danger">(*)</sup></label>
-                              <input type="text" name="name_prod_alm_origen" class="form-control" id="name_prod_alm_origen" placeholder="Nombre almacen." disabled />
+                              <label for="name_prod_alm_origen_transf">Producto <sup class="text-danger">(*)</sup></label>
+                              <input type="text" name="name_prod_alm_origen_transf" class="form-control" id="name_prod_alm_origen_transf" placeholder="Nombre almacen." disabled />
+                              <input type="hidden" name="idalmacen_prod_guar" class="form-control" id="idalmacen_prod_guar" />
+                              <input type="hidden" name="alm_resumen_original" class="form-control" id="alm_resumen_original" />
+
                             </div>
                           </div>
-                          <!-- Nombre -->
+                          <!-- Cantidad -->
                           <div class="col-12 col-sm-3 col-md-3 col-lg-3">
                             <div class="form-group">
                               <label for="cantidad_alm_trans">Cantidad <sup class="text-danger">(*)</sup></label>
                               <input type="number" name="cantidad_alm_trans" class="form-control" id="cantidad_alm_trans" placeholder="Cantidad." />
                             </div>
                           </div>
+                          <!-- Fecha -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="fecha_transf">Fecha</label>
+                              <input type="date" name="fecha_transf" class="form-control" id="fecha_transf" placeholder="Fecha" />
+                            </div>
+                          </div>
 
                           <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-t-20px" id="barra_progress_almacen_div">
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-t-20px" id="barra_progress_trans_almacen_div">
                             <div class="progress">
-                              <div id="barra_progress_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              <div id="barra_progress_trans_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                 0%
                               </div>
                             </div>
@@ -403,7 +413,7 @@ if (!isset($_SESSION["nombre"])) {
 
                         </div>
 
-                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                        <div class="row" id="cargando-4-fomulario" style="display: none;">
                           <div class="col-lg-12 text-center">
                             <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
                             <br />
@@ -412,12 +422,12 @@ if (!isset($_SESSION["nombre"])) {
                         </div>
                       </div>
                       <!-- /.card-body -->
-                      <button type="submit" style="display: none;" id="submit-form-almacen-general">Submit</button>
+                      <button type="submit" style="display: none;" id="submit-form-trans-almacen-general">Submit</button>
                     </form>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
-                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_Transferencia();">Close</button>
+                    <button type="submit" class="btn btn-success" id="guardar_registro_trans_almacen">Guardar Cambios</button>
                   </div>
                 </div>
               </div>
