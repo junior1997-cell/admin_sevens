@@ -130,13 +130,15 @@ class Clasificacion_de_grupo
     $delete = ejecutarConsulta($sql);
 
     $ii = 0;
-    while ($ii < count($proyecto)) {
-      
-      $sql_detalle = "INSERT INTO detalle_p_cg(idproyecto, idclasificacion_grupo) VALUES ('$proyecto[$ii]', '$idgrupo')";
-      $new_asig =  ejecutarConsulta_retornarID($sql_detalle); if ($new_asig['status'] == false) { return  $new_asig;}      
+    if ( !empty($proyecto) ) {
+      while ($ii < count($proyecto)) {
+        
+        $sql_detalle = "INSERT INTO detalle_p_cg(idproyecto, idclasificacion_grupo) VALUES ('$proyecto[$ii]', '$idgrupo')";
+        $new_asig =  ejecutarConsulta_retornarID($sql_detalle); if ($new_asig['status'] == false) { return  $new_asig;}      
 
-      $ii = $ii + 1;
-    }
+        $ii = $ii + 1;
+      }
+    }    
 
     return $delete;
   }

@@ -160,7 +160,7 @@
 
         case 'guardar_y_editar_proyecto_grupo':
           
-          if (!empty($_POST["idclasificacion_grupo_p"]) && !empty($id_proyecto_grupo)) {            
+          if ( !empty($_POST["idclasificacion_grupo_p"]) ) {            
             $rspta = $clasificacion_de_grupo->asigar_grupo_a_proyecto($_POST["idclasificacion_grupo_p"],$_POST["id_proyecto_grupo"]);            
             echo json_encode( $rspta, true);
 
