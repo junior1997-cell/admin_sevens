@@ -5,9 +5,51 @@ SUM( dc.cantidad) as total_stok, SUM( dc.cantidad) as total_ingreso
 from detalle_compra as dc inner JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto =cpp.idcompra_proyecto 
 GROUP BY cpp.idproyecto, dc.idproducto;
 
+:::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_detalle ::::::::::::::::::::::
+SET time_zone = 'America/Lima';
+INSERT INTO almacen_detalle(idalmacen_resumen, idproyecto_destino, tipo_mov, fecha, cantidad, stok_anterior, stok_actual) 
+SELECT ar.idalmacen_resumen, cpp.idproyecto,"IP" as tipo_mov, cpp.fecha_compra,  dc.cantidad as cantidad, 0 as stok_anterior, dc.cantidad as total_ingreso 
+FROM detalle_compra as dc 
+INNER JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto =cpp.idcompra_proyecto 
+INNER JOIN almacen_resumen AS ar ON ar.idproducto = dc.idproducto AND ar.idproyecto = cpp.idproyecto
+
 :::::::::::::::::::::: ACTUALIZAR FECHAS NOMBRE compra_por_proyecto: DIA - MES - AÑO ::::::::::::::::::::::
 SET lc_time_names = 'es_ES';
 UPDATE compra_por_proyecto as v, compra_por_proyecto  as vp
 SET v.day_name= CONCAT(UPPER(LEFT(DAYNAME(vp.fecha_compra),1)),SUBSTR(DAYNAME(vp.fecha_compra),2)), 
 v.month_name=CONCAT(UPPER(LEFT(MONTHNAME(vp.fecha_compra),1)),SUBSTR(MONTHNAME(vp.fecha_compra),2)), 
 v.year_name=YEAR(vp.fecha_compra) WHERE  v.idcompra_proyecto = vp.idcompra_proyecto;
+
+::::::::::::::::::::: RELLENAR FECHA CALENDARIO
+-- Crear una tabla temporal para almacenar las fechas
+CREATE TEMPORARY TABLE IF NOT EXISTS tmp_fechas ( fecha DATE );
+
+-- Insertar todos los días del año 2024 en la tabla temporal
+INSERT INTO tmp_fechas (fecha)
+WITH RECURSIVE dates AS (
+    SELECT '2020-01-01' AS fecha
+    UNION ALL
+    SELECT fecha + INTERVAL 1 DAY FROM dates WHERE fecha < '2020-12-31'
+)
+SELECT fecha FROM dates;
+
+-- Insertar los datos de la tabla temporal a la tabla 'fechas_de_calendario' ordenados por fecha ascendente
+INSERT INTO fechas_de_calendario (fecha)
+SELECT fecha FROM tmp_fechas ORDER BY fecha ASC;
+
+-- Eliminar la tabla temporal
+DROP TEMPORARY TABLE IF EXISTS tmp_fechas;
+
+:::::::::::::
+SET lc_time_names = 'es_ES';
+UPDATE fechas_de_calendario as v, fechas_de_calendario  as vp
+SET v.name_day	= CONCAT(UPPER(LEFT(DAYNAME(vp.fecha),1)),SUBSTR(DAYNAME(vp.fecha),2)),
+v.number_day	= DATE_FORMAT(vp.fecha, '%d'),
+v.name_month	= CONCAT(UPPER(LEFT(MONTHNAME(vp.fecha),1)),SUBSTR(MONTHNAME(vp.fecha),2)), 
+v.number_month	= DATE_FORMAT(vp.fecha, '%m'), 
+v.name_year		= YEAR(vp.fecha) WHERE  v.idfechas_de_calendario = vp.idfechas_de_calendario;
+::::::::::::
+SET lc_time_names = 'es_ES';
+UPDATE fechas_de_calendario as v, fechas_de_calendario  as vp
+SET v.name_day_abrev= LEFT(vp.name_day, 3),
+v.name_month_abrev	= LEFT(vp.name_month, 3);

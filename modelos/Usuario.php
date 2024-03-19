@@ -238,7 +238,7 @@ class Usuario
 
   //Implementar un método para listar los registros
   public function listar() {
-    $sql = "SELECT u.idusuario, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento, u.estado
+    $sql = "SELECT u.idusuario, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento, u.estado
 		FROM usuario as u, trabajador as t
 		WHERE  u.idtrabajador = t.idtrabajador  AND u.estado=1 AND u.estado_delete=1 ORDER BY t.nombres ASC;";
     return ejecutarConsulta($sql);
@@ -262,6 +262,19 @@ class Usuario
     $sql = "SELECT idtrabajador as id, nombres as nombre, tipo_documento as documento, numero_documento, imagen_perfil
 		FROM trabajador WHERE estado='1' AND estado_delete='1' AND estado_usuario = '0' ORDER BY nombres ASC;";
     return ejecutarConsulta($sql);
+  }
+
+  public function last_sesion($idusuario)	{
+		$sql = "UPDATE usuario SET last_sesion = CURRENT_TIMESTAMP WHERE  idusuario='$idusuario';";
+		ejecutarConsulta($sql);
+		$sql1 = "INSERT INTO bitacora_sesion (idusuario) VALUES ('$idusuario')";
+		return ejecutarConsulta($sql1); 	
+	}
+  public function historial_sesion($idusuario) {
+   
+    $sql = "SELECT DATE_FORMAT(bs.fecha_sesion, '%d/%m/%Y %h:%i %p') AS last_sesion , MONTHNAME(bs.fecha_sesion) AS nombre_mes, DAYNAME(bs.fecha_sesion) AS nombre_dia
+		FROM bitacora_sesion as bs WHERE idusuario = '$idusuario' ORDER BY bs.fecha_sesion DESC;";
+    return ejecutarConsultaArray($sql); 
   }
   
 }

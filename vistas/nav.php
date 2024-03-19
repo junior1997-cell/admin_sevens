@@ -46,6 +46,20 @@
       </div>
     </li>
 
+    <!-- MODULO - ALMACEN -->
+    <li class="nav-item d-none d-sm-inline-block">
+      <a class="nav-link"  href="almacen.php" role="button" data-toggle="tooltip" data-original-title="Ir a: Almacén">
+        <i class="fa-solid fa-warehouse nav-icon"></i>
+      </a>
+    </li>
+
+    <!-- MODULO - COMPRAS -->
+    <li class="nav-item d-none d-sm-inline-block">
+      <a class="nav-link"  href="compra_insumos.php" role="button" data-toggle="tooltip" data-original-title="Ir a: Compras">
+        <i class="fas fa-shopping-cart nav-icon"></i>
+      </a>
+    </li>
+
     <!-- Messages Dropdown Menu -->
     <li class="nav-item dropdown ">
       <a class="nav-link" data-toggle="dropdown" href="#">

@@ -76,6 +76,7 @@
                                   <th>Telefono</th>
                                   <th>Usuario</th>
                                   <th>Cargo</th>
+                                  <th>Sesión</th>
                                   <th>Estado</th>
                                 </tr>
                               </thead>
@@ -90,6 +91,7 @@
                                   <th>Telefono</th>
                                   <th>Usuario</th>
                                   <th>Cargo</th>
+                                  <th>Sesión</th>
                                   <th>Estado</th>
                                 </tr>
                               </tfoot>
@@ -203,7 +205,7 @@
                 </div>
                 <!-- /.container-fluid -->
                 
-                <!-- Modal agregar trabajador -->
+                <!-- MODAL - AGREGAR UAURIO -->
                 <div class="modal fade" id="modal-agregar-trabajador">
                   <div class="modal-dialog modal-dialog-scrollable modal-xl">
                     <div class="modal-content">
@@ -506,6 +508,49 @@
                       <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-danger" onclick="limpiar_form_trabajador();" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_trabajador">Guardar Cambios</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MODAL - VER HISTORIAL SESION -->
+                <div class="modal fade" id="modal-ver-historial">
+                  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Lista de Sesiones</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        <!-- form start -->                        
+                        <div class="card-body"> 
+                          <table id="tabla-historial-sesion" class="table table-bordered w-100" style="width: 100%;">
+                            <thead>
+                              <tr>
+                                <th class="text-center">#</th>                          
+                                <th>Fecha</th>
+                                <th>Dia</th>
+                                <th>Mes</th>     
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th class="text-center">#</th>                          
+                                <th>Fecha</th>
+                                <th>Dia</th>
+                                <th>Mes</th>   
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>                        
+                      </div>
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>                        
                       </div>
                     </div>
                   </div>

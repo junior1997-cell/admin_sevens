@@ -18,6 +18,8 @@
       $almacen = new Almacen($_SESSION['idusuario']);
       $resumen_insumos = new ResumenInsumos($_SESSION['idusuario']);
 
+      setlocale(LC_ALL, 'es_ES.utf8');
+      date_default_timezone_set('America/Lima');
       $imagen_error = "this.src='../dist/svg/user_default.svg'";
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
@@ -69,8 +71,10 @@
           
         break; 
 
-        case 'tabla_almacen':
+        case 'tabla_almacen':         
+
           $rspta = $almacen->tbla_principal($_POST["id_proyecto"], $_POST["fip"], $_POST["ffp"], $_POST["fpo"] );
+          // echo json_encode($rspta, true); die();
           // $rspta = $almacen->tbla_principal(6, '2023-04-18', '2023-04-22', 'semanal' );
 
           $codigoHTMLbodyProducto =''; 
@@ -85,7 +89,7 @@
           }
 
           foreach ($rspta['data']['data_sq'] as $key => $val) {
-            $codigoHTMLhead3 .= '<th colspan="'.$val['colspan'].'">'.$val['nombre_sq'].' '. $val['num_sq'].'</th>';
+            $codigoHTMLhead3 .= '<th class="text-nowrap" colspan="'.$val['colspan'].'">'.$val['nombre_sq'].' '. $val['num_sq'].'</th>';
           }
 
           echo '<thead class="st_tr_style bg-color-ffd146">
@@ -110,43 +114,31 @@
 
           foreach ($rspta['data']['producto'] as $key => $val) {
             $color_filas =  ($key%2==0 ? 'bg-color-e9e9e9' : '') ;
-            $html_dias = ''; $html_dias_sum = ''; $total_x_producto = 0;
-            foreach ($val['almacen'] as $key2 => $val2) {
-              $salida = ''; $entrada = ''; $acumulado_s = 0; $acumulado_e = 0 ;
-              if ( count($val2['salida']) === 0) { $salida='0'; } else { 
-                foreach ($val2['salida'] as $key3 => $val3) {
-                  $key3 == 0 ? $salida = floatval($val3['cantidad']) : $salida = $salida . ', ' . floatval($val3['cantidad']); 
-                  $acumulado_s += floatval($val3['cantidad']); $total_x_producto += floatval($val3['cantidad']);
-                }                
-              } 
-              if ( count($val2['entrada']) === 0) { $entrada='0'; } else { 
-                foreach ($val2['entrada'] as $key3 => $val3) {
-                  $key3 == 0 ? $entrada = floatval($val3['cantidad']) : $entrada = $entrada . ', ' . floatval($val3['cantidad']); 
-                  $acumulado_e += floatval($val3['cantidad']); 
-                }                
-              } 
-              $html_dias .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$entrada.'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idproducto'].'\');">'.$acumulado_e.'</td>';
-              $html_dias_sum .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$salida.'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idproducto'].'\');">'.$acumulado_s.'</td>';
+            $html_dias = ''; $html_dias_sum = ''; 
+
+            foreach ($val['almacen'] as $key2 => $val2) {              
+              $html_dias .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$val2['entrada_group'].'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idproducto'].'\');">'.$val2['entrada_cant'].'</td>';
+              $html_dias_sum .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$val2['salida_group'].'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idproducto'].'\');">'.$val2['salida_cant'].'</td>';
             }
 
-            $saldo = ($val['entrada_total'] + $val['saldo_anterior']) - $total_x_producto;
+            $saldo = floatval($val['stok']) ;
             $codigoHTMLbodyProducto = '<tr class="text-nowrap '.$color_filas.'">
               <td rowspan="2">'.($key +1).'</td>
               <td rowspan="2">'.$val['idproducto'].'</td> 
               <td class="text_producto text-nowrap" rowspan="2"> <span class="name_producto_'.$val['idproducto'].'">'.$val['nombre_producto'].'</span> <br> <small><b>Clasf:</b> '.$val['categoria'].' </small></td>
               <td rowspan="2">'.$val['abreviacion_um'].'</td>
               <td rowspan="2"> 
-                <span class="span_s" >'.$val['saldo_anterior'].'</span> 
-                <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="'.$val['saldo_anterior'].'" style="display:none;" onchange="calcular_saldo(this, '.$val['idproducto'].');" onkeyup="calcular_saldo(this, '.$val['idproducto'].');" > <br> 
+                <span class="span_s" > SA </span> 
+                <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="SA" style="display:none;" onchange="calcular_saldo(this, '.$val['idproducto'].');" onkeyup="calcular_saldo(this, '.$val['idproducto'].');" > <br> 
                 <input type="hidden" name="idproducto_sa[]" value="'.$val['idproducto'].'" > <input type="hidden" name="idproyecto_sa[]" value="'.$val['idproyecto'].'" >
                 <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior(\''.$idproyecto.'\', \''.$val['idproducto'].'\');"><i class="far fa-eye"></i></span> 
               </td>          
               '.$html_dias.'          
-              <td> <span class="entrada_total_'.$val['idproducto'].'">'.number_format(($val['entrada_total'] + $val['saldo_anterior']), 2,',','.').'</span> </td>
+              <td> <span class="entrada_total_'.$val['idproducto'].'">'.number_format($val['total_entrada'] , 2,',','.').'</span> </td>
               <td rowspan="2" class="'.($saldo < 0 ? 'text-danger' : '').'"><span class="saldo_total_'.$val['idproducto'].'">'.number_format($saldo, 2,',','.').'</span></td>
             </tr>';
 
-            echo $codigoHTMLbodyProducto .' <tr>'.$html_dias_sum.'<td class="'.$color_filas.'"><span class="salida_total_'.$val['idproducto'].'">'.number_format($total_x_producto, 2,',','.').'</span></td> </tr>'; 
+            echo $codigoHTMLbodyProducto .' <tr>'.$html_dias_sum.'<td class="'.$color_filas.'"><span class="salida_total_'.$val['idproducto'].'">'.number_format($val['total_salida'], 2,',','.').'</span></td> </tr>'; 
             $html_dias ='';            
 
           }

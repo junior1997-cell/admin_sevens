@@ -172,9 +172,9 @@ function tbla_principal( nube_idproyecto ) {
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }, 
-      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,11,12,13,14,4,5,6,7,8,9,15,16], } }
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,8,9,10,11,12,13,4,5,14,15,16,17,18], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,8,9,10,11,12,13,4,5,14,15,16,17,18], } }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,8,9,10,11,12,13,4,5,14,15,16,17,18], } }
     ],
     ajax:{
       url: `../ajax/trabajador_por_proyecto.php?op=tbla_principal&nube_idproyecto=${nube_idproyecto}&estado=1`,
@@ -199,9 +199,9 @@ function tbla_principal( nube_idproyecto ) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [ 
-      { targets: [6], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      // { targets: [5], render: $.fn.dataTable.render.moment('YYYY-MM-DD', `DD/MM/YYYY ${this.data}`) , },     
       //{ targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
-      { targets: [11,12,13,14,15,16], visible: false, searchable: false, }, 
+      { targets: [8,9,10,11,12,13,14,15,16,17,18], visible: false, searchable: false, }, 
     ]
   }).DataTable();
 }

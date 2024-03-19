@@ -121,13 +121,17 @@ if (!isset($_SESSION["nombre"])) {
                                 </button>
                               </h3>
                               <h3 class="card-title mr-2">
-                                
-                                <button type="button" class="btn bg-gradient-success p-y-2px btn-sm btn-block btn-general" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar_form_otro_almacen();" >
-                                  <i class="fas fa-plus-circle"></i> General
-                                </button>
-                                <button type="button" class="btn bg-gradient-success p-y-2px btn-sm btn-block btn-salida" data-toggle="modal" data-target="#modal-agregar-almacen" onclick="limpiar_form_almacen();" >
-                                  <i class="fas fa-plus-circle"></i> Salida
-                                </button>
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-success" data-toggle="dropdown">Opciones</button>
+                                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"> <span class="sr-only">Toggle Dropdown</span> </button>
+                                  <div class="dropdown-menu" role="menu" style="box-shadow: 0px 0rem 2rem 8px rgb(0 0 0 / 64%) !important;">
+                                    <button type="button" class="dropdown-item my-2 btn-salida" data-toggle="modal" data-target="#modal-agregar-almacen" onclick="limpiar_form_almacen();" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a uso de Obra</button>
+                                    <div class="dropdown-divider"></div>
+                                    <button type="button" class="dropdown-item my-2 btn-general"  data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar_form_otro_almacen();"><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar Almacén General</button>         
+                                    <div class="dropdown-divider"></div>                           
+                                    <button type="button" class="dropdown-item my-2" ><i class="fa-solid fa-arrow-right-to-bracket"></i> Recibir de Almacén General</button>                                    
+                                  </div>
+                                </div>                                
                               </h3>
                               <!-- Botones de quincenas -->
                               <div id="lista_quincenas" class="row-horizon disenio-scroll ml-2" >

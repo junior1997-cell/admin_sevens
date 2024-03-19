@@ -265,8 +265,9 @@ class TrabajadorPorProyecto
     
     $data = [];
 
-    $sql = "SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento,  t.imagen_perfil as imagen, t.telefono, t.fecha_nacimiento,
-    t.email, tpp.desempenio, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, tpp.fecha_inicio, tpp.fecha_fin, tpp.estado, 
+    $sql = "SELECT t.idtrabajador, t.nombres, t.tipo_documento, t.numero_documento,  t.imagen_perfil as imagen, t.telefono, DATE_FORMAT(t.fecha_nacimiento, '%d/%m/%Y') AS fecha_nacimiento,
+    TIMESTAMPDIFF(YEAR, t.fecha_nacimiento, CURDATE()) AS edad,
+    t.email, tpp.desempenio, tpp.sueldo_mensual, tpp.sueldo_diario, tpp.sueldo_hora, DATE_FORMAT(tpp.fecha_inicio, '%d/%m/%Y') AS fecha_inicio, DATE_FORMAT(tpp.fecha_fin, '%d/%m/%Y') AS fecha_fin, tpp.estado, 
     tpp.idtrabajador_por_proyecto, t.idtipo_trabajador, tt.nombre as nombre_tipo, oc.nombre_ocupacion, d.nombre_desempenio
 		FROM trabajador_por_proyecto as tpp, trabajador as t,  tipo_trabajador as tt, ocupacion as oc, desempenio as d
 		WHERE tpp.idtrabajador = t.idtrabajador AND tt.idtipo_trabajador=t.idtipo_trabajador AND t.idocupacion = oc.idocupacion 
@@ -291,6 +292,7 @@ class TrabajadorPorProyecto
         'imagen_perfil'   => $value['imagen'],          
         'telefono'        => $value['telefono'],         
         'fecha_nacimiento'=> $value['fecha_nacimiento'],
+        'edad'            => $value['edad'],
         'email'           => $value['email'],
         'sueldo_diario'   =>$value['sueldo_diario'],
         'sueldo_hora'     =>$value['sueldo_hora'],

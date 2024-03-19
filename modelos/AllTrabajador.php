@@ -12,7 +12,7 @@
     //Implementamos un método para insertar registros
     public function insertar( $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $nacimiento, $edad,  $email, $banco_seleccionado, $banco, $cta_bancaria,  $cci,  $titular_cuenta, $tipo, $desempenio, $ocupacion, $ruc, $talla_ropa,$talla_zapato, $imagen1, $imagen2, $imagen3, $cv_documentado, $cv_nodocumentado) {
       $sw = Array();
-      $sql_0 = "SELECT t.nombres, t.tipo_documento, t.numero_documento, tip.nombre as tipo, t.estado, t.estado_delete, t.fecha_nacimiento, t.edad
+      $sql_0 = "SELECT t.nombres, t.tipo_documento, t.numero_documento, tip.nombre as tipo, t.estado, t.estado_delete, DATE_FORMAT(t.fecha_nacimiento, '%d/%m/%Y') AS fecha_nacimiento, TIMESTAMPDIFF(YEAR, t.fecha_nacimiento, CURDATE()) AS edad
       FROM trabajador as t, tipo_trabajador as tip
       WHERE t.idtipo_trabajador = tip.idtipo_trabajador and  numero_documento = '$num_documento';";
       $existe = ejecutarConsultaArray($sql_0); if ($existe['status'] == false) { return $existe;}
@@ -63,7 +63,7 @@
             <span class="font-size-15px text-danger"><b>Nombre: </b>'.$value['nombres'].'</span><br>
             <b>'.$value['tipo_documento'].': </b>'.$value['numero_documento'].'<br>
             <b>Tipo: </b>'.$value['tipo'].'<br>
-            '.$value['edad'].': <b>'.$value['edad'].'</b><br>
+            '.$value['fecha_nacimiento'].': <b>'.$value['edad'].'</b><br>
             <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .' <b>|</b>
             <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
             <hr class="m-t-2px m-b-2px">
@@ -234,7 +234,8 @@
     //Implementar un método para listar los registros
     public function tbla_principal($estado) {
       $data = Array();
-      $sql="SELECT t.idtrabajador,  t.nombres, t.tipo_documento, t.numero_documento, t.fecha_nacimiento, t.edad, t.telefono, t.imagen_perfil,  
+      $sql="SELECT t.idtrabajador,  t.nombres, t.tipo_documento, t.numero_documento, DATE_FORMAT(t.fecha_nacimiento, '%d/%m/%Y') AS fecha_nacimiento, 
+      TIMESTAMPDIFF(YEAR, t.fecha_nacimiento, CURDATE()) AS edad, t.telefono, t.imagen_perfil,  
       t.estado, t.talla_ropa, t.talla_zapato, tt.nombre AS nombre_tipo, t.descripcion_expulsion, o.nombre_ocupacion
       FROM trabajador AS t, tipo_trabajador as tt, ocupacion as o
       WHERE  tt.idtipo_trabajador= t.idtipo_trabajador AND t.idocupacion = o.idocupacion AND  t.estado = '$estado' AND t.estado_delete = '1' ORDER BY  t.nombres ASC ;";

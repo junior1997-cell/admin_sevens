@@ -19,12 +19,12 @@ class Proyecto
     // prepoaramos la consulta del proyecto
     $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, idempresa_a_cargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
 		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero', '" . $_SESSION['idusuario'] . "');";
-
     $id_proyect = ejecutarConsulta_retornarID($sql); if ($id_proyect['status'] == false) { return $id_proyect; }
-
     //add registro en nuestra bitacora
     $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','" . $id_proyect['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
     $bitacora1 = ejecutarConsulta($sql2);  if ( $bitacora1['status'] == false) {return $bitacora1; }
+
+
 
     // CREAMOS FECHAS DE VALORIZACION ----------------------------------------------------------
     if ($fecha_valorizacion == "quincenal") {
@@ -65,10 +65,9 @@ class Proyecto
       //B I T A C O R A -------
       $sql_b = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('resumen_q_s_valorizacion', '".$insertando['data']."', 'Crear registro', '".$_SESSION['idusuario']."')";
       $bitacora = ejecutarConsulta($sql_b); if ( $bitacora['status'] == false) {return $bitacora; }
-    }
-    
+    }    
 
-    // extraemos todas fechas ------------------------------------------------------------------
+    // CREAMOS EL CALENDARIO POR PROYECTO ------------------------------------------------------------------
     $sql2 = "SELECT titulo, descripcion, fecha_feriado, background_color, text_color FROM calendario WHERE estado = 1;";
     $proyecto = ejecutarConsultaArray($sql2);
     if ($proyecto['status'] == false) {return $proyecto;}
@@ -211,7 +210,8 @@ class Proyecto
     $sql_estado = "";
     if ($estado == 3) { $sql_estado = "p.estado >= 0 "; } else { $sql_estado = "p.estado = '$estado'"; }
 
-    $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, p.nombre_proyecto, p.nombre_codigo, 
+    $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, CASE WHEN LENGTH(p.empresa) <= 15 THEN p.empresa ELSE CONCAT(LEFT(p.empresa, 15), '...') END AS empresa_recorte_20, 
+    p.nombre_proyecto, p.nombre_codigo, 
     p.ubicacion, p.actividad_trabajo, p.empresa_acargo, p.costo, p.garantia, p.fecha_inicio_actividad, p.fecha_fin_actividad, p.plazo_actividad, 
     p.fecha_inicio, p.fecha_fin, p.plazo, p.dias_habiles, p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra, p.doc4_presupuesto, 
     p.doc5_analisis_costos_unitarios, p.doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, 

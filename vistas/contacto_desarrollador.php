@@ -251,7 +251,15 @@
         dataType : "json",						
         error: function(e){
           console.log(e.responseText); ver_errores(e);
-        }
+        },
+        complete: function () {
+          // $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');
+          // $(".buttons-copy").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Copiar');
+          // $(".buttons-excel").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Excel');
+          // $(".buttons-pdf").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'PDF');
+          // $(".buttons-colvis").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Columnas');
+          $('[data-toggle="tooltip"]').tooltip();
+        },
       },
       createdRow: function (row, data, ixdex) {
         // columna: #

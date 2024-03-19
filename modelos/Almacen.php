@@ -148,65 +148,59 @@ class Almacen
       $count_sq += 1;  $colspan = $cant_sq; $sumando += $cant_sq;            
     }
 
-    $sql_0 = "SELECT cpp.idcompra_proyecto, cpp.idproyecto, dc.iddetalle_compra, dc.idproducto, sum(dc.cantidad) as cantidad, dc.marca,
-    um.nombre_medida, um.nombre_medida, um.abreviacion, pr.nombre AS nombre_producto, pr.modelo, ci.nombre as clasificacion    
-		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, categoria_insumos_af AS ci, unidad_medida AS um 
-		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto
-    AND um.idunidad_medida  = pr.idunidad_medida AND pr.idcategoria_insumos_af = ci.idcategoria_insumos_af
-    AND cpp.idproyecto = '$idproyecto'
-    AND cpp.estado = '1' AND cpp.estado_delete = '1' GROUP BY dc.idproducto ORDER BY pr.nombre ASC;";    
+    $sql_0 = "SELECT ar.*, prod.nombre as producto, ci.nombre as categoria_insumos, um.abreviacion as um_abreviacion, um.nombre_medida as um_nombre
+    FROM almacen_resumen as ar
+    INNER JOIN producto as prod ON prod.idproducto = ar.idproducto
+    INNER JOIN categoria_insumos_af AS ci ON ci.idcategoria_insumos_af = prod.idcategoria_insumos_af
+    INNER JOIN unidad_medida AS um ON um.idunidad_medida = prod.idunidad_medida
+    WHERE ar.idproyecto =  '$idproyecto' ORDER BY prod.nombre ASC;";    
     $producto = ejecutarConsultaArray($sql_0); if ($producto['status'] == false) { return $producto; }   
 
     foreach ($producto['data'] as $key1 => $val1) { 
 
-      $id_p   = $val1['idproducto'];
-
-      $sql_1 = "SELECT idalmacen_resumen, idproyecto, idproducto, saldo_anterior 
-      FROM almacen_resumen WHERE estado = '1' AND estado_delete = '1' AND idproducto = '$id_p' AND idproyecto = '$idproyecto';";   
-      $sal_ant = ejecutarConsultaSimpleFila($sql_1); if ($sal_ant['status'] == false) { return $sal_ant; }
-
-      $id_r    = empty($sal_ant['data']) ? 0 : (empty($sal_ant['data']['idalmacen_resumen']) ? 0 : $sal_ant['data']['idalmacen_resumen']); 
+      $id_ar   = $val1['idalmacen_resumen'];
        
       $data_almacen = [];
       foreach ($dias_rango as $key2 => $val2) {
         
-        $sql_1 = "SELECT idalmacen_salida, idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca 
-        FROM almacen_salida WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_r' AND fecha_ingreso = '$val2';";
-        $salida = ejecutarConsultaArray($sql_1); if ($salida['status'] == false) { return $salida; }
-        $sql_1_1 = "SELECT SUM( cantidad ) as cantidad
-        FROM almacen_salida WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_r' AND fecha_ingreso = '$val2';";
-        $salida_sum = ejecutarConsultaSimpleFila($sql_1_1); if ($salida_sum['status'] == false) { return $salida_sum; }
+        // ENTRADA =======================================================
+        $sql_1 = "SELECT SUM(cantidad) AS cant FROM almacen_detalle 
+        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$val2' AND tipo_mov IN ('IP', 'IEP', 'IPG');";
+        $entrada = ejecutarConsultaSimpleFila($sql_1); if ($entrada['status'] == false) { return $entrada; }      
 
-        $sql_2 = "SELECT dc.idproducto, dc.cantidad FROM compra_por_proyecto as cpp, detalle_compra as dc 
-        WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.fecha_compra = '$val2' AND cpp.idproyecto = '$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idproducto = '$id_p';";
-        $entrada = ejecutarConsultaArray($sql_2); if ($entrada['status'] == false) { return $entrada; }
-        $sql_2_1 = "SELECT SUM( dc.cantidad ) as cantidad FROM compra_por_proyecto as cpp, detalle_compra as dc 
-        WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.fecha_compra = '$val2' AND cpp.idproyecto = '$idproyecto' AND cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idproducto = '$id_p';";
-        $entrada_sum = ejecutarConsultaSimpleFila($sql_2_1); if ($entrada_sum['status'] == false) { return $entrada_sum; }
+        $sql_1_1 = "SELECT  GROUP_CONCAT(CAST(ad.cantidad AS UNSIGNED) SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$val2' AND tipo_mov IN ('IP', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen;";
+        $e_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($e_cant_group['status'] == false) { return $e_cant_group; }    
+
+        // SALIDA =======================================================
+        $sql_2 = "SELECT SUM(cantidad) AS cant FROM almacen_detalle 
+        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$val2' AND tipo_mov IN ('EP', 'EEP', 'EPG');";
+        $salida = ejecutarConsultaSimpleFila($sql_2); if ($salida['status'] == false) { return $salida; }        
+
+        $sql_1_1 = "SELECT  GROUP_CONCAT(CAST(ad.cantidad AS UNSIGNED) SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$val2' AND tipo_mov IN ('EP', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen;";
+        $s_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($s_cant_group['status'] == false) { return $s_cant_group; } 
 
         $data_almacen[] =  [
-          'fecha'=> $val2, 
-          'salida'=> $salida['data'],          
-          'salida_sum'=> empty($salida_sum['data']) ? 0 : (empty($salida_sum['data']['cantidad']) ? 0 : floatval($salida_sum['data']['cantidad']) ) ,
-          'entrada'=> $entrada['data'],          
-          'entrada_sum'=> empty($entrada_sum['data']) ? 0 : (empty($entrada_sum['data']['cantidad']) ? 0 : floatval($entrada_sum['data']['cantidad']) ) ,      
+          'fecha'         => $val2, 
+          'entrada_cant'  => empty($entrada['data'])      ? '-' : (empty($entrada['data']['cant'])            ? '-' : floatval($entrada['data']['cant']) ) ,
+          'entrada_group' => empty($e_cant_group['data']) ? '-' : (empty($e_cant_group['data']['cant_group']) ? '-' : $e_cant_group['data']['cant_group'] ) ,
+          'salida_cant'   => empty($salida['data'])       ? '-' : (empty($salida['data']['cant'])             ? '-' : floatval($salida['data']['cant']) ) ,
+          'salida_group'  => empty($s_cant_group['data']) ? '-' : (empty($s_cant_group['data']['cant_group']) ? '-' : $s_cant_group['data']['cant_group'] ) ,      
         ];
       }  
       
-      // $sql_3 = "SELECT SUM(dc.cantidad) AS cantidad  FROM compra_por_proyecto as cpp, detalle_compra as dc 
-      // WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.idproyecto = '$idproyecto' AND dc.idproducto = '$id_p';";
-      // $entrada = ejecutarConsultaSimpleFila($sql_3); if ($entrada['status'] == false) { return $entrada; }
-
       $resumen_producto[] = [
         'idalmacen_resumen' => empty($sal_ant['data']) ? '' : (empty($sal_ant['data']['idalmacen_resumen']) ? '' : $sal_ant['data']['idalmacen_resumen']),
         'idproyecto'        => $val1['idproyecto'],
-        'idproducto'        => $val1['idproducto'],
-        'saldo_anterior'    => empty($sal_ant['data']) ? 0 : (empty($sal_ant['data']['saldo_anterior']) ? 0 : floatval($sal_ant['data']['saldo_anterior'])) ,
-        'entrada_total'     => empty($val1['cantidad']) ? 0 :  floatval($val1['cantidad'] ) ,
-        'nombre_producto'   => $val1['nombre_producto'],
-        'unidad_medida'     => $val1['nombre_medida'],
-        'abreviacion_um'    => $val1['abreviacion'],
-        'categoria'         => $val1['clasificacion'],
+        'idproducto'        => $val1['idproducto'],        
+        'total_entrada'     => empty($val1['total_ingreso']) ? 0 :  floatval($val1['total_ingreso'] ) ,
+        'total_salida'      => empty($val1['total_egreso']) ? 0 :  floatval($val1['total_egreso'] ) ,
+        'stok'             => empty($val1['total_stok']) ? 0 :  floatval($val1['total_stok'] ) ,
+        'nombre_producto'   => $val1['producto'],
+        'um_nombre'         => $val1['um_nombre'],
+        'um_abreviacion'    => $val1['um_abreviacion'],
+        'categoria'         => $val1['categoria_insumos'],
         'almacen'           => $data_almacen,        
       ];
     }
@@ -279,8 +273,7 @@ class Almacen
   }
 
   //Implementamos un método para desactivar almacen_salida
-	public function desactivar_x_dia($idalmacen_salida)
-	{
+	public function desactivar_x_dia($idalmacen_salida)	{
 		$sql="UPDATE almacen_salida SET estado='0' ,user_trash= '$this->id_usr_sesion' WHERE idalmacen_salida='$idalmacen_salida'";
 		$desactivar= ejecutarConsulta($sql);	if ($desactivar['status'] == false) {  return $desactivar; }
 		

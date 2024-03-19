@@ -1,5 +1,5 @@
 var tabla;  
-
+var tabla_historial;
 //Función que se ejecuta al inicio
 function init() {
 
@@ -540,7 +540,53 @@ function add_bancos(id_select_banco = null) {
 
 function remove_bancos(id) { $(`.delete_multiple_${id}`).remove(); }
 
-init();
+function historial_sesion(id) {
+  $('#modal-ver-historial').modal('show');
+  tabla_historial = $('#tabla-historial-sesion').dataTable({
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    "aProcessing": true,//Activamos el procesamiento del datatables
+    "aServerSide": true,//Paginación y filtrado realizados por el servidor
+    dom:"<'row'<'col-md-2'B><'col-md-3 float-left'l><'col-md-7'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",//Definimos los elementos del control de tabla
+    buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_historial) { tabla_historial.ajax.reload(null, false); } } },      
+    ],
+		"ajax":	{
+			url: `../ajax/usuario.php?op=historial_sesion&id=${id}`,
+			type: "get",
+			dataType: "json",
+			error: function (e) {
+				console.log(e.responseText);
+			},
+      complete: function () {
+        $(".buttons-reload").attr('data-bs-toggle', 'tooltip').attr('data-bs-original-title', 'Recargar');        
+        $('[data-bs-toggle="tooltip"]').tooltip();
+      },
+      dataSrc: function (e) {
+				if (e.status != true) {  ver_errores(e); }  return e.aaData;
+			},
+		},
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != "") { $("td", row).eq(0).addClass("text-center"); }
+      // columna: sub total
+      if (data[1] != "") { $("td", row).eq(1).addClass("text-nowrap"); } 
+    },
+		language: {
+      lengthMenu: "_MENU_",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      emptyTable: "No hay datos"
+    },
+    "bDestroy": true,
+    "iDisplayLength": 10,//Paginación
+    "order": [[0, "asc"]]//Ordenar (columna,orden)
+	}).DataTable();
+
+}
+
+$(document).ready(function () {
+  init();
+});
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 

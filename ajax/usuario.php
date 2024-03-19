@@ -19,6 +19,9 @@
 
       if ( $rspta['status'] == true ) {
         if ( !empty($rspta['data']) ) {
+
+          $rspta_sesion = $usuario->last_sesion($rspta['data']['idusuario']); # Ultima sesion
+
           //Declaramos las variables de sesión
           $_SESSION['idusuario']      = $rspta['data']['idusuario'];
           $_SESSION['nombre']         = $rspta['data']['nombres'];
@@ -226,22 +229,23 @@
       $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
       if ($rspta['status'] == true) {
-        foreach ($rspta['data'] as $key => $value) {
+        foreach ($rspta['data'] as $key => $val) {
           $data[] = [
             "0"=>$cont++,
-            "1" => $value['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $value['idusuario'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ($value['cargo']=='Administrador' ? ' <button class="btn btn-danger btn-sm disabled" data-toggle="tooltip" data-original-title="El administrador no se puede eliminar."><i class="fas fa-skull-crossbones"></i> </button>' : ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $value['idusuario'] .', \''.encodeCadenaHtml($value['nombres']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>' ) :
-                '<button class="btn btn-warning  btn-sm" onclick="mostrar(' . $value['idusuario'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' . 
-                ' <button class="btn btn-primary  btn-sm" onclick="activar(' . $value['idusuario'] . ')" data-toggle="tooltip" data-original-title="Recuperar"><i class="fa fa-check"></i></button>',
+            "1" => $val['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $val['idusuario'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ($val['cargo']=='Administrador' ? ' <button class="btn btn-danger btn-sm disabled" data-toggle="tooltip" data-original-title="El administrador no se puede eliminar."><i class="fas fa-skull-crossbones"></i> </button>' : ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' . $val['idusuario'] .', \''.encodeCadenaHtml($val['nombres']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i> </button>' ) :
+                '<button class="btn btn-warning  btn-sm" onclick="mostrar(' . $val['idusuario'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' . 
+                ' <button class="btn btn-primary  btn-sm" onclick="activar(' . $val['idusuario'] . ')" data-toggle="tooltip" data-original-title="Recuperar"><i class="fa fa-check"></i></button>',
             "2" => '<div class="user-block">'. 
-              '<img class="img-circle" src="../dist/docs/all_trabajador/perfil/' . $value['imagen_perfil'] . '" alt="User Image" onerror="' . $imagen_error . '">'.
-              '<span class="username"><p class="text-primary m-b-02rem" >' . $value['nombres'] . '</p></span>'. 
-              '<span class="description"> - ' . $value['tipo_documento'] .  ': ' . $value['numero_documento'] . ' </span>'.
+              '<img class="img-circle" src="../dist/docs/all_trabajador/perfil/' . $val['imagen_perfil'] . '" alt="User Image" onerror="' . $imagen_error . '">'.
+              '<span class="username"><p class="text-primary m-b-02rem" >' . $val['nombres'] . '</p></span>'. 
+              '<span class="description"> - ' . $val['tipo_documento'] .  ': ' . $val['numero_documento'] . ' </span>'.
             '</div>',
-            "3" => $value['telefono'],
-            "4" => $value['login'],
-            "5" => $value['cargo'],
-            "6" => ($value['estado'] ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
+            "3" => $val['telefono'],
+            "4" => $val['login'],
+            "5" => $val['cargo'],
+            "6" =>'<span class="cursor-pointer" data-toggle="tooltip" title="Ver historial" onclick="historial_sesion(' . $val['idusuario'] . ')" >'.$val['last_sesion'].'</span>',
+            "7" => ($val['estado'] ? '<span class="text-center badge badge-success">Activado</span>' : '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
           ];
         }
         $results = [
@@ -346,6 +350,27 @@
         echo json_encode($rspta, true);
       }    
     break;    
+
+    case 'historial_sesion':
+      $rspta = $usuario->historial_sesion($_GET["id"]);
+      $data = array();
+      foreach ($rspta['data'] as $key => $val) {
+        $data[] = array(
+          "0" => $key +1  ,        
+          "1" => $val['last_sesion'],
+          "2" => $val['nombre_dia'],
+          "3" => $val['nombre_mes'],
+        );
+      }
+      $results = array(
+        'status'=> true,
+        "sEcho" => 1, //Información para el datatables
+        "iTotalRecords" => count($data),  //enviamos el total registros al datatable
+        "iTotalDisplayRecords" => count($data),  //enviamos el total registros a visualizar
+        "aaData" => $data
+      );
+      echo json_encode($results, true);
+    break;
     
     // ::::::::::::::::::::::::::::::::: S E C C I O N   T R A B A J A D O R :::::::::::::::::::::::::::::
     case 'guardar_y_editar_trabajador':

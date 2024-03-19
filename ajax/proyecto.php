@@ -318,26 +318,26 @@
               } else {  
                 $estado = '<span class="text-center badge badge-success">Terminado</span>';
                 $acciones = '<button class="btn btn-primary btn-sm" onclick="reiniciar_proyecto('.$value['idproyecto'].', \''.encodeCadenaHtml($value['nombre_codigo']).'\')" data-toggle="tooltip" data-original-title="Reiniciar proyecto" /*style="margin-right: 3px !important;"*/><i class="fas fa-sync-alt"></i></button>';            
-              }
-  
-              $empresa = cortar_string($value['empresa'], 20, '...');  
+              }             
                   
               $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['ec_razon_social'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\', \''. $value['fecha_inicio_actividad'].'\', \''. $value['fecha_fin_actividad'].'\', \''.$value['fecha_pago_obrero'].'\'';
   
               $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
-  
+              $color_abierto = $_SESSION['idproyecto']==$value['idproyecto'] ? "bg-danger" : "bg-secondary";
+              $color_text = $_SESSION['idproyecto']==$value['idproyecto'] ? "text-primary" : "text-muted";
+
               $data[]=array(
                 "0"=>$cont++,
                 "1"=>'<div class="asignar_paint_'.$value['idproyecto'].'"> 
-                  <button class="btn bg-secondary btn-sm" onclick="abrir_proyecto_para_todos_los_modulos('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$value['idproyecto'].'">
+                  <button class="btn '.$color_abierto.' btn-sm" onclick="abrir_proyecto_para_todos_los_modulos('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$value['idproyecto'].'">
                     <i class="fas fa-folder"></i>
                   </button> 
                 </div>',
                 "2"=>'<div class="user-block asignar_paint_'.$value['idproyecto'].'">                  
-                  <span class="username ml-0"><p class="text-primary m-02rem" >'. $empresa .'</p></span>
-                  <span class="description ml-0">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
+                  <span class="username ml-0"><p class="'.$color_text.' m-02rem cursor-pointer" data-toggle="tooltip" data-original-title="'. $value['empresa'] .'" >'. $value['empresa_recorte_20'] .'</p></span>
+                  <span class="description '.$color_text.' ml-0">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 </div>',              
-                "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description" >'.$value['nombre_codigo'].'</span> </div>' ,
+                "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description '.$color_text.'" >'.$value['nombre_codigo'].'</span> </div>' ,
                 "4"=>  number_format($value['costo'], 2, '.', ''),                 
                 "5"=> '<div class="asignar_paint_'.$value['idproyecto'].'">'. $estado.'</div>'.$toltip
               );

@@ -7,6 +7,17 @@ if (!function_exists('ejecutarConsulta')) {
 
   /*  ══════════════════════════════════════════ - F E C H A S - ══════════════════════════════════════════ */
 
+  function calculaedad($fecha_nacimiento){
+    $edad = '-';
+    if (empty($fecha_nacimiento) || $fecha_nacimiento=='0000-00-00') { } else{
+      $fecha_actual = new DateTime();
+      $fecha_nacimiento = new DateTime($fecha_nacimiento);
+      $edad = $fecha_actual->diff($fecha_nacimiento);
+      return $edad->y;
+    }     
+    return $edad;
+  }
+
   function nombre_dia_mes_anio( $fecha_entrada ) {
 
     $fecha_parse = new FechaEs($fecha_entrada);

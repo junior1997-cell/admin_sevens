@@ -246,14 +246,14 @@
                 "4"=> $value['nombre_ocupacion'],
                 "5"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['html_desempenio'].'</div>',
                 "6"=>'<a href="tel:+51'.quitar_guion($value['telefono']).'" data-toggle="tooltip" data-original-title="Llamar al trabajador.">'. $value['telefono'] . '</a>',
-                "7"=>format_d_m_a($value['fecha_nacimiento']).'<b>: </b>'. '<b>'.$value['edad'].'</b>' ,
+                "7"=>$value['fecha_nacimiento'].'<b>: </b>'. '<b>'.$value['edad'].'</b>' ,
                 "8"=> '<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] .' <br> <b>CCI: </b>'.$value['cci'],
 
                 "9"=>(($value['estado'])?'<span class="text-center badge badge-success">Activado</span>': '<span class="text-center badge badge-danger">Desactivado</span>').$toltip,
                 "10"=> $value['trabajador'],
                 "11"=> $value['tipo_documento'],
                 "12"=> $value['numero_documento'],
-                "13"=> format_d_m_a($value['fecha_nacimiento']),
+                "13"=> $value['fecha_nacimiento'],
                 "14"=>$value['edad'],
                 "15"=> $value['banco'],
                 "16"=> $value['cuenta_bancaria'],
@@ -291,7 +291,7 @@
                 "2"=>'<div class="user-block">
                   <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['trabajador'] .'</p></span>
-                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .'<br>'.format_d_m_a($value['fecha_nacimiento']).' : '.$value['edad'].' años</span>
+                  <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .'<br>'.$value['fecha_nacimiento'].' : '.$value['edad'].' años</span>
                   </div>',
                 "3"=> '<div class="center-vertical">'. $value['nombre_tipo'] .'</div>',
                 "4"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.$value['html_desempenio'].'</div>',
@@ -303,7 +303,7 @@
                 "8"=> $value['trabajador'],
                 "9"=> $value['tipo_documento'],
                 "10"=> $value['numero_documento'],
-                "11"=> format_d_m_a($value['fecha_nacimiento']),
+                "11"=> $value['fecha_nacimiento'],
                 "12"=>$value['edad'],
                 "13"=> $value['banco'],
                 "14"=> $value['cuenta_bancaria'],
@@ -356,19 +356,7 @@
     }
   }
 
-  function calculaedad($fechanacimiento){
-    $ano_diferencia = '-';
-    if (empty($fechanacimiento) || $fechanacimiento=='0000-00-00') { } else{
-      list($ano,$mes,$dia) = explode("-",$fechanacimiento);
-      $ano_diferencia  = date("Y") - $ano;
-      $mes_diferencia = date("m") - $mes;
-      $dia_diferencia   = date("d") - $dia;
-      if ($dia_diferencia < 0 || $mes_diferencia < 0)
-        $ano_diferencia--;
-    } 
-    
-    return $ano_diferencia;
-  }
+
 
   ob_end_flush();
 

@@ -926,10 +926,10 @@ class Papelera
         );
       }
     }
-    $sql38 = "SELECT of.idotra_factura, of.tipo_comprobante, of.numero_comprobante, of.costo_parcial, of.descripcion,
-    of.created_at, of.updated_at,p.razon_social
-    FROM otra_factura as of, proveedor as p
-    WHERE of.estado='0' AND of.estado_delete='1' AND of.idproveedor=p.idproveedor";
+    $sql38 = "SELECT ofa.idotra_factura, ofa.tipo_comprobante, ofa.numero_comprobante, ofa.costo_parcial, ofa.descripcion,
+    ofa.created_at, ofa.updated_at,p.razon_social
+    FROM otra_factura as ofa, proveedor as p
+    WHERE ofa.estado='0' AND ofa.estado_delete='1' AND ofa.idproveedor=p.idproveedor";
     $otra_factura = ejecutarConsultaArray($sql38);
 
     if ($otra_factura['status'] == false) { return $otra_factura; }

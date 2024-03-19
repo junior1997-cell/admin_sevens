@@ -24,7 +24,7 @@
       </head> 
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
-        <div class="wrapper">
+        <div class="wrapper"> 
           <?php
           require 'nav.php';
           require 'aside.php';
@@ -77,17 +77,19 @@
                                   <th>Nombre Completo</th>
                                   <th>Fechas</th>
                                   <th>Celular</th>
-                                  <th>Correo</th>
                                   <th>Nacimiento</th>
-                                  <th>Tipo</th>
-                                  <th>Ocupación</th>
-                                  <th>Desempeño</th>                                  
+                                  <th>Cargos</th>                                  
                                   <th>Cuenta</th> 
 
                                   <th>Nombre Completo</th>
-                                  <th>DNI</th>
+                                  <th>Tipo Doc.</th>
+                                  <th>Num. Doc.</th>
+                                  <th>Correo</th>
                                   <th>Fecha inicial</th>
                                   <th>Fecha final</th>
+                                  <th>Tipo</th>
+                                  <th>Ocupación</th>
+                                  <th>Desempeño</th>
                                   <th>Banco</th>
                                   <th>Cta. Bancaria</th>
                                 </tr>
@@ -100,17 +102,19 @@
                                   <th>Nombre Completo</th>
                                   <th>Fechas</th>
                                   <th>Celular</th>
-                                  <th>Correo</th>
                                   <th>Nacimiento</th>
-                                  <th>Tipo</th>
-                                  <th>Ocupación</th>
-                                  <th>Desempeño</th>
+                                  <th>Cargos</th>                                  
                                   <th>Cuenta</th> 
 
                                   <th>Nombre Completo</th>
-                                  <th>DNI</th>
+                                  <th>Tipo Doc.</th>
+                                  <th>Num. Doc.</th>
+                                  <th>Correo</th>
                                   <th>Fecha inicial</th>
                                   <th>Fecha final</th>
+                                  <th>Tipo</th>
+                                  <th>Ocupación</th>
+                                  <th>Desempeño</th>
                                   <th>Banco</th>
                                   <th>Cta. Bancaria</th>
                                 </tr>

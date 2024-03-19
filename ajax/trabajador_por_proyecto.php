@@ -148,23 +148,34 @@
                   <img class="img-circle cursor-pointer" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_perfil'] .'" alt="User Image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'' . $imagen . '\', \''.encodeCadenaHtml($value['trabajador']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                   <span class="username"><p class="text-primary m-b-02rem" >'. $value['trabajador'] .'</p></span>
                   <span class="description">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
-                  </div>',
-                "3"=>'<div class="text-nowrap"><b>Inicio: </b>'. ( empty($value['fecha_inicio']) ? '--' : format_d_m_a($value['fecha_inicio']) ). '<br> 
-                  <b>Fin: </b>'.( empty($value['fecha_fin']) ? '--' : format_d_m_a($value['fecha_fin']) ) . '</div>',
-                "4"=> '<a data-toggle="tooltip" data-original-title="Realizar llamada" href="tel:+51'.quitar_guion($value['telefono']).'">'.$value['telefono'].'</a>' ,
-                "5"=> '<a data-toggle="tooltip" data-original-title="Enviar correo" href="mailto:'.$value['email'].'">'.$value['email'].'</a>' ,
-                "6"=> $value['fecha_nacimiento'],
-                "7"=>$value['nombre_tipo'] ,
-                "8"=>$value['nombre_ocupacion'] ,
-                "9"=>$value['nombre_desempeno'],
-                "10"=>'<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] . '<br> <b>CCI: </b>'. $value['cci'] . $toltip ,                
+                  <span class="description"><a data-toggle="tooltip" data-original-title="Enviar correo" href="mailto:'.$value['email'].'">'.$value['email'].'</a> </span>
+                </div>',
+                "3"=>'<div class="text-nowrap"><b>Inicio: </b>'. ( empty($value['fecha_inicio']) ? '--' : $value['fecha_inicio'] ). '<br> 
+                  <b>Fin: </b>'.( empty($value['fecha_fin']) ? '--' : $value['fecha_fin'] ) . '</div>',
+                "4"=> '<a data-toggle="tooltip" data-original-title="Realizar llamada" href="tel:+51'.quitar_guion($value['telefono']).'">'.$value['telefono'].'</a>' ,                
+                "5"=> '<b>'.$value['edad'].' Años.</b> ' .$value['fecha_nacimiento'],
+                "6"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. 
+                  '<b>Tipo: </b>' . $value['nombre_tipo'] .
+                  '<br><b>Ocupacion: </b>' . $value['nombre_ocupacion'] .
+                  '<br><b>Desempeño: </b>' . $value['nombre_desempeno'] .
+                '</div>'  ,
+                // "8"=>$value['nombre_ocupacion'] ,
+                // "9"=>$value['nombre_desempeno'],
+                "7"=>'<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.
+                  '<b>'.$value['banco'] .': </b>'. $value['cuenta_bancaria'] . '<br> <b>CCI: </b>'. $value['cci'] . 
+                '</div>'.  $toltip ,                
                 
-                "11"=> $value['trabajador'],
-                "12"=>$value['numero_documento'],
-                "13"=>( empty($value['fecha_inicio']) ? '--' : format_d_m_a($value['fecha_inicio']) ),
-                "14"=>( empty($value['fecha_fin']) ? '--' : format_d_m_a($value['fecha_fin']) ),
-                "15"=>$value['banco'],
-                "16"=>$value['cuenta_bancaria'],
+                "8"=> $value['trabajador'],
+                "9"=>$value['tipo_documento'],
+                "10"=>$value['numero_documento'],
+                "11"=>$value['email'],
+                "12"=>( empty($value['fecha_inicio']) ? '--' : $value['fecha_inicio'] ),
+                "13"=>( empty($value['fecha_fin']) ? '--' : $value['fecha_fin'] ),
+                "14"=>$value['nombre_tipo'],
+                "15"=>$value['nombre_ocupacion'],
+                "16"=>$value['nombre_desempeno'],
+                "17"=>$value['banco'],
+                "18"=>$value['cuenta_bancaria'],
 
                 );
             }
