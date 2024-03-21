@@ -87,7 +87,7 @@ function listar_botones_q_s(nube_idproyecto) {
            
           var htm_btn = '';          
           e.data.btn_asistencia.forEach((val, key) => {
-            htm_btn = htm_btn.concat(` <button type="button" id="boton-${(key+1)}" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="por_fecha('${val.ids_q_asistencia}', '${format_d_m_a(val.fecha_q_s_inicio)}', '${format_d_m_a(val.fecha_q_s_fin)}', '${(key+1)}', ${q_s_dias});"><i class="far fa-calendar-alt"></i> ${q_s_btn} ${val.numero_q_s}<br>${format_d_m_a(val.fecha_q_s_inicio)} // ${format_d_m_a(val.fecha_q_s_fin)}</button>`);             
+            htm_btn = htm_btn.concat(` <button type="button" id="boton-${(key+1)}" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="por_fecha('${val.ids_q_asistencia}', '${val.fecha_q_s_inicio}', '${val.fecha_q_s_fin}', '${(key+1)}', ${q_s_dias});"><i class="far fa-calendar-alt"></i> ${q_s_btn} ${val.numero_q_s}<br>${format_d_m_a(val.fecha_q_s_inicio)} // ${format_d_m_a(val.fecha_q_s_fin)}</button>`);             
           });   
 
           $('#lista_quincenas').html(`<button type="button" id="boton-0" class="mb-2 btn bg-gradient-info btn-sm text-center" onclick="todos_almacen();"><i class="far fa-calendar-alt"></i><br> Todos</button> 
@@ -135,7 +135,7 @@ function tabla_resumen() {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); } 
       // columna: 1
-      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
+      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap text-center'); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -307,95 +307,6 @@ function todos_almacen() {
   
 }
 
-function todos_almacen_tttt() {
-  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
-  pintar_boton_selecionado(0); show_hide_tablas(2);
-  var idproyecto =  localStorage.getItem("nube_idproyecto");
-  var fip =  localStorage.getItem("nube_fecha_inicial_actividad");
-  var ffp =  localStorage.getItem("nube_fecha_final_actividad");
-  var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
-  
-  $('#cargando-table-almacen').html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
-  
-  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
-
-    e = JSON.parse(e); console.log(e);
-
-    if (e.status == true) {
-      var codigoHTMLbody="", codigoHTMLbodyProducto ='', codigoHTMLbodyDias="", html_dias = ''; 
-      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="", codigoHTMLhead5="" ;
-      var fpo =  localStorage.getItem("nube_fecha_pago_obrero"), nombre_sq = '', cant_sq = ''; 
-
-      e.data.fechas.forEach((val1, key1) => {
-        codigoHTMLhead1 = codigoHTMLhead1.concat(`<th colspan="${val1.cantidad_dias}">${extraer_nombre_mes(val1.mes)}</th>`);
-        val1.dia.forEach((val2, key2) => {
-          codigoHTMLhead2 = codigoHTMLhead2.concat(`<th class="style-head">${val2.num_dia}</th>`);     
-          codigoHTMLhead4 = codigoHTMLhead4.concat(`<th class="style-head">${val2.nombre_abrev_dia}</th>`);             
-        });
-              
-      });
-      e.data.data_sq.forEach((val1, key1) => {
-        codigoHTMLhead3 = codigoHTMLhead3.concat(`<th colspan="${val1.colspan}">${val1.nombre_sq} ${val1.num_sq}</th>`);
-      });      
-
-      $('.thead-f1').html(`<th rowspan="4">#</th> 
-      <th rowspan="4">Code</th> 
-      <th rowspan="4">Producto</th>
-      <th rowspan="4">UND</th> 
-      <th rowspan="4">SALDO <br> ANTERIOR <br> <br> <button type="button" class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
-      
-      ${codigoHTMLhead1}
-      <th rowspan="4">ENTRADA/ <br> SALIDA</th> 
-      <th rowspan="4">SALDO</th>`);
-
-      $('.thead-f2').html(`${codigoHTMLhead2}`);
-      $('.thead-f3').html(`${codigoHTMLhead3}`);
-      $('.thead-f4').html(`${codigoHTMLhead4}`);
-      $('.thead-f5').html(`${codigoHTMLhead5}`);
-
-      e.data.producto.forEach((val1, key1) => {
-        var color_filas =  (key1%2==0 ? 'bg-color-e9e9e9' : '') ;
-        var html_dias = '', html_dias_sum = ''; var total_x_producto = 0;
-        val1.almacen.forEach((val2, key2) => {
-          var salida = '', entrada = '', acumulado_s = 0, acumulado_e = 0 ;
-          if (val2.salida.length === 0) { salida='0'; } else { val2.salida.forEach((val3, key3) => { key3 == 0 ? salida = parseFloat(val3.cantidad) : salida = salida + ', ' + parseFloat(val3.cantidad); acumulado_s += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
-          if (val2.entrada.length === 0) { entrada='0'; } else { val2.entrada.forEach((val3, key3) => { key3 == 0 ? entrada = parseFloat(val3.cantidad) : entrada = entrada + ', ' + parseFloat(val3.cantidad); acumulado_e += parseFloat(val3.cantidad);  }); } 
-          html_dias = html_dias.concat(`<td class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="${entrada}" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_e}</td>`);
-          html_dias_sum = html_dias_sum.concat(`<td class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="${salida}" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s}</td>`);
-        });
-        var saldo = (val1.entrada_total + val1.saldo_anterior) - total_x_producto;
-        codigoHTMLbodyProducto = `
-        <tr class="text-nowrap ${color_filas}">
-          <td rowspan="2">${(key1 +1)}</td>
-          <td rowspan="2">${val1.idproducto}</td>
-          <td class="text_producto text-nowrap" rowspan="2"> <span class="name_producto_${val1.idproducto}">${val1.nombre_producto}</span> <br> <small><b>Clasf:</b> ${val1.categoria} </small></td>
-          <td rowspan="2">${val1.abreviacion_um}</td>
-          <td rowspan="2"> 
-            <span class="span_s" >${val1.saldo_anterior}</span> 
-            <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="${val1.saldo_anterior}" style="display:none;" onchange="calcular_saldo(this, ${val1.idproducto});" onkeyup="calcular_saldo(this, ${val1.idproducto});" > <br> 
-            <input type="hidden" name="idproducto_sa[]" value="${val1.idproducto}" > <input type="hidden" name="idproyecto_sa[]" value="${val1.idproyecto}" >
-            <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior('${idproyecto}', '${val1.idproducto}');"><i class="far fa-eye"></i></span> 
-          </td>          
-          ${html_dias}          
-          <td> <span class="entrada_total_${val1.idproducto}">${formato_miles(val1.entrada_total + val1.saldo_anterior)}</span> </td>
-          <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}"><span class="saldo_total_${val1.idproducto}">${formato_miles(saldo)}</span></td>
-        </tr>`;
-
-        $('.data_tbody_almacen').append(`${codigoHTMLbodyProducto} <tr>${html_dias_sum}<td class="${color_filas}"><span class="salida_total_${val1.idproducto}">${formato_miles(total_x_producto)}</span></td> </tr>`); // Agregar el contenido
-        html_dias ='';
-      });       
-
-      $('#div_tabla_almacen').show();
-      $('#cargando-table-almacen').hide();
-      $('[data-toggle="tooltip"]').tooltip();
-      scroll_tabla_asistencia();
-    } else {
-      ver_errores(e);
-    }
-  }).fail(function (e) { ver_errores(e); });
-  
-}
-
 function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dias ) {
   $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
   pintar_boton_selecionado(i); show_hide_tablas(2);
@@ -420,95 +331,7 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
   }).fail(function (e) { ver_errores(e); });
 }
 
-function por_fecha_ttt(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dias ) {
-  $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
-  pintar_boton_selecionado(i); show_hide_tablas(2);
-  var idproyecto =  localStorage.getItem("nube_idproyecto");
-  var fip =  fecha_q_s_inicio
-  var ffp =  fecha_q_s_fin
-  var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
 
-  $('#div_tabla_almacen').hide();
-
-  $('#cargando-table-almacen').show().html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
-  
-  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
-
-    e = JSON.parse(e); console.log(e);
-
-    if (e.status == true) {
-      var codigoHTMLbody="", codigoHTMLbodyProducto ='', codigoHTMLbodyDias=""; 
-      var codigoHTMLhead1="", codigoHTMLhead2="", codigoHTMLhead3="", codigoHTMLhead4="", codigoHTMLhead5="" ;      
-
-      e.data.fechas.forEach((val1, key1) => {
-        codigoHTMLhead1 = codigoHTMLhead1.concat(`<th colspan="${val1.cantidad_dias}">${extraer_nombre_mes(val1.mes)}</th>`);
-        val1.dia.forEach((val2, key2) => {
-          codigoHTMLhead2 = codigoHTMLhead2.concat(`<th class="style-head">${extraer_dia_mes(val2)}</th>`);
-          codigoHTMLhead4 = codigoHTMLhead4.concat(`<th class="style-head">${extraer_dia_semana(val2)}</th>`);             
-        });        
-      });
-      e.data.data_sq.forEach((val1, key1) => {
-        codigoHTMLhead3 = codigoHTMLhead3.concat(`<th colspan="${e.data.cant_dias}">${val1.nombre_sq} ${i}</th>`);
-      });      
-
-      $('.thead-f1').html(`<th rowspan="4">#</th> 
-      <th rowspan="4">Code</th> 
-      <th rowspan="4">Producto</th>
-      <th rowspan="4">UND</th> 
-      <th rowspan="4">SALDO <br> ANTERIOR <br> <br> <button type="button" class="btn btn-sm btn-warning celda-b-y-1px celda-b-x-1px btn_editar_s" onclick="show_hide_input(2)">Editar</button> <button class="btn btn-sm btn-success btn_guardar_s" style="display:none;" >Guardar</button> </th> 
-      
-      ${codigoHTMLhead1}
-      <th rowspan="4">SALIDA</th> 
-      <th rowspan="4">SALDO</th>`);
-
-      $('.thead-f2').html(`${codigoHTMLhead2}`);
-      $('.thead-f3').html(`${codigoHTMLhead3}`);
-      $('.thead-f4').html(`${codigoHTMLhead4}`);
-      $('.thead-f5').html(`${codigoHTMLhead5}`);
-
-      e.data.producto.forEach((val1, key1) => {
-        var color_filas =  (key1%2==0 ? 'bg-color-e9e9e9' : '') ;
-        var html_dias = '', html_dias_sum = ''; var total_x_producto = 0;
-        val1.almacen.forEach((val2, key2) => {
-          var salida = '', entrada = '', acumulado_s = 0, acumulado_e = 0 ;
-          if (val2.salida.length === 0) { salida='0'; } else { val2.salida.forEach((val3, key3) => { key3 == 0 ? salida = parseFloat(val3.cantidad) : salida = salida + ', ' + parseFloat(val3.cantidad); acumulado_s += parseFloat(val3.cantidad); total_x_producto += parseFloat(val3.cantidad); }); } 
-          if (val2.entrada.length === 0) { entrada='0'; } else { val2.entrada.forEach((val3, key3) => { key3 == 0 ? entrada = parseFloat(val3.cantidad) : entrada = entrada + ', ' + parseFloat(val3.cantidad); acumulado_e += parseFloat(val3.cantidad); }); } 
-          html_dias = html_dias.concat(`<td class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="${entrada}" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_e}</td>`);
-          html_dias_sum = html_dias_sum.concat(`<td class="cursor-pointer ${color_filas}" data-toggle="tooltip" data-original-title="${salida}" onclick="modal_ver_almacen('${val2.fecha}', '${val1.idproducto}');">${acumulado_s}</td>`);
-        });
-        var saldo = (val1.entrada_total + val1.saldo_anterior) - total_x_producto;
-        codigoHTMLbodyProducto = `
-        <tr class="text-nowrap ${color_filas}">
-          <td rowspan="2">${(key1 +1)}</td>
-          <td rowspan="2">${val1.idproducto}</td>
-          <td class="text_producto text-nowrap" rowspan="2"> <span class="name_producto_${val1.idproducto}">${val1.nombre_producto}</span> <br> <small><b>Clasf:</b> ${val1.categoria} </small></td>
-          <td rowspan="2">${val1.abreviacion_um}</td>
-          <td rowspan="2"> 
-            <span class="span_s" >${val1.saldo_anterior}</span> 
-            <input class="input_s w-70px" type="number" name="saldo_anterior[]" value="${val1.saldo_anterior}" style="display:none;" onchange="calcular_saldo(this, ${val1.idproducto});" onkeyup="calcular_saldo(this, ${val1.idproducto});" > <br> 
-            <input type="hidden" name="idproducto_sa[]" value="${val1.idproducto}" > <input type="hidden" name="idproyecto_sa[]" value="${val1.idproyecto}" >
-            <span class="badge badge-info cursor-pointer shadow-1px06rem09rem-rgb-52-174-193-77" data-toggle="tooltip" data-original-title="Saldo de otros proyectos" onclick="modal_saldo_anterior('${idproyecto}', '${val1.idproducto}');"><i class="far fa-eye"></i></span> 
-          </td>          
-          ${html_dias}          
-          <td> <span class="entrada_total_${val1.idproducto}">${formato_miles(val1.entrada_total)}</span> </td>
-          <td rowspan="2" class="${saldo < 0 ? 'text-danger' : ''}"><span class="saldo_total_${val1.idproducto}">${formato_miles(saldo)}</span></td>
-        </tr>`;
-
-        $('.data_tbody_almacen').append(`${codigoHTMLbodyProducto} <tr>${html_dias_sum}<td class="${color_filas}"><span class="salida_total_${val1.idproducto}">${formato_miles(total_x_producto)}</span></td> </tr>`); // Agregar el contenido
-
-        html_dias ='';
-      }); 
-       
-
-      $('#div_tabla_almacen').show();
-      $('#cargando-table-almacen').hide();
-      $('[data-toggle="tooltip"]').tooltip();
-      scroll_tabla_asistencia();
-    } else {
-      ver_errores(e);
-    }
-  }).fail(function (e) { ver_errores(e); });
-}
 
 function calcular_saldo(input, id) {
   var input_sa = $(input).val() == '' || $(input).val() == null ? 0 :  quitar_formato_miles($(input).val() ) ;
@@ -570,7 +393,7 @@ function modal_ver_almacen(fecha, id_producto) {
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } },  
     ],
     ajax:{
-      url: `../ajax/almacen.php?op=tbla-ver-almacen&idproyecto=${localStorage.getItem("nube_idproyecto")}&fecha=${fecha}&id_producto=${id_producto}`,
+      url: `../ajax/almacen.php?op=tbla-ver-almacen&id_producto=${id_producto}&fecha=${fecha}`,
       type : "get",
       dataType : "json",						
       error: function(e){

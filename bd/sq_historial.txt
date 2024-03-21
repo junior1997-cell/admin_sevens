@@ -1,26 +1,26 @@
-:::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_resumen ::::::::::::::::::::::
+:::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_resumen :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 INSERT INTO almacen_resumen(idproyecto, idproducto, tipo, total_stok, total_ingreso) 
 SELECT cpp.idproyecto as idproyecto, dc.idproducto as idproducto, CASE dc.idclasificacion_grupo WHEN 11 THEN 'EPP' ELSE 'PN' END as tipo,
 SUM( dc.cantidad) as total_stok, SUM( dc.cantidad) as total_ingreso 
 from detalle_compra as dc inner JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto =cpp.idcompra_proyecto 
 GROUP BY cpp.idproyecto, dc.idproducto;
 
-:::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_detalle ::::::::::::::::::::::
-SET time_zone = 'America/Lima';
+:::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_detalle :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+SET lc_time_names = 'es_ES';
 INSERT INTO almacen_detalle(idalmacen_resumen, idproyecto_destino, tipo_mov, fecha, cantidad, stok_anterior, stok_actual) 
 SELECT ar.idalmacen_resumen, cpp.idproyecto,"IP" as tipo_mov, cpp.fecha_compra,  dc.cantidad as cantidad, 0 as stok_anterior, dc.cantidad as total_ingreso 
 FROM detalle_compra as dc 
 INNER JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto =cpp.idcompra_proyecto 
-INNER JOIN almacen_resumen AS ar ON ar.idproducto = dc.idproducto AND ar.idproyecto = cpp.idproyecto
+INNER JOIN almacen_resumen AS ar ON ar.idproducto = dc.idproducto AND ar.idproyecto = cpp.idproyecto;
 
-:::::::::::::::::::::: ACTUALIZAR FECHAS NOMBRE compra_por_proyecto: DIA - MES - AÑO ::::::::::::::::::::::
+:::::::::::::::::::::: ACTUALIZAR FECHAS NOMBRE compra_por_proyecto: DIA - MES - AÑO ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 SET lc_time_names = 'es_ES';
 UPDATE compra_por_proyecto as v, compra_por_proyecto  as vp
 SET v.day_name= CONCAT(UPPER(LEFT(DAYNAME(vp.fecha_compra),1)),SUBSTR(DAYNAME(vp.fecha_compra),2)), 
 v.month_name=CONCAT(UPPER(LEFT(MONTHNAME(vp.fecha_compra),1)),SUBSTR(MONTHNAME(vp.fecha_compra),2)), 
 v.year_name=YEAR(vp.fecha_compra) WHERE  v.idcompra_proyecto = vp.idcompra_proyecto;
 
-::::::::::::::::::::: RELLENAR FECHA CALENDARIO
+::::::::::::::::::::: RELLENAR FECHA CALENDARIO ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 -- Crear una tabla temporal para almacenar las fechas
 CREATE TEMPORARY TABLE IF NOT EXISTS tmp_fechas ( fecha DATE );
 
@@ -52,4 +52,5 @@ v.name_year		= YEAR(vp.fecha) WHERE  v.idfechas_de_calendario = vp.idfechas_de_c
 SET lc_time_names = 'es_ES';
 UPDATE fechas_de_calendario as v, fechas_de_calendario  as vp
 SET v.name_day_abrev= LEFT(vp.name_day, 3),
-v.name_month_abrev	= LEFT(vp.name_month, 3);
+v.name_month_abrev	= LEFT(vp.name_month, 3)
+where v.idfechas_de_calendario = vp.idfechas_de_calendario;

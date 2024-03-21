@@ -568,9 +568,11 @@ if (!isset($_SESSION["nombre"])) {
                           <tr>
                             <th class="text-center">#</th>
                             <th class="">Aciones</th>
-                            <th>Producto</th>                                
+                            <th>Producto</th>     
+                            <th>Fecha</th> 
+                            <th>Día</th>
                             <th>Cant</th>
-                            <th>Marca</th>                                                       
+                            <th>Marca</th>                                                     
                           </tr>
                         </thead>
                         <tbody></tbody>
@@ -578,7 +580,9 @@ if (!isset($_SESSION["nombre"])) {
                           <tr>
                             <th class="text-center">#</th>
                             <th class="">Aciones</th>
-                            <th>Producto</th>                                
+                            <th>Producto</th>     
+                            <th>Fecha</th> 
+                            <th>Día</th>                           
                             <th class="text-center" >Cant</th>
                             <th>Marca</th>                             
                           </tr>
