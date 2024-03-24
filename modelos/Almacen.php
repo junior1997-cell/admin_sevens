@@ -138,12 +138,15 @@ class Almacen
     } else if ($weekday_regular == "6") { $dia_regular = 1;}# regulamos - sabado 
 
     $cant_dias = count($dias_rango['data']); $sumando = $dia_regular; $estado = true; $count_sq = 1; $colspan = $dia_regular;
-
-    while ($estado == true) {        
-      if ( $sumando < $cant_dias ) {   
-        $data_sq[] = ['colspan'  => $colspan, 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];        
-      } else {   
-        $data_sq[] = ['colspan'  => ($cant_dias - ($sumando - $cant_sq) ), 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];
+    //  ($cant_dias - ($sumando - $cant_sq) )
+    while ($estado == true) {      
+      if ( $cant_dias < $cant_sq ) {        #validamos si el rango de fechas en menor a: $cant_sq
+        $data_sq[] = ['colspan'  =>  $dia_regular, 's'  => $sumando, 'c'  => $cant_dias, 'w'  => $weekday_regular, 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];
+        $estado = false;   
+      } else if ( $sumando < $cant_dias ) { #semana regulada
+        $data_sq[] = ['colspan'  =>  $colspan, 's'  => $sumando, 'c'  => $cant_dias, 'w'  => $weekday_regular, 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];        
+      } else {                              # validamos la ultima semana
+        $data_sq[] = ['colspan'  => ($cant_dias - ($sumando - $cant_sq) ), 's'  => $sumando, 'c'  => $cant_dias, 'w'  =>$weekday_regular, 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];
         $estado = false;
       }
       $count_sq += 1;  $colspan = $cant_sq; $sumando += $cant_sq;            

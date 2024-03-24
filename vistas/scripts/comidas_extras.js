@@ -143,7 +143,9 @@ function listar(fecha_1, fecha_2, id_proveedor, comprobante) {
     "iDisplayLength": 10,//Paginación
     "order": [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [11,12,13,14,15,16,17], visible: false, searchable: false, },    
+      { targets: [6,7,8], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
   total(fecha_1_r,fecha_2_r,id_proveedor_r,comprobante_r);

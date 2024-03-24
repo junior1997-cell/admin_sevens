@@ -151,7 +151,7 @@
                 "0" => $cont++,
                 "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' .$reg->idcomida_extra .')"><i class="fas fa-pencil-alt"></i></button>' .
                     ' <button class="btn btn-danger  btn-sm" onclick="eliminar(' .$reg->idcomida_extra .',' . "'" . $reg->tipo_comprobante . "'" . ',' . "'" . $reg->numero_comprobante . "'" . ')"><i class="fas fa-skull-crossbones"></i> </button>',
-                "2" => date("d/m/Y", strtotime($reg->fecha_comida)),
+                "2" => $reg->fecha_comida,
                 "3" =>'<div class="user-block">
                     <span class="username" style="margin-left: 0px !important;"> <p class="text-primary" style="margin-bottom: 0.2rem !important";>'.
                     ((empty($reg->razon_social)) ? 'Sin Razón social' : $reg->razon_social ) .'</p> </span>
@@ -164,9 +164,9 @@
                         <span class="description" style="margin-left: 0px !important;">N° ' .(empty($reg->numero_comprobante) ? " - " : $reg->numero_comprobante) .'</span>         
                       </div>',
                 "5" => $reg->forma_de_pago,
-                "6" => 'S/ ' . number_format($reg->subtotal, 2, '.', ','),
-                "7" => 'S/ ' . number_format($reg->igv, 2, '.', ','),
-                "8" => 'S/ ' . number_format($reg->costo_parcial, 2, '.', ','),
+                "6" => $reg->subtotal,
+                "7" => $reg->igv,
+                "8" => $reg->costo_parcial,
                 "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "10" => $comprobante. $toltip,
                 "11"=>$reg->ruc,
