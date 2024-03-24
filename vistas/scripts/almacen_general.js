@@ -244,20 +244,18 @@ function tabla_detalle(id_categoria, nombre) {
       var datosFila = "";
       datosFila=tabla_almacen_detalle.row(this).data();
       // Hacer lo que desees con los datos de la fila
-      detalle_almacen_general(datosFila[5]);
+      detalle_almacen_generale(datosFila[5]);
   
     });*/
 
 }
 
-function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
+ function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
 
   //necesito dos id
   //1 ------- id del alamcen general 
   //2 ------- id del almacen_general_resumen
 
-  console.log('id_almacen_transf :', id_almacen_transf);
-  console.log('almacen_general_resumen :', idalmacen_general_resumen);
 
   tabla_detalle_almacen_general = $("#tabla_detalle_almacen_general").dataTable({
     responsive: true,
@@ -417,7 +415,6 @@ function limpiar_form_otro_almacen() {
   $('#producto_ag').val('').trigger("change");
   $('#proyecto_ag').val('').trigger("change");
   $('#fecha_ingreso_ag').val('');
-  $('#idalmacen_producto_guardado').val('');
   $('#html_producto_ag').html(`<div class="col-12 html_mensaje">
     <div class="alert alert-warning alert-dismissible">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>

@@ -29,7 +29,6 @@ if (!isset($_SESSION["nombre"])) {
 
     // ::::::::::::::::::: ALMACEN GENERAL ::::::::::::::::::::::::::::::::::::::::::::
 
-    $idalmacen_producto_guardado        = isset($_POST["idalmacen_producto_guardado"]) ? limpiarCadena($_POST["idalmacen_producto_guardado"]) : "";
     $idalmacen_general_ag = isset($_POST["idalmacen_general_ag"]) ? limpiarCadena($_POST["idalmacen_general_ag"]) : "";
     // $cantidad_ag          = isset($_POST["cantidad_ag"]) ? limpiarCadena($_POST["cantidad_ag"]) : "";
     $fecha_ingreso_ag     = isset($_POST["fecha_ingreso_ag"]) ? limpiarCadena($_POST["fecha_ingreso_ag"]) : "";
@@ -133,7 +132,7 @@ if (!isset($_SESSION["nombre"])) {
               "3" =>  $reg['total_ingreso'],
               "4" =>  $reg['total_egreso'],
               //"5" => '<span class="badge bg-info text-dark" onclick="detalle_almacen_general('.$reg['idalmacen_general'].', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\')">Movimientos</span>'
-              //  $reg['idalmacen_general_resumen'],idalmacen_general
+             //"5" => $reg['idalmacen_general_resumen'],
               "5" =>'<button type="button" class="btn btn-info btn-sm" onclick="detalle_almacen_general('.$reg['idalmacen_general'].', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\')"><i class="fa fa-exchange"></i></button>'
             ];
           }
@@ -202,9 +201,9 @@ if (!isset($_SESSION["nombre"])) {
         // ══════════════════════════════════════  A L M A C E N E S   G E N E R A L E S ══════════════════════════════════════
       case 'guardar_y_editar_almacen_general':
 
-        if (empty($idalmacen_producto_guardado) && !empty($idalmacen_general_ag)) {
+        if (!empty($idalmacen_general_ag)) {
 
-          $rspta = $almacen_general->insertar_alm_general($idalmacen_producto_guardado, $idalmacen_general_ag, 
+          $rspta = $almacen_general->insertar_alm_general($idalmacen_general_ag, 
           $fecha_ingreso_ag, $dia_ingreso_ag, $_POST["idproducto_ag"],$_POST["proyecto_ag"], $_POST["id_ar_ag"], $_POST["cantidad_ag"],
           $_POST["stok"],$_POST["t_egreso"],$_POST["t_ingreso"],$_POST['tipo_mov']);
          

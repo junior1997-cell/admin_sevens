@@ -145,8 +145,8 @@ class Almacen_general
     $sql = "SELECT agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
     FROM almacen_general_resumen AS agr
     INNER JOIN almacen_general as ag on agr.idalmacen_general = ag.idalmacen_general
-    INNER JOIN almacen_resumen as ar on agr.idalmacen_resumen=ar.idalmacen_resumen
-    INNER JOIN producto as p on ar.idproducto = p.idproducto
+    -- INNER JOIN almacen_resumen as ar on agr.idalmacen_resumen=ar.idalmacen_resumen
+    INNER JOIN producto as p on agr.idproducto = p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
     WHERE agr.idalmacen_general='$id_almacen' AND agr.estado = '1' AND agr.estado_delete = '1'";
@@ -171,7 +171,6 @@ class Almacen_general
     ad.name_day, 
     ad.name_month, 
     ad.name_year, 
-
     CASE ad.tipo_mov
         WHEN 'IEA' THEN ad.cantidad
         WHEN 'EEA' THEN -1*ad.cantidad
@@ -252,7 +251,6 @@ class Almacen_general
 
   //----------- Insertar productos a almacen general ,-------$id_ar_ag = id_almacen_resumen
   public function insertar_alm_general(
-    $idalmacen_producto_guardado,
     $idalmacen_general_ag,
     $fecha_ingreso_ag,
     $dia_ingreso,
@@ -265,16 +263,19 @@ class Almacen_general
     $t_ingreso,
     $tipo_mov
   ) {
-
+    //var_dump($id_almacen_resumen); die();
     $ii = 0;
 
     if (!empty($id_almacen_resumen)) {
 
       while ($ii < count($idproducto_ag)) {
-
+        //=================A L M A C E N  P O R  P R O Y E C T O =====================
         //ACTUALIZAMOS EL ALMACEN_RESUMEN
-        $sql = "UPDATE almacen_resumen SET  total_stok= total_stok - $cantidad_ag[$ii] , total_egreso= total_egreso + $cantidad_ag[$ii], user_updated='$this->id_usr_sesion'
-          WHERE idalmacen_resumen='$id_almacen_resumen[$ii]';";
+        $sql = "UPDATE almacen_resumen SET  
+        total_stok= total_stok - $cantidad_ag[$ii] , 
+        total_egreso= total_egreso + $cantidad_ag[$ii], 
+        user_updated='$this->id_usr_sesion'
+        WHERE idalmacen_resumen='$id_almacen_resumen[$ii]';";
         $ar = ejecutarConsulta($sql);
         if ($ar['status'] == false) {
           return $ar;
@@ -287,32 +288,35 @@ class Almacen_general
         if ($sql_alm_det['status'] == false) {
           return $sql_alm_det;
         }
+        //=================F I N  A L M A C E N  P O R  P R O Y E C T O =====================
+        // var_dump($idalmacen_general_ag.'idproducto'.$idproducto_ag[$ii]);die();
+        $sql_validate = "SELECT `idalmacen_general_resumen`,`idalmacen_general`,`idproducto` 
+        FROM `almacen_general_resumen` where `idalmacen_general`='$idalmacen_general_ag' and `idproducto`='$idproducto_ag[$ii]' ";
 
-        $sql_validate = "SELECT idalmacen_general_resumen,idalmacen_general,idalmacen_resumen FROM almacen_general_resumen WHERE idalmacen_resumen='$id_almacen_resumen[$ii]'";
         $validate = ejecutarConsultaSimpleFila($sql_validate);
         if ($validate['status'] == false) {
           return $validate;
         }
 
-        // var_dump($validate['data']);
-        // die();
+        //  var_dump($validate['data']);die();
+
         if (!empty($validate['data'])) {
 
           $idalmacen_general_r = $validate['data']['idalmacen_general_resumen'];
           $idalmacen           = $validate['data']['idalmacen_general'];
-          $idalmacen_resumen_r = $validate['data']['idalmacen_resumen'];
+          $id_producto_r = $validate['data']['idproducto'];
         } else {
           $idalmacen_general_r = null;
           $idalmacen           = null;
-          $idalmacen_resumen_r = null;
+          $id_producto_r       = null;
         }
 
-        if (!empty($idalmacen_general_r) &&  !empty($idalmacen) && !empty($idalmacen_resumen_r) && $idalmacen = $idalmacen_general_ag  && $idalmacen_resumen_r = $id_almacen_resumen[$ii]) {
+        if (!empty($idalmacen_general_r) &&  !empty($idalmacen) && !empty($id_producto_r) && $idalmacen = $idalmacen_general_ag  && $id_producto_r = $idproducto_ag[$ii]) {
 
           //ACTUALIZAMOS EL QUE YA EXISTE
           $sql_update = "UPDATE almacen_general_resumen SET 
           idalmacen_general='$idalmacen_general_ag',
-          idalmacen_resumen='$id_almacen_resumen[$ii]',
+          idproducto='$idproducto_ag[$ii]',
           total_stok=total_stok + $cantidad_ag[$ii],
           total_ingreso=total_ingreso+ $cantidad_ag[$ii],
           user_updated='$this->id_usr_sesion'
@@ -334,8 +338,8 @@ class Almacen_general
         } else {
           //  var_dump('estamos aqui'); die();
           //AGREGAMOS UNO NUEVO
-          $sql_nuevo = "INSERT INTO almacen_general_resumen(idalmacen_general, idalmacen_resumen, tipo, total_stok, total_ingreso, user_created) 
-          VALUES ('$idalmacen_general_ag','$id_almacen_resumen[$ii]','$tipo_mov[$ii]','$cantidad_ag[$ii]','$cantidad_ag[$ii]','$this->id_usr_sesion')";
+          $sql_nuevo = "INSERT INTO almacen_general_resumen(idalmacen_general, idproducto, tipo, total_stok, total_ingreso, user_created) 
+          VALUES ('$idalmacen_general_ag','$idproducto_ag[$ii]','$tipo_mov[$ii]','$cantidad_ag[$ii]','$cantidad_ag[$ii]','$this->id_usr_sesion')";
           $sql_new_regist = ejecutarConsulta_retornarID($sql_nuevo);
           if ($sql_new_regist['status'] == false) {
             return $sql_new_regist;

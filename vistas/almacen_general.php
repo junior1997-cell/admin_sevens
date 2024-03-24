@@ -123,7 +123,7 @@ if (!isset($_SESSION["nombre"])) {
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-5">
                                       <div class="row">
                                         <div class="col-12 mb-1">
-                                          <button type="button" class="btn btn-warning btn-sm" onclick="limpiar(); transf_a_proyecto();"><i class="fa fa-exchange"></i> a Proyecto</button>
+                                          <button type="button" class="btn btn-warning btn-block btn-sm" onclick="limpiar(); transf_a_proyecto();"><i class="fa fa-exchange"></i> Transferencia</button>
 
                                         </div>
                                       </div>
@@ -298,8 +298,6 @@ if (!isset($_SESSION["nombre"])) {
                         <div class="row" id="cargando-1-fomulario">
                           <!-- idalmacen general -->
                           <input type="hidden" name="idalmacen_general_ag" id="idalmacen_general_ag" />
-                          <!-- idalmacen_producto_guardado  -->
-                          <input type="hidden" name="idalmacen_producto_guardado" id="idalmacen_producto_guardado" />
 
                           <!-- Proyecto -->
                           <div class="col-12 col-sm-12 col-md-5 col-lg-4">
