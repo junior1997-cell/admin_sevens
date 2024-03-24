@@ -113,6 +113,9 @@ if (!isset($_SESSION["nombre"])) {
         break;
 
       case 'tabla_detalle':
+        /*agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, 
+        ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,
+        um.abreviacion, c.nombre as categoria*/
         $rspta = $almacen_general->tabla_detalle($_GET["id_proyecto"], $_GET["id_almacen"]);
         //Vamos a declarar un array
         $data = [];
@@ -120,14 +123,18 @@ if (!isset($_SESSION["nombre"])) {
 
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $reg) {
-
+            
             $data[] = [
               "0" => $cont++,
-              "1" => '<button class="btn btn-warning btn-sm" onclick="transferencia('.$reg['idalmacen_resumen'].',' . $reg['idalmacen_producto_guardado'] . ', \'' . encodeCadenaHtml($reg['producto']) . '\', \'' . encodeCadenaHtml($reg['cantidad']) . '\')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-exchange"></i></button>',
-              "2" => $reg['proyecto'],
-              "3" => date("d/m/Y", strtotime($reg['fecha_envio'])) ,
-              "4" =>  $reg['producto'],
-              "5" =>  $reg['cantidad'],
+              //"1" => '<button class="btn btn-warning btn-sm" onclick="transferencia('.$reg['idalmacen_general_resumen'].',' . $reg['idalmacen_general_resumen'] . ', \'' . encodeCadenaHtml($reg['nombre_producto']) . '\', \'' . encodeCadenaHtml($reg['total_stok']) . '\')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-exchange"></i></button>',
+              //"1" => $reg['nombre_producto'] .' - '.$reg['abreviacion'],
+              "1" => '<textarea cols="70" rows="2" class="textarea_datatable bg-light w-100 " readonly="" style=" font-size: 12px;">'.$reg['nombre_producto'] .' - '.$reg['abreviacion'].'</textarea>',
+              "2" => $reg['total_stok'],
+              "3" =>  $reg['total_ingreso'],
+              "4" =>  $reg['total_egreso'],
+              //"5" => '<span class="badge bg-info text-dark" onclick="detalle_almacen_general('.$reg['idalmacen_general'].', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\')">Movimientos</span>'
+              //  $reg['idalmacen_general_resumen'],idalmacen_general
+              "5" =>'<button type="button" class="btn btn-info btn-sm" onclick="detalle_almacen_general('.$reg['idalmacen_general'].', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\')"><i class="fa fa-exchange"></i></button>'
             ];
           }
 
@@ -144,6 +151,44 @@ if (!isset($_SESSION["nombre"])) {
         }
 
         break;
+      
+        case 'tabla_detalle_almacen_general':
+          /*agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, 
+          ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,
+          um.abreviacion, c.nombre as categoria*/
+          $rspta = $almacen_general->tabla_detalle_almacen_general($_GET["id_almacen_transf"], $_GET["idalmacen_general_resumen"]);
+          // var_dump($_GET["id_almacen_transf"]); die();
+          //Vamos a declarar un array
+          $data = [];
+          $cont = 1;
+  
+          if ($rspta['status'] == true) {
+            foreach ($rspta['data'] as $key => $reg) {
+              
+              $data[] = [
+                "0" => $cont++,
+                //"1" => '<button class="btn btn-warning btn-sm" onclick="transferencia('.$reg['idalmacen_general_resumen'].',' . $reg['idalmacen_general_resumen'] . ', \'' . encodeCadenaHtml($reg['nombre_producto']) . '\', \'' . encodeCadenaHtml($reg['total_stok']) . '\')" data-toggle="tooltip" data-original-title="Editar"><i class="fa fa-exchange"></i></button>',
+                //"1" => $reg['nombre_producto'] .' - '.$reg['abreviacion'],
+                "1" => '<textarea cols="70" rows="2" class="textarea_datatable bg-light w-100 " readonly="" style=" font-size: 12px;">'.$reg['tipo_movimiento'] .'</textarea>',
+                "2" => $reg['fecha'],
+                "3" =>  $reg['cantidad'],
+                "4" =>  $reg['nombre_proyecto_almacen']
+              ];
+            }
+  
+            $results = [
+              "sEcho" => 1, //Información para el datatables
+              "iTotalRecords" => count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
+              "data" => $data,
+            ];
+  
+            echo json_encode($results);
+          } else {
+            echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
+          }
+  
+          break;
 
       case 'lista_de_categorias':
 
@@ -158,7 +203,11 @@ if (!isset($_SESSION["nombre"])) {
       case 'guardar_y_editar_almacen_general':
 
         if (empty($idalmacen_producto_guardado) && !empty($idalmacen_general_ag)) {
-          $rspta = $almacen_general->insertar_alm_general($idalmacen_producto_guardado, $idalmacen_general_ag, $fecha_ingreso_ag, $dia_ingreso_ag, $_POST["idproducto_ag"], $_POST["id_ar_ag"], $_POST["cantidad_ag"]);
+
+          $rspta = $almacen_general->insertar_alm_general($idalmacen_producto_guardado, $idalmacen_general_ag, 
+          $fecha_ingreso_ag, $dia_ingreso_ag, $_POST["idproducto_ag"],$_POST["proyecto_ag"], $_POST["id_ar_ag"], $_POST["cantidad_ag"],
+          $_POST["stok"],$_POST["t_egreso"],$_POST["t_ingreso"],$_POST['tipo_mov']);
+         
           echo json_encode($rspta, true);
         } else {
           echo json_encode(['status' => true, 'message' => 'todo oka ps', 'data' => ''], true);
@@ -199,7 +248,11 @@ if (!isset($_SESSION["nombre"])) {
 
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option style=" font-size: 12px; "  value="' . $value['idproducto'] . '" id_ar = "' . $value['idalmacen_resumen'] . '" stok="' . $value['total_stok'] . '" unidad_medida="' . $value['unidad_medida'] . '" >' . $value['nombre_producto'] . ' - ' . $value['categoria'] . ' - Saldo: ' . $value['total_stok'] . ' - ' . $value['abreviacion'] . '</option>';
+            $data .= '<option style=" font-size: 12px; "  value="' . $value['idproducto'] . '"  id_ar = "' . $value['idalmacen_resumen'] . '" tipo_mov = "' . $value['tipo'] . '" stok="' . $value['total_stok'] . '" t_egreso="' . $value['total_egreso'] . '" t_ingreso="' . $value['total_ingreso'] . '" unidad_medida="' . $value['unidad_medida'] . '" >' . $value['nombre_producto'] . ' - ' . $value['categoria'] . ' - Stock: ' . $value['total_stok'] . ' - ' . $value['abreviacion'] . '</option>';
+            //total_egreso,ar.total_stok,ar.total_ingreso
+            //t_egreso="' . $value['total_egreso'] . '" t_ingreso="' . $value['total_ingreso'] . '"
+            // t_egreso
+            // t_ingreso
           }
           $retorno = array(
             'status' => true,
@@ -251,6 +304,16 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
 
       break;
+      // ══════════════════════ T R A S F E R E N C I A S  A   A L M A C E N  P R O Y E C T O  ══════════════════════════════════
+     // $rspta = $almacen_general->tabla_detalle($_GET["id_proyecto"], $_GET["id_almacen"]);
+
+      case 'transferencia_a_proyecto':
+        $rspta = $almacen_general->transferencia_a_proyecto($_GET["id_almacen"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+        break;
+
+
 
 
       default:

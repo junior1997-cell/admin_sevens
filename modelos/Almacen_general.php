@@ -142,16 +142,58 @@ class Almacen_general
   //Implementar un método para listar los registros
   public function tabla_detalle($id_proyecto, $id_almacen)
   {
-    $sql = "SELECT apg.idalmacen_producto_guardado, apg.idalmacen_general, apg.idalmacen_resumen, apg.fecha_envio, apg.cantidad, prd.nombre as producto, 
-    pry.nombre_codigo as proyecto
-    FROM almacen_producto_guardado as apg, almacen_resumen as ar, producto as prd, proyecto as pry
-    WHERE apg.idalmacen_resumen = ar.idalmacen_resumen AND ar.idproducto = prd.idproducto AND ar.idproyecto = pry.idproyecto 
-    AND apg.idalmacen_general='$id_almacen' AND apg.estado = '1' AND apg.estado_delete = '1' AND ar.estado = '1' AND ar.estado_delete = '1'
-    AND apg.cantidad>'0'
-    ORDER BY pry.nombre_codigo ASC;";
+    $sql = "SELECT agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
+    FROM almacen_general_resumen AS agr
+    INNER JOIN almacen_general as ag on agr.idalmacen_general = ag.idalmacen_general
+    INNER JOIN almacen_resumen as ar on agr.idalmacen_resumen=ar.idalmacen_resumen
+    INNER JOIN producto as p on ar.idproducto = p.idproducto
+    INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
+    INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
+    WHERE agr.idalmacen_general='$id_almacen' AND agr.estado = '1' AND agr.estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
+  public function tabla_detalle_almacen_general($idalmacen_general, $idalmacen_general_resumen)
+  {
+    // var_dump($idalmacen_general); die();
+    $sql = "SELECT 
+    ad.idalmacen_general_detalle, 
+    ad.idalmacen_general_resumen, 
+    ad.idalmacen_general_destino, 
+    ad.idproyecto, 
+    ad.tipo_mov,
+    CASE ad.tipo_mov
+        WHEN 'IEA' THEN 'INGRESO ENTRE ALMACENES'
+        WHEN 'EEA' THEN 'EGRESO ENTRE ALMACENES'
+        WHEN 'IGP' THEN 'INGRESO A ALMACEN GENERAL DE PROYECTO'
+        WHEN 'EGP' THEN 'EGRESO DE ALMACEN GENERAL E INGRESO A UN PROYECTO'
+    END AS tipo_movimiento ,
+    ad.fecha, 
+    ad.name_day, 
+    ad.name_month, 
+    ad.name_year, 
 
+    CASE ad.tipo_mov
+        WHEN 'IEA' THEN ad.cantidad
+        WHEN 'EEA' THEN -1*ad.cantidad
+        WHEN 'IGP' THEN ad.cantidad
+        WHEN 'EGP' THEN -1*ad.cantidad
+    END AS cantidad, 
+    ad.stok_anterior, 
+    ad.stok_actual,
+    CASE ad.tipo_mov
+        WHEN 'IEA' THEN agd.nombre_almacen
+        WHEN 'EEA' THEN agd.nombre_almacen
+        WHEN 'IGP' THEN p.nombre_codigo
+        WHEN 'EGP' THEN p.nombre_codigo
+    END AS nombre_proyecto_almacen
+  FROM almacen_general_detalle ad
+  LEFT JOIN Proyecto p ON ad.idproyecto = p.idproyecto
+  LEFT JOIN almacen_general agd ON ad.idalmacen_general_destino = agd.idalmacen_general
+  INNER JOIN almacen_general_resumen as agr on agr.idalmacen_general_resumen=ad.idalmacen_general_resumen
+  where agr.idalmacen_general = '$idalmacen_general' and agr.idalmacen_general_resumen='$idalmacen_general_resumen';";
+
+    return ejecutarConsultaArray($sql);
+  }
   //Seleccionar Trabajador Select2
   public function lista_de_categorias()
   {
@@ -198,7 +240,7 @@ class Almacen_general
   public function select2_recursos_almacen($idproyecto)
   {
 
-    $sql = "SELECT ar.idalmacen_resumen,ar.idproyecto,ar.idproducto,ar.tipo,ar.saldo_anterior,ar.total_stok, p.nombre as nombre_producto, 
+    $sql = "SELECT ar.idalmacen_resumen,ar.idproyecto,ar.idproducto,ar.tipo,ar.total_egreso,ar.total_stok,ar.total_ingreso, p.nombre as nombre_producto, 
     um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
     FROM almacen_resumen as ar
     INNER JOIN producto as p on ar.idproducto=p.idproducto
@@ -208,42 +250,107 @@ class Almacen_general
     return ejecutarConsultaArray($sql);
   }
 
-  //----------- Insertar productos a almacen general
-  public function insertar_alm_general($idalmacen_producto_guardado, $idalmacen_general_ag, $fecha_ingreso_ag, $dia_ingreso, $idproducto_ag, $id_ar_ag, $cantidad_ag)
-  {
+  //----------- Insertar productos a almacen general ,-------$id_ar_ag = id_almacen_resumen
+  public function insertar_alm_general(
+    $idalmacen_producto_guardado,
+    $idalmacen_general_ag,
+    $fecha_ingreso_ag,
+    $dia_ingreso,
+    $idproducto_ag,
+    $proyecto_ag,
+    $id_almacen_resumen,
+    $cantidad_ag,
+    $stok,
+    $t_egreso,
+    $t_ingreso,
+    $tipo_mov
+  ) {
+
     $ii = 0;
 
-    if (!empty($id_ar_ag)) {
+    if (!empty($id_almacen_resumen)) {
 
       while ($ii < count($idproducto_ag)) {
+
         //ACTUALIZAMOS EL ALMACEN_RESUMEN
         $sql = "UPDATE almacen_resumen SET  total_stok= total_stok - $cantidad_ag[$ii] , total_egreso= total_egreso + $cantidad_ag[$ii], user_updated='$this->id_usr_sesion'
-          WHERE idalmacen_resumen='$id_ar_ag[$ii]';";
+          WHERE idalmacen_resumen='$id_almacen_resumen[$ii]';";
         $ar = ejecutarConsulta($sql);
         if ($ar['status'] == false) {
           return $ar;
         }
+        //REGISTRAMOS EL EGRESO EN  ALMACEN_DETALLE
+        $sql_alm_detall = "INSERT INTO almacen_detalle(idalmacen_resumen, idalmacen_general, tipo_mov, fecha, cantidad, stok_anterior, stok_actual) 
+        VALUES ('$id_almacen_resumen[$ii]','$idalmacen_general_ag','EPG','$fecha_ingreso_ag','$cantidad_ag[$ii]','$stok[$ii]','$cantidad_ag[$ii]-$stok[$ii]')";
 
-        //add registro en nuestra bitacora.
-        $sql_bit_d = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_resumen','" . $id_ar_ag[$ii] . "','Actualizacion x por envio a almacen general','$this->id_usr_sesion')";
-        $bitacora = ejecutarConsulta($sql_bit_d);
-        if ($bitacora['status'] == false) {
-          return $bitacora;
+        $sql_alm_det = ejecutarConsulta($sql_alm_detall);
+        if ($sql_alm_det['status'] == false) {
+          return $sql_alm_det;
         }
 
-        //INSERTAMOS A UN ALMACEN_GENERAL
-        $sql_0 = " INSERT INTO almacen_producto_guardado( idalmacen_general, idalmacen_resumen, fecha_envio, cantidad,tipo_movimiento) 
-          VALUES ('$idalmacen_general_ag','$id_ar_ag[$ii]','$fecha_ingreso_ag', '$cantidad_ag[$ii]','ID')";
-        $creando = ejecutarConsulta_retornarID($sql_0);
-        if ($creando['status'] == false) {
-          return $creando;
+        $sql_validate = "SELECT idalmacen_general_resumen,idalmacen_general,idalmacen_resumen FROM almacen_general_resumen WHERE idalmacen_resumen='$id_almacen_resumen[$ii]'";
+        $validate = ejecutarConsultaSimpleFila($sql_validate);
+        if ($validate['status'] == false) {
+          return $validate;
         }
-        $id = $creando['data'];
-        //add registro en nuestra bitacora
-        $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_producto_guardado','$id','Crear registro','$this->id_usr_sesion')";
-        $bitacora = ejecutarConsulta($sql_5);
-        if ($bitacora['status'] == false) {
-          return $bitacora;
+
+        // var_dump($validate['data']);
+        // die();
+        if (!empty($validate['data'])) {
+
+          $idalmacen_general_r = $validate['data']['idalmacen_general_resumen'];
+          $idalmacen           = $validate['data']['idalmacen_general'];
+          $idalmacen_resumen_r = $validate['data']['idalmacen_resumen'];
+        } else {
+          $idalmacen_general_r = null;
+          $idalmacen           = null;
+          $idalmacen_resumen_r = null;
+        }
+
+        if (!empty($idalmacen_general_r) &&  !empty($idalmacen) && !empty($idalmacen_resumen_r) && $idalmacen = $idalmacen_general_ag  && $idalmacen_resumen_r = $id_almacen_resumen[$ii]) {
+
+          //ACTUALIZAMOS EL QUE YA EXISTE
+          $sql_update = "UPDATE almacen_general_resumen SET 
+          idalmacen_general='$idalmacen_general_ag',
+          idalmacen_resumen='$id_almacen_resumen[$ii]',
+          total_stok=total_stok + $cantidad_ag[$ii],
+          total_ingreso=total_ingreso+ $cantidad_ag[$ii],
+          user_updated='$this->id_usr_sesion'
+          WHERE idalmacen_general_resumen='$idalmacen_general_r'";
+
+          $sql_alm_detalle = ejecutarConsulta($sql_update);
+          if ($sql_alm_detalle['status'] == false) {
+            return $sql_alm_detalle;
+          }
+
+          //Registramos un nuevo detalle
+          $sql_create_det = "INSERT INTO almacen_general_detalle( idalmacen_general_resumen, idproyecto, tipo_mov, fecha,cantidad, user_created) 
+          VALUES ('$idalmacen_general_r','$proyecto_ag[$ii]','IGP','$fecha_ingreso_ag','$cantidad_ag[$ii]','$this->id_usr_sesion')";
+          $sql_alm_det_gen = ejecutarConsulta($sql_create_det);
+
+          if ($sql_alm_det_gen['status'] == false) {
+            return $sql_alm_det_gen;
+          }
+        } else {
+          //  var_dump('estamos aqui'); die();
+          //AGREGAMOS UNO NUEVO
+          $sql_nuevo = "INSERT INTO almacen_general_resumen(idalmacen_general, idalmacen_resumen, tipo, total_stok, total_ingreso, user_created) 
+          VALUES ('$idalmacen_general_ag','$id_almacen_resumen[$ii]','$tipo_mov[$ii]','$cantidad_ag[$ii]','$cantidad_ag[$ii]','$this->id_usr_sesion')";
+          $sql_new_regist = ejecutarConsulta_retornarID($sql_nuevo);
+          if ($sql_new_regist['status'] == false) {
+            return $sql_new_regist;
+          }
+
+          $idalm_general_resumen = $sql_new_regist['data'];
+
+          //Registramos un nuevo detalle
+          $sql_create_det = "INSERT INTO almacen_general_detalle( idalmacen_general_resumen, idalmacen_general_destino, idproyecto, tipo_mov, fecha,cantidad, user_created) 
+          VALUES ('$idalm_general_resumen','$idalmacen_general_ag','$proyecto_ag[$ii]','IGP','$fecha_ingreso_ag','$cantidad_ag[$ii]','$this->id_usr_sesion')";
+          $sql_alm_det_gen = ejecutarConsulta($sql_create_det);
+
+          if ($sql_alm_det_gen['status'] == false) {
+            return $sql_alm_det_gen;
+          }
         }
 
         $ii = $ii + 1;
@@ -276,7 +383,7 @@ class Almacen_general
 
   public function guardar_transf_almacen($name_alm_destino, $idalmacen_prod_guar, $cantidad_alm_trans, $fecha_transf, $alm_resumen_original)
   {
-   // var_dump('$name_alm_destino :'. $name_alm_destino.' $idalmacen_prod_guar :'. $idalmacen_prod_guar.'$cantidad_alm_trans : '.$cantidad_alm_trans); die();
+    // var_dump('$name_alm_destino :'. $name_alm_destino.' $idalmacen_prod_guar :'. $idalmacen_prod_guar.'$cantidad_alm_trans : '.$cantidad_alm_trans); die();
 
     //ACTUALIZAMOS EL ALMACEN_RESUMEN
     $sql = "UPDATE almacen_producto_guardado SET cantidad=cantidad-'$cantidad_alm_trans' WHERE idalmacen_producto_guardado='$idalmacen_prod_guar'";
@@ -303,5 +410,23 @@ class Almacen_general
 
 
     return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
+  }
+
+  //------------------------------------------------------------------------------------
+  // ---------------- T R A N S F E R E N C I A S  A   P R O Y E C T O S ------------------
+  //------------------------------------------------------------------------------------
+
+
+  //Implementar un método para listar los registros
+  public function transferencia_a_proyecto($id_almacen)
+  {
+    $sql = "SELECT apg.idalmacen_producto_guardado, apg.idalmacen_general, apg.idalmacen_resumen, apg.fecha_envio, apg.cantidad, prd.nombre as producto, 
+      pry.nombre_codigo as proyecto
+      FROM almacen_producto_guardado as apg, almacen_resumen as ar, producto as prd, proyecto as pry
+      WHERE apg.idalmacen_resumen = ar.idalmacen_resumen AND ar.idproducto = prd.idproducto AND ar.idproyecto = pry.idproyecto 
+      AND apg.idalmacen_general='$id_almacen' AND apg.estado = '1' AND apg.estado_delete = '1' AND ar.estado = '1' AND ar.estado_delete = '1'
+      AND apg.cantidad>'0'
+      ORDER BY pry.nombre_codigo ASC;";
+    return ejecutarConsultaArray($sql);
   }
 }
