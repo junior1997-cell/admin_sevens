@@ -19,7 +19,16 @@ if (!isset($_SESSION["nombre"])) {
     <?php $title = "Almacenes";
     require 'head.php'; ?>
 
-
+    <style>
+      .style_tabla_datatable td,
+      tr {
+        font-size: 13px;
+        /* Reducir el tamaño de la fuente */
+        padding: 5px;
+        /* Ajustar el padding */
+      }
+      
+    </style>
   </head>
 
   <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
@@ -111,30 +120,75 @@ if (!isset($_SESSION["nombre"])) {
                                 <!-- TABLA - DETALLE -->
                                 <div class="tab-pane fade" id="tabs-for-detalle" role="tabpanel" aria-labelledby="tabs-for-detalle-tab">
                                   <div class="row">
-                                    <div class="col-12">
-                                      <table id="tabla-detalle-almacen" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-5">
+                                      <div class="row">
+                                        <div class="col-12 mb-1">
+                                          <button type="button" class="btn btn-warning btn-sm" onclick="limpiar(); transf_a_proyecto();"><i class="fa fa-exchange"></i> a Proyecto</button>
+
+                                        </div>
+                                      </div>
+                                      <table id="tabla-detalle-almacen" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
                                         <thead>
                                           <tr>
                                             <th class="text-center">#</th>
-                                            <th class="">Trans.</th>
-                                            <th class="">Proyecto</th>
-                                            <th class="">Fecha</th>
-                                            <th class="">Nombre producto</th>
-                                            <th class="">Cantidad</th>
+                                            <th class="">Producto</th>
+                                            <th class="">Stock</th>
+                                            <th class="">Ingreso</th>
+                                            <th class="">Salida</th>
+                                            <th class="">Ver</th>
                                           </tr>
                                         </thead>
                                         <tbody></tbody>
                                         <tfoot>
                                           <tr>
                                             <th class="text-center">#</th>
-                                            <th class="">Trans.</th>
-                                            <th class="">Proyecto</th>
-                                            <th class="">Fecha</th>
-                                            <th class="">Nombre producto</th>
-                                            <th class="">Cantidad</th>
+                                            <th class="">Producto</th>
+                                            <th class="">Stock</th>
+                                            <th class="">Ingreso</th>
+                                            <th class="">Salida</th>
+                                            <th class="">Ver</th>
                                           </tr>
                                         </tfoot>
                                       </table>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-7">
+                                      <div class="col-12 mb-1" style="margin: 5px; color: #1f2d3d; background-color: #f8f9fa; border-color: #e9ecef;">
+                                        <!--<div class="modal-header">
+                                          <h6> Producto:<strong class="nombre_insumo"> <i class="fas fa-exclamation-triangle text-warning"></i> </strong> </h6>
+                                        </div> -->
+
+                                        <div class="alert alert-secondary alerta_inicial" role="alert" style=" background-color: #ffe69c; border-color: #ffe69c; color: black;">
+                                          <h2 class="alert-heading">¡UPS! Ningún Producto seleccionado.</strong></h2>
+                                          <hr>
+                                          <p class="mb-0">Tiene que seleccionar un Producto para poder ver sus movimientos</p>
+                                        </div>
+
+                                        <div class="tabla_detalle_almacen_g" style="display: none; ">
+                                          <table id="tabla_detalle_almacen_general" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
+                                            <thead>
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="">Movimiento</th>
+                                                <th class="">Fecha</th>
+                                                <th class="">Cantidad</th>
+                                                <th class="">Pro/Alm</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                            <tfoot>
+                                              <tr>
+                                                <th class="text-center">#</th>
+                                                <th class="">Movimiento</th>
+                                                <th class="">Fecha</th>
+                                                <th class="">Cantidad</th>
+                                                <th class="">Pro/Alm</th>
+                                              </tr>
+                                            </tfoot>
+                                          </table>
+
+                                        </div>
+                                      </div>
                                     </div>
                                     <!-- /.col -->
                                   </div>
@@ -160,7 +214,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
             <!-- /.container-fluid -->
 
-            <!-- MODAL - AGREGAR ACTIVOS FIJOS -->
+            <!-- MODAL - AGREGAR ALMACEN GENERAL -->
             <div class="modal fade" id="modal-agregar-almacen-general">
               <div class="modal-dialog modal-dialog-scrollable modal-md">
                 <div class="modal-content">
@@ -226,7 +280,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <!-- MODAL - AGREGAR OTROS ALMACEN - chargue 5-6 -->
+            <!-- MODAL - AGREGAR AL  ALMACEN GENERAL - chargue 5-6 -->
             <div class="modal fade" id="modal-agregar-otro-almacen">
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
@@ -344,7 +398,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
 
 
-            <!-- MODAL - TRNASFERENCIA -->
+            <!-- MODAL - TRNASFERENCIA  - ENTRE ALMACENES GENERALES-->
             <div class="modal fade" id="modal-transferencia">
               <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
@@ -435,12 +489,12 @@ if (!isset($_SESSION["nombre"])) {
 
 
 
-            <!-- MODAL - TRNASFERENCIA MASIVO NO SE UTILIZA -->
-            <div class="modal fade" id="modal-transferencia_MASIVO">
-              <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <!-- MODAL - TRNASFERENCIA MASIVO A PROYECTO -->
+            <div class="modal fade" id="modal-transferencia_aproyecto">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Transferencia</h4>
+                    <h4 class="modal-title">Transferencia a Proyecto</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
@@ -453,49 +507,45 @@ if (!isset($_SESSION["nombre"])) {
                         <div class="row" id="cargando-1-fomulario">
 
                           <!-- Nombre -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                          <div class="col-12 col-sm-7 col-md-7 col-lg-8">
                             <div class="form-group">
-                              <label for="name_alm_orige">Almacen Origen <sup class="text-danger">(*)</sup></label>
-                              <!-- <input type="text" name="name_alm_orige" class="form-control" id="name_alm_origen" placeholder="Nombre almacen." /> -->
-
-                              <select name="name_alm_orige" id="name_alm_orige" class="form-control" placeholder="Almacen Origen" onchange="reload_transf_almacen(this);">
+                              <label for="name_alm_proyecto">Proyecto Destino <sup class="text-danger">(*)</sup></label>
+                              <select name="name_alm_proyecto" id="name_alm_proyecto" class="form-control">
                               </select>
                             </div>
                           </div>
-
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                          <!-- Fecha -->
+                          <div class="col-12 col-sm-5 col-md-5 col-lg-4">
                             <div class="form-group">
-                              <label for="nombre_almacen">Almacen Origen <sup class="text-danger">(*)</sup></label>
-                              <!-- <input type="text" name="nombre_almacen" class="form-control" id="nombre_almacen" placeholder="Nombre almacen." /> -->
-                              <select name="name_alm_destin" id="name_alm_destin" class="form-control" placeholder="Almacen destino " disabled>
-                              </select>
+                              <label for="fecha_transf_proyecto">Fecha</label>
+                              <input type="date" name="fecha_transf_proyecto" class="form-control" id="fecha_transf_proyecto" placeholder="Fecha" />
                             </div>
                           </div>
 
-                          <!-- Nombre -->
-                          <div class="col-12 col-sm-9 col-md-9 col-lg-9">
-                            <div class="form-group">
-                              <label for="name_prod_alm_origen">Producto <sup class="text-danger">(*)</sup></label>
+                          <!-- style="display: none;" -->
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                            <div class="row head_list_items_trans">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Proyecto</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Cantidad</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold"><i class="far fa-trash-alt"></i></div>
+                              <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+                            </div>
+                            <div class="row" id="html_producto_transf">
+                              <div class="col-12 html_mensaje">
+                                <div class="alert alert-warning alert-dismissible">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                  <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+                                  NO TIENES NINGÚN PRODUCTO SELECCIONADO.
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-                              <select name="name_prod_alm_orige" id="name_prod_alm_orige" class="form-control" placeholder="Producto">
-                              </select>
-                            </div>
-                          </div>
-                          <!-- Nombre -->
-                          <div class="col-12 col-sm-3 col-md-3 col-lg-3">
-                            <div class="form-group">
-                              <label for="cantidad_alm_tran">Cantidad <sup class="text-danger">(*)</sup></label>
-                              <input type="text" name="cantidad_alm_tran" class="form-control" id="cantidad_alm_tran" placeholder="Cantidad." />
-                            </div>
-                          </div>
 
-                          <!-- Descripcion -->
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                              <label for="descripcion">Descripcion </label>
-                              <textarea class="form-control" name="descripcion" id="descripcion" cols="30" rows="2"></textarea>
-                            </div>
-                          </div>
+
+
+
 
 
                           <!-- barprogress -->
