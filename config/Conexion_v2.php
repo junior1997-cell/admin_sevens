@@ -48,7 +48,52 @@ if (!function_exists('ejecutarConsulta')) {
         'field_count' => $conexion->field_count,
         'warning_count' => $conexion->warning_count, 
       );
-    }
+    }    
+    
+    $query->free();     // Liberar los resultados
+    $conexion->close(); // Cerrar la conexión
+  }
+
+  
+
+  function ejecutarConsultaSimpleFilaStore($sql) {
+    global $conexion;
+    $query = $conexion->prepare($sql);
+    $query->execute();
+    # $query = $conexion->query($sql);
+    // Recoger los resultados
+    $result = $query->get_result();
+    $row = $result->fetch_assoc();
+    if ($conexion->error) {
+      try {
+        throw new Exception("MySQL error <b> $conexion->error </b> Query:<br> $query", $conexion->errno);
+      } catch (Exception $e) {
+        //echo "Error No: " . $e->getCode() . " - " . $e->getMessage() . "<br >"; echo nl2br($e->getTraceAsString());
+        return array( 
+          'status' => false, 
+          'code_error' => $e->getCode(), 
+          'message' => $e->getMessage(), 
+          'data' => '<br><b>Rutas de errores:</b> <br>'.nl2br($e->getTraceAsString()),
+        );          
+      }
+    } else {
+      return array( 
+        'status' => true, 
+        'code_error' => $conexion->errno, 
+        'message' => 'Salió todo ok, en ejecutarConsulta()', 
+        'data' => $row, 
+        'id_tabla' => $conexion->insert_id,
+        'affected_rows' => $conexion->affected_rows,
+        'sqlstate' => $conexion->sqlstate,
+        'field_count' => $conexion->field_count,
+        'warning_count' => $conexion->warning_count, 
+      );
+    }    
+    
+    
+    $result->free(); // Liberar los resultados    
+    $query->close(); // Cerrar la consulta   
+    $conexion->close();  // Cerrar la conexión
   }
 
   function ejecutarConsultaSimpleFila($sql) {
@@ -82,6 +127,49 @@ if (!function_exists('ejecutarConsulta')) {
         'warning_count' => $conexion->warning_count, 
       );
     }
+
+    $query->free();     // Liberar los resultados
+    $conexion->close(); // Cerrar la conexión
+  }
+
+  function ejecutarConsultaArrayStore($sql) {
+    global $conexion;
+    $query = $conexion->prepare($sql);
+    $query->execute();
+    # $query = $conexion->query($sql);
+    // Recoger los resultados
+    $result = $query->get_result();
+     for ($data = []; ($row = $result->fetch_assoc()); $data[] = $row);
+    if ($conexion->error) {
+      try {
+        throw new Exception("MySQL error <b> $conexion->error </b> Query:<br> $query", $conexion->errno);
+      } catch (Exception $e) {
+        //echo "Error No: " . $e->getCode() . " - " . $e->getMessage() . "<br >"; echo nl2br($e->getTraceAsString());
+        return array( 
+          'status' => false, 
+          'code_error' => $e->getCode(), 
+          'message' => $e->getMessage(), 
+          'data' => '<br><b>Rutas de errores:</b> <br>'.nl2br($e->getTraceAsString()),
+        );          
+      }
+    } else {
+      return array( 
+        'status' => true, 
+        'code_error' => $conexion->errno, 
+        'message' => 'Salió todo ok, en ejecutarConsulta()', 
+        'data' => $data, 
+        'id_tabla' => $conexion->insert_id,
+        'affected_rows' => $conexion->affected_rows,
+        'sqlstate' => $conexion->sqlstate,
+        'field_count' => $conexion->field_count,
+        'warning_count' => $conexion->warning_count, 
+      );
+    }    
+    
+    
+    $result->free(); // Liberar los resultados    
+    $query->close(); // Cerrar la consulta   
+    $conexion->close();  // Cerrar la conexión
   }
 
   function ejecutarConsultaArray($sql) {

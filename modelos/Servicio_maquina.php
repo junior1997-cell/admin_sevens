@@ -517,7 +517,9 @@ class ServicioMaquina
     }   
 
     $sql = "SELECT *
-		FROM factura WHERE idproyecto='$idproyecto' AND idmaquinaria = '$idmaquinaria' AND  estado='1' AND estado_delete='1' $filtro_fecha  ORDER BY fecha_emision DESC";
+		FROM factura 
+    WHERE idproyecto='$idproyecto' AND idmaquinaria = '$idmaquinaria' AND  estado='1' AND estado_delete='1' $filtro_fecha  
+    ORDER BY fecha_emision DESC";
     return ejecutarConsulta($sql);
   }
   

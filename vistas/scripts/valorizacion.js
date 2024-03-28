@@ -751,6 +751,29 @@ function eliminar_tr_fecha_ocultas(id_tr) {
   
 }
 
+$('.suma_total_monto_gastado').on('click', function () {
+  $("#modal-modulos-detalle").modal("show");
+  $('#tabla-modulo-detalle tbody').html(`<tr><td colspan="3"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>`);
+  var id = localStorage.getItem('nube_idproyecto');
+  $.getJSON(`../ajax/valorizacion.php?op=detalle_x_modulo`, {id:id}, function (e, textStatus, jqXHR) {
+    $('#tabla-modulo-detalle tbody').html('');
+    var total_add = 0;
+    e.data.forEach((val, key) => {
+      $('#tabla-modulo-detalle tbody').append(`<tr>
+        <td class="py-1">${key + 1}</td>
+        <td class="py-1">${val.modulo}</td>
+        <td class="py-1 text-right">${ formato_miles(val.total) }</td>      
+      </tr>`);
+      total_add +=  parseFloat(val.total);
+    });
+    $('#tabla-modulo-detalle tbody').append(`<tr>
+        <td class=""></td>
+        <th class=" text-right">SUMA TOTAL</th>
+        <th class=" text-right">${ formato_miles(total_add) }</th>      
+      </tr>`);
+  });
+});
+
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
 
 $(function () {  

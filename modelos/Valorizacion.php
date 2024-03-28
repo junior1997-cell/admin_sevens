@@ -290,7 +290,11 @@ class Valorizacion
       WHERE idproyecto='$idproyecto' AND numero_q_s='$num' AND estado=1 AND estado_delete=1;";
       $val_q_s =  ejecutarConsultaSimpleFila($sql);  if ($val_q_s['status'] == false) { return $val_q_s; }
 
-      $monto_gastado = suma_totales_modulos($idproyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
+      // $monto_gastado = suma_totales_modulos($idproyecto, $value['fecha_inicio_oculto'], $value['fecha_fin_oculto']);
+      // "CALL suma_de_modulos_rango_fecha;";
+      $sql_modulos = "CALL suma_de_modulos_rango_fecha($idproyecto,'".$value['fecha_inicio_oculto']."', '".$value['fecha_fin_oculto']."', 'SUMA');";
+      $sum_modulos =  ejecutarConsultaSimpleFilaStore($sql_modulos);  if ($sum_modulos['status'] == false) { return $sum_modulos; }
+
       $data[] = [
         'idresumen_q_s_valorizacion'=> (empty($val_q_s['data']) ? '' : $val_q_s['data']['idresumen_q_s_valorizacion']),
         'idproyecto'                => $idproyecto,
@@ -301,7 +305,7 @@ class Valorizacion
         'fecha_fin_oculto'          => $value['fecha_fin_oculto'],
         'monto_programado'          => (empty($val_q_s['data']) ? 0 : (empty($val_q_s['data']['monto_programado']) ? 0 : floatval($val_q_s['data']['monto_programado']) ) ),
         'monto_valorizado'          => (empty($val_q_s['data']) ? 0 : (empty($val_q_s['data']['monto_valorizado']) ? 0 : floatval($val_q_s['data']['monto_valorizado']) ) ),
-        'monto_gastado'             => $monto_gastado,
+        'monto_gastado'             => (empty($sum_modulos['data']) ? 0 : (empty($sum_modulos['data']['total']) ? 0 : floatval($sum_modulos['data']['total']) ) ),
       ];
     }
 
@@ -338,6 +342,20 @@ class Valorizacion
     ];
 
     return $retorno = [ 'status' => true, 'message' => 'todo oka', 'data' => $data_totales] ; 
+
+  }
+
+  public function detalle_x_modulo($idproyecto) {
+
+    $sql1 = "SELECT min(fecha_inicio_oculto) as fecha_incio FROM resumen_q_s_valorizacion WHERE idproyecto = '$idproyecto' and estado=1 AND estado_delete=1";
+    $fecha_1 =  ejecutarConsultaSimpleFila($sql1); if ($fecha_1['status'] == false) { return $fecha_1; }  
+    $sql2 = "SELECT max(fecha_fin_oculto) as fecha_fin FROM resumen_q_s_valorizacion WHERE idproyecto = '$idproyecto' and estado=1 AND estado_delete=1";
+    $fecha_2 =  ejecutarConsultaSimpleFila($sql2); if ($fecha_2['status'] == false) { return $fecha_2; }  
+    $fecha_init = $fecha_1['data']['fecha_incio'];
+    $fecha_fin = $fecha_2['data']['fecha_fin'];
+
+    $sql_modulos = "CALL suma_de_modulos_rango_fecha($idproyecto,' $fecha_init', '$fecha_fin', 'DETALLE');";
+    return  ejecutarConsultaArrayStore($sql_modulos);  
 
   }
 

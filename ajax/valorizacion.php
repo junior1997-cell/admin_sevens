@@ -301,6 +301,12 @@
           echo json_encode($rspta, true) ;
         break;
 
+        case 'detalle_x_modulo':
+          $rspta=$valorizacion->detalle_x_modulo($_GET['id']);
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true) ;
+        break;
+
         // :::::::::::::::::::::::::::::::::::::::::: U P D A T E   F E C H A S  O C U L T A S :::::::::::::::::::::::::::::::
         case 'mostrar_para_editar_fechas':
           $rspta=$valorizacion->mostrar_para_editar_fechas($_POST['idproyecto']);

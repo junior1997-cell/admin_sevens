@@ -821,9 +821,8 @@ function suma_totales_maquina_y_equipo($idproyecto, $fecha_1, $fecha_2) {
   }    
 
   $sql2 = "SELECT SUM(f.monto) AS total , SUM(f.subtotal) AS subtotal, SUM(f.igv) AS igv
-  FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
-  WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
-  AND f.estado = '1' AND f.estado_delete = '1'  AND f.idproyecto = $idproyecto $filtro_fecha;";
+  FROM factura as f
+	WHERE f.estado = '1' AND f.estado_delete='1' AND f.idproyecto = $idproyecto $filtro_fecha;";
   $maquinaria = ejecutarConsultaSimpleFila($sql2);  if ($maquinaria['status'] == false) { return $maquinaria; } 
 
   $total    = (empty($maquinaria['data'])) ? 0 : ( empty($maquinaria['data']['total']) ? 0 : floatval($maquinaria['data']['total']) );

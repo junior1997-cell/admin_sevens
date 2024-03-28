@@ -71,13 +71,13 @@ class Resumen_general
     $serv_maquinaria = [];  $pago_total = 0; $filtro_proveedor = ""; $filtro_fecha = "";    
 
     if ( !empty($fecha_filtro_1) && !empty($fecha_filtro_2) ) {
-      $filtro_fecha = "AND s.fecha_entrega BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
+      $filtro_fecha = "AND f.fecha_emision BETWEEN '$fecha_filtro_1' AND '$fecha_filtro_2'";
     } else {
       if (!empty($fecha_filtro_1)) {
-        $filtro_fecha = "AND s.fecha_entrega = '$fecha_filtro_1'";
+        $filtro_fecha = "AND f.fecha_emision = '$fecha_filtro_1'";
       }else{
         if (!empty($fecha_filtro_2)) {
-          $filtro_fecha = "AND s.fecha_entrega = '$fecha_filtro_2'";
+          $filtro_fecha = "AND f.fecha_emision = '$fecha_filtro_2'";
         }     
       }      
     }
@@ -104,42 +104,40 @@ class Resumen_general
 
         $deposito_m = (empty($deposito_mquina['data'])) ? 0 : $retVal = (empty($deposito_mquina['data']['deposito'])) ? 0 : floatval($deposito_mquina['data']['deposito']);
 
-        $sql_3 = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, m.nombre as maquina, p.razon_social as razon_social, 
-        s.costo_parcial , s.fecha_entrega
-        FROM servicio as s, maquinaria as m, proveedor as p 
-        WHERE s.estado = '1' AND s.idproyecto='$idproyecto' AND m.tipo = '$tipo' AND s.idmaquinaria = '$idmaquinaria' $filtro_fecha
-        AND s.idmaquinaria=m.idmaquinaria AND m.idproveedor=p.idproveedor ORDER by s.fecha_entrega ASC;";
-        $desglose_mquina = ejecutarConsultaArray($sql_3);
-        if ($desglose_mquina['status'] == false) {  return $desglose_mquina;}
+        $sql_3 = "SELECT  f.*
+        FROM factura as f
+        INNER JOIN maquinaria as m on m.idmaquinaria = f.idmaquinaria
+        WHERE f.estado = '1' AND f.estado_delete = '1' and m.tipo = '$tipo' AND f.idproyecto = '$idproyecto' 
+        AND m.idmaquinaria = '$idmaquinaria' $filtro_fecha ORDER by f.fecha_emision ASC;";
+        $desglose_mquina = ejecutarConsultaArray($sql_3);    if ($desglose_mquina['status'] == false) {  return $desglose_mquina;}
 
         if (!empty($desglose_mquina['data'])) {
           foreach ($desglose_mquina['data'] as $keys => $value) {
              
-            if ( floatval($value['costo_parcial']) < $deposito_m) {
+            if ( floatval($value['monto']) < $deposito_m) {
 
-              $deposito_m = $deposito_m - floatval($value['costo_parcial']);
-              $deposito_cubre = $value['costo_parcial'];
+              $deposito_m = $deposito_m - floatval($value['monto']);
+              $deposito_cubre = $value['monto'];
 
             } else {   
 
               if ($deposito_m > 0) {
-
                 $deposito_cubre = $deposito_m;
                 $estado_deposito = true;
               }               
             }
             
             $serv_maquinaria[] = [
-              "idmaquinaria"=> $value['idmaquinaria'],
-              "idproyecto"  => $value['idproyecto'],
-              "maquina"     => $value['maquina'],
+              "idmaquinaria"    => $val['idmaquinaria'],
+              "idproyecto"      => $val['idproyecto'],
+              "maquina"         => $val['maquina'],
               "cantidad_veces"  => 1,              
               "fecha_entrega"   => ($retVal_4 = empty($value['fecha_entrega']) ? '' : $value['fecha_entrega']),
-              "proveedor"   => $value['razon_social'],
+              "proveedor"       => $val['razon_social'],
 
-              "costo_parcial"   => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
-              //"deposito" => $deposito_cubre,
-              "deposito"   => ($retVal_1 = empty($value['costo_parcial']) ? 0 : $value['costo_parcial']),
+              "costo_parcial"   => ($retVal_1 = empty($value['monto']) ? 0 : $value['monto']),
+              //"deposito"      => $deposito_cubre,
+              "deposito"        => ($retVal_1 = empty($value['monto']) ? 0 : $value['monto']),
             ];
 
             if ($estado_deposito) { $deposito_m = 0; $deposito_cubre = 0;  }
@@ -483,7 +481,7 @@ class Resumen_general
         foreach ($fechas_mes_pagos_administrador['data'] as $key => $valor) {
           $idfechas_mes_pagos_administrador = $valor['idfechas_mes_pagos_administrador'];
 
-          $sql_4 = "SELECT SUM(monto) as total_monto_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_administrador' AND estado=1";
+          $sql_4 = "SELECT SUM(monto) as total_monto_pago FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador='$idfechas_mes_pagos_administrador' AND estado=1 and estado_delete = 1";
           $return_monto_pago = ejecutarConsultaSimpleFila($sql_4);
           if ($return_monto_pago['status'] == false) {  return $return_monto_pago;}
 

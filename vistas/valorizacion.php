@@ -433,7 +433,7 @@
                                       <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_valorizado"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
                                       <th class="pt-1 pb-1 celda-b-t-2px text-center total_porcent_valorizado"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                       <th class="pt-1 pb-1 celda-b-t-2px celda-b-r-2px"></th> 
-                                      <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_gastado"><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
+                                      <th class="pt-1 pb-1 celda-b-t-2px "><div class="formato-numero-conta"><span class="">S/&nbsp;</span><span class="suma_total_monto_gastado cursor-pointer" data-toggle="tooltip" data-original-title="Ver detalle" title="Ver detalle" ><i class="fas fa-spinner fa-pulse fa-sm"></i></span></div> </th>
                                       <th class="pt-1 pb-1 celda-b-t-2px text-center total_porcent_gastado"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
                                       <th class="pt-1 pb-1 celda-b-t-2px"></th>                               
                                     </tr> 
@@ -796,6 +796,37 @@
                   </div>
                 </div>
 
+                <!-- MODAL - MODULOS DETALLE  -->
+                <div class="modal fade" id="modal-modulos-detalle">
+                  <div class="modal-dialog modal-dialog-scrollable modal-md">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title">Totales por Módulos Incluidos</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body"> 
+                        <div class="table-responsive p-0" >
+                          <table class="table table-hover text-nowrap" id="tabla-modulo-detalle">
+                            <thead class="bg-primary">
+                              <tr>
+                                <th>#</th>
+                                <th>MODULO</th>
+                                <th>TOTAL</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr><td colspan="3"><div class="row" ><div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-4x"></i><br/><br/><h4>Cargando...</h4></div></div></td></tr>
+                              
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </section>
               <!-- /.content -->
             </div>
@@ -817,12 +848,18 @@
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <!-- Jquery UI -->
-        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
+        <script src="../plugins/jquery-ui/jquery-ui.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
         <script type="text/javascript" src="scripts/valorizacion.js"></script>
 
-        <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
+        <script> 
+          $(function () { 
+            $('[data-toggle="tooltip"]').tooltip(); 
+            // $(document).tooltip({position: { my: "center bottom", at: "center top" }}); 
+          });         
+        </script>
 
       </body>
     </html>

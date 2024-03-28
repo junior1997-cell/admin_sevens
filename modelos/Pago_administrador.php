@@ -28,7 +28,7 @@ class PagoAdministrador
 
       $sql_2 = "SELECT fmpg.idtrabajador_por_proyecto, SUM(pxma.monto) deposito_por_trabajdor
       FROM fechas_mes_pagos_administrador AS fmpg, pagos_x_mes_administrador AS pxma
-      WHERE fmpg.idtrabajador_por_proyecto = '$id_trabajdor' AND fmpg.idfechas_mes_pagos_administrador = pxma.idfechas_mes_pagos_administrador AND pxma.estado = '1';";
+      WHERE fmpg.idtrabajador_por_proyecto = '$id_trabajdor' AND fmpg.idfechas_mes_pagos_administrador = pxma.idfechas_mes_pagos_administrador AND pxma.estado = '1' and pxma.estado_delete = '1';";
 
       $depositos = ejecutarConsultaSimpleFila($sql_2); if ($depositos['status'] == false) { return $depositos; }
 
@@ -42,7 +42,7 @@ class PagoAdministrador
       foreach ($fechas_mes['data'] as $key => $element) {
         $id = $element['idfechas_mes_pagos_administrador'];
 
-        $sql_4 = "SELECT SUM(monto) AS suma_monto_depositado FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador ='$id' AND estado = '1';";
+        $sql_4 = "SELECT SUM(monto) AS suma_monto_depositado FROM pagos_x_mes_administrador WHERE idfechas_mes_pagos_administrador ='$id' AND estado = '1' and estado_delete = '1';";
         $pagos_x_mes = ejecutarConsultaSimpleFila($sql_4); if ($pagos_x_mes['status'] == false) { return $pagos_x_mes; }
 
         $data_fechas[] = [
