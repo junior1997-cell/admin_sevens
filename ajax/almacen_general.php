@@ -214,16 +214,16 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'select2_proyect':
+      case 'select2_proyect_almacen':
 
-        $rspta = $almacen_general->select2_proyect();
+        $rspta = $almacen_general->select2_proyect_almacen($_GET['tipo_transf'],$_GET['id_almacen_g'] );
         $cont = 1;
         $data = "";
-
+        // idalmacen_general  as id ,nombre_almacen as nombre
         if ($rspta['status'] == true) {
 
           foreach ($rspta['data'] as $key => $value) {
-            $data .= '<option value="' . $value['idproyecto'] . '" >' . $value['nombre_codigo'] . '</option>';
+            $data .= '<option value="' . $value['id'] . '" >' . $value['nombre'] . '</option>';
           }
 
           $retorno = array(
@@ -306,14 +306,11 @@ if (!isset($_SESSION["nombre"])) {
       // ══════════════════════ T R A S F E R E N C I A S  A   A L M A C E N  P R O Y E C T O  ══════════════════════════════════
      // $rspta = $almacen_general->tabla_detalle($_GET["id_proyecto"], $_GET["id_almacen"]);
 
-      case 'transferencia_a_proyecto':
-        $rspta = $almacen_general->transferencia_a_proyecto($_GET["id_almacen"]);
+      case 'transferencia_a_proy_almacen':
+        $rspta = $almacen_general->transferencia_a_proy_almacen($_GET["id_almacen"]);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
-        break;
-
-
-
+      break;
 
       default:
         $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];

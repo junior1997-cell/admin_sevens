@@ -27,7 +27,6 @@ if (!isset($_SESSION["nombre"])) {
         padding: 5px;
         /* Ajustar el padding */
       }
-      
     </style>
   </head>
 
@@ -123,8 +122,7 @@ if (!isset($_SESSION["nombre"])) {
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-5">
                                       <div class="row">
                                         <div class="col-12 mb-1">
-                                          <button type="button" class="btn btn-warning btn-block btn-sm" onclick="limpiar(); transf_a_proyecto();"><i class="fa fa-exchange"></i> Transferencia</button>
-
+                                          <button type="button" class="btn btn-warning btn-block btn-sm" onclick="limpiar_Transferencia(); listar_productos_transferencia();"><i class="fa fa-exchange"></i> Transferencia</button>
                                         </div>
                                       </div>
                                       <table id="tabla-detalle-almacen" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
@@ -395,104 +393,12 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-
-            <!-- MODAL - TRNASFERENCIA  - ENTRE ALMACENES GENERALES-->
-            <div class="modal fade" id="modal-transferencia">
-              <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title">Transferencia</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span class="text-danger" aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-
-                  <div class="modal-body">
-                    <!-- form start -->
-                    <form id="form-transf_almacen" name="form-transf_almacen" method="POST">
-                      <div class="card-body">
-                        <div class="row" id="cargando-3-fomulario">
-
-                          <!-- Nombre -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                              <label for="name_alm_origen">Almacen Origen <sup class="text-danger">(*)</sup></label>
-                              <input type="text" name="name_alm_origen" class="form-control" id="name_alm_origen" placeholder="Nombre almacen." disabled />
-                            </div>
-                          </div>
-
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                              <label for="name_alm_destino">Almacen Destino <sup class="text-danger">(*)</sup></label>
-                              <select name="name_alm_destino" id="name_alm_destino" class="form-control" placeholder="Almacen destino ">
-                              </select>
-                            </div>
-                          </div>
-
-                          <!-- Nombre -->
-                          <div class="col-12 col-sm-9 col-md-9 col-lg-9">
-                            <div class="form-group">
-                              <label for="name_prod_alm_origen_transf">Producto <sup class="text-danger">(*)</sup></label>
-                              <input type="text" name="name_prod_alm_origen_transf" class="form-control" id="name_prod_alm_origen_transf" placeholder="Nombre almacen." disabled />
-                              <input type="hidden" name="idalmacen_prod_guar" class="form-control" id="idalmacen_prod_guar" />
-                              <input type="hidden" name="alm_resumen_original" class="form-control" id="alm_resumen_original" />
-
-                            </div>
-                          </div>
-                          <!-- Cantidad -->
-                          <div class="col-12 col-sm-3 col-md-3 col-lg-3">
-                            <div class="form-group">
-                              <label for="cantidad_alm_trans">Cantidad <sup class="text-danger">(*)</sup></label>
-                              <input type="number" name="cantidad_alm_trans" class="form-control" id="cantidad_alm_trans" placeholder="Cantidad." />
-                            </div>
-                          </div>
-                          <!-- Fecha -->
-                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                            <div class="form-group">
-                              <label for="fecha_transf">Fecha</label>
-                              <input type="date" name="fecha_transf" class="form-control" id="fecha_transf" placeholder="Fecha" />
-                            </div>
-                          </div>
-
-                          <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 m-t-20px" id="barra_progress_trans_almacen_div">
-                            <div class="progress">
-                              <div id="barra_progress_trans_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                0%
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-
-                        <div class="row" id="cargando-4-fomulario" style="display: none;">
-                          <div class="col-lg-12 text-center">
-                            <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                            <br />
-                            <h4>Cargando...</h4>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- /.card-body -->
-                      <button type="submit" style="display: none;" id="submit-form-trans-almacen-general">Submit</button>
-                    </form>
-                  </div>
-                  <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_Transferencia();">Close</button>
-                    <button type="submit" class="btn btn-success" id="guardar_registro_trans_almacen">Guardar Cambios</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-            <!-- MODAL - TRNASFERENCIA MASIVO A PROYECTO -->
+            <!-- MODAL ---- ENTRE ALMACENES GENERALES --- TRNASFERENCIA MASIVO A PROYECTO -->
             <div class="modal fade" id="modal-transferencia_aproyecto">
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Transferencia a Proyecto</h4>
+                    <h4 class="modal-title">Transferencias</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
@@ -500,20 +406,37 @@ if (!isset($_SESSION["nombre"])) {
 
                   <div class="modal-body">
                     <!-- form start -->
-                    <form id="form-almacen-general" name="form-almacen-general" method="POST">
+                    <form id="form_proyecto_almacen" name="form_proyecto_almacen" method="POST">
                       <div class="card-body">
                         <div class="row" id="cargando-1-fomulario">
 
-                          <!-- Nombre -->
-                          <div class="col-12 col-sm-7 col-md-7 col-lg-8">
+                          <!-- Tipo -->
+                          <div class="col-12 col-sm-3 col-md-3 col-lg-3">
                             <div class="form-group">
-                              <label for="name_alm_proyecto">Proyecto Destino <sup class="text-danger">(*)</sup></label>
-                              <select name="name_alm_proyecto" id="name_alm_proyecto" class="form-control">
+                              <label for="tranferencia">Tranferencia a <sup class="text-danger">(*)</sup></label>
+                              <select name="tranferencia" id="tranferencia" class="form-control" onchange="select_tipo_transferencia(this);">
+                                <option value="Otro_Almacen">Otro Almacen</option>
+                                <option value="Proyecto">Proyecto</option>
                               </select>
                             </div>
                           </div>
+
+                          <!-- Nombre -->
+                          <div class="col-12 col-sm-7 col-md-7 col-lg-6">
+                            <div class="form-group init_select">
+                              <label for="">Destino <sup class="text-danger">(*)</sup></label>
+                              <p class="text-warning m-b-01rem" style="margin-top: 7px"> <strong>SELECCIONAR UN ALMACEN O UN PROYECTO</strong> </p>
+                            </div>
+
+                            <div class="form-group select_proy_alm" style="display: none;">
+                              <label for="name_alm_proyecto">Destino <sup class="text-danger">(*)</sup></label>
+                              <select name="name_alm_proyecto" id="name_alm_proyecto" class="form-control">
+                              </select>
+                            </div>
+
+                          </div>
                           <!-- Fecha -->
-                          <div class="col-12 col-sm-5 col-md-5 col-lg-4">
+                          <div class="col-12 col-sm-5 col-md-5 col-lg-3">
                             <div class="form-group">
                               <label for="fecha_transf_proyecto">Fecha</label>
                               <input type="date" name="fecha_transf_proyecto" class="form-control" id="fecha_transf_proyecto" placeholder="Fecha" />
@@ -524,26 +447,27 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
                             <div class="row head_list_items_trans">
                               <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Proyecto</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Stock</div>
                               <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Cantidad</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold"><i class="far fa-trash-alt"></i></div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold">
+
+                                <div class="custom-control custom-switch" data-toggle="tooltip" data-original-title="Activar todos">
+                                  <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();" >
+                                  <label for="marcar_todo" class="custom-control-label"></label>
+                                </div>
+                              </div>
                               <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
                             </div>
                             <div class="row" id="html_producto_transf">
                               <div class="col-12 html_mensaje">
                                 <div class="alert alert-warning alert-dismissible">
-                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" >×</button>
                                   <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
                                   NO TIENES NINGÚN PRODUCTO SELECCIONADO.
                                 </div>
                               </div>
                             </div>
                           </div>
-
-
-
-
-
 
 
                           <!-- barprogress -->
@@ -566,18 +490,16 @@ if (!isset($_SESSION["nombre"])) {
                         </div>
                       </div>
                       <!-- /.card-body -->
-                      <button type="submit" style="display: none;" id="submit-form-almacen-general">Submit</button>
+                      <button type="submit" style="display: none;" id="submit-form-proyecto_almacen">Submit</button>
                     </form>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
-                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_Transferencia();">Close</button>
+                    <button type="submit" class="btn btn-success btn_g_proy_alm">Guardar Cambios</button>
                   </div>
                 </div>
               </div>
             </div>
-
-
 
           </section>
           <!-- /.content -->

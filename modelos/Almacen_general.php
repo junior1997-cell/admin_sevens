@@ -230,10 +230,31 @@ class Almacen_general
     return ejecutarConsultaArray($sql_0);
   }
 
-  public function select2_proyect()
+  public function select2_proyect_almacen($tipo_transf,$id_almacen_g)
   {
-    $sql = "SELECT idproyecto,nombre_proyecto,nombre_codigo FROM proyecto;";
-    return ejecutarConsultaArray($sql);
+    // var_dump($tipo_transf);die();
+    $sql_return="";
+
+    if ($tipo_transf=='Proyecto') {
+      $sql = "SELECT idproyecto as id ,nombre_proyecto,nombre_codigo as nombre FROM proyecto ORDER BY idproyecto desc;";
+
+      $sql_return = ejecutarConsulta($sql);
+      if ($sql_return['status'] == false) {
+        return $sql_return;
+      }
+
+    }else{
+      $sql = "SELECT idalmacen_general  as id ,nombre_almacen as nombre 
+      FROM almacen_general where  idalmacen_general<>'$id_almacen_g' ORDER BY idalmacen_general desc;";
+
+      $sql_return = ejecutarConsulta($sql);
+      if ($sql_return['status'] == false) {
+        return $sql_return;
+      }
+
+    }
+    return $sql_return;
+
   }
 
   public function select2_recursos_almacen($idproyecto)
@@ -290,8 +311,8 @@ class Almacen_general
         }
         //=================F I N  A L M A C E N  P O R  P R O Y E C T O =====================
         // var_dump($idalmacen_general_ag.'idproducto'.$idproducto_ag[$ii]);die();
-        $sql_validate = "SELECT `idalmacen_general_resumen`,`idalmacen_general`,`idproducto` 
-        FROM `almacen_general_resumen` where `idalmacen_general`='$idalmacen_general_ag' and `idproducto`='$idproducto_ag[$ii]' ";
+        $sql_validate = "SELECT idalmacen_general_resumen,idalmacen_general,idproducto 
+        FROM almacen_general_resumen where idalmacen_general='$idalmacen_general_ag' and idproducto='$idproducto_ag[$ii]' ";
 
         $validate = ejecutarConsultaSimpleFila($sql_validate);
         if ($validate['status'] == false) {
@@ -416,21 +437,20 @@ class Almacen_general
     return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
   }
 
-  //------------------------------------------------------------------------------------
-  // ---------------- T R A N S F E R E N C I A S  A   P R O Y E C T O S ------------------
-  //------------------------------------------------------------------------------------
-
+  //-----------------------------------------------------------------------------------------------------------------
+  // ----------- T R A N S F E R E N C I A S  A   P R O Y E C T O S   Y   A L M A C E N  G E N E R A L --------------
+  //-----------------------------------------------------------------------------------------------------------------
 
   //Implementar un método para listar los registros
-  public function transferencia_a_proyecto($id_almacen)
+  public function transferencia_a_proy_almacen($id_almacen)
   {
-    $sql = "SELECT apg.idalmacen_producto_guardado, apg.idalmacen_general, apg.idalmacen_resumen, apg.fecha_envio, apg.cantidad, prd.nombre as producto, 
-      pry.nombre_codigo as proyecto
-      FROM almacen_producto_guardado as apg, almacen_resumen as ar, producto as prd, proyecto as pry
-      WHERE apg.idalmacen_resumen = ar.idalmacen_resumen AND ar.idproducto = prd.idproducto AND ar.idproyecto = pry.idproyecto 
-      AND apg.idalmacen_general='$id_almacen' AND apg.estado = '1' AND apg.estado_delete = '1' AND ar.estado = '1' AND ar.estado_delete = '1'
-      AND apg.cantidad>'0'
-      ORDER BY pry.nombre_codigo ASC;";
+    $sql = "SELECT agr.idalmacen_general_resumen,p.idproducto,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
+    FROM almacen_general_resumen AS agr
+    INNER JOIN almacen_general as ag on agr.idalmacen_general = ag.idalmacen_general
+    INNER JOIN producto as p on agr.idproducto = p.idproducto
+    INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
+    INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
+    WHERE agr.idalmacen_general='$id_almacen' AND agr.estado = '1' AND agr.estado_delete = '1';";
     return ejecutarConsultaArray($sql);
   }
 }
