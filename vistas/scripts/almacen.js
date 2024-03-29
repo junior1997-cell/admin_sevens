@@ -14,7 +14,9 @@ function init() {
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto', null, '.cargando_productos');
   lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto_ag', null, '.cargando_productos_oa');
-  lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${idproyecto}`, '#producto_xp', null, '.cargando_productos');
+  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto_ep', null, '.cargando_producto_ep');
+  lista_select2(`../ajax/almacen.php?op=select2proyecto`, '#producto_ep', null, '.cargando_producto_ep');
+  // lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${idproyecto}`, '#producto_xp', null, '.cargando_productos');
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen").submit(); });
@@ -26,6 +28,8 @@ function init() {
   $("#producto").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
   $("#producto_ag").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
   $("#producto_xp").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
+
+  $("#producto_ep").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
 
   $("#idproyecto").val(localStorage.getItem("nube_idproyecto"));
   $("#idproyecto_xp").val(localStorage.getItem("nube_idproyecto"));
@@ -118,10 +122,17 @@ function tabla_resumen() {
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
     dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    // buttons: [
+    //   { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+    //   { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+    //   { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+    // ],
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3 btn btn-sm btn-outline-info", action: function ( e, dt, node, config ) { if (tbla_resumen) { tbla_resumen.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
+      { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6,7], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6,7], }, title: 'Lista de Almacen', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true,  }, 
+      { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6,7], }, title: 'Lista de Almacen', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-3 btn btn-sm btn-outline-danger", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-3 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax:{
       url: `../ajax/almacen.php?op=tabla-almacen-resumen&id_proyecto=${idproyecto}&fip=${fip}&ffp=${ffp}&fpo=${fpo}`,
@@ -129,7 +140,15 @@ function tabla_resumen() {
       dataType : "json",						
       error: function(e){
         console.log(e.responseText);  ver_errores(e);
-      }
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-toggle', 'tooltip').attr('data-original-title', 'Recargar');
+        $(".buttons-copy").attr('data-toggle', 'tooltip').attr('data-original-title', 'Copiar');
+        $(".buttons-excel").attr('data-toggle', 'tooltip').attr('data-original-title', 'Excel');
+        $(".buttons-pdf").attr('data-toggle', 'tooltip').attr('data-original-title', 'PDF');
+        $(".buttons-colvis").attr('data-toggle', 'tooltip').attr('data-original-title', 'Columnas');
+        $('[data-toggle="tooltip"]').tooltip();
+      },
     },
     createdRow: function (row, data, ixdex) {
       // columna: #
@@ -150,6 +169,8 @@ function tabla_resumen() {
     ],
   }).DataTable();
 }
+
+// .....:::::::::::::::::::::::::::::::::::::  A L M A C E N  G E N E R A L   :::::::::::::::::::::::::::::::::::::::..
 
 function limpiar_form_otro_almacen() {
 
@@ -280,7 +301,7 @@ function remove_producto_ag(id) {
   }   
 }
 
-// .....::::::::::::::::::::::::::::::::::::: A L M A C E N   D E T A L L E S  :::::::::::::::::::::::::::::::::::::::..
+// .....::::::::::::::::::::::::::::::::::::: A L M A C E N   P R O Y E C T O   D E T A L L E S  :::::::::::::::::::::::::::::::::::::::..
 
 function todos_almacen() {
   $('.data_tbody_almacen').html(''); $('#div_tabla_almacen').css({'height':`auto`});
@@ -331,8 +352,6 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
   }).fail(function (e) { ver_errores(e); });
 }
 
-
-
 function calcular_saldo(input, id) {
   var input_sa = $(input).val() == '' || $(input).val() == null ? 0 :  quitar_formato_miles($(input).val() ) ;
   var input_et = $(`.entrada_total_${id}`).text() == '' || $(`.entrada_total_${id}`).text() == null ? 0 : quitar_formato_miles($(`.entrada_total_${id}`).text()) ;
@@ -346,7 +365,7 @@ function calcular_saldo(input, id) {
   // });
 }
 
-// .....::::::::::::::::::::::::::::::::::::: E D I T A R   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
+// .....::::::::::::::::::::::::::::::::::::: E D I T A R   P R O Y E C T O   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
 function limpiar_form_almacen_x_dia() {
 
   $('#idalmacen_x_proyecto_xp').val('');
@@ -548,7 +567,7 @@ function eliminar_x_dia(idalmacen, cant, nombre) {
   );
 }
 
-// .....::::::::::::::::::::::::::::::::::::: A G R E G A R   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
+// .....::::::::::::::::::::::::::::::::::::: A G R E G A R   P R O Y E C T O   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
 
 function show_hide_input(flag) {
   if (flag==1) {
@@ -699,48 +718,17 @@ function remove_producto(id) {
   }   
 }
 
-// .....::::::::::::::::::::::::::::::::::::: S A L D O S   A N T E R I O R E S  :::::::::::::::::::::::::::::::::::::::..
+// .....::::::::::::::::::::::::::::::::::::: A G R E G A R  A  O T R O   P R O Y E C T O  :::::::::::::::::::::::::::::::::::::::..
+
+function limpiar_form_tranferencia_entre_proyecto() {
+  
+}
 
 function modal_saldo_anterior(idproyecto, idproducto) {
   $('#modal-saldo-anterior').modal('show');
   $(`.title_saldo_anterior`).html(`Saldos: ${$(`.name_producto_${idproducto}`).text()}`);
 
-  tabla_saldo_anterior = $('#tabla-saldo-anterior').dataTable({
-    responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
-    aProcessing: true,//Activamos el procesamiento del datatables
-    aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } },  
-    ],
-    ajax:{
-      url: `../ajax/almacen.php?op=tbla_saldos_anteriores&idproyecto=${idproyecto}&idproducto=${idproducto}`,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);  ver_errores(e);
-      }
-    },
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); } 
-      // columna: 1
-      if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap'); }
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 10,//Paginación
-    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
-    columnDefs: [
-      // { targets: [9, 10, 11, 12, 13, 14, 15, 16,17], visible: false, searchable: false, }, 
-    ],
-  }).DataTable();
+  
 }
 
 //Función para guardar o editar
@@ -957,3 +945,5 @@ function obtener_dia_ingreso(datos) {
 function reload_producto_todos(){ $('.comprado_todos').html(`(todos)`); lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto', null, '.cargando_productos'); }
 function reload_producto_comprados(){ $('.comprado_todos').html(`(comprado)`);  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto', null, '.cargando_productos'); }
 function reload_producto_comprados_ag(){ $('.comprado_todos_ag').html(`(comprado)`);  lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto_ag', null, '.cargando_productos_ag'); }
+
+function reload_producto_ep(){ lista_select2(`../ajax/almacen.php?op=select2ProductosComprados&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto_ep', null, '.cargando_producto_ep'); }

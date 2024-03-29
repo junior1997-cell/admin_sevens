@@ -260,11 +260,13 @@ function tabla_detalle(id_categoria, nombre) {
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla    
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3 btn btn-sm btn-outline-info", action: function ( e, dt, node, config ) { if (tbla_resumen) { tbla_resumen.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
+      { extend: 'copy', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], }, title: 'Lista de Almacen', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true,  }, 
+      // { extend: 'pdf', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], }, title: 'Lista de Almacen', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-3 btn btn-sm btn-outline-danger", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-3 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
       url: `../ajax/almacen_general.php?op=tabla_detalle&id_almacen=${id_categoria}&id_proyecto=${localStorage.getItem("nube_idproyecto")}`,
@@ -272,6 +274,14 @@ function tabla_detalle(id_categoria, nombre) {
       dataType: "json",
       error: function (e) {
         console.log(e.responseText); ver_errores(e);
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-toggle', 'tooltip').attr('data-original-title', 'Recargar');
+        $(".buttons-copy").attr('data-toggle', 'tooltip').attr('data-original-title', 'Copiar');
+        $(".buttons-excel").attr('data-toggle', 'tooltip').attr('data-original-title', 'Excel');
+        $(".buttons-pdf").attr('data-toggle', 'tooltip').attr('data-original-title', 'PDF');
+        $(".buttons-colvis").attr('data-toggle', 'tooltip').attr('data-original-title', 'Columnas');
+        $('[data-toggle="tooltip"]').tooltip();
       },
     },
     createdRow: function (row, data, ixdex) {
@@ -282,7 +292,7 @@ function tabla_detalle(id_categoria, nombre) {
 
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -304,10 +314,17 @@ function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    // buttons: [
+    //   { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+    //   { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+    //   { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+    // ],
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3 btn btn-sm btn-outline-info", action: function ( e, dt, node, config ) { if (tbla_resumen) { tbla_resumen.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
+      { extend: 'copy', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], }, title: 'Lista de Almacen', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true,  }, 
+      // { extend: 'pdf', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], }, title: 'Lista de Almacen', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-3 btn btn-sm btn-outline-danger", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-3 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax: {
       url: `../ajax/almacen_general.php?op=tabla_detalle_almacen_general&id_almacen_transf=${id_almacen_transf}&idalmacen_general_resumen=${idalmacen_general_resumen}`,
@@ -315,6 +332,14 @@ function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
       dataType: "json",
       error: function (e) {
         console.log(e.responseText); ver_errores(e);
+      },
+      complete: function () {
+        $(".buttons-reload").attr('data-toggle', 'tooltip').attr('data-original-title', 'Recargar');
+        $(".buttons-copy").attr('data-toggle', 'tooltip').attr('data-original-title', 'Copiar');
+        $(".buttons-excel").attr('data-toggle', 'tooltip').attr('data-original-title', 'Excel');
+        $(".buttons-pdf").attr('data-toggle', 'tooltip').attr('data-original-title', 'PDF');
+        $(".buttons-colvis").attr('data-toggle', 'tooltip').attr('data-original-title', 'Columnas');
+        $('[data-toggle="tooltip"]').tooltip();
       },
     },
     createdRow: function (row, data, ixdex) {
@@ -326,7 +351,7 @@ function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
 
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "Mostrar: _MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -381,7 +406,8 @@ function guardar_y_editar_almacen_general(e) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
 
-          tabla_almacen_detalle.ajax.reload(null, false);
+          if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false);   } 
+          if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); } 
           // lista_de_items();
           $("#modal-agregar-otro-almacen").modal("hide");
           limpiar_form_otro_almacen();
@@ -693,8 +719,8 @@ function guardar_tranf_almacenes_generales(e) {
         e = JSON.parse(e); console.log(e);
         if (e.status == true) {
 
-          tabla_almacen_detalle.ajax.reload(null, false);
-          tabla_detalle_almacen_general.ajax.reload(null, false);
+          if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false);  }  
+          if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); } 
           $("#modal-transferencia_aproyecto").modal("hide");
           limpiar_Transferencia();
 

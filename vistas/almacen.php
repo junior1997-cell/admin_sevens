@@ -126,7 +126,7 @@ if (!isset($_SESSION["nombre"])) {
                                   <div class="dropdown-menu" style="box-shadow: 0px 0rem 2rem 8px rgb(0 0 0 / 64%) !important;">
                                     <button type="button" class="dropdown-item my-2 btn-salida" data-toggle="modal" data-target="#modal-agregar-almacen" onclick="limpiar_form_almacen();" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a uso de Obra</button>
                                     <div class="dropdown-divider"></div>                           
-                                    <button type="button" class="dropdown-item my-2" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a otro proyecto</button>  
+                                    <button type="button" class="dropdown-item my-2" data-toggle="modal" data-target="#modal-transferencia-entre-proyecto" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a otro proyecto</button>  
                                     <div class="dropdown-divider"></div>
                                     <button type="button" class="dropdown-item my-2 btn-general"  data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar_form_otro_almacen();"><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar Almacén General</button>                                             
                                   </div>
@@ -156,9 +156,8 @@ if (!isset($_SESSION["nombre"])) {
                                   <th class="">Código</th>
                                   <th class="">Nombre almacen</th>
                                   <th class="text-center" >UND</th>
-                                  <th class="text-center" >Otro almacen</th>
-                                  <th class="text-center" >Saldo anterior</th>
-                                  <th class="text-center" >Entrada / Salida</th>
+                                  <th class="text-center" >Entrada</th>
+                                  <th class="text-center" >Salida</th>
                                   <th class="text-center" >Saldo</th>
                                 </tr>
                               </thead>
@@ -170,9 +169,8 @@ if (!isset($_SESSION["nombre"])) {
                                   <th class="">Código</th>
                                   <th class="">Nombre almacen</th>
                                   <th class="text-center" >UND</th>
-                                  <th class="text-center" >Otro almacen</th>
-                                  <th class="text-center" >Saldo anterior</th>
-                                  <th class="text-center" >Entrada / Salida</th>
+                                  <th class="text-center" >Entrada</th>
+                                  <th class="text-center" >Salida</th>
                                   <th class="text-center" >Saldo</th>
                                 </tr>
                               </tfoot>
@@ -406,7 +404,7 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- idalmacen_resumen -->
                           <input type="hidden" name="idproyecto" id="idproyecto" />
 
-                          <!-- Tipo de documento -->
+                          <!-- Producto -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                             <div class="form-group">
                               <label for="producto"> 
@@ -419,7 +417,7 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
                           </div> 
 
-                          <!-- Correo electronico --> 
+                          <!-- Fecha --> 
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
                               <label for="fecha_ingreso">Fecha</label>
@@ -472,7 +470,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <!-- MODAL - AGREGAR OTROS ALMACEN - chargue 5-6 -->
+            <!-- MODAL - AGREGAR OTROS ALMACEN - chargue 3-4 -->
             <div class="modal fade" id="modal-agregar-otro-almacen">
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
@@ -487,7 +485,7 @@ if (!isset($_SESSION["nombre"])) {
                     <!-- form start -->
                     <form id="form-otro-almacen" name="form-otro-almacen" method="POST">
                       <div class="card-body">
-                        <div class="row" id="cargando-1-fomulario">
+                        <div class="row" id="cargando-3-fomulario">
                           <!-- idalmacen_resumen -->
                           <input type="hidden" name="idalmacen_resumen_ag" id="idalmacen_resumen_ag" />
                           <!-- idalmacen_resumen -->
@@ -535,7 +533,7 @@ if (!isset($_SESSION["nombre"])) {
 
                         </div>
 
-                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                        <div class="row" id="cargando-4-fomulario" style="display: none;">
                           <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
                         </div>
                       </div>
@@ -551,7 +549,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <!-- MODAL - VER ALMACEN - chargue 3-4 -->
+            <!-- MODAL - VER ALMACEN - chargue 5-6 -->
             <div class="modal fade" id="modal-ver-almacen">
               <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
@@ -599,7 +597,7 @@ if (!isset($_SESSION["nombre"])) {
                     <!-- form start -->
                     <form id="form-almacen-x-dia" name="form-almacen-x-dia" method="POST" style="display: none;">
                       <div class="card-body">
-                        <div class="row" id="cargando-3-fomulario">
+                        <div class="row" id="cargando-5-fomulario">
                           <!-- id  -->
                           <input type="hidden" name="idalmacen_salida_xp" id="idalmacen_salida_xp" />
                           <input type="hidden" name="idalmacen_resumen_xp" id="idalmacen_resumen_xp" />
@@ -650,7 +648,7 @@ if (!isset($_SESSION["nombre"])) {
 
                         </div>
 
-                        <div class="row" id="cargando-4-fomulario" style="display: none;">
+                        <div class="row" id="cargando-6-fomulario" style="display: none;">
                           <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
                         </div>
                       </div>
@@ -708,6 +706,56 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
               </div>
             </div>
+
+            <!-- MODAL - TRANSFERENCIA ENTRE PROYECTO - charge 7-8  -->
+            <div class="modal fade" id="modal-transferencia-entre-proyecto">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title title_transferencia_entre_proyecto">Transferencia entre Proyecto</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
+                  </div>
+                  <div class="modal-body">                    
+                    <div class="row">
+                      <!-- Poyecto Destino -->
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="producto_ag">                                 
+                            <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span> 
+                            Proyecto destino <span class="cargando_productos_ag"></span> 
+                          </label>
+                          <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">                                
+                          </select>
+                        </div>
+                      </div>
+                      <!-- Producto -->
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                          <label for="producto_ep">                                 
+                            <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_ep();"><i class="fa-solid fa-rotate-right"></i></span> 
+                            Producto  <span class="cargando_producto_ep"></span> 
+                          </label>
+                          <select name="producto_ep" id="producto_ep" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">                                
+                          </select>
+                        </div>
+                      </div>
+                      <!-- Fecha --> 
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+                        <div class="form-group">
+                          <label for="fecha_ingreso">Fecha</label>
+                          <input type="date" name="fecha_ingreso" class="form-control" id="fecha_ingreso" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
+                          <input type="hidden" name="dia_ingreso" id="dia_ingreso" />
+                        </div>
+                      </div>   
+                    </div>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>                    
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </section>
           <!-- /.content -->
         </div>

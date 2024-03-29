@@ -173,14 +173,13 @@
           
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>'<button class="btn btn-info btn-sm" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>',
+                "1"=>'<button class="btn btn-info btn-sm" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
                 "2"=> $val['idproducto_f'],
                 "3"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['nombre_producto'] .'</p></span> </div>',
                 "4"=> $val['um_abreviacion'],
-                "5"=> $val['total_stok'],
-                "6"=> $val['total_ingreso'],
-                "7"=> $val['total_egreso']  . $toltip,              
-                "8"=> 0,              
+                "5"=> $val['total_ingreso'],
+                "6"=> $val['total_egreso'],
+                "7"=> $val['total_stok'] ,       
               );
             }
             $results = array(
@@ -328,6 +327,21 @@
               'message' => 'Salió todo ok', 
               'data' => $data, 
             );    
+            echo json_encode($retorno, true);  
+          } else {  
+            echo json_encode($rspta, true); 
+          }
+        break;
+
+        case 'select2Proyecto': 
+    
+          $rspta = $almacen->select2_productos_comprados(); $cont = 1; $data = "";
+          
+          if ($rspta['status'] == true) {  
+            foreach ($rspta['data'] as $key => $value) {              
+              $data .= '<option value="'.$idpr.'" id_ar= "'.$id_ar.'" saldo= "'.$saldo.'" unidad_medida="'.$um.'" >' . $value['nombre_producto'] .' - '. $value['categoria'] .' - Saldo: '. $saldo .'</option>';
+            }  
+            $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data, );    
             echo json_encode($retorno, true);  
           } else {  
             echo json_encode($rspta, true); 

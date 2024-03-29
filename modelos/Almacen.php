@@ -510,6 +510,14 @@ class Almacen
     ]; 
   }
 
+  public function select2_proyecto($idproyecto){
+    $sql_0 = "SELECT pr.idproducto, pr.nombre AS nombre_producto, um.nombre_medida, um.abreviacion,  pr.modelo, ci.nombre as clasificacion    
+		FROM  producto AS pr, categoria_insumos_af AS ci, unidad_medida AS um 
+		WHERE pr.idcategoria_insumos_af = ci.idcategoria_insumos_af AND um.idunidad_medida  = pr.idunidad_medida 
+    AND pr.estado = '1' AND pr.estado_delete = '1' ORDER BY pr.nombre ASC;";    
+    return ejecutarConsultaArray($sql_0);
+  }
+
 }
 
 ?>

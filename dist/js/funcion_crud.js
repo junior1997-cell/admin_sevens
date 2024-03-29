@@ -418,7 +418,7 @@ function toastr_error(titulo = "Error!!", mensaje = "Acción ejecutada con error
   toastr.error( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
 }
 
-function toastr_success(titulo = "Éxito!!", mensaje = "Acción ejecutada con éxito.", timer_duration = 1700) {
+function toastr_success(titulo = "Éxito!!", mensaje = "Acción ejecutada con éxito.", timer_duration = 700) {
   // console.log(titulo, mensaje, timer_duration );
   toastr.success( mensaje, titulo,{"closeButton": true, "debug": false, "newestOnTop": true, "progressBar": true, "positionClass": "toast-top-right",  "preventDuplicates": false, "onclick": null,  "showDuration": timer_duration, "hideDuration": "1000",  "timeOut": "5000", "extendedTimeOut": "5000", "showEasing": "swing", "hideEasing": "linear", "showMethod": "slideDown", "hideMethod": "fadeOut" });
 }
