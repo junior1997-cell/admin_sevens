@@ -520,6 +520,7 @@ function select_tipo_transferencia(tipo) {
   $("#modal-transferencia_aproyecto").modal("show");
 
   tipo_transf = $(tipo).select2('val');
+  var isResumido = (tipo_transf === 'Otro_Almacen')? "Seleccione Almacen": "Seleccione Proyecto";
 
   if (tipo_transf == null || tipo_transf == 0) {
 
@@ -530,7 +531,7 @@ function select_tipo_transferencia(tipo) {
     $(".init_select").hide(); $(".select_proy_alm").show();
 
     lista_select2(`../ajax/almacen_general.php?op=select2_proyect_almacen&tipo_transf=${tipo_transf}&id_almacen_g=${id_almacen_transf}`, '#name_alm_proyecto', null);
-    $("#name_alm_proyecto").select2({ theme: "bootstrap4", placeholder: "Selecione Proyecto", allowClear: true, });
+    $("#name_alm_proyecto").select2({ theme: "bootstrap4", placeholder: `${isResumido}`, allowClear: true, });
 
   }
 }

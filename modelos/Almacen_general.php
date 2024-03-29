@@ -173,7 +173,7 @@ class Almacen_general
     INNER JOIN producto as p on ar.idproducto=p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    where ar.idproyecto='$idproyecto' and ar.total_stok>'0';";
+    where ar.idproyecto='$idproyecto' and ar.total_stok>'0' ORDER BY p.nombre ASC;";
     return ejecutarConsultaArray($sql);
   }
 
