@@ -104,7 +104,7 @@ function lista_de_items() {
 function tabla_principal(id_categoria) {
 
   $('.btn_add_almacen').show();  $('.btn_add_prod_almacen').hide(); 
-
+  
   tabla_almacen_resumen = $("#tabla-almacen").dataTable({
     responsive: true,
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
@@ -145,6 +145,7 @@ function tabla_principal(id_categoria) {
       // { targets: [7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
+
 }
 
 //Función para guardar o editar
@@ -247,7 +248,7 @@ function eliminar(idproducto, nombre) {
 //================================================================
 // LISTAR TABLA ALMACEN POR ALMACEN
 function tabla_detalle(id_categoria, nombre) {
-
+  $('.tabla_detalle_almacen_g').hide();  $('.alerta_inicial').show();
   nombre_almacen_transf = nombre;   id_almacen_transf = id_categoria;
 
   $('#idalmacen_general_ag').val(id_categoria);  $('.nombre_almacen_g').html(nombre);
@@ -292,7 +293,7 @@ function tabla_detalle(id_categoria, nombre) {
       // { targets: [5], visible: false, searchable: false, },
     ],
   }).DataTable();
-
+  // $('.tabla_detalle_almacen_g').show();  $('.alerta_inicial').hide();
 }
 
 function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
@@ -535,7 +536,7 @@ function select_tipo_transferencia(tipo) {
 }
 
 function listar_productos_transferencia() {
-
+  // id_almacen_transferencia=id_almacen_transf
   $("#modal-transferencia_aproyecto").modal("show");
 
   $.post(`../ajax/almacen_general.php?op=transferencia_a_proy_almacen&id_almacen=${id_almacen_transf}`, function (e, status) {
@@ -567,7 +568,7 @@ function listar_productos_transferencia() {
         <div class="col-lg-12"></div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-6" >
           <input type="hidden" name="idalmacen_general_trns[]"  id="${val.idalmacen_general}" value="${val.idalmacen_general}"/>
-          <input type="hidden" name="idalmacen_general_origen"  id="${id_almacen_transf}" value="${id_almacen_transf}"/>
+          <input type="hidden" name="idalmacen_general_origen"  value="${id_almacen_transf}"/>
           <input type="hidden" name="idproducto_trns[]" id="${val.idproducto}" value="${val.idproducto}"/>
           <input type="hidden" name="idalmacen_general_resumen_trns[]" id="${val.idalmacen_general_resumen}" value="${val.idalmacen_general_resumen}"/>
           <input type="hidden" name="tipo_trns[]" id="${val.tipo}" value="${val.tipo}"/>
@@ -669,7 +670,7 @@ function Activar_masivo() {
 }
 
 function limpiar_Transferencia() {
-  $("#fecha_transf").val("");
+  $("#fecha_transf_proy_alm").val("");
   $("#cantidad_alm_trans").val("");
   $("#name_alm_destino").val("").trigger("change");
   $("#tranferencia").val("").trigger("change");
@@ -692,10 +693,9 @@ function guardar_tranf_almacenes_generales(e) {
         if (e.status == true) {
 
           tabla_almacen_detalle.ajax.reload(null, false);
-          // lista_de_items();
-          $("#modal-transferencia").modal("hide");
+          tabla_detalle_almacen_general.ajax.reload(null, false);
+          $("#modal-transferencia_aproyecto").modal("hide");
           limpiar_Transferencia();
-          // reload_producto_comprados_ag()
 
           Swal.fire("Correcto!", "Transferencia guardado correctamente", "success");
 

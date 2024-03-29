@@ -562,7 +562,7 @@ class Almacen_general
     $sql_return = "";
 
     if ($tipo_transf == 'Proyecto') {
-      $sql = "SELECT idproyecto as id ,nombre_proyecto,nombre_codigo as nombre FROM proyecto ORDER BY idproyecto desc;";
+      $sql = "SELECT idproyecto as id ,nombre_proyecto,nombre_codigo as nombre FROM proyecto  ORDER BY idproyecto desc;";
 
       $sql_return = ejecutarConsulta($sql);
       if ($sql_return['status'] == false) {
@@ -570,7 +570,7 @@ class Almacen_general
       }
     } else {
       $sql = "SELECT idalmacen_general  as id ,nombre_almacen as nombre 
-      FROM almacen_general where  idalmacen_general<>'$id_almacen_g' ORDER BY idalmacen_general desc;";
+      FROM almacen_general where  idalmacen_general<>'$id_almacen_g' AND estado = '1' AND estado_delete = '1'  ORDER BY idalmacen_general desc;";
 
       $sql_return = ejecutarConsulta($sql);
       if ($sql_return['status'] == false) {
