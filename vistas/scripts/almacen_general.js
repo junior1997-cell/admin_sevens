@@ -5,9 +5,10 @@ var textproyecto = "";
 var nombre_almacen_transf = "";
 var id_almacen_transf = "";
 var tabla_detalle_almacen_general = "";
-//Función que se ejecuta al inicio
+
+
 function init() {
-  // console.log(Date.now());
+
   $("#bloc_Recurso").addClass("menu-open bg-color-191f24");
   $("#mRecurso").addClass("active");
   $("#lAlmacenGeneral").addClass("active");
@@ -17,12 +18,11 @@ function init() {
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2(`../ajax/almacen_general.php?op=select2_proyect_almacen&tipo_transf=Proyecto&id_almacen_g=0`, '#proyecto_ag', null);
-  // lista_select2(`../ajax/almacen_general.php?op=select_lista_almacenes&id_alm_origen='0'`, '#name_alm_origen', null);
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
-  $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen-general").submit(); });
-  $("#guardar_registro_otro_almacen").on("click", function (e) { $("#submit-form-otro-almacen").submit(); });
-  $("#guardar_registro_proyecto_almacen").on("click", function (e) { $("#submit-form-proyecto_almacen").submit(); });
+  $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen-general").submit(); }); //CREATE UN ALMACEN GENERAL
+  $("#guardar_registro_otro_almacen").on("click", function (e) { $("#submit-form-otro-almacen").submit(); }); //ADD INFO AL ALMACEN GENERAL
+  $("#guardar_registro_proyecto_almacen").on("click", function (e) { $("#submit-form-proyecto_almacen").submit(); }); //ADD TRANFERENCIAS
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════ 
   $("#proyecto_ag").select2({ theme: "bootstrap4", placeholder: "Seleccinar proyecto", allowClear: true, });
@@ -31,22 +31,18 @@ function init() {
   // $('#precio_unitario').number( true, 2 );
 }
 
-function templateColor(state) {
-  if (!state.id) { return state.text; }
-  var color_bg = state.title != '' ? `${state.title}` : '#ffffff00';
-  var $state = $(`<span ><b style="background-color: ${color_bg}; color: ${color_bg};" class="mr-2"><i class="fas fa-square"></i><i class="fas fa-square"></i></b>${state.text}</span>`);
-  return $state;
-}
-
+//select Productos Comprados ADD EN ALMACEN GENERAL
 function reload_proyect_ag(pry) {
+
   idproyecto = $(pry).select2('val');
 
-  // console.log('textproyecto '+textproyecto);
-
   if (idproyecto == null || idproyecto == '') {
+
     $('.select_init_recurso').show();
     $('.select_recurso').hide();
+
   } else {
+
     $('.select_init_recurso').hide();
     $('.select_recurso').show();
 
@@ -56,40 +52,16 @@ function reload_proyect_ag(pry) {
 
   }
 
-
 }
 
-//Función limpiar
+//Función limpiar inputs AL add general
 function limpiar() {
 
   $("#guardar_registro_almacen").html('Guardar Cambios').removeClass('disabled');
-  // no usados
-  $("#precio_unitario").val("0");
-  $("#precio_sin_igv").val("0");
-  $("#precio_igv").val("0");
-  $("#precio_total").val("0");
-  $("#color").val(1);
-  $("#modelo").val("");
-  $("#serie").val("");
-  $("#estado_igv").val("1");
 
-  //input usados
-  $("#idproducto").val("");
-  $("#nombre").val("");
-  $("#categoria_insumos_af").val("").trigger("change");
-  $("#unidad_medida").val("").trigger("change");
-  $("#marcas").val("").trigger("change");
+  $("#idalmacen_general").val("");
+  $("#nombre_almacen").val("");
   $("#descripcion").val("");
-
-  $("#foto1_i").attr("src", "../dist/img/default/img_defecto_activo_fijo.png");
-  $("#foto1").val("");
-  $("#foto1_actual").val("");
-  $("#foto1_nombre").html("");
-
-  $("#doc_old_2").val("");
-  $("#doc2").val("");
-  $('#doc2_ver').html(`<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >`);
-  $('#doc2_nombre').html("");
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -97,6 +69,7 @@ function limpiar() {
   $(".error.invalid-feedback").remove();
 }
 
+//LISTAR  ALAMANCENES GENERALES
 function lista_de_items() {
 
   $(".lista-items").html(`<li class="nav-item"><a class="nav-link active" role="tab" ><i class="fas fa-spinner fa-pulse fa-sm"></i></a></li>`);
@@ -127,10 +100,11 @@ function lista_de_items() {
   }).fail(function (e) { ver_errores(e); });
 }
 
-//Función Listar
+//LISTAR ALAMACENES.
 function tabla_principal(id_categoria) {
-  $('.btn_add_almacen').show();
-  $('.btn_add_prod_almacen').hide();
+
+  $('.btn_add_almacen').show();  $('.btn_add_prod_almacen').hide(); 
+
   tabla_almacen_resumen = $("#tabla-almacen").dataTable({
     responsive: true,
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
@@ -171,141 +145,6 @@ function tabla_principal(id_categoria) {
       // { targets: [7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
     ],
   }).DataTable();
-}
-
-function tabla_detalle(id_categoria, nombre) {
-  nombre_almacen_transf = nombre;
-  id_almacen_transf = id_categoria;
-  $('#idalmacen_general_ag').val(id_categoria);
-  $('.nombre_almacen_g').html(nombre);
-  // 
-  $('.btn_add_almacen').hide();
-  $('.btn_add_prod_almacen').show();
-
-  tabla_almacen_detalle = $("#tabla-detalle-almacen").dataTable({
-    responsive: true,
-    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
-    aProcessing: true, //Activamos el procesamiento del datatables
-    aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-    ],
-    ajax: {
-      url: `../ajax/almacen_general.php?op=tabla_detalle&id_almacen=${id_categoria}&id_proyecto=${localStorage.getItem("nube_idproyecto")}`,
-      type: "get",
-      dataType: "json",
-      error: function (e) {
-        console.log(e.responseText); ver_errores(e);
-      },
-    },
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-      // columna: op
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
-
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 10, //Paginación
-    order: [[0, "asc"]], //Ordenar (columna,orden)
-    columnDefs: [
-      // { targets: [5], visible: false, searchable: false, },
-    ],
-  }).DataTable();
-
-  // Referencia a la fila previamente seleccionada
-  /* var filaSeleccionadaAnterior = null;
-
-   // Agregar el evento onclick a las filas de la tabla
-   $('#tabla-detalle-almacen tbody').on('mouseenter', 'tr', function () {
-     $(this).css('cursor', 'pointer');
-   }).on('mouseleave', 'tr', function () {
-     $(this).css('cursor', 'default');
-   }).on('click', 'tr', function () {
-     // Eliminar el estilo de fila-seleccionada de la fila anterior
-     if (filaSeleccionadaAnterior !== null) { filaSeleccionadaAnterior.css('background-color', ''); }
- 
-     // Aplicar el estilo a la nueva fila seleccionada
-     $(this).css('background-color', '#ffe69c');
-     // Guardar la referencia de la nueva fila seleccionada
-     filaSeleccionadaAnterior = $(this);
- 
-     // Obtener los datos de la fila seleccionada
-     var datosFila = "";
-     datosFila=tabla_almacen_detalle.row(this).data();
-     // Hacer lo que desees con los datos de la fila
-     detalle_almacen_generale(datosFila[5]);
- 
-   });*/
-
-}
-
-function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
-
-  //necesito dos id
-  //1 ------- id del alamcen general 
-  //2 ------- id del almacen_general_resumen
-
-
-  tabla_detalle_almacen_general = $("#tabla_detalle_almacen_general").dataTable({
-    responsive: true,
-    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
-    aProcessing: true, //Activamos el procesamiento del datatables
-    aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
-    ],
-    ajax: {
-      url: `../ajax/almacen_general.php?op=tabla_detalle_almacen_general&id_almacen_transf=${id_almacen_transf}&idalmacen_general_resumen=${idalmacen_general_resumen}`,
-      type: "get",
-      dataType: "json",
-      error: function (e) {
-        console.log(e.responseText); ver_errores(e);
-      },
-    },
-    createdRow: function (row, data, ixdex) {
-      // columna: #
-      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-      // columna: op
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
-      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
-
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 10, //Paginación
-    order: [[0, "asc"]], //Ordenar (columna,orden)
-    columnDefs: [
-      // { targets: [5], visible: false, searchable: false, },
-    ],
-  }).DataTable();
-
-
-
-  $('.alerta_inicial').hide(); $('.tabla_detalle_almacen_g').show();
-
-
-}
-
-//ver ficha tecnica
-function modal_ficha_tec(ficha_tecnica) {
-
-  $(".tooltip").remove();
 }
 
 //Función para guardar o editar
@@ -356,7 +195,6 @@ function guardar_y_editar_almacen(e) {
   });
 }
 
-
 function mostrar(idalmacen_general) {
   limpiar();
 
@@ -404,9 +242,108 @@ function eliminar(idproducto, nombre) {
 
 }
 
-//------------------------------------------------------------------
-//---------GUARDAR REGISTOS EN UN ALMACEN GENERAL-------------------
-//------------------------------------------------------------------
+//================================================================
+//--------------------INICIO ALMACEN GENERAL----------------------
+//================================================================
+// LISTAR TABLA ALMACEN POR ALMACEN
+function tabla_detalle(id_categoria, nombre) {
+
+  nombre_almacen_transf = nombre;   id_almacen_transf = id_categoria;
+
+  $('#idalmacen_general_ag').val(id_categoria);  $('.nombre_almacen_g').html(nombre);
+
+  $('.btn_add_almacen').hide();  $('.btn_add_prod_almacen').show();
+
+  tabla_almacen_detalle = $("#tabla-detalle-almacen").dataTable({
+    responsive: true,
+    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+    ],
+    ajax: {
+      url: `../ajax/almacen_general.php?op=tabla_detalle&id_almacen=${id_categoria}&id_proyecto=${localStorage.getItem("nube_idproyecto")}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: op
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [5], visible: false, searchable: false, },
+    ],
+  }).DataTable();
+
+}
+
+function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen) {
+
+  tabla_detalle_almacen_general = $("#tabla_detalle_almacen_general").dataTable({
+    responsive: true,
+    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0, 2, 10, 4, 5, 11, 7, 8], } },
+    ],
+    ajax: {
+      url: `../ajax/almacen_general.php?op=tabla_detalle_almacen_general&id_almacen_transf=${id_almacen_transf}&idalmacen_general_resumen=${idalmacen_general_resumen}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+      // columna: op
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      // { targets: [5], visible: false, searchable: false, },
+    ],
+  }).DataTable();
+
+
+
+  $('.alerta_inicial').hide(); $('.tabla_detalle_almacen_g').show();
+
+
+}
+
 
 function limpiar_form_otro_almacen() {
 
@@ -570,6 +507,8 @@ function remove_producto_ag(id, idproy) {
   }
 }
 
+//--------------------FIN ALMACEN GENERAL----------------------
+
 //------------------------------------------------------------------
 //-----TRANsFERENCIA DE PRODUCTOS ENTRE ALMACENES GENERALES----------
 //------------------------------------------------------------------
@@ -613,10 +552,23 @@ function listar_productos_transferencia() {
 
         array_id_a_g_r.push(val.idalmacen_general_resumen);
 
+    //     agr.idalmacen_general_resumen,--------------
+    // p.idproducto,--------------
+    // agr.tipo,------------------
+    // agr.total_stok,
+    // agr.total_ingreso,
+    // agr.total_egreso,
+    // ag.idalmacen_general,
+    // p.nombre as nombre_producto,
+    // um.nombre_medida as unidad_medida,
+    // um.abreviacion,
+
         $('#html_producto_transf').append(`
         <div class="col-lg-12"></div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-6" >
           <input type="hidden" name="idalmacen_general_trns[]"  id="${val.idalmacen_general}" value="${val.idalmacen_general}"/>
+          <input type="hidden" name="idalmacen_general_origen"  id="${id_almacen_transf}" value="${id_almacen_transf}"/>
+          <input type="hidden" name="idproducto_trns[]" id="${val.idproducto}" value="${val.idproducto}"/>
           <input type="hidden" name="idalmacen_general_resumen_trns[]" id="${val.idalmacen_general_resumen}" value="${val.idalmacen_general_resumen}"/>
           <input type="hidden" name="tipo_trns[]" id="${val.tipo}" value="${val.tipo}"/>
           <input type="hidden" name="categoria_trns[]" id="${val.categoria}" value="${val.categoria}"/>
@@ -661,7 +613,7 @@ function update_valueChec(id) {
     $(`#ValorCheck${id}`).val(1);
     $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
     $(`#cantidad__trns${id}`).removeAttr('readonly',true);
-    $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
+    // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
     $("#form_proyecto_almacen").valid();
 
   } else {
@@ -669,7 +621,7 @@ function update_valueChec(id) {
     $(`#ValorCheck${id}`).val(0);
     $(`#cantidad__trns${id}`).rules("remove", "required");
     $(`#cantidad__trns${id}`).attr('readonly',true);
-    $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
+    // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
     
     $(`#cantidad__trns_env${id}`).val(0);
     $(`#cantidad__trns${id}`).val(0);
@@ -691,7 +643,7 @@ function Activar_masivo() {
       $(`#cantidad__trns${val}`).removeAttr('readonly',true);
     });
 
-    $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
+    // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
 
     $("#form_proyecto_almacen").valid();
 
@@ -707,8 +659,8 @@ function Activar_masivo() {
       $(`#cantidad__trns${val}`).val(0);
       
     });
-    
-    $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
+
+    // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
 
     $("#form_proyecto_almacen").valid();
 
@@ -729,7 +681,7 @@ function guardar_tranf_almacenes_generales(e) {
   var formData = new FormData($("#form_proyecto_almacen")[0]);
 
   $.ajax({
-    url: "../ajax/almacen_general.php?op=guardar_transf_almacen",
+    url: "../ajax/almacen_general.php?op=guardar_transf_almacen_proyecto",
     type: "POST",
     data: formData,
     contentType: false,
@@ -848,12 +800,12 @@ $(function () {
     rules: {
       tranferencia: { required: true, },
       name_alm_proyecto: { required: true, },
-      fecha_transf_proyecto: { required: true, },
+      fecha_transf_proy_alm: { required: true, },
     },
     messages: {
       tranferencia: { required: "Campo requerido.", },
       name_alm_proyecto: { required: "Campo requerido.", },
-      fecha_transf_proyecto: { required: "Campo requerido.", },
+      fecha_transf_proy_alm: { required: "Campo requerido.", },
       // 'cantidad[]':   { min: "Mínimo 0", required: "Campo requerido"},  
     },
 

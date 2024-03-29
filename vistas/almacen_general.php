@@ -278,7 +278,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <!-- MODAL - AGREGAR AL  ALMACEN GENERAL - chargue 5-6 -->
+            <!-- MODAL - AGREGAR DATOS A UN ALMACEN GENERAL-->
             <div class="modal fade" id="modal-agregar-otro-almacen">
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
@@ -438,8 +438,8 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- Fecha -->
                           <div class="col-12 col-sm-5 col-md-5 col-lg-3">
                             <div class="form-group">
-                              <label for="fecha_transf_proyecto">Fecha</label>
-                              <input type="date" name="fecha_transf_proyecto" class="form-control" id="fecha_transf_proyecto" placeholder="Fecha" />
+                              <label for="fecha_transf_proy_alm">Fecha</label>
+                              <input type="date" name="fecha_transf_proy_alm" class="form-control" id="fecha_transf_proy_alm" placeholder="Fecha" />
                             </div>
                           </div>
 
@@ -495,7 +495,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_Transferencia();">Close</button>
-                    <button type="submit" class="btn btn-success btn_g_proy_alm">Guardar Cambios</button>
+                    <button type="submit" class="btn btn-success btn_g_proy_alm" id="guardar_registro_proyecto_almacen">Guardar Cambios</button>
                   </div>
                 </div>
               </div>
