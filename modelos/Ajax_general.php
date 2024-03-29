@@ -57,7 +57,15 @@
       return $respuestas;    	
 
     }
-
+    /* ══════════════════════════════════════ B I T A C O R A  ══════════════════════════════════════ */
+    public function tabla_bitacora($nombre_tabla, $id_tabla){
+      $sql = "SELECT bbd.idbitacora_bd, bbd.nombre_tabla, bbd.id_tabla, bbd.accion, bbd.sql_d, bbd.id_user, 
+      bbd.estado, bbd.estado_delete, DATE_FORMAT(bbd.created_at, '%d/%m/%Y %h:%i %p') as created_at, u.login as responsable
+      FROM bitacora_bd as bbd
+      INNER JOIN usuario as u ON u.idusuario = bbd.id_user
+      WHERE bbd.id_tabla = '$id_tabla' AND bbd.nombre_tabla = '$nombre_tabla';";
+      return ejecutarConsulta($sql);
+    }
     /* ══════════════════════════════════════ T R A B A J A D O R ══════════════════════════════════════ */
 
     public function select2_trabajador(){
@@ -112,6 +120,16 @@
 
     public function select2_proveedor_filtro() {
       $sql = "SELECT idproveedor, razon_social, ruc FROM proveedor WHERE idproveedor > 1 ORDER BY razon_social ASC;";
+      return ejecutarConsulta($sql);
+    }
+
+    public function select2ProveedorFiltroCompra($idproyecto) {
+      $sql = "SELECT p.*
+      FROM compra_por_proyecto as cpp
+      INNER JOIN proveedor as p ON p.idproveedor = cpp.idproveedor
+      WHERE p.idproveedor > 1 and cpp.idproyecto = '$idproyecto' and cpp.estado = '1' AND cpp.estado_delete = '1'
+      GROUP BY cpp.idproveedor 
+      ORDER BY p.razon_social ASC;";
       return ejecutarConsulta($sql);
     }
 

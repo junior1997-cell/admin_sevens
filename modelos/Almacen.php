@@ -21,30 +21,26 @@ class Almacen
       $exist_producto = ejecutarConsultaSimpleFila($sql_1); if ( $exist_producto['status'] == false) {return $exist_producto; }
 
       if ( empty($exist_producto['data']) ) {
-        $sql_1 = "INSERT INTO almacen_resumen( idproyecto, idproducto, user_created) 
-        VALUES ('$idproyecto','$idproducto[$ii]', '$this->id_usr_sesion');";
-        $new_resumen = ejecutarConsulta_retornarID($sql_1); if ( $new_resumen['status'] == false) {return $new_resumen; }
-        $id_r = $new_resumen['data'];
-        //add registro en nuestra bitacora
-        $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_resumen','$id_r','Crear registro','$this->id_usr_sesion')";
-        $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }
+        $sql_1 = "INSERT INTO almacen_resumen( idproyecto, idproducto, total_stok,  total_egreso) 
+        VALUES ('$idproyecto','$idproducto[$ii]', total_stok - $cantidad[$ii], total_egreso + $cantidad[$ii]);";
+        $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
+        $id_r = $new_resumen['data'];         
 
-        $sql_0 = "INSERT INTO almacen_salida( idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca, user_created)
-        VALUES ('$id_r', '$fecha_ingreso', '$dia_ingreso',  '$cantidad[$ii]', '$marca[$ii]', '$this->id_usr_sesion')";         
-        $new_salida = ejecutarConsulta_retornarID($sql_0); if ( $new_salida['status'] == false) {return $new_salida; }  
-        $id_s = $new_salida['data'];
-        //add registro en nuestra bitacora
-        $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_salida','$id_s','Crear registro','$this->id_usr_sesion')";
-        $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }
+        $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino,  tipo_mov, fecha, cantidad, descripcion)      
+        VALUES ('$id_r', '$idproyecto', 'EP', '$fecha_ingreso',  '$cantidad[$ii]', '')";         
+        $new_salida = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_salida['status'] == false) {return $new_salida; }  
+        
       } else {
         $id_r = $exist_producto['data']['idalmacen_resumen'];
-        $sql_0 = "INSERT INTO almacen_salida( idalmacen_resumen, fecha_ingreso, dia_ingreso, cantidad, marca, user_created)
-        VALUES ('$id_r', '$fecha_ingreso', '$dia_ingreso',  '$cantidad[$ii]', '$marca[$ii]', '$this->id_usr_sesion')";         
-        $new_salida = ejecutarConsulta_retornarID($sql_0); if ( $new_salida['status'] == false) {return $new_salida; }  
-        $id_s = $new_salida['data'];
-        //add registro en nuestra bitacora
-        $sql_5 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('almacen_salida','$id_s','Crear registro','$this->id_usr_sesion')";
-        $bitacora = ejecutarConsulta($sql_5); if ( $bitacora['status'] == false) {return $bitacora; }
+
+        $sql_1= "UPDATE almacen_resumen SET idproyecto='$idproyecto', idproducto='$idproducto[$ii]', tipo='EP', total_stok= total_stok - $cantidad[$ii], 
+        total_egreso= total_egreso + $cantidad[$ii] WHERE idalmacen_resumen='$id_r';";
+        $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }  
+        
+        $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino,  tipo_mov, fecha, cantidad, descripcion)      
+        VALUES ('$id_r', '$idproyecto', 'EP', '$fecha_ingreso',  '$cantidad[$ii]', '')";         
+        $new_salida = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_salida['status'] == false) {return $new_salida; }  
+        
       }        
 
       $ii++;
@@ -172,7 +168,8 @@ class Almacen
         WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IP', 'IEP', 'IPG');";
         $entrada = ejecutarConsultaSimpleFila($sql_1); if ($entrada['status'] == false) { return $entrada; }      
 
-        $sql_1_1 = "SELECT  GROUP_CONCAT(CAST(ad.cantidad AS UNSIGNED) SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
+        $sql_1_1 = "SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2))
+        END SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
         where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IP', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen;";
         $e_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($e_cant_group['status'] == false) { return $e_cant_group; }    
 
@@ -181,7 +178,8 @@ class Almacen
         WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EP', 'EEP', 'EPG');";
         $salida = ejecutarConsultaSimpleFila($sql_2); if ($salida['status'] == false) { return $salida; }        
 
-        $sql_1_1 = "SELECT  GROUP_CONCAT(CAST(ad.cantidad AS UNSIGNED) SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
+        $sql_1_1 = "SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2))
+        END SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
         where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EP', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen;";
         $s_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($s_cant_group['status'] == false) { return $s_cant_group; } 
 
@@ -487,7 +485,7 @@ class Almacen
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    WHERE ar.tipo <> 'EPP' AND ar.idproyecto = '$idproyecto' AND ar.estado = '1' AND ar.estado_delete = '1' ;";    
+    WHERE ar.tipo <> 'EPP' AND ar.idproyecto = '$idproyecto' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre  ASC;";    
     $producto = ejecutarConsultaArray($sql_0);
     
     foreach ($producto['data'] as $key => $val1) {      
@@ -499,9 +497,9 @@ class Almacen
         'unidad_medida'     => $val1['nombre_medida'],
         'abreviacion_um'    => $val1['um_abreviacion'],
         'categoria'         => $val1['categoria'],
-        'salida_sum'        => empty($salida_sum['data'])   ? 0 : (empty($salida_sum['data']['total_egreso'])   ? 0 : floatval($salida_sum['data']['total_egreso']) ) ,                   
-        'entrada_sum'       => empty($entrada_sum['data'])  ? 0 : (empty($entrada_sum['data']['total_ingreso']) ? 0 : floatval($entrada_sum['data']['total_ingreso']) ) ,       
-        'saldo'             => empty($entrada_sum['data'])  ? 0 : (empty($entrada_sum['data']['total_stok'])    ? 0 : floatval($entrada_sum['data']['total_stok']) ) ,
+        'salida_sum'        => (empty($val1['total_egreso'])   ? 0 : floatval($val1['total_egreso']) ) ,                   
+        'entrada_sum'       => (empty($val1['total_ingreso']) ? 0 : floatval($val1['total_ingreso']) ) ,       
+        'saldo'             => (empty($val1['total_stok'])    ? 0 : floatval($val1['total_stok']) ) ,
       ];
     }
 

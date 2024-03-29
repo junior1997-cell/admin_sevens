@@ -637,42 +637,43 @@ function add_producto(data) {
   $('.delete_multiple_alerta').remove();
 
   if (idproducto == null || idproducto == '' || idproducto === undefined) { } else {
-    var textproducto = $('#producto').select2('data')[0].text;
+
+    var textproducto  = $('#producto').select2('data')[0].text;
     var unidad_medida = $('#producto').select2('data')[0].element.attributes.unidad_medida.value
+    var saldo         = $('#producto').select2('data')[0].element.attributes.saldo.value
+
     if ($(`#html_producto div`).hasClass(`delete_multiple_${idproducto}`)) { // validamos si exte el producto agregado
       toastr_error('Existe!!', `<u>${textproducto}</u>, Este producto ya ha sido agregado`);
     } else {      
-      $('#html_producto').append(`<div class="col-lg-12 borde-arriba-0000001a mt-2 mb-2 delete_multiple_${idproducto}"></div>
+      $('#html_producto').append(`
       <div class="col-12 col-sm-12 col-md-6 col-lg-4 delete_multiple_${idproducto}" >
         <input type="hidden" name="idproducto[]" value="${idproducto}" />        
-        <div class="form-group">
-          <label for="fecha_ingreso">Nombre Producto</label>
-          <span class="form-control-mejorado"> ${textproducto} </span>                                  
+        <div class="form-group">          
+          <textarea class="form-control" name="" id="" cols="30" rows="1"> ${textproducto} </textarea>                             
         </div>
       </div> 
       <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}">
-        <div class="form-group">
-          <label for="marca">U.M.</label>
+        <div class="form-group">          
           <span class="form-control-mejorado">${unidad_medida} </span>
         </div>      
       </div>
       <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${idproducto}">
         <div class="form-group">
-          <label for="marca">Marca <span class="cargando-marca-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span></label>
+          <span class="cargando-marca-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span>
           <select name="marca[]" id="marca_${idproducto}" class="form-control" placeholder="Marca"> </select>
         </div>      
       </div> 
       <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}"">
-        <div class="form-group">
-          <label for="fecha_ingreso">Cantidad</label>
-          <input type="number" name="cantidad[]" class="form-control" id="cantidad_${idproducto}" placeholder="cantidad" required min="0" />
+        <div class="form-group">          
+          <input type="number" name="cantidad_view_${idproducto}" class="form-control" id="cantidad_view_${idproducto}" placeholder="cantidad" required min="0" max="${saldo}" step="0.01" onkeyup="replicar_cantidad_input('#cantidad_view_${idproducto}', '#cantidad_${idproducto}')" />
+          <input type="hidden" name="cantidad[]" class="form-control" id="cantidad_${idproducto}" placeholder="cantidad"  />
         </div>      
       </div> 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${idproducto}">      
-        <label class="text-white">.</label> <br>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${idproducto}">        
         <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_producto(${idproducto});"><i class="far fa-trash-alt"></i></button>      
-      </div> `);
-      $(`#cantidad_${idproducto}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", } });  
+      </div> <div class="col-lg-12 borde-arriba-0000001a mt-0 mb-3 delete_multiple_${idproducto}"></div>`);
+
+      $(`#cantidad_view_${idproducto}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo {0}", max: "Máximo {0}", step: "Maximo {0} decimales" } });  
 
       $.post(`../ajax/almacen.php?op=marcas_x_producto`, {'id_producto':idproducto, 'id_proyecto': localStorage.getItem("nube_idproyecto") }, function (e, status, jqXHR) {
         e = JSON.parse(e);   //console.log(e);

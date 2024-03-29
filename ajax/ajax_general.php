@@ -66,7 +66,40 @@
         $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => [], );
         echo json_encode($retorno, true);
       break;
-      
+
+      /* ══════════════════════════════════════ B I T A C O R A  ══════════════════════════════════════ */
+      case 'tabla_bitacora':
+        $rspta = $ajax_general->tabla_bitacora($_GET["nombre_tabla"], $_GET["id_tabla"]);        
+        //Vamos a declarar un array
+        $data = []; $cont = 1;
+        
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {            
+
+            $data[] = [
+              "0"=>$cont++,              
+              "1" => $value['id_tabla'],
+              "2" => '<span class="fw-semibold text-primary">'.$value['nombre_tabla'].'</span>',
+              "3" => $value['accion'],
+              "4" => $value['responsable'],
+              "5" => '<div class="textarea_datatable bg-light" style="overflow: auto; resize: vertical; height: 45px;">' .$value['sql_d'].'</div>',                             
+              "6" => $value['created_at']
+            ];
+          }
+          $results = [
+            'status'=> true,
+            "sEcho" => 1, //Información para el datatables
+            "iTotalRecords" => count($data), //enviamos el total registros al datatable
+            "iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+            "aaData" => $data,
+          ];
+          echo json_encode($results, true) ;
+        } else {
+          echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+        }
+
+      break;
       /* ══════════════════════════════════════ T R A B A J A D O R  ══════════════════════════════════════ */
       case 'select2Trabajador': 
 
@@ -273,6 +306,31 @@
       case 'select2ProveedorFiltro': 
     
         $rspta=$ajax_general->select2_proveedor_filtro();  $cont = 1; $data = "";
+
+        if ($rspta['status'] == true) {
+
+          foreach ($rspta['data'] as $key => $value) {  
+
+            $data .= '<option value="' .  $value['idproveedor'] . '" ruc="'.$value['ruc'].'">' .$cont++.'. '.  $value['razon_social'] .' - '.  $value['ruc'] . '</option>';      
+          }
+
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => '<option value="1" ruc="">Anónimo - 00000000000</option>' . $data, 
+          );
+  
+          echo json_encode($retorno, true);
+
+        } else {
+
+          echo json_encode($rspta, true); 
+        }
+      break;
+
+      case 'select2ProveedorFiltroCompra': 
+    
+        $rspta=$ajax_general->select2ProveedorFiltroCompra($_SESSION['idproyecto'] );  $cont = 1; $data = "";
 
         if ($rspta['status'] == true) {
 

@@ -1,7 +1,7 @@
 <?php
 //Activamos el almacenamiento en el buffer
 ob_start();
-session_start();
+session_start(); date_default_timezone_set('America/Lima');
 
 if (!isset($_SESSION["nombre"])) {
 
@@ -121,17 +121,16 @@ if (!isset($_SESSION["nombre"])) {
                                 </button>
                               </h3>
                               <h3 class="card-title mr-2">
-                                <div class="btn-group">
-                                  <button type="button" class="btn btn-success" data-toggle="dropdown">Opciones</button>
-                                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"> <span class="sr-only">Toggle Dropdown</span> </button>
-                                  <div class="dropdown-menu" role="menu" style="box-shadow: 0px 0rem 2rem 8px rgb(0 0 0 / 64%) !important;">
+                                <div class="input-group-prepend" >
+                                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones</button>
+                                  <div class="dropdown-menu" style="box-shadow: 0px 0rem 2rem 8px rgb(0 0 0 / 64%) !important;">
                                     <button type="button" class="dropdown-item my-2 btn-salida" data-toggle="modal" data-target="#modal-agregar-almacen" onclick="limpiar_form_almacen();" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a uso de Obra</button>
-                                    <div class="dropdown-divider"></div>
-                                    <button type="button" class="dropdown-item my-2 btn-general"  data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar_form_otro_almacen();"><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar Almacén General</button>         
                                     <div class="dropdown-divider"></div>                           
-                                    <button type="button" class="dropdown-item my-2" ><i class="fa-solid fa-arrow-right-to-bracket"></i> Recibir de Almacén General</button>                                    
+                                    <button type="button" class="dropdown-item my-2" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a otro proyecto</button>  
+                                    <div class="dropdown-divider"></div>
+                                    <button type="button" class="dropdown-item my-2 btn-general"  data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar_form_otro_almacen();"><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar Almacén General</button>                                             
                                   </div>
-                                </div>                                
+                                </div>                                                         
                               </h3>
                               <!-- Botones de quincenas -->
                               <div id="lista_quincenas" class="row-horizon disenio-scroll ml-2" >
@@ -411,8 +410,8 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                             <div class="form-group">
                               <label for="producto"> 
-                                <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_producto_todos();"><i class="fa-solid fa-rotate-right"></i></span> 
-                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                <!-- <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_producto_todos();"><i class="fa-solid fa-rotate-right"></i></span>  -->
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_comprados();"><i class="fa-solid fa-rotate-right"></i></span> 
                                 Producto <small class="comprado_todos">(comprado)</small> <span class="cargando_productos"></span> 
                               </label>
                               <select name="producto" id="producto" class="form-control" placeholder="Producto" onchange="add_producto(this);">                                
@@ -434,7 +433,14 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
 
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
-                            <div class="row" id="html_producto" > 
+                            <div class="row" >    
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-4"><label for="fecha_ingreso">Nombre Producto</label></div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-2"><label for="marca">U.M.</label></div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-3"><label for="marca">Marca </label></div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-2"><label for="fecha_ingreso">Cantidad</label></div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1"></div>                          
+                            </div>
+                            <div class="row" id="html_producto" >                               
                               <span> Seleccione un producto</span>
                             </div>
                           </div>                                                 
@@ -471,7 +477,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                   <div class="modal-header"> 
-                    <h4 class="modal-title">Agregar a otro almacen</h4>
+                    <h4 class="modal-title">Agregar a almacén general</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>

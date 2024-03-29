@@ -317,7 +317,11 @@
           
           if ($rspta['status'] == true) {  
             foreach ($rspta['data'] as $key => $value) {   
-              $data .= '<option value="' . $value['idproducto'] . '" id_ar = "'.$value['idalmacen_resumen'].'" unidad_medida="' . $value['unidad_medida'] . '" >' . $value['nombre_producto'] .' - '. $value['categoria'] .' - Saldo: '. $value['saldo'] .'</option>';
+              $idpr   = $value['idproducto'];
+              $id_ar  = $value['idalmacen_resumen'];
+              $um     = $value['unidad_medida'];
+              $saldo = $value['saldo'];
+              $data .= '<option value="'.$idpr.'" id_ar= "'.$id_ar.'" saldo= "'.$saldo.'" unidad_medida="'.$um.'" >' . $value['nombre_producto'] .' - '. $value['categoria'] .' - Saldo: '. $saldo .'</option>';
             }  
             $retorno = array(
               'status' => true, 

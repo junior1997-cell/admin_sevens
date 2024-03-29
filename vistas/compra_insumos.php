@@ -1311,6 +1311,37 @@
                     </div>
                   </div>
 
+                  <!-- MODAL - VER BITACORA -->
+                  <div class="modal fade" id="modal-ver-bitacora">
+                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h3 class="modal-title ">Movimientos</h3>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body table-responsive">
+                          <table id="tabla-bitacora" class="table table-striped table-bordered table-condensed table-hover" style="width: 100% !important;">
+                            <thead>
+                              <th data-toggle="tooltip" data-original-title="Opciones">#</th>
+                              <th>ID</th>
+                              <th>Tabla</th>
+                              <th>Acción</th>
+                              <th >Responsable</th>
+                              <th>Descripción</th>
+                              <th>Creado</th>
+                            </thead>
+                            <tbody></tbody>
+                          </table>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>    
+
                 </div>
               </section>
               <!-- /.content -->

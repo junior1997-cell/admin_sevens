@@ -21,8 +21,8 @@ if (mysqli_connect_errno()) {
 
 if (!function_exists('ejecutarConsulta')) {
 
-  function ejecutarConsulta($sql) {
-    global $conexion;
+  function ejecutarConsulta($sql, $crud = 'R') {
+    global $conexion;  mysqli_query($conexion, "SET @crud ='$crud' ");
     $query = $conexion->query($sql);
     if ($conexion->error) {
       try {
@@ -52,9 +52,7 @@ if (!function_exists('ejecutarConsulta')) {
     
     $query->free();     // Liberar los resultados
     $conexion->close(); // Cerrar la conexión
-  }
-
-  
+  }  
 
   function ejecutarConsultaSimpleFilaStore($sql) {
     global $conexion;
@@ -205,8 +203,8 @@ if (!function_exists('ejecutarConsulta')) {
     }
   }
 
-  function ejecutarConsulta_retornarID($sql) {
-    global $conexion;
+  function ejecutarConsulta_retornarID($sql, $crud = 'R') {
+    global $conexion; mysqli_query($conexion, "SET @crud ='$crud' ");
     $query = $conexion->query($sql);
     if ($conexion->error) {
       try {

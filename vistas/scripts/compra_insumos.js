@@ -3,6 +3,7 @@ var reload_detraccion = "";
 
 var tabla_compra_insumo;
 var tabla_comprobantes;
+var tabla_bitacora_compra;
 
 var tabla_compra_x_proveedor;
 var tabla_detalle_compra_x_proveedor;
@@ -33,7 +34,7 @@ function init() {
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════
   lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#idproveedor', null);
-  lista_select2("../ajax/ajax_general.php?op=select2Proveedor", '#filtro_proveedor', null);
+  lista_select2("../ajax/ajax_general.php?op=select2ProveedorFiltroCompra", '#filtro_proveedor', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_pago', null);
   lista_select2("../ajax/ajax_general.php?op=select2Banco", '#banco_prov', null);
   lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marcas_p', null);
@@ -459,6 +460,42 @@ function eliminar_compra(idcompra_proyecto, nombre) {
     false
   );
 
+}
+
+//facturas agrupadas por proveedor.
+function ver_bitacora(id) {  
+  $('#modal-ver-bitacora').modal('show');
+  tabla_bitacora_compra = $("#tabla-bitacora").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: ["copyHtml5", "excelHtml5", "colvis"],
+    ajax: {
+      url: `../ajax/ajax_general.php?op=tabla_bitacora&nombre_tabla=compra_por_proyecto&id_tabla=${id}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      //var api = this.api(); var total = api.column( 5 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
+      //$( api.column( 5 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total)}</span>` );
+    },
+    bDestroy: true,
+    iDisplayLength: 5, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      //{ targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+    ],
+  }).DataTable();
 }
 
 // .......::::::::::::::::::::::::::::::::::::::::: AGREGAR FACURAS, BOLETAS, NOTA DE VENTA, ETC :::::::::::::::::::::::::::::::::::.......

@@ -238,7 +238,7 @@ class Usuario
 
   //Implementar un método para listar los registros
   public function listar() {
-    $sql = "SELECT u.idusuario, DATE_FORMAT(u.last_sesion, '%m/%d/%Y %h:%i: %p') AS last_sesion, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento, u.estado
+    $sql = "SELECT u.idusuario, DATE_FORMAT(u.last_sesion, '%d/%m/%Y %h:%i %p') AS last_sesion, t.nombres, t.tipo_documento, t.numero_documento, t.telefono, t.email, u.cargo, u.login, t.imagen_perfil, t.tipo_documento, u.estado
 		FROM usuario as u, trabajador as t
 		WHERE  u.idtrabajador = t.idtrabajador  AND u.estado=1 AND u.estado_delete=1 ORDER BY t.nombres ASC;";
     return ejecutarConsulta($sql);

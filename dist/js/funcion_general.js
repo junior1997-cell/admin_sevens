@@ -143,15 +143,7 @@ function format_m_a(fecha) {
 
 // restringimos la fecha para no elegir mañana
 function no_select_tomorrow(nombre_input) {  
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
-  var yyyy = today.getFullYear();
-  if(dd<10){ dd='0'+dd } 
-  if(mm<10){ mm='0'+mm } 
-
-  today = `${yyyy}-${mm}-${dd}`;
-  
+  var today = moment().format('YYYY-MM-DD');  
   $(nombre_input).attr('max',today);
 }
 
@@ -1394,6 +1386,8 @@ function error_dowload_doc() { toastr.success("Hubo un ERROR en la descarga, rei
 function no_doc() { toastr.error("No hay DOC disponible, suba un DOC en el apartado de editar!!") }
 
 /*  ══════════════════════════════════════════ - O T R O S - ══════════════════════════════════════════ */
+
+function replicar_cantidad_input(input_origen, input_destino) { $(input_destino).val($(input_origen).val()); }
 
 function decifrar_format_banco(format) {
 

@@ -25,13 +25,9 @@ class Compra_insumos
     $compra_existe = ejecutarConsultaArray($sql_2);   if ($compra_existe['status'] == false) { return  $compra_existe;}
 
     if (empty($compra_existe['data']) || $tipo_comprobante == 'Ninguno') {
-      $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante,nc_serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion, user_created)
-      VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante','$slt2_serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion','$this->id_usr_sesion')";
-      $idventanew = ejecutarConsulta_retornarID($sql_3); if ($idventanew['status'] == false) { return  $idventanew;}
-
-      //add registro en nuestra bitacora
-      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_por_proyecto','".$idventanew['data']."','Nueva compra proyecto','$this->id_usr_sesion')";
-      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; } 
+      $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante,nc_serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion)
+      VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante','$slt2_serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion')";
+      $idventanew = ejecutarConsulta_retornarID($sql_3, 'C'); if ($idventanew['status'] == false) { return  $idventanew;}
 
       $ii = 0;
       $compra_new = "";
@@ -49,11 +45,7 @@ class Compra_insumos
 
           $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, idclasificacion_grupo, unidad_medida, color, marca, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
           VALUES ('$id','$idproducto[$ii]', '$id_grupo', '$unidad_medida[$ii]',  '$nombre_color[$ii]', '$nombre_marca[$ii]', '$cantidad[$ii]', '$precio_sin_igv[$ii]', '$precio_igv[$ii]', '$precio_con_igv[$ii]', '$descuento[$ii]', '$subtotal_producto', '$ficha_tecnica_producto[$ii]','$this->id_usr_sesion')";
-          $compra_new =  ejecutarConsulta_retornarID($sql_detalle); if ($compra_new['status'] == false) { return  $compra_new;}
-
-          //add registro en nuestra bitacora.
-          $sql_bit_d = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('detalle_compra','".$compra_new['data']."','Detalle compra','$this->id_usr_sesion')";
-          $bitacora = ejecutarConsulta($sql_bit_d); if ( $bitacora['status'] == false) {return $bitacora; } 
+          $compra_new =  ejecutarConsulta_retornarID($sql_detalle, 'C'); if ($compra_new['status'] == false) { return  $compra_new;}
 
           // ::::::::::: Enviar a almacen :::::::::::
           $sql_ra = "SELECT * FROM almacen_resumen WHERE idproyecto = '$idproyecto' and idproducto ='$idproducto[$ii]'";
@@ -63,13 +55,13 @@ class Compra_insumos
           if( empty($r_a['data']) ) {            
             $sql = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok, total_ingreso) 
             VALUES ('$idproyecto', '$idproducto[$ii]', '$tipo', '$cantidad[$ii]', '$cantidad[$ii]' )";
-            $ar = ejecutarConsulta($sql); if ( $ar['status'] == false) {return $ar; }
+            $ar = ejecutarConsulta($sql, 'C'); if ( $ar['status'] == false) {return $ar; }
           }else{
             foreach ($r_a['data'] as $key => $val) {
               $id_ar = $val['idalmacen_resumen'];
               $sql = "UPDATE almacen_resumen SET idproducto='$idproducto[$ii]', tipo='$tipo', total_stok= total_stok + $cantidad[$ii] , total_ingreso= total_ingreso + $cantidad[$ii]
               WHERE idalmacen_resumen='$id_ar';";
-              $ar = ejecutarConsulta($sql); if ( $ar['status'] == false) {return $ar; }
+              $ar = ejecutarConsulta($sql, 'U'); if ( $ar['status'] == false) {return $ar; }
             }
           }          
 
@@ -113,11 +105,7 @@ class Compra_insumos
       tipo_comprobante = '$tipo_comprobante', serie_comprobante = '$serie_comprobante',nc_serie_comprobante='$slt2_serie_comprobante', val_igv = '$val_igv', descripcion = '$descripcion',
       glosa = '$glosa', total = '$total_venta', subtotal = '$subtotal_compra', igv = '$igv_compra', tipo_gravada = '$tipo_gravada',
       estado_detraccion = '$estado_detraccion',user_updated= '$this->id_usr_sesion' WHERE idcompra_proyecto = '$idcompra_proyecto'";
-      $update_compra = ejecutarConsulta($sql); if ($update_compra['status'] == false) { return $update_compra; }
-
-      //add registro en nuestra bitacora
-      $sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_por_proyecto','$idcompra_proyecto','Editar compra proyecto','$this->id_usr_sesion')";
-      $bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }
+      $update_compra = ejecutarConsulta($sql, 'U'); if ($update_compra['status'] == false) { return $update_compra; }
 
       $ii = 0; $detalle_compra = "";
 
@@ -131,11 +119,7 @@ class Compra_insumos
 
         $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto,	idclasificacion_grupo, unidad_medida, color, marca, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
         VALUES ('$idcompra_proyecto', '$idproducto[$ii]', '$id_grupo', '$unidad_medida[$ii]', '$nombre_color[$ii]', '$nombre_marca[$ii]', '$cantidad[$ii]', '$precio_sin_igv[$ii]', '$precio_igv[$ii]', '$precio_con_igv[$ii]', '$descuento[$ii]', '$subtotal_producto', '$ficha_tecnica_producto[$ii]','$this->id_usr_sesion')";
-        $detalle_compra = ejecutarConsulta_retornarID($sql_detalle); if ($detalle_compra['status'] == false) { return $detalle_compra; }
-
-        //add registro en nuestra bitacora.
-        $sql_bit_d = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('detalle_compra','".$detalle_compra['data']."','Detalle editado compra','$this->id_usr_sesion')";
-        $bitacora = ejecutarConsulta($sql_bit_d); if ( $bitacora['status'] == false) {return $bitacora; } 
+        $detalle_compra = ejecutarConsulta_retornarID($sql_detalle, 'C'); if ($detalle_compra['status'] == false) { return $detalle_compra; }
 
         $ii = $ii + 1;
       }
@@ -226,35 +210,20 @@ class Compra_insumos
   //Implementamos un método para desactivar categorías
   public function desactivar($idcompra_proyecto) {
     $sql = "UPDATE compra_por_proyecto SET estado='0',user_trash= '$this->id_usr_sesion' WHERE idcompra_proyecto='$idcompra_proyecto'";
-		$desactivar= ejecutarConsulta($sql);
-
-		if ($desactivar['status'] == false) {  return $desactivar; }
+		return ejecutarConsulta($sql, 'T');
 		
-		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_por_proyecto','".$idcompra_proyecto."','Compra desactivada','$this->id_usr_sesion')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
-		
-		return $desactivar;
   }
 
   //Implementamos un método para activar categorías
   public function activar($idcompra_por_proyecto) {
     $sql = "UPDATE compra_por_proyecto SET estado='1' WHERE idcompra_proyecto='$idcompra_por_proyecto'";
-    return ejecutarConsulta($sql);
+    return ejecutarConsulta($sql, 'RT');
   }
 
   //Implementamos un método para activar categorías
   public function eliminar($idcompra_por_proyecto) {
     $sql = "UPDATE compra_por_proyecto SET estado_delete='0',user_delete= '$this->id_usr_sesion' WHERE idcompra_proyecto='$idcompra_por_proyecto'";
-
-		$eliminar =  ejecutarConsulta($sql);
-		if ( $eliminar['status'] == false) {return $eliminar; }  
-		
-		//add registro en nuestra bitacora
-		$sql = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('compra_por_proyecto','$idcompra_por_proyecto','Compra Eliminada','$this->id_usr_sesion')";
-		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
-		
-		return $eliminar;
+		return  ejecutarConsulta($sql, 'D');		
   }
 
   //Implementar un método para mostrar los datos de un registro a modificar
