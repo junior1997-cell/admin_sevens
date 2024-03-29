@@ -22,7 +22,7 @@ if (!isset($_SESSION["nombre"])) {
     <style>
       .style_tabla_datatable td,
       tr {
-        font-size: 13px;
+        font-size: 11px;
         /* Reducir el tamaño de la fuente */
         padding: 5px;
         /* Ajustar el padding */
