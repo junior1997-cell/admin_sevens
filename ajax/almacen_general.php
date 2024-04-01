@@ -134,11 +134,11 @@ if (!isset($_SESSION["nombre"])) {
           foreach ($rspta['data'] as $key => $reg) {
             $data[] = [
               "0" => $cont++,
-              "1" => '<textarea cols="70" rows="2" class="textarea_datatable bg-light w-100 " readonly="" style=" font-size: 12px;">' . $reg['nombre_producto'] . ' - ' . $reg['abreviacion'] . '</textarea>',
+              "1" => '<textarea cols="70" rows="2" class="textarea_datatable bg-light w-100 " readonly="" style=" font-size: 11px;">' . $reg['nombre_producto'] . ' - ' . $reg['abreviacion'] . '</textarea>',
               "2" => $reg['total_stok'],
               "3" =>  $reg['total_ingreso'],
               "4" =>  $reg['total_egreso'],
-              "5" => '<button type="button" class="btn btn-info btn-sm" onclick="detalle_almacen_general(' . $reg['idalmacen_general'] . ', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\')"><i class="fa fa-exchange"></i></button>'
+              "5" => '<button type="button" class="btn btn-info btn-sm" onclick="detalle_almacen_general(' . $reg['idalmacen_general'] . ', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\', \'' . encodeCadenaHtml($reg['nombre_producto']) . '\')"><i class="fa fa-exchange"></i></button>'
             ];
           }
           $results = [
@@ -166,7 +166,7 @@ if (!isset($_SESSION["nombre"])) {
           foreach ($rspta['data'] as $key => $reg) {
             $data[] = [
               "0" => $cont++,
-              "1" => '<textarea cols="70" rows="2" class="textarea_datatable bg-light w-100 " readonly="" style=" font-size: 12px;">' . $reg['tipo_movimiento'] . '</textarea>',
+              "1" => '<textarea cols="70" rows="2" class="textarea_datatable bg-light w-100 " readonly="" style=" font-size: 11px;">' . $reg['tipo_movimiento'] . '</textarea>',
               "2" => $reg['fecha'],
               "3" =>  $reg['cantidad'],
               "4" =>  $reg['nombre_proyecto_almacen']
