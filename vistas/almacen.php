@@ -121,14 +121,14 @@ if (!isset($_SESSION["nombre"])) {
                                 </button>
                               </h3>
                               <h3 class="card-title mr-2">
-                                <div class="input-group-prepend" >
+                                <div class="input-group-prepend " >
                                   <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones</button>
                                   <div class="dropdown-menu" style="box-shadow: 0px 0rem 2rem 8px rgb(0 0 0 / 64%) !important;">
-                                    <button type="button" class="dropdown-item my-2 btn-salida" data-toggle="modal" data-target="#modal-agregar-almacen" onclick="limpiar_form_almacen();" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a uso de Obra</button>
+                                    <button type="button" class="dropdown-item my-2 btn-salida" data-toggle="modal" data-target="#modal-transferencia-uso-proyecto" onclick="limpiar_form_tup();" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a uso de Obra</button>
                                     <div class="dropdown-divider"></div>                           
-                                    <button type="button" class="dropdown-item my-2" data-toggle="modal" data-target="#modal-transferencia-entre-proyecto" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a otro proyecto</button>  
+                                    <button type="button" class="dropdown-item my-2" data-toggle="modal" data-target="#modal-transferencia-entre-proyecto" onclick="limpiar_form_tep();" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a otro proyecto</button>  
                                     <div class="dropdown-divider"></div>
-                                    <button type="button" class="dropdown-item my-2 btn-general"  data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar_form_otro_almacen();"><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar Almacén General</button>                                             
+                                    <button type="button" class="dropdown-item my-2 btn-general"  data-toggle="modal" data-target="#modal-transferencia-almacen-general" onclick="limpiar_form_tag();"><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar Almacén General</button>                                             
                                   </div>
                                 </div>                                                         
                               </h3>
@@ -383,12 +383,12 @@ if (!isset($_SESSION["nombre"])) {
               <!-- /.container-fluid -->
             </div>
 
-            <!-- MODAL - AGREGAR ALMACEN - chargue 1-2 -->
-            <div class="modal fade" id="modal-agregar-almacen">
+            <!-- MODAL - TRANSFERENCIA USO DE PROYECTO - chargue 1-2 -->
+            <div class="modal fade" id="modal-transferencia-uso-proyecto">
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                   <div class="modal-header"> 
-                    <h4 class="modal-title">Agregar salida de producto</h4>
+                    <h4 class="modal-title">Enviar a: <span class="font-weight-normal" >Uso de Obra</span> </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
@@ -396,23 +396,22 @@ if (!isset($_SESSION["nombre"])) {
 
                   <div class="modal-body"> 
                     <!-- form start -->
-                    <form id="form-almacen" name="form-almacen" method="POST">
-                      <div class="card-body">
+                    <form id="form-almacen-tup" name="form-almacen-tup" method="POST">
+                      <div class="px-2">
                         <div class="row" id="cargando-1-fomulario">
-                          <!-- idalmacen_resumen -->
-                          <input type="hidden" name="idalmacen_resumen" id="idalmacen_resumen" />
-                          <!-- idalmacen_resumen -->
-                          <input type="hidden" name="idproyecto" id="idproyecto" />
+                          
+                          <!-- idproyecto_origen_tup -->
+                          <input type="hidden" name="idproyecto_origen_tup" id="idproyecto_origen_tup" value="<?php echo $_SESSION['idproyecto'];?>"/>
 
                           <!-- Producto -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                             <div class="form-group">
-                              <label for="producto"> 
+                              <label for="producto_tup"> 
                                 <!-- <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_producto_todos();"><i class="fa-solid fa-rotate-right"></i></span>  -->
-                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_comprados();"><i class="fa-solid fa-rotate-right"></i></span> 
-                                Producto <small class="comprado_todos">(comprado)</small> <span class="cargando_productos"></span> 
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_tup();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                Producto <span class="cargando_producto_tup"></span> 
                               </label>
-                              <select name="producto" id="producto" class="form-control" placeholder="Producto" onchange="add_producto(this);">                                
+                              <select name="producto_tup" id="producto_tup" class="form-control" placeholder="Producto" onchange="add_producto_tup(this);">                                
                               </select>
                             </div>
                           </div> 
@@ -420,33 +419,43 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- Fecha --> 
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                              <label for="fecha_ingreso">Fecha</label>
-                              <input type="date" name="fecha_ingreso" class="form-control" id="fecha_ingreso" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
-                              <input type="hidden" name="dia_ingreso" id="dia_ingreso" />
+                              <label for="fecha_tup">Fecha</label>
+                              <input type="date" name="fecha_tup" class="form-control" id="fecha_tup" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" />
+                              
                             </div>
                           </div>   
 
-                          <div class="col-12 pl-0">
-                            <div class="text-primary"><label for="">Productos agregados </label></div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2" >PRODUCTOS - AGREGADOS</b>  </span></div>
                           </div>
 
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
-                            <div class="row" >    
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-4"><label for="fecha_ingreso">Nombre Producto</label></div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-2"><label for="marca">U.M.</label></div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-3"><label for="marca">Marca </label></div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-2"><label for="fecha_ingreso">Cantidad</label></div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-1"></div>                          
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 " >
+                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                              <div class="row titulo-add-producto-tup mt-2" >    
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-5 col-xl-5"><label >Nombre Producto</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >U.M.</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >Marca </label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >Cantidad</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-1 col-xl-1"></div>                          
+                              </div>
+                              <div class="row" id="html_producto_tup" >                               
+                                <span> Seleccione un producto</span>
+                              </div>
+                            </div>                       
+                          </div>     
+
+                          <!-- Descripción --> 
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                              <label for="descripcion_tup">Descripción</label>
+                              <textarea name="descripcion_tup" id="descripcion_tup" class="form-control" cols="30" rows="2" placeholder="ejem: Por que se terminó el proyecto." ></textarea>                         
                             </div>
-                            <div class="row" id="html_producto" >                               
-                              <span> Seleccione un producto</span>
-                            </div>
-                          </div>                                                 
+                          </div>                                               
 
                           <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_almacen_div">
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_tup_div">
                             <div class="progress">
-                              <div id="barra_progress_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              <div id="barra_progress_tup" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                 0%
                               </div>
                             </div>
@@ -458,24 +467,122 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
                         </div>
                       </div>
-                      <!-- /.card-body -->
-                      <button type="submit" style="display: none;" id="submit-form-almacen">Submit</button>
+                      <!-- /.px-2 -->
+                      <button type="submit" style="display: none;" id="submit-form-almacen-tup">Submit</button>
                     </form>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen();" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" onclick="limpiar_form_tup();" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen_tup">Guardar Cambios</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- MODAL - AGREGAR OTROS ALMACEN - chargue 3-4 -->
-            <div class="modal fade" id="modal-agregar-otro-almacen">
+            <!-- MODAL - TRANSFERENCIA ENTRE PROYECTO - charge 3-4  -->
+            <div class="modal fade" id="modal-transferencia-entre-proyecto">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title title_transferencia_entre_proyecto">Transferencia entre Proyecto</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
+                  </div>
+                  <div class="modal-body">     
+                    <form id="form-almacen-tep" name="form-almacen-tep" method="POST">
+                      <div class="px-2">
+                        <div class="row" id="cargando-3-fomulario">
+
+                          <input type="hidden" name="idproyecto_origen_tep" id="idproyecto_origen_tep" value="<?php echo $_SESSION['idproyecto'];?>"/>                          
+
+                          <!-- Poyecto Destino -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-5">
+                            <div class="form-group">
+                              <label for="proyecto_tep">                                 
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_proyecto_tep();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                Proyecto destino <span class="cargando_proyecto_tep"></span> 
+                              </label>
+                              <select name="proyecto_tep" id="proyecto_tep" class="form-control" placeholder="Proyecto" onchange="replicar_proyecto_destino();" >                                
+                              </select>
+                            </div>
+                          </div>
+                          <!-- Producto -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-5">
+                            <div class="form-group">
+                              <label for="producto_tep">                                 
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_tep();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                Producto <small>(más EPP)</small> <span class="cargando_producto_tep"></span> 
+                              </label>
+                              <select name="producto_tep" id="producto_tep" class="form-control" placeholder="Producto" onchange="add_producto_tep(this);">                                
+                              </select>
+                            </div>
+                          </div>
+                          <!-- Fecha --> 
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+                            <div class="form-group">
+                              <label for="fecha_tep">Fecha</label>
+                              <input type="date" name="fecha_tep" class="form-control" id="fecha_tep" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>"  />                          
+                            </div>
+                          </div>  
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2" >PRODUCTOS - AGREGADOS</b>  </span></div>
+                          </div>
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 " >
+                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                              <div class="row titulo-add-producto-tep mt-2" >    
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-5 col-xl-5"><label >Nombre Producto</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >U.M.</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >Marca </label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >Cantidad</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-1 col-xl-1"></div>                          
+                              </div>
+                              <div class="row" id="html_producto_tep" >                               
+                                <span> Seleccione un producto</span>
+                              </div>
+                            </div>                       
+                          </div>     
+
+                          <!-- Descripción --> 
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                              <label for="descripcion_tep">Descripción</label>
+                              <textarea name="descripcion_tep" id="descripcion_tep" class="form-control" cols="30" rows="2" placeholder="ejem: Por que se terminó el proyecto." ></textarea>                         
+                            </div>
+                          </div>                                              
+
+                          <!-- barprogress -->
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_tep_div">
+                            <div class="progress">
+                              <div id="barra_progress_tep" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                0%
+                              </div>
+                            </div>
+                          </div>  
+                        </div>
+                        <div class="row" id="cargando-4-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
+                        </div>
+                      </div>
+                      <!-- /.px-2 -->
+                      <button type="submit" style="display: none;" id="submit-form-almacen-tep">Submit</button>
+                    </form> 
+                    <!-- /.form -->                    
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_tep();">Close</button>        
+                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen_tep">Guardar Cambios</button>            
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MODAL - TRANSFERENCIA A ALMACEN GENERAL - chargue 5-6 -->
+            <div class="modal fade" id="modal-transferencia-almacen-general">
               <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                   <div class="modal-header"> 
-                    <h4 class="modal-title">Agregar a almacén general</h4>
+                    <h4 class="modal-title">Enviar a: <span class="font-weight-normal" >Almacén general</span></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span class="text-danger" aria-hidden="true">&times;</span>
                     </button>
@@ -483,22 +590,19 @@ if (!isset($_SESSION["nombre"])) {
 
                   <div class="modal-body"> 
                     <!-- form start -->
-                    <form id="form-otro-almacen" name="form-otro-almacen" method="POST">
-                      <div class="card-body">
-                        <div class="row" id="cargando-3-fomulario">
-                          <!-- idalmacen_resumen -->
-                          <input type="hidden" name="idalmacen_resumen_ag" id="idalmacen_resumen_ag" />
-                          <!-- idalmacen_resumen -->
-                          <input type="hidden" name="idproyecto_ag" id="idproyecto_ag" />
+                    <form id="form-almacen-tag" name="form-almacen-tag" method="POST">
+                      <div class="px-2">
+                        <div class="row" id="cargando-5-fomulario">
+                          <input type="hidden" name="idproyecto_origen_tag" id="idproyecto_origen_tag" value="<?php echo $_SESSION['idproyecto'];?>"/>
 
                           <!-- Tipo de documento --> 
                           <div class="col-12 col-sm-12 col-md-6 col-lg-8">
                             <div class="form-group">
-                              <label for="producto_ag">                                 
-                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span> 
-                                Producto <small >(comprado)</small> <span class="cargando_productos_ag"></span> 
+                              <label for="producto_tag">                                 
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_tag();"><i class="fa-solid fa-rotate-right"></i></span> 
+                                Producto <small >(mas EPP)</small> <span class="cargando_productos_ag"></span> 
                               </label>
-                              <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">                                
+                              <select name="producto_tag" id="producto_tag" class="form-control" placeholder="Producto" onchange="add_producto_tag(this);">                                
                               </select>
                             </div>
                           </div> 
@@ -506,26 +610,42 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- Correo electronico --> 
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                              <label for="fecha_ingreso_ag">Fecha</label>
-                              <input type="date" name="fecha_ingreso_ag" class="form-control" id="fecha_ingreso_ag" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
-                              <input type="hidden" name="dia_ingreso_ag" id="dia_ingreso_ag" />
+                              <label for="fecha_tag">Fecha</label>
+                              <input type="date" name="fecha_tag" class="form-control" id="fecha_tag" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" />
                             </div>
                           </div>   
 
-                          <div class="col-12 pl-0">
-                            <div class="text-primary"><label for="">Productos agregados </label></div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2" >PRODUCTOS - AGREGADOS</b>  </span></div>
                           </div>
 
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
-                            <div class="row" id="html_producto_ag" > 
-                              <span> Seleccione un producto</span>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 " >
+                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                              <div class="row titulo-add-producto-tag mt-2" >    
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-5 col-xl-5"><label >Nombre Producto</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >U.M.</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >Almacen </label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label >Cantidad</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-1 col-xl-1"></div>                          
+                              </div>
+                              <div class="row" id="html_producto_tag" >                               
+                                <span> Seleccione un producto</span>
+                              </div>
+                            </div>                       
+                          </div>     
+
+                          <!-- Descripción --> 
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                              <label for="descripcion_tag">Descripción</label>
+                              <textarea name="descripcion_tag" id="descripcion_tag" class="form-control" cols="30" rows="2" placeholder="ejem: Por que se terminó el proyecto." ></textarea>                         
                             </div>
-                          </div>                                                 
+                          </div>                                                      
 
                           <!-- barprogress -->
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_otro_almacen_div">
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_tag_div">
                             <div class="progress">
-                              <div id="barra_progress_otro_almacen" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              <div id="barra_progress_tag" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
                                 0%
                               </div>
                             </div>
@@ -533,29 +653,29 @@ if (!isset($_SESSION["nombre"])) {
 
                         </div>
 
-                        <div class="row" id="cargando-4-fomulario" style="display: none;">
+                        <div class="row" id="cargando-6-fomulario" style="display: none;">
                           <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
                         </div>
                       </div>
-                      <!-- /.card-body -->
-                      <button type="submit" style="display: none;" id="submit-form-otro-almacen">Submit</button>
+                      <!-- /.px-2 -->
+                      <button type="submit" style="display: none;" id="submit-form-almacen-tag">Submit</button>
                     </form>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" onclick="limpiar_form_otro_almacen();" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" id="guardar_registro_otro_almacen">Guardar Cambios</button>
+                    <button type="button" class="btn btn-danger" onclick="limpiar_form_tag();" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen_tag">Guardar Cambios</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- MODAL - VER ALMACEN - chargue 5-6 -->
+            <!-- MODAL - VER ALMACEN X DIA - chargue 7-8 -->
             <div class="modal fade" id="modal-ver-almacen">
-              <div class="modal-dialog modal-dialog-scrollable modal-lg">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h4 class="modal-title">
-                      <button type="button" class="btn bg-gradient-warning btn-regresar" onclick="show_hide_form(1);" style="display: none;" >
+                      <button type="button" class="btn bg-gradient-warning btn-regresar-x-dia" onclick="show_hide_form_x_dia(1);" style="display: none;" >
                         <i class="fa-solid fa-arrow-left"></i> Regresar
                       </button>
                       Ver almacen x dia</h4>
@@ -570,25 +690,25 @@ if (!isset($_SESSION["nombre"])) {
                       <table id="tabla-ver-almacen" class="table table-bordered table-striped display" style="width: 100% !important;">
                         <thead>
                           <tr>
-                            <th class="text-center">#</th>
-                            <th class="">Aciones</th>
-                            <th>Producto</th>     
-                            <th>Fecha</th> 
-                            <th>Día</th>
-                            <th>Cant</th>
-                            <th>Marca</th>                                                     
+                            <th class="text-center">#</th> 
+                            <!-- <th class="">Aciones</th> -->
+                            <th>Fecha</th>                             
+                            <th>Movimiento</th>                                 
+                            <th>Destino</th>
+                            <th>Cant</th>  
+                            <th>Descripcion</th>                                                    
                           </tr>
                         </thead>
                         <tbody></tbody>
                         <tfoot>
                           <tr>
-                            <th class="text-center">#</th>
-                            <th class="">Aciones</th>
-                            <th>Producto</th>     
-                            <th>Fecha</th> 
-                            <th>Día</th>                           
-                            <th class="text-center" >Cant</th>
-                            <th>Marca</th>                             
+                            <th class="text-center">#</th> 
+                            <!-- <th class="">Aciones</th> -->
+                            <th>Fecha</th>                             
+                            <th>Movimiento</th>                                 
+                            <th>Destino</th>
+                            <th>Cant</th>  
+                            <th>Descripcion</th>              
                           </tr>
                         </tfoot>
                       </table>
@@ -597,7 +717,7 @@ if (!isset($_SESSION["nombre"])) {
                     <!-- form start -->
                     <form id="form-almacen-x-dia" name="form-almacen-x-dia" method="POST" style="display: none;">
                       <div class="card-body">
-                        <div class="row" id="cargando-5-fomulario">
+                        <div class="row" id="cargando-7-fomulario">
                           <!-- id  -->
                           <input type="hidden" name="idalmacen_salida_xp" id="idalmacen_salida_xp" />
                           <input type="hidden" name="idalmacen_resumen_xp" id="idalmacen_resumen_xp" />
@@ -615,7 +735,7 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- Fecha -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-4">
                             <div class="form-group">
-                              <label for="fecha_ingreso">Fecha</label>
+                              <label for="fecha_ingreso_xp">Fecha</label>
                               <input type="date" name="fecha_ingreso_xp" id="fecha_ingreso_xp" class="form-control"  placeholder="Fecha"  onchange="obtener_dia_ingreso(this);" />
                               <input type="hidden" name="dia_ingreso_xp" id="dia_ingreso_xp" />
                             </div>
@@ -648,7 +768,7 @@ if (!isset($_SESSION["nombre"])) {
 
                         </div>
 
-                        <div class="row" id="cargando-6-fomulario" style="display: none;">
+                        <div class="row" id="cargando-8-fomulario" style="display: none;">
                           <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br/><br/><h4>Cargando...</h4></div>
                         </div>
                       </div>
@@ -707,54 +827,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <!-- MODAL - TRANSFERENCIA ENTRE PROYECTO - charge 7-8  -->
-            <div class="modal fade" id="modal-transferencia-entre-proyecto">
-              <div class="modal-dialog modal-dialog-scrollable modal-xl">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title title_transferencia_entre_proyecto">Transferencia entre Proyecto</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="text-danger" aria-hidden="true">&times;</span></button>
-                  </div>
-                  <div class="modal-body">                    
-                    <div class="row">
-                      <!-- Poyecto Destino -->
-                      <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="form-group">
-                          <label for="producto_ag">                                 
-                            <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span> 
-                            Proyecto destino <span class="cargando_productos_ag"></span> 
-                          </label>
-                          <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">                                
-                          </select>
-                        </div>
-                      </div>
-                      <!-- Producto -->
-                      <div class="col-12 col-sm-12 col-md-6 col-lg-6">
-                        <div class="form-group">
-                          <label for="producto_ep">                                 
-                            <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_ep();"><i class="fa-solid fa-rotate-right"></i></span> 
-                            Producto  <span class="cargando_producto_ep"></span> 
-                          </label>
-                          <select name="producto_ep" id="producto_ep" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">                                
-                          </select>
-                        </div>
-                      </div>
-                      <!-- Fecha --> 
-                      <div class="col-12 col-sm-12 col-md-6 col-lg-2">
-                        <div class="form-group">
-                          <label for="fecha_ingreso">Fecha</label>
-                          <input type="date" name="fecha_ingreso" class="form-control" id="fecha_ingreso" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" onchange="obtener_dia_ingreso(this);" />
-                          <input type="hidden" name="dia_ingreso" id="dia_ingreso" />
-                        </div>
-                      </div>   
-                    </div>
-                  </div>
-                  <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>                    
-                  </div>
-                </div>
-              </div>
-            </div>
+            
 
           </section>
           <!-- /.content -->

@@ -27,15 +27,15 @@ class Compra_insumos
     if (empty($compra_existe['data']) || $tipo_comprobante == 'Ninguno') {
       $sql_3 = "INSERT INTO compra_por_proyecto(idproyecto, idproveedor, fecha_compra, tipo_comprobante, serie_comprobante,nc_serie_comprobante, val_igv, descripcion, glosa, total, subtotal, igv, tipo_gravada, estado_detraccion)
       VALUES ('$idproyecto', '$idproveedor', '$fecha_compra', '$tipo_comprobante', '$serie_comprobante','$slt2_serie_comprobante', '$val_igv', '$descripcion', '$glosa', '$total_compra', '$subtotal_compra', '$igv_compra', '$tipo_gravada', '$estado_detraccion')";
-      $idventanew = ejecutarConsulta_retornarID($sql_3, 'C'); if ($idventanew['status'] == false) { return  $idventanew;}
+      $compra_new = ejecutarConsulta_retornarID($sql_3, 'C'); if ($compra_new['status'] == false) { return  $compra_new;}
 
       $ii = 0;
-      $compra_new = "";
+      $compra_detalle_new = "";
 
-      if ( !empty($idventanew['data']) ) {
+      if ( !empty($compra_new['data']) ) {
       
         while ($ii < count($idproducto)) {
-          $id = $idventanew['data'];
+          $id = $compra_new['data'];
           $subtotal_producto = (floatval($cantidad[$ii]) * floatval($precio_con_igv[$ii])) - $descuento[$ii];
 
           // ::::::::::: buscando grupo para asignar :::::::::::
@@ -45,31 +45,39 @@ class Compra_insumos
 
           $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto, idclasificacion_grupo, unidad_medida, color, marca, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
           VALUES ('$id','$idproducto[$ii]', '$id_grupo', '$unidad_medida[$ii]',  '$nombre_color[$ii]', '$nombre_marca[$ii]', '$cantidad[$ii]', '$precio_sin_igv[$ii]', '$precio_igv[$ii]', '$precio_con_igv[$ii]', '$descuento[$ii]', '$subtotal_producto', '$ficha_tecnica_producto[$ii]','$this->id_usr_sesion')";
-          $compra_new =  ejecutarConsulta_retornarID($sql_detalle, 'C'); if ($compra_new['status'] == false) { return  $compra_new;}
+          $compra_detalle_new =  ejecutarConsulta_retornarID($sql_detalle, 'C'); if ($compra_detalle_new['status'] == false) { return  $compra_detalle_new;}
+          $id_dc = $compra_detalle_new['data'];
 
           // ::::::::::: Enviar a almacen :::::::::::
           $sql_ra = "SELECT * FROM almacen_resumen WHERE idproyecto = '$idproyecto' and idproducto ='$idproducto[$ii]'";
           $r_a = ejecutarConsultaArray($sql_ra); if ( $r_a['status'] == false) {return $r_a; } 
-          // buscamos el tipo
-          $tipo =  ($id_grupo == '11' ? 'EPP' : 'PN' ) ;
+          
+          $tipo =  ($id_grupo == '11' ? 'EPP' : 'PN' ) ; // buscamos el tipo
           if( empty($r_a['data']) ) {            
             $sql = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok, total_ingreso) 
             VALUES ('$idproyecto', '$idproducto[$ii]', '$tipo', '$cantidad[$ii]', '$cantidad[$ii]' )";
-            $ar = ejecutarConsulta($sql, 'C'); if ( $ar['status'] == false) {return $ar; }
+            $ar = ejecutarConsulta_retornarID($sql, 'C'); if ( $ar['status'] == false) {return $ar; }
+            $id_ar_ip = $ar['data'];
+
+            $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general, iddetalle_compra, tipo_mov, marca, fecha, cantidad, descripcion)      
+            VALUES ($id_ar_ip, $idproyecto, NULL, $id_dc, 'IPC', '$nombre_marca[$ii]', '$fecha_compra',  '$cantidad[$ii]', 'INGRESO DE COMPRAS')";         
+            $new_entrada = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_entrada['status'] == false) {return $new_entrada; }
           }else{
             foreach ($r_a['data'] as $key => $val) {
               $id_ar = $val['idalmacen_resumen'];
               $sql = "UPDATE almacen_resumen SET idproducto='$idproducto[$ii]', tipo='$tipo', total_stok= total_stok + $cantidad[$ii] , total_ingreso= total_ingreso + $cantidad[$ii]
               WHERE idalmacen_resumen='$id_ar';";
               $ar = ejecutarConsulta($sql, 'U'); if ( $ar['status'] == false) {return $ar; }
-            }
-          }          
 
+              $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general, iddetalle_compra, tipo_mov, marca, fecha, cantidad, descripcion)      
+              VALUES ($id_ar, $idproyecto, NULL, $id_dc, 'IPC', '$nombre_marca[$ii]', '$fecha_compra',  '$cantidad[$ii]', 'INGRESO DE COMPRAS')";         
+              $new_entrada = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_entrada['status'] == false) {return $new_entrada; }
+            }
+          }
           $ii = $ii + 1;
         }
       }
-      return $compra_new;
-
+      return $compra_detalle_new;
     } else {
 
       $info_repetida = ''; 
@@ -237,19 +245,11 @@ class Compra_insumos
 
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
 
-    if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND cpp.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'";
-    } else if (!empty($fecha_1)) {      
-      $filtro_fecha = "AND cpp.fecha_compra = '$fecha_1'";
-    }else if (!empty($fecha_2)) {        
-      $filtro_fecha = "AND cpp.fecha_compra = '$fecha_2'";
-    }    
+    if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND cpp.fecha_compra BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND cpp.fecha_compra = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND cpp.fecha_compra = '$fecha_2'"; }    
 
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND cpp.idproveedor = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else {
-      $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; 
-    } 
+    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND cpp.tipo_comprobante = '$comprobante'"; } 
 
     $data = Array();
     $scheme_host=  ($_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost/admin_sevens/' :  $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'].'/');
@@ -345,8 +345,7 @@ class Compra_insumos
       );
     }
 
-    return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>$data];
-      
+    return $retorno=['status'=>true, 'message'=>'todo oka ps', 'data'=>$data];      
 
   }
 

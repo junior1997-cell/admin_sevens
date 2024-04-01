@@ -1387,7 +1387,7 @@ function no_doc() { toastr.error("No hay DOC disponible, suba un DOC en el apart
 
 /*  ══════════════════════════════════════════ - O T R O S - ══════════════════════════════════════════ */
 
-function replicar_cantidad_input(input_origen, input_destino) { $(input_destino).val($(input_origen).val()); }
+function replicar_data_input(input_origen, input_destino) { $(input_destino).val($(input_origen).val()); }
 
 function decifrar_format_banco(format) {
 

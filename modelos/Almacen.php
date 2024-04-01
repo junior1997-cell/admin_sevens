@@ -13,33 +13,140 @@ class Almacen
 		$this->id_usr_sesion = $id_usr_sesion;
 	}
 
-  public function insertar_almacen($idproyecto, $fecha_ingreso, $dia_ingreso, $idproducto, $marca, $cantidad){
+  public function insertar_almacen($idproyecto_origen, $idproyecto_destino, $idalmacen_general, $tipo_mov, $fecha_ingreso, $idproducto, $tipo_prod, $marca, $cantidad, $descripcion){
 
     $ii = 0;
     while ($ii < count($idproducto)) {
-      $sql_1 = "SELECT * FROM almacen_resumen WHERE idproducto = '$idproducto[$ii]' and idproyecto = '$idproyecto';";
+      $sql_1 = "SELECT * FROM almacen_resumen WHERE idproducto = '$idproducto[$ii]' and idproyecto = '$idproyecto_origen';";
       $exist_producto = ejecutarConsultaSimpleFila($sql_1); if ( $exist_producto['status'] == false) {return $exist_producto; }
-
+      $id_ar = "";
       if ( empty($exist_producto['data']) ) {
-        $sql_1 = "INSERT INTO almacen_resumen( idproyecto, idproducto, total_stok,  total_egreso) 
-        VALUES ('$idproyecto','$idproducto[$ii]', total_stok - $cantidad[$ii], total_egreso + $cantidad[$ii]);";
-        $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
-        $id_r = $new_resumen['data'];         
+        
+        if ($tipo_mov == 'IPC' || $tipo_mov == 'IEP' || $tipo_mov == 'IPG') {
+          $sql_1 = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok,  total_ingreso) 
+          VALUES ($idproyecto_origen, $idproducto[$ii], '$tipo_prod[$ii]', ( total_stok + $cantidad[$ii] ), ( total_ingreso + $cantidad[$ii] ) );";
+          $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
+          $id_ar = $new_resumen['data'];
+        } else if ($tipo_mov == 'EPO' || $tipo_mov == 'EPT' || $tipo_mov == 'EEP' || $tipo_mov == 'EPG') { 
+          $sql_1 = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok,  total_egreso) 
+          VALUES ($idproyecto_origen, $idproducto[$ii], '$tipo_prod[$ii]', (total_stok - $cantidad[$ii] ), (total_egreso + $cantidad[$ii] ) );";
+          $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
+          $id_ar = $new_resumen['data'];
+        }                 
 
-        $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino,  tipo_mov, fecha, cantidad, descripcion)      
-        VALUES ('$id_r', '$idproyecto', 'EP', '$fecha_ingreso',  '$cantidad[$ii]', '')";         
+        $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general, tipo_mov, fecha, marca, cantidad, descripcion)      
+        VALUES ($id_ar, $idproyecto_destino[$ii], $idalmacen_general[$ii], '$tipo_mov', '$fecha_ingreso',  '$marca[$ii]', '$cantidad[$ii]', '$descripcion')";         
         $new_salida = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_salida['status'] == false) {return $new_salida; }  
+
+        if ($tipo_mov == 'EEP') { # INSERTAMOS EL INGRESO AL PROYECTO DESTINO
+          $id_ar_iep = '';
+
+          $sql_1 = "SELECT * FROM almacen_resumen WHERE idproducto = '$idproducto[$ii]' and idproyecto = '$idproyecto_destino[$ii]';";
+          $exist_producto_iep = ejecutarConsultaSimpleFila($sql_1); if ( $exist_producto['status'] == false) {return $exist_producto; }
+
+          if (empty($exist_producto_iep['data'])) {
+            $sql_1 = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok,  total_ingreso) 
+            VALUES ($idproyecto_destino[$ii], $idproducto[$ii], '$tipo_prod[$ii]', ( total_stok + $cantidad[$ii] ), ( total_ingreso + $cantidad[$ii] ) );";
+            $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
+            $id_ar_iep = $new_resumen['data'];
+          }else{
+            $id_ar_iep = $exist_producto_iep['data']['idalmacen_resumen'];
+            $sql_1= "UPDATE almacen_resumen SET idproyecto=$idproyecto_destino[$ii], idproducto=$idproducto[$ii], tipo='$tipo_prod[$ii]', total_stok= ( total_stok + $cantidad[$ii] ), 
+            total_ingreso= ( total_ingreso + $cantidad[$ii] ) WHERE idalmacen_resumen='$id_ar_iep';";
+            $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }
+          }
+
+          $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general, tipo_mov, fecha, marca, cantidad, descripcion)      
+          VALUES ($id_ar_iep, $idproyecto_destino[$ii], NULL, 'IEP', '$fecha_ingreso', '$marca[$ii]', '$cantidad[$ii]', '$descripcion')";         
+          $new_salida = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_salida['status'] == false) {return $new_salida; }
+        }
+
+        if ($tipo_mov == 'EPG') { #INSERTAMOS EN EL ALMACEN GENERAL
+          $id_ar_igp = '';
+
+          $sql_1 = "SELECT agr.* FROM almacen_general_resumen AS agr WHERE agr.idalmacen_general = $idalmacen_general[$ii] AND agr.idproducto = $idproducto[$ii] ;";
+          $exist_producto_igp = ejecutarConsultaSimpleFila($sql_1); if ( $exist_producto['status'] == false) {return $exist_producto; }
+
+          if (empty($exist_producto_igp['data'])) {
+            $sql_1 = "INSERT INTO almacen_general_resumen( idalmacen_general, idproducto, tipo, total_stok,  total_ingreso) 
+            VALUES ($idalmacen_general[$ii], $idproducto[$ii], '$tipo_prod[$ii]', ( total_stok + $cantidad[$ii] ), ( total_ingreso + $cantidad[$ii] ) );";
+            $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
+            $id_ar_igp = $new_resumen['data'];
+          }else{
+            $id_ar_igp = $exist_producto_igp['data']['idalmacen_general_resumen'];
+            $sql_1= "UPDATE almacen_general_resumen SET idalmacen_general=$idalmacen_general[$ii], idproducto=$idproducto[$ii], tipo='$tipo_prod[$ii]', total_stok= ( total_stok + $cantidad[$ii] ), 
+            total_ingreso= ( total_ingreso + $cantidad[$ii] ) WHERE idalmacen_general_resumen='$id_ar_igp';";
+            $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }
+          }
+
+          $sql_2 = "INSERT INTO almacen_general_detalle( idalmacen_general_resumen, idproyecto, tipo_mov, fecha, cantidad, descripcion)      
+          VALUES ($id_ar_igp, $idproyecto_origen, 'IGP', '$fecha_ingreso',  '$cantidad[$ii]', '$descripcion')";         
+          $new_ingreso = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_ingreso['status'] == false) {return $new_ingreso; }
+        }
         
       } else {
-        $id_r = $exist_producto['data']['idalmacen_resumen'];
 
-        $sql_1= "UPDATE almacen_resumen SET idproyecto='$idproyecto', idproducto='$idproducto[$ii]', tipo='EP', total_stok= total_stok - $cantidad[$ii], 
-        total_egreso= total_egreso + $cantidad[$ii] WHERE idalmacen_resumen='$id_r';";
-        $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }  
+        $id_ar = $exist_producto['data']['idalmacen_resumen'];
+
+        if ($tipo_mov == 'IP' || $tipo_mov == 'IEP' || $tipo_mov == 'IPG') {
+          $sql_1= "UPDATE almacen_resumen SET idproyecto=$idproyecto_origen, idproducto=$idproducto[$ii], tipo='$tipo_prod[$ii]', total_stok= ( total_stok + $cantidad[$ii] ), 
+          total_egreso= ( total_egreso + $cantidad[$ii] ) WHERE idalmacen_resumen='$id_ar';";
+          $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }  
+        } else if ($tipo_mov == 'EPO' || $tipo_mov == 'EPT' || $tipo_mov == 'EEP' || $tipo_mov == 'EPG') { 
+          $sql_1= "UPDATE almacen_resumen SET idproyecto=$idproyecto_origen, idproducto=$idproducto[$ii], tipo='$tipo_prod[$ii]', total_stok= ( total_stok - $cantidad[$ii] ), 
+          total_egreso= ( total_egreso + $cantidad[$ii] ) WHERE idalmacen_resumen='$id_ar';";
+          $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }  
+        }
         
-        $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino,  tipo_mov, fecha, cantidad, descripcion)      
-        VALUES ('$id_r', '$idproyecto', 'EP', '$fecha_ingreso',  '$cantidad[$ii]', '')";         
+        $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general,  tipo_mov, fecha, marca, cantidad, descripcion)      
+        VALUES ($id_ar, $idproyecto_destino[$ii], $idalmacen_general[$ii], '$tipo_mov', '$fecha_ingreso', '$marca[$ii]', '$cantidad[$ii]', '$descripcion')"; 
         $new_salida = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_salida['status'] == false) {return $new_salida; }  
+
+        if ($tipo_mov == 'EEP') { # INSERTAMOS EL INGRESO AL PROYECTO DESTINO
+          $id_ar_iep = '';
+
+          $sql_1 = "SELECT * FROM almacen_resumen WHERE idproducto = '$idproducto[$ii]' and idproyecto = '$idproyecto_destino[$ii]';";
+          $exist_producto_iep = ejecutarConsultaSimpleFila($sql_1); if ( $exist_producto['status'] == false) {return $exist_producto; }
+
+          if (empty($exist_producto_iep['data'])) {
+            $sql_1 = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok,  total_ingreso) 
+            VALUES ($idproyecto_destino[$ii], $idproducto[$ii], '$tipo_prod[$ii]', ( total_stok + $cantidad[$ii] ), ( total_ingreso + $cantidad[$ii] ) );";
+            $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
+            $id_ar_iep = $new_resumen['data'];
+          }else{
+            $id_ar_iep = $exist_producto_iep['data']['idalmacen_resumen'];
+            $sql_1= "UPDATE almacen_resumen SET idproyecto=$idproyecto_destino[$ii], idproducto=$idproducto[$ii], tipo='$tipo_prod[$ii]', total_stok= ( total_stok + $cantidad[$ii] ), 
+            total_ingreso= ( total_ingreso + $cantidad[$ii] ) WHERE idalmacen_resumen='$id_ar_iep';";
+            $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }
+          }
+
+          $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general, tipo_mov,  fecha, marca, cantidad, descripcion)      
+          VALUES ($id_ar_iep, $idproyecto_destino[$ii], NULL, 'IEP', '$fecha_ingreso', '$marca[$ii]', '$cantidad[$ii]', '$descripcion')";         
+          $new_salida = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_salida['status'] == false) {return $new_salida; }
+        }
+
+        if ($tipo_mov == 'EPG') { #INSERTAMOS EN EL ALMACEN GENERAL
+          $id_ar_igp = '';
+
+          $sql_1 = "SELECT agr.* FROM almacen_general_resumen AS agr WHERE agr.idalmacen_general = $idalmacen_general[$ii] AND agr.idproducto = $idproducto[$ii] ;";
+          $exist_producto_igp = ejecutarConsultaSimpleFila($sql_1); if ( $exist_producto['status'] == false) {return $exist_producto; }
+
+          if (empty($exist_producto_igp['data'])) {
+            $sql_1 = "INSERT INTO almacen_general_resumen( idalmacen_general, idproducto, tipo, total_stok,  total_ingreso) 
+            VALUES ($idalmacen_general[$ii], $idproducto[$ii], '$tipo_prod[$ii]', ( total_stok + $cantidad[$ii] ), ( total_ingreso + $cantidad[$ii] ) );";
+            $new_resumen = ejecutarConsulta_retornarID($sql_1, 'C'); if ( $new_resumen['status'] == false) {return $new_resumen; }
+            $id_ar_igp = $new_resumen['data'];
+          }else{
+            $id_ar_igp = $exist_producto_igp['data']['idalmacen_general_resumen'];
+            $sql_1= "UPDATE almacen_general_resumen SET idalmacen_general=$idalmacen_general[$ii], idproducto=$idproducto[$ii], tipo='$tipo_prod[$ii]', total_stok= ( total_stok + $cantidad[$ii] ), 
+            total_ingreso= ( total_ingreso + $cantidad[$ii] ) WHERE idalmacen_general_resumen='$id_ar_igp';";
+            $update_resumen = ejecutarConsulta($sql_1, 'U'); if ( $update_resumen['status'] == false) {return $update_resumen; }
+          }
+
+          $sql_2 = "INSERT INTO almacen_general_detalle( idalmacen_general_resumen, idproyecto, tipo_mov, fecha, cantidad, descripcion)      
+          VALUES ($id_ar_igp, $idproyecto_origen, 'IGP', '$fecha_ingreso',  '$cantidad[$ii]', '$descripcion')";
+          $new_ingreso = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_ingreso['status'] == false) {return $new_ingreso; }
+        }
         
       }        
 
@@ -165,22 +272,22 @@ class Almacen
         $d_fecha = $val2['fecha'];
         // ENTRADA =======================================================
         $sql_1 = "SELECT SUM(cantidad) AS cant FROM almacen_detalle 
-        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IP', 'IEP', 'IPG');";
+        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IPC', 'IEP', 'IPG');";
         $entrada = ejecutarConsultaSimpleFila($sql_1); if ($entrada['status'] == false) { return $entrada; }      
 
         $sql_1_1 = "SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2))
         END SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
-        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IP', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen;";
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IPC', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen;";
         $e_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($e_cant_group['status'] == false) { return $e_cant_group; }    
 
         // SALIDA =======================================================
         $sql_2 = "SELECT SUM(cantidad) AS cant FROM almacen_detalle 
-        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EP', 'EEP', 'EPG');";
+        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG');";
         $salida = ejecutarConsultaSimpleFila($sql_2); if ($salida['status'] == false) { return $salida; }        
 
         $sql_1_1 = "SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2))
         END SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
-        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EP', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen;";
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen;";
         $s_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($s_cant_group['status'] == false) { return $s_cant_group; } 
 
         $data_almacen[] =  [
@@ -253,26 +360,75 @@ class Almacen
           
   }
 
-  public function tbla_ver_almacen(  $id_producto, $fecha ) {
-    $sql_fecha= empty($fecha) || $fecha == 'null'  ? '' : "AND ad.fecha = '$fecha'";
-    $sql_0 = "SELECT ad.*, ar.tipo, p.nombre as nombre_producto
+  public function tbla_ver_almacen_detalle(  $idalmacen_resumen, $fecha, $tipo_mov ) {
+
+    $sql_fecha    = empty($fecha) || $fecha == 'null'  ? '' : "AND ad.fecha = '$fecha'";
+    $sql_tipo_mov = empty($tipo_mov) || $tipo_mov == 'null'  ? '' :  ($tipo_mov == 'ENTRADA' ? "AND ad.tipo_mov IN ('IPC', 'IEP', 'IPG')" : ($tipo_mov == 'SALIDA' ? "AND ad.tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG')" : ""));
+
+    $sql_0 = "SELECT idalmacen_detalle, ad.idalmacen_resumen, ad.idproyecto_destino, ad.idalmacen_general, ad.tipo_mov, ad.marca, ad.fecha, ad.name_day, ad.name_month, 
+    ad.name_year,  ad.cantidad, CASE  WHEN ad.tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') THEN ad.cantidad * -1 ELSE  ad.cantidad END AS cantidad_real,
+    ad.stok_anterior, ad.stok_actual, ad.descripcion, ad.estado, ar.tipo, 
+    CASE ad.tipo_mov
+      WHEN 'EPO'  THEN 'EGRESO DE PROYECTO A OBRA'
+      WHEN 'EPT'  THEN 'EGRESO DE PROYECTO A EPP'
+      WHEN 'EEP'  THEN 'EGRESO ENTRE PROYECTOS'
+      WHEN 'EPG'  THEN 'EGRESO DE PROYECTO A ALMACEN GENERAL'
+      WHEN 'IPC'  THEN 'INGRESO A PROYECTO DE COMPRA'
+      WHEN 'IEP'  THEN 'INGRESO ENTRE PROYECTOS'
+      WHEN 'IPG'  THEN 'INGRESO A PROYECTO DE ALMACEN GENERAL'
+    END AS tipo_movimiento ,
+    CASE WHEN ad.tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') THEN 'text-danger' ELSE 'text-primary' END AS class_tipo_mov ,
+    CASE WHEN ad.tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') THEN 'EGRESO' ELSE 'INGRESO' END AS tipo_mov_1 ,
+    CASE  ad.tipo_mov
+      WHEN 'EPO'  THEN 'DE PROYECTO A OBRA'
+      WHEN 'EPT'  THEN 'DE PROYECTO A EPP'
+      WHEN 'EEP'  THEN 'ENTRE PROYECTOS'
+      WHEN 'EPG'  THEN 'DE PROYECTO A ALMACEN GENERAL'
+      WHEN 'IPC'  THEN 'A PROYECTO DE COMPRA'
+      WHEN 'IEP'  THEN 'ENTRE PROYECTOS'
+      WHEN 'IPG'  THEN 'A PROYECTO DE ALMACEN GENERAL' 
+    END AS tipo_mov_2 ,
+    CASE ad.tipo_mov
+      WHEN 'EPO'  THEN proy.nombre_codigo
+      WHEN 'EPT'  THEN trab.nombres
+      WHEN 'EEP'  THEN proy.nombre_codigo
+      WHEN 'EPG'  THEN ag.nombre_almacen
+      WHEN 'IPC'  THEN CONCAT('<b>', cpp.tipo_comprobante, '</b> ', cpp.serie_comprobante )
+      WHEN 'IEP'  THEN proy.nombre_codigo
+      WHEN 'IPG'  THEN ag.nombre_almacen
+    END AS destino ,
+    p.nombre as nombre_producto
     FROM almacen_detalle as ad 
     INNER JOIN almacen_resumen as ar ON ar.idalmacen_resumen = ad.idalmacen_resumen
     INNER JOIN producto as p ON p.idproducto = ar.idproducto
-    WHERE ad.estado = '1' AND ad.estado_delete = '1' AND ad.idalmacen_resumen = '$id_producto'  $sql_fecha ;";    
+    LEFT JOIN proyecto as proy ON proy.idproyecto = ad.idproyecto_destino 
+    LEFT JOIN almacen_general as ag ON ag.idalmacen_general = ad.idalmacen_general
+    LEFT JOIN trabajador_por_proyecto as tpt ON tpt.idtrabajador_por_proyecto = ad.idtrabajador_por_proyecto
+    LEFT JOIN trabajador as trab ON trab.idtrabajador = tpt.idtrabajador
+    LEFT JOIN detalle_compra as dc ON dc.iddetalle_compra = ad.iddetalle_compra
+    LEFT JOIN compra_por_proyecto as cpp ON cpp.idcompra_proyecto = dc.idcompra_proyecto
+    WHERE ad.estado = '1' AND ad.estado_delete = '1' AND ad.idalmacen_resumen = '$idalmacen_resumen' $sql_tipo_mov  $sql_fecha 
+    ORDER BY ad.fecha DESC;";    //return $sql_0;
     return ejecutarConsultaArray($sql_0);
           
   }
 
   public function marcas_x_producto($id_proyecto, $id_producto) {
+    $array_marca = [];
+    $sql_0 = "SELECT ac.marca, ar.idproducto
+    FROM almacen_detalle as ac
+    INNER JOIN almacen_resumen as ar ON ar.idalmacen_resumen = ac.idalmacen_resumen
+    WHERE ar.idproyecto = '$id_proyecto' AND ar.idproducto = '$id_producto'
+    GROUP BY ar.idproducto, ac.marca
+    ORDER BY ac.marca ASC;";    
+    $marca = ejecutarConsultaArray($sql_0); if ($marca['status'] == false) { return $marca; }  
 
-    $sql_0 = "SELECT  dc.marca,  pr.nombre AS nombre_producto
-		FROM compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
-		WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto     
-    AND cpp.idproyecto = '$id_proyecto' AND dc.idproducto = '$id_producto'
-    AND cpp.estado = '1' AND cpp.estado_delete = '1'  GROUP BY dc.idproducto, dc.marca ORDER BY pr.nombre ASC;";    
-    return ejecutarConsultaArray($sql_0);
-          
+    if ( empty($marca['data']) ) {
+      $array_marca[] = [ 'idproducto' => $id_producto, 'marca' => 'SIN MARCA', 'selected' => 'selected' ];
+    } else {
+      foreach ($marca['data'] as $key => $val) { $array_marca[] = [ 'idproducto' => $id_producto, 'marca' => $val['marca'] ]; }
+    }
+    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $array_marca ];  
   }
 
   //Implementamos un método para desactivar almacen_salida
@@ -468,6 +624,14 @@ class Almacen
     ];
   }
 
+  // ══════════════════════════════════════ T R A N F E R E N C I A   E N T R E   P R O Y E C T O ══════════════════════════════════════ 
+  public function guardar_y_editar_tep( $proyecto_tep, $fecha_tep, $idproducto_tep, $marca_tep, $cantidad_tep ){
+    $sql_0 = "SELECT p.idproyecto, p.nombre_codigo, 
+    CASE p.estado WHEN 0 THEN 'Terminado' WHEN 1 THEN 'En proceso' ELSE 'No empezado' END as estado
+    FROM proyecto as p ORDER BY p.idproyecto DESC;";    
+    return ejecutarConsultaArray($sql_0);
+  }
+
   // ══════════════════════════════════════ SELECT 2 ══════════════════════════════════════ 
 
   public function select2_productos_todos($idproyecto){
@@ -478,7 +642,7 @@ class Almacen
     return ejecutarConsultaArray($sql_0);
   }
 
-  public function select2_productos_comprados($idproyecto){
+  public function select2_productos($idproyecto){
     $resumen_producto = [];
     $sql_0 = "SELECT ar.*, p.nombre as nombre_producto, um.nombre_medida, um.abreviacion as um_abreviacion, ciaf.nombre as categoria
     FROM almacen_resumen AS ar
@@ -492,7 +656,41 @@ class Almacen
 
       $resumen_producto[] = [
         'idalmacen_resumen' => $val1['idalmacen_resumen'],
+        'idproducto'        => $val1['idproducto'],    
+        'tipo'              => $val1['tipo'],    
+        'nombre_producto'   => $val1['nombre_producto'],
+        'unidad_medida'     => $val1['nombre_medida'],
+        'abreviacion_um'    => $val1['um_abreviacion'],
+        'categoria'         => $val1['categoria'],
+        'salida_sum'        => (empty($val1['total_egreso'])   ? 0 : floatval($val1['total_egreso']) ) ,                   
+        'entrada_sum'       => (empty($val1['total_ingreso']) ? 0 : floatval($val1['total_ingreso']) ) ,       
+        'saldo'             => (empty($val1['total_stok'])    ? 0 : floatval($val1['total_stok']) ) ,
+      ];
+    }
+
+    return $retorno = [
+      'status'  => true, 
+      'data'    => $resumen_producto , 
+      'message' => 'todo bien'
+    ]; 
+  }
+
+  public function select2ProductosMasEPP($idproyecto){
+    $resumen_producto = [];
+    $sql_0 = "SELECT ar.*, p.nombre as nombre_producto, um.nombre_medida, um.abreviacion as um_abreviacion, ciaf.nombre as categoria
+    FROM almacen_resumen AS ar
+    INNER JOIN producto AS p ON p.idproducto = ar.idproducto
+    INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
+    INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
+    WHERE ar.idproyecto = '$idproyecto' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre  ASC;";    
+    $producto = ejecutarConsultaArray($sql_0);
+    
+    foreach ($producto['data'] as $key => $val1) {      
+
+      $resumen_producto[] = [
+        'idalmacen_resumen' => $val1['idalmacen_resumen'],
         'idproducto'        => $val1['idproducto'],        
+        'tipo'              => $val1['tipo'],
         'nombre_producto'   => $val1['nombre_producto'],
         'unidad_medida'     => $val1['nombre_medida'],
         'abreviacion_um'    => $val1['um_abreviacion'],
@@ -511,10 +709,9 @@ class Almacen
   }
 
   public function select2_proyecto($idproyecto){
-    $sql_0 = "SELECT pr.idproducto, pr.nombre AS nombre_producto, um.nombre_medida, um.abreviacion,  pr.modelo, ci.nombre as clasificacion    
-		FROM  producto AS pr, categoria_insumos_af AS ci, unidad_medida AS um 
-		WHERE pr.idcategoria_insumos_af = ci.idcategoria_insumos_af AND um.idunidad_medida  = pr.idunidad_medida 
-    AND pr.estado = '1' AND pr.estado_delete = '1' ORDER BY pr.nombre ASC;";    
+    $sql_0 = "SELECT p.idproyecto, p.nombre_codigo, 
+    CASE p.estado WHEN 0 THEN 'Terminado' WHEN 1 THEN 'En proceso' ELSE 'No empezado' END as estado
+    FROM proyecto as p WHERE p.idproyecto <> $idproyecto ORDER BY p.idproyecto DESC;";    
     return ejecutarConsultaArray($sql_0);
   }
 

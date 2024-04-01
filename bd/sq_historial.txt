@@ -1,4 +1,5 @@
 :::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_resumen :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+SET lc_time_names = 'es_ES';
 INSERT INTO almacen_resumen(idproyecto, idproducto, tipo, total_stok, total_ingreso) 
 SELECT cpp.idproyecto as idproyecto, dc.idproducto as idproducto, CASE dc.idclasificacion_grupo WHEN 11 THEN 'EPP' ELSE 'PN' END as tipo,
 SUM( dc.cantidad) as total_stok, SUM( dc.cantidad) as total_ingreso 
@@ -7,8 +8,9 @@ GROUP BY cpp.idproyecto, dc.idproducto;
 
 :::::::::::::::::::::: CARGAR INGRESOS DE COMPRAS A: almacen_detalle :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 SET lc_time_names = 'es_ES';
-INSERT INTO almacen_detalle(idalmacen_resumen, idproyecto_destino, tipo_mov, fecha, cantidad, stok_anterior, stok_actual) 
-SELECT ar.idalmacen_resumen, cpp.idproyecto,"IP" as tipo_mov, cpp.fecha_compra,  dc.cantidad as cantidad, 0 as stok_anterior, dc.cantidad as total_ingreso 
+INSERT INTO almacen_detalle(idalmacen_resumen, idproyecto_destino, iddetalle_compra, tipo_mov, marca, fecha, cantidad, stok_anterior, stok_actual, descripcion) 
+SELECT ar.idalmacen_resumen, cpp.idproyecto, dc.iddetalle_compra, "IPC" as tipo_mov, dc.marca, cpp.fecha_compra,  dc.cantidad as cantidad, 0 as stok_anterior, 
+dc.cantidad as total_ingreso, 'INGRESO DE COMPRAS' 
 FROM detalle_compra as dc 
 INNER JOIN compra_por_proyecto as cpp on dc.idcompra_proyecto =cpp.idcompra_proyecto 
 INNER JOIN almacen_resumen AS ar ON ar.idproducto = dc.idproducto AND ar.idproyecto = cpp.idproyecto;

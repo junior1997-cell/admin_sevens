@@ -292,7 +292,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="modal-body">
                     <!-- form start -->
                     <form id="form-otro-almacen" name="form-otro-almacen" method="POST">
-                      <div class="card-body">
+                      <div class="px-2">
                         <div class="row" id="cargando-1-fomulario">
                           <!-- idalmacen general -->
                           <input type="hidden" name="idalmacen_general_ag" id="idalmacen_general_ag" />
@@ -320,7 +320,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="form-group select_recurso" style="display: none; padding-left: 2px;">
                               <label for="producto_ag">
                                 <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span>
-                                Producto <small>(comprado)</small> <span class="cargando_productos_ag"></span>
+                                Producto  <span class="cargando_productos_ag"></span>
 
                               </label>
                               <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">
@@ -330,7 +330,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="form-group select_init_recurso">
                               <label for="producto_ag">
                                 <span class="badge badge-danger cursor-pointer" data-toggle="tooltip" data-original-title="Selecciona un proyecto"><i class="fa-solid fa-rotate-right"></i></span>
-                                Producto <small>(comprado)</small> <span class="cargando_productos_ag"></span>
+                                Producto  <span class="cargando_productos_ag"></span>
 
                               </label>
                               <p class="text-warning m-b-01rem" style="margin-top: 7px"> <strong>SELECCIONAR PROYECTO</strong> </p>
@@ -341,24 +341,26 @@ if (!isset($_SESSION["nombre"])) {
 
                           </div>
 
-                          <div class="col-12 pl-0">
-                            <div class="text-primary"><label for="">Productos agregados </label></div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2" >PRODUCTOS - AGREGADOS</b>  </span></div>
                           </div>
 
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
-                            <div class="row head_list" style="display: none;">
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Proyecto</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Cantidad</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold"><i class="far fa-trash-alt"></i></div>
-                              <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
-                            </div>
-                            <div class="row" id="html_producto_ag">
-                              <div class="col-12 html_mensaje">
-                                <div class="alert alert-warning alert-dismissible">
-                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                  <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                                  NO TIENES NINGÚN PRODUCTO SELECCIONADO.
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 " >
+                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">                      
+                              <div class="row head_list" style="display: none;">
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Proyecto</div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Cantidad</div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold"><i class="far fa-trash-alt"></i></div>
+                                <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+                              </div>
+                              <div class="row" id="html_producto_ag">
+                                <div class="col-12 html_mensaje">
+                                  <div class="alert alert-warning alert-dismissible mb-0">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+                                    NO TIENES NINGÚN PRODUCTO SELECCIONADO.
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -460,7 +462,7 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
                             <div class="row" id="html_producto_transf">
                               <div class="col-12 html_mensaje">
-                                <div class="alert alert-warning alert-dismissible">
+                                <div class="alert alert-warning alert-dismissible mb-0">
                                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" >×</button>
                                   <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
                                   NO TIENES NINGÚN PRODUCTO SELECCIONADO.

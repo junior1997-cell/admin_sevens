@@ -46,7 +46,7 @@ function reload_proyect_ag(pry) {
     $('.select_init_recurso').hide();
     $('.select_recurso').show();
 
-    lista_select2(`../ajax/almacen_general.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto_ag', null, '.cargando_productos_oa');
+    lista_select2(`../ajax/almacen_general.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto_ag', null, '.cargando_productos_ag');
 
     $("#producto_ag").select2({ theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
 
@@ -377,7 +377,7 @@ function limpiar_form_otro_almacen() {
   $('#proyecto_ag').val('').trigger("change");
   $('#fecha_ingreso_ag').val('');
   $('#html_producto_ag').html(`<div class="col-12 html_mensaje">
-    <div class="alert alert-warning alert-dismissible">
+    <div class="alert alert-warning alert-dismissible mb-0">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
       <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
       NO TIENES NINGÚN PRODUCTO SELECCIONADO.
@@ -528,7 +528,7 @@ function remove_producto_ag(id, idproy) {
   $(`.delete_multiple_${id}_${idproy}`).remove();
   if ($("#html_producto_ag").children().length == 0) {
     $('#html_producto_ag').html(`<div class="col-12 html_mensaje">
-      <div class="alert alert-warning alert-dismissible"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5> NO TIENES NINGÚN PRODUCTO SELECCIONADO. </div>
+      <div class="alert alert-warning alert-dismissible mb-0"> <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5> NO TIENES NINGÚN PRODUCTO SELECCIONADO. </div>
     </div>`);
     $('.head_list').hide();
   }
