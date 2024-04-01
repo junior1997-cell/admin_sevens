@@ -9,7 +9,7 @@ class Compra_insumos
   public function __construct()
   {
     $this->id_usr_sesion =  isset($_SESSION['idusuario']) ? $_SESSION["idusuario"] : 0;
-		// $this->id_proyecto_sesion = isset($_SESSION['idempresa']) ? $_SESSION["idempresa"] : 0;
+		$this->id_proyecto_sesion = isset($_SESSION['idproyecto'] ) ? $_SESSION['idproyecto']  : 0;
   }
 
   // ::::::::::::::::::::::::::::::::::::::::: S E C C I O N   C O M P R A  ::::::::::::::::::::::::::::::::::::::::: 
@@ -105,6 +105,20 @@ class Compra_insumos
   $cantidad, $precio_sin_igv, $precio_igv, $precio_con_igv, $descuento, $tipo_gravada, $ficha_tecnica_producto ) {
 
     if ( !empty($idcompra_proyecto) ) {
+  
+      # DEVOLVEMOS EL STOK
+      $sqldel = "SELECT * FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";
+      $get_compra = ejecutarConsultaArray($sqldel);  if ($get_compra['status'] == false) { return $get_compra; }
+      foreach ($get_compra['data'] as $key => $val) {
+        //Eliminamos todos los permisos asignados para volverlos a registrar
+        $sqldel = "DELETE FROM almacen_detalle WHERE iddetalle_compra='".$val['iddetalle_compra']."';";
+        $del_ad = ejecutarConsulta($sqldel);  if ($del_ad['status'] == false) { return $del_ad; }
+
+        $sql = "UPDATE almacen_resumen SET  total_stok= total_stok - ".$val['cantidad']." , total_ingreso= total_ingreso - ".$val['cantidad']."
+          WHERE idproyecto = '$idproyecto' and idproducto ='".$val['idproducto']."';";
+          $ar = ejecutarConsulta($sql, 'U'); if ( $ar['status'] == false) {return $ar; }
+      }
+      
       //Eliminamos todos los permisos asignados para volverlos a registrar
       $sqldel = "DELETE FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";
       $delete_compra = ejecutarConsulta($sqldel);  if ($delete_compra['status'] == false) { return $delete_compra; }
@@ -128,7 +142,35 @@ class Compra_insumos
         $sql_detalle = "INSERT INTO detalle_compra(idcompra_proyecto, idproducto,	idclasificacion_grupo, unidad_medida, color, marca, cantidad, precio_sin_igv, igv, precio_con_igv, descuento, subtotal, ficha_tecnica_producto, user_created) 
         VALUES ('$idcompra_proyecto', '$idproducto[$ii]', '$id_grupo', '$unidad_medida[$ii]', '$nombre_color[$ii]', '$nombre_marca[$ii]', '$cantidad[$ii]', '$precio_sin_igv[$ii]', '$precio_igv[$ii]', '$precio_con_igv[$ii]', '$descuento[$ii]', '$subtotal_producto', '$ficha_tecnica_producto[$ii]','$this->id_usr_sesion')";
         $detalle_compra = ejecutarConsulta_retornarID($sql_detalle, 'C'); if ($detalle_compra['status'] == false) { return $detalle_compra; }
+        $id_dc = $detalle_compra['data'];
 
+        // ::::::::::: Enviar a almacen :::::::::::
+        $sql_ra = "SELECT * FROM almacen_resumen WHERE idproyecto = '$idproyecto' and idproducto ='$idproducto[$ii]'";
+        $r_a = ejecutarConsultaArray($sql_ra); if ( $r_a['status'] == false) {return $r_a; } 
+        
+        $tipo =  ($id_grupo == '11' ? 'EPP' : 'PN' ) ; // buscamos el tipo
+        if( empty($r_a['data']) ) {            
+          $sql = "INSERT INTO almacen_resumen( idproyecto, idproducto, tipo, total_stok, total_ingreso) 
+          VALUES ('$idproyecto', '$idproducto[$ii]', '$tipo', '$cantidad[$ii]', '$cantidad[$ii]' )";
+          $ar = ejecutarConsulta_retornarID($sql, 'C'); if ( $ar['status'] == false) {return $ar; }
+          $id_ar_ip = $ar['data'];
+
+          $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general, iddetalle_compra, tipo_mov, marca, fecha, cantidad, descripcion)      
+          VALUES ($id_ar_ip, $idproyecto, NULL, $id_dc, 'IPC', '$nombre_marca[$ii]', '$fecha_compra',  '$cantidad[$ii]', 'INGRESO DE COMPRAS')";         
+          $new_entrada = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_entrada['status'] == false) {return $new_entrada; }
+        }else{
+          foreach ($r_a['data'] as $key => $val) {
+            $id_ar = $val['idalmacen_resumen'];
+            $sql = "UPDATE almacen_resumen SET idproducto='$idproducto[$ii]', tipo='$tipo', total_stok= total_stok + $cantidad[$ii] , total_ingreso= total_ingreso + $cantidad[$ii]
+            WHERE idalmacen_resumen='$id_ar';";
+            $ar = ejecutarConsulta($sql, 'U'); if ( $ar['status'] == false) {return $ar; }
+
+            $sql_2 = "INSERT INTO almacen_detalle( idalmacen_resumen, idproyecto_destino, idalmacen_general, iddetalle_compra, tipo_mov, marca, fecha, cantidad, descripcion)      
+            VALUES ($id_ar, $idproyecto, NULL, $id_dc, 'IPC', '$nombre_marca[$ii]', '$fecha_compra',  '$cantidad[$ii]', 'INGRESO DE COMPRAS')";         
+            $new_entrada = ejecutarConsulta_retornarID($sql_2, 'C'); if ( $new_entrada['status'] == false) {return $new_entrada; }
+          }
+        }
+        
         $ii = $ii + 1;
       }
       return $detalle_compra; 
@@ -217,6 +259,19 @@ class Compra_insumos
 
   //Implementamos un método para desactivar categorías
   public function desactivar($idcompra_proyecto) {
+    # DEVOLVEMOS EL STOK
+    $sqldel = "SELECT * FROM detalle_compra WHERE idcompra_proyecto='$idcompra_proyecto';";
+    $get_compra = ejecutarConsultaArray($sqldel);  if ($get_compra['status'] == false) { return $get_compra; }
+    foreach ($get_compra['data'] as $key => $val) {
+      //Eliminamos todos los permisos asignados para volverlos a registrar
+      $sqldel = "DELETE FROM almacen_detalle WHERE iddetalle_compra='".$val['iddetalle_compra']."';";
+      $del_ad = ejecutarConsulta($sqldel);  if ($del_ad['status'] == false) { return $del_ad; }
+
+      $sql = "UPDATE almacen_resumen SET  total_stok= total_stok - ".$val['cantidad']." , total_ingreso= total_ingreso - ".$val['cantidad']."
+        WHERE idproyecto = '$this->id_proyecto_sesion' and idproducto ='".$val['idproducto']."';";
+        $ar = ejecutarConsulta($sql, 'U'); if ( $ar['status'] == false) {return $ar; }
+    }
+
     $sql = "UPDATE compra_por_proyecto SET estado='0',user_trash= '$this->id_usr_sesion' WHERE idcompra_proyecto='$idcompra_proyecto'";
 		return ejecutarConsulta($sql, 'T');
 		
@@ -230,6 +285,20 @@ class Compra_insumos
 
   //Implementamos un método para activar categorías
   public function eliminar($idcompra_por_proyecto) {
+
+    # DEVOLVEMOS EL STOK
+    $sqldel = "SELECT * FROM detalle_compra WHERE idcompra_proyecto='$idcompra_por_proyecto';";
+    $get_compra = ejecutarConsultaArray($sqldel);  if ($get_compra['status'] == false) { return $get_compra; }
+    foreach ($get_compra['data'] as $key => $val) {
+      //Eliminamos todos los permisos asignados para volverlos a registrar
+      $sqldel = "DELETE FROM almacen_detalle WHERE iddetalle_compra='".$val['iddetalle_compra']."';";
+      $del_ad = ejecutarConsulta($sqldel);  if ($del_ad['status'] == false) { return $del_ad; }
+
+      $sql = "UPDATE almacen_resumen SET  total_stok= total_stok - ".$val['cantidad']." , total_ingreso= total_ingreso - ".$val['cantidad']."
+        WHERE idproyecto = '$this->id_proyecto_sesion' and idproducto ='".$val['idproducto']."';";
+        $ar = ejecutarConsulta($sql, 'U'); if ( $ar['status'] == false) {return $ar; }
+    }
+
     $sql = "UPDATE compra_por_proyecto SET estado_delete='0',user_delete= '$this->id_usr_sesion' WHERE idcompra_proyecto='$idcompra_por_proyecto'";
 		return  ejecutarConsulta($sql, 'D');		
   }

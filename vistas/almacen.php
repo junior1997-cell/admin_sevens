@@ -600,7 +600,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="form-group">
                               <label for="producto_tag">                                 
                                 <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_tag();"><i class="fa-solid fa-rotate-right"></i></span> 
-                                Producto <small >(mas EPP)</small> <span class="cargando_productos_ag"></span> 
+                                Producto <small >(mas EPP)</small> <span class="cargando_productos_tag"></span> 
                               </label>
                               <select name="producto_tag" id="producto_tag" class="form-control" placeholder="Producto" onchange="add_producto_tag(this);">                                
                               </select>
