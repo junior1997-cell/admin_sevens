@@ -258,12 +258,6 @@ if (!isset($_SESSION["nombre"])) {
 
       break;
 
-      case 'marcas_x_producto':
-        $rspta = $almacen->marcas_x_producto($_POST["id_proyecto"], $_POST["id_producto"]);
-        echo json_encode($rspta, true);
-      break;
-
-
       //F I N I  I N S E R T  Y  L I S T  D A T A  E N  L O S  A L M A C E N E S  G.
 
       // ══════════════════════════════════════ secc 3 ════════════════════════════════

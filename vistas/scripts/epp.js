@@ -80,9 +80,9 @@ function tabla_resumen_epp() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2], }, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2,3,4,5,6], } },
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2,4,5,6], } },
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2,4,5,6], }, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis" },
     ],
     ajax: {
@@ -134,9 +134,9 @@ function listar_trabajdor() {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2], }, orientation: 'landscape', pageSize: 'LEGAL', },
-      { extend: "colvis" },
+      // { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
+      // { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2], }, orientation: 'landscape', pageSize: 'LEGAL', },
+      // { extend: "colvis" },
     ],
     ajax: {
       url: `../ajax/epp.php?op=listar_trabajdor&idproyecto=${idproyecto}`,
@@ -155,7 +155,7 @@ function listar_trabajdor() {
       if (data[2] != "") { $("td", row).eq(5).addClass("text-nowrap text-center"); }
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_",
+      lengthMenu: "Ver: _MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -216,9 +216,9 @@ function epp_tabajador(nombres, t_ropa, t_zapato, id_tpp,) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2,3], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2,3], } },
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 2,3,4,5,6], } },
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 2,3,4,5,6], } },
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 2,3,4,5,6], }, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis" },
     ],
     ajax: {
@@ -270,9 +270,9 @@ function tabla_detalle_epp(idproducto,nombre,marca) {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2], } },
-      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2], }, orientation: 'landscape', pageSize: 'LEGAL', },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0, 1, 2,3], } },
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0, 1, 2,3], } },
+      { extend: 'pdfHtml5', footer: false, exportOptions: { columns: [0, 1, 2,3], }, orientation: 'landscape', pageSize: 'LEGAL', },
       { extend: "colvis" },
     ],
     ajax: {
@@ -380,19 +380,20 @@ function mostrar(idepp) {
 
   lista_select2(`../ajax/epp.php?op=select_2_insumos_pp&idproyecto=${localStorage.getItem('nube_idproyecto')}`, '#producto_xp', null);
 
-  $("#cargando-1-fomulario").hide();
-  $("#cargando-2-fomulario").show();
+  $("#cargando-3-fomulario").hide();
+  $("#cargando-4-fomulario").show();
 
   $("#modal-ver-editar-epp").modal("show");
 
   $.post("../ajax/epp.php?op=mostrar", { idepp: idepp }, function (e, status) {
-
+    // p.nombre,um.abreviacion, ad.idalmacen_detalle, ad.idalmacen_resumen, ad.idproyecto_destino,
+    // ad.idtrabajador_por_proyecto, ad.tipo_mov,ad.marca, ad.fecha, ad.cantidad
     e = JSON.parse(e); //console.log('laaaaaaaaaa'); console.log(e);
     if (e.status == true) {
       $("#idalmacen_x_proyecto_xp").val(e.data.idepp_x_proyecto);
       $("#idtrabajador_xp").val(e.data.idtrabajador_por_proyecto);
       $("#idalmacen_resumen_xp").val(e.data.idalmacen_resumen);
-      $("#epp_xp").val(e.data.nombre);
+      $("#epp_xp").val(`${e.data.nombre} -  ${e.data.nombre}`);
       $("#unidad_m").val(e.data.abreviacion);
       $("#id_producto_xp").val(e.data.idproducto);
       // id_product_edit = e.data.idproducto;
@@ -402,8 +403,8 @@ function mostrar(idepp) {
 
       // $("#marca_xp").val(e.data.marca).trigger('change');
 
-      $("#cargando-1-fomulario").show();
-      $("#cargando-2-fomulario").hide();
+      $("#cargando-3-fomulario").show();
+      $("#cargando-4-fomulario").hide();
 
 
     } else {
@@ -516,22 +517,31 @@ function editar_epp(e) {
   });
 }
 
-function eliminar_detalle(idalmacen_x_proyecto, producto) {
+//Función para ANULAR registros
+function eliminar_detalle(idalmacen_detalle,idalmacen_resumen,cantidad, producto) {
 
-  crud_eliminar_papelera(
-    "../ajax/epp.php?op=desactivar",
-    "../ajax/epp.php?op=eliminar",
-    idalmacen_x_proyecto,
-    "!Elija una opción¡",
-    `<b class="text-danger"><del> ${producto} </del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`,
-    function () { sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado.") },
-    function () { sw_success('Eliminado!', 'Tu registro ha sido Eliminado.') },
-    function () { tabla_epp_x_tpp.ajax.reload(null, false); },
-    false,
-    false,
-    false,
-    false
-  );
+  Swal.fire({
+    title: "¿Está Seguro de  Eliminar el registro?",
+    html:`<b class="text-danger"><del> ${producto} </del></b>`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, Eliminar!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.post("../ajax/epp.php?op=eliminar", { id_tabla: idalmacen_detalle,idalmacen_resumen: idalmacen_resumen,cantidad:cantidad }, function (e) {
+        e = JSON.parse(e); console.log(e);
+        if (e.status == true) {
+          Swal.fire("Eliminado!", "El registro ha sido Eliminado.", "success");
+
+          tabla_epp_x_tpp.ajax.reload(null, false);
+        } else {
+          Swal.fire("Error!", e, "error");
+        }
+      });
+    }
+  });
 }
 
 ///add varios elementos para guardar 
@@ -548,6 +558,8 @@ function add_row(el) {
   idProduc_almacen_resumen = $('option:selected', el).attr('data-idProduc_almacen_resu');
   modelo      = $('option:selected', el).attr('data-modelo');
   abreviacion = $('option:selected', el).attr('data-abreviacion');
+  stok = $('option:selected', el).attr('data-total_stok');
+  
   
 
   if (id_insumo == null) {
@@ -567,29 +579,28 @@ function add_row(el) {
 
         if (!i_Array.includes(i)) { i_Array.push(i); }
 
-        codigoHTML = `<hr class="id_${i}">
-                  <div class="row id_${i}" >
+        codigoHTML = ` <div class="row id_${i}" >
 
                       <!-- Nombre Producto -->
-                      <div class="col-12 col-sm-12 col-md-6 col-lg-5">
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="form-group">
-                        <label for="">Nombre Producto</label>
+                        <!--<label for="">Nombre Producto</label>-->
                         <input type="hidden" name="id_insumo[]" class="form-control" id="id_insumo" value="${id_insumo}"/>
                         <input type="hidden" name="idProduc_almacen_resumen[]" class="form-control" id="idProduc_almacen_resumen" value="${idProduc_almacen_resumen}"/>
-                          <span class="form-control-mejorado"> ${nombre} </span>  
+                          <span class="form-control-mejorado"> ${nombre} - Stock ${stok} </span>  
                         </div>
                       </div>
                       <!-- unidad -->
-                      <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+                      <div class="col-12 col-sm-12 col-md-6 col-lg-1">
                         <div class="form-group">
-                          <label for="">U.M</label>
+                        <!--<label for="">U.M</label>-->
                           <span class="form-control-mejorado"> ${abreviacion} </span>  
                         </div>
                       </div> 
                       <!-- MARCA -->
                       <div class="col-12 col-sm-12 col-md-6 col-lg-2">
                         <div class="form-group">
-                          <label for="">Marca</label>
+                         <!-- <label for="">Marca</label> -->
                           <select name="marca[]" id="marca_select_${id_insumo}" class="form-control"></select>
                         </div>
                       </div> 
@@ -597,19 +608,21 @@ function add_row(el) {
                       <!-- cantidad -->
                       <div class="col-12 col-sm-12 col-md-6 col-lg-2">
                         <div class="form-group">
-                          <label for="">Cantidad</label>
-                          <input type="text" name="cantidad[]" class="form-control" id="cantidad" placeholder="Cantidad"/>
+                          <!--<label for="">Cantidad</label>-->
+                          <input type="number" name="cantidad_epp${idProduc_almacen_resumen}" class="form-control" id="cantidad_epp${idProduc_almacen_resumen}" onkeyup="replicar_cantidad(${idProduc_almacen_resumen})" placeholder="Cantidad" required min="0" step="0.01" max="${stok}"/>
+                          <input type="hidden" name="cantidad[]" class="form-control" id="cantidad_epp_env${idProduc_almacen_resumen}"/>
                         </div>
                       </div> 
 
                       <div class="col-12 col-sm-12 col-md-1 col-lg-1">
                         <div class="form-group"> 
-                          <label class="text-white">.</label> <br>
+                        <!--<label class="text-white">.</label> <br>-->
                           <button type="button" class="btn bg-gradient-danger cursor-pointer" aria-hidden="true" data-toggle="tooltip" data-original-title="Eliminar" onclick="eliminar_item(${i});"><i class="far fa-trash-alt"></i></button>
                         </div>
                       </div>
 
                   </div>`;
+                  $(`#cantidad_epp${idProduc_almacen_resumen}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
 
       }
 
@@ -641,6 +654,9 @@ function add_row(el) {
 
   // console.log(miArray);
 }
+
+//--------------------------------
+function replicar_cantidad(id) { $(`#cantidad_epp_env${id}`).val($(`#cantidad_epp${id}`).val()); }
 
 function eliminar_item(id) {
 
@@ -689,12 +705,12 @@ $(function () {
     ignore: '.select2-input, .select2-focusser',
     rules: {
       fecha_g: { required: true },
-      "cantidad[]": { required: true, positiveNumber: true },
+      // "cantidad[]": { required: true, positiveNumber: true },
       // cantidad: { required: true, pattern: /^[1-9]\d*$/},
     },
     messages: {
       fecha_g: { required: "Por favor ingresar fecha" },
-      "cantidad[]": { required: "Por favor ingresar la cantidad", }
+      // "cantidad[]": { required: "Por favor ingresar la cantidad", }
 
     },
 

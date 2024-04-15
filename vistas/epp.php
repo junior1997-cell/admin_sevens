@@ -253,15 +253,31 @@ if (!isset($_SESSION["nombre"])) {
                                   <input type="date" name="fecha_g" class="form-control" id="fecha_g" />
                                 </div>
                               </div>
-                              <div class="col-12 pl-0">
-                                <div class="text-primary"><label for="">E.P.P Seleccionados </label></div>
+
+
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2">E.P.P - AGREGADOS</b> </span></div>
                               </div>
 
-                              <div class="card col-12 px-3 py-3 codigoGenerado" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
-                                <!-- agregando -->
-                                <div class="alert alert-warning alert-dismissible alerta">
-                                  <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                                  NO TIENES NINGÚN EQUIPO DE PROTECCIÓN PERSONAL SELECCIONADO.
+                              <div class="col-12 col-sm-12 col-md-12 col-lg-12 ">
+                                <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                                  <div class="row head_list" > <!-- style="display: none;" -->
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold">Unidad</div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Marca</div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Cantidad</div>
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold"></div>
+                                    <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+                                  </div>
+                                  <div class="codigoGenerado" id="html_producto_ag">
+                                    <div class="col-12  col-lg-12 html_mensaje alerta">
+                                      <div class="alert alert-warning alert-dismissible mb-0">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h5><i class="icon fas fa-exclamation-triangle "></i> Alerta!</h5>
+                                        NO TIENES NINGÚN PRODUCTO SELECCIONADO.
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
 

@@ -168,7 +168,7 @@
     $hojaActiva->setCellValue('B'.$fila_1, ($valor['cantidad']));
     $hojaActiva->setCellValue('C'.$fila_1, ($valor['abreviacion']));
     $hojaActiva->setCellValue('D'.$fila_1, ($valor['producto']));
-    $hojaActiva->setCellValue('H'.$fila_1, (date("d/m/Y", strtotime($valor['fecha_ingreso'])) ));
+    $hojaActiva->setCellValue('H'.$fila_1, (date("d/m/Y", strtotime($valor['fecha'])) ));
     $spreadsheet->getActiveSheet()->getStyle('J'.$fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
     // Obtén el estilo de la celda

@@ -74,18 +74,9 @@
 
         break;
 
-      
-        case 'desactivar':
-      
-          $rspta = $epp->desactivar($_GET['id_tabla']);
-      
-          echo json_encode($rspta,true);
-      
-        break;
-
         case 'eliminar':
       
-          $rspta = $epp->eliminar($_GET['id_tabla']);
+          $rspta = $epp->eliminar($_POST['id_tabla'], $_POST['idalmacen_resumen'], $_POST['cantidad']);
       
           echo json_encode($rspta,true);
       
@@ -134,20 +125,19 @@
           $rspta = $epp->listar_epp_trabajdor($_GET["id_tpp"], $_GET["proyecto"]);
           //Vamos a declarar un array
           $data = [];
-          
+
           $cont = 1;
           if ($rspta['status'] == true) {
             while ($reg = $rspta['data']->fetch_object()) {
-
+              // '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idalmacen_detalle . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
               $data[] = [
                 "0" => $cont++,
-                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg->idepp_x_proyecto . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ' <button class="btn btn-danger btn-sm" onclick="eliminar_detalle(' . $reg->idepp_x_proyecto .', \''.encodeCadenaHtml($reg->producto).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
-                "2" => $reg->producto,
+                "1" => '<button class="btn btn-danger btn-sm" onclick="eliminar_detalle(' . $reg->idalmacen_detalle .',' . $reg->idalmacen_resumen .', \''.encodeCadenaHtml($reg->cantidad).'\', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>',  
+                "2" => $reg->nombre,
                 "3" => $reg->marca,
                 "4" => $reg->abreviacion,
                 "5" => $reg->cantidad,
-                "6" => $reg->fecha_ingreso,
+                "6" => $reg->fecha,
                 
               ];
             }
@@ -172,7 +162,7 @@
 
             foreach ($rspta['data'] as $key => $value) {  
 
-                $data .= '<option value=' .$value['idproducto']. ' data-nombre=" \''.encodeCadenaHtml($value['nombre_producto']).'\'" data-idProduc_almacen_resu="'.$value['idproducto'].'" data-modelo="'.$value['modelo'].'" data-abreviacion="'.$value['abreviacion'].'">'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
+                $data .= '<option value=' .$value['idproducto']. ' data-nombre=" \''.encodeCadenaHtml($value['nombre_producto']).'\'" data-idProduc_almacen_resu="'.$value['idalmacen_resumen'].'" data-modelo="'.$value['modelo'].'" data-abreviacion="'.$value['abreviacion'].'"   data-total_stok="'.$value['total_stok'].'"  >'.( !empty($value['nombre_producto']) ? $value['nombre_producto']: '') .'</option>';
                 //data-marca="'.$value['marca'] .'"
             }
 
@@ -198,6 +188,7 @@
           echo json_encode($rspta,true);
       
         break;
+
         //resumen
         case'tabla_resumen_epp':
           $rspta = $epp->tabla_resumen_epp($_GET["idproyecto"]);
@@ -207,16 +198,17 @@
           $cont = 1;
           if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $value) {    
-
+              // ad.idalmacen_resumen, ad.idproyecto_destino,SUM(ad.cantidad) as cantidad_repartida,p.nombre, p.idproducto, um.abreviacion, ar.total_stok as Saldo, 
+              // (SUM(ad.cantidad) + ar.total_stok ) as total_stok
               $data[] = [
                 "0" => $cont++,
                 "1" =>$value['idproducto'],
                 "2" =>$value['nombre'].' - '.$value['marca'],
                 "3" =>$value['abreviacion'],
-                "4" =>$value['cantidad_total'],
-                "5" =>$value['cantidad_rapartida'],                
-                "6" =>$value['cantidad_q_queda'],
-                "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tabla_detalle_epp(' . $value['idproducto'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
+                "4" =>$value['total_stok'],
+                "5" =>$value['cantidad_repartida'],                
+                "6" =>$value['Saldo'],
+                "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tabla_detalle_epp(' . $value['idalmacen_resumen'] . ',' . $value['idproyecto_destino'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
                 
                 
               ];
@@ -243,13 +235,12 @@
           $cont = 1;
           if ($rspta['status'] == true) {
             foreach ($rspta['data'] as $key => $value) {    
-              /*ap.idalmacen_x_proyecto,ap.idproducto,ap.idtrabajador_por_proyecto,ap.fecha_ingreso,ap.dia_ingreso,
-              ap.cantidad,ap.marca,t.nombres */
+              // ad.idalmacen_detalle, ad.idalmacen_resumen, ad.idproyecto_destino, t.nombres, ad.cantidad, ad.fecha
               $data[] = [
                 "0" => $cont++,
                 "1" =>$value['nombres'],
                 "2" =>$value['cantidad'],
-                "3" =>$value['fecha_ingreso'],
+                "3" =>$value['fecha'],
                 //"5" => '<button class="btn btn-info btn-sm mb-2" onclick="tbl_detalle_epp(' . $value['idproducto'] . ', \'' .  htmlspecialchars($value['nombre'], ENT_QUOTES) . '\', \'' .$value['marca']. '\')" data-toggle="tooltip" data-original-title="Ver compras" title="Ver compras"><i class="far fa-eye"></i></button>'. $toltip,
                 //"6" =>$value['cantidad_q_queda'],
                 

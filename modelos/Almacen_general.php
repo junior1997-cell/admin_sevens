@@ -155,16 +155,6 @@ class Almacen_general
   // ------------ ADD PRODUCTOS DE PROYECTOS A UN ALMACEN GENERAL  ---------------------
   //------------------------------------------------------------------------------------
 
-  public function marcas_x_producto($id_proyecto, $id_producto)
-  {
-    $sql_0 = "SELECT  dc.marca,  pr.nombre AS nombre_producto
-		FROM compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr
-		WHERE cpp.idcompra_proyecto = dc.idcompra_proyecto AND dc.idproducto = pr.idproducto     
-    AND cpp.idproyecto = '$id_proyecto' AND dc.idproducto = '$id_producto'
-    AND cpp.estado = '1' AND cpp.estado_delete = '1'  GROUP BY dc.idproducto, dc.marca ORDER BY pr.nombre ASC;";
-    return ejecutarConsultaArray($sql_0);
-  }
-
   public function select2_recursos_almacen($idproyecto)
   {
     $sql = "SELECT ar.idalmacen_resumen,ar.idproyecto,ar.idproducto,ar.tipo,ar.total_egreso,ar.total_stok,ar.total_ingreso, p.nombre as nombre_producto, 

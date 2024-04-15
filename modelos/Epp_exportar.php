@@ -19,8 +19,8 @@ class Epp_exportar
     WHERE tpp.idtrabajador = t.idtrabajador AND tpp.idproyecto = '$idproyecto' and tpp.idtrabajador_por_proyecto='$id_tpp' ";
     $datostrabajador =  ejecutarConsultaSimpleFila($sql1); if ($datostrabajador['status'] == false) { return $datostrabajador; }
 
-    $sql2="SELECT epp.idepp_x_proyecto, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha_ingreso
-    FROM epp_x_proyecto as epp 
+    $sql2="SELECT epp.idalmacen_detalle, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha
+    FROM almacen_detalle as epp 
     INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
     INNER JOIN producto AS p ON p.idproducto=ar.idproducto
     INNER JOIN unidad_medida AS um ON um.idunidad_medida = p.idunidad_medida
@@ -43,8 +43,8 @@ class Epp_exportar
       
       $id_tpp = $reg['idtrabajador_por_proyecto'];
 
-      $sql_detalle="SELECT epp.idepp_x_proyecto, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha_ingreso
-            FROM epp_x_proyecto as epp 
+      $sql_detalle="SELECT epp.idalmacen_detalle, p.nombre as producto, epp.marca, um.nombre_medida AS nombre_und, um.abreviacion, epp.cantidad, epp.fecha as fecha_ingreso 
+            FROM almacen_detalle as epp 
             INNER JOIN almacen_resumen as ar on ar.idalmacen_resumen = epp.idalmacen_resumen 
             INNER JOIN producto AS p ON p.idproducto=ar.idproducto
             INNER JOIN unidad_medida AS um ON um.idunidad_medida = p.idunidad_medida
