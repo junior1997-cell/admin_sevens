@@ -1,4 +1,4 @@
-var tabla_principal; var tabla_ingreso_pagos;
+var tabla_principal; var tabla_ingreso_pagos; var tabla_pago_x_persona;
 
 var tabla_recibo_por_honorario;
 
@@ -222,7 +222,7 @@ function listar_tbla_principal(nube_idproyecto) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      //{ targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      //{ targets: [11,13], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       { targets: [13,14,15,16,17,18], visible: false, searchable: false, },  
       { targets: [5,6,7,8,10,18], render: $.fn.dataTable.render.number(',', '.', 2) },  
     ],
@@ -265,7 +265,7 @@ function listar_tbla_recibo_por_honorario(id_mes) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       //{ targets: [13,14,15,16,17,18], visible: false, searchable: false, },    
     ],
   }).DataTable();
@@ -628,7 +628,7 @@ function listar_tbla_pagos_x_mes(idfechas_mes_pagos_administrador, id_tabajador_
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       //{ targets: [8,11],  visible: false,  searchable: false,  },
     ],
   }).DataTable();  
@@ -766,6 +766,7 @@ function desactivar_pago_x_mes(id) {
 
           reload_table_pagos_x_mes(id_fechas_mes);
           Swal.fire("Anulado!", "Tu registro ha sido Anulado.", "success");
+          if (tabla_pago_x_persona) {   tabla_pago_x_persona.ajax.reload(null, false);     }
         } else {
           ver_errores(e);
         }        
@@ -796,6 +797,7 @@ function activar_pago_x_mes(id) {
 
           reload_table_pagos_x_mes(id_fechas_mes);
           Swal.fire("ReActivado!", "Tu registro ha sido ReActivado.", "success");
+          if (tabla_pago_x_persona) {   tabla_pago_x_persona.ajax.reload(null, false);     }
         } else {
           Swal.fire("Error!", e, "error");
         }        
@@ -839,10 +841,53 @@ function reload_table_pagos_x_mes(id) {
     iDisplayLength: 10,//Paginación
     order: [[ 0, "asc" ]],//Ordenar (columna,orden)
     columnDefs: [
-      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD-MM-YYYY'), },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
       //{ targets: [8,11],  visible: false,  searchable: false,  },
     ],
   }).DataTable();
+}
+
+function ver_pagos_x_persona(idtrabajador  ) {
+  
+  $("#modal-tabla-pago-x-persona").modal("show");    
+
+  tabla_pago_x_persona=$('#tabla-pago-x-persona').dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    aProcessing: true,//Activamos el procesamiento del datatables
+    aServerSide: true,//Paginación y filtrado realizados por el servidor
+    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    buttons: ['copyHtml5', 'excelHtml5'],
+    ajax:{
+      url: '../ajax/pago_administrador.php?op=ver_pago_persona&idtrabajador='+idtrabajador,
+      type : "get",
+      dataType : "json",						
+      error: function(e){
+        console.log(e.responseText);	ver_errores(e);
+      }
+    },
+    createdRow: function (row, data, ixdex) {   
+      // columna: #0
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
+    },
+    footerCallback: function( tfoot, data, start, end, display ) {
+      var api1 = this.api(); var total1 = api1.column( 5 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
+      $( api1.column( 5 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total1)}</span>` );      
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10,//Paginación
+    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [2], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
+      //{ targets: [8,11],  visible: false,  searchable: false,  },
+    ],
+  }).DataTable();  
 }
 
 // ══════════════════════════════════════ OTROS ══════════════════════════════════════

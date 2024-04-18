@@ -144,8 +144,11 @@
                 "7"=> $pago_total  ,
                 "8"=> $pago_acumulado_hasta_hoy ,
                 "9" =>'<div class="formato-numero-conta"> 
-                  <button class="btn btn-info '.$btn_depositos.' btn-sm mr-1" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')">
-                    <i class="far fa-eye"></i> Detalle
+                  <button class="btn btn-info '.$btn_depositos.' btn-sm mr-1" '. $deshabilitado . ' onclick="ver_pagos_x_persona('.$value['idtrabajador_por_proyecto'].')" data-toggle="tooltip" data-original-title="Ver todos los pagos" >
+                    <i class="fa-solid fa-gear"></i>
+                  </button> 
+                  <button class="btn btn-info '.$btn_depositos.' btn-sm mr-1" '. $deshabilitado . ' onclick="detalle_fechas_mes_trabajador('.$value['idtrabajador_por_proyecto'].', \'' . $value['nombres'] . '\', \'' . $fecha_inicio. '\', \'' . $date_actual. '\', \'' . $fecha_fin .'\', \''.$value['sueldo_mensual'] .'\', \''. $value['cuenta_bancaria'] .'\', \''. $count_dia .'\')" data-toggle="tooltip" data-original-title="Realizar pagos">
+                    <i class="far fa-eye"></i> 
                   </button> 
                   <button style="font-size: 14px;" class="btn '.$btn_depositos.' btn-xs">S/ '.number_format($value['cantidad_deposito'], 2, '.', ',').'</button>
                 </div>',
@@ -384,6 +387,42 @@
             echo json_encode($rspta, true);
           }
 
+        break;
+
+        // ══════════════════════════════════════ VER TODOS LO PAGOS ══════════════════════════════════════
+        case 'ver_pago_persona':
+
+          $rspta=$pago_administrador->ver_todos_pagos($_GET["idtrabajador"]);          
+          //Vamos a declarar un array
+          $data= Array();   $cont=1;
+           
+          if ($rspta['status'] == true) {
+            while ($reg = $rspta['data']->fetch_object()) {
+                           
+              $data[]=array(
+                "0"=>$cont++,               
+                "1"=>($reg->estado)? ' <button class="btn btn-danger btn-sm" onclick="desactivar_pago_x_mes('.$reg->idpago .')"><i class="far fa-trash-alt"></i></button>':                
+                ' <button class="btn btn-primary btn-sm" onclick="activar_pago_x_mes('.$reg->idpago .')"><i class="fa fa-check"></i></button>',     
+                "2"=> $reg->fecha_pago,
+                "3"=> $reg->tipo_comprobante,
+                "4"=> $reg->numero_comprobante ,
+                "5"=> $reg->monto_pago,
+                "6"=>($reg->estado)? '<span class="text-center badge badge-success">Activado</span>':'<span class="text-center badge badge-danger">Desactivado</span>'
+              );
+            }
+  
+            $results = array(
+              "sEcho"=>1, //Información para el datatables
+              "iTotalRecords"=>count($data), //enviamos el total registros al datatable
+              "iTotalDisplayRecords"=>1, //enviamos el total registros a visualizar
+              "data"=>$data
+            );
+  
+            echo json_encode($results, true);
+          } else {
+            echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
+          }          
+          
         break;
 
         default: 

@@ -535,7 +535,7 @@ class Almacen
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    WHERE ar.tipo <> 'EPP' AND ar.idproyecto = '$idproyecto' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre ASC;";    
+    WHERE ar.idproyecto = '$idproyecto' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre ASC;";    
    return ejecutarConsultaArray($sql_0); 
 
   } 

@@ -515,6 +515,52 @@
                   </div>
                 </div>
 
+                <!-- MODAL - VER PAGO POR PERSONA -->
+                <div class="modal fade" id="modal-tabla-pago-x-persona">
+                  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header"> 
+                        <h4 class="modal-title titulo-tabla-rh">Lista de Pagos</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span class="text-danger" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <div class="modal-body ">                          
+                          
+                        <table id="tabla-pago-x-persona" class="table table-bordered table-striped display " style="width: 100% !important;">
+                          <thead>
+                            <tr> 
+                              <th class="text-center">#</th> 
+                              <th>OP</th> 
+                              <th>Fecha Pago</th> 
+                              <th>Tipo</th> 
+                              <th>Numero</th>
+                              <th>Monto</th>     
+                              <th>Estado</th>                                        
+                            </tr>
+                          </thead>
+                          <tbody>  </tbody>
+                          <tfoot>
+                            <tr> 
+                              <th class="text-center">#</th> 
+                              <th>OP</th> 
+                              <th>Fecha Pago</th> 
+                              <th>Tipo</th> 
+                              <th>Numero</th>
+                              <th>Monto</th>  
+                              <th>Estado</th>               
+                            </tr>
+                          </tfoot>
+                        </table>
+                          
+                      </div> 
+                      <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <!-- Modal recibo por honorarios - ----------------- NO SE USA --------------------------- -->
                 <div class="modal fade" id="modal-recibos-x-honorarios">
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">

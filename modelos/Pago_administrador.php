@@ -271,6 +271,19 @@ class PagoAdministrador
 
     return ejecutarConsulta($sql);
   }
+
+  // ══════════════════════════════════════ VER TODOS LO PAGOS ══════════════════════════════════════
+  public function ver_todos_pagos($idtrabajador) {
+    $sql = "SELECT pxma.idpagos_x_mes_administrador as idpago, fmpa.fecha_inicial, fmpa.fecha_final, fmpa.nombre_mes, fmpa.monto_x_mes, 
+    pxma.monto as monto_pago, pxma.fecha_pago, pxma.tipo_comprobante, pxma.numero_comprobante, pxma.estado
+    FROM trabajador_por_proyecto as tpp
+    INNER JOIN fechas_mes_pagos_administrador as fmpa ON fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
+    INNER JOIN pagos_x_mes_administrador as pxma ON pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador
+    where tpp.idtrabajador_por_proyecto = '$idtrabajador'
+    ORDER BY pxma.fecha_pago ASC;";
+     return ejecutarConsulta($sql);
+  }
+  
 }
 
 ?>
