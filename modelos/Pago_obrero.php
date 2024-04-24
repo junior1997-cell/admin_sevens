@@ -27,7 +27,7 @@ class PagoObrero
       $sql_2 = "SELECT SUM( pqs.monto_deposito) as total_deposito  
       FROM pagos_q_s_obrero pqs
       inner JOIN resumen_q_s_asistencia rqs on pqs.idresumen_q_s_asistencia= rqs.idresumen_q_s_asistencia
-      where rqs.ids_q_asistencia='$ids_q_asistencia';";
+      where rqs.ids_q_asistencia='$ids_q_asistencia' and pqs.estado='1' and pqs.estado_delete = '1';";
 
       $depositos = ejecutarConsultaSimpleFila($sql_2);  if ($depositos['status'] == false) { return $depositos; }
 
