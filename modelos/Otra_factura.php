@@ -13,10 +13,10 @@ class Otra_factura
   public function insertar($tipo_documento, $num_documento, $razon_social, $direccion, $empresa_acargo,  $tipo_comprobante, $nro_comprobante, 
   $forma_pago, $fecha_emision, $val_igv, $subtotal, $igv, $precio_parcial,$descripcion, $glosa, $comprobante, $tipo_gravada) {
 
-    $sql_1 = "SELECT  p.razon_social, p.tipo_documento, p.ruc, of.tipo_comprobante, of.numero_comprobante, of.fecha_emision, 
-    of.costo_parcial, of.forma_de_pago, of.estado, of.estado_delete
-    FROM otra_factura as of, proveedor as p
-    WHERE p.idproveedor = of.idproveedor and p.ruc ='$num_documento' AND of.tipo_comprobante ='$tipo_comprobante' and of.numero_comprobante ='$nro_comprobante';";
+    $sql_1 = "SELECT  p.razon_social, p.tipo_documento, p.ruc, o_f.tipo_comprobante, o_f.numero_comprobante, o_f.fecha_emision, 
+    o_f.costo_parcial, o_f.forma_de_pago, o_f.estado, o_f.estado_delete
+    FROM otra_factura as o_f, proveedor as p
+    WHERE p.idproveedor = o_f.idproveedor and p.ruc ='$num_documento' AND o_f.tipo_comprobante ='$tipo_comprobante' and o_f.numero_comprobante ='$nro_comprobante';";
 		$prov = ejecutarConsultaArray($sql_1); if ($prov['status'] == false) { return  $prov;}
 
     if (empty($prov['data']) || $tipo_comprobante == 'Ninguno') {      
@@ -146,11 +146,11 @@ class Otra_factura
   //Implementar un método para mostrar los datos de un registro a modificar
   public function mostrar($idotra_factura)
   {
-    $sql = "SELECT of.idotra_factura, of.idproveedor, of.idempresa_a_cargo, of.tipo_comprobante, of.numero_comprobante, of.forma_de_pago, of.fecha_emision, 
-    of.val_igv, of.subtotal, of.igv, of.costo_parcial, of.descripcion, of.glosa, of.comprobante, of.tipo_gravada, of.estado, of.estado_delete,
+    $sql = "SELECT o_f.idotra_factura, o_f.idproveedor, o_f.idempresa_a_cargo, o_f.tipo_comprobante, o_f.numero_comprobante, o_f.forma_de_pago, o_f.fecha_emision, 
+    o_f.val_igv, o_f.subtotal, o_f.igv, o_f.costo_parcial, o_f.descripcion, o_f.glosa, o_f.comprobante, o_f.tipo_gravada, o_f.estado, o_f.estado_delete,
     ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento ec_numero_documento, ec.logo as ec_logo, p.ruc, p.razon_social,p.tipo_documento
     FROM otra_factura AS of, empresa_a_cargo AS ec, proveedor as p
-    WHERE of.idempresa_a_cargo = ec.idempresa_a_cargo AND of.idproveedor = p.idproveedor AND of.idotra_factura ='$idotra_factura'";
+    WHERE o_f.idempresa_a_cargo = ec.idempresa_a_cargo AND o_f.idproveedor = p.idproveedor AND o_f.idotra_factura ='$idotra_factura'";
     return ejecutarConsultaSimpleFila($sql);
   }
 
@@ -159,22 +159,22 @@ class Otra_factura
   
     $filtro_empresa_a_cargo = ""; $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = ""; 
 
-    if (empty($empresa_a_cargo) ) {  $filtro_empresa_a_cargo = ""; } else { $filtro_empresa_a_cargo = "AND of.idempresa_a_cargo = '$empresa_a_cargo'"; }
+    if (empty($empresa_a_cargo) ) {  $filtro_empresa_a_cargo = ""; } else { $filtro_empresa_a_cargo = "AND o_f.idempresa_a_cargo = '$empresa_a_cargo'"; }
 
     if ( !empty($fecha_1) && !empty($fecha_2) ) {
-      $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
+      $filtro_fecha = "AND o_f.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'";
     } else if (!empty($fecha_1)) {      
-      $filtro_fecha = "AND of.fecha_emision = '$fecha_1'";
+      $filtro_fecha = "AND o_f.fecha_emision = '$fecha_1'";
     }else if (!empty($fecha_2)) {        
-      $filtro_fecha = "AND of.fecha_emision = '$fecha_2'";
+      $filtro_fecha = "AND o_f.fecha_emision = '$fecha_2'";
     }   
 
-    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND of.idproveedor = '$id_proveedor'"; }
+    if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND o_f.idproveedor = '$id_proveedor'"; }
 
-    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }  
+    if ( empty($comprobante) ) { } else { $filtro_comprobante = "AND o_f.tipo_comprobante = '$comprobante'"; }  
 
-    $sql = "SELECT of.idotra_factura,of.idproveedor,of.tipo_comprobante,of.numero_comprobante,of.forma_de_pago,of.fecha_emision,of.subtotal,of.igv,of.costo_parcial,of.descripcion,of.glosa,of.comprobante,of.estado,p.razon_social, p.ruc 
-    FROM otra_factura as of, proveedor as p WHERE of.estado=1 AND of.estado_delete=1 AND of.idproveedor=p.idproveedor $filtro_empresa_a_cargo $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY idotra_factura DESC";
+    $sql = "SELECT o_f.idotra_factura,o_f.idproveedor,o_f.tipo_comprobante,o_f.numero_comprobante,o_f.forma_de_pago,o_f.fecha_emision,o_f.subtotal,o_f.igv,o_f.costo_parcial,o_f.descripcion,o_f.glosa,o_f.comprobante,o_f.estado,p.razon_social, p.ruc 
+    FROM otra_factura as o_f, proveedor as p WHERE o_f.estado=1 AND o_f.estado_delete=1 AND o_f.idproveedor=p.idproveedor $filtro_empresa_a_cargo $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY idotra_factura DESC";
     return ejecutarConsulta($sql);
 
   }

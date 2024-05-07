@@ -166,8 +166,11 @@
                                       <li class="nav-item" data-toggle="tooltip" data-original-title="COMIDA EXTRA">
                                         <a class="nav-link modulo-nav" onclick="cargando_search(); delay(function(){select_modulo('comida_extra'); }, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura"data-toggle="tooltip" data-original-title="COMIDA EXTRA" ><i class="fas fa-drumstick-bite nav-icon"></i></a>
                                       </li>
-                                      <li class="nav-item" data-toggle="tooltip" data-original-title="OTRA FACTURA">
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="OTRA FACTURA (sin proyecto)">
                                         <a class="nav-link modulo-nav" onclick="cargando_search(); delay(function(){select_modulo('otra_factura'); }, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura"><i class="nav-icon fas fa-receipt"></i></a>
+                                      </li>
+                                      <li class="nav-item" data-toggle="tooltip" data-original-title="OTRA FACTURA (con proyecto)">
+                                        <a class="nav-link modulo-nav" onclick="cargando_search(); delay(function(){select_modulo('otra_factura_proyecto'); }, 100 );" data-toggle="pill" role="tab" aria-selected="false" href="#tabs-for-resumen-factura"><i class="nav-icon fas fa-receipt"></i></a>
                                       </li>
                                     </ul>
                                   </div>
@@ -374,7 +377,8 @@
                             <li class="m-b-04rem"><i class="fas fa-utensils nav-icon"></i> PENSION</li>
                             <li class="m-b-04rem"><i class="fas fa-hamburger nav-icon"></i> BREAK</li>
                             <li class="m-b-04rem"><i class="fas fa-drumstick-bite nav-icon"></i> COMIDA EXTRA</li>
-                            <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(sin proyecto)</small></li>
+                            <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(Sin Proyecto)</small></li>
+                            <li class="m-b-04rem"><i class="nav-icon fas fa-receipt"></i> OTRA FACTURA <small class="text-red">(Con Proyecto)</small></li>
                             <!-- <li>OTRO INGRESO</li> -->
                             <!-- <li class="m-b-04rem"><i class="fas fa-briefcase nav-icon"></i> PAGO ADMINISTRADORES</li> -->
                             <!-- <li class="m-b-04rem"><i class="fas fa-users nav-icon"></i> PAGO OBREROS</li> -->
