@@ -70,6 +70,7 @@ if (!isset($_SESSION["nombre"])) {
                       <h3 class="card-title">
                         <button type="button" class="btn bg-gradient-success btn_add_almacen" data-toggle="modal" data-target="#modal-agregar-almacen-general" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Almacen</button>
                         <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
+                        <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiarig();"><i class="fas fa-plus-circle"></i> Ingreso Directo</button>
                         Admnistra de manera eficiente a tus almacenes.
                       </h3>
                     </div>
@@ -320,7 +321,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="form-group select_recurso" style="display: none; padding-left: 2px;">
                               <label for="producto_ag">
                                 <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span>
-                                Producto  <span class="cargando_productos_ag"></span>
+                                Producto <span class="cargando_productos_ag"></span>
 
                               </label>
                               <select name="producto_ag" id="producto_ag" class="form-control" placeholder="Producto" onchange="add_producto_ag(this);">
@@ -330,7 +331,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="form-group select_init_recurso">
                               <label for="producto_ag">
                                 <span class="badge badge-danger cursor-pointer" data-toggle="tooltip" data-original-title="Selecciona un proyecto"><i class="fa-solid fa-rotate-right"></i></span>
-                                Producto  <span class="cargando_productos_ag"></span>
+                                Producto <span class="cargando_productos_ag"></span>
 
                               </label>
                               <p class="text-warning m-b-01rem" style="margin-top: 7px"> <strong>SELECCIONAR PROYECTO</strong> </p>
@@ -342,11 +343,11 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
 
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2" >PRODUCTOS - AGREGADOS</b>  </span></div>
+                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2">PRODUCTOS - AGREGADOS</b> </span></div>
                           </div>
 
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 " >
-                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">                      
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 ">
+                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
                               <div class="row head_list" style="display: none;">
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Proyecto</div>
@@ -454,7 +455,7 @@ if (!isset($_SESSION["nombre"])) {
                               <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold">
 
                                 <div class="custom-control custom-switch" data-toggle="tooltip" data-original-title="Activar todos">
-                                  <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();" >
+                                  <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();">
                                   <label for="marcar_todo" class="custom-control-label"></label>
                                 </div>
                               </div>
@@ -463,7 +464,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="row" id="html_producto_transf">
                               <div class="col-12 html_mensaje">
                                 <div class="alert alert-warning alert-dismissible mb-0">
-                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" >×</button>
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                   <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
                                   NO TIENES NINGÚN PRODUCTO SELECCIONADO.
                                 </div>
@@ -502,6 +503,106 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
               </div>
             </div>
+
+            <!-- MODAL - INGRESO DIRECTO - chargue 1-2 -->
+            <div class="modal fade" id="modal-ingreso-directo">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Ingreso Directo</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span class="text-danger" aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+                    <!-- form start -->
+                    <form id="form-almacen-tup" name="form-almacen-tup" method="POST">
+                      <div class="px-2">
+                        <div class="row" id="cargando-1-fomulario">
+
+                          <!-- idproyecto_origen_tup -->
+                          <input type="hidden" name="idproyecto_origen_tup" id="idproyecto_origen_tup" value="<?php echo $_SESSION['idproyecto']; ?>" />
+
+                          <!-- Producto -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                            <div class="form-group">
+                              <label for="producto_tup">
+                                <!-- <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_producto_todos();"><i class="fa-solid fa-rotate-right"></i></span>  -->
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_producto_tup();"><i class="fa-solid fa-rotate-right"></i></span>
+                                Producto <span class="cargando_producto_tup"></span>
+                              </label>
+                              <select name="producto_tup" id="producto_tup" class="form-control" placeholder="Producto" onchange="add_producto_tup(this);">
+                              </select>
+                            </div>
+                          </div>
+
+                          <!-- Fecha -->
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                            <div class="form-group">
+                              <label for="fecha_tup">Fecha</label>
+                              <input type="date" name="fecha_tup" class="form-control" id="fecha_tup" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" />
+
+                            </div>
+                          </div>
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2">PRODUCTOS - AGREGADOS</b> </span></div>
+                          </div>
+
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 ">
+                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
+                              <div class="row titulo-add-producto-tup mt-2">
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-5 col-xl-5"><label>Nombre Producto</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label>U.M.</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label>Marca </label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label>Cantidad</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-1 col-xl-1"></div>
+                              </div>
+                              <div class="row" id="html_producto_tup">
+                                <span> Seleccione un producto</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Descripción -->
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                              <label for="descripcion_tup">Descripción</label>
+                              <textarea name="descripcion_tup" id="descripcion_tup" class="form-control" cols="30" rows="2" placeholder="ejem: Por que se terminó el proyecto."></textarea>
+                            </div>
+                          </div>
+
+                          <!-- barprogress -->
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;" id="barra_progress_tup_div">
+                            <div class="progress">
+                              <div id="barra_progress_tup" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                0%
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row" id="cargando-2-fomulario" style="display: none;">
+                          <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br />
+                            <h4>Cargando...</h4>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /.px-2 -->
+                      <button type="submit" style="display: none;" id="submit-form-almacen-tup">Submit</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-danger" onclick="limpiar_form_tup();" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success" id="guardar_registro_almacen_tup">Guardar Cambios</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
 
           </section>
           <!-- /.content -->

@@ -39,12 +39,12 @@ if (!isset($_SESSION["nombre"])) {
     $name_alm_proyecto         = isset($_POST["name_alm_proyecto"]) ? limpiarCadena($_POST["name_alm_proyecto"]) : "";
     $fecha_transf_proy_alm     = isset($_POST["fecha_transf_proy_alm"]) ? limpiarCadena($_POST["fecha_transf_proy_alm"]) : "";
     $idalmacen_general_origen  = isset($_POST["idalmacen_general_origen"]) ? limpiarCadena($_POST["idalmacen_general_origen"]) : "";
-    
+
     switch ($_GET["op"]) {
 
-      // ══════════════════════════════════════ secc 1 ════════════════════════════════
+        // ══════════════════════════════════════ secc 1 ════════════════════════════════
 
-      //I N I C I O  A L M A C E N E S  G E N E R A L E S
+        //I N I C I O  A L M A C E N E S  G E N E R A L E S
 
       case 'guardar_y_editar_almacen':
 
@@ -58,23 +58,23 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         }
 
-      break;
+        break;
 
       case 'desactivar':
         $rspta = $almacen_general->desactivar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-      break;
+        break;
 
       case 'eliminar':
         $rspta = $almacen_general->eliminar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-      break;
+        break;
 
       case 'mostrar':
         $rspta = $almacen_general->mostrar($idalmacen_general);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
-      break;
+        break;
 
       case 'tabla_principal':
         $rspta = $almacen_general->tabla_principal($_GET["id_categoria"]);
@@ -109,25 +109,26 @@ if (!isset($_SESSION["nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-      break;
+        break;
 
-      //F I N  A L M A C E N E S  G E N E R A L E S
+        //F I N  A L M A C E N E S  G E N E R A L E S
 
-      // ══════════════════════════════════════ secc 2 ════════════════════════════════
+        // ══════════════════════════════════════ secc 2 ════════════════════════════════
 
-      //I N I C I O  I N S E R T  Y  L I S T  D A T A  E N  L O S  A L M A C E N E S  G.
+        //I N I C I O  I N S E R T  Y  L I S T  D A T A  E N  L O S  A L M A C E N E S  G.
 
-      //Listar almacenes en la cabecera
+        //Listar almacenes en la cabecera
       case 'lista_de_categorias':
         $rspta = $almacen_general->lista_de_categorias();
         echo json_encode($rspta, true);
-      break;
+        break;
 
       case 'tabla_detalle':
 
         $rspta = $almacen_general->tabla_detalle($_GET["id_proyecto"], $_GET["id_almacen"]);
 
-        $data = []; $cont = 1;
+        $data = [];
+        $cont = 1;
 
         if ($rspta['status'] == true) {
 
@@ -153,13 +154,14 @@ if (!isset($_SESSION["nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-      break;
+        break;
 
       case 'tabla_detalle_almacen_general':
 
         $rspta = $almacen_general->tabla_detalle_almacen_general($_GET["id_almacen_transf"], $_GET["idalmacen_general_resumen"]);
 
-        $data = []; $cont = 1;
+        $data = [];
+        $cont = 1;
 
         if ($rspta['status'] == true) {
 
@@ -184,7 +186,7 @@ if (!isset($_SESSION["nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-      break;
+        break;
 
       case 'guardar_y_editar_almacen_general':
 
@@ -209,13 +211,14 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode(['status' => true, 'message' => 'todo oka ps', 'data' => ''], true);
         }
 
-      break;
-     
+        break;
+
       case 'select2_proyect_almacen':
 
         $rspta = $almacen_general->select2_proyect_almacen($_GET['tipo_transf'], $_GET['id_almacen_g']);
 
-        $cont = 1; $data = "";
+        $cont = 1;
+        $data = "";
 
         if ($rspta['status'] == true) {
 
@@ -235,12 +238,13 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         }
 
-      break;
+        break;
 
       case 'select2ProductosComprados':
 
         $rspta = $almacen_general->select2_recursos_almacen($_GET["idproyecto"]);
-        $cont = 1; $data = "";
+        $cont = 1;
+        $data = "";
 
         if ($rspta['status'] == true) {
           foreach ($rspta['data'] as $key => $value) {
@@ -256,35 +260,63 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         }
 
-      break;
+        break;
 
-      //F I N I  I N S E R T  Y  L I S T  D A T A  E N  L O S  A L M A C E N E S  G.
+        case 'select2Productos': 
+    
+          $rspta = $almacen_general->select2_productos_todos(); $cont = 1; $data = "";
+          
+          if ($rspta['status'] == true) {  
+            foreach ($rspta['data'] as $key => $value) {   
+              $data .= '<option value="' . $value['idproducto'] . '" unidad_medida="' . $value['nombre_medida'] . '" >' . $value['nombre_producto'] .' - '. $value['clasificacion'] .'</option>';
+            }  
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => $data, 
+            );    
+            echo json_encode($retorno, true);  
+          } else {  
+            echo json_encode($rspta, true); 
+          }
+        break;
 
-      // ══════════════════════════════════════ secc 3 ════════════════════════════════
+        //F I N I  I N S E R T  Y  L I S T  D A T A  E N  L O S  A L M A C E N E S  G.
 
-      //  I N S E R T  E N T R E  L O S  A L M A C E N  G.   O  P R O Y E C T O.
+        // ══════════════════════════════════════ secc 3 ════════════════════════════════
+
+        //  I N S E R T  E N T R E  L O S  A L M A C E N  G.   O  P R O Y E C T O.
       case 'guardar_transf_almacen_proyecto':
 
-        $rspta = $almacen_general->guardar_transf_almacen_proyecto($tranferencia,$name_alm_proyecto,$fecha_transf_proy_alm,$idalmacen_general_origen,
-        $_POST["idalmacen_general_trns"], $_POST["idalmacen_general_resumen_trns"], $_POST["idproducto_trns"], $_POST["tipo_trns"], 
-        $_POST["categoria_trns"],$_POST["cantidad_trns"],$_POST["ValorCheck_trns"]);
+        $rspta = $almacen_general->guardar_transf_almacen_proyecto(
+          $tranferencia,
+          $name_alm_proyecto,
+          $fecha_transf_proy_alm,
+          $idalmacen_general_origen,
+          $_POST["idalmacen_general_trns"],
+          $_POST["idalmacen_general_resumen_trns"],
+          $_POST["idproducto_trns"],
+          $_POST["tipo_trns"],
+          $_POST["categoria_trns"],
+          $_POST["cantidad_trns"],
+          $_POST["ValorCheck_trns"]
+        );
 
 
         echo json_encode($rspta, true);
 
-      break;
+        break;
 
-      //listar_productos de almacen para realizar transferencia
+        //listar_productos de almacen para realizar transferencia
       case 'transferencia_a_proy_almacen':
         $rspta = $almacen_general->transferencia_a_proy_almacen($_GET["id_almacen"]);
         echo json_encode($rspta, true);
-      break;
+        break;
 
       default:
         $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
         echo json_encode($rspta, true);
-      break;
-
+        break;
     }
   } else {
     $retorno = ['status' => 'nopermiso', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => []];

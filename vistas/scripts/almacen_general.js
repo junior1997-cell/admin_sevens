@@ -18,6 +18,7 @@ function init() {
 
   // ══════════════════════════════════════ S E L E C T 2 ══════════════════════════════════════  
   lista_select2(`../ajax/almacen_general.php?op=select2_proyect_almacen&tipo_transf=Proyecto&id_almacen_g=0`, '#proyecto_ag', null);
+  lista_select2(`../ajax/almacen_general.php?op=select2Productos`, '#producto_tup', null, '.cargando_producto_tup'); 
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
   $("#guardar_registro_almacen").on("click", function (e) { $("#submit-form-almacen-general").submit(); }); //CREATE UN ALMACEN GENERAL
@@ -26,6 +27,7 @@ function init() {
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════ 
   $("#proyecto_ag").select2({ theme: "bootstrap4", placeholder: "Seleccinar proyecto", allowClear: true, });
+  $("#producto_tup").select2({ theme: "bootstrap4", placeholder: "Seleccinar Insumo", allowClear: true, });
   $("#tranferencia").select2({ theme: "bootstrap4", placeholder: "Selec.", allowClear: true, });
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
   // $('#precio_unitario').number( true, 2 );
