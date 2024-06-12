@@ -576,4 +576,23 @@ class Almacen_general
     AND pr.estado = '1' AND pr.estado_delete = '1' ORDER BY pr.nombre ASC;";    
     return ejecutarConsultaArray($sql_0);
   }
+
+  public function marcas_x_producto($id_producto) {
+    $array_marca = [];
+
+    //listar detalle_marca
+    $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
+    FROM detalle_marca as dm, marca as m 
+    WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$id_producto' AND dm.estado='1' AND dm.estado_delete='1' ORDER BY dm.iddetalle_marca ASC;";
+    $detalle_marca = ejecutarConsultaArray($sql);   if ($detalle_marca['status'] == false){ return $detalle_marca; }
+
+
+
+    if ( empty($detalle_marca['data']) ) {
+      $array_marca[] = [ 'idproducto' => $id_producto, 'marca' => 'SIN MARCA', 'selected' => 'selected' ];
+    } else {
+      foreach ($detalle_marca['data'] as $key => $val) { $array_marca[] = [ 'idproducto' => $id_producto, 'marca' => $val['marca'] ]; }
+    }
+    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $array_marca ];  
+  }
 }

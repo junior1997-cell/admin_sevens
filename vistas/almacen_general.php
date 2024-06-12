@@ -70,7 +70,7 @@ if (!isset($_SESSION["nombre"])) {
                       <h3 class="card-title">
                         <button type="button" class="btn bg-gradient-success btn_add_almacen" data-toggle="modal" data-target="#modal-agregar-almacen-general" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Almacen</button>
                         <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                        <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiarig();"><i class="fas fa-plus-circle"></i> Ingreso Directo</button>
+                        <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiar_ing_di();"><i class="fas fa-plus-circle"></i> Ingreso Directo</button>
                         Admnistra de manera eficiente a tus almacenes.
                       </h3>
                     </div>
@@ -525,7 +525,7 @@ if (!isset($_SESSION["nombre"])) {
                           <input type="hidden" name="idproyecto_origen_tup" id="idproyecto_origen_tup" value="<?php echo $_SESSION['idproyecto']; ?>" />
 
                           <!-- Producto -->
-                          <div class="col-12 col-sm-12 col-md-6 col-lg-8">
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="form-group">
                               <label for="producto_tup">
                                 <!-- <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_producto_todos();"><i class="fa-solid fa-rotate-right"></i></span>  -->
@@ -536,9 +536,21 @@ if (!isset($_SESSION["nombre"])) {
                               </select>
                             </div>
                           </div>
+                          <!-- Almancen -->
+                          <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                              <label for="almacen_tup">
+                                <!-- <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_almacen_todos();"><i class="fa-solid fa-rotate-right"></i></span>  -->
+                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_almacen_tup();"><i class="fa-solid fa-rotate-right"></i></span>
+                                Almacen <span class="cargando_almacen_tup"></span>
+                              </label>
+                              <select name="almacen_tup" id="almacen_tup" class="form-control" placeholder="Selecionar almacen">
+                              </select>
+                            </div>
+                          </div>
 
                           <!-- Fecha -->
-                          <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                          <div class="col-12 col-sm-12 col-md-3 col-lg-3">
                             <div class="form-group">
                               <label for="fecha_tup">Fecha</label>
                               <input type="date" name="fecha_tup" class="form-control" id="fecha_tup" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" />

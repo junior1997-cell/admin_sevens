@@ -212,6 +212,12 @@ if (!isset($_SESSION["nombre"])) {
         }
 
         break;
+      
+        case 'marcas_x_producto':
+          $rspta = $almacen_general->marcas_x_producto($_POST["id_producto"]);          
+          //Codificar el resultado utilizando json $_POST["id_producto"] 
+          echo json_encode($rspta, true);
+        break; 
 
       case 'select2_proyect_almacen':
 
