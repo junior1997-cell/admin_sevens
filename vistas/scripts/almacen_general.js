@@ -30,7 +30,7 @@ function init() {
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════ 
   $("#proyecto_ag").select2({ theme: "bootstrap4", placeholder: "Seleccinar proyecto", allowClear: true, });
   $("#producto_tup").select2({ theme: "bootstrap4", placeholder: "Seleccinar Insumo", allowClear: true, });
-  $("#almacen_tup").select2({ theme: "bootstrap4", placeholder: "Seleccinar Insumo", allowClear: true, });
+  $("#almacen_tup").select2({ theme: "bootstrap4", placeholder: "Seleccinar", allowClear: true, });
   $("#tranferencia").select2({ theme: "bootstrap4", placeholder: "Selec.", allowClear: true, });
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
   // $('#precio_unitario').number( true, 2 );
@@ -474,7 +474,7 @@ function add_producto_ag(data) {
     } else {
       $('.head_list').show();
       $('#html_producto_ag').append(`<div class="col-lg-12 delete_multiple_${idproducto}_${idproyecto}"></div>
-      <div class="col-12 col-sm-12 col-md-6 col-lg-6 delete_multiple_${idproducto}_${idproyecto}" >
+      <div class="col-12 col-sm-12 col-md-12 col-lg-4 delete_multiple_${idproducto}_${idproyecto}" >
         <input type="hidden" name="idproducto_ag[]" value="${idproducto}" />        
         <input type="hidden" name="idproyecto_ag[]" value="${idproyecto}" />        
         <input type="hidden" name="id_ar_ag[]" value="${id_ar}" /> 
@@ -485,31 +485,36 @@ function add_producto_ag(data) {
         <input type="hidden" name="tipo_mov[]" value="${tipo_mov}" />  
 
         <div class="form-group">
-        <!--<label for="fecha_ingreso">Nombre Producto</label>-->
+          <label class="ver delete_multiple_${idproducto}_${idproyecto}" style="display:none">Producto</label>
           <textarea class="form-control textarea_datatable" rows="1"> ${textproducto} </textarea>                                  
         </div>
       </div> 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-3 delete_multiple_${idproducto}_${idproyecto}">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-3 delete_multiple_${idproducto}_${idproyecto}">
         <div class="form-group">
-        <!--<label for="almacen_general_${idproducto}">Almacen general <span class="cargando-almacen-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span></label>
-          <select name="almacen_general_ag[]" id="almacen_general_${idproducto}" class="form-control" placeholder="Almacen general"> </select>-->
-           <input type="hidden" name="proyecto_ag[]" class="form-control" id="proyecto_${idproducto}" value="${idproyecto}"  placeholder="Proyecto" required min="0" />
-           <!--<span class="form-control-mejorado"> ${textproyecto} </span>-->
-          <textarea class="form-control textarea_datatable" rows="1"> ${textproyecto} </textarea>                        
-
+           <label class="ver delete_multiple_${idproducto}_${idproyecto}" style="display:none">Proyecto</label>
+           <textarea class="form-control textarea_datatable" rows="1">${textproyecto} </textarea>  
+           <input type="hidden" name="proyecto_ag[]" class="form-control" id="proyecto_${idproducto}" value="${idproyecto}"  placeholder="Proyecto" required min="0" />                    
         </div>      
       </div> 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}_${idproyecto}">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-2 delete_multiple_${idproducto}_${idproyecto}">
         <div class="form-group">
-          <!--<label for="cantidad_${idproducto}">Cantidad</label>-->
+         <label class="ver delete_multiple_${idproducto}_${idproyecto}" style="display:none">Unidad</label>
+          <textarea class="form-control textarea_datatable" rows="1">${unidad_medida} </textarea> 
+           <!--<input type="text" name="unidad[]" class="form-control" id="unidad_${idproducto}" value="${unidad_medida}"  placeholder="und" required />-->               
+        </div>      
+      </div> 
+      <div class="col-12 col-sm-12 col-md-12 col-lg-2 delete_multiple_${idproducto}_${idproyecto}">
+        <div class="form-group">
+            <label class="ver delete_multiple_${idproducto}_${idproyecto}" style="display:none">Cantidad</label>
           <input type="number" name="cantidad_ag_${idproducto}" class="form-control" id="cantidad_ag_${idproducto}" onkeyup="replicar_cantidad(${idproducto})" placeholder="cantidad" required min="0" step="0.01" max="${stok}"/>
           <input type="hidden" name="cantidad_ag[]" id="cantidad_${idproducto}"/>
         </div>      
       </div> 
-      <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${idproducto}_${idproyecto}">      
-      <!--<label class="text-white">.</label> <br>-->
+      <div class="col-12 col-sm-12 col-md-12 col-lg-1 delete_multiple_${idproducto}_${idproyecto}"> 
+       <label class="ver delete_multiple_${idproducto}_${idproyecto}" style="display:none">Eliminar</label>     
         <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_producto_ag(${idproducto},${idproyecto});"><i class="far fa-trash-alt"></i></button>      
-      </div> `);
+      </div>
+      <hr style=" height: 1px; width: 100%; background-color: black; display:none" class="ver delete_multiple_${idproducto}_${idproyecto}"/>`);
       $(`#cantidad_ag_${idproducto}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
 
       $.post(`../ajax/almacen.php?op=otros_almacenes`, function (e, status, jqXHR) {
@@ -575,7 +580,7 @@ function listar_productos_transferencia() {
 
     $('#html_producto_transf').html("");
 
-    e = JSON.parse(e); //console.log(e);
+    e = JSON.parse(e); console.log(e);
 
     if (e.status == true) {
 
@@ -598,7 +603,7 @@ function listar_productos_transferencia() {
 
         $('#html_producto_transf').append(`
         <div class="col-lg-12"></div>
-        <div class="col-12 col-sm-12 col-md-6 col-lg-6" >
+        <div class="col-12 col-sm-12 col-md-12 col-lg-5" >
           <input type="hidden" name="idalmacen_general_trns[]"  id="${val.idalmacen_general}" value="${val.idalmacen_general}"/>
           <input type="hidden" name="idalmacen_general_origen"  value="${id_almacen_transf}"/>
           <input type="hidden" name="idproducto_trns[]" id="${val.idproducto}" value="${val.idproducto}"/>
@@ -606,27 +611,38 @@ function listar_productos_transferencia() {
           <input type="hidden" name="tipo_trns[]" id="${val.tipo}" value="${val.tipo}"/>
           <input type="hidden" name="categoria_trns[]" id="${val.categoria}" value="${val.categoria}"/>
           <div class="form-group">
+            <label class="ver" style="display:none" > Producto </label> 
             <textarea class="form-control textarea_datatable" rows="1"> ${val.nombre_producto} ${val.abreviacion}</textarea>                                  
           </div>
         </div> 
-        <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
           <div class="form-group">
+            <label class="ver" style="display:none" > Unidad Medida </label> 
+            <textarea class="form-control textarea_datatable" rows="1"> ${val.unidad_medida} </textarea>                                  
+          </div>      
+        </div> 
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
+          <div class="form-group">
+            <label class="ver" style="display:none" > Stock </label> 
             <textarea class="form-control textarea_datatable" rows="1"> ${val.total_stok} </textarea>                                  
           </div>      
         </div> 
-        <div class="col-12 col-sm-12 col-md-6 col-lg-2">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
           <div class="form-group">
+            <label class="ver" style="display:none" > Cantidad a Transferir </label> 
             <input type="number" class="form-control cant_g" name="cantidad_tr${val.idalmacen_general_resumen}" id="cantidad__trns${val.idalmacen_general_resumen}" onkeyup="replicar_cantidad_a_r(${val.idalmacen_general_resumen})" readonly placeholder="cantidad"  min="0" step="0.01" max="${val.total_stok}"/>
             <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env${val.idalmacen_general_resumen}"/>
           </div>      
         </div> 
-        <div class="col-12 col-sm-12 col-md-6 col-lg-1"> 
+        <div class="col-12 col-sm-12 col-md-12 col-lg-1">
+        <label class="ver" style="display:none" > Activar </label> 
           <div class="custom-control custom-switch">
             <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox${val.idalmacen_general_resumen}" onchange="update_valueChec(${val.idalmacen_general_resumen})" >
             <input type="hidden" class="estadochecked_all" name="ValorCheck_trns[]" id="ValorCheck${val.idalmacen_general_resumen}" value="0">
             <label for="customCheckbox${val.idalmacen_general_resumen}" class="custom-control-label"></label>
           </div>         
-        </div> `);
+        </div> 
+        <hr style=" height: 1px; width: 100%; background-color: black; display:none" class="ver"/>`);
 
       });
 
@@ -802,30 +818,35 @@ function add_producto_tup(data) {
       $('#html_producto_tup').append(`
       <div class="col-12 col-sm-12 col-md-6 col-lg-5 delete_multiple_${idproducto}" >
         <input type="hidden" name="idproducto_tup[]" value="${idproducto}" />     
-        <div class="form-group">          
+        <div class="form-group"> 
+          <label for="almacen_tup" class="ver" style="display:none"> Producto </label>     
           <textarea class="form-control" name="" id="" cols="30" rows="1"> ${textproducto} </textarea>                             
         </div>
       </div> 
       <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}">
-        <div class="form-group">          
+        <div class="form-group">
+          <label for="almacen_tup" class="ver" style="display:none"> Und. </label>          
           <span class="form-control-mejorado">${unidad_medida} </span>
         </div>      
       </div>
       <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}">
         <div class="form-group">
+          <label for="almacen_tup" class="ver" style="display:none"> Marca </label>
           <span class="cargando-marca-tup-${idproducto}"><i class="fas fa-spinner fa-pulse fa-lg text-danger"></i></span>
           <select name="marca_tup[]" id="marca_tup_${idproducto}" class="form-control" placeholder="Marca"> </select>
         </div>      
       </div> 
       <div class="col-12 col-sm-12 col-md-6 col-lg-2 delete_multiple_${idproducto}"">
         <div class="form-group">
+          <label for="almacen_tup" class="ver" style="display:none"> Cantidad </label>
           <input type="number" name="cantidad_tup_view_${idproducto}" class="form-control" id="cantidad_tup_view_${idproducto}" placeholder="cantidad" required min="0"  step="0.01" onkeyup="replicar_data_input(${idproducto})" />
           <input type="hidden" name="cantidad_tup[]" class="form-control" id="cantidad_tup_${idproducto}" placeholder="cantidad"  />
         </div>      
       </div> 
       <div class="col-12 col-sm-12 col-md-6 col-lg-1 delete_multiple_${idproducto}">        
         <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_producto_tup(${idproducto});"><i class="far fa-trash-alt"></i></button>      
-      </div> <div class="col-lg-12 borde-arriba-0000001a mt-0 mb-3 delete_multiple_${idproducto}"></div>`);
+      </div> 
+      <hr style=" height: 1px; width: 100%; background-color: black; display:none" class="ver delete_multiple_${idproducto}"/>`);
 
       $(`#cantidad_tup_view_${idproducto}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo {0}", step: "Maximo 2 decimales" } });
       

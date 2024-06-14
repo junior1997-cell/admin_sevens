@@ -27,6 +27,14 @@ if (!isset($_SESSION["nombre"])) {
         padding: 5px;
         /* Ajustar el padding */
       }
+      @media only screen and (max-width: 991px){
+        .ocultar_head {
+         display: none;
+        }
+        .ver{
+         display: block !important;
+        }
+      }
     </style>
   </head>
 
@@ -279,9 +287,9 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <!-- MODAL - AGREGAR DATOS A UN ALMACEN GENERAL-->
+            <!-- MODAL - AGREGAR DATOS A UN ALMACEN GENERAL  style="max-width: 95% !important;" -->
             <div class="modal fade" id="modal-agregar-otro-almacen">
-              <div class="modal-dialog modal-dialog-scrollable modal-xl">
+              <div class="modal-dialog modal-dialog-scrollable modal-xl "  >
                 <div class="modal-content">
                   <div class="modal-header">
                     <h4 class="modal-title">Agregar al Almacen General : <span class="nombre_almacen_g" style="color:red">nombre</span> </h4>
@@ -299,7 +307,7 @@ if (!isset($_SESSION["nombre"])) {
                           <input type="hidden" name="idalmacen_general_ag" id="idalmacen_general_ag" />
 
                           <!-- Proyecto -->
-                          <div class="col-12 col-sm-12 col-md-5 col-lg-4">
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                             <div class="form-group">
                               <label for="proyecto_ag"> Proyecto <sup class="text-danger">*</sup></label>
                               <select name="proyecto_ag" id="proyecto_ag" class="form-control" placeholder="Proyecto" onchange="reload_proyect_ag(this);">
@@ -308,7 +316,7 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
 
                           <!-- Fecha -->
-                          <div class="col-12 col-sm-12 col-md-2 col-lg-2">
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                               <label for="fecha_ingreso_ag">Fecha</label>
                               <input type="date" name="fecha_ingreso_ag" class="form-control" id="fecha_ingreso_ag" placeholder="Fecha" onchange="obtener_dia_ingreso(this);" />
@@ -317,8 +325,8 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
 
                           <!-- Recurso  style="display: none; padding-left: 2px;"-->
-                          <div class="col-12 col-sm-12 col-md-5 col-lg-6 ">
-                            <div class="form-group select_recurso" style="display: none; padding-left: 2px;">
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-5 ">
+                            <div class="form-group select_recurso" style="display: none; ">
                               <label for="producto_ag">
                                 <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar comprados" onclick="reload_producto_comprados_ag();"><i class="fa-solid fa-rotate-right"></i></span>
                                 Producto <span class="cargando_productos_ag"></span>
@@ -346,13 +354,14 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2">PRODUCTOS - AGREGADOS</b> </span></div>
                           </div>
 
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 ">
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12  ">
                             <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
                               <div class="row head_list" style="display: none;">
-                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
-                                <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Proyecto</div>
-                                <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Cantidad</div>
-                                <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold"><i class="far fa-trash-alt"></i></div>
+                                <div class="col-12 col-sm-12 col-md-4 col-lg-4 mt-2 mb-2 text-bold ocultar_head">Nombre Producto</div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold ocultar_head">Proyecto</div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Und.</div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Cantidad</div>
+                                <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold ocultar_head"><i class="far fa-trash-alt"></i></div>
                                 <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
                               </div>
                               <div class="row" id="html_producto_ag">
@@ -414,7 +423,7 @@ if (!isset($_SESSION["nombre"])) {
                         <div class="row" id="cargando-1-fomulario">
 
                           <!-- Tipo -->
-                          <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
                             <div class="form-group">
                               <label for="tranferencia">Tranferencia a <sup class="text-danger">(*)</sup></label>
                               <select name="tranferencia" id="tranferencia" class="form-control" onchange="select_tipo_transferencia(this);">
@@ -425,7 +434,7 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
 
                           <!-- Nombre -->
-                          <div class="col-12 col-sm-7 col-md-7 col-lg-6">
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="form-group init_select">
                               <label for="">Destino <sup class="text-danger">(*)</sup></label>
                               <p class="text-warning m-b-01rem" style="margin-top: 7px"> <strong>SELECCIONAR UN ALMACEN O UN PROYECTO</strong> </p>
@@ -439,7 +448,7 @@ if (!isset($_SESSION["nombre"])) {
 
                           </div>
                           <!-- Fecha -->
-                          <div class="col-12 col-sm-5 col-md-5 col-lg-3">
+                          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
                             <div class="form-group">
                               <label for="fecha_transf_proy_alm">Fecha</label>
                               <input type="date" name="fecha_transf_proy_alm" class="form-control" id="fecha_transf_proy_alm" placeholder="Fecha" />
@@ -449,16 +458,19 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- style="display: none;" -->
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
                             <div class="row head_list_items_trans">
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-6 mt-2 mb-2 text-bold">Nombre Producto</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-3 mt-2 mb-2 text-bold">Stock</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold">Cantidad</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold">
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-5 mt-2 mb-2 text-bold ocultar_head">Nombre Producto</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Und.</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Stock</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Cantidad</div>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold" data-toggle="tooltip" data-placement="top" title="Activar Todos Transferir"> <span class="ver" style="display: none;" >Activar Masivo</span>
 
                                 <div class="custom-control custom-switch" data-toggle="tooltip" data-original-title="Activar todos">
                                   <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();">
                                   <label for="marcar_todo" class="custom-control-label"></label>
                                 </div>
+                                
                               </div>
+                              <hr style=" height: 1px; width: 100%; background-color: red; display:none" class="ver"/>
                               <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
                             </div>
                             <div class="row" id="html_producto_transf">
@@ -521,7 +533,7 @@ if (!isset($_SESSION["nombre"])) {
                       <div class="px-2">
                         <div class="row" id="cargando-1-fomulario">
                           <!-- Producto -->
-                          <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                             <div class="form-group">
                               <label for="producto_tup">
                                 <!-- <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_producto_todos();"><i class="fa-solid fa-rotate-right"></i></span>  -->
@@ -533,7 +545,7 @@ if (!isset($_SESSION["nombre"])) {
                             </div>
                           </div>
                           <!-- Almancen -->
-                          <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                          <div class="col-12 col-sm-12 col-md-7 col-lg-3">
                             <div class="form-group">
                               <label for="almacen_tup"> Almacén </label>
                               <select name="almacen_tup" id="almacen_tup" class="form-control" placeholder="Selecionar almacen">
@@ -542,7 +554,7 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
 
                           <!-- Fecha -->
-                          <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                          <div class="col-12 col-sm-12 col-md-5 col-lg-3">
                             <div class="form-group">
                               <label for="fecha_tup">Fecha</label>
                               <input type="date" name="fecha_tup" class="form-control" id="fecha_tup" placeholder="Fecha" value="<?php echo date("Y-m-d"); ?>" />
@@ -557,11 +569,11 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-12 col-sm-12 col-md-12 col-lg-12 ">
                             <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
                               <div class="row titulo-add-producto-tup mt-2">
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-5 col-xl-5"><label>Nombre Producto</label></div>
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label>U.M.</label></div>
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label>Marca </label></div>
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2"><label>Cantidad</label></div>
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-1 col-xl-1"></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-5 col-xl-5 ocultar_head"><label>Nombre Producto</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2 ocultar_head"><label>U.M.</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2 ocultar_head"><label>Marca </label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-2 col-xl-2 ocultar_head"><label>Cantidad</label></div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-1 col-xl-1 ocultar_head"></div>
                               </div>
                               <div class="row" id="html_producto_tup">
                                 <span> Seleccione un producto</span>
