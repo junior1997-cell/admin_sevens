@@ -40,6 +40,11 @@ if (!isset($_SESSION["nombre"])) {
     $fecha_transf_proy_alm     = isset($_POST["fecha_transf_proy_alm"]) ? limpiarCadena($_POST["fecha_transf_proy_alm"]) : "";
     $idalmacen_general_origen  = isset($_POST["idalmacen_general_origen"]) ? limpiarCadena($_POST["idalmacen_general_origen"]) : "";
 
+    
+    // ::::::::::::::::::: INGRESO DIRECTO  ::::::::::::::::::::::::::::::::::::::::::::
+    $almacen_tup            = isset($_POST["almacen_tup"])? limpiarCadena($_POST["almacen_tup"]):"";   
+    $fecha_tup	            = isset($_POST["fecha_tup"])? limpiarCadena($_POST["fecha_tup"]):"";
+
     switch ($_GET["op"]) {
 
         // ══════════════════════════════════════ secc 1 ════════════════════════════════
@@ -58,23 +63,23 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         }
 
-        break;
+      break;
 
       case 'desactivar':
         $rspta = $almacen_general->desactivar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'eliminar':
         $rspta = $almacen_general->eliminar($_GET["id_tabla"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'mostrar':
         $rspta = $almacen_general->mostrar($idalmacen_general);
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'tabla_principal':
         $rspta = $almacen_general->tabla_principal($_GET["id_categoria"]);
@@ -109,7 +114,7 @@ if (!isset($_SESSION["nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-        break;
+      break;
 
         //F I N  A L M A C E N E S  G E N E R A L E S
 
@@ -121,7 +126,7 @@ if (!isset($_SESSION["nombre"])) {
       case 'lista_de_categorias':
         $rspta = $almacen_general->lista_de_categorias();
         echo json_encode($rspta, true);
-        break;
+      break;
 
       case 'tabla_detalle':
 
@@ -154,7 +159,7 @@ if (!isset($_SESSION["nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-        break;
+      break;
 
       case 'tabla_detalle_almacen_general':
 
@@ -186,7 +191,7 @@ if (!isset($_SESSION["nombre"])) {
           echo $rspta['code_error'] . ' - ' . $rspta['message'] . ' ' . $rspta['data'];
         }
 
-        break;
+      break;
 
       case 'guardar_y_editar_almacen_general':
 
@@ -211,13 +216,13 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode(['status' => true, 'message' => 'todo oka ps', 'data' => ''], true);
         }
 
-        break;
+      break;
       
-        case 'marcas_x_producto':
-          $rspta = $almacen_general->marcas_x_producto($_POST["id_producto"]);          
-          //Codificar el resultado utilizando json $_POST["id_producto"] 
-          echo json_encode($rspta, true);
-        break; 
+      case 'marcas_x_producto':
+        $rspta = $almacen_general->marcas_x_producto($_POST["id_producto"]);          
+        //Codificar el resultado utilizando json $_POST["id_producto"] 
+        echo json_encode($rspta, true);
+      break; 
 
       case 'select2_proyect_almacen':
 
@@ -244,7 +249,7 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         }
 
-        break;
+      break;
 
       case 'select2ProductosComprados':
 
@@ -266,26 +271,26 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         }
 
-        break;
+      break;
 
-        case 'select2Productos': 
-    
-          $rspta = $almacen_general->select2_productos_todos(); $cont = 1; $data = "";
-          
-          if ($rspta['status'] == true) {  
-            foreach ($rspta['data'] as $key => $value) {   
-              $data .= '<option value="' . $value['idproducto'] . '" unidad_medida="' . $value['nombre_medida'] . '" >' . $value['nombre_producto'] .' - '. $value['clasificacion'] .'</option>';
-            }  
-            $retorno = array(
-              'status' => true, 
-              'message' => 'Salió todo ok', 
-              'data' => $data, 
-            );    
-            echo json_encode($retorno, true);  
-          } else {  
-            echo json_encode($rspta, true); 
-          }
-        break;
+      case 'select2Productos': 
+  
+        $rspta = $almacen_general->select2_productos_todos(); $cont = 1; $data = "";
+        
+        if ($rspta['status'] == true) {  
+          foreach ($rspta['data'] as $key => $value) {   
+            $data .= '<option value="' . $value['idproducto'] . '" unidad_medida="' . $value['nombre_medida'] . '" >' . $value['nombre_producto'] .' - '. $value['clasificacion'] .'</option>';
+          }  
+          $retorno = array(
+            'status' => true, 
+            'message' => 'Salió todo ok', 
+            'data' => $data, 
+          );    
+          echo json_encode($retorno, true);  
+        } else {  
+          echo json_encode($rspta, true); 
+        }
+      break;
 
         //F I N I  I N S E R T  Y  L I S T  D A T A  E N  L O S  A L M A C E N E S  G.
 
@@ -308,21 +313,26 @@ if (!isset($_SESSION["nombre"])) {
           $_POST["ValorCheck_trns"]
         );
 
-
         echo json_encode($rspta, true);
 
-        break;
+      break;
+
+      // ══════════════════════════  I N G R E S O  D I R E C T O ══════════════════════════════════════
+      case 'guardar_y_prod_id_tup':
+        $rspta = $almacen_general->guardar_y_prod_id_tup( $almacen_tup, $fecha_tup, $_POST["idproducto_tup"], $_POST["marca_tup"], $_POST["cantidad_tup"] );
+        echo json_encode($rspta, true);           
+      break;    
 
         //listar_productos de almacen para realizar transferencia
       case 'transferencia_a_proy_almacen':
         $rspta = $almacen_general->transferencia_a_proy_almacen($_GET["id_almacen"]);
         echo json_encode($rspta, true);
-        break;
+      break;
 
       default:
         $rspta = ['status' => 'error_code', 'message' => 'Te has confundido en escribir en el <b>swich.</b>', 'data' => []];
         echo json_encode($rspta, true);
-        break;
+      break;
     }
   } else {
     $retorno = ['status' => 'nopermiso', 'message' => 'Tu sesion a terminado pe, inicia nuevamente', 'data' => []];

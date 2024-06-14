@@ -115,7 +115,8 @@ class Almacen_general
         WHEN 'IEA' THEN 'INGRESO ENTRE ALMACENES'
         WHEN 'EEA' THEN 'EGRESO ENTRE ALMACENES'
         WHEN 'IGP' THEN 'INGRESO A ALMACEN GENERAL DE PROYECTO'
-        WHEN 'EGP' THEN 'EGRESO DE ALMACEN GENERAL E INGRESO A UN PROYECTO'
+        WHEN 'EGP' THEN 'EGRESO DE ALMACEN GENERAL E INGRESO A UN PROYECTO' 
+        WHEN 'IDAG' THEN 'INGRESO DIRECTO A ALMACEN GENERAL'
     END AS tipo_movimiento ,
     ad.fecha, 
     ad.name_day, 
@@ -126,6 +127,7 @@ class Almacen_general
         WHEN 'EEA' THEN -1*ad.cantidad
         WHEN 'IGP' THEN ad.cantidad
         WHEN 'EGP' THEN -1*ad.cantidad
+        WHEN 'IDAG' THEN ad.cantidad
     END AS cantidad, 
     ad.stok_anterior, 
     ad.stok_actual,
@@ -134,6 +136,7 @@ class Almacen_general
         WHEN 'EEA' THEN agd.nombre_almacen
         WHEN 'IGP' THEN p.nombre_codigo
         WHEN 'EGP' THEN p.nombre_codigo
+        WHEN 'IDAG' THEN 'Externo'
     END AS nombre_proyecto_almacen
   FROM almacen_general_detalle ad
   LEFT JOIN proyecto p ON ad.idproyecto = p.idproyecto
@@ -543,6 +546,94 @@ class Almacen_general
     return ejecutarConsultaArray($sql);
   }
 
+  /**
+   * -----------------------------------------------------
+   * ------------------INGRESO DIRECTO.-------------------
+   * -----------------------------------------------------
+   */
+
+  public function guardar_y_prod_id_tup($almacen_tup, $fecha_tup, $idproducto_tup, $marca_tup, $cantidad_tup)
+  {
+    /*var_dump($idproducto_tup);
+    die();*/
+
+    $ii = 0;
+
+    if (!empty($idproducto_tup)) {
+
+      while ($ii < count($idproducto_tup)) {
+        //Verificamos si hay el producto en el almacen nuevo 
+        $sql_validate = "SELECT idalmacen_general_resumen,idalmacen_general,idproducto 
+        FROM almacen_general_resumen where idalmacen_general='$almacen_tup' and idproducto='$idproducto_tup[$ii]' ";
+
+        $validate = ejecutarConsultaSimpleFila($sql_validate);
+        if ($validate['status'] == false) {
+          return $validate;
+        }
+
+        if (!empty($validate['data'])) {
+
+          $idalmacen_general_r = $validate['data']['idalmacen_general_resumen'];
+          $idalmacen           = $validate['data']['idalmacen_general'];
+          $id_producto_r = $validate['data']['idproducto'];
+        } else {
+          $idalmacen_general_r = null;
+          $idalmacen           = null;
+          $id_producto_r       = null;
+        }
+
+        if (!empty($idalmacen_general_r) &&  !empty($idalmacen) && !empty($id_producto_r) && $idalmacen = $almacen_tup  && $id_producto_r = $idproducto_tup[$ii]) {
+
+          //ACTUALIZAMOS EL QUE YA EXISTE
+          $sql_update = "UPDATE almacen_general_resumen SET 
+          idalmacen_general='$almacen_tup', idproducto='$idproducto_tup[$ii]', total_stok=total_stok + $cantidad_tup[$ii],
+          total_ingreso=total_ingreso+ $cantidad_tup[$ii], user_updated='$this->id_usr_sesion'
+          WHERE idalmacen_general_resumen='$idalmacen_general_r'";
+
+          $sql_alm_detalle = ejecutarConsulta($sql_update, 'U');
+
+          if ($sql_alm_detalle['status'] == false) {
+            return $sql_alm_detalle;
+          }
+
+          //Registramos un nuevo detalle
+          $sql_create_det = "INSERT INTO almacen_general_detalle( idalmacen_general_resumen, tipo_mov, fecha,cantidad,marca,user_created) 
+          VALUES ('$idalmacen_general_r','IDAG','$fecha_tup','$cantidad_tup[$ii]','$marca_tup[$ii]','$this->id_usr_sesion')";
+          $sql_alm_det_gen = ejecutarConsulta($sql_create_det, 'C');
+
+          if ($sql_alm_det_gen['status'] == false) {
+            return $sql_alm_det_gen;
+          }
+        } else {
+
+          //AGREGAMOS UNO NUEVO $almacen_tup, $fecha_tup, $idproducto_tup, $marca_tup, $cantidad_tup
+          $sql_nuevo = "INSERT INTO almacen_general_resumen(idalmacen_general, idproducto, total_stok, total_ingreso, user_created) 
+          VALUES ('$almacen_tup','$idproducto_tup[$ii]','$cantidad_tup[$ii]','$cantidad_tup[$ii]','$this->id_usr_sesion')";
+          $sql_new_regist = ejecutarConsulta_retornarID($sql_nuevo, 'C');
+
+          if ($sql_new_regist['status'] == false) {
+            return $sql_new_regist;
+          }
+
+          $idalm_general_resumen = $sql_new_regist['data'];
+
+          //Registramos un nuevo detalle
+          $sql_create_det = "INSERT INTO almacen_general_detalle( idalmacen_general_resumen, tipo_mov, fecha,cantidad,marca, user_created) 
+          VALUES ('$idalm_general_resumen','IDAG','$fecha_tup','$cantidad_tup[$ii]','$marca_tup[$ii]','$this->id_usr_sesion')";
+          $sql_alm_det_gen = ejecutarConsulta($sql_create_det, 'C');
+
+          if ($sql_alm_det_gen['status'] == false) {
+            return $sql_alm_det_gen;
+          }
+        }
+
+        $ii = $ii + 1;
+      }
+      return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
+    }
+    return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => 'Error'];
+  }
+
   public function select2_proyect_almacen($tipo_transf, $id_almacen_g)
   {
     // var_dump($tipo_transf);die();
@@ -569,30 +660,37 @@ class Almacen_general
 
   //----------------------------------------------------------------
   //Implementar un método para listar los registros
-  public function select2_productos_todos(){
+  public function select2_productos_todos()
+  {
     $sql_0 = "SELECT pr.idproducto, pr.nombre AS nombre_producto, um.nombre_medida, um.abreviacion,  pr.modelo, ci.nombre as clasificacion    
 		FROM  producto AS pr, categoria_insumos_af AS ci, unidad_medida AS um 
 		WHERE pr.idcategoria_insumos_af = ci.idcategoria_insumos_af AND um.idunidad_medida  = pr.idunidad_medida 
-    AND pr.estado = '1' AND pr.estado_delete = '1' ORDER BY pr.nombre ASC;";    
+    AND pr.estado = '1' AND pr.estado_delete = '1' ORDER BY pr.nombre ASC;";
     return ejecutarConsultaArray($sql_0);
   }
 
-  public function marcas_x_producto($id_producto) {
+  public function marcas_x_producto($id_producto)
+  {
     $array_marca = [];
 
     //listar detalle_marca
     $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
     FROM detalle_marca as dm, marca as m 
     WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$id_producto' AND dm.estado='1' AND dm.estado_delete='1' ORDER BY dm.iddetalle_marca ASC;";
-    $detalle_marca = ejecutarConsultaArray($sql);   if ($detalle_marca['status'] == false){ return $detalle_marca; }
-
-
-
-    if ( empty($detalle_marca['data']) ) {
-      $array_marca[] = [ 'idproducto' => $id_producto, 'marca' => 'SIN MARCA', 'selected' => 'selected' ];
-    } else {
-      foreach ($detalle_marca['data'] as $key => $val) { $array_marca[] = [ 'idproducto' => $id_producto, 'marca' => $val['marca'] ]; }
+    $detalle_marca = ejecutarConsultaArray($sql);
+    if ($detalle_marca['status'] == false) {
+      return $detalle_marca;
     }
-    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $array_marca ];  
+
+
+
+    if (empty($detalle_marca['data'])) {
+      $array_marca[] = ['idproducto' => $id_producto, 'marca' => 'SIN MARCA', 'selected' => 'selected'];
+    } else {
+      foreach ($detalle_marca['data'] as $key => $val) {
+        $array_marca[] = ['idproducto' => $id_producto, 'marca' => $val['marca']];
+      }
+    }
+    return $retorno = ['status' => true, 'message' => 'Salió todo ok,', 'data' => $array_marca];
   }
 }

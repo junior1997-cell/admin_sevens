@@ -769,7 +769,7 @@ function limpiar_ing_di() {
 
   $('#producto_tup').val('').trigger("change");
   $('#fecha_tup').val('');
-  $('#descripcion_tup').val('');
+  $('#almacen_tup').val('');
   $(".titulo-add-producto-tup").hide();
   $('#html_producto_tup').html(`<div class="col-12 delete_multiple_alerta_tup">
     <div class="alert alert-warning alert-dismissible mb-0">
@@ -801,9 +801,7 @@ function add_producto_tup(data) {
     } else {
       $('#html_producto_tup').append(`
       <div class="col-12 col-sm-12 col-md-6 col-lg-5 delete_multiple_${idproducto}" >
-        <input type="hidden" name="idproducto_tup[]" value="${idproducto}" /> 
-        <input type="hidden" name="idproyecto_destino_tup[]" value="${localStorage.getItem("nube_idproyecto")}" />       
-        <input type="hidden" name="idalmacen_general_tup[]" value="NULL" />       
+        <input type="hidden" name="idproducto_tup[]" value="${idproducto}" />     
         <div class="form-group">          
           <textarea class="form-control" name="" id="" cols="30" rows="1"> ${textproducto} </textarea>                             
         </div>
@@ -860,12 +858,12 @@ function remove_producto_tup(id) {
 function replicar_data_input(id) { $(`#cantidad_tup_${id}`).val($(`#cantidad_tup_view_${id}`).val()); }
 
 //Función para guardar o editar
-function guardar_y_editar_tup(e) {
+function guardar_y_prod_id_tup(e) {
   // e.preventDefault(); //No se activará la acción predeterminada del evento
   var formData = new FormData($("#form-almacen-tup")[0]);
 
   $.ajax({
-    url: "../ajax/almacen.php?op=guardar_y_editar_tup",
+    url: "../ajax/almacen_general.php?op=guardar_y_prod_id_tup",
     type: "POST",
     data: formData,
     contentType: false,
@@ -874,10 +872,11 @@ function guardar_y_editar_tup(e) {
       try {
         e = JSON.parse(e);  console.log(e);  
         if (e.status == true) {      
-          $("#modal-transferencia-uso-proyecto").modal("hide");         
-          Swal.fire("Correcto!", "Enviado a uso de Obra correctamente", "success");  
-          tbla_resumen.ajax.reload(null, false);           
-          lista_select2(`../ajax/almacen.php?op=select2Productos&idproyecto=${localStorage.getItem("nube_idproyecto")}`, '#producto_tup', null, '.cargando_producto_tup');      
+          $("#modal-ingreso-directo").modal("hide");         
+          Swal.fire("Correcto!", "Se realizo el ingreso Directo a almacen general correctamente", "success");  
+          if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false); }
+          if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); }     
+          lista_select2(`../ajax/almacen_general.php?op=select2Productos`, '#producto_tup', null, '.cargando_producto_tup');      
         } else {
           ver_errores(e);
         }
@@ -1032,7 +1031,7 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
     submitHandler: function (e) {
-      guardar_y_editar_tup(e);
+      guardar_y_prod_id_tup(e);
     },
   });
 
@@ -1045,3 +1044,5 @@ $(function () {
 function reload_producto_comprados_ag() { $('.comprado_todos_ag').html(`(comprado)`); lista_select2(`../ajax/almacen_general.php?op=select2ProductosComprados&idproyecto=${idproyecto}`, '#producto_ag', null, '.cargando_productos_ag'); }
 
 function obtener_dia_ingreso(datos) { $('#dia_ingreso_ag').val(extraer_dia_semana_completo($(datos).val())); }
+
+function reload_producto_tup(){ lista_select2(`../ajax/almacen_general.php?op=select2Productos`, '#producto_tup', null, '.cargando_producto_tup'); }

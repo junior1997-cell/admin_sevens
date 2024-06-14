@@ -68,7 +68,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="card card-primary card-outline">
                     <div class="card-header">
                       <h3 class="card-title">
-                        <button type="button" class="btn bg-gradient-success btn_add_almacen" data-toggle="modal" data-target="#modal-agregar-almacen-general" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Almacen</button>
+                        <button type="button" class="btn bg-gradient-success btn_add_almacen" data-toggle="modal" data-target="#modal-agregar-almacen-general" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Almacén</button>
                         <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
                         <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiar_ing_di();"><i class="fas fa-plus-circle"></i> Ingreso Directo</button>
                         Admnistra de manera eficiente a tus almacenes.
@@ -97,7 +97,7 @@ if (!isset($_SESSION["nombre"])) {
                                           <tr>
                                             <th class="text-center">#</th>
                                             <th class="">Acciones</th>
-                                            <th class="">Nombre almacen</th>
+                                            <th class="">Nombre almacén</th>
                                             <th class="text-center">Descripción</th>
                                           </tr>
                                         </thead>
@@ -106,7 +106,7 @@ if (!isset($_SESSION["nombre"])) {
                                           <tr>
                                             <th class="text-center">#</th>
                                             <th class="">Acciones</th>
-                                            <th class="">Nombre almacen</th>
+                                            <th class="">Nombre almacén</th>
                                             <th class="text-center">Descripción</th>
                                           </tr>
                                         </tfoot>
@@ -520,10 +520,6 @@ if (!isset($_SESSION["nombre"])) {
                     <form id="form-almacen-tup" name="form-almacen-tup" method="POST">
                       <div class="px-2">
                         <div class="row" id="cargando-1-fomulario">
-
-                          <!-- idproyecto_origen_tup -->
-                          <input type="hidden" name="idproyecto_origen_tup" id="idproyecto_origen_tup" value="<?php echo $_SESSION['idproyecto']; ?>" />
-
                           <!-- Producto -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="form-group">
@@ -539,11 +535,7 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- Almancen -->
                           <div class="col-12 col-sm-12 col-md-3 col-lg-3">
                             <div class="form-group">
-                              <label for="almacen_tup">
-                                <!-- <span class="badge badge-info cursor-pointer" data-toggle="tooltip" data-original-title="Recargar todos" onclick="reload_almacen_todos();"><i class="fa-solid fa-rotate-right"></i></span>  -->
-                                <span class="badge badge-warning cursor-pointer" data-toggle="tooltip" data-original-title="Recargar" onclick="reload_almacen_tup();"><i class="fa-solid fa-rotate-right"></i></span>
-                                Almacen <span class="cargando_almacen_tup"></span>
-                              </label>
+                              <label for="almacen_tup"> Almacén </label>
                               <select name="almacen_tup" id="almacen_tup" class="form-control" placeholder="Selecionar almacen">
                               </select>
                             </div>
@@ -574,14 +566,6 @@ if (!isset($_SESSION["nombre"])) {
                               <div class="row" id="html_producto_tup">
                                 <span> Seleccione un producto</span>
                               </div>
-                            </div>
-                          </div>
-
-                          <!-- Descripción -->
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                              <label for="descripcion_tup">Descripción</label>
-                              <textarea name="descripcion_tup" id="descripcion_tup" class="form-control" cols="30" rows="2" placeholder="ejem: Por que se terminó el proyecto."></textarea>
                             </div>
                           </div>
 
