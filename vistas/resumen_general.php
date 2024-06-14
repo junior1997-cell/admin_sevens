@@ -1158,7 +1158,7 @@
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
         <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
-        <script type="text/javascript" src="scripts/resumen_general.js"></script>
+        <script type="text/javascript" src="scripts/resumen_general.js?version_jdl=1.1"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

@@ -113,7 +113,7 @@
                           <div class="col-12 col-sm-6 col-md-6 col-lg-2" >
                             <div class="form-group">
                               <!-- <label for="filtros" >Tipo comprobante </label> -->
-                              <select id="filtro_tipo_comprobante" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
+                              <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
                                 <option value="0">Todos</option>
                                 <option value="Ninguno">Ninguno</option>
                                 <option value="Boleta">Boleta</option>
@@ -328,30 +328,30 @@
                                 <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
-                                <th>Fecha Emisión</th>
-                                <th>Nota</th>
-                                <th>Sub total</th>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Subtotal</th>
                                 <th>IGV</th>
                                 <th>Monto</th>
                                 <th>Descripción</th>
-                                <th>Factura</th>
-                                <th>Estado</th>
+                                <th>Nota</th> 
+                                <th>CFDI.</th>                                                             
                               </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody></tbody> 
                             <tfoot>
                               <tr>
                                 <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
-                                <th>Fecha Emisión</th>
-                                <th>Nota</th>
-                                <th>Sub total</th>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Subtotal</th>
                                 <th>IGV</th>
                                 <th class="text-nowrap text-right" id="monto_total_f" style="color: #ff0000; background-color: #f3e700;"></th>
                                 <th>Descripción</th>
-                                <th>Factura</th>
-                                <th>Estado</th>
+                                <th>Nota</th>      
+                                <th>CFDI.</th>                                                          
                               </tr>
                             </tfoot>
                           </table>
@@ -757,7 +757,7 @@
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="codigo">Forma de Pago </label>
-                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                  <select name="forma_pago_c" id="forma_pago_c" class="form-control select2" style="width: 100%;">
                                     <option value="Transferencia">Transferencia</option>
                                     <option value="Efectivo">Efectivo</option>
                                     <option value="Crédito">Crédito</option>
@@ -894,7 +894,7 @@
         <!-- /.content-wrapper -->
         <?php require 'script.php'; ?>
 
-        <script type="text/javascript" src="scripts/servicio_maquina.js"></script>
+        <script type="text/javascript" src="scripts/servicio_maquina.js?version_jdl=1.1"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

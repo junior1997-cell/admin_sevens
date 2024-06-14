@@ -425,7 +425,7 @@ class ServicioMaquina
   //----------------------S E C C   F A C T U R A S--------------------------------
   //-------------------------------------------------------------------------------
 
-  public function insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
+  public function insertar_factura($idproyectof, $idmaquina, $forma_pago_c, $tipo_comprobante, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
   {
 
     
@@ -437,8 +437,8 @@ class ServicioMaquina
     if (empty($prov['data'])) {
 
 
-      $sql = "INSERT INTO factura (idproyecto,idmaquinaria,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota, user_created) 
-      VALUES ('$idproyectof','$idmaquina','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv', '$val_igv', '$tipo_gravada','$nota','" . $_SESSION['idusuario'] . "')";
+      $sql = "INSERT INTO factura (idproyecto,idmaquinaria, forma_de_pago, tipo_comprobante,codigo,monto,fecha_emision,descripcion,imagen,subtotal,igv,val_igv,tipo_gravada,nota, user_created) 
+      VALUES ('$idproyectof','$idmaquina','$forma_pago_c', '$tipo_comprobante','$codigo','$monto','$fecha_emision','$descripcion_f','$imagen2','$subtotal','$igv', '$val_igv', '$tipo_gravada','$nota','" . $_SESSION['idusuario'] . "')";
       $insertar =  ejecutarConsulta_retornarID($sql); 
       if ($insertar['status'] == false) {  return $insertar; } 
       
@@ -473,12 +473,14 @@ class ServicioMaquina
   }
 
   //Implementamos un método para editar registros
-  public function editar_factura($idfactura, $idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
+  public function editar_factura($idfactura, $idproyectof, $idmaquina, $forma_pago_c, $tipo_comprobante, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota)
   {
 
     $sql = "UPDATE factura SET
 		idproyecto='$idproyectof',
 		idmaquinaria='$idmaquina',
+		forma_de_pago='$forma_pago_c',
+		tipo_comprobante='$tipo_comprobante',
 		codigo='$codigo',
 		monto='$monto',
 		fecha_emision='$fecha_emision',

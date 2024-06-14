@@ -113,7 +113,7 @@
                           <div class="col-12 col-sm-6 col-md-6 col-lg-2" >
                             <div class="form-group">
                               <!-- <label for="filtros" >Tipo comprobante </label> -->
-                              <select id="filtro_tipo_comprobante" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
+                              <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
                                 <option value="0">Todos</option>
                                 <option value="Ninguno">Ninguno</option>
                                 <option value="Boleta">Boleta</option>
@@ -328,14 +328,14 @@
                                 <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
-                                <th>Fecha Emisión</th>
-                                <th>Nota</th>
-                                <th>Sub total</th>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Subtotal</th>
                                 <th>IGV</th>
                                 <th>Monto</th>
                                 <th>Descripción</th>
-                                <th>Factura</th>
-                                <th>Estado</th>
+                                <th>Nota</th> 
+                                <th>CFDI.</th>   
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -344,14 +344,14 @@
                                 <th>#</th>
                                 <th>Aciones</th>
                                 <th>Código</th>
-                                <th>Fecha Emisión</th>
-                                <th>Nota</th>
-                                <th>Sub total</th>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Subtotal</th>
                                 <th>IGV</th>
                                 <th class="text-nowrap text-right" id="monto_total_f" style="color: #ff0000; background-color: #f3e700;"></th>
                                 <th>Descripción</th>
-                                <th>Factura</th>
-                                <th>Estado</th>
+                                <th>Nota</th>      
+                                <th>CFDI.</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -735,7 +735,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Factura</h4>
+                        <h4 class="modal-title">Agregar Comprobante</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -753,26 +753,51 @@
                               <!-- id idfactura -->
                               <input type="hidden" name="idfactura" id="idfactura" />
 
+                              <!-- Tipo comprobante-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="codigo">Forma de Pago </label>
+                                  <select name="forma_pago_c" id="forma_pago_c" class="form-control select2" style="width: 100%;">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <!-- Tipo comprobante-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="codigo">Tipo Comprobante </label>
+                                  <select id="tipo_comprobante" name="tipo_comprobante" class="form-control select2" onchange="select_comprobante();" style="width: 100%;"  >                                       
+                                    <option value="Ninguno">Ninguno</option>
+                                    <option value="Boleta">Boleta</option>
+                                    <option value="Factura">Factura</option>
+                                    <option value="Nota de venta">Nota de venta</option>
+                                  </select>
+                                </div>
+                              </div>         
+
                               <!-- Código-->
                               <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="codigo">Código </label>
                                   <input type="text" name="codigo" id="codigo" class="form-control" placeholder="Código" />
                                 </div>
-                              </div>
-                              <!-- Monto-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="monto">Monto</label>
-                                  <input type="number" name="monto" id="monto" class="form-control" placeholder="Monto" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();" />
-                                </div>
-                              </div>
+                              </div>                              
 
                               <!-- Fecha Emisión -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="fecha_emision">Fecha Emisión</label>
                                   <input class="form-control" type="date" id="fecha_emision" name="fecha_emision" />
+                                </div>
+                              </div>
+                              <!-- Monto-->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto">Monto</label>
+                                  <input type="number" name="monto" id="monto" class="form-control" placeholder="Monto" onclick="calc_total();" onkeyup="calc_total();" />
                                 </div>
                               </div>
                               <!-- Sub total -->
@@ -786,7 +811,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onchange="calcula_igv_subt();" onkeyup="calcula_igv_subt();"> 
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onchange="calc_total();" onkeyup="calc_total();"> 
                                   <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>
@@ -868,7 +893,7 @@
         <!-- /.content-wrapper -->
         <?php require 'script.php'; ?>
 
-        <script type="text/javascript" src="scripts/servicio_equipos.js"></script>
+        <script type="text/javascript" src="scripts/servicio_equipos.js?version_jdl=1.1"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

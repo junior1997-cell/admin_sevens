@@ -62,6 +62,8 @@
       $idproyectof    = isset($_POST["idproyectof"]) ? limpiarCadena($_POST["idproyectof"]) : "";
       $idfactura      = isset($_POST["idfactura"]) ? limpiarCadena($_POST["idfactura"]) : "";
       $idmaquina      = isset($_POST["idmaquina"]) ? limpiarCadena($_POST["idmaquina"]) : "";
+      $forma_pago_c     = isset($_POST["forma_pago_c"]) ? limpiarCadena($_POST["forma_pago_c"]) : "";
+      $tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
       $codigo         = isset($_POST["codigo"]) ? limpiarCadena($_POST["codigo"]) : "";
       $monto          = isset($_POST["monto"]) ? limpiarCadena($_POST["monto"]) : "";
       $fecha_emision  = isset($_POST["fecha_emision"]) ? limpiarCadena($_POST["fecha_emision"]) : "";
@@ -553,7 +555,7 @@
           }
 
           if (empty($idfactura)) {
-            $rspta = $servicioequipos->insertar_factura($idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota);
+            $rspta = $servicioequipos->insertar_factura($idproyectof, $idmaquina, $forma_pago_c, $tipo_comprobante, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota);
             echo json_encode($rspta,true);
           } else {
 
@@ -567,7 +569,7 @@
               }
             }
 
-            $rspta = $servicioequipos->editar_factura($idfactura, $idproyectof, $idmaquina, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota);
+            $rspta = $servicioequipos->editar_factura($idfactura, $idproyectof, $idmaquina, $forma_pago_c, $tipo_comprobante, $codigo, $monto, $fecha_emision, $descripcion_f, $imagen2, $subtotal, $igv, $val_igv, $tipo_gravada, $nota);
 
             echo json_encode($rspta,true);
           }
@@ -606,13 +608,13 @@
                     ' <button class="btn btn-danger btn-sm" onclick="eliminar_factura(' . $reg->idfactura . ',' . "'" . $reg->codigo . "'" . ')"><i class="fas fa-skull-crossbones"></i></button>',
                 "2" => $reg->codigo,
                 "3" => date("d/m/Y", strtotime($reg->fecha_emision)),            
-                "4" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->nota) ? '- - -' : $reg->nota ).'</textarea>',
+                "4" => '<b>' . $reg->tipo_comprobante .'</b><br>'. $reg->forma_de_pago,
                 "5" => 'S/ '.number_format($reg->subtotal, 2, '.', ','),
                 "6" => 'S/ '.number_format($reg->igv, 2, '.', ','),
                 "7" => 'S/ '.number_format($reg->monto, 2, '.', ','),
                 "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->descripcion) ? '- - -' : $reg->descripcion ).'</textarea>',
-                "9" => $imagen,
-                "10" => $reg->estado ? '<span class="text-center badge badge-success">Activado</span>' . $toltip : '<span class="text-center badge badge-danger">Desactivado</span>' . $toltip,
+                "9" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.(empty($reg->nota) ? '- - -' : $reg->nota ).'</textarea>',
+                "10" => $imagen . $toltip ,
               ];
             }
 

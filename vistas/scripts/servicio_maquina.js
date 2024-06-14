@@ -53,7 +53,7 @@ function init() {
   $("#tipo_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo de pago", allowClear: true, }); 
   $("#banco_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Seleccinar banco", allowClear: true, });
 
-  $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true, });
+  $("#forma_pago_c").select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true, });
   $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true, });
 
   $('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
@@ -1225,7 +1225,7 @@ function listar_facturas(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,f
   // maquina
   var nombre_m_e = maquina==null || maquina=="" ? `<i class="fas fa-spinner fa-pulse fa-sm"></i>` : maquina;
 
-  $(".head_name_facturas_m_e").html(`<h3 class="text-bold">Comprobante :  ${nombre_m_e} </h3>`);
+  $(".head_name_facturas_m_e").html(`<h4 class="text-bold">Comprobantes:  ${nombre_m_e} </h4>`);
 
   localStorage.setItem("nubeidmaquif", idmaquinaria);
   localStorage.setItem("nubeidproyectf", idproyecto);
@@ -1352,8 +1352,12 @@ function select_comprobante() {
     $("#val_igv").val(0.18); 
     $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)");
     $(".div_ruc").show(); $(".div_razon_social").show();
+    calc_total();
   }else if ($("#tipo_comprobante").select2("val") == "Boleta" || $("#tipo_comprobante").select2("val") =="Nota de Crédito") {
+    $("#val_igv").val(0.00); 
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
     $(".div_ruc").show(); $(".div_razon_social").show(); 
+    calc_total();
   }else {    
     $("#val_igv").val(0.00); 
     $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
@@ -1361,8 +1365,9 @@ function select_comprobante() {
     $(".div_ruc").hide(); $(".div_razon_social").hide();  
     $('#num_documento').val("");
     $('#razon_social').val("");
+    calc_total();
   }  
-  calc_total();
+  
 }
 
 function quitar_igv_del_precio(precio , igv, tipo ) {
@@ -1399,6 +1404,8 @@ function quitar_igv_del_precio(precio , igv, tipo ) {
 
 //Función limpiar-factura
 function limpiar_factura() {
+  $("#forma_pago_c").val('').trigger("change");
+  $("#tipo_comprobante").val('').trigger("change");
 
   $("#codigo").val("");
   $("#monto").val("");
@@ -1434,6 +1441,8 @@ function mostrar_factura(idfactura) {
     if (e.status == true) {
 
       $("#idfactura").val(e.data.idfactura);
+      $("#forma_pago_c").val(e.data.forma_de_pago).trigger("change");
+      $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");
       $("#codigo").val(e.data.codigo);
       $("#monto").val(parseFloat(e.data.monto).toFixed(2));
       $("#fecha_emision").val(e.data.fecha_emision);
