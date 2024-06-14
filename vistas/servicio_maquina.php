@@ -66,7 +66,7 @@
                                 <i class="fas fa-dollar-sign"></i> Agregar Pago
                               </button>
                               <button type="button" id="btn-factura" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-factura" onclick="limpiar_factura();">
-                                <i class="fas fa-file-invoice"></i> Agregar Factura
+                                <i class="fas fa-file-invoice"></i> Agregar comprobante
                               </button>
                             </div>
                           </div>
@@ -137,7 +137,7 @@
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
                                 <th data-toggle="tooltip" data-original-title="Costo Parcial">C. Parcial</th>
-                                <th>Facturas</th>
+                                <th>Comprobante</th>
                               </tr>
                             </thead>
                             <tbody></tbody>
@@ -150,7 +150,7 @@
                                 <th data-toggle="tooltip" data-original-title="Unidad Medida">U. M</th>
                                 <th data-toggle="tooltip" data-original-title="Cantidad(veces)">Cant.</th>
                                 <th data-toggle="tooltip" data-original-title="Costo Parcial">C. Parcial</th>
-                                <th>Facturas</th>
+                                <th>Comprobante</th>
                               </tr>
                             </tfoot>
                           </table>
@@ -735,7 +735,7 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h4 class="modal-title">Agregar Factura</h4>
+                        <h4 class="modal-title">Agregar Comprobante</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>
@@ -752,6 +752,31 @@
                               <input type="hidden" name="idmaquina" id="idmaquina" />
                               <!-- id idfactura -->
                               <input type="hidden" name="idfactura" id="idfactura" />
+                              
+                              <!-- Tipo comprobante-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="codigo">Forma de Pago </label>
+                                  <select name="forma_pago" id="forma_pago" class="form-control select2" style="width: 100%;">
+                                    <option value="Transferencia">Transferencia</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Crédito">Crédito</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <!-- Tipo comprobante-->
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label for="codigo">Tipo Comprobante </label>
+                                  <select id="tipo_comprobante" name="tipo_comprobante" class="form-control select2" onchange="select_comprobante();" style="width: 100%;"  >                                       
+                                    <option value="Ninguno">Ninguno</option>
+                                    <option value="Boleta">Boleta</option>
+                                    <option value="Factura">Factura</option>
+                                    <option value="Nota de venta">Nota de venta</option>
+                                  </select>
+                                </div>
+                              </div>                              
 
                               <!-- Código-->
                               <div class="col-lg-6">
@@ -759,20 +784,21 @@
                                   <label for="codigo">Código </label>
                                   <input type="text" name="codigo" id="codigo" class="form-control" placeholder="Código" />
                                 </div>
-                              </div>
-                              <!-- Monto-->
-                              <div class="col-lg-6">
-                                <div class="form-group">
-                                  <label for="monto">Monto</label>
-                                  <input type="number" name="monto" id="monto" class="form-control" placeholder="Monto" onclick="calcula_igv_subt();" onkeyup="calcula_igv_subt();" />
-                                </div>
-                              </div>
-
+                              </div>                              
+                                                      
                               <!-- Fecha Emisión -->
-                              <div class="col-lg-4">
+                              <div class="col-lg-6">
                                 <div class="form-group">
                                   <label for="fecha_emision">Fecha Emisión</label>
                                   <input class="form-control" type="date" id="fecha_emision" name="fecha_emision" />
+                                </div>
+                              </div>
+
+                              <!-- Monto-->
+                              <div class="col-lg-4">
+                                <div class="form-group">
+                                  <label for="monto">Monto</label>
+                                  <input type="number" name="monto" id="monto" class="form-control" placeholder="Monto" onclick="calc_total();" onkeyup="calc_total();" />
                                 </div>
                               </div>
                               <!-- Sub total -->
@@ -786,7 +812,7 @@
                               <div class="col-lg-2">
                                 <div class="form-group">
                                   <label for="val_igv" class="text-gray val_igv" style=" font-size: 13px;">Valor - IGV </label>
-                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onchange="calcula_igv_subt();" onkeyup="calcula_igv_subt();"> 
+                                  <input type="text" name="val_igv" id="val_igv" value="0.18" class="form-control" onchange="calc_total();" onkeyup="calc_total();"> 
                                   <input class="form-control" type="hidden"  id="tipo_gravada" name="tipo_gravada"/>
                                 </div>
                               </div>

@@ -12,17 +12,33 @@ Class Marca
 
 	//Implementamos un método para insertar registros
 	public function insertar($nombre_marca, $descripcion_marca) {
-		//var_dump($nombre);die();
-		$sql="INSERT INTO marca(nombre_marca, descripcion, user_created)VALUES('$nombre_marca', '$descripcion_marca','" . $_SESSION['idusuario'] . "' )";
+		$sql = "SELECT * FROM marca WHERE nombre_marca = '$nombre_marca';";
+    $buscando = ejecutarConsultaArray($sql); if ( $buscando['status'] == false) {return $buscando; } 
+		
+		if (empty($buscando['data'])) {
+			$sql="INSERT INTO marca(nombre_marca, descripcion, user_created)VALUES('$nombre_marca', '$descripcion_marca','" . $_SESSION['idusuario'] . "' )";
+			$insertar =  ejecutarConsulta_retornarID($sql); if ($insertar['status'] == false) {  return $insertar; } 
+			
+			//add registro en nuestra bitacora
+			$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('marca','".$insertar['data']."','Nueva marca registrado','" . $_SESSION['idusuario'] . "')";
+			$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
+			
+			return $insertar;
+		} else {
+			$info_repetida = ''; 
 
-		$insertar =  ejecutarConsulta_retornarID($sql); 
-		if ($insertar['status'] == false) {  return $insertar; } 
-		
-		//add registro en nuestra bitacora
-		$sql_bit = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('marca','".$insertar['data']."','Nueva marca registrado','" . $_SESSION['idusuario'] . "')";
-		$bitacora = ejecutarConsulta($sql_bit); if ( $bitacora['status'] == false) {return $bitacora; }   
-		
-		return $insertar;
+      foreach ($buscando['data'] as $key => $value) {
+        $info_repetida .= '<li class="text-left font-size-13px">
+          <b>Nombre: </b>'.$value['nombre_marca'].'<br>
+          <b>UM: </b>'.$value['descripcion'].'<br>
+          <b>Papelera: </b>'.( $value['estado']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO') .'<br>
+          <b>Eliminado: </b>'. ($value['estado_delete']==0 ? '<i class="fas fa-check text-success"></i> SI':'<i class="fas fa-times text-danger"></i> NO').'<br>
+          <hr class="m-t-2px m-b-2px">
+        </li>'; 
+      }
+      $sw = array( 'status' => 'duplicado', 'message' => 'duplicado', 'data' => '<ul>'.$info_repetida.'</ul>', 'id_tabla' => '' );
+      return $sw;
+		}		
 	}
 
 	//Implementamos un método para editar registros

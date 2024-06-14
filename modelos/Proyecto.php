@@ -210,8 +210,9 @@ class Proyecto
     $sql_estado = "";
     if ($estado == 3) { $sql_estado = "p.estado >= 0 "; } else { $sql_estado = "p.estado = '$estado'"; }
 
-    $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, CASE WHEN LENGTH(p.empresa) <= 15 THEN p.empresa ELSE CONCAT(LEFT(p.empresa, 15), '...') END AS empresa_recorte_20, 
-    p.nombre_proyecto, p.nombre_codigo, 
+    $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, 
+    CASE WHEN LENGTH(p.empresa) <= 15 THEN p.empresa ELSE CONCAT(LEFT(p.empresa, 15), '...') END AS empresa_recorte_20, 
+    p.nombre_proyecto, p.nombre_codigo, CASE WHEN LENGTH(p.nombre_codigo) <= 15 THEN p.nombre_codigo ELSE CONCAT(LEFT(p.nombre_codigo, 15), '...') END AS nombre_codigo_recorte_20, 
     p.ubicacion, p.actividad_trabajo, p.empresa_acargo, p.costo, p.garantia, p.fecha_inicio_actividad, p.fecha_fin_actividad, p.plazo_actividad, 
     p.fecha_inicio, p.fecha_fin, p.plazo, p.dias_habiles, p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra, p.doc4_presupuesto, 
     p.doc5_analisis_costos_unitarios, p.doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, 

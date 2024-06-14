@@ -14,10 +14,12 @@ if (!isset($_SESSION["nombre"])) {
     require_once "../modelos/Compra_insumos.php";
     require_once "../modelos/AllProveedor.php";
     require_once "../modelos/Materiales.php";
+    require_once "../modelos/Marca.php";    
 
     $compra_insumos = new Compra_insumos();
-    $proveedor = new AllProveedor();
-    $insumos = new Materiales();      
+    $proveedor      = new AllProveedor();
+    $insumos        = new Materiales();     
+    $marca          = new Marca(); 
     
     date_default_timezone_set('America/Lima');  $date_now = date("d_m_Y__h_i_s_A");
     $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
@@ -83,6 +85,11 @@ if (!isset($_SESSION["nombre"])) {
     $descripcion_p    = isset($_POST["descripcion_p"]) ? encodeCadenaHtml($_POST["descripcion_p"]) : "" ;  
     $img_pefil_p      = isset($_POST["foto2"]) ? limpiarCadena($_POST["foto2"]) : "" ;
     $ficha_tecnica_p  = isset($_POST["doc2"]) ? limpiarCadena($_POST["doc2"]) : "" ;
+
+    // :::::::::::::::::::::::::::::::::::: D A T O S   M A R C A ::::::::::::::::::::::::::::::::::::::
+    $m_idmarca            = isset($_POST["m_idmarca"]) ? limpiarCadena($_POST["m_idmarca"]) : "";
+    $m_nombre_marca       = isset($_POST["m_nombre_marca"]) ? limpiarCadena($_POST["m_nombre_marca"]) : "";
+    $m_descripcion_marca  = isset($_POST["m_descripcion_marca"]) ? limpiarCadena($_POST["m_descripcion_marca"]) : "";
 
     // :::::::::::::::::::::::::::::::::::: D A T O S   P R O V E E D O R ::::::::::::::::::::::::::::::::::::::
     $idproveedor_prov		= isset($_POST["idproveedor_prov"])? limpiarCadena($_POST["idproveedor_prov"]):"";
@@ -167,6 +174,17 @@ if (!isset($_SESSION["nombre"])) {
         //Codificar el resultado utilizando json
         echo json_encode($rspta, true);
     
+      break;
+
+      // :::::::::::::::::::::::::: S E C C I O N   M A T E R I A L E S ::::::::::::::::::::::::::
+      case 'guardar_y_editar_marca':
+        if (empty($m_idmarca)) {
+          $rspta = $marca->insertar($m_nombre_marca, $m_descripcion_marca);
+          echo json_encode( $rspta, true) ;
+        } else {
+          $rspta = $marca->editar($m_idmarca, $m_nombre_marca, $m_descripcion_marca);
+          echo json_encode( $rspta, true) ;
+        }
       break;
         
       // :::::::::::::::::::::::::: S E C C I O N   P R O V E E D O R  ::::::::::::::::::::::::::

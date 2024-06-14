@@ -337,8 +337,8 @@
                   <span class="username ml-0"><p class="'.$color_text.' m-02rem cursor-pointer" data-toggle="tooltip" data-original-title="'. $value['empresa'] .'" >'. $value['empresa_recorte_20'] .'</p></span>
                   <span class="description '.$color_text.' ml-0">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 </div>',              
-                "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description '.$color_text.'" >'.$value['nombre_codigo'].'</span> </div>' ,
-                "4"=>  number_format($value['costo'], 2, '.', ''),                 
+                "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'">  <span class="description '.$color_text.'" >'.$value['nombre_codigo_recorte_20'].'</span> </div>' ,
+                "4"=>  $value['costo'],                 
                 "5"=> '<div class="asignar_paint_'.$value['idproyecto'].'">'. $estado.'</div>'.$toltip
               );
             }

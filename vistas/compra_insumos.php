@@ -661,7 +661,7 @@
                   </div>
                   <!-- /.container-fluid -->
 
-                  <!-- Modal agregar proveedores -->
+                  <!-- MODAL - AGREGAR PROVEEDORES -->
                   <div class="modal fade" id="modal-agregar-proveedor">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -804,7 +804,7 @@
                     </div>
                   </div>
 
-                  <!-- Modal elegir material -->
+                  <!-- MODAL - ELEGIR MATERIAL -->
                   <div class="modal fade" id="modal-elegir-material">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -840,7 +840,7 @@
                     </div>
                   </div>                  
 
-                  <!-- Modal agregar Pagos - charge -->
+                  <!-- MODAL - AGREGAR PAGOS - charge -->
                   <div class="modal fade" id="modal-agregar-pago">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -991,7 +991,7 @@
                     </div>
                   </div>
 
-                  <!-- MODAL - DETALLE compras - charge -->
+                  <!-- MODAL - DETALLE COMPRAS - charge -->
                   <div class="modal fade" id="modal-ver-compras">
                     <div class="modal-dialog modal-dialog-scrollable modal-xl">
                       <div class="modal-content">
@@ -1025,7 +1025,7 @@
                     </div>
                   </div>
 
-                  <!-- MODAL -  agregar comprobantes - charge -->
+                  <!-- MODAL -  AGREGAR COMPROBANTES - charge -->
                   <div class="modal fade" id="modal-tabla-comprobantes-compra">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -1136,7 +1136,7 @@
                     </div>
                   </div>
 
-                  <!-- Modal-ver-vaucher-pagos -->
+                  <!-- MODAL - VER BOUCHER -->
                   <div class="modal fade" id="modal-ver-vaucher">
                     <div class="modal-dialog modal-dialog-scrollable modal-xm">
                       <div class="modal-content">
@@ -1153,7 +1153,7 @@
                     </div>
                   </div> 
 
-                  <!-- Modal ver grande img producto -->
+                  <!-- MODAL - VER IMAGEN -->
                   <div class="modal fade bg-color-02020280" id="modal-ver-img-material">
                     <div class="modal-dialog modal-dialog-scrollable modal-md shadow-0px1rem3rem-rgb-0-0-0-50 rounded">
                       <div class="modal-content bg-color-0202022e shadow-none border-0" >
@@ -1174,7 +1174,7 @@
                     </div>
                   </div>
 
-                  <!-- Modal agregar MATERIALES Y ACTIVOS FIJOS - charge -->                 
+                  <!-- MODAL AGREGAR MATERIALES Y ACTIVOS - charge -->                 
                   <div class="modal fade bg-color-02020263" id="modal-agregar-material-activos-fijos">
                     <div class="modal-dialog modal-dialog-scrollable modal-lg">
                       <div class="modal-content">
@@ -1231,7 +1231,10 @@
                                 <!-- select2 multiple marca-->
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                   <div class="form-group">
-                                    <label for="marcas_p">Marca <sup class="text-danger">(unico*)</sup></label>
+                                    <label for="marcas_p">
+                                      <span class="badge bg-success cursor-pointer" data-toggle="tooltip" data-original-title="Agregar marca" onclick="add_new_marca();"><i class="fa-solid fa-plus"></i></span>
+                                       Marca <sup class="text-danger">(unico*)</sup>
+                                    </label>
                                     <div class="select2-purple">
                                       <select name="marcas_p[]" id="marcas_p" class="form-control select2" multiple="multiple" data-dropdown-css-class="select2-purple" data-placeholder="Seleccione marca" style="width: 100%;"> </select>
                                     </div>
@@ -1341,6 +1344,72 @@
                       </div>
                     </div>
                   </div>    
+
+                  <!-- MODAL - MARCA -->
+                  <div class="modal fade bg-color-02020280" id="modal-agregar-marca">
+                    <div class="modal-dialog modal-dialog-scrollable modal-md">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Agregar Marca</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span class="text-danger" aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+
+                        <div class="modal-body">
+                          <!-- form start -->
+                          <form id="form-marca" name="form-marca" method="POST" autocomplete="off">
+                            <div class="card-body">
+                              <div class="row" id="cargando-13-fomulario">
+                                <!-- id banco -->
+                                <input type="hidden" name="m_idmarca" id="m_idmarca" />
+
+                                <!-- Nombre -->
+                                <div class="col-lg-12 class_pading">
+                                  <div class="form-group">
+                                    <label for="m_nombre_marca">Nombre</label>
+                                    <input type="text" name="m_nombre_marca" class="form-control" id="m_nombre_marca" placeholder="Nombre del marca." />
+                                  </div>
+                                </div>   
+
+                                <!-- descripcion -->
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                  <div class="form-group">
+                                    <label for="m_descripcion_marca">Descripción </label> <br />
+                                    <textarea name="m_descripcion_marca" id="m_descripcion_marca" class="form-control" rows="2"></textarea>
+                                  </div>
+                                </div>
+
+                                <!-- barprogress -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                                  <div class="progress" id="barra_progress_marca_div">
+                                    <div id="barra_progress_marca" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                      0%
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+
+                              <div class="row" id="cargando-14-fomulario" style="display: none;">
+                                <div class="col-lg-12 text-center">
+                                  <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                                  <br />
+                                  <h4>Cargando...</h4>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <button type="submit" style="display: none;" id="submit-form-marca">Submit</button>
+                          </form>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                          <button type="submit" class="btn btn-success" id="guardar_registro_marca">Guardar Cambios</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                 </div>
               </section>

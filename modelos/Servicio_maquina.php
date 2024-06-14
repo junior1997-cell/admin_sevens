@@ -14,8 +14,7 @@ class ServicioMaquina
   //---------------------------------------------------------------------------------
 
   //Implementar un método para listar los registros AGRUPADOS
-  public function listar($nube_idproyecto)
-  {
+  public function listar($nube_idproyecto) {
     $data = Array();
 
     $sql = "SELECT s.idmaquinaria as idmaquinaria, s.idproyecto as idproyecto, s.unidad_medida as unidad_medida, m.nombre as maquina,

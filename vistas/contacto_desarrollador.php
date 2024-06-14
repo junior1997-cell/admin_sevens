@@ -239,7 +239,7 @@
   function tbla_principal_para_todos_los_modulos(estado = 3) {    
 
     var tabla_proyectos = $('#tabla-para-todos-los-modulos-proyecto').dataTable({
-      responsive: true,
+      responsive: false,
       lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
       aProcessing: true,//Activamos el procesamiento del datatables
       aServerSide: true,//Paginación y filtrado realizados por el servidor
@@ -280,7 +280,7 @@
       iDisplayLength: 10,//Paginación
       order: [[ 0, "asc" ]],//Ordenar (columna,orden)
       columnDefs: [
-      { targets: [4], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [4], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<div class="text-nowrap"><span >S/</span> <span class=" ${color} "> ${number} </span></div>`; } return number; }, },
 
         // { targets: [6], visible: false, searchable: false, },             
       ],
