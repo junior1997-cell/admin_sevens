@@ -42,13 +42,14 @@ function init() {
   lista_select2("../ajax/ajax_general.php?op=select2Categoria_all", '#categoria_insumos_af_p', null);  
   lista_select2(`../ajax/compra_insumos.php?op=select2_serie_comprobante&idproyecto=${localStorage.getItem('nube_idproyecto')}`, '#slt2_serie_comprobante', null);
 
-  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
+  // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════  
 
   $("#guardar_registro_compras").on("click", function (e) {  $("#submit-form-compras").submit(); });
   $("#guardar_registro_proveedor").on("click", function (e) { $("#submit-form-proveedor").submit(); });
   $("#guardar_registro_pago").on("click", function (e) {  $("#submit-form-pago").submit(); });
   $("#guardar_registro_comprobante_compra").on("click", function (e) {  $("#submit-form-comprobante-compra").submit();  }); 
   $("#guardar_registro_material").on("click", function (e) {  $("#submit-form-materiales").submit(); });  
+  $("#guardar_registro_marca").on("click", function(e){if($(this).hasClass('send-data')==false){$("#submit-form-marca").submit();}});
 
   // ══════════════════════════════════════ INITIALIZE SELECT2 - FILTROS ══════════════════════════════════════
   $("#filtro_tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione comprobante", allowClear: true, });
@@ -1736,6 +1737,76 @@ function actualizar_producto() {
   }   
 }
 
+// :::::::::::::::::::::::::: S E C C I O N   M A R C A  ::::::::::::::::::::::::::
+function add_new_marca() {
+  limpiar_form_marca();
+  $("#modal-agregar-marca").modal("show");
+}
+//Función limpiar
+function limpiar_form_marca() {
+  $("#guardar_registro_marca").html('Guardar Cambios').removeClass('disabled send-data');
+  //Mostramos los Materiales
+  $("m_idmarca").val("");
+  $("m_nombre_marca").val("");
+  $("m_descripcion_marca").val("");
+
+  // Limpiamos las validaciones
+  $(".form-control").removeClass('is-valid');
+  $(".form-control").removeClass('is-invalid');
+  $(".error.invalid-feedback").remove();
+}
+
+//Función para guardar o editar
+function guardar_y_editar_marca(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-marca")[0]);
+ 
+  $.ajax({
+    url: "../ajax/compra_insumos.php?op=guardar_y_editar_marca",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Color registrado correctamente.", "success");	
+          limpiar_form_marca();
+          $("#modal-agregar-marca").modal("hide");     
+          lista_select2("../ajax/ajax_general.php?op=select2Marcas", '#marcas_p', null);   
+        }else{
+          ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!",'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); } 
+      $("#guardar_registro_marca").html('Guardar Cambios').removeClass('disabled send-data');      
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_marca").css({"width": percentComplete+'%'}).text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_marca").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled send-data');
+      $("#barra_progress_marca").css({ width: "0%",  }).text("0%");
+    },
+    complete: function () {
+      $("#barra_progress_marca").css({ width: "0%", }).text("0%");
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+function name(params) {
+  
+}
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -1945,6 +2016,35 @@ $(function () {
 
     submitHandler: function (e) {
       guardar_y_editar_materiales(e);
+    },
+
+  });
+
+  $("#form-marca").validate({
+    rules: {
+      m_nombre_marca: { required: true }      // terms: { required: true },
+    },
+    messages: {
+      m_nombre_marca: {  required: "Campo requerido.", },
+    },
+        
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");   
+    },
+    submitHandler: function (e) { 
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_y_editar_marca(e);      
     },
 
   });

@@ -48,14 +48,13 @@ function init() {
   // ══════════════════════════════════════ INICIALIZE SELECT2 ELEMENTS ══════════════════════════
 
   $("#maquinaria").select2({ theme: "bootstrap4", placeholder: "Selecione maquinaria", allowClear: true, });
-
   $("#unidad_m").select2({ theme: "bootstrap4", placeholder: "Selecione una unidad de medida", allowClear: false, });
-
   $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione una forma de pago", allowClear: true, });
-
-  $("#tipo_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo de pago", allowClear: true, });
-
+  $("#tipo_pago").select2({ theme: "bootstrap4", placeholder: "Selecione un tipo de pago", allowClear: true, }); 
   $("#banco_pago").select2({ templateResult: templateBanco, theme: "bootstrap4", placeholder: "Seleccinar banco", allowClear: true, });
+
+  $("#forma_pago").select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true, });
+  $("#tipo_comprobante").select2({ theme: "bootstrap4", placeholder: "Selecione", allowClear: true, });
 
   $('.click-btn-fecha-inicio').on('click', function (e) {$('#filtro_fecha_inicio').focus().select(); });
   $('.click-btn-fecha-fin').on('click', function (e) {$('#filtro_fecha_fin').focus().select(); });
@@ -1226,7 +1225,7 @@ function listar_facturas(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,f
   // maquina
   var nombre_m_e = maquina==null || maquina=="" ? `<i class="fas fa-spinner fa-pulse fa-sm"></i>` : maquina;
 
-  $(".head_name_facturas_m_e").html(`<h3 class="text-bold">Facturas :  ${nombre_m_e} </h3>`);
+  $(".head_name_facturas_m_e").html(`<h3 class="text-bold">Comprobante :  ${nombre_m_e} </h3>`);
 
   localStorage.setItem("nubeidmaquif", idmaquinaria);
   localStorage.setItem("nubeidproyectf", idproyecto);
@@ -1278,55 +1277,99 @@ function listar_facturas(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,f
   total_costo_parcial(idmaquinaria, idproyecto);
 }
 
-//Calcular Igv y subtotal
-function calcula_igv_subt() {
+function calc_total() {
 
-  var subtotal = 0;  var igv = 0;
-  
-  $("#subtotal").val("");
+  $(".nro_comprobante").html("Núm. Comprobante");
 
-  $("#igv").val("");
+  var total         = es_numero($('#monto').val()) == true? parseFloat($('#monto').val()) : 0;
+  var val_igv       = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0;
+  var subtotal      = 0; 
+  var igv           = 0;
 
-  var val_igv = es_numero($('#val_igv').val()) == true? parseFloat($('#val_igv').val()) : 0; 
-  
-  var monto = parseFloat($("#monto").val());
+  //console.log(total, val_igv); console.log($('#precio_parcial').val(), $('#val_igv').val()); console.log('----------');
 
-  if (monto=="" || monto==null) {
+  if ($("#tipo_comprobante").select2("val")=="" || $("#tipo_comprobante").select2("val")==null) {
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);    
+  }else if ($("#tipo_comprobante").select2("val") =="Ninguno") {  
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00"); 
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)"); 
+    $("#val_igv").prop("readonly",true);
+    $(".nro_comprobante").html("Núm. de Operación");    
+  }else if ($("#tipo_comprobante").select2("val") =="Factura" || $("#tipo_comprobante").select2("val") =="Nota de Crédito") {  
 
-    $("#val_igv").val(""); 
+    $("#val_igv").prop("readonly",false);    
 
-    $("#tipo_gravada").val(""); 
+    if (total == null || total == "") {
+      $("#subtotal").val(0.00);
+      $("#igv").val(0.00); 
+      $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+    } else if (val_igv == null || val_igv == "") {  
+      $("#subtotal").val(redondearExp(total));
+      $("#igv").val(0.00);
+      $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+      // $('#num_documento').val("");
+      // $('#razon_social').val("");
+    }else{     
 
-    $("#subtotal").val("");
+      subtotal = quitar_igv_del_precio(total, val_igv, 'decimal');
+      igv = total - subtotal;
 
-    $("#igv").val("");
+      $("#subtotal").val(redondearExp(subtotal));
+      $("#igv").val(redondearExp(igv));
 
+      if (val_igv > 0 && val_igv <= 1) {
+        $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+      } else {
+        $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
+      } 
+    }    
   } else {
-    if (val_igv ==0) {
-      $("#tipo_gravada").val("NO GRAVADA");
-      $(".tipo_gravada").html("(NO GRAVADA)");
-    }else{
-      $("#tipo_gravada").val("GRAVADA");
-      $(".tipo_gravada").html("(GRAVADA)");
-    }
+    $("#subtotal").val(redondearExp(total));
+    $("#igv").val("0.00");
+    $("#val_igv").val("0.00"); 
+    $("#tipo_gravada").val("NO GRAVADA"); $(".tipo_gravada").html("(NO GRAVADA)");
+    $("#val_igv").prop("readonly",true);
+    
+  }
 
-    subtotal =quitar_igv_del_precio(monto, val_igv, 'decimal');
-
-    igv = monto - subtotal;
-
-    $("#subtotal").val(subtotal.toFixed(2));
-
-    $("#igv").val(igv.toFixed(2));
-
+  if (val_igv > 0 && val_igv <= 1) {
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)")
+  } else {
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
   }
 }
 
-function quitar_igv_del_precio(precio , igv, tipo ) {
+function select_comprobante() {
+  console.log('select_comprobante');
+  if ($("#tipo_comprobante").select2("val") == "Factura" || $("#tipo_comprobante").select2("val") =="Nota de Crédito" ) {
+    $("#val_igv").prop("readonly",false);
+    $("#val_igv").val(0.18); 
+    $("#tipo_gravada").val('GRAVADA'); $(".tipo_gravada").html("(GRAVADA)");
+    $(".div_ruc").show(); $(".div_razon_social").show();
+  }else if ($("#tipo_comprobante").select2("val") == "Boleta" || $("#tipo_comprobante").select2("val") =="Nota de Crédito") {
+    $(".div_ruc").show(); $(".div_razon_social").show(); 
+  }else {    
+    $("#val_igv").val(0.00); 
+    $("#tipo_gravada").val('NO GRAVADA'); $(".tipo_gravada").html("(NO GRAVADA)");
 
+    $(".div_ruc").hide(); $(".div_razon_social").hide();  
+    $('#num_documento').val("");
+    $('#razon_social').val("");
+  }  
+  calc_total();
+}
+
+function quitar_igv_del_precio(precio , igv, tipo ) {
+  console.log(precio , igv, tipo);
   var precio_sin_igv = 0;
 
   switch (tipo) {
-
     case 'decimal':
 
       if (parseFloat(precio) != NaN && igv > 0 && igv <= 1 ) {
