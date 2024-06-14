@@ -166,7 +166,7 @@
 
         <?php require 'script.php'; ?>      
 
-        <script type="text/javascript" src="scripts/permiso.js"></script>
+        <script type="text/javascript" src="scripts/permiso.js?version_jdl=1.1"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); })</script>
       
