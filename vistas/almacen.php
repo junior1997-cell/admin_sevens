@@ -82,7 +82,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="row mb-2">
                 <div class="col-sm-6">
                   <h1 class="m-0">
-                    <i class="nav-icon fas fa-box-open"></i> Almacén
+                    <i class="nav-icon fas fa-box-open"></i> Almacén 
                     <!-- <a type="button" class="btn bg-gradient-gray btn-sm" id="btn-export-qs" href="#" onclick="toastr_error('No hay datos!!', 'Seleccione una quincena o semana para exportar.');">
                       <i class="fa-regular fa-file-excel"></i> Export
                     </a>  -->
@@ -107,7 +107,8 @@ if (!isset($_SESSION["nombre"])) {
           <section class="content">
             <div class="container-fluid">
               <div class="row">
-                <div class="col-12">
+                <!-- :::::::::::::::::: CARD 1 ::::::::::::::::: -->
+                <div class="col-12 card-almacen-1">
                   <div class="card card-primary card-outline">
                     <!-- Start Main Top -->
                     <div class="main-top">
@@ -129,6 +130,8 @@ if (!isset($_SESSION["nombre"])) {
                                     <button type="button" class="dropdown-item my-2" data-toggle="modal" data-target="#modal-transferencia-entre-proyecto" onclick="limpiar_form_tep();" ><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar a otro proyecto</button>  
                                     <div class="dropdown-divider"></div>
                                     <button type="button" class="dropdown-item my-2 btn-general"  data-toggle="modal" data-target="#modal-transferencia-almacen-general" onclick="limpiar_form_tag();"><i class="fa-solid fa-arrow-right-to-bracket fa-flip-horizontal"></i> Enviar Almacén General</button>                                             
+                                    <div class="dropdown-divider"></div>
+                                    <button type="button" class="dropdown-item my-2 btn-general"  onclick="tranferencia_masiva('', '', '');"><i class="fa-solid fa-list-check"></i> Transferencia Masiva</button>                                             
                                   </div>
                                 </div>                                                         
                               </h3>
@@ -368,7 +371,7 @@ if (!isset($_SESSION["nombre"])) {
                         </form>
                       </div>                      
 
-                      <!-- CARGANDO - REGISTRO DE ASISTENCIA -->
+                      <!-- CARGANDO -->
                       <div class="row" id="cargando-table-almacen" style="display: none;">   
                         <div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>                     
                       </div>
@@ -376,7 +379,65 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <!-- /.card -->
                   </div>
-                  <!-- /.col -->
+                  <!-- /.card -->
+                </div>
+
+                <!-- :::::::::::::::::: CARD 1 ::::::::::::::::: -->
+                <div class="col-12 card-almacen-2" style="display: none;">
+                  <div class="card card-primary card-outline">
+                    <!-- Start Main Top -->
+                    <div class="main-top">
+                      <div class="container-fluid border-bottom">
+                        <div class="row">
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="card-header">
+                              <h3 class="card-title mr-2">
+                                <button type="button" class="btn bg-gradient-warning btn-regresar-2" onclick="show_hide_tablas(1);">
+                                  <i class="fas fa-arrow-left"></i> 
+                                </button>
+                              </h3>                             
+                              <!-- FILTROS NEW -->
+                              <div class="d-flex flex-row  row-horizon disenio-scroll ml-2" >                                
+                                
+                                <div class="form-group w-250px ml-3">
+                                  <select id="filtro_tm_unidad_medida" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
+                                  </select>
+                                </div>
+                              
+                                <div class="form-group w-200px ml-3">                                  
+                                  <select id="filtro_tm_categoria" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
+                                    <option value="0">Todos</option>
+                                    <option value="Ninguno">Ninguno</option>
+                                    <option value="Boleta">Boleta</option>
+                                    <option value="Factura">Factura</option>                                    
+                                    <option value="Nota de Crédito">Nota de Crédito</option>
+                                    <option value="Nota de venta">Nota de venta</option>
+                                  </select>
+                                </div> 
+                              
+                                <div class="form-group w-200px ml-3">
+                                  <select id="filtro_tm_es_epp" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
+                                    <option value="0">Todos</option>
+                                    <option value="PN">NO EPP</option>
+                                    <option value="EPP">SI EPP</option>                                    
+                                  </select>
+                                </div> 
+
+                              </div>         
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div> 
+                    <!-- End Main Top -->
+
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive" id="html-transferencia-masiva">                      
+                      
+                      
+                    </div>
+                    <!-- /.card -->
+                  </div>
                 </div>
                 <!-- /.row -->
               </div>
@@ -859,7 +920,8 @@ if (!isset($_SESSION["nombre"])) {
 
     <script>
       $(function() {
-        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();          
+
       });
     </script>
 

@@ -281,6 +281,80 @@
           
         break;        
 
+        // ══════════════════════════════════════ TRASNFERENCIA MASIVA ══════════════════════════════════════ 
+        case 'transferencia-masiva-almacen':          
+
+          $rspta=$almacen->tbla_principal_resumen_stock($_GET["id_proyecto"], $_GET["unidad_medida"], $_GET["categoria"], $_GET["es_epp"]);
+          $ag = $almacen->otros_almacenes();
+          $almacen_general = '';
+          foreach ($ag['data'] as $key => $val) {
+            $almacen_general .= '<option value="'. $val['idalmacen_general'].'">'. $val['nombre_almacen'].'</option>';
+          }
+          
+          //Vamos a declarar un array
+          $data= Array(); $cont=1;        
+          
+          echo '<table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Producto</th>
+              <th style="width: 100px">UM.</th>
+              <th style="width: 200px">Almacen</th>
+              <th style="width: 100px">Stock</th>
+              <th style="width: 150px">Cant.</th>
+              <th style="width: 60px"><i class="fa-solid fa-list-check"></i>
+                <div class="custom-control custom-switch cursor-pointer" data-toggle="tooltip" data-original-title="Activar todos">
+                  <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();">
+                  <label for="marcar_todo" class="custom-control-label cursor-pointer"></label>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>';
+
+          foreach ($rspta['data'] as $key => $val) {      
+            
+            echo '<tr>
+              <td>'. $key +1 .'</td>
+              <td>'. $val['nombre_producto'] .'</td>
+              <td>'.$val['um_abreviacion'].'</td>
+              <td>
+                <div class="form-group mb-0">                  
+                  <select name="marca_tag[]" id="marca_tag_${idproducto}" class="form-control w-200px" placeholder="Marca">'.$almacen_general.' </select>
+                </div>    
+              </td>
+              <td>'.$val['total_stok'].'</td>
+              <td>
+                <div class="form-group mb-0">                  
+                  <input type="number" class="form-control w-150px cant_g" name="cantidad_tr'. $val['idalmacen_resumen'].'" id="cantidad__trns'. $val['idalmacen_resumen'].'" onkeyup="replicar_cantidad_a_r('. $val['idalmacen_resumen'].')" readonly placeholder="cantidad"  min="0" step="0.01" max="${val.total_stok}"/>
+                  <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env'. $val['idalmacen_resumen'].'"/>
+                </div>     
+              </td>
+              <td>
+                <div class="custom-control custom-switch">
+                  <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox'. $val['idalmacen_resumen'].'" onchange="update_valueChec('. $val['idalmacen_resumen'].')" >
+                  <input type="hidden" class="estadochecked_all" name="ValorCheck_trns[]" id="ValorCheck'. $val['idalmacen_resumen'].'" value="0">
+                  <label for="customCheckbox'. $val['idalmacen_resumen'].'" class="custom-control-label cursor-pointer"></label>
+                </div>     
+              </td>
+            </tr>'; 
+        
+            // $data[]=array(
+            //   "0"=>$cont++,
+            //   "1"=>'<button class="btn btn-info btn-sm" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
+            //   "2"=> $val['idproducto_f'],
+            //   "3"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['nombre_producto'] .'</p></span> </div>',
+            //   "4"=> $val['um_abreviacion'],
+            //   "5"=> $val['total_ingreso'],
+            //   "6"=> $val['total_egreso'],
+            //   "7"=> $val['total_stok'] ,       
+            // );
+          }
+          echo '</tbody>  </table>';
+          
+        break;
+
         // ══════════════════════════════════════ SELECT 2 ══════════════════════════════════════ 
 
         case 'select2ProductosTodos': 
@@ -360,6 +434,44 @@
               $data .= '<option value="'.$id.'" estado="'.$estado.'" >' . $value['nombre_codigo'] .'</option>';
             }  
             $retorno = array( 'status' => true, 'message' => 'Salió todo ok', 'data' => $data, );    
+            echo json_encode($retorno, true);  
+          } else {  
+            echo json_encode($rspta, true); 
+          }
+        break;
+
+        case 'select2UnidadMedida': 
+    
+          $rspta = $almacen->select2_unidad_medida(); $cont = 1; $data = "";
+          
+          if ($rspta['status'] == true) {  
+            foreach ($rspta['data'] as $key => $value) {   
+              $data .= '<option value="' . $value['idunidad_medida'] . '" >' . $value['abreviacion'] .' - '. $value['nombre_medida'] .'</option>';
+            }  
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => $data, 
+            );    
+            echo json_encode($retorno, true);  
+          } else {  
+            echo json_encode($rspta, true); 
+          }
+        break;
+
+        case 'select2Categoria': 
+    
+          $rspta = $almacen->select2_categoria(); $cont = 1; $data = "";
+          
+          if ($rspta['status'] == true) {  
+            foreach ($rspta['data'] as $key => $value) {   
+              $data .= '<option value="' . $value['idcategoria_insumos_af'] . '" >' . $value['nombre']  .'</option>';
+            }  
+            $retorno = array(
+              'status' => true, 
+              'message' => 'Salió todo ok', 
+              'data' => $data, 
+            );    
             echo json_encode($retorno, true);  
           } else {  
             echo json_encode($rspta, true); 

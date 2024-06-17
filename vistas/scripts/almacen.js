@@ -16,6 +16,9 @@ function init() {
   lista_select2(`../ajax/almacen.php?op=select2ProductosMasEPP&idproyecto=${idproyecto}`, '#producto_tep', null, '.cargando_producto_tep');   // transferencia entre proyectos
   lista_select2(`../ajax/almacen.php?op=select2ProductosMasEPP&idproyecto=${idproyecto}`, '#producto_tag', null, '.cargando_productos_tag');  // transferencia almacen general
   lista_select2(`../ajax/almacen.php?op=select2Proyecto`, '#proyecto_tep', null, '.cargando_proyecto_tep');
+
+  lista_select2(`../ajax/almacen.php?op=select2UnidadMedida`, '#filtro_tm_unidad_medida', null, '.cargando_proyecto_tep');
+  lista_select2(`../ajax/almacen.php?op=select2Categoria`, '#filtro_tm_categoria', null, '.cargando_proyecto_tep');
   
   // lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${idproyecto}`, '#producto_xp', null, '.cargando_productos');
 
@@ -32,6 +35,10 @@ function init() {
   $("#proyecto_tep").select2({templateResult: templateProyecto, theme: "bootstrap4", placeholder: "Selecione proyecto", allowClear: true, }); // tranferencia entre proyectos
   $("#producto_tag").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });                                   // transferencia almacen general
   $("#producto_xp").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });
+
+  $("#filtro_tm_unidad_medida").select2({theme: "bootstrap4", placeholder: "Unidad Medida", allowClear: true, });
+  $("#filtro_tm_categoria").select2({theme: "bootstrap4", placeholder: "Categoria", allowClear: true, });
+  $("#filtro_tm_es_epp").select2({theme: "bootstrap4", placeholder: "EPP", allowClear: true, });
   
 
   $("#idproyecto_xp").val(localStorage.getItem("nube_idproyecto"));
@@ -54,16 +61,24 @@ function templateProyecto (state) {
 };
 
 function show_hide_tablas(flag) {
-  if (flag == 1) {
+
+  if (flag == 1) {                    // TAABLA PRINCIPAL
+    $(".card-almacen-1").show();
+    $(".card-almacen-2").hide();
     $("#div_tabla_principal").show();
     $("#div_tabla_almacen").hide();
     $("#cargando-table-almacen").hide();
     $(".btn-regresar").hide();
-  } else if (flag == 2) {
+  } else if (flag == 2) {             // TAABLA LISTA
+    $(".card-almacen-1").show();
+    $(".card-almacen-2").hide();
     $("#div_tabla_principal").hide();
     $("#div_tabla_almacen").hide();
     $("#cargando-table-almacen").show();
     $(".btn-regresar").show();
+  } else if (flag == 3) {             // TAABLA TRANFERENCIA MASIVA
+    $(".card-almacen-1").hide();
+    $(".card-almacen-2").show();   
   }
 }
 
@@ -191,7 +206,10 @@ function todos_almacen() {
   var ffp =  localStorage.getItem("nube_fecha_final_actividad");
   var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
   
-  $('#cargando-table-almacen').html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
+
+  $('#cargando-table-almacen').html(`<div class="col-12 text-center"><span class="spinner-border spinner-border-xl"></span> <br> <span class="text-olas-mar-letra">Cargando...</span></div>`);
+  const text = document.querySelector('.text-olas-mar-letra');  text.innerHTML = text.textContent.split('').map((char, i) => `<span style="--i:${i}">${char}</span>` ).join('');        
+
   
   $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
 
@@ -217,7 +235,9 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
   var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
 
   $('#div_tabla_almacen').hide();
-  $('#cargando-table-almacen').show().html(`<div class="col-lg-12 text-center"><i class="fas fa-spinner fa-pulse fa-6x"></i><br /><br /><h4>Cargando...</h4></div>`);
+  $('#cargando-table-almacen').html(`<div class="col-12 text-center"><span class="spinner-border spinner-border-xl"></span> <br> <span class="text-olas-mar-letra">Cargando...</span></div>`);
+  const text = document.querySelector('.text-olas-mar-letra');  text.innerHTML = text.textContent.split('').map((char, i) => `<span style="--i:${i}">${char}</span>` ).join('');        
+
   
   $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
 
@@ -959,6 +979,82 @@ function guardar_y_editar_tag(e) {
   });
 }
 
+// .....::::::::::::::::::::::::::::::::::::: T R A S N F E R E N C I A  MASIVA  A L M A C E N   G E N E R A L   :::::::::::::::::::::::::::::::::::::::..
+function tranferencia_masiva(unidad_medida, categoria, es_epp) {
+
+  $('#html-transferencia-masiva').html(`<div class="col-12 text-center"><span class="spinner-border spinner-border-xl"></span> <br> <span class="text-olas-mar-letra">Cargando...</span></div>`);
+  const text = document.querySelector('.text-olas-mar-letra');  text.innerHTML = text.textContent.split('').map((char, i) => `<span style="--i:${i}">${char}</span>` ).join('');        
+  show_hide_tablas(3);
+  var idproyecto =  localStorage.getItem("nube_idproyecto"); 
+
+  $.get(`../ajax/almacen.php?op=transferencia-masiva-almacen`, {id_proyecto: idproyecto, unidad_medida: unidad_medida, categoria:categoria, es_epp:es_epp},  function (e, textStatus, jqXHR) {
+    $('#html-transferencia-masiva').html(e);
+    $('[data-toggle="tooltip"]').tooltip();   
+  });
+}
+
+function update_valueChec(id) {
+
+  if ($(`#customCheckbox${id}`).is(':checked')) {
+
+    $(`#ValorCheck${id}`).val(1);
+    $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
+    $(`#cantidad__trns${id}`).removeAttr('readonly', true);
+    // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
+    $("#form_proyecto_almacen").valid();
+
+  } else {
+
+    $(`#ValorCheck${id}`).val(0);
+    $(`#cantidad__trns${id}`).rules("remove", "required");
+    $(`#cantidad__trns${id}`).attr('readonly', true);
+    // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
+
+    $(`#cantidad__trns_env${id}`).val(0);
+    $(`#cantidad__trns${id}`).val(0);
+
+    $("#form_proyecto_almacen").valid();
+  }
+
+}
+
+function Activar_masivo() {
+
+  if ($(`#marcar_todo`).is(':checked')) {
+
+    $('.checked_all').each(function () { this.checked = true; });
+    $('.estadochecked_all').val(1);
+
+    array_id_a_g_r.forEach((val, key) => {
+      $(`#cantidad__trns${val}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
+      $(`#cantidad__trns${val}`).removeAttr('readonly', true);
+    });
+
+    // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
+
+    $("#form_proyecto_almacen").valid();
+
+  } else {
+
+    $('.checked_all').each(function () { this.checked = false; });
+    $('.estadochecked_all').val(0);
+
+    array_id_a_g_r.forEach((val, key) => {
+      $(`#cantidad__trns${val}`).rules("remove", "required");
+      $(`#cantidad__trns${val}`).attr('readonly', true);
+      $(`#cantidad__trns_env${val}`).val(0);
+      $(`#cantidad__trns${val}`).val(0);
+
+    });
+
+    // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
+
+    $("#form_proyecto_almacen").valid();
+
+
+  }
+}
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
@@ -1126,6 +1222,18 @@ $(function () {
 });
 
 // .....::::::::::::::::::::::::::::::::::::: O T R A S   F U N C I O N E S  :::::::::::::::::::::::::::::::::::::::..
+
+function filtros_tm() {  
+
+  var unidad_medida = $("#filtro_tm_unidad_medida").val();
+  var categoria     = $("#filtro_tm_categoria").val();  
+  var es_epp        = $("#filtro_tm_es_epp").select2('val'); 
+  
+  // var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
+  // var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
+
+  tranferencia_masiva(unidad_medida, categoria, es_epp);
+}
 
 function scroll_tabla_asistencia() {
   var height_tabla = $('#div_tabla_almacen').height(); //console.log('Alto pantalla: '+height_tabla);

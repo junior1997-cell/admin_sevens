@@ -696,6 +696,57 @@ table th { vertical-align: top !important; }
   animation-iteration-count: infinite;
 }
 
+/*  ══════════════════════════════════════════ - S P I N N E R   C S S - ══════════════════════════════════════════ */
+.spinner-border-md {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.1em;
+}
+.spinner-border-lg {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.2em;
+}
+.spinner-border-xl {
+  width: 4rem;
+  height: 4rem;
+  border-width: 0.2em;
+}
+
+/*  ══════════════════════════════════════════ - A N I M A C I O N   T E X T O  C S S - ══════════════════════════════════════════ */
+
+@keyframes texto_olas_mar {
+  0% { transform: translateY(0); }
+  20% { transform: translateY(-10px); }
+  40% { transform: translateY(10px); }
+  60% { transform: translateY(-10px); }
+  80% { transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+
+.text-olas-mar {
+  display: inline-block;
+  font-size: 48px;
+  font-weight: bold;
+  animation: texto_olas_mar 2s infinite;
+}
+
+@keyframes texto_olas_mar_letra {
+  0% { transform: translateY(0); }  
+  50% { transform: translateY(-3px); }
+  80% { transform: translateY(3px); }
+  100% { transform: translateY(0); }
+}
+
+.text-olas-mar-letra { display: inline-block;}
+
+.text-olas-mar-letra span {
+  display: inline-block;
+  animation: texto_olas_mar_letra 1.5s infinite;
+  animation-delay: calc(0.1s * var(--i));
+  /* font-size: 48px;
+  font-weight: bold; */
+}
 /*  ══════════════════════════════════════════ - I N P U T - ══════════════════════════════════════════ */
 
 .numero_positivos {

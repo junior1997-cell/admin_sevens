@@ -535,8 +535,27 @@ class Almacen
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    WHERE ar.idproyecto = '$idproyecto' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre ASC;";    
+    WHERE ar.idproyecto = '$idproyecto' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY left(p.nombre, 2) ASC, ar.total_stok DESC;";    
    return ejecutarConsultaArray($sql_0); 
+
+  } 
+
+  //Implementar un método para listar los registros
+  public function tbla_principal_resumen_stock($idproyecto, $unidad_medida, $categoria, $es_epp) {    
+    $filtro_unidad_medida = ""; $filtro_categoria = ""; $filtro_es_epp = ""; 
+
+    if (empty($unidad_medida) ) { } else { $filtro_unidad_medida  = "AND p.idunidad_medida = '$unidad_medida'"; }
+    if ( empty($categoria) )    { } else { $filtro_categoria      = "AND p.idcategoria_insumos_af = '$categoria'"; } 
+    if ( empty($es_epp) )       { } else { $filtro_es_epp         = "AND ar.tipo = '$es_epp'"; } 
+
+    $sql_0 = "SELECT ar.*, LPAD(p.idproducto, 5, '0') AS idproducto_f , p.nombre as nombre_producto, um.nombre_medida, um.abreviacion as um_abreviacion, ciaf.nombre as categoria
+    FROM almacen_resumen AS ar
+    INNER JOIN producto AS p ON p.idproducto = ar.idproducto
+    INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
+    INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
+    WHERE ar.idproyecto = '$idproyecto' AND ar.total_stok > 0 AND ar.estado = '1' AND ar.estado_delete = '1' $filtro_unidad_medida $filtro_categoria $filtro_es_epp
+    ORDER BY left(p.nombre, 2) ASC, ar.total_stok DESC;";    
+    return ejecutarConsultaArray($sql_0); 
 
   } 
 
@@ -712,6 +731,16 @@ class Almacen
     $sql_0 = "SELECT p.idproyecto, p.nombre_codigo, 
     CASE p.estado WHEN 0 THEN 'Terminado' WHEN 1 THEN 'En proceso' ELSE 'No empezado' END as estado
     FROM proyecto as p WHERE p.idproyecto <> $idproyecto ORDER BY p.idproyecto DESC;";    
+    return ejecutarConsultaArray($sql_0);
+  }
+
+  public function select2_unidad_medida(){
+    $sql_0 = "SELECT * FROM unidad_medida WHERE estado = '1' AND estado_delete = '1' ORDER BY nombre_medida DESC;";    
+    return ejecutarConsultaArray($sql_0);
+  }
+
+  public function select2_categoria(){
+    $sql_0 = "SELECT * FROM categoria_insumos_af WHERE estado = '1' AND estado_delete = '1' ORDER BY nombre DESC;";    
     return ejecutarConsultaArray($sql_0);
   }
 
