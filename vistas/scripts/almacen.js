@@ -29,6 +29,8 @@ function init() {
   $("#guardar_registro_almacen_x_dia").on("click", function (e) { $("#submit-form-almacen-x-dia").submit(); });
   $(".btn_guardar_s").on("click", function (e) { $("#submit-form-almacen-sa").submit(); });
 
+  $(".btn-guardar-tm").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-almacen-tm").submit(); } });
+
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#producto_tup").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });                                   // tranferencia uso de obra  
   $("#producto_tep").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });                                   // tranferencia entre proyectos
@@ -980,17 +982,19 @@ function guardar_y_editar_tag(e) {
 }
 
 // .....::::::::::::::::::::::::::::::::::::: T R A S N F E R E N C I A  MASIVA  A L M A C E N   G E N E R A L   :::::::::::::::::::::::::::::::::::::::..
+var mostrar_masivo = false;
 function tranferencia_masiva(unidad_medida, categoria, es_epp) {
-
+  
   $('#html-transferencia-masiva').html(`<div class="col-12 text-center"><span class="spinner-border spinner-border-xl"></span> <br> <span class="text-olas-mar-letra">Cargando...</span></div>`);
   const text = document.querySelector('.text-olas-mar-letra');  text.innerHTML = text.textContent.split('').map((char, i) => `<span style="--i:${i}">${char}</span>` ).join('');        
   show_hide_tablas(3);
   var idproyecto =  localStorage.getItem("nube_idproyecto"); 
-
+  mostrar_masivo = true;
   $.get(`../ajax/almacen.php?op=transferencia-masiva-almacen`, {id_proyecto: idproyecto, unidad_medida: unidad_medida, categoria:categoria, es_epp:es_epp},  function (e, textStatus, jqXHR) {
     $('#html-transferencia-masiva').html(e);
     $('[data-toggle="tooltip"]').tooltip();   
   });
+   
 }
 
 function update_valueChec(id) {
@@ -1001,7 +1005,7 @@ function update_valueChec(id) {
     $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
     $(`#cantidad__trns${id}`).removeAttr('readonly', true);
     // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
-    $("#form_proyecto_almacen").valid();
+    $("#form-almacen-tm").valid();
 
   } else {
 
@@ -1013,7 +1017,7 @@ function update_valueChec(id) {
     $(`#cantidad__trns_env${id}`).val(0);
     $(`#cantidad__trns${id}`).val(0);
 
-    $("#form_proyecto_almacen").valid();
+    $("#form-almacen-tm").valid();
   }
 
 }
@@ -1022,37 +1026,56 @@ function Activar_masivo() {
 
   if ($(`#marcar_todo`).is(':checked')) {
 
-    $('.checked_all').each(function () { this.checked = true; });
-    $('.estadochecked_all').val(1);
-
-    array_id_a_g_r.forEach((val, key) => {
-      $(`#cantidad__trns${val}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
-      $(`#cantidad__trns${val}`).removeAttr('readonly', true);
+    $('.checked_all').each(function (key, val) { 
+      this.checked = true; 
+      $(`#cantidad__trns${key+1}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
+      $(`#cantidad__trns${key+1}`).removeAttr('readonly', false);
     });
+    $('.estadochecked_all').val(1);    
 
-    // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
+    // $('.cant_all_tm').each(function () {  
+    //   $(this).removeAttr('readonly', false); 
+    //   $(this).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
+    // });
 
-    $("#form_proyecto_almacen").valid();
+    $("#form-almacen-tm").valid();
 
   } else {
 
     $('.checked_all').each(function () { this.checked = false; });
     $('.estadochecked_all').val(0);
 
-    array_id_a_g_r.forEach((val, key) => {
-      $(`#cantidad__trns${val}`).rules("remove", "required");
-      $(`#cantidad__trns${val}`).attr('readonly', true);
-      $(`#cantidad__trns_env${val}`).val(0);
-      $(`#cantidad__trns${val}`).val(0);
+    $('.cant_all_tm').each(function (key, val) {  
+      $(this).attr('readonly', true); 
+      $(this).rules("remove", "required");
+      $(`#cantidad__trns_env${key}`).val(0);
+      $(`#cantidad__trns${key}`).val(0);
+    });   
 
-    });
-
-    // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
-
-    $("#form_proyecto_almacen").valid();
-
-
+    $("#form-almacen-tm").valid();
   }
+}
+
+function enviar_todo_stok(input) {
+  
+  if ($(input).val() == '0') {
+    $('.cant_all_tm').each(function (key, val) {       
+      $(`#cantidad__trns_env${key}`).val(0);
+      $(`#cantidad__trns${key}`).val(0);
+    });
+    $("#form-almacen-tm").valid();
+  }else if ($(input).val() == '1') {
+    $('#marcar_todo').prop('checked', true);
+    Activar_masivo();
+    $('.cant_all_tm').each(function (key, val) {  $(this).val( $(`#total_stok_tm_${key+1}`).text() ); });
+    $("#form-almacen-tm").valid();
+  }
+}
+
+function cambiar_de_almacen(input) {
+
+  $('.almacen_destino_all_tm').each(function (key, val) {  $(this).val( $(input).val() ); });
+  $("#form-almacen-tm").valid();
 }
 
 init();
@@ -1212,6 +1235,35 @@ $(function () {
     },
   });
 
+  $("#form-almacen-tm").validate({
+    ignore: '.select2-input, .select2-focusser',
+    rules: {
+      idproyecto_origen_tm:  { required: true,  },      
+    },
+    messages: {
+      idproyecto_origen_tm:  { required: "Campo requerido.", },    
+      // 'cantidad[]':   { min: "Mínimo 0", required: "Campo requerido"},  
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid").removeClass("is-valid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+    submitHandler: function (e) {
+      guardar_y_editar_tag(e);
+    },
+  });
+
   no_select_tomorrow("#fecha_ingreso");
   no_select_tomorrow("#fecha_ingreso_xp");
   no_select_tomorrow("#fecha_tep");
@@ -1231,8 +1283,10 @@ function filtros_tm() {
   
   // var nombre_proveedor = $('#filtro_proveedor').find(':selected').text();
   // var nombre_comprobante = ' ─ ' + $('#filtro_tipo_comprobante').find(':selected').text();
-
-  tranferencia_masiva(unidad_medida, categoria, es_epp);
+  if (mostrar_masivo == true) {
+     tranferencia_masiva(unidad_medida, categoria, es_epp);
+  }
+ 
 }
 
 function scroll_tabla_asistencia() {

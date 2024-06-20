@@ -395,6 +395,9 @@ if (!isset($_SESSION["nombre"])) {
                                 <button type="button" class="btn bg-gradient-warning btn-regresar-2" onclick="show_hide_tablas(1);">
                                   <i class="fas fa-arrow-left"></i> 
                                 </button>
+                                <button type="button" class="btn bg-gradient-success btn-guardar-tm"  >
+                                  <i class="fa-solid fa-floppy-disk"></i>
+                                </button> 
                               </h3>                             
                               <!-- FILTROS NEW -->
                               <div class="d-flex flex-row  row-horizon disenio-scroll ml-2" >                                
@@ -432,9 +435,14 @@ if (!isset($_SESSION["nombre"])) {
                     <!-- End Main Top -->
 
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive" id="html-transferencia-masiva">                      
-                      
-                      
+                    <div class="card-body">     
+                      <form id="form-almacen-tm" name="form-almacen-tm" method="POST">
+                        <input type="hidden" name="idproyecto_origen_tm" id="idproyecto_origen_tm" value="<?php echo $_SESSION['idproyecto'];?>"/>
+                        <div class="table-responsive" id="html-transferencia-masiva">
+
+                        </div>
+                        <button type="submit" style="display: none;" id="submit-form-almacen-tm">Submit</button>
+                      </form>                       
                     </div>
                     <!-- /.card -->
                   </div>
@@ -915,7 +923,7 @@ if (!isset($_SESSION["nombre"])) {
     <script src="../plugins/jszip/dist/jszip-utils.js"></script>
     <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
 
-    <script type="text/javascript" src="scripts/almacen.js?version_jdl=1.1"></script>
+    <script type="text/javascript" src="scripts/almacen.js?version_jdl=1.2"></script>
     <!-- <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script> -->
 
     <script>

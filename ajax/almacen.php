@@ -300,9 +300,16 @@
               <th style="width: 10px">#</th>
               <th>Producto</th>
               <th style="width: 100px">UM.</th>
-              <th style="width: 200px">Almacen</th>
-              <th style="width: 100px">Stock</th>
-              <th style="width: 150px">Cant.</th>
+              <th style="width: 100px">Marca</th>
+              <th style="width: 200px"> Almacen <select id="almacen_general_tm"  class="w-200px font-size-12px" onchange="cambiar_de_almacen(this)" >'.$almacen_general.' </select> </th>
+              <th style="width: 100px">Stock</th>              
+              <th style="width: 150px">Cant. 
+                <select id="enviar_todo_tm[]" class="w-150px font-size-12px" placeholder="Marca" onchange=" enviar_todo_stok(this)">
+                  <option value="" >Seleccione</option>
+                  <option value="0" >Limpiar</option>
+                  <option value="1" >Enviar todo</option>
+                </select>
+              </th>
               <th style="width: 60px"><i class="fa-solid fa-list-check"></i>
                 <div class="custom-control custom-switch cursor-pointer" data-toggle="tooltip" data-original-title="Activar todos">
                   <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();">
@@ -314,20 +321,35 @@
           <tbody>';
 
           foreach ($rspta['data'] as $key => $val) {      
+            $option_marcas = '';
+            $marcas = $almacen->marcas_x_producto($_GET["id_proyecto"], $val['idproducto']); 
+            foreach ($marcas['data'] as $key => $val2) {
+              $option_marcas .= '<option value="'. $val2['marca'].'">'. $val2['marca'].'</option>';
+            }
             
             echo '<tr>
               <td>'. $key +1 .'</td>
-              <td>'. $val['nombre_producto'] .'</td>
+              <td>
+                <input type="hidden" name="idproducto_tm[]" id="idproducto_tm'. $key +1 .'" value="'.$val['idproducto'].'" />        
+                <input type="hidden" name="tipo_prod_tm[]" id="tipo_prod_tm'. $key +1 .'" value="'.$val['tipo'].'" /> 
+                <input type="hidden" name="idproyecto_destino_tm[]" id="idproyecto_destino_tm'. $key +1 .'"  value="NULL" />  
+                '. $val['nombre_producto'] .'
+              </td>
               <td>'.$val['um_abreviacion'].'</td>
               <td>
                 <div class="form-group mb-0">                  
-                  <select name="marca_tag[]" id="marca_tag_${idproducto}" class="form-control w-200px" placeholder="Marca">'.$almacen_general.' </select>
+                  <select name="marca_tm[]" class="form-control form-control-sm w-200px marca_all_tm" placeholder="Marca">'.$option_marcas.' </select>
                 </div>    
               </td>
-              <td>'.$val['total_stok'].'</td>
               <td>
                 <div class="form-group mb-0">                  
-                  <input type="number" class="form-control w-150px cant_g" name="cantidad_tr'. $val['idalmacen_resumen'].'" id="cantidad__trns'. $val['idalmacen_resumen'].'" onkeyup="replicar_cantidad_a_r('. $val['idalmacen_resumen'].')" readonly placeholder="cantidad"  min="0" step="0.01" max="${val.total_stok}"/>
+                  <select name="almacen_destino_tm[]" class="form-control form-control-sm w-200px almacen_destino_all_tm" placeholder="Almacén">'.$almacen_general.' </select>
+                </div>    
+              </td>
+              <td> <span id="total_stok_tm_'. $key +1 .'" >'.$val['total_stok'].'</span> </td>
+              <td>
+                <div class="form-group mb-0">                  
+                  <input type="number" class="form-control form-control-sm w-150px cant_all_tm" name="cantidad_tr'. $key +1 .'" id="cantidad__trns'. $key +1 .'" onkeyup="replicar_data_input(\'#cantidad__trns'. $key +1 .'\', \'#cantidad__trns_env'. $key +1 .'\')" readonly="true" placeholder="cantidad"  min="0" step="0.01" max="'.$val['total_stok'].'"/>
                   <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env'. $val['idalmacen_resumen'].'"/>
                 </div>     
               </td>
