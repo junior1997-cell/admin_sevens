@@ -134,6 +134,8 @@ class Resumen_general
               "cantidad_veces"  => 1,              
               "fecha_entrega"   => ($retVal_4 = empty($value['fecha_entrega']) ? '' : $value['fecha_entrega']),
               "proveedor"       => $val['razon_social'],
+              "idfactura"       => $value['idfactura'],
+              
 
               "costo_parcial"   => ($retVal_1 = empty($value['monto']) ? 0 : $value['monto']),
               //"deposito"      => $deposito_cubre,
@@ -154,9 +156,31 @@ class Resumen_general
     $sql = "SELECT * FROM servicio as s 
     WHERE s.idmaquinaria='$idmaquinaria' AND s.idproyecto='$idproyecto' AND s.estado = '1'
     ORDER BY s.fecha_entrega DESC";
+     return  ejecutarConsulta($sql);
+    //$det_servicio_m_e = ejecutarConsultaArray($sql);    if ($det_servicio_m_e['status'] == false) {  return $det_servicio_m_e;}
 
-    return ejecutarConsulta($sql);
+   /* $sql_3 = "SELECT  f.*
+    FROM factura as f
+    INNER JOIN maquinaria as m on m.idmaquinaria = f.idmaquinaria
+    WHERE f.estado = '1' AND f.estado_delete = '1'  AND f.idproyecto = '$idproyecto' 
+    AND m.idmaquinaria = '$idmaquinaria' ORDER by f.fecha_emision ASC;";
+    $desglose_mquina = ejecutarConsultaArray($sql_3);    if ($desglose_mquina['status'] == false) {  return $desglose_mquina;}*/
+
+    // return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $det_servicio_m_e ,'data_facturas'=> $desglose_mquina];
+   // return $retorno = ['status'=> true, 'message'=> 'todo oka ps', 'data'=> $det_servicio_m_e];
+    
   }
+    //ver detallete de facturas  por maquina-equipo
+    public function ver_detalle_fac_maq_equ($idmaquinaria, $idproyecto)  {
+      $sql_3 = "SELECT  f.*
+      FROM factura as f
+      INNER JOIN maquinaria as m on m.idmaquinaria = f.idmaquinaria
+      WHERE f.estado = '1' AND f.estado_delete = '1'  AND f.idproyecto = '$idproyecto' 
+      AND m.idmaquinaria = '$idmaquinaria' ORDER by f.fecha_emision ASC;";
+      return ejecutarConsultaArray($sql_3);
+        
+    }
+
 
   // TABLA - SUB CONTRATO
   public function tabla_sub_contrato($idproyecto, $fecha_filtro_1, $fecha_filtro_2, $id_proveedor)  {

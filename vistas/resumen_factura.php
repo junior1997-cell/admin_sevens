@@ -96,12 +96,12 @@
                               <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                 <label for="filtros" >Fecha inicio </label>
                                 <!-- fecha inicial -->
-                                <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" onchange="cargando_search(); delay(function(){filtros('2')}, 90 );" />
+                                <input name="fecha_filtro" id="fecha_filtro_1" type="date" class="form-control form-control-sm m-b-1px" placeholder="Seleccionar fecha" value="<?php echo date('Y-m-01'); ?>" onchange="cargando_search(); delay(function(){filtros('2')}, 90 );" />
                               </div>
                               <div class="col-lg-2 col-md-6 col-sm-6 col-xs-12">
                                 <label for="filtros" >Fecha fin </label>
                                 <!-- fecha final -->
-                                <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" onchange="cargando_search(); delay(function(){filtros('3')}, 90 );" />
+                                <input name="fecha_filtro" id="fecha_filtro_2" type="date" class="form-control form-control-sm" placeholder="Seleccionar fecha" value="<?php echo date('Y-m-d'); ?>" onchange="cargando_search(); delay(function(){filtros('3')}, 90 );" />
                               </div>
 
                               <!-- filtro por: proveedor -->

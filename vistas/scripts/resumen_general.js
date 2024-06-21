@@ -1592,7 +1592,9 @@ function mostrar_detalle_compras(idcompra_proyecto) {
 }
 
 //MODAL - MAQUINARIA y EQUIPO
-function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, proveedor, maquina) {
+function mostrar_detalle_maquinaria_equipo(idfactura,idmaquinaria, idproyecto, servicio, proveedor, maquina) {
+  console.log('idfactura ' + idfactura);
+  console.log('monto_serv_maq ' + monto_serv_maq);
   $("#nombre_proveedor_").html("");
 
   $("#modal_ver_detalle_maq_equ").modal("show");
@@ -1600,40 +1602,23 @@ function mostrar_detalle_maquinaria_equipo(idmaquinaria, idproyecto, servicio, p
   $("#detalle_").html(servicio);
   $("#nombre_proveedor_").html(`${maquina} - <i>${proveedor}</i>`);
 
-  tabla2 = $("#tabla-detalle-m").dataTable({
-    responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
-    aProcessing: true, //Activamos el procesamiento del datatables
-    aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: ["copyHtml5", "excelHtml5", "pdf",],
-    ajax: {
-      url: "../ajax/resumen_general.php?op=mostrar_detalle_maquinaria_equipo&idmaquinaria=" + idmaquinaria + "&idproyecto=" + idproyecto,
-      type: "get",
-      dataType: "json",
-      error: function (e) {
-        console.log(e.responseText);
-      },
-    },
-    createdRow: function (row, data, ixdex) {
-      // columna: unidad
-      if (data[1] != '') { $("td", row).eq(1).addClass("text-center"); }       
-      // columna: cantidad
-      if (data[2] != '') { $("td", row).eq(2).addClass("text-center"); }
-      // columna: costo unitario
-      if (data[3] != '') { $("td", row).eq(3).addClass("text-right"); }
-      // columna: costo parcial
-      if (data[4] != '') { $("td", row).eq(4).addClass("text-right"); } 
-    },
-    language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
-      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
-    },
-    bDestroy: true,
-    iDisplayLength: 5, //Paginación
-    order: [[0, "desc"]], //Ordenar (columna,orden)
-  }).DataTable();
+  $.get("../ajax/resumen_general.php?op=mostrar_detalle_maquinaria_equipo",{idmaquinaria : idmaquinaria, idproyecto: idproyecto }, function(data, status)
+	{
+		// data = JSON.parse(data);	
+    console.log(data);	
+     $('#tabla_detalle_servicio_maquina').html(data);
+
+ 	})  
+
+  //detalle de las facturas que se pidieron.
+  $.get("../ajax/resumen_general.php?op=tabla_html_fac_ma_eq",{idmaquinaria : idmaquinaria, idproyecto: idproyecto,idfactura :idfactura }, function(data, status)
+	{
+		// data = JSON.parse(data);	
+    console.log(data);	
+     $('#tabla_pagos_servicio_maquina').html(data);
+
+ 	})
+
 }
 
 // MODAL - BREAKS

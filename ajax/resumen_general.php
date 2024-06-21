@@ -162,7 +162,7 @@
                 '1' => $value['maquina'] .' - '. $value['proveedor'],
                 '2' => $value['fecha_entrega'],
                 '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'] .', \'' . $value['idproyecto']. '\', \'' .'Servicio Maquinaria:' . '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'] .', \'' . $value['idproyecto']. '\', \'' .'Servicio Maquinaria:' . '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                 '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                 '6' => number_format($value['deposito'], 2, '.', ',' ),
                 '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -179,7 +179,7 @@
                     '1' => $value['maquina'] .' - '. $value['proveedor'],
                     '2' => $value['fecha_entrega'],
                     '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                     '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -197,7 +197,7 @@
                       '1' => $value['maquina'] .' - '. $value['proveedor'],
                       '2' => $value['fecha_entrega'],
                       '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                       '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -215,7 +215,7 @@
                         '1' => $value['maquina'] .' - '. $value['proveedor'],
                         '2' => $value['fecha_entrega'],
                         '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                        '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                        '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Maquinaria:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                         '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                         '6' => number_format($value['deposito'], 2, '.', ',' ),
                         '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -273,7 +273,7 @@
                 '1' => $value['maquina'] .' - '. $value['proveedor'],
                 '2' => $value['fecha_entrega'],
                 '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                 '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                 '6' => number_format($value['deposito'], 2, '.', ',' ),
                 '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -290,7 +290,7 @@
                     '1' => $value['maquina'] .' - '. $value['proveedor'],
                     '2' => $value['fecha_entrega'],
                     '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                    '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                     '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                     '6' => number_format($value['deposito'], 2, '.', ',' ),
                     '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -308,7 +308,7 @@
                       '1' => $value['maquina'] .' - '. $value['proveedor'],
                       '2' => $value['fecha_entrega'],
                       '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                      '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                       '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                       '6' => number_format($value['deposito'], 2, '.', ',' ),
                       '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -326,7 +326,7 @@
                         '1' => $value['maquina'] .' - '. $value['proveedor'],
                         '2' => $value['fecha_entrega'],
                         '3' => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >- - -</textarea>',
-                        '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
+                        '4' => '<button class="btn btn-info btn-sm" onclick="mostrar_detalle_maquinaria_equipo('.$value['idfactura'].','.$value['idmaquinaria'].', \'' . $value['idproyecto'].  '\', \'' .'Servicio Equipo:'.  '\', \'' . $value['proveedor'] . '\', \'' . $value['maquina'] . '\')"><i class="fa fa-eye"></i></button>',
                         '5' => number_format($value['costo_parcial'], 2, '.', ',' ),
                         '6' => number_format($value['deposito'], 2, '.', ',' ),
                         '7' => number_format($saldo_x_fila , 2, '.', ',' ),
@@ -362,13 +362,32 @@
           $idproyecto = $_GET["idproyecto"];
 
           $rspta = $resumen_general->ver_detalle_maq_equ($idmaquinaria, $idproyecto);
+          //  var_dump($rspta['data']); die();
           $fecha_entreg = '';
           $fecha_recoj = '';
           $fecha = '';
+          $cont = 0;
+          $total =0;
           //Vamos a declarar un array
           $data = [];
 
+          echo '<table class="table table-sm table-hover ">
+          <thead>
+            <tr >
+              <th style="width: 10px">#</th>
+              <th >Fecha</th>
+              <th >Unidad M</th>
+              <th >Cantidad</th>              
+              <th >Costo Unitario</th>
+              <th >Costo Parcial</th>
+              <th >Descripción</th>
+            </tr>
+          </thead>
+          <tbody>';
+
           while ($reg = $rspta['data']->fetch_object()) {
+            $cont++;
+            $total += floatval($reg->costo_parcial); 
             if (empty($reg->fecha_recojo) || $reg->fecha_recojo == '0000-00-00') {
               
               $fecha_entreg = nombre_dia_semana($reg->fecha_entrega);
@@ -384,26 +403,78 @@
               <b  class="text-danger text-nowrap">'.$fecha_recoj .', '.format_d_m_a( $reg->fecha_recojo) .'<b>';
             }           
 
-            $tool = '"tooltip"';
-            $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
+              $tool = '"tooltip"';
+              $toltip = "<script> $(function () { $('[data-toggle=$tool]').tooltip(); }); </script>";
 
-            $data[] = [
-              "0" => $fecha,
-              "1" => empty($reg->unidad_medida) ? '-' : $reg->unidad_medida,
-              "2" => empty($reg->cantidad) ? '-' : $reg->cantidad,
-              "3" => empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ? '-' : number_format($reg->costo_unitario, 2, '.', ','),
-              "4" => empty($reg->costo_parcial) ? '-' : number_format($reg->costo_parcial, 2, '.', ','),
-              "5" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.'</textarea>'  ,
-            ];
+              echo '<tr>
+              <td>'. $cont .'</td>
+              <td> '.$fecha.'</td>
+              <td>'.(empty($reg->unidad_medida) ? '-' : $reg->unidad_medida).'</td>
+              <td>'.(empty($reg->cantidad) ? '-' : $reg->cantidad).'</td>
+              <td>'.(empty($reg->costo_unitario) || $reg->costo_unitario == '0.00' ? '-' : number_format($reg->costo_unitario, 2, '.', ',')).'</td>
+              <td>'.(empty($reg->costo_parcial) ? '-' : number_format($reg->costo_parcial, 2, '.', ',')).'</td>
+              <td> <textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg->descripcion.' </textarea></td>
+
+            </tr>';
+
           }
-          $results = [
-            "sEcho" => 1, //Información para el datatables
-            "iTotalRecords" => count($data), //enviamos el total registros al datatable
-            "iTotalDisplayRecords" => 1, //enviamos el total registros a visualizar
-            "data" => $data,
-          ];
-          echo json_encode($results, true);
+
+          echo '<tr>
+              <th colspan="5">Total</th>
+              <th> S/. '.number_format( $total, 2, '.', ',').'</th>
+              <th ></th>
+            </tr>
+          </tbody>  </table>';
+
         break;
+
+        case 'tabla_html_fac_ma_eq':
+          $idmaquinaria = $_GET["idmaquinaria"];
+          $idfactura    = $_GET["idfactura"];
+          $idproyecto   = $_GET["idproyecto"];
+
+          $rspta = $resumen_general->ver_detalle_fac_maq_equ($idmaquinaria, $idproyecto);
+          $pintar_fila = '';
+          $total =0;
+          //Vamos a declarar un array
+          $data= Array(); $cont=1;        
+          //table table-bordered table-striped
+          echo '<table class="table table-sm table-hover ">
+          <thead>
+            <tr >
+              <th style="width: 10px">#</th>
+              <th>Código</th>
+              <th >Fecha</th>
+              <th >Tipo</th>
+              <th >Subtotal</th>              
+              <th >IGV</th>
+              <th >Monto</th>
+            </tr>
+          </thead>
+          <tbody>';
+
+          foreach ($rspta['data'] as $key => $val) {      
+            // $idfactura
+            if ($idfactura == $val['idfactura']) { $pintar_fila = 'style=" background-color: antiquewhite; "'; }else { $pintar_fila = ''; }
+            $total += floatval($val['monto']); 
+            echo '<tr '. $pintar_fila .'>
+              <td>'. $key +1 .'</td>
+              <td> '.$val['codigo'].'</td>
+              <td>'.$val['fecha_emision'].'</td>
+              <td>'.$val['tipo_comprobante'].'</td>
+              <td>'.number_format( $val['subtotal'], 2, '.', ',').'</td>
+              <td>'.number_format( $val['igv'], 2, '.', ',').'</td>
+              <td>'.number_format( $val['monto'], 2, '.', ',').'</td>
+
+            </tr>'; 
+          }
+          echo '<tr>
+                  <th colspan="6">Total</th>
+                  <th> S/. '.number_format( $total, 2, '.', ',').'</th>
+                </tr>
+              </tbody>  </table>';
+
+        break ;
 
         // TABLA - SUB CONTRATO
         case 'tbla_sub_contrato':

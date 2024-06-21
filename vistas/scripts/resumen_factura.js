@@ -586,7 +586,7 @@ function detalle_servicio_maquina( name_tabla, name_id_tabla, id_tabla, accion, 
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Tipo comprobante:</th>
-                  <td>Factura - ${e.data.codigo}</td>
+                  <td>${e.data.tipo_comprobante} - ${e.data.codigo}</td>
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Fecha emisión:</th>
@@ -691,7 +691,7 @@ function detalle_servicio_equipo( name_tabla, name_id_tabla, id_tabla, accion, n
                 </tr>
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Tipo comprobante:</th>
-                  <td>Factura - ${e.data.codigo}</td>
+                  <td>${e.data.tipo_comprobante} - ${e.data.codigo}</td>
                 </tr>                
                 <tr data-widget="expandable-table" aria-expanded="false">
                   <th>Fecha emisión:</th>

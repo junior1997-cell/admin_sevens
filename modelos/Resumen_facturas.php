@@ -106,7 +106,13 @@ class Resumenfacturas
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
       $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
-      f.nota, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
+      f.nota, mq.nombre , f.tipo_comprobante,
+      CASE
+          WHEN f.tipo_comprobante = 'Boleta' THEN 'BV'
+          WHEN f.tipo_comprobante = 'Factura' THEN 'FT'
+          ELSE 'OTRO'
+      END AS tipo_compr,
+      prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
       f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
@@ -124,7 +130,7 @@ class Resumenfacturas
             "bd_nombre_tabla"   => 'factura',
             "bd_nombre_id_tabla"=> 'idfactura',
             "fecha"             => $value['fecha_emision'],
-            "tipo_comprobante"  => 'FT',
+            "tipo_comprobante"  => $value['tipo_compr'],
             "serie_comprobante" => $value['codigo'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -174,7 +180,12 @@ class Resumenfacturas
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
       $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
-      f.nota, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
+      f.nota , f.tipo_comprobante,
+      CASE
+          WHEN f.tipo_comprobante = 'Boleta' THEN 'BV'
+          WHEN f.tipo_comprobante = 'Factura' THEN 'FT'
+          ELSE 'OTRO'
+      END AS tipo_compr, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
       f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
@@ -192,7 +203,7 @@ class Resumenfacturas
             "bd_nombre_tabla"   => 'factura',
             "bd_nombre_id_tabla"=> 'idfactura',
             "fecha"             => $value['fecha_emision'],
-            "tipo_comprobante"  => 'FT',
+            "tipo_comprobante"  => $value['tipo_compr'],
             "serie_comprobante" => $value['codigo'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -1280,7 +1291,7 @@ class Resumenfacturas
   // detalle_servicio_maquina
   public function detalle_servicio_maquina($id) {
     $sql = "SELECT mq.nombre as nombre_maquina, prov.razon_social, f.codigo, f.fecha_emision,  f.subtotal, f.igv, f.monto as total, 
-    f.nota, f.descripcion, f.imagen as comprobante
+    f.nota, f.descripcion, f.imagen as comprobante, f.tipo_comprobante
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND  f.idfactura = '$id';";
@@ -1290,7 +1301,7 @@ class Resumenfacturas
   // detalle_servicio_equipo
   public function detalle_servicio_equipo($id) {
     $sql = "SELECT mq.nombre as nombre_maquina, prov.razon_social, f.codigo, f.fecha_emision,  f.subtotal, f.igv, f.monto as total, 
-    f.nota, f.descripcion, f.imagen as comprobante
+    f.nota, f.descripcion, f.imagen as comprobante, f.tipo_comprobante
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' AND  f.idfactura = '$id';";

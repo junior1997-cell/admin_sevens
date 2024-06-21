@@ -106,7 +106,12 @@ class ResumenfacturasProyecto
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
       $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
-      f.nota, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
+      f.nota,f.tipo_comprobante,
+      CASE
+            WHEN f.tipo_comprobante = 'Boleta' THEN 'BV'
+            WHEN f.tipo_comprobante = 'Factura' THEN 'FT'
+            ELSE 'OTRO'
+        END AS tipo_compr, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
       f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov 
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto and f.idproyecto='$idproyecto'
@@ -124,7 +129,7 @@ class ResumenfacturasProyecto
             "bd_nombre_tabla"   => 'factura',
             "bd_nombre_id_tabla"=> 'idfactura',
             "fecha"             => $value['fecha_emision'],
-            "tipo_comprobante"  => 'FT',
+            "tipo_comprobante"  => $value['tipo_compr'],
             "serie_comprobante" => $value['codigo'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -174,7 +179,13 @@ class ResumenfacturasProyecto
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
       $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
-      f.nota, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
+      f.nota, f.tipo_comprobante,
+      CASE
+          WHEN f.tipo_comprobante = 'Boleta' THEN 'BV'
+          WHEN f.tipo_comprobante = 'Factura' THEN 'FT'
+          ELSE 'OTRO'
+      END AS tipo_compr,
+      mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
       f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto and f.idproyecto='$idproyecto'
@@ -192,7 +203,7 @@ class ResumenfacturasProyecto
             "bd_nombre_tabla"   => 'factura',
             "bd_nombre_id_tabla"=> 'idfactura',
             "fecha"             => $value['fecha_emision'],
-            "tipo_comprobante"  => 'FT',
+            "tipo_comprobante"  => $value['tipo_compr'],
             "serie_comprobante" => $value['codigo'],
             "proveedor"         => $value['razon_social'],
             "tipo_documento"    => $value['tipo_documento'],
@@ -799,19 +810,19 @@ class ResumenfacturasProyecto
 
     if ($modulo == 'todos' || $modulo == 'otra_factura') {    
     
-      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND of.fecha_emision = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND of.fecha_emision = '$fecha_2'"; }    
+      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND ofp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND ofp.fecha_emision = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND ofp.fecha_emision = '$fecha_2'"; }    
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND ofp.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND ofp.tipo_comprobante = '$comprobante'"; }
 
-      $sql9 = "SELECT of.idotra_factura_proyecto, of.idproyecto, of.fecha_emision, of.tipo_comprobante, of.numero_comprobante, p.razon_social, p.tipo_documento, p.ruc,
-      of.costo_parcial, of.subtotal, of.igv, of.glosa, of.comprobante , of.tipo_gravada,
-      of.id_user_vb_rf, of.nombre_user_vb_rf, of.imagen_user_vb_rf, of.estado_user_vb_rf
-      FROM otra_factura_proyecto AS of, proveedor p, empresa_a_cargo as ec, proyecto as pry
-      WHERE of.idproyecto='$idproyecto' and pry.idproyecto=of.idproyecto  and of.idempresa_a_cargo = ec.idempresa_a_cargo and of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' 
-      and ec.$idempresa_a_cargo AND of.$estado_vb
-      $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY of.fecha_emision DESC;";
+      $sql9 = "SELECT ofp.idotra_factura_proyecto, ofp.idproyecto, ofp.fecha_emision, ofp.tipo_comprobante, ofp.numero_comprobante, p.razon_social, p.tipo_documento, p.ruc,
+      ofp.costo_parcial, ofp.subtotal, ofp.igv, ofp.glosa, ofp.comprobante , ofp.tipo_gravada,
+      ofp.id_user_vb_rf, ofp.nombre_user_vb_rf, ofp.imagen_user_vb_rf, ofp.estado_user_vb_rf
+      FROM otra_factura_proyecto AS ofp, proveedor p, empresa_a_cargo as ec, proyecto as pry
+      WHERE ofp.idproyecto='$idproyecto' and pry.idproyecto=ofp.idproyecto  and ofp.idempresa_a_cargo = ec.idempresa_a_cargo and ofp.idproveedor = p.idproveedor AND ofp.estado = '1' AND ofp.estado_delete = '1' 
+      and ec.$idempresa_a_cargo AND ofp.$estado_vb
+      $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY ofp.fecha_emision DESC;";
       $otra_factura =  ejecutarConsultaArray($sql9);
 
       if ($otra_factura['status'] == false) { return $otra_factura; }
@@ -1145,14 +1156,14 @@ class ResumenfacturasProyecto
 
     if ($modulo == 'todos' || $modulo == 'otra_factura') {
 
-      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND of.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND of.fecha_emision = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND of.fecha_emision = '$fecha_2'"; }    
+      if ( !empty($fecha_1) && !empty($fecha_2) ) { $filtro_fecha = "AND ofp.fecha_emision BETWEEN '$fecha_1' AND '$fecha_2'"; } else if (!empty($fecha_1)) { $filtro_fecha = "AND ofp.fecha_emision = '$fecha_1'"; }else if (!empty($fecha_2)) { $filtro_fecha = "AND ofp.fecha_emision = '$fecha_2'"; }    
 
       if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND p.ruc = '$id_proveedor'"; }
 
-      if ( empty($comprobante) ) { $filtro_comprobante = "AND of.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND of.tipo_comprobante = '$comprobante'"; }
-      $sql9 = "SELECT SUM(of.costo_parcial) AS total, SUM(of.subtotal) AS subtotal, SUM(of.igv) AS igv
-      FROM otra_factura AS of, proveedor p
-      WHERE of.idproveedor = p.idproveedor AND of.estado = '1' AND of.estado_delete = '1' AND of.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha";
+      if ( empty($comprobante) ) { $filtro_comprobante = "AND ofp.tipo_comprobante IN ('Factura','Boleta','Nota de Crédito')"; } else { $filtro_comprobante = "AND ofp.tipo_comprobante = '$comprobante'"; }
+      $sql9 = "SELECT SUM(ofp.costo_parcial) AS total, SUM(ofp.subtotal) AS subtotal, SUM(ofp.igv) AS igv
+      FROM otra_factura AS ofp, proveedor p
+      WHERE ofp.idproveedor = p.idproveedor AND ofp.estado = '1' AND ofp.estado_delete = '1' AND ofp.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha";
       $otra_factura = ejecutarConsultaSimpleFila($sql9);
 
       if ($otra_factura['status'] == false) { return $otra_factura; } 
@@ -1209,7 +1220,7 @@ class ResumenfacturasProyecto
   // detalle_servicio_maquina
   public function detalle_servicio_maquina($id) {
     $sql = "SELECT mq.nombre as nombre_maquina, prov.razon_social, f.codigo, f.fecha_emision,  f.subtotal, f.igv, f.monto as total, 
-    f.nota, f.descripcion, f.imagen as comprobante
+    f.nota, f.descripcion, f.imagen as comprobante, f.tipo_comprobante
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND  f.idfactura = '$id';";
@@ -1219,7 +1230,7 @@ class ResumenfacturasProyecto
   // detalle_servicio_equipo
   public function detalle_servicio_equipo($id) {
     $sql = "SELECT mq.nombre as nombre_maquina, prov.razon_social, f.codigo, f.fecha_emision,  f.subtotal, f.igv, f.monto as total, 
-    f.nota, f.descripcion, f.imagen as comprobante
+    f.nota, f.descripcion, f.imagen as comprobante, f.tipo_comprobante
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' AND  f.idfactura = '$id';";
@@ -1327,13 +1338,13 @@ class ResumenfacturasProyecto
 
   // detalle_pago_administrador
   public function detalle_otra_factura($id) {
-    $sql = "SELECT of.idotra_factura, of.idproveedor, of.idempresa_a_cargo, of.tipo_comprobante, of.numero_comprobante, of.forma_de_pago, 
-    of.fecha_emision, of.val_igv, of.subtotal, of.igv, of.costo_parcial, of.descripcion, of.glosa, of.comprobante, of.tipo_gravada, 
-    of.estado, of.estado_delete, 
-    of.id_user_vb, of.nombre_user_vb, of.imagen_user_vb, of.estado_user_vb,
+    $sql = "SELECT ofp.idotra_factura, ofp.idproveedor, ofp.idempresa_a_cargo, ofp.tipo_comprobante, ofp.numero_comprobante, ofp.forma_de_pago, 
+    ofp.fecha_emision, ofp.val_igv, ofp.subtotal, ofp.igv, ofp.costo_parcial, ofp.descripcion, ofp.glosa, ofp.comprobante, ofp.tipo_gravada, 
+    ofp.estado, ofp.estado_delete, 
+    ofp.id_user_vb, ofp.nombre_user_vb, ofp.imagen_user_vb, ofp.estado_user_vb,
     prov.razon_social, prov.tipo_documento, prov.ruc
-    FROM otra_factura as of, proveedor as prov  
-    WHERE of.idproveedor = prov.idproveedor AND of.idotra_factura =  '$id';";
+    FROM otra_factura as ofp, proveedor as prov  
+    WHERE ofp.idproveedor = prov.idproveedor AND ofp.idotra_factura =  '$id';";
     return ejecutarConsultaSimpleFila($sql);
   }
 
