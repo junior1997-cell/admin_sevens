@@ -894,7 +894,7 @@
         <!-- /.content-wrapper -->
         <?php require 'script.php'; ?>
 
-        <script type="text/javascript" src="scripts/servicio_maquina.js?version_jdl=1.2"></script>
+        <script type="text/javascript" src="scripts/servicio_maquina.js?version_jdl=1.3"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         
