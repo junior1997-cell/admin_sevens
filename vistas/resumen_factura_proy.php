@@ -118,6 +118,7 @@
                                   <option value="0">Todos</option>
                                   <option value="Factura">Factura</option>
                                   <option value="Boleta">Boleta</option>
+                                  <option value="Nota de Crédito">Nota de Crédito</option>
                                 </select>
                               </div>
 
