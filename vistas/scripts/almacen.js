@@ -982,6 +982,48 @@ function guardar_y_editar_tag(e) {
 }
 
 // .....::::::::::::::::::::::::::::::::::::: T R A S N F E R E N C I A  MASIVA  A L M A C E N   G E N E R A L   :::::::::::::::::::::::::::::::::::::::..
+function guardar_y_editar_tm(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-almacen-tm")[0]); 
+
+  var catidad_valid = 0;
+  $('.cant_all_tm').each(function (key, val) { catidad_valid +=  $(this).val() == 0 || $(this).val() == '' || $(this).val() == null || $(this).val() === undefined ? 0 : parseFloat($(this).val());  });
+  if ( catidad_valid == 0 ) { sw_cancelar('No hay productos', 'Asigne una cantidad para transferir.', 5000); return; }
+
+  Swal.fire({
+    title: "¿Está seguro de Transferir?",
+    html: "Verifica que todos lo <b>campos</b>  esten <b>conformes</b>!!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, enviar!",
+    preConfirm: (input) => {
+      return fetch("../ajax/almacen.php?op=guardar_y_editar_tm", {
+        method: 'POST', // or 'PUT'
+        body: formData, // data can be `string` or {object}!        
+      }).then(response => {
+        //console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); });
+    },
+    showLoaderOnConfirm: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if (result.value.status == true){      
+
+        Swal.fire("Correcto!", "Transferencia guardada correctamente", "success");
+        tbla_resumen.ajax.reload(null, false);          
+        show_hide_tablas(1);        
+          
+      } else {
+        ver_errores(result.value);
+      }      
+    }
+  });  
+}
+
 var mostrar_masivo = false;
 function tranferencia_masiva(unidad_medida, categoria, es_epp) {
   
@@ -1001,73 +1043,97 @@ function update_valueChec(id) {
 
   if ($(`#customCheckbox${id}`).is(':checked')) {
 
-    $(`#ValorCheck${id}`).val(1);
-    $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
-    $(`#cantidad__trns${id}`).removeAttr('readonly', true);
-    // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
+    $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0.01, messages: { required: `Campo requerido.`, min: "Mínimo {0}", max: " Stock Máximo {0}" } });
+    
+    $(`#cantidad__trns${id}`).prop("disabled", false);
+    $(`#cantidad__trns_env${id}`).prop("disabled", false);
+    $(`#idproducto_tm${id}`).prop("disabled", false);
+    $(`#tipo_prod_tm${id}`).prop("disabled", false);
+    $(`#idproyecto_destino_tm${id}`).prop("disabled", false);
+    $(`#marca_tm${id}`).prop("disabled", false);
+    $(`#almacen_destino_tm${id}`).prop("disabled", false);
+    
     $("#form-almacen-tm").valid();
 
-  } else {
-
-    $(`#ValorCheck${id}`).val(0);
+  } else {    
     $(`#cantidad__trns${id}`).rules("remove", "required");
-    $(`#cantidad__trns${id}`).attr('readonly', true);
-    // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
+
+    $(`#cantidad__trns${id}`).prop("disabled", true);
+    $(`#cantidad__trns_env${id}`).prop("disabled", true);
+    $(`#idproducto_tm${id}`).prop("disabled", true);
+    $(`#tipo_prod_tm${id}`).prop("disabled", true);
+    $(`#idproyecto_destino_tm${id}`).prop("disabled", true);
+    $(`#marca_tm${id}`).prop("disabled", true);
+    $(`#almacen_destino_tm${id}`).prop("disabled", true);
 
     $(`#cantidad__trns_env${id}`).val(0);
-    $(`#cantidad__trns${id}`).val(0);
+    $(`#cantidad__trns${id}`).val(0);    
 
     $("#form-almacen-tm").valid();
   }
-
 }
 
 function Activar_masivo() {
 
   if ($(`#marcar_todo`).is(':checked')) {
 
-    $('.checked_all').each(function (key, val) { 
-      this.checked = true; 
-      $(`#cantidad__trns${key+1}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
-      $(`#cantidad__trns${key+1}`).removeAttr('readonly', false);
+    $('.checked_all').each(function (key, val) { this.checked = true; });
+
+    $('.cant_all_tm').each(function (key, val) {  
+      $(this).rules("add", { required: true, min: 0.01, messages: { required: `Campo requerido.`, min: "Mínimo {0}", max: " Stock Máximo {0}" } });      
+      $(`#cantidad__trns${key+1}`).prop("disabled", false);
+      $(`#cantidad__trns_env${key+1}`).prop("disabled", false);
+      $(`#idproducto_tm${key+1}`).prop("disabled", false);
+      $(`#tipo_prod_tm${key+1}`).prop("disabled", false);
+      $(`#idproyecto_destino_tm${key+1}`).prop("disabled", false);
+      $(`#marca_tm${key+1}`).prop("disabled", false);
+      $(`#almacen_destino_tm${key+1}`).prop("disabled", false);
+
+      $(`#cantidad__trns_env${key+1}`).val(0);
+      $(`#cantidad__trns${key+1}`).val(0);
     });
-    $('.estadochecked_all').val(1);    
-
-    // $('.cant_all_tm').each(function () {  
-    //   $(this).removeAttr('readonly', false); 
-    //   $(this).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
-    // });
-
+    
+    $('.estadochecked_all').val(1);   
     $("#form-almacen-tm").valid();
 
   } else {
 
-    $('.checked_all').each(function () { this.checked = false; });
-    $('.estadochecked_all').val(0);
+    $('.checked_all').each(function () { this.checked = false; });    
 
-    $('.cant_all_tm').each(function (key, val) {  
-      $(this).attr('readonly', true); 
+    $('.cant_all_tm').each(function (key, val) {        
       $(this).rules("remove", "required");
-      $(`#cantidad__trns_env${key}`).val(0);
-      $(`#cantidad__trns${key}`).val(0);
-    });   
+      $(`#cantidad__trns${key+1}`).prop("disabled", true);
+      $(`#cantidad__trns_env${key+1}`).prop("disabled", true);
+      $(`#idproducto_tm${key+1}`).prop("disabled", true);
+      $(`#tipo_prod_tm${key+1}`).prop("disabled", true);
+      $(`#idproyecto_destino_tm${key+1}`).prop("disabled", true);
+      $(`#marca_tm${key+1}`).prop("disabled", true);
+      $(`#almacen_destino_tm${key+1}`).prop("disabled", true);
 
+      $(`#cantidad__trns_env${key+1}`).val(0);
+      $(`#cantidad__trns${key+1}`).val(0);
+    });
+    $(`#enviar_todo_tm`).val("");
+    $('.estadochecked_all').val(0);
     $("#form-almacen-tm").valid();
   }
 }
 
-function enviar_todo_stok(input) {
+function enviar_todo_stok(input) { console.log($(input).val());
   
   if ($(input).val() == '0') {
     $('.cant_all_tm').each(function (key, val) {       
-      $(`#cantidad__trns_env${key}`).val(0);
-      $(`#cantidad__trns${key}`).val(0);
+      $(`#cantidad__trns_env${key+1}`).val(0);
+      $(`#cantidad__trns${key+1}`).val(0);
     });
     $("#form-almacen-tm").valid();
   }else if ($(input).val() == '1') {
     $('#marcar_todo').prop('checked', true);
     Activar_masivo();
-    $('.cant_all_tm').each(function (key, val) {  $(this).val( $(`#total_stok_tm_${key+1}`).text() ); });
+    $('.cant_all_tm').each(function (key, val) {  
+      $(this).val( $(`#total_stok_tm_${key+1}`).text() ); 
+      $(`#cantidad__trns_env${key+1}`).val($(`#total_stok_tm_${key+1}`).text()); 
+    });
     $("#form-almacen-tm").valid();
   }
 }
@@ -1238,11 +1304,14 @@ $(function () {
   $("#form-almacen-tm").validate({
     ignore: '.select2-input, .select2-focusser',
     rules: {
-      idproyecto_origen_tm:  { required: true,  },      
+      idproyecto_origen_tm: { required: true,  },      
+      fecha_tm:             { required: true,  },      
+      descripcion_tm:       { minlength:4, maxlength:500  },      
     },
     messages: {
       idproyecto_origen_tm:  { required: "Campo requerido.", },    
-      // 'cantidad[]':   { min: "Mínimo 0", required: "Campo requerido"},  
+      fecha_tm:             { required: "Campo requerido.",  },      
+      descripcion_tm:       { minlength: "Mínimo {0}", maxlength: "Maximo {0}" },      
     },
 
     errorElement: "span",
@@ -1260,7 +1329,7 @@ $(function () {
       $(element).removeClass("is-invalid").addClass("is-valid");
     },
     submitHandler: function (e) {
-      guardar_y_editar_tag(e);
+      guardar_y_editar_tm(e);
     },
   });
 
