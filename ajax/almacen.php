@@ -282,6 +282,12 @@
         break;        
 
         // ══════════════════════════════════════ TRASNFERENCIA MASIVA ══════════════════════════════════════ 
+        case 'guardar_y_editar_tm':
+          $rspta = $almacen->insertar_almacen( $_POST["idproyecto_origen_tm"], $_POST["idproyecto_destino_tm"], $_POST["almacen_destino_tm"], 'EPG',
+          $_POST["fecha_tm"], $_POST["idproducto_tm"], $_POST["tipo_prod_tm"], $_POST["marca_tm"], $_POST["cantidad_trns"], $_POST["descripcion_tm"] );
+          echo json_encode($rspta, true);           
+        break;
+
         case 'transferencia-masiva-almacen':          
 
           $rspta=$almacen->tbla_principal_resumen_stock($_GET["id_proyecto"], $_GET["unidad_medida"], $_GET["categoria"], $_GET["es_epp"]);
@@ -304,7 +310,7 @@
               <th style="width: 200px"> Almacen <select id="almacen_general_tm"  class="w-200px font-size-12px" onchange="cambiar_de_almacen(this)" >'.$almacen_general.' </select> </th>
               <th style="width: 100px">Stock</th>              
               <th style="width: 150px">Cant. 
-                <select id="enviar_todo_tm[]" class="w-150px font-size-12px" placeholder="Marca" onchange=" enviar_todo_stok(this)">
+                <select id="enviar_todo_tm" class="w-150px font-size-12px" placeholder="Marca" onchange=" enviar_todo_stok(this)">
                   <option value="" >Seleccione</option>
                   <option value="0" >Limpiar</option>
                   <option value="1" >Enviar todo</option>
@@ -323,41 +329,40 @@
           foreach ($rspta['data'] as $key => $val) {      
             $option_marcas = '';
             $marcas = $almacen->marcas_x_producto($_GET["id_proyecto"], $val['idproducto']); 
-            foreach ($marcas['data'] as $key => $val2) {
+            foreach ($marcas['data'] as $key2 => $val2) {
               $option_marcas .= '<option value="'. $val2['marca'].'">'. $val2['marca'].'</option>';
             }
             
             echo '<tr>
               <td>'. $key +1 .'</td>
               <td>
-                <input type="hidden" name="idproducto_tm[]" id="idproducto_tm'. $key +1 .'" value="'.$val['idproducto'].'" />        
-                <input type="hidden" name="tipo_prod_tm[]" id="tipo_prod_tm'. $key +1 .'" value="'.$val['tipo'].'" /> 
-                <input type="hidden" name="idproyecto_destino_tm[]" id="idproyecto_destino_tm'. $key +1 .'"  value="NULL" />  
+                <input type="hidden" name="idproducto_tm[]" id="idproducto_tm'. $key +1 .'" value="'.$val['idproducto'].'" disabled />        
+                <input type="hidden" name="tipo_prod_tm[]" id="tipo_prod_tm'. $key +1 .'" value="'.$val['tipo'].'" disabled /> 
+                <input type="hidden" name="idproyecto_destino_tm[]" id="idproyecto_destino_tm'. $key +1 .'"  value="NULL" disabled />  
                 '. $val['nombre_producto'] .'
               </td>
               <td>'.$val['um_abreviacion'].'</td>
               <td>
                 <div class="form-group mb-0">                  
-                  <select name="marca_tm[]" class="form-control form-control-sm w-200px marca_all_tm" placeholder="Marca">'.$option_marcas.' </select>
+                  <select name="marca_tm[]" id="marca_tm'. ($key +1).'" class="form-control form-control-sm w-200px marca_all_tm" disabled>'.$option_marcas.' </select>
                 </div>    
               </td>
               <td>
                 <div class="form-group mb-0">                  
-                  <select name="almacen_destino_tm[]" class="form-control form-control-sm w-200px almacen_destino_all_tm" placeholder="Almacén">'.$almacen_general.' </select>
+                  <select name="almacen_destino_tm[]"  id="almacen_destino_tm'. ($key +1).'" class="form-control form-control-sm w-200px almacen_destino_all_tm" disabled>'.$almacen_general.' </select>
                 </div>    
               </td>
               <td> <span id="total_stok_tm_'. $key +1 .'" >'.$val['total_stok'].'</span> </td>
               <td>
                 <div class="form-group mb-0">                  
-                  <input type="number" class="form-control form-control-sm w-150px cant_all_tm" name="cantidad_tr'. $key +1 .'" id="cantidad__trns'. $key +1 .'" onkeyup="replicar_data_input(\'#cantidad__trns'. $key +1 .'\', \'#cantidad__trns_env'. $key +1 .'\')" readonly="true" placeholder="cantidad"  min="0" step="0.01" max="'.$val['total_stok'].'"/>
-                  <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env'. $val['idalmacen_resumen'].'"/>
+                  <input type="number" class="form-control form-control-sm w-150px cant_all_tm" name="cantidad_tr'. ($key +1) .'" id="cantidad__trns'. $key +1 .'" onkeyup="replicar_data_input(\'#cantidad__trns'. $key +1 .'\', \'#cantidad__trns_env'. $key +1 .'\')" disabled placeholder="cantidad"  step="0.01" max="'.$val['total_stok'].'"/>
+                  <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env'. ($key +1).'" disabled/>
                 </div>     
               </td>
               <td>
                 <div class="custom-control custom-switch">
-                  <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox'. $val['idalmacen_resumen'].'" onchange="update_valueChec('. $val['idalmacen_resumen'].')" >
-                  <input type="hidden" class="estadochecked_all" name="ValorCheck_trns[]" id="ValorCheck'. $val['idalmacen_resumen'].'" value="0">
-                  <label for="customCheckbox'. $val['idalmacen_resumen'].'" class="custom-control-label cursor-pointer"></label>
+                  <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox'. $key +1 .'" onchange="update_valueChec('. $key +1 .')" >
+                  <label for="customCheckbox'.  $key +1 .'" class="custom-control-label cursor-pointer"></label>
                 </div>     
               </td>
             </tr>'; 

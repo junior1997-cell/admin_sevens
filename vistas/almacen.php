@@ -396,37 +396,9 @@ if (!isset($_SESSION["nombre"])) {
                                   <i class="fas fa-arrow-left"></i> 
                                 </button>
                                 <button type="button" class="btn bg-gradient-success btn-guardar-tm"  >
-                                  <i class="fa-solid fa-floppy-disk"></i>
+                                  <i class="fa-solid fa-floppy-disk"></i> Guardar
                                 </button> 
-                              </h3>                             
-                              <!-- FILTROS NEW -->
-                              <div class="d-flex flex-row  row-horizon disenio-scroll ml-2" >                                
-                                
-                                <div class="form-group w-250px ml-3">
-                                  <select id="filtro_tm_unidad_medida" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
-                                  </select>
-                                </div>
-                              
-                                <div class="form-group w-200px ml-3">                                  
-                                  <select id="filtro_tm_categoria" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
-                                    <option value="0">Todos</option>
-                                    <option value="Ninguno">Ninguno</option>
-                                    <option value="Boleta">Boleta</option>
-                                    <option value="Factura">Factura</option>                                    
-                                    <option value="Nota de Crédito">Nota de Crédito</option>
-                                    <option value="Nota de venta">Nota de venta</option>
-                                  </select>
-                                </div> 
-                              
-                                <div class="form-group w-200px ml-3">
-                                  <select id="filtro_tm_es_epp" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
-                                    <option value="0">Todos</option>
-                                    <option value="PN">NO EPP</option>
-                                    <option value="EPP">SI EPP</option>                                    
-                                  </select>
-                                </div> 
-
-                              </div>         
+                              </h3>
                             </div>
                           </div>
                         </div>
@@ -435,11 +407,73 @@ if (!isset($_SESSION["nombre"])) {
                     <!-- End Main Top -->
 
                     <!-- /.card-header -->
-                    <div class="card-body">     
+                    <div class="card-body">   
+                      <!-- FILTROS NEW -->
+                      <div class="row">                          
+
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">                        
+                          <div class="form-group">
+                            <select id="filtro_tm_es_epp" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
+                              <option value="0">Todos</option>
+                              <option value="PN">NO EPP</option>
+                              <option value="EPP">SI EPP</option>                                    
+                            </select>
+                          </div> 
+                        </div>
+
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                          <div class="form-group">                                  
+                            <select id="filtro_tm_categoria" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
+                              <option value="0">Todos</option>
+                              <option value="Ninguno">Ninguno</option>
+                              <option value="Boleta">Boleta</option>
+                              <option value="Factura">Factura</option>                                    
+                              <option value="Nota de Crédito">Nota de Crédito</option>
+                              <option value="Nota de venta">Nota de venta</option>
+                            </select>
+                          </div> 
+                        </div>   
+                        
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                          <div class="form-group">
+                            <select id="filtro_tm_unidad_medida" class="form-control select2" onchange="delay(function(){filtros_tm()}, 50 );" style="width: 100%;"> 
+                            </select>
+                          </div>
+                        </div>
+                                
+                      </div>  
+
                       <form id="form-almacen-tm" name="form-almacen-tm" method="POST">
                         <input type="hidden" name="idproyecto_origen_tm" id="idproyecto_origen_tm" value="<?php echo $_SESSION['idproyecto'];?>"/>
-                        <div class="table-responsive" id="html-transferencia-masiva">
 
+                        <div class="row">
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="pl-2" style="position: relative; top: 10px; z-index: +1; letter-spacing: 2px;"><span class="bg-white text-primary" for=""> <b class="mx-2" >PRODUCTOS - AGREGADOS</b>  </span></div>
+                          </div>
+                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 " >
+                            <div class="card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">                              
+                              <div class="row" >                               
+                                <!-- Fecha --> 
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-3 col-xl-2">
+                                  <div class="form-group">                            
+                                    <input type="date" name="fecha_tm" class="form-control" id="fecha_tm" placeholder="Fecha" data-toggle="tooltip" data-original-title="Fecha de Transferencia"  value="<?php echo date("Y-m-d"); ?>" />
+                                  </div>
+                                </div> 
+                                <!-- Descripción --> 
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                  <div class="form-group">                              
+                                    <textarea name="descripcion_tm" id="descripcion_tm" class="form-control" cols="30" rows="1" placeholder="ejem: Por que se terminó el proyecto." ></textarea>                         
+                                  </div>
+                                </div>   
+                                <!-- Tabla -->
+                                <div class="col-12">
+                                  <div class="table-responsive" id="html-transferencia-masiva"></div>
+                                </div> 
+                              </div>
+                            </div>                       
+                          </div>   
+                                                 
+                          
                         </div>
                         <button type="submit" style="display: none;" id="submit-form-almacen-tm">Submit</button>
                       </form>                       
