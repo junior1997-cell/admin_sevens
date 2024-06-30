@@ -260,7 +260,7 @@
         <script src="../plugins/excel-preview/js/src/util.js" type="text/javascript" ></script>
 	      <script src="../plugins/excel-preview/js/src/excel-preview.js" type="text/javascript" ></script>
 
-        <script type="text/javascript" src="scripts/valorizacion_fierro.js?version_jdl=1.3"></script>
+        <script type="text/javascript" src="scripts/valorizacion_fierro.js?version_jdl=1.4"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
 

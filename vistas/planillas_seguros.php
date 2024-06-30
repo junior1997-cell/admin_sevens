@@ -400,7 +400,7 @@
         <?php require 'script.php'; ?>  
 
         <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
-        <script type="text/javascript" src="scripts/planillas_seguros.js?version_jdl=1.3"></script>
+        <script type="text/javascript" src="scripts/planillas_seguros.js?version_jdl=1.4"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
           

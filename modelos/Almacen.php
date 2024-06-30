@@ -554,7 +554,7 @@ class Almacen
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
     WHERE ar.idproyecto = '$idproyecto' AND ar.total_stok > 0 AND ar.estado = '1' AND ar.estado_delete = '1' $filtro_unidad_medida $filtro_categoria $filtro_es_epp
-    ORDER BY left(p.nombre, 2) ASC, ar.total_stok DESC;";    
+    ORDER BY ar.total_stok DESC;";    
     return ejecutarConsultaArray($sql_0); 
 
   } 

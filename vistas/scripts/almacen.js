@@ -45,8 +45,10 @@ function init() {
 
   $("#idproyecto_xp").val(localStorage.getItem("nube_idproyecto"));
 
-  $("#fecha_ingreso_xp").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
-  $("#fecha_ingreso").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
+  $("#fecha_tup").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
+  $("#fecha_tep").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
+  $("#fecha_tag").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
+  $("#fecha_tm").attr('min', localStorage.getItem("nube_fecha_inicial_actividad")).attr('max', localStorage.getItem("nube_fecha_final_actividad"));
   // Formato para telefono
   $("[data-mask]").inputmask();
 

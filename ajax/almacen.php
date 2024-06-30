@@ -352,7 +352,7 @@
                   <select name="almacen_destino_tm[]"  id="almacen_destino_tm'. ($key +1).'" class="form-control form-control-sm w-200px almacen_destino_all_tm" disabled>'.$almacen_general.' </select>
                 </div>    
               </td>
-              <td> <span id="total_stok_tm_'. $key +1 .'" >'.$val['total_stok'].'</span> </td>
+              <td class="text-right"> <span id="total_stok_tm_'. $key +1 .'"  >'. number_format($val['total_stok'], 2, '.', ',') .'</span> </td>
               <td>
                 <div class="form-group mb-0">                  
                   <input type="number" class="form-control form-control-sm w-150px cant_all_tm" name="cantidad_tr'. ($key +1) .'" id="cantidad__trns'. $key +1 .'" onkeyup="replicar_data_input(\'#cantidad__trns'. $key +1 .'\', \'#cantidad__trns_env'. $key +1 .'\')" disabled placeholder="cantidad"  step="0.01" max="'.$val['total_stok'].'"/>
