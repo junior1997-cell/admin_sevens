@@ -77,8 +77,8 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="card-header">
                       <h3 class="card-title">
                         <button type="button" class="btn bg-gradient-success btn_add_almacen" data-toggle="modal" data-target="#modal-agregar-almacen-general" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Almacén</button>
-                        <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Agregar</button>
-                        <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiar_ing_di();"><i class="fas fa-plus-circle"></i> Ingreso Directo</button>
+                        <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Enviar</button>
+                        <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiar_ing_di();"><i class="fas fa-plus-circle"></i> Agresar insumo</button>
                         Admnistra de manera eficiente a tus almacenes.
                       </h3>
                     </div>
