@@ -601,7 +601,7 @@
 
         <?php require 'script.php'; ?>
 
-        <script type="text/javascript" src="scripts/otra_factura.js?version_jdl=1.4"></script>
+        <script type="text/javascript" src="scripts/otra_factura.js?version_jdl=1.5"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 

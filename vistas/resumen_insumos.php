@@ -820,6 +820,7 @@
 
                               <!-- idproducto -->
                               <input type="hidden" name="idproducto_g" id="idproducto_g" />
+                              <input type="hidden" name="idproyecto_grp" id="idproyecto_grp" />
 
                               <!-- Grupo -->
                               <div class="col-12 col-sm-12 col-md-12 col-lg-12">
@@ -886,8 +887,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
         
-        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=1.4"></script>
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=1.4"></script>
+        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=1.5"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=1.5"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

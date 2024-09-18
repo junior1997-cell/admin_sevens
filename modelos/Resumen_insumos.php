@@ -170,10 +170,28 @@ class ResumenInsumos
   }
 
   //Seleccionar
-  public function actualizar_grupo($idproducto, $idgrupo)
+  public function actualizar_grupo($idproducto, $idgrupo, $idproyecto_grp)
   {
+
+    //var_dump($idproducto, $idgrupo, $idproyecto_grp); die();
     $sql = "UPDATE detalle_compra SET idclasificacion_grupo='$idgrupo' WHERE idproducto = '$idproducto'";
-    return ejecutarConsulta($sql);
+
+    $upd_grupo =  ejecutarConsulta($sql);
+
+    if ( $upd_grupo['status'] == false ) { return $upd_grupo; }
+    
+
+    if ($idgrupo==11) {
+      $sql_u = "UPDATE almacen_resumen SET tipo='EPP' WHERE idproyecto='$idproyecto_grp' and idproducto='$idproducto'";
+      $up_gr_tbl_almacen_r = ejecutarConsulta($sql_u);
+      if ( $up_gr_tbl_almacen_r['status'] == false ) { return $up_gr_tbl_almacen_r; }
+    }else {
+      $sql_u = "UPDATE almacen_resumen SET tipo='PN' WHERE idproyecto='$idproyecto_grp' and idproducto='$idproducto'";
+      $up_gr_tbl_almacen_r = ejecutarConsulta($sql_u);
+      if ( $up_gr_tbl_almacen_r['status'] == false ) { return $up_gr_tbl_almacen_r; }
+    }
+
+    return $upd_grupo;
   }
 }
 

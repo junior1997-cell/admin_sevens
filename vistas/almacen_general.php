@@ -77,9 +77,9 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="card-header">
                       <h3 class="card-title">
                         <button type="button" class="btn bg-gradient-success btn_add_almacen" data-toggle="modal" data-target="#modal-agregar-almacen-general" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Almacén</button>
-                        <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Enviar</button>
+                        <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Traer insumos</button>
                         <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiar_ing_di();"><i class="fas fa-plus-circle"></i> Agresar insumo</button>
-                        Admnistra de manera eficiente a tus almacenes.
+                        Administra de manera eficiente a tus almacenes.
                       </h3>
                     </div>
                     <!-- /.card-header -->
@@ -131,10 +131,11 @@ if (!isset($_SESSION["nombre"])) {
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-5">
                                       <div class="row">
                                         <div class="col-12 mb-1">
-                                          <button type="button" class="btn btn-warning btn-block btn-sm" onclick="limpiar_Transferencia(); listar_productos_transferencia();"><i class="fa fa-exchange"></i> Transferencia</button>
+                                          <button type="button" class="btn btn-warning btn-block btn-sm" onclick="limpiar_Transferencia(); listar_productos_transferencia();"><i class="fa fa-exchange"></i> Transferencia (Enviar)</button>
                                         </div>
                                       </div>
                                       <table id="tabla-detalle-almacen" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
+                                        <h6>Tabla Insumos </h6>
                                         <thead>
                                           <tr>
                                             <th class="text-center">#</th>
@@ -172,6 +173,7 @@ if (!isset($_SESSION["nombre"])) {
                                         </div>
 
                                         <div class="tabla_detalle_almacen_g" style="display: none; ">
+                                          <h6>Movimientos por Insumos </h6>
                                           <table id="tabla_detalle_almacen_general" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
                                             <thead>
                                               <tr>
@@ -626,7 +628,7 @@ if (!isset($_SESSION["nombre"])) {
     <!-- /.content-wrapper -->
     <?php require 'script.php'; ?>
 
-    <script type="text/javascript" src="scripts/almacen_general.js?version_jdl=1.4"></script>
+    <script type="text/javascript" src="scripts/almacen_general.js?version_jdl=1.5"></script>
 
     <script>
       $(function() {

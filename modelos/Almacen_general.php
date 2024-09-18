@@ -98,7 +98,7 @@ class Almacen_general
     INNER JOIN producto as p on agr.idproducto = p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    WHERE agr.idalmacen_general='$id_almacen' AND agr.estado = '1' AND agr.estado_delete = '1'";
+    WHERE agr.idalmacen_general='$id_almacen' AND agr.total_stok>'0' AND agr.estado = '1' AND agr.estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
 

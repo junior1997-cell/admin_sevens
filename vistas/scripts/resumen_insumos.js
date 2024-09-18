@@ -841,6 +841,7 @@ function limpiar_form_grupos() {
 
 function agregar_grupos(id_producto, id_grupo) {
   $("#idproducto_g").val(id_producto);
+  $("#idproyecto_grp").val(localStorage.getItem('nube_idproyecto'));
   $("#idclasificacion_grupo_g").val(id_grupo).trigger('change');
   $('#modal-agregar-grupos').modal('show');
 }

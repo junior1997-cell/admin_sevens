@@ -273,7 +273,7 @@
         // :::::::::::::::::::::::::: S E C C I O N   G R U P O S ::::::::::::::::::::::::::
         case 'actualizar_grupo':
             
-          $rspta = $resumen_insumos->actualizar_grupo( $_POST["idproducto_g"], $_POST["idclasificacion_grupo_g"]);
+          $rspta = $resumen_insumos->actualizar_grupo( $_POST["idproducto_g"], $_POST["idclasificacion_grupo_g"], $_POST['idproyecto_grp']);
           //var_dump($idactivos_fijos,$idproveedor);
           echo json_encode($rspta, true);          
       
