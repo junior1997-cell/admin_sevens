@@ -89,7 +89,7 @@ function lista_de_items() {
       e.data.forEach((val, index) => {
         data_html = data_html.concat(`
         <li class="nav-item">
-          <a class="nav-link" onclick="delay(function(){tabla_detalle('${val.idcategoria}','${val.nombre}')}, 50 );" id="tabs-for-detalle-tab" data-toggle="pill" href="#tabs-for-detalle" role="tab" aria-controls="tabs-for-detalle" aria-selected="false">${val.nombre}</a>
+          <a class="nav-link" onclick="delay(function(){tabla_detalle('${val.idcategoria}','${val.nombre}','1')}, 50 );" id="tabs-for-detalle-tab" data-toggle="pill" href="#tabs-for-detalle" role="tab" aria-controls="tabs-for-detalle" aria-selected="false">${val.nombre}</a>
         </li>`);
       });
 
@@ -251,9 +251,27 @@ function eliminar(idproducto, nombre) {
 //================================================================
 //--------------------INICIO ALMACEN GENERAL----------------------
 //================================================================
+function stock(type) {
+  if (type =='1') {
+
+    $(".mayor_cero").removeClass("btn btn-secondary").addClass("btn btn-info");
+    $(".include_cero").removeClass("btn btn-info").addClass("btn btn-secondary");
+    tabla_detalle(id_almacen_transf, nombre_almacen_transf, '1');
+  }else {
+
+    $(".mayor_cero").removeClass("btn btn-info").addClass("btn btn-secondary");
+    $(".include_cero").removeClass("btn btn-secondary").addClass("btn btn-info");
+    tabla_detalle(id_almacen_transf, nombre_almacen_transf, '0');
+  }
+  
+  
+}
 // LISTAR TABLA ALMACEN POR ALMACEN
-function tabla_detalle(id_categoria, nombre) {
+function tabla_detalle(id_categoria, nombre, stock) {
+  if (stock=='1') { $(".mayor_cero").removeClass("btn btn-secondary").addClass("btn btn-info"); $(".include_cero").removeClass("btn btn-info").addClass("btn btn-secondary");  }
+  
   $('.tabla_detalle_almacen_g').hide(); $('.alerta_inicial').show();
+ 
   nombre_almacen_transf = nombre; id_almacen_transf = id_categoria;
 
   $('#idalmacen_general_ag').val(id_categoria); $('.nombre_almacen_g').html(nombre);
@@ -272,7 +290,7 @@ function tabla_detalle(id_categoria, nombre) {
       { extend: 'excel', exportOptions: { columns: [0, 1, 2, 3, 4], }, title: `LISTA DE PRODUCTOS ${nombre_almacen_transf}`, text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true, },
     ],
     ajax: {
-      url: `../ajax/almacen_general.php?op=tabla_detalle&id_almacen=${id_categoria}&id_proyecto=${localStorage.getItem("nube_idproyecto")}`,
+      url: `../ajax/almacen_general.php?op=tabla_detalle&id_almacen=${id_categoria}&id_proyecto=${localStorage.getItem("nube_idproyecto")}&stock=${stock}`,
       type: "get",
       dataType: "json",
       error: function (e) {
@@ -380,7 +398,7 @@ function limpiar_form_otro_almacen() {
 
   $('#producto_ag').val('').trigger("change");
   $('#proyecto_ag').val('').trigger("change");
-  $('#fecha_ingreso_ag').val('');
+  //$('#fecha_ingreso_ag').val('');
   $('#html_producto_ag').html(`<div class="col-12 html_mensaje">
     <div class="alert alert-warning alert-dismissible mb-0">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -637,8 +655,8 @@ function listar_productos_transferencia() {
         <div class="col-12 col-sm-12 col-md-12 col-lg-1">
         <label class="ver" style="display:none" > Activar </label> 
           <div class="custom-control custom-switch">
-            <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox${val.idalmacen_general_resumen}" onchange="update_valueChec(${val.idalmacen_general_resumen})" >
-            <input type="hidden" class="estadochecked_all" name="ValorCheck_trns[]" id="ValorCheck${val.idalmacen_general_resumen}" value="0">
+            <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox${val.idalmacen_general_resumen}" onchange="update_valueChec(${val.idalmacen_general_resumen},${val.total_stok})" >
+            <input type="hidden" class="estadochecked_all" name="ValorCheck_trns[]" id="ValorCheck${val.idalmacen_general_resumen}">
             <label for="customCheckbox${val.idalmacen_general_resumen}" class="custom-control-label"></label>
           </div>         
         </div> 
@@ -655,9 +673,12 @@ function listar_productos_transferencia() {
 
 function replicar_cantidad_a_r(id) { $(`#cantidad__trns_env${id}`).val($(`#cantidad__trns${id}`).val()); }
 
-function update_valueChec(id) {
+function update_valueChec(id,total_stok) {
 
   if ($(`#customCheckbox${id}`).is(':checked')) {
+
+    $(`#cantidad__trns${id}`).val(total_stok);
+    $(`#cantidad__trns_env${id}`).val(total_stok);
 
     $(`#ValorCheck${id}`).val(1);
     $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
@@ -718,7 +739,7 @@ function Activar_masivo() {
 }
 
 function limpiar_Transferencia() {
-  $("#fecha_transf_proy_alm").val("");
+  //$("#fecha_transf_proy_alm").val("");
   $("#cantidad_alm_trans").val("");
   $("#name_alm_destino").val("").trigger("change");
   $("#tranferencia").val("").trigger("change");
@@ -784,7 +805,7 @@ function guardar_tranf_almacenes_generales(e) {
 function limpiar_ing_di() {
 
   $('#producto_tup').val('').trigger("change");
-  $('#fecha_tup').val('');
+  //$('#fecha_tup').val('');
   $('#almacen_tup').val('');
   $(".titulo-add-producto-tup").hide();
   $('#html_producto_tup').html(`<div class="col-12 delete_multiple_alerta_tup">

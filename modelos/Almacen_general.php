@@ -89,8 +89,12 @@ class Almacen_general
   }
 
   //Implementar un método para listar los registros
-  public function tabla_detalle($id_proyecto, $id_almacen)
+  public function tabla_detalle($id_proyecto, $id_almacen,$_stock)
   {
+    $stock ="";
+
+    if ($_stock =='1') { $stock ="AND agr.total_stok>'0'"; }else{ $stock =""; }
+
     $sql = "SELECT agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
     FROM almacen_general_resumen AS agr
     INNER JOIN almacen_general as ag on agr.idalmacen_general = ag.idalmacen_general
@@ -98,7 +102,7 @@ class Almacen_general
     INNER JOIN producto as p on agr.idproducto = p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    WHERE agr.idalmacen_general='$id_almacen' AND agr.total_stok>'0' AND agr.estado = '1' AND agr.estado_delete = '1'";
+    WHERE agr.idalmacen_general='$id_almacen'  $stock AND agr.estado = '1' AND agr.estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
 
@@ -542,7 +546,7 @@ class Almacen_general
     INNER JOIN producto as p on agr.idproducto = p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    WHERE agr.idalmacen_general='$id_almacen' AND agr.estado = '1' AND agr.estado_delete = '1';";
+    WHERE agr.idalmacen_general='$id_almacen' AND agr.total_stok>'0' AND agr.estado = '1' AND agr.estado_delete = '1';";
     return ejecutarConsultaArray($sql);
   }
 

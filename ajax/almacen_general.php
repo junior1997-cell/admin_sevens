@@ -130,7 +130,7 @@ if (!isset($_SESSION["nombre"])) {
 
       case 'tabla_detalle':
 
-        $rspta = $almacen_general->tabla_detalle($_GET["id_proyecto"], $_GET["id_almacen"]);
+        $rspta = $almacen_general->tabla_detalle($_GET["id_proyecto"], $_GET["id_almacen"], $_GET['stock']);
 
         $data = [];
         $cont = 1;

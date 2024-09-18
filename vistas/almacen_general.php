@@ -17,7 +17,7 @@ if (!isset($_SESSION["nombre"])) {
     <title>Almacenes | Admin Sevens</title>
 
     <?php $title = "Almacenes";
-    require 'head.php'; ?>
+    require 'head.php';  date_default_timezone_set('America/Lima');?>
 
     <style>
       .style_tabla_datatable td,
@@ -27,12 +27,14 @@ if (!isset($_SESSION["nombre"])) {
         padding: 5px;
         /* Ajustar el padding */
       }
-      @media only screen and (max-width: 991px){
+
+      @media only screen and (max-width: 991px) {
         .ocultar_head {
-         display: none;
+          display: none;
         }
-        .ver{
-         display: block !important;
+
+        .ver {
+          display: block !important;
         }
       }
     </style>
@@ -135,7 +137,19 @@ if (!isset($_SESSION["nombre"])) {
                                         </div>
                                       </div>
                                       <table id="tabla-detalle-almacen" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
-                                        <h6>Tabla Insumos </h6>
+
+                                          
+                                          <div class="row mb-2 mt-2">
+                                            <div class="col-sm-4">
+                                              <h6><i class="nav-icon fas fa-box-open"></i> Tabla Insumos</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                              <h6 class="float-sm-right" style=" padding: 3px !important; margin-bottom: 0px !important;">
+                                                <button class="btn btn-info btn-sm mayor_cero" onclick="stock('1');"  >Stok > 0</button>
+                                                <button class="btn btn-secondary  btn-sm include_cero" onclick="stock('0');">Stock Incluido 0</button>
+                                              </h6>
+                                            </div>
+                                          </div>
                                         <thead>
                                           <tr>
                                             <th class="text-center">#</th>
@@ -291,7 +305,7 @@ if (!isset($_SESSION["nombre"])) {
 
             <!-- MODAL - AGREGAR DATOS A UN ALMACEN GENERAL  style="max-width: 95% !important;" -->
             <div class="modal fade" id="modal-agregar-otro-almacen">
-              <div class="modal-dialog modal-dialog-scrollable modal-xl "  >
+              <div class="modal-dialog modal-dialog-scrollable modal-xl ">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h4 class="modal-title">Agregar al Almacen General : <span class="nombre_almacen_g" style="color:red">nombre</span> </h4>
@@ -321,7 +335,7 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-12 col-sm-12 col-md-12 col-lg-3">
                             <div class="form-group">
                               <label for="fecha_ingreso_ag">Fecha</label>
-                              <input type="date" name="fecha_ingreso_ag" class="form-control" id="fecha_ingreso_ag" placeholder="Fecha" onchange="obtener_dia_ingreso(this);" />
+                              <input type="date" name="fecha_ingreso_ag" class="form-control" id="fecha_ingreso_ag" value="<?php echo date("Y-m-d"); ?>" placeholder="Fecha" onchange="obtener_dia_ingreso(this);" />
                               <input type="hidden" name="dia_ingreso_ag" id="dia_ingreso_ag" />
                             </div>
                           </div>
@@ -453,7 +467,7 @@ if (!isset($_SESSION["nombre"])) {
                           <div class="col-12 col-sm-12 col-md-6 col-lg-3">
                             <div class="form-group">
                               <label for="fecha_transf_proy_alm">Fecha</label>
-                              <input type="date" name="fecha_transf_proy_alm" class="form-control" id="fecha_transf_proy_alm" placeholder="Fecha" />
+                              <input type="date" name="fecha_transf_proy_alm" class="form-control" value="<?php echo date("Y-m-d"); ?>" id="fecha_transf_proy_alm" placeholder="Fecha" />
                             </div>
                           </div>
 
@@ -464,15 +478,15 @@ if (!isset($_SESSION["nombre"])) {
                               <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Und.</div>
                               <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Stock</div>
                               <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Cantidad</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold" data-toggle="tooltip" data-placement="top" title="Activar Todos Transferir"> <span class="ver" style="display: none;" >Activar Masivo</span>
+                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold" data-toggle="tooltip" data-placement="top" title="Activar Todos Transferir"> <span class="ver" style="display: none;">Activar Masivo</span>
 
                                 <div class="custom-control custom-switch" data-toggle="tooltip" data-original-title="Activar todos">
                                   <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();">
                                   <label for="marcar_todo" class="custom-control-label"></label>
                                 </div>
-                                
+
                               </div>
-                              <hr style=" height: 1px; width: 100%; background-color: red; display:none" class="ver"/>
+                              <hr style=" height: 1px; width: 100%; background-color: red; display:none" class="ver" />
                               <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
                             </div>
                             <div class="row" id="html_producto_transf">
