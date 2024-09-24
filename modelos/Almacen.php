@@ -203,9 +203,10 @@ class Almacen
   }
 
   //Implementar un método para listar los registros
-  public function tbla_principal($idproyecto, $fip, $ffp, $fpo) {
+  public function tbla_principal($idproyecto, $nombre_insumo, $fip, $ffp, $fpo) {
 
     $resumen_producto = []; $data_meses= []; $data_dias = [];  $data_num_dia = []; $data_nombre_dia = []; $data_nombre_abrev_dia = []; $data_sq = []; 
+    $filtro_nombre_insumo = empty($nombre_insumo) ? "" : "AND prod.nombre LIKE '%$nombre_insumo%'" ;
 
     $sql = "SELECT fecha, name_day, name_day_abrev, number_day, name_month, name_month_abrev, number_month, name_year FROM fechas_de_calendario WHERE fecha BETWEEN '$fip' AND '$ffp' GROUP BY number_month;";    
     $meses_rango = ejecutarConsultaArray($sql); if ($meses_rango['status'] == false) { return $meses_rango; }   
@@ -260,44 +261,39 @@ class Almacen
     INNER JOIN producto as prod ON prod.idproducto = ar.idproducto
     INNER JOIN categoria_insumos_af AS ci ON ci.idcategoria_insumos_af = prod.idcategoria_insumos_af
     INNER JOIN unidad_medida AS um ON um.idunidad_medida = prod.idunidad_medida
-    WHERE ar.idproyecto =  '$idproyecto' ORDER BY prod.nombre ASC;";    
+    WHERE ar.idproyecto =  '$idproyecto' $filtro_nombre_insumo ORDER BY prod.nombre ASC;";    
     $producto = ejecutarConsultaArray($sql_0); if ($producto['status'] == false) { return $producto; }   
 
     foreach ($producto['data'] as $key1 => $val1) { 
 
-      $id_ar   = $val1['idalmacen_resumen'];
-       
-      $data_almacen = [];
-      foreach ($dias_rango['data'] as $key2 => $val2) {
-        $d_fecha = $val2['fecha'];
-        // ENTRADA =======================================================
-        $sql_1 = "SELECT SUM(cantidad) AS cant FROM almacen_detalle 
-        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IPC', 'IEP', 'IPG');";
-        $entrada = ejecutarConsultaSimpleFila($sql_1); if ($entrada['status'] == false) { return $entrada; }      
+      $id_ar   = $val1['idalmacen_resumen'];       
+        
+      // ENTRADA Y SALIDA =======================================================
+      $sql_1 = "SELECT fc.fecha, fc.name_day_abrev, fc.name_month_abrev, fc.name_year, IFNULL(ad_ic.cant, '-') as entrada_cant, IFNULL(ad_ig.cant_group, '-') as entrada_group, IFNULL(ad_sc.cant, '-') as salida_cant, IFNULL(ad_sg.cant_group, '-') as salida_group
+      FROM fechas_de_calendario as fc
+      LEFT JOIN ( 
+        select SUM(cantidad) AS cant, fecha 
+        from almacen_detalle where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar 
+          AND tipo_mov IN ('IPC', 'IEP', 'IPG') 
+      ) as ad_ic on ad_ic.fecha = fc.fecha 
+      LEFT JOIN ( 
+        SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN 		ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2)) END SEPARATOR ', ') as cant_group, ad.fecha 
+        FROM almacen_detalle as ad 
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar AND tipo_mov IN ('IPC', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen
+      ) as ad_ig on ad_ig.fecha = fc.fecha 
 
-        $sql_1_1 = "SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2))
-        END SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
-        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('IPC', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen;";
-        $e_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($e_cant_group['status'] == false) { return $e_cant_group; }    
-
-        // SALIDA =======================================================
-        $sql_2 = "SELECT SUM(cantidad) AS cant FROM almacen_detalle 
-        WHERE estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG');";
-        $salida = ejecutarConsultaSimpleFila($sql_2); if ($salida['status'] == false) { return $salida; }        
-
-        $sql_1_1 = "SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2))
-        END SEPARATOR ', ') as cant_group FROM almacen_detalle as ad 
-        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = '$id_ar' AND fecha = '$d_fecha' AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen;";
-        $s_cant_group = ejecutarConsultaSimpleFila($sql_1_1); if ($s_cant_group['status'] == false) { return $s_cant_group; } 
-
-        $data_almacen[] =  [
-          'fecha'         => $d_fecha, 
-          'entrada_cant'  => empty($entrada['data'])      ? '-' : (empty($entrada['data']['cant'])            ? '-' : floatval($entrada['data']['cant']) ) ,
-          'entrada_group' => empty($e_cant_group['data']) ? '-' : (empty($e_cant_group['data']['cant_group']) ? '-' : $e_cant_group['data']['cant_group'] ) ,
-          'salida_cant'   => empty($salida['data'])       ? '-' : (empty($salida['data']['cant'])             ? '-' : floatval($salida['data']['cant']) ) ,
-          'salida_group'  => empty($s_cant_group['data']) ? '-' : (empty($s_cant_group['data']['cant_group']) ? '-' : $s_cant_group['data']['cant_group'] ) ,      
-        ];
-      }  
+      LEFT JOIN ( 
+        select SUM(cantidad) AS cant, fecha 
+        from almacen_detalle where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar 
+          AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') 
+      ) as ad_sc on ad_sc.fecha = fc.fecha 
+      LEFT JOIN ( 
+        SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN 		ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2)) END SEPARATOR ', ') as cant_group, ad.fecha 
+        FROM almacen_detalle as ad 
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen
+      ) as ad_sg on ad_sg.fecha = fc.fecha 
+      WHERE fc.fecha BETWEEN '$fip' AND '$ffp';";
+      $data_almacen = ejecutarConsultaArray($sql_1); if ($data_almacen['status'] == false) { return $data_almacen; }      
       
       $resumen_producto[] = [
         'idalmacen_resumen' => $val1['idalmacen_resumen'],
@@ -310,7 +306,7 @@ class Almacen
         'um_nombre'         => $val1['um_nombre'],
         'um_abreviacion'    => $val1['um_abreviacion'],
         'categoria'         => $val1['categoria_insumos'],
-        'almacen'           => $data_almacen,        
+        'almacen'           => $data_almacen['data'],        
       ];
     }
     return $retorno = [

@@ -310,6 +310,7 @@
                                     <option value="ESTACIONAMIENTO">ESTACIONAMIENTO</option>
                                     <option value="PERSONALES">PERSONALES</option>
                                     <option value="PASAJE">PASAJE</option>
+                                    <option value="PEAJE">PEAJE</option>
                                     <option value="EPPS">EPPS</option>
                                     <option value="OTROS">OTROS</option>
                                     

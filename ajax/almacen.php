@@ -59,7 +59,7 @@
 
         case 'tabla_almacen':         
 
-          $rspta = $almacen->tbla_principal($_POST["id_proyecto"], $_POST["fip"], $_POST["ffp"], $_POST["fpo"] );
+          $rspta = $almacen->tbla_principal($_POST["id_proyecto"], $_POST["nombre_insumo"], $_POST["fip"], $_POST["ffp"], $_POST["fpo"] );
           // echo json_encode($rspta, true); die();
           // $rspta = $almacen->tbla_principal(6, '2023-04-18', '2023-04-22', 'semanal' );
 
@@ -74,7 +74,7 @@
             }
           }          
 
-          echo '<thead class="st_tr_style bg-color-ffd146">
+          echo '<thead class="st_tr_style bg-white">
           <tr class="thead-f1">
             <th rowspan="4">#</th> 
             <th rowspan="4">Code</th> 
@@ -97,7 +97,8 @@
           echo '<tbody class="data_tbody_almacen"> ';       
 
           foreach ($rspta['data']['producto'] as $key => $val) {
-            $color_filas =  ($key%2==0 ? 'bg-color-e9e9e9' : '') ;
+            // $color_filas =  ($key%2==0 ? 'bg-color-e9e9e9' : '') ;
+            $color_filas = '';
             $html_dias_entrada = ''; $html_dias_salida = ''; 
 
             foreach ($val['almacen'] as $key2 => $val2) {              

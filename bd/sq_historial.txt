@@ -56,3 +56,30 @@ UPDATE fechas_de_calendario as v, fechas_de_calendario  as vp
 SET v.name_day_abrev= LEFT(vp.name_day, 3),
 v.name_month_abrev	= LEFT(vp.name_month, 3)
 where v.idfechas_de_calendario = vp.idfechas_de_calendario;
+
+
+:::::::::::::::::::::::::::::::: ALMACEN DETALLE
+SELECT fc.fecha, fc.name_day_abrev, fc.name_month_abrev, fc.name_year, IFNULL(ad_ic.cant, '-') as entrada_cant, IFNULL(ad_ig.cant_group, '-') as entrada_group, IFNULL(ad_sc.cant, '-') as salida_cant, IFNULL(ad_sg.cant_group, '-') as salida_group
+FROM fechas_de_calendario as fc
+LEFT JOIN ( 
+	select SUM(cantidad) AS cant, fecha 
+	from almacen_detalle where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = 4564 
+    AND tipo_mov IN ('IPC', 'IEP', 'IPG') 
+) as ad_ic on ad_ic.fecha = fc.fecha 
+LEFT JOIN ( 
+	SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN 		ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2)) END SEPARATOR ', ') as cant_group, ad.fecha 
+	FROM almacen_detalle as ad 
+	where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = 4564 AND tipo_mov IN ('IPC', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen
+) as ad_ig on ad_ig.fecha = fc.fecha 
+
+LEFT JOIN ( 
+	select SUM(cantidad) AS cant, fecha 
+	from almacen_detalle where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = 4564 
+    AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') 
+) as ad_sc on ad_sc.fecha = fc.fecha 
+LEFT JOIN ( 
+	SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN 		ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2)) END SEPARATOR ', ') as cant_group, ad.fecha 
+	FROM almacen_detalle as ad 
+	where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = 4564 AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen
+) as ad_sg on ad_sg.fecha = fc.fecha 
+WHERE fc.fecha BETWEEN '2024-09-08' AND '2024-11-07';

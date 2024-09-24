@@ -1,6 +1,7 @@
 var tbla_resumen, tabla_x_dia, tabla_saldo_anterior;
 var array_doc = [];
 var id_almacen_s_r = '';
+var idproyecto_r = '', fip_r = '' ; ffp_r = '' ; fpo_r  = '';
 //Función que se ejecuta al inicio
 function init() {
 
@@ -70,14 +71,14 @@ function show_hide_tablas(flag) {
     $(".card-almacen-1").show();
     $(".card-almacen-2").hide();
     $("#div_tabla_principal").show();
-    $("#div_tabla_almacen").hide();
+    $("#div_tabla_almacen").hide();$("#div_tabla_almacen_search").hide();
     $("#cargando-table-almacen").hide();
     $(".btn-regresar").hide();
   } else if (flag == 2) {             // TAABLA LISTA
     $(".card-almacen-1").show();
     $(".card-almacen-2").hide();
     $("#div_tabla_principal").hide();
-    $("#div_tabla_almacen").hide();
+    $("#div_tabla_almacen").hide(); $("#div_tabla_almacen_search").show();
     $("#cargando-table-almacen").show();
     $(".btn-regresar").show();
   } else if (flag == 3) {             // TAABLA TRANFERENCIA MASIVA
@@ -210,18 +211,19 @@ function todos_almacen() {
   var ffp =  localStorage.getItem("nube_fecha_final_actividad");
   var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
   
+  idproyecto_r = idproyecto ; fip_r = fip ; ffp_r = ffp ; fpo_r  = fpo;
 
   $('#cargando-table-almacen').html(`<div class="col-12 text-center"><span class="spinner-border spinner-border-xl"></span> <br> <span class="text-olas-mar-letra">Cargando...</span></div>`);
   const text = document.querySelector('.text-olas-mar-letra');  text.innerHTML = text.textContent.split('').map((char, i) => `<span style="--i:${i}">${char}</span>` ).join('');        
 
   
-  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
+  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'nombre_insumo': '', 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
 
     // e = JSON.parse(e); console.log(e);
 
     $('.tabla_almacen').html(e);        
 
-    $('#div_tabla_almacen').show();
+    $('#div_tabla_almacen').show(); 
     $('#cargando-table-almacen').hide();
     $('[data-toggle="tooltip"]').tooltip();
     scroll_tabla_asistencia();
@@ -237,18 +239,19 @@ function por_fecha(ids_q_asistencia, fecha_q_s_inicio, fecha_q_s_fin, i, q_s_dia
   var fip =  fecha_q_s_inicio
   var ffp =  fecha_q_s_fin
   var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
+  idproyecto_r = idproyecto ; fip_r = fip ; ffp_r = ffp ; fpo_r  = fpo;
 
   $('#div_tabla_almacen').hide();
   $('#cargando-table-almacen').html(`<div class="col-12 text-center"><span class="spinner-border spinner-border-xl"></span> <br> <span class="text-olas-mar-letra">Cargando...</span></div>`);
   const text = document.querySelector('.text-olas-mar-letra');  text.innerHTML = text.textContent.split('').map((char, i) => `<span style="--i:${i}">${char}</span>` ).join('');        
 
   
-  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
+  $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto, 'nombre_insumo': '', 'fip': fip, 'ffp':ffp, 'fpo': fpo }, function (e, status) {
 
     // e = JSON.parse(e); console.log(e);
     $('.tabla_almacen').html(e); 
 
-    $('#div_tabla_almacen').show();
+    $('#div_tabla_almacen').show(); 
     $('#cargando-table-almacen').hide();
     $('[data-toggle="tooltip"]').tooltip();
     scroll_tabla_asistencia();
@@ -268,6 +271,33 @@ function calcular_saldo(input, id) {
   //   console.log( hora );     
   // });
 }
+
+$('#buscar_insumo').on('change', function () {
+  var nombre_insumo = $(this).val() == '' || $(this).val() == null ? '' : $(this).val() ;
+  console.log(nombre_insumo);
+
+  show_hide_tablas(2);
+  $('#div_tabla_almacen').hide();
+  $('#cargando-table-almacen').html(`<div class="col-12 text-center"><span class="spinner-border spinner-border-xl"></span> <br> <span class="text-olas-mar-letra">Cargando...</span></div>`);
+  const text = document.querySelector('.text-olas-mar-letra');  text.innerHTML = text.textContent.split('').map((char, i) => `<span style="--i:${i}">${char}</span>` ).join('');        
+
+
+  delay(function(){ // Retrasamos la busqueda  
+    
+
+    $.post("../ajax/almacen.php?op=tabla_almacen", { 'id_proyecto': idproyecto_r, 'nombre_insumo': nombre_insumo, 'fip': fip_r, 'ffp':ffp_r, 'fpo': fpo_r }, function (e, status) {
+
+      $('.tabla_almacen').html(e); 
+
+      $('#div_tabla_almacen').show(); 
+      $('#cargando-table-almacen').hide();
+      $('[data-toggle="tooltip"]').tooltip();
+      scroll_tabla_asistencia();
+
+    }).fail(function (e) { ver_errores(e); });
+
+  }, 30 );
+});
 
 // .....::::::::::::::::::::::::::::::::::::: E D I T A R   P R O Y E C T O   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
 function limpiar_form_almacen_x_dia() {
@@ -1076,74 +1106,110 @@ function update_valueChec(id) {
 }
 
 function Activar_masivo() {
+  $('.card-almacen-2 div:nth-of-type(1) .card-body').after(`<div class="overlay dark" style="align-items: flex-start !important;" ><div class="text-center mt-5" ><span class="spinner-border spinner-border-xl"></span><br><span class="text-olas-mar-letra text-white text-bold">Procesando...</span></div></div>`);
+  
+  setTimeout(function() {  console.log($(`#marcar_todo`).is(':checked'));
+  
 
-  if ($(`#marcar_todo`).is(':checked')) {
+    if ($(`#marcar_todo`).is(':checked')) {
 
-    $('.checked_all').each(function (key, val) { this.checked = true; });
+      $('.checked_all').each(function (key, val) { this.checked = true; });
 
-    $('.cant_all_tm').each(function (key, val) {  
-      $(this).rules("add", { required: true, min: 0.01, messages: { required: `Campo requerido.`, min: "Mínimo {0}", max: " Stock Máximo {0}" } });      
-      $(`#cantidad__trns${key+1}`).prop("disabled", false);
-      $(`#cantidad__trns_env${key+1}`).prop("disabled", false);
-      $(`#idproducto_tm${key+1}`).prop("disabled", false);
-      $(`#tipo_prod_tm${key+1}`).prop("disabled", false);
-      $(`#idproyecto_destino_tm${key+1}`).prop("disabled", false);
-      $(`#marca_tm${key+1}`).prop("disabled", false);
-      $(`#almacen_destino_tm${key+1}`).prop("disabled", false);
+      $('.cant_all_tm').each(function (key, val) {  
+        $(this).rules("add", { required: true, min: 0.01, messages: { required: `Campo requerido.`, min: "Mínimo {0}", max: " Stock Máximo {0}" } });      
+        $(`#cantidad__trns${key+1}`).prop("disabled", false);
+        $(`#cantidad__trns_env${key+1}`).prop("disabled", false);
+        $(`#idproducto_tm${key+1}`).prop("disabled", false);
+        $(`#tipo_prod_tm${key+1}`).prop("disabled", false);
+        $(`#idproyecto_destino_tm${key+1}`).prop("disabled", false);
+        $(`#marca_tm${key+1}`).prop("disabled", false);
+        $(`#almacen_destino_tm${key+1}`).prop("disabled", false);
 
-      $(`#cantidad__trns_env${key+1}`).val(0);
-      $(`#cantidad__trns${key+1}`).val(0);
-    });
-    
-    $('.estadochecked_all').val(1);   
-    $("#form-almacen-tm").valid();
+        $(`#cantidad__trns_env${key+1}`).val(0);
+        $(`#cantidad__trns${key+1}`).val(0);
+      });
+      
+      $('.estadochecked_all').val(1);   
+      $("#form-almacen-tm").valid();
 
-  } else {
+    } else {
 
-    $('.checked_all').each(function () { this.checked = false; });    
+      $('.checked_all').each(function () { this.checked = false; });    
 
-    $('.cant_all_tm').each(function (key, val) {        
-      $(this).rules("remove", "required");
-      $(`#cantidad__trns${key+1}`).prop("disabled", true);
-      $(`#cantidad__trns_env${key+1}`).prop("disabled", true);
-      $(`#idproducto_tm${key+1}`).prop("disabled", true);
-      $(`#tipo_prod_tm${key+1}`).prop("disabled", true);
-      $(`#idproyecto_destino_tm${key+1}`).prop("disabled", true);
-      $(`#marca_tm${key+1}`).prop("disabled", true);
-      $(`#almacen_destino_tm${key+1}`).prop("disabled", true);
+      $('.cant_all_tm').each(function (key, val) {        
+        $(this).rules("remove", "required");
+        $(`#cantidad__trns${key+1}`).prop("disabled", true);
+        $(`#cantidad__trns_env${key+1}`).prop("disabled", true);
+        $(`#idproducto_tm${key+1}`).prop("disabled", true);
+        $(`#tipo_prod_tm${key+1}`).prop("disabled", true);
+        $(`#idproyecto_destino_tm${key+1}`).prop("disabled", true);
+        $(`#marca_tm${key+1}`).prop("disabled", true);
+        $(`#almacen_destino_tm${key+1}`).prop("disabled", true);
 
-      $(`#cantidad__trns_env${key+1}`).val(0);
-      $(`#cantidad__trns${key+1}`).val(0);
-    });
-    $(`#enviar_todo_tm`).val("");
-    $('.estadochecked_all').val(0);
-    $("#form-almacen-tm").valid();
-  }
+        $(`#cantidad__trns_env${key+1}`).val(0);
+        $(`#cantidad__trns${key+1}`).val(0);
+      });
+      $(`#enviar_todo_tm`).val("");
+      $('.estadochecked_all').val(0);
+      $("#form-almacen-tm").valid();
+    }
+
+    $('.card-almacen-2 div:nth-of-type(1) .card-body').next('.overlay').remove();
+
+  }, 1000);
 }
 
 function enviar_todo_stok(input) { console.log($(input).val());
+
+  $('.card-almacen-2 div:nth-of-type(1) .card-body').after(`<div class="overlay dark" style="align-items: flex-start !important;" ><div class="text-center mt-5" ><span class="spinner-border spinner-border-xl"></span><br><span class="text-olas-mar-letra text-white text-bold">Procesando...</span></div></div>`);
   
-  if ($(input).val() == '0') {
-    $('.cant_all_tm').each(function (key, val) {       
-      $(`#cantidad__trns_env${key+1}`).val(0);
-      $(`#cantidad__trns${key+1}`).val(0);
-    });
-    $("#form-almacen-tm").valid();
-  }else if ($(input).val() == '1') {
-    $('#marcar_todo').prop('checked', true);
-    Activar_masivo();
-    $('.cant_all_tm').each(function (key, val) {  
-      $(this).val( $(`#total_stok_tm_${key+1}`).text() ); 
-      $(`#cantidad__trns_env${key+1}`).val($(`#total_stok_tm_${key+1}`).text()); 
-    });
-    $("#form-almacen-tm").valid();
-  }
+  setTimeout(function() {  
+
+    if ($(input).val() == '0') {
+      $('.cant_all_tm').each(function (key, val) {       
+        $(`#cantidad__trns_env${key+1}`).val(0);
+        $(`#cantidad__trns${key+1}`).val(0);
+      });
+      $("#form-almacen-tm").valid();
+    }else if ($(input).val() == '1') {
+      $('#marcar_todo').prop('checked', true);
+     
+      $('.cant_all_tm').each(function (key, val) {  
+        $(this).val( $(`#total_stok_tm_${key+1}`).text() ); 
+        $(`#cantidad__trns_env${key+1}`).val($(`#total_stok_tm_${key+1}`).text()); 
+      });
+
+      $('.checked_all').each(function (key, val) { this.checked = true; });
+      $('.cant_all_tm').each(function (key, val) {  
+        $(this).rules("add", { required: true, min: 0.01, messages: { required: `Campo requerido.`, min: "Mínimo {0}", max: " Stock Máximo {0}" } });      
+        $(`#cantidad__trns${key+1}`).prop("disabled", false);
+        $(`#cantidad__trns_env${key+1}`).prop("disabled", false);
+        $(`#idproducto_tm${key+1}`).prop("disabled", false);
+        $(`#tipo_prod_tm${key+1}`).prop("disabled", false);
+        $(`#idproyecto_destino_tm${key+1}`).prop("disabled", false);
+        $(`#marca_tm${key+1}`).prop("disabled", false);
+        $(`#almacen_destino_tm${key+1}`).prop("disabled", false);
+        
+      });
+      $('.estadochecked_all').val(1);
+
+      $("#form-almacen-tm").valid();
+    }
+
+    $('.card-almacen-2 div:nth-of-type(1) .card-body').next('.overlay').remove();
+
+  }, 1000);
 }
 
 function cambiar_de_almacen(input) {
+  $('.card-almacen-2 div:nth-of-type(1) .card-body').after(`<div class="overlay dark" style="align-items: flex-start !important;" ><div class="text-center mt-5" ><span class="spinner-border spinner-border-xl"></span><br><span class="text-olas-mar-letra text-white text-bold">Procesando...</span></div></div>`);
+  
+  setTimeout(function() {
+    $('.almacen_destino_all_tm').each(function (key, val) {  $(this).val( $(input).val() ); });
+    $("#form-almacen-tm").valid();
+    $('.card-almacen-2 div:nth-of-type(1) .card-body').next('.overlay').remove();
 
-  $('.almacen_destino_all_tm').each(function (key, val) {  $(this).val( $(input).val() ); });
-  $("#form-almacen-tm").valid();
+  }, 500);
 }
 
 init();

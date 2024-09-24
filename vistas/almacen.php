@@ -58,10 +58,69 @@ if (!isset($_SESSION["nombre"])) {
         z-index: 10;
       }
       .text_producto{  text-align: inherit !important; }
+
+      /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+      ::                  FIJADO DE COLUMNAS
+      :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */  
+
+      /* Fijar las primeras 3 columnas */
+      .tabla_almacen th:nth-child(1),
+      .tabla_almacen td:nth-child(1) {
+        position: sticky !important;
+        left: 0 !important;
+        background-color: white !important;
+        z-index: 3 !important; /* Asegura que estas celdas estén sobre otras */
+        border-right: 1px solid #000000 !important;
+        box-shadow: 2px 0 0 0 #000000 !important;
+      }
+
+      .tabla_almacen th:nth-child(2),
+      .tabla_almacen td:nth-child(2) {
+        position: sticky !important;
+        left: 30px !important; /* Ajusta este valor según el ancho de la columna */
+        background-color: white !important;
+        z-index: 3 !important;
+        border-right: 1px solid #000000 !important;
+      }
+
+      .tabla_almacen th:nth-child(3),
+      .tabla_almacen td:nth-child(3) {
+        position: sticky !important;
+        left: 80px !important; /* Ajusta este valor según el ancho de la columna */
+        background-color: white !important;
+        z-index: 3 !important;
+        border-right: 1px solid #000000 !important;
+      }
+
+      /* Ajuste para la primera columna con rowspan */
+      .tabla_almacen th[rowspan="4"],
+      .tabla_almacen td[rowspan="2"] {        
+        z-index: 4 !important; /* Aumenta el z-index para que no se superponga con otras celdas */
+        border: 1px solid #000000 !important;
+        /* background-color: #ffd146 !important; */
+      }
+
+      /* Manejar las columnas de fechas (4ta a 10ma columna) */
+      /* .tabla_almacen th:nth-child(6),
+      .tabla_almacen td:nth-child(6) {
+        position: sticky !important;
+        left: 180px !important; 
+        background-color: white !important;
+        z-index: 2 !important;
+      } */
+      .tabla_almacen thead th:nth-child(n+6):nth-child(-n+30),
+      .tabla_almacen tbody td:nth-child(n+6):nth-child(-n+30) {
+        position: sticky !important;
+        left: calc(180px + 60px) !important; /* Ajusta este valor según el ancho total de las columnas fijas */
+       background-color: white !important;
+        z-index: 2 !important;
+        border-right: 1px solid #000000 !important;
+      }
     </style>
   </head>
 
   <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+    
     <div class="wrapper">
       <!-- Preloader -->
       <!-- <div class="preloader flex-column justify-content-center align-items-center">
@@ -76,6 +135,7 @@ if (!isset($_SESSION["nombre"])) {
       ?>
         <!--Contenido-->
         <div class="content-wrapper">
+        
           <!-- Content Header (Page header) -->
           <div class="content-header">
             <div class="container-fluid">
@@ -109,7 +169,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="row">
                 <!-- :::::::::::::::::: CARD 1 ::::::::::::::::: -->
                 <div class="col-12 card-almacen-1">
-                  <div class="card card-primary card-outline">
+                  <div class="card card-primary card-outline card-almacen">
                     <!-- Start Main Top -->
                     <div class="main-top">
                       <div class="container-fluid border-bottom">
@@ -182,12 +242,29 @@ if (!isset($_SESSION["nombre"])) {
                           <!-- /.col -->
                         </div>
                       </div>
+
+                      <div id="div_tabla_almacen_search" >
+                        <div class="row">
+                          <div class="col-4">
+                            <div class="form-group" >
+                              <div class="input-group input-group-sm mb-3">
+                                <input class="form-control form-control-sm" type="text" name="buscar_insumo" id="buscar_insumo" placeholder="Buscar insumo...">
+                                <div class="input-group-append">
+                                  <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>                         
+                      </div>
+
+                      
                       
                       <!-- TABLA - Almacen -->                      
                       <div class="table-container" id="div_tabla_almacen" style="display: none;">
                         <form id="form-almacen-saldo-anterior" name="form-almacen-saldo-anterior" method="POST">                        
                           <table class="custom-table tabla_almacen" style="width: 100%;" role="grid">
-                            <thead class="st_tr_style bg-color-ffd146">
+                            <thead class="st_tr_style bg-white">
                               <tr class="thead-f1">
                                 <!-- <th rowspan="4">#</th>
                                 <th rowspan="4">Code</th>
@@ -378,6 +455,8 @@ if (!isset($_SESSION["nombre"])) {
                       <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+
+                    
                   </div>
                   <!-- /.card -->
                 </div>
