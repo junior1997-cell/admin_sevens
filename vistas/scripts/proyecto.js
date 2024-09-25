@@ -666,7 +666,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6, ve
 
     $("#verdoc6_nombre").html(`Insumos.${extrae_extencion(verdoc6)}<div class="col-md-12 row mt-2"> 
       <div class="col-6 col-sm-6 col-md-6 col-lg-6"> 
-        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Analisis de costos unitarios" onclick="dowload_pdf();"  type="button" > 
+        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Insumos" onclick="dowload_pdf();"  type="button" > 
           <i class="fas fa-download"></i> 
         </a> 
       </div>  
@@ -683,7 +683,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6, ve
 
     $('#verdoc9').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
 
-    $("#verdoc9_nombre").html(`Insumos <div class="col-md-12 row mt-2"> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-warning  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-info  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>`);
+    $("#verdoc9_nombre").html(`Acta de conformidad <div class="col-md-12 row mt-2"> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-warning  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-info  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>`);
 
   } else {  
 
@@ -696,9 +696,9 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6, ve
 
     if ( pdf_o_img(verdoc9) ) { href = `../dist/docs/valorizacion/documento/${verdoc9}`;  disabled = '';  } 
 
-    $("#verdoc9_nombre").html(`Insumos.${extrae_extencion(verdoc9)}<div class="col-md-12 row mt-2"> 
+    $("#verdoc9_nombre").html(`Acta-de-conformidad.${extrae_extencion(verdoc9)}<div class="col-md-12 row mt-2"> 
       <div class="col-6 col-sm-6 col-md-6 col-lg-6"> 
-        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Analisis de costos unitarios" onclick="dowload_pdf();"  type="button" > 
+        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Acta de conformidad" onclick="dowload_pdf();"  type="button" > 
           <i class="fas fa-download"></i> 
         </a> 
       </div>  
@@ -715,7 +715,7 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6, ve
 
     $('#verdoc10').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
 
-    $("#verdoc10_nombre").html(`Insumos <div class="col-md-12 row mt-2"> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-warning  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-info  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>`);
+    $("#verdoc10_nombre").html(`Contrato Adenda <div class="col-md-12 row mt-2"> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-warning  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-info  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>`);
 
   } else {  
 
@@ -728,9 +728,9 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6, ve
 
     if ( pdf_o_img(verdoc10) ) { href = `../dist/docs/valorizacion/documento/${verdoc10}`;  disabled = '';  } 
 
-    $("#verdoc10_nombre").html(`Insumos.${extrae_extencion(verdoc10)}<div class="col-md-12 row mt-2"> 
+    $("#verdoc10_nombre").html(`Contrato-Adenda.${extrae_extencion(verdoc10)}<div class="col-md-12 row mt-2"> 
       <div class="col-6 col-sm-6 col-md-6 col-lg-6"> 
-        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Analisis de costos unitarios" onclick="dowload_pdf();"  type="button" > 
+        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Contrato Adenda" onclick="dowload_pdf();"  type="button" > 
           <i class="fas fa-download"></i> 
         </a> 
       </div>  
@@ -1160,7 +1160,7 @@ function mostrar_detalle(idproyecto) {
       }  
 
       if (data.data.doc9_acta_conformidad == '' || data.data.doc9_acta_conformidad == null) {
-        $('.name_doc_9').html('<i class="fas fa-paperclip"></i> Insumos');
+        $('.name_doc_9').html('<i class="fas fa-paperclip"></i> Acta de conformidad');
         $('.name_icon_9').html( doc_view_icon(data.data.doc9_acta_conformidad) );
         $('.download_doc_9').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_9').removeClass('btn-outline-info').addClass('btn-default disabled');
@@ -1168,10 +1168,10 @@ function mostrar_detalle(idproyecto) {
 
         $('.download_doc_9').attr('onclick', ``);
       } else {
-        $('.name_doc_9').html(`<i class="fas fa-paperclip"></i> Insumos.${extrae_extencion(data.data.doc9_acta_conformidad)}`);
+        $('.name_doc_9').html(`<i class="fas fa-paperclip"></i> Acta de conformidad.${extrae_extencion(data.data.doc9_acta_conformidad)}`);
         $('.name_icon_9').html( doc_view_icon(data.data.doc9_acta_conformidad) );
         $('.download_doc_9').removeClass('btn-default disabled').addClass('btn-outline-success');
-        $('.download_doc_9').attr('download', 'Insumos');
+        $('.download_doc_9').attr('download', 'Acta-de-conformidad');
         $('.download_doc_9').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc9_acta_conformidad}`);
 
         $('.download_doc_9').attr('onclick', `ok_dowload_doc();`);
@@ -1189,7 +1189,7 @@ function mostrar_detalle(idproyecto) {
       }  
 
       if (data.data.doc10_contrato_adenda == '' || data.data.doc10_contrato_adenda == null) {
-        $('.name_doc_10').html('<i class="fas fa-paperclip"></i> Insumos');
+        $('.name_doc_10').html('<i class="fas fa-paperclip"></i> Contrato Adenda');
         $('.name_icon_10').html( doc_view_icon(data.data.doc10_contrato_adenda) );
         $('.download_doc_10').removeClass('btn-outline-success').addClass('btn-default disabled');
         $('.ver_doc_10').removeClass('btn-outline-info').addClass('btn-default disabled');
@@ -1197,10 +1197,10 @@ function mostrar_detalle(idproyecto) {
 
         $('.download_doc_10').attr('onclick', ``);
       } else {
-        $('.name_doc_10').html(`<i class="fas fa-paperclip"></i> Insumos.${extrae_extencion(data.data.doc10_contrato_adenda)}`);
+        $('.name_doc_10').html(`<i class="fas fa-paperclip"></i> Contrato Adenda.${extrae_extencion(data.data.doc10_contrato_adenda)}`);
         $('.name_icon_10').html( doc_view_icon(data.data.doc10_contrato_adenda) );
         $('.download_doc_10').removeClass('btn-default disabled').addClass('btn-outline-success');
-        $('.download_doc_10').attr('download', 'Insumos');
+        $('.download_doc_10').attr('download', 'Contrato-Adenda');
         $('.download_doc_10').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc10_contrato_adenda}`);
 
         $('.download_doc_10').attr('onclick', `ok_dowload_doc();`);
