@@ -11,14 +11,16 @@ class Proyecto
   }
 
   //Implementamos un método para insertar registros
-  public function insertar( $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero  ) {
+  public function insertar( $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, 
+  $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6,  $doc9, $doc10,
+  $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero  ) {
     $doc7 = "";
     $doc8 = "";
     $calendario_error = "No hay feriados, agregue alguno";
 
     // prepoaramos la consulta del proyecto
-    $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, idempresa_a_cargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
-		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero', '" . $_SESSION['idusuario'] . "');";
+    $sql = "INSERT INTO proyecto ( tipo_documento, numero_documento, empresa, nombre_proyecto, nombre_codigo, ubicacion, actividad_trabajo, idempresa_a_cargo, costo, garantia,  fecha_inicio, fecha_fin, plazo, dias_habiles, doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc7_cronograma_obra_valorizad, doc8_certificado_habilidad_ing_residnt, doc9_acta_conformidad, doc10_contrato_adenda, fecha_pago_obrero, fecha_valorizacion, permanente_pago_obrero,user_created) 
+		VALUES ('$tipo_documento', '$numero_documento', '$empresa', '$nombre_proyecto', '$nombre_codigo', '$ubicacion', '$actividad_trabajo', '$empresa_acargo', '$costo', '$garantia', '$fecha_inicio', '$fecha_fin', '$dias_habiles', '$plazo', '$doc1', '$doc2', '$doc3', '$doc4', '$doc5', '$doc6', '$doc7', '$doc8', '$doc9', '$doc10', '$fecha_pago_obrero', '$fecha_valorizacion', '$permanente_pago_obrero', '" . $_SESSION['idusuario'] . "');";
     $id_proyect = ejecutarConsulta_retornarID($sql); if ($id_proyect['status'] == false) { return $id_proyect; }
     //add registro en nuestra bitacora
     $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','" . $id_proyect['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
@@ -99,13 +101,14 @@ class Proyecto
   }
 
   //Implementamos un método para editar registros
-  public function editar(  $idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero  ) {
-    $sql = "UPDATE proyecto SET tipo_documento = '$tipo_documento', numero_documento = '$numero_documento', 
-			empresa = '$empresa', nombre_proyecto = '$nombre_proyecto', nombre_codigo = '$nombre_codigo',  ubicacion = '$ubicacion',
-			actividad_trabajo = '$actividad_trabajo', idempresa_a_cargo = '$empresa_acargo', costo = '$costo',  garantia = '$garantia',  
-			fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', dias_habiles='$dias_habiles',
-			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3',
-			doc4_presupuesto = '$doc4', doc5_analisis_costos_unitarios = '$doc5', doc6_insumos = '$doc6', 
+  public function editar(  $idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, 
+  $costo, $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, 
+  $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $doc9, $doc10, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero  ) {
+    $sql = "UPDATE proyecto SET tipo_documento = '$tipo_documento', numero_documento = '$numero_documento', empresa = '$empresa', nombre_proyecto = '$nombre_proyecto', 
+    nombre_codigo = '$nombre_codigo',  ubicacion = '$ubicacion', actividad_trabajo = '$actividad_trabajo', idempresa_a_cargo = '$empresa_acargo', costo = '$costo',  
+    garantia = '$garantia',  fecha_inicio = '$fecha_inicio', fecha_fin = '$fecha_fin', plazo = '$plazo', dias_habiles='$dias_habiles',
+			doc1_contrato_obra = '$doc1', doc2_entrega_terreno = '$doc2', doc3_inicio_obra = '$doc3',	doc4_presupuesto = '$doc4', doc5_analisis_costos_unitarios = '$doc5', 
+      doc6_insumos = '$doc6', doc9_acta_conformidad = '$doc9', doc10_contrato_adenda = '$doc10', 
 			fecha_pago_obrero = '$fecha_pago_obrero', fecha_valorizacion = '$fecha_valorizacion', 
       permanente_pago_obrero = '$permanente_pago_obrero',
       user_updated= '" . $_SESSION['idusuario'] . "'
@@ -191,7 +194,7 @@ class Proyecto
     $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, p.nombre_proyecto, p.nombre_codigo, p.ubicacion, p.
     actividad_trabajo, p.empresa_acargo, p.costo, p.garantia, p.fecha_inicio_actividad, p.fecha_fin_actividad, p.plazo_actividad, p.fecha_inicio, p.fecha_fin, p.
     plazo, p.dias_habiles, p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra, p.doc4_presupuesto, p.doc5_analisis_costos_unitarios, p.
-    doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, p.feriado_domingo, p.fecha_pago_obrero, p.
+    doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, p.doc9_acta_conformidad, p.doc10_contrato_adenda, p.feriado_domingo, p.fecha_pago_obrero, p.
     fecha_valorizacion, p.permanente_pago_obrero, p.estado, 
     ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento as ec_numero_documento, ec.logo as ec_logo
     FROM proyecto as p, empresa_a_cargo as ec
@@ -215,7 +218,7 @@ class Proyecto
     p.nombre_proyecto, p.nombre_codigo, CASE WHEN LENGTH(p.nombre_codigo) <= 15 THEN p.nombre_codigo ELSE CONCAT(LEFT(p.nombre_codigo, 15), '...') END AS nombre_codigo_recorte_20, 
     p.ubicacion, p.actividad_trabajo, p.empresa_acargo, p.costo, p.garantia, p.fecha_inicio_actividad, p.fecha_fin_actividad, p.plazo_actividad, 
     p.fecha_inicio, p.fecha_fin, p.plazo, p.dias_habiles, p.doc1_contrato_obra, p.doc2_entrega_terreno, p.doc3_inicio_obra, p.doc4_presupuesto, 
-    p.doc5_analisis_costos_unitarios, p.doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, 
+    p.doc5_analisis_costos_unitarios, p.doc6_insumos, p.doc7_cronograma_obra_valorizad, p.doc8_certificado_habilidad_ing_residnt, doc9_acta_conformidad, doc10_contrato_adenda,
     p.feriado_domingo, p.fecha_pago_obrero, p.fecha_valorizacion, p.permanente_pago_obrero, p.estado, p.estado_delete, p.created_at, 
     p.updated_at, p.user_trash, p.user_delete, p.user_created, p.user_updated, 
     ec.razon_social as ec_razon_social, ec.tipo_documento as ec_tipo_documento, ec.numero_documento as ec_numero_documento, ec.logo as ec_logo
@@ -310,7 +313,8 @@ class Proyecto
 
   // obtebnemos los DOCS para eliminar
   public function obtenerDocs($idproyecto)  {
-    $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos FROM proyecto WHERE idproyecto='$idproyecto'";
+    $sql = "SELECT doc1_contrato_obra, doc2_entrega_terreno, doc3_inicio_obra, doc4_presupuesto, doc5_analisis_costos_unitarios, doc6_insumos, doc9_acta_conformidad, doc10_contrato_adenda
+    FROM proyecto WHERE idproyecto='$idproyecto'";
 
     return ejecutarConsultaSimpleFila($sql);
   }

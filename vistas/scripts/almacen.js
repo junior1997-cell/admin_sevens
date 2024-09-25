@@ -272,8 +272,11 @@ function calcular_saldo(input, id) {
   // });
 }
 
-$('#buscar_insumo').on('change', function () {
-  var nombre_insumo = $(this).val() == '' || $(this).val() == null ? '' : $(this).val() ;
+
+function buscar_producto() {
+  
+
+  var nombre_insumo = $('#buscar_insumo').val() == '' || $('#buscar_insumo').val() == null ? '' : $('#buscar_insumo').val() ;
   console.log(nombre_insumo);
 
   show_hide_tablas(2);
@@ -296,8 +299,8 @@ $('#buscar_insumo').on('change', function () {
 
     }).fail(function (e) { ver_errores(e); });
 
-  }, 30 );
-});
+  }, 40 );
+}
 
 // .....::::::::::::::::::::::::::::::::::::: E D I T A R   P R O Y E C T O   A L M A C E N  :::::::::::::::::::::::::::::::::::::::..
 function limpiar_form_almacen_x_dia() {

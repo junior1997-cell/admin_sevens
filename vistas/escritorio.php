@@ -727,6 +727,62 @@
                                   <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>
                                 </div>
 
+                                <!-- Pdf 9 -->
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
+                                  <div class="row text-center">
+                                    <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                      <label for="inicio-de-obra" class="control-label" > Acta de conformidad</label>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc9_i">
+                                        <i class="fas fa-file-upload"></i> Subir.
+                                      </button>
+                                      <input type="hidden" id="doc_old_9" name="doc_old_9" />
+                                      <input style="display: none;" id="doc9" type="file" name="doc9" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
+                                    </div>
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(9);">
+                                        <i class="fa fa-eye"></i> PDF.
+                                      </button>
+                                    </div>
+                                  </div>                              
+                                  <div id="doc9_ver" class="text-center mt-4">
+                                    <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                                  </div>
+                                  <div class="text-center" id="doc9_nombre"><!-- aqui va el nombre del pdf --></div>
+
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>
+                                </div>
+
+                                <!-- Pdf 10 -->
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4" >                               
+                                  <div class="row text-center">
+                                    <div class="col-md-12" style="padding-top: 15px; padding-bottom: 5px;">
+                                      <label for="inicio-de-obra" class="control-label" > Contrato Adenda</label>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                      <button type="button" class="btn btn-success btn-block btn-xs" id="doc10_i">
+                                        <i class="fas fa-file-upload"></i> Subir.
+                                      </button>
+                                      <input type="hidden" id="doc_old_10" name="doc_old_10" />
+                                      <input style="display: none;" id="doc10" type="file" name="doc10" accept=".pdf, .doc, .docx, .csv, .xls, .xlsx, .xlsm" class="docpdf" /> 
+                                    </div>
+                                    <div class="col-6 col-md-6 col-lg-6 col-xl-6 text-center">
+                                      <button type="button" class="btn btn-info btn-block btn-xs" onclick="re_visualizacion(10);">
+                                        <i class="fa fa-eye"></i> PDF.
+                                      </button>
+                                    </div>
+                                  </div>                              
+                                  <div id="doc10_ver" class="text-center mt-4">
+                                    <img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >
+                                  </div>
+                                  <div class="text-center" id="doc10_nombre"><!-- aqui va el nombre del pdf --></div>
+
+                                  <!-- linea divisoria -->
+                                  <div class="col-lg-12 borde-arriba-naranja mt-2"> </div>
+                                </div>
+
                                 <!-- barprogress -->
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
                                   <div class="progress" id="div_barra_progress">
@@ -856,6 +912,34 @@
                               <div class="borde-arriba-naranja mt-4"> </div>
                             </div>
 
+                            <!-- Pdf 9 -->
+                            <div class="col-md-12 col-lg-6 mb-4" >                             
+                              <div id="verdoc9" class="text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                                <h4>Cargando...</h4>
+                              </div>
+                              <div class="text-center " id="verdoc9_nombre">
+                                  <!-- aqui va el nombre del pdf -->
+                              </div>
+
+                              <!-- linea divisoria -->
+                              <div class="borde-arriba-naranja mt-4"> </div>
+                            </div>
+
+                            <!-- Pdf 10 -->
+                            <div class="col-md-12 col-lg-6 mb-4" >                             
+                              <div id="verdoc10" class="text-center">
+                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br><br>
+                                <h4>Cargando...</h4>
+                              </div>
+                              <div class="text-center " id="verdoc10_nombre">
+                                  <!-- aqui va el nombre del pdf -->
+                              </div>
+
+                              <!-- linea divisoria -->
+                              <div class="borde-arriba-naranja mt-4"> </div>
+                            </div>
+
                           </div>                      
                         </div>
 
@@ -967,6 +1051,35 @@
                                   </div>
                                 </li>
                               </div>
+
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >  
+                                <li>                       
+                                  <span class="mailbox-attachment-icon name_icon_9"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_9"><i class="fas fa-paperclip"></i> Acta de conformidad</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_9" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_9" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_9" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4" >  
+                                <li>                       
+                                  <span class="mailbox-attachment-icon name_icon_10"><i class="far fa-file-pdf"></i></span>
+                                  <div class="mailbox-attachment-info">
+                                    <a href="#" class="mailbox-attachment-name name_doc_10"><i class="fas fa-paperclip"></i> Contrato Adenda</a>
+                                      <span class="mailbox-attachment-size clearfix mt-1">
+                                        <a href="#" class="btn btn-default btn-sm download_doc_10" download="" data-toggle="tooltip" data-original-title="Descargar"><i class="fas fa-cloud-download-alt"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm ver_doc_10" target="_blank" data-toggle="tooltip" data-original-title="Ver"><i class="far fa-eye"></i></a>
+                                        <a href="#" class="btn btn-default btn-sm imprimir_doc_10" data-toggle="tooltip" data-original-title="Imprimir" onclick=""><i class="fas fa-print"></i></a>
+                                      </span>
+                                  </div>
+                                </li>
+                              </div>
+
                             </div>
                           </div>
 

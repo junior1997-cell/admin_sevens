@@ -165,6 +165,16 @@ function limpiar() {
   $("#doc6_nombre").html('');
   $("#doc6_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
 
+  $("#doc9").val(""); 
+  $("#doc_old_9").val("");
+  $("#doc9_nombre").html('');
+  $("#doc9_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
+  $("#doc10").val(""); 
+  $("#doc_old_10").val("");
+  $("#doc10_nombre").html('');
+  $("#doc10_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
   $(".form-control").removeClass('is-invalid');
@@ -414,6 +424,12 @@ $("#doc5").change(function(e) {  addImageApplication(e, $("#doc5").attr("id"), n
 $("#doc6_i").click(function() {  $('#doc6').trigger('click'); });
 $("#doc6").change(function(e) {  addImageApplication(e, $("#doc6").attr("id"), null, '100%', '210' ) });
 
+$("#doc9_i").click(function() {  $('#doc9').trigger('click'); });
+$("#doc9").change(function(e) {  addImageApplication(e, $("#doc9").attr("id"), null, '100%', '210' ) });
+
+$("#doc10_i").click(function() {  $('#doc10').trigger('click'); });
+$("#doc10").change(function(e) {  addImageApplication(e, $("#doc10").attr("id"), null, '100%', '210' ) });
+
 // Eliminamos el doc 1
 function doc1_eliminar() {
 	$("#doc1").val("");
@@ -456,7 +472,21 @@ function doc6_eliminar() {
 	$("#doc6_nombre").html("");
 } 
 
-function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
+// Eliminamos el doc 9
+function doc9_eliminar() {
+	$("#doc9").val("");
+	$("#doc9_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+	$("#doc9_nombre").html("");
+} 
+
+// Eliminamos el doc 10
+function doc10_eliminar() {
+	$("#doc10").val("");
+	$("#doc10_ver").html('<img src="../dist/svg/pdf_trasnparent.svg" alt="" width="50%" >');
+	$("#doc10_nombre").html("");
+} 
+
+function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6, verdoc9, verdoc10) {
   //console.log(verdoc1, verdoc2, verdoc3,verdoc4, verdoc5, verdoc6);
   $('#modal-ver-docs').modal("show");
 
@@ -649,6 +679,70 @@ function ver_modal_docs(verdoc1, verdoc2, verdoc3, verdoc4, verdoc5, verdoc6) {
 
   }
 
+  if (verdoc9 == "") {
+
+    $('#verdoc9').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc9_nombre").html(`Insumos <div class="col-md-12 row mt-2"> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-warning  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-info  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>`);
+
+  } else {  
+
+    // cargamos la imagen adecuada par el archivo
+    var ver_doc = doc_view_extencion(verdoc9, 'valorizacion', 'documento', '100%', '206');
+
+    $("#verdoc9").html(ver_doc);
+
+    var href = '#'; var disabled = 'disabled';
+
+    if ( pdf_o_img(verdoc9) ) { href = `../dist/docs/valorizacion/documento/${verdoc9}`;  disabled = '';  } 
+
+    $("#verdoc9_nombre").html(`Insumos.${extrae_extencion(verdoc9)}<div class="col-md-12 row mt-2"> 
+      <div class="col-6 col-sm-6 col-md-6 col-lg-6"> 
+        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Analisis de costos unitarios" onclick="dowload_pdf();"  type="button" > 
+          <i class="fas fa-download"></i> 
+        </a> 
+      </div>  
+      <div class="col-6 col-sm-6 col-md-6 col-lg-6"> 
+        <a  class="btn btn-info  btn-block btn-xs ${disabled}" href="${href}" type="button" target="_blank" > 
+          Ver completo <i class="fas fa-expand"></i> 
+        </a> 
+      </div> 
+    </div>`);  
+
+  }
+
+  if (verdoc10 == "") {
+
+    $('#verdoc10').html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" height="206" >');
+
+    $("#verdoc10_nombre").html(`Insumos <div class="col-md-12 row mt-2"> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-warning  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > <i class="fas fa-download"></i> </a> </div> <div class="col-6 col-sm-6 col-md-6 col-lg-6"> <a class="btn btn-info  btn-block btn-xs" href="#"  onclick="no_pdf();" type="button" > Ver completo <i class="fas fa-expand"></i> </a> </div> </div>`);
+
+  } else {  
+
+    // cargamos la imagen adecuada par el archivo
+    var ver_doc = doc_view_extencion(verdoc10, 'valorizacion', 'documento', '100%', '206');
+
+    $("#verdoc10").html(ver_doc);
+
+    var href = '#'; var disabled = 'disabled';
+
+    if ( pdf_o_img(verdoc10) ) { href = `../dist/docs/valorizacion/documento/${verdoc10}`;  disabled = '';  } 
+
+    $("#verdoc10_nombre").html(`Insumos.${extrae_extencion(verdoc10)}<div class="col-md-12 row mt-2"> 
+      <div class="col-6 col-sm-6 col-md-6 col-lg-6"> 
+        <a  class="btn btn-warning btn-block btn-xs" href="${href}" download="Analisis de costos unitarios" onclick="dowload_pdf();"  type="button" > 
+          <i class="fas fa-download"></i> 
+        </a> 
+      </div>  
+      <div class="col-6 col-sm-6 col-md-6 col-lg-6"> 
+        <a  class="btn btn-info  btn-block btn-xs ${disabled}" href="${href}" type="button" target="_blank" > 
+          Ver completo <i class="fas fa-expand"></i> 
+        </a> 
+      </div> 
+    </div>`);  
+
+  }
+
   $(".tooltip").removeClass("show").addClass("hidde");
 }
 
@@ -787,6 +881,30 @@ function mostrar(idproyecto) {
         $("#doc6_nombre").html('Insumos.' + extrae_extencion(e.data.doc6_insumos));  
         // cargamos la imagen adecuada par el archivo  
         $("#doc6_ver").html(doc_view_extencion(e.data.doc6_insumos, 'valorizacion', 'documento', '100%', '210')); 
+      }
+
+      //validamoos DOC-9
+      if (e.data.doc9_acta_conformidad == "" || e.data.doc9_acta_conformidad == null ) {  
+        $("#doc9_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#doc9_nombre").html('');  
+        $("#doc_old_9").val("");
+      } else {  
+        $("#doc_old_9").val(e.data.doc9_acta_conformidad);  
+        $("#doc9_nombre").html('Insumos.' + extrae_extencion(e.data.doc9_acta_conformidad));  
+        // cargamos la imagen adecuada par el archivo  
+        $("#doc9_ver").html(doc_view_extencion(e.data.doc9_acta_conformidad, 'valorizacion', 'documento', '100%', '210')); 
+      }
+
+      //validamoos DOC-10
+      if (e.data.doc10_contrato_adenda == "" || e.data.doc10_contrato_adenda == null ) {  
+        $("#doc10_ver").html('<img src="../dist/svg/pdf_trasnparent_no.svg" alt="" width="50%" >');  
+        $("#doc10_nombre").html('');  
+        $("#doc_old_10").val("");
+      } else {  
+        $("#doc_old_10").val(e.data.doc10_contrato_adenda);  
+        $("#doc10_nombre").html('Insumos.' + extrae_extencion(e.data.doc10_contrato_adenda));  
+        // cargamos la imagen adecuada par el archivo  
+        $("#doc10_ver").html(doc_view_extencion(e.data.doc10_contrato_adenda, 'valorizacion', 'documento', '100%', '210')); 
       }
     } else {
       ver_errores(e);
@@ -1038,6 +1156,64 @@ function mostrar_detalle(idproyecto) {
         } else {
           $('.ver_doc_6').removeClass('btn-outline-info').addClass('btn-default disabled');
           $('.imprimir_doc_6').removeClass('btn-outline-primary').addClass('btn-default disabled');
+        }        
+      }  
+
+      if (data.data.doc9_acta_conformidad == '' || data.data.doc9_acta_conformidad == null) {
+        $('.name_doc_9').html('<i class="fas fa-paperclip"></i> Insumos');
+        $('.name_icon_9').html( doc_view_icon(data.data.doc9_acta_conformidad) );
+        $('.download_doc_9').removeClass('btn-outline-success').addClass('btn-default disabled');
+        $('.ver_doc_9').removeClass('btn-outline-info').addClass('btn-default disabled');
+        $('.imprimir_doc_9').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_9').attr('onclick', ``);
+      } else {
+        $('.name_doc_9').html(`<i class="fas fa-paperclip"></i> Insumos.${extrae_extencion(data.data.doc9_acta_conformidad)}`);
+        $('.name_icon_9').html( doc_view_icon(data.data.doc9_acta_conformidad) );
+        $('.download_doc_9').removeClass('btn-default disabled').addClass('btn-outline-success');
+        $('.download_doc_9').attr('download', 'Insumos');
+        $('.download_doc_9').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc9_acta_conformidad}`);
+
+        $('.download_doc_9').attr('onclick', `ok_dowload_doc();`);
+
+        if ( pdf_o_img(data.data.doc9_acta_conformidad) ) {
+          $('.ver_doc_9').removeClass('btn-default disabled').addClass('btn-outline-info');
+          $('.ver_doc_9').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc9_acta_conformidad}`);        
+
+          $('.imprimir_doc_9').removeClass('btn-default disabled').addClass('btn-outline-primary');
+          $('.imprimir_doc_9').attr('onclick', `printJS({printable:'${ruta_carpeta}${data.data.doc9_acta_conformidad}', type:'pdf', showModal:true})`);
+        } else {
+          $('.ver_doc_9').removeClass('btn-outline-info').addClass('btn-default disabled');
+          $('.imprimir_doc_9').removeClass('btn-outline-primary').addClass('btn-default disabled');
+        }        
+      }  
+
+      if (data.data.doc10_contrato_adenda == '' || data.data.doc10_contrato_adenda == null) {
+        $('.name_doc_10').html('<i class="fas fa-paperclip"></i> Insumos');
+        $('.name_icon_10').html( doc_view_icon(data.data.doc10_contrato_adenda) );
+        $('.download_doc_10').removeClass('btn-outline-success').addClass('btn-default disabled');
+        $('.ver_doc_10').removeClass('btn-outline-info').addClass('btn-default disabled');
+        $('.imprimir_doc_10').removeClass('btn-outline-primary').addClass('btn-default disabled');
+
+        $('.download_doc_10').attr('onclick', ``);
+      } else {
+        $('.name_doc_10').html(`<i class="fas fa-paperclip"></i> Insumos.${extrae_extencion(data.data.doc10_contrato_adenda)}`);
+        $('.name_icon_10').html( doc_view_icon(data.data.doc10_contrato_adenda) );
+        $('.download_doc_10').removeClass('btn-default disabled').addClass('btn-outline-success');
+        $('.download_doc_10').attr('download', 'Insumos');
+        $('.download_doc_10').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc10_contrato_adenda}`);
+
+        $('.download_doc_10').attr('onclick', `ok_dowload_doc();`);
+
+        if ( pdf_o_img(data.data.doc10_contrato_adenda) ) {
+          $('.ver_doc_10').removeClass('btn-default disabled').addClass('btn-outline-info');
+          $('.ver_doc_10').attr('href', `../dist/docs/valorizacion/documento/${data.data.doc10_contrato_adenda}`);        
+
+          $('.imprimir_doc_10').removeClass('btn-default disabled').addClass('btn-outline-primary');
+          $('.imprimir_doc_10').attr('onclick', `printJS({printable:'${ruta_carpeta}${data.data.doc10_contrato_adenda}', type:'pdf', showModal:true})`);
+        } else {
+          $('.ver_doc_10').removeClass('btn-outline-info').addClass('btn-default disabled');
+          $('.imprimir_doc_10').removeClass('btn-outline-primary').addClass('btn-default disabled');
         }        
       }  
       

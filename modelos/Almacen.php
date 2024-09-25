@@ -161,7 +161,7 @@ class Almacen
   }
 
   public function insertar_almacen_x_dia( ){ 
-
+    return '';
   }
 
   public function editar_almacen_x_dia($idalmacen_salida_xp, $idalmacen_resumen_xp, $idproyecto_xp, $producto_xp, $fecha_ingreso_xp, $dia_ingreso_xp, $marca_xp, $cantidad_xp){    

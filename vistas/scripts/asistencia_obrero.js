@@ -1552,7 +1552,7 @@ function calcular_hn( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
  
   var suma_hn = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0;
   var sueldo_1 = 0, sueldo_2 = 0;
-  // validamos el adicional descuento
+  // validamos el adicional descuento                                                                                                
   if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
     adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val()); 
   } else {

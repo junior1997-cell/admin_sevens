@@ -249,7 +249,7 @@ if (!isset($_SESSION["nombre"])) {
                             <div class="form-group" >
                               <div class="input-group input-group-sm mb-3">
                                 <input class="form-control form-control-sm" type="text" name="buscar_insumo" id="buscar_insumo" placeholder="Buscar insumo...">
-                                <div class="input-group-append">
+                                <div class="input-group-append cursor-pointer" onclick="buscar_producto();"  data-toggle="tooltip" data-original-title="Click para buscar">
                                   <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
                                 </div>
                               </div>

@@ -117,11 +117,33 @@
             $flat_doc6  = true;  $ext_doc6 = explode(".", $_FILES["doc6"]["name"]);            
             $doc6       = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext_doc6);
             move_uploaded_file($_FILES["doc6"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc6);            
-          }          
+          }  
+          
+          //*DOC 9*//
+          if (!file_exists($_FILES['doc9']['tmp_name']) || !is_uploaded_file($_FILES['doc9']['tmp_name'])) {
+            $flat_doc9  = false;
+            $doc9       = $_POST["doc_old_9"];
+          } else {
+            $flat_doc9  = true;  $ext_doc9 = explode(".", $_FILES["doc9"]["name"]);            
+            $doc9       = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext_doc9);
+            move_uploaded_file($_FILES["doc9"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc9);            
+          } 
+          
+          //*DOC 10*//
+          if (!file_exists($_FILES['doc10']['tmp_name']) || !is_uploaded_file($_FILES['doc10']['tmp_name'])) {
+            $flat_doc10  = false;
+            $doc10       = $_POST["doc_old_10"];
+          } else {
+            $flat_doc10  = true;  $ext_doc10 = explode(".", $_FILES["doc10"]["name"]);            
+            $doc10       = $date_now .'__'. random_int(0, 20) . round(microtime(true)) . random_int(21, 41) . '.' . end($ext_doc10);
+            move_uploaded_file($_FILES["doc10"]["tmp_name"], "../dist/docs/valorizacion/documento/" . $doc10);            
+          } 
 
           if (empty($idproyecto)){
             // insertamos en la bd
-            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);            
+            $rspta=$proyecto->insertar($tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, 
+            quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, 
+            $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $doc9, $doc10, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);            
             echo json_encode($rspta, true);
 
           } else {
@@ -162,7 +184,21 @@
               if ( !empty( $doc6_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc6_ant); }
             }
 
-            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);            
+            if ($flat_doc9 == true) {
+              $datos_f9 = $proyecto->obtenerDocs($idproyecto);
+              $doc9_ant = $datos_f9['data']['doc9_acta_conformidad'];
+              if ( !empty( $doc9_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc9_ant); }
+            }
+
+            if ($flat_doc10 == true) {
+              $datos_f10 = $proyecto->obtenerDocs($idproyecto);
+              $doc10_ant = $datos_f10['data']['doc10_contrato_adenda'];
+              if ( !empty( $doc10_ant ) ) { unlink("../dist/docs/valorizacion/documento/" . $doc10_ant); }
+            }
+
+            $rspta=$proyecto->editar($idproyecto, $tipo_documento, $numero_documento, $empresa, $nombre_proyecto, $nombre_codigo, $ubicacion, $actividad_trabajo, 
+            $empresa_acargo, quitar_formato_miles($costo), $garantia, $fecha_inicio_actividad, $fecha_fin_actividad, $plazo_actividad, $fecha_inicio, $fecha_fin, $plazo, 
+            $dias_habiles, $doc1, $doc2, $doc3, $doc4, $doc5, $doc6, $doc9, $doc10, $fecha_pago_obrero, $fecha_valorizacion, $permanente_pago_obrero);            
             echo json_encode( $rspta, true);
             
           }
@@ -241,7 +277,7 @@
                 
               $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['ec_razon_social'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\', \''. $value['fecha_inicio_actividad'].'\', \''. $value['fecha_fin_actividad'].'\', \''.$value['fecha_pago_obrero'].'\'';
   
-              $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
+              $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'] .'\', \''.$value['doc9_acta_conformidad'] .'\', \''.$value['doc10_contrato_adenda'].'\'';
   
               $data[]=array(
                 "0"=>$cont++,
@@ -391,7 +427,7 @@
                 
               $abrir_proyecto = ' \''.$value['idproyecto'].'\', \''.$value['nombre_codigo'].'\', \''.$value['fecha_inicio'].'\', \''.$value['fecha_fin'].'\', \''. $value['fecha_inicio_actividad'].'\', \''. $value['fecha_fin_actividad'].'\', \''.$value['fecha_pago_obrero'].'\'';
   
-              $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'].'\'';
+              $docs= '\''.$value['doc1_contrato_obra'].'\', \''.$value['doc2_entrega_terreno'].'\', \''.$value['doc3_inicio_obra'].'\', \''.$value['doc4_presupuesto'].'\', \''.$value['doc5_analisis_costos_unitarios'].'\', \''.$value['doc6_insumos'] .'\', \''.$value['doc9_acta_conformidad'] .'\', \''.$value['doc10_contrato_adenda'].'\'';
               
               $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';                
   
