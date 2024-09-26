@@ -559,7 +559,7 @@
 
         <?php require 'script.php'; ?>        
 
-        <script type="text/javascript" src="scripts/pension.js?version_jdl=1.5"></script> 
+        <script type="text/javascript" src="scripts/pension.js?version_jdl=1.6"></script> 
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); });</script>
 

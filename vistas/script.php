@@ -87,12 +87,12 @@
 <script type="text/javascript" src="../plugins/jquery-zoom/jquery.zoom.js"></script>
 
 <!-- hora sesion-->
-<script src="../dist/js/sesion.js?version_jdl=1.5"></script> 
+<script src="../dist/js/sesion.js?version_jdl=1.6"></script> 
 
 <!-- Funciones Crud -->
-<script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=1.5"></script>
+<script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=1.6"></script>
 <!-- Funciones Generales -->
-<script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=1.5"></script>
+<script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=1.6"></script>
 
 <?php require 'contacto_desarrollador.php'; ?>
 
