@@ -5,6 +5,7 @@ var textproyecto = "";
 var nombre_almacen_transf = "";
 var id_almacen_transf = "";
 var tabla_detalle_almacen_general = "";
+var table_producto_transferencia ="";
 
 
 function init() {
@@ -268,6 +269,8 @@ function stock(type) {
 }
 // LISTAR TABLA ALMACEN POR ALMACEN
 function tabla_detalle(id_categoria, nombre, stock) {
+  if (table_producto_transferencia) {table_producto_transferencia.destroy(); }
+
   if (stock=='1') { $(".mayor_cero").removeClass("btn btn-secondary").addClass("btn btn-info"); $(".include_cero").removeClass("btn btn-info").addClass("btn btn-secondary");  }
   
   $('.tabla_detalle_almacen_g').hide(); $('.alerta_inicial').show();
@@ -568,6 +571,7 @@ function remove_producto_ag(id, idproy) {
 //-----TRANsFERENCIA DE PRODUCTOS ENTRE ALMACENES GENERALES----------
 //------------------------------------------------------------------
 var array_id_a_g_r = [];
+let array_verif_env_not_vacio = [];
 
 function select_tipo_transferencia(tipo) {
 
@@ -592,19 +596,22 @@ function select_tipo_transferencia(tipo) {
 
 function listar_productos_transferencia() {
   // id_almacen_transferencia=id_almacen_transf
+  $("#idalmacen_general_origen").val(id_almacen_transf);
   $("#modal-transferencia_aproyecto").modal("show");
-
+  
   $.post(`../ajax/almacen_general.php?op=transferencia_a_proy_almacen&id_almacen=${id_almacen_transf}`, function (e, status) {
 
     $('#html_producto_transf').html("");
 
-    e = JSON.parse(e); console.log(e);
+    e = JSON.parse(e);
+    
+    //console.log(e);
 
     if (e.status == true) {
 
       $('.head_list').show();
 
-      e.data.forEach((val, index) => {
+     /* e.data.forEach((val, index) => {
 
         array_id_a_g_r.push(val.idalmacen_general_resumen);
 
@@ -662,7 +669,39 @@ function listar_productos_transferencia() {
         </div> 
         <hr style=" height: 1px; width: 100%; background-color: black; display:none" class="ver"/>`);
 
+      });*/
+
+      table_producto_transferencia = $('#tabla-producto_tra').DataTable({
+        
+        retrieve: true,
+        responsive: true,
+        paging: true,
+        searching: true,
+        info: false,
+        data: e.data,
+        columns: [
+          { data: "indice" },
+          { data: "nombre_producto" },
+          { data: "unidad" },
+          { data: "stock" },
+          { data: "cantidad" },          
+          { data: "activar" }
+        ],
+        autoWidth: false,
+        language: {
+          lengthMenu: "Mostrar: _MENU_",
+        },
+        columnDefs: [
+         { width: '5%', targets: 0 }, // Define el ancho de la primera columna
+         { width: '45%', targets: 1 }, // Define el ancho de la primera columna
+         { width: '15%', targets: 4 }, // Define el ancho de la primera columna
+         { width: '5%', targets: 5 }, // Define el ancho de la primera columna
+         // Agrega más líneas según las columnas que tengas
+        ],
+        bDestroy: true,
       });
+
+      //table_producto_transferencia.destroy();
 
     } else {
       ver_errores(e);
@@ -676,12 +715,12 @@ function replicar_cantidad_a_r(id) { $(`#cantidad__trns_env${id}`).val($(`#canti
 function update_valueChec(id,total_stok) {
 
   if ($(`#customCheckbox${id}`).is(':checked')) {
-
+    array_verif_env_not_vacio.push(`cantidad__trns${id}`);
     $(`#cantidad__trns${id}`).val(total_stok);
     $(`#cantidad__trns_env${id}`).val(total_stok);
 
     $(`#ValorCheck${id}`).val(1);
-    $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 0", max: " Stock Máximo {0}" } });
+    $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 1", max: " Stock Máximo {0}" } });
     $(`#cantidad__trns${id}`).removeAttr('readonly', true);
     // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
     $("#form_proyecto_almacen").valid();
@@ -692,12 +731,22 @@ function update_valueChec(id,total_stok) {
     $(`#cantidad__trns${id}`).rules("remove", "required");
     $(`#cantidad__trns${id}`).attr('readonly', true);
     // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
-
+    $("#cantidad__trns").removeClass('is-valid');
     $(`#cantidad__trns_env${id}`).val(0);
     $(`#cantidad__trns${id}`).val(0);
 
+    let indice = array_verif_env_not_vacio.indexOf(`cantidad__trns${id}`);
+
+    if (indice !== -1) {
+      // Eliminar el elemento en el índice encontrado
+      array_verif_env_not_vacio.splice(indice, 1);
+    }
+
     $("#form_proyecto_almacen").valid();
   }
+
+  console.log(array_verif_env_not_vacio);
+  
 
 }
 
@@ -747,54 +796,64 @@ function limpiar_Transferencia() {
 
 //Función para guardar o editar
 function guardar_tranf_almacenes_generales(e) {
-  // e.preventDefault(); //No se activará la acción predeterminada del evento
-  var formData = new FormData($("#form_proyecto_almacen")[0]);
+  if (array_verif_env_not_vacio.length > 0) {
+    // e.preventDefault(); //No se activará la acción predeterminada del evento
+    var formData = new FormData($("#form_proyecto_almacen")[0]);
+    
+    $.ajax({
+      url: "../ajax/almacen_general.php?op=guardar_transf_almacen_proyecto",
+      type: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function (e) {
+        try {
+          e = JSON.parse(e); console.log(e);
+          if (e.status == true) {
 
-  $.ajax({
-    url: "../ajax/almacen_general.php?op=guardar_transf_almacen_proyecto",
-    type: "POST",
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (e) {
-      try {
-        e = JSON.parse(e); console.log(e);
-        if (e.status == true) {
+            if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false); }
+            if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); }
+            
+           // listar_productos_transferencia();
+            $("#modal-transferencia_aproyecto").modal("hide");
+            if (table_producto_transferencia) {table_producto_transferencia.destroy(); }
+            limpiar_Transferencia();
 
-          if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false); }
-          if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); }
-          $("#modal-transferencia_aproyecto").modal("hide");
-          limpiar_Transferencia();
+            Swal.fire("Correcto!", "Transferencia guardado correctamente", "success");
 
-          Swal.fire("Correcto!", "Transferencia guardado correctamente", "success");
+          } else {
+            ver_errores(e);
+          }
+        } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!", 'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }
 
-        } else {
-          ver_errores(e);
-        }
-      } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!", 'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }
+        $("#guardar_registro_trans_almacen").html('Guardar Cambios').removeClass('disabled');
+      },
+      xhr: function () {
+        var xhr = new window.XMLHttpRequest();
+        xhr.upload.addEventListener("progress", function (evt) {
+          if (evt.lengthComputable) {
+            var percentComplete = (evt.loaded / evt.total) * 100;
+            /*console.log(percentComplete + '%');*/
+            $("#barra_progress_trans_almacen").css({ "width": percentComplete + '%' }).text(percentComplete.toFixed(2) + " %");
+          }
+        }, false);
+        return xhr;
+      },
+      beforeSend: function () {
+        $("#barra_progress_trans_almacen").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+        $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+      },
+      complete: function () {
+        $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+      },
+      error: function (jqXhr) { ver_errores(jqXhr); },
+    });
 
-      $("#guardar_registro_trans_almacen").html('Guardar Cambios').removeClass('disabled');
-    },
-    xhr: function () {
-      var xhr = new window.XMLHttpRequest();
-      xhr.upload.addEventListener("progress", function (evt) {
-        if (evt.lengthComputable) {
-          var percentComplete = (evt.loaded / evt.total) * 100;
-          /*console.log(percentComplete + '%');*/
-          $("#barra_progress_trans_almacen").css({ "width": percentComplete + '%' }).text(percentComplete.toFixed(2) + " %");
-        }
-      }, false);
-      return xhr;
-    },
-    beforeSend: function () {
-      $("#barra_progress_trans_almacen").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").addClass('progress-bar-striped progress-bar-animated');
-    },
-    complete: function () {
-      $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
-    },
-    error: function (jqXhr) { ver_errores(jqXhr); },
-  });
+  }else{
+
+    toastr_error("Error temporal!!", 'No tienes productos marcados para enviar', 700);
+    
+  }
 }
 
 /**------------------------------------------------------------------

@@ -17,7 +17,8 @@ if (!isset($_SESSION["nombre"])) {
     <title>Almacenes | Admin Sevens</title>
 
     <?php $title = "Almacenes";
-    require 'head.php';  date_default_timezone_set('America/Lima');?>
+    require 'head.php';
+    date_default_timezone_set('America/Lima'); ?>
 
     <style>
       .style_tabla_datatable td,
@@ -138,18 +139,18 @@ if (!isset($_SESSION["nombre"])) {
                                       </div>
                                       <table id="tabla-detalle-almacen" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
 
-                                          
-                                          <div class="row mb-2 mt-2">
-                                            <div class="col-sm-4">
-                                              <h6><i class="nav-icon fas fa-box-open"></i> Tabla Insumos</h6>
-                                            </div>
-                                            <div class="col-sm-8">
-                                              <h6 class="float-sm-right" style=" padding: 3px !important; margin-bottom: 0px !important;">
-                                                <button class="btn btn-info btn-sm mayor_cero" onclick="stock('1');"  >Stok > 0</button>
-                                                <button class="btn btn-secondary  btn-sm include_cero" onclick="stock('0');">Stock Incluido 0</button>
-                                              </h6>
-                                            </div>
+
+                                        <div class="row mb-2 mt-2">
+                                          <div class="col-sm-4">
+                                            <h6><i class="nav-icon fas fa-box-open"></i> Tabla Insumos</h6>
                                           </div>
+                                          <div class="col-sm-8">
+                                            <h6 class="float-sm-right" style=" padding: 3px !important; margin-bottom: 0px !important;">
+                                              <button class="btn btn-info btn-sm mayor_cero" onclick="stock('1');">Stok > 0</button>
+                                              <button class="btn btn-secondary  btn-sm include_cero" onclick="stock('0');">Stock Incluido 0</button>
+                                            </h6>
+                                          </div>
+                                        </div>
                                         <thead>
                                           <tr>
                                             <th class="text-center">#</th>
@@ -437,6 +438,7 @@ if (!isset($_SESSION["nombre"])) {
                     <form id="form_proyecto_almacen" name="form_proyecto_almacen" method="POST">
                       <div class="card-body">
                         <div class="row" id="cargando-1-fomulario">
+                          <input type="hidden" name="idalmacen_general_origen" id="idalmacen_general_origen"/>
 
                           <!-- Tipo -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-3">
@@ -448,12 +450,11 @@ if (!isset($_SESSION["nombre"])) {
                               </select>
                             </div>
                           </div>
-
                           <!-- Nombre -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="form-group init_select">
                               <label for="">Destino <sup class="text-danger">(*)</sup></label>
-                              <p class="text-warning m-b-01rem" style="margin-top: 7px"> <strong>SELECCIONAR UN ALMACEN O UN PROYECTO</strong> </p>
+                              <p class="text-warning m-b-01rem" style="margin-top: 7px"> <strong>ALMACEN O UN PROYECTO</strong> </p>
                             </div>
 
                             <div class="form-group select_proy_alm" style="display: none;">
@@ -470,32 +471,36 @@ if (!isset($_SESSION["nombre"])) {
                               <input type="date" name="fecha_transf_proy_alm" class="form-control" value="<?php echo date("Y-m-d"); ?>" id="fecha_transf_proy_alm" placeholder="Fecha" />
                             </div>
                           </div>
-
-                          <!-- style="display: none;" -->
-                          <div class="col-12 col-sm-12 col-md-12 col-lg-12 card px-3 py-3" style="box-shadow: 0 0 1px rgb(0 0 0), 0 1px 3px rgb(0 0 0 / 60%);">
-                            <div class="row head_list_items_trans">
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-5 mt-2 mb-2 text-bold ocultar_head">Nombre Producto</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Und.</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Stock</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-2 mt-2 mb-2 text-bold ocultar_head">Cantidad</div>
-                              <div class="col-12 col-sm-12 col-md-6 col-lg-1 mt-2 mb-2 text-bold" data-toggle="tooltip" data-placement="top" title="Activar Todos Transferir"> <span class="ver" style="display: none;">Activar Masivo</span>
-
-                                <div class="custom-control custom-switch" data-toggle="tooltip" data-original-title="Activar todos">
-                                  <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();">
-                                  <label for="marcar_todo" class="custom-control-label"></label>
-                                </div>
-
-                              </div>
-                              <hr style=" height: 1px; width: 100%; background-color: red; display:none" class="ver" />
-                              <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+                          <div class="col-12">
+                            <div class="table-responsive" style="width: 100%;" >
+                              <table id="tabla-producto_tra" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                <thead>
+                                  <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="">Nombre Producto</th>
+                                    <th class="">Unidad</th>
+                                    <th class="text-center">Stock</th>
+                                    <th class="text-center">Cantidad</th>
+                                    <th class="text-center"> Marcar
+                                      <div class="custom-control custom-switch hidden"  data-toggle="tooltip" data-original-title="Activar todos">
+                                        <input class="custom-control-input" type="checkbox" id="marcar_todo" onchange="Activar_masivo();">
+                                        <label for="marcar_todo" class="custom-control-label"></label>
+                                      </div>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody></tbody>
+                              </table>
                             </div>
-                            <div class="row" id="html_producto_transf">
-                              <div class="col-12 html_mensaje">
-                                <div class="alert alert-warning alert-dismissible mb-0">
-                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                  <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
-                                  NO TIENES NINGÚN PRODUCTO SELECCIONADO.
-                                </div>
+                          </div>
+                          <!-- /.col -->
+
+                          <div class="row" id="html_producto_transf">
+                            <div class="col-12 html_mensaje">
+                              <div class="alert alert-warning alert-dismissible mb-0">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Alerta!</h5>
+                                NO TIENES NINGÚN PRODUCTO SELECCIONADO.
                               </div>
                             </div>
                           </div>

@@ -89,11 +89,15 @@ class Almacen_general
   }
 
   //Implementar un método para listar los registros
-  public function tabla_detalle($id_proyecto, $id_almacen,$_stock)
+  public function tabla_detalle($id_proyecto, $id_almacen, $_stock)
   {
-    $stock ="";
+    $stock = "";
 
-    if ($_stock =='1') { $stock ="AND agr.total_stok>'0'"; }else{ $stock =""; }
+    if ($_stock == '1') {
+      $stock = "AND agr.total_stok>'0'";
+    } else {
+      $stock = "";
+    }
 
     $sql = "SELECT agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
     FROM almacen_general_resumen AS agr
@@ -529,6 +533,8 @@ class Almacen_general
   //Implementar un método para listar los registros
   public function transferencia_a_proy_almacen($id_almacen)
   {
+    $data = [];
+
     $sql = "SELECT 
     agr.idalmacen_general_resumen,
     p.idproducto,
@@ -547,7 +553,58 @@ class Almacen_general
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
     WHERE agr.idalmacen_general='$id_almacen' AND agr.total_stok>'0' AND agr.estado = '1' AND agr.estado_delete = '1';";
-    return ejecutarConsultaArray($sql);
+
+
+    $sql_return = ejecutarConsultaArray($sql);
+
+    if ($sql_return['status'] == false) {
+      return $sql_return;
+    }
+
+    if (!empty($sql_return['data'])) {
+
+     // echo json_encode($sql_return['data'],true);die();
+      $cont = 1;
+
+      foreach ($sql_return['data'] as $key => $value) {
+        
+        $data[] = [
+          'indice'          => $cont,
+          'idalmacen_general_resumen' => $value['idalmacen_general_resumen'],
+          'nombre_producto' => '<textarea class="form-control textarea_datatable" rows="1" style="font-size: 12px;">'.$value['nombre_producto'].' - '.$value['abreviacion'].'</textarea>
+                                <input type="hidden" name="idalmacen_general_trns[]"  id="'.$value['idalmacen_general'].'" value="'.$value['idalmacen_general'].'"/>
+                                
+                                <input type="hidden" name="idproducto_trns[]" id="'.$value['idproducto'].'" value="'.$value['idproducto'].'"/>
+                                <input type="hidden" name="idalmacen_general_resumen_trns[]" id="'.$value['idalmacen_general_resumen'].'" value="'.$value['idalmacen_general_resumen'].'"/>
+                                <input type="hidden" name="tipo_trns[]" id="'.$value['tipo'].'" value="'.$value['tipo'].'"/>
+                                <input type="hidden" name="categoria_trns[]" id="'.$value['categoria'].'" value="'.$value['categoria'].'"/>',
+
+          'unidad'          => $value['unidad_medida'],
+
+          'stock'           => $value['total_stok'],
+
+          'cantidad'        => '<input type="number" class="form-control cant_g" name="cantidad_tr'.$value['idalmacen_general_resumen'].'" id="cantidad__trns'.$value['idalmacen_general_resumen'].'" onkeyup="replicar_cantidad_a_r('.$value['idalmacen_general_resumen'].')" readonly placeholder="cantidad"  min="0" step="0.01" max="'.$value['total_stok'].'"/>
+                               <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env'.$value['idalmacen_general_resumen'].'"/>',
+          
+          'activar'         => '<div class="custom-control custom-switch">
+                                  <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox'.$value['idalmacen_general_resumen'].'" onchange="update_valueChec('.$value['idalmacen_general_resumen'].','.$value['total_stok'].')" >
+                                  <input type="hidden" class="estadochecked_all" name="ValorCheck_trns[]" id="ValorCheck'.$value['idalmacen_general_resumen'].'">
+                                  <label for="customCheckbox'.$value['idalmacen_general_resumen'].'" class="custom-control-label"></label>
+                                </div>',
+
+        ];
+        $cont++;
+
+      };
+      //echo json_encode($data,true);die();
+     return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => $data];
+
+    } else {
+
+      return $sql_return;
+
+    }
+
   }
 
   /**
