@@ -1200,7 +1200,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>        
 
-        <script type="text/javascript" src="scripts/compra_activos_fijos.js?version_jdl=1.5"></script>
+        <script type="text/javascript" src="scripts/compra_activos_fijos.js?version_jdl=1.6"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         
