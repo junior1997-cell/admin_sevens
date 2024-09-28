@@ -472,12 +472,14 @@ function guardar_y_editar_almacen_general(e) {
 
 function add_producto_ag(data) {
 
-  var idproducto = $(data).select2('val');
+  var idproducto = $(data).select2('val'); 
+ 
   textproyecto = $('#proyecto_ag').select2('data')[0].text;
 
-
   if (idproducto == null || idproducto == '' || idproducto === undefined) { } else {
+
     $('.html_mensaje').remove();
+
     var textproducto = $('#producto_ag').select2('data')[0].text;
     var unidad_medida = $('#producto_ag').select2('data')[0].element.attributes.unidad_medida.value
     var id_ar = $('#producto_ag').select2('data')[0].element.attributes.id_ar.value
@@ -485,8 +487,6 @@ function add_producto_ag(data) {
     var t_egreso = $('#producto_ag').select2('data')[0].element.attributes.t_egreso.value
     var t_ingreso = $('#producto_ag').select2('data')[0].element.attributes.t_ingreso.value
     var tipo_mov = $('#producto_ag').select2('data')[0].element.attributes.tipo_mov.value
-    // t_egreso
-    // t_ingreso
 
     if ($(`#html_producto_ag div`).hasClass(`delete_multiple_${idproducto}_${idproyecto}`)) { // validamos si exte el producto agregado
 
@@ -572,6 +572,7 @@ function remove_producto_ag(id, idproy) {
 //------------------------------------------------------------------
 var array_id_a_g_r = [];
 let array_verif_env_not_vacio = [];
+var tipo_transf ="";
 
 function select_tipo_transferencia(tipo) {
 
@@ -721,7 +722,7 @@ function update_valueChec(id,total_stok) {
 
     $(`#ValorCheck${id}`).val(1);
     $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 1", max: " Stock Máximo {0}" } });
-    $(`#cantidad__trns${id}`).removeAttr('readonly', true);
+    $(`#cantidad__trns${id}`).prop("disabled", false);
     // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
     $("#form_proyecto_almacen").valid();
 
@@ -729,7 +730,7 @@ function update_valueChec(id,total_stok) {
 
     $(`#ValorCheck${id}`).val(0);
     $(`#cantidad__trns${id}`).rules("remove", "required");
-    $(`#cantidad__trns${id}`).attr('readonly', true);
+    $(`#cantidad__trns${id}`).prop("disabled", true);
     // $('.btn_g_proy_alm').attr('disabled', 'disabled').removeAttr('id');
     $("#cantidad__trns").removeClass('is-valid');
     $(`#cantidad__trns_env${id}`).val(0);
@@ -745,7 +746,7 @@ function update_valueChec(id,total_stok) {
     $("#form_proyecto_almacen").valid();
   }
 
-  console.log(array_verif_env_not_vacio);
+  //console.log(array_verif_env_not_vacio);
   
 
 }
@@ -795,17 +796,42 @@ function limpiar_Transferencia() {
 }
 
 //Función para guardar o editar
+let array_data_g = [];
 function guardar_tranf_almacenes_generales(e) {
+
+  $('.input_checkted').each(function (key, val) {  
+    
+    if ($(this).val()=='1' ) {
+      array_data_g.push({
+        'cantidad__trns_env'             :$(`#cantidad__trns_env${key+1}`).val(),
+        'idalmacen_general_trns'         :$(`#idalmacen_general_trns${key+1}`).val(),
+        'idproducto_trns'                :$(`#idproducto_trns${key+1}`).val(),
+        'idalmacen_general_resumen_trns' :$(`#idalmacen_general_resumen_trns${key+1}`).val(),
+        'tipo_trns'                      :$(`#tipo_trns${key+1}`).val(),
+        'categoria_trns'                 :$(`#categoria_trns${key+1}`).val(),
+        'idalmacen_general_trns'         :$(`#idalmacen_general_trns${key+1}`).val(),
+        
+      });
+    }
+    
+  });
+  console.log(array_data_g);
+
   if (array_verif_env_not_vacio.length > 0) {
     // e.preventDefault(); //No se activará la acción predeterminada del evento
-    var formData = new FormData($("#form_proyecto_almacen")[0]);
+    //var formData = new FormData($("#form_proyecto_almacen")[0]);
     
     $.ajax({
       url: "../ajax/almacen_general.php?op=guardar_transf_almacen_proyecto",
       type: "POST",
-      data: formData,
-      contentType: false,
-      processData: false,
+      data: {
+
+        'array_data_g'             : JSON.stringify(array_data_g),
+        'idalmacen_general_origen' : id_almacen_transf,
+        'tranferencia'             : tipo_transf,
+        'name_alm_proyecto'        : $(`#name_alm_proyecto`).val(),
+        'fecha_transf_proy_alm'    : $(`#fecha_transf_proy_alm`).val()
+      },
       success: function (e) {
         try {
           e = JSON.parse(e); console.log(e);

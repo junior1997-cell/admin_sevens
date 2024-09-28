@@ -438,7 +438,6 @@ if (!isset($_SESSION["nombre"])) {
                     <form id="form_proyecto_almacen" name="form_proyecto_almacen" method="POST">
                       <div class="card-body">
                         <div class="row" id="cargando-1-fomulario">
-                          <input type="hidden" name="idalmacen_general_origen" id="idalmacen_general_origen"/>
 
                           <!-- Tipo -->
                           <div class="col-12 col-sm-12 col-md-6 col-lg-3">

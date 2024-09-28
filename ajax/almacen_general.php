@@ -35,10 +35,10 @@ if (!isset($_SESSION["nombre"])) {
 
     // ::::::::::::::::::: TRANSFERENCIAS ALMACEN GENERAL O A PROYECTO ::::::::::::::::::::::::::::::::
 
-    $tranferencia              = isset($_POST["tranferencia"]) ? limpiarCadena($_POST["tranferencia"]) : "";
+    /*$tranferencia              = isset($_POST["tranferencia"]) ? limpiarCadena($_POST["tranferencia"]) : "";
     $name_alm_proyecto         = isset($_POST["name_alm_proyecto"]) ? limpiarCadena($_POST["name_alm_proyecto"]) : "";
     $fecha_transf_proy_alm     = isset($_POST["fecha_transf_proy_alm"]) ? limpiarCadena($_POST["fecha_transf_proy_alm"]) : "";
-    $idalmacen_general_origen  = isset($_POST["idalmacen_general_origen"]) ? limpiarCadena($_POST["idalmacen_general_origen"]) : "";
+    $idalmacen_general_origen  = isset($_POST["idalmacen_general_origen"]) ? limpiarCadena($_POST["idalmacen_general_origen"]) : "";*/
 
     
     // ::::::::::::::::::: INGRESO DIRECTO  ::::::::::::::::::::::::::::::::::::::::::::
@@ -299,18 +299,18 @@ if (!isset($_SESSION["nombre"])) {
         //  I N S E R T  E N T R E  L O S  A L M A C E N  G.   O  P R O Y E C T O.
       case 'guardar_transf_almacen_proyecto':
 
+        $array_data_g             = $_POST["array_data_g"];
+        $idalmacen_general_origen = $_POST["idalmacen_general_origen"];
+        $tranferencia             = $_POST["tranferencia"];
+        $name_alm_proyecto        = $_POST["name_alm_proyecto"];
+        $fecha_transf_proy_alm    = $_POST["fecha_transf_proy_alm"];
+
         $rspta = $almacen_general->guardar_transf_almacen_proyecto(
+          $array_data_g,
+          $idalmacen_general_origen,
           $tranferencia,
           $name_alm_proyecto,
-          $fecha_transf_proy_alm,
-          $idalmacen_general_origen,
-          $_POST["idalmacen_general_trns"],
-          $_POST["idalmacen_general_resumen_trns"],
-          $_POST["idproducto_trns"],
-          $_POST["tipo_trns"],
-          $_POST["categoria_trns"],
-          $_POST["cantidad_trns"],
-          $_POST["ValorCheck_trns"]
+          $fecha_transf_proy_alm
         );
 
         echo json_encode($rspta, true);
