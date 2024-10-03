@@ -1968,7 +1968,7 @@ function detalle_otra_factura( name_tabla, name_id_tabla, id_tabla, accion, nomb
 
   var comprobante=''; var btn_comprobante = '';
 
-  $.post("../ajax/resumen_facturas.php?op=detalle_otra_factura", { 'id_tabla': id_tabla }, function (e, status) {
+  $.post("../ajax/resumen_facturas.php?op=detalle_otra_factura", { 'id_tabla': id_tabla, 'name_tabla':name_tabla }, function (e, status) {
 
     e = JSON.parse(e);  console.log(e); 
     

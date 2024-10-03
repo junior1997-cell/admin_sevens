@@ -210,7 +210,7 @@
         break;
 
         case 'detalle_otra_factura':
-          $rspta = $resumen_factura_proy->detalle_otra_factura($_POST['id_tabla']);
+          $rspta = $resumen_factura_proy->detalle_otra_factura($_POST['id_tabla'], $_POST['name_tabla']);
           //Codificar el resultado utilizando json
           echo json_encode($rspta, true);
         break;

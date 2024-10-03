@@ -1408,14 +1408,29 @@ class Resumenfacturas
   }
 
   // detalle_pago_administrador
-  public function detalle_otra_factura($id) {
-    $sql = "SELECT ofp.idotra_factura, ofp.idproveedor, ofp.idempresa_a_cargo, ofp.tipo_comprobante, ofp.numero_comprobante, ofp.forma_de_pago, 
+  public function detalle_otra_factura($id, $name_tabla) {
+    $sql = "";
+
+    if ($name_tabla == 'otra_factura') {
+
+      $sql = "SELECT ofp.idotra_factura, ofp.idproveedor, ofp.idempresa_a_cargo, ofp.tipo_comprobante, ofp.numero_comprobante, ofp.forma_de_pago, 
     ofp.fecha_emision, ofp.val_igv, ofp.subtotal, ofp.igv, ofp.costo_parcial, ofp.descripcion, ofp.glosa, ofp.comprobante, ofp.tipo_gravada, 
     ofp.estado, ofp.estado_delete, 
     ofp.id_user_vb, ofp.nombre_user_vb, ofp.imagen_user_vb, ofp.estado_user_vb,
     prov.razon_social, prov.tipo_documento, prov.ruc
     FROM otra_factura as ofp, proveedor as prov  
     WHERE ofp.idproveedor = prov.idproveedor AND ofp.idotra_factura =  '$id';";
+
+    } else {
+      
+      $sql = "SELECT ofp.idotra_factura_proyecto, ofp.idproveedor, ofp.idempresa_a_cargo, ofp.tipo_comprobante, ofp.numero_comprobante, 
+    ofp.forma_de_pago, ofp.fecha_emision, ofp.val_igv, ofp.subtotal, ofp.igv, ofp.costo_parcial, ofp.descripcion, ofp.glosa, 
+    ofp.comprobante, ofp.tipo_gravada, ofp.estado, ofp.estado_delete, ofp.id_user_vb, ofp.nombre_user_vb, ofp.imagen_user_vb, 
+    ofp.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc 
+    FROM otra_factura_proyecto as ofp, proveedor as prov 
+    WHERE ofp.idproveedor = prov.idproveedor AND ofp.idotra_factura_proyecto = '$id';";
+    }
+
     return ejecutarConsultaSimpleFila($sql);
   }
 
