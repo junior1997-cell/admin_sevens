@@ -196,6 +196,7 @@ function tbla_principal() {
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload buttons-html5 px-2 buttons-copy", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,9,4,11,6,10], } }, 
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,9,4,11,6,10], } }, 
       { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,9,4,11,6,10], } },

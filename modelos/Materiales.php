@@ -205,7 +205,10 @@ class Materiales
         $datalle_marcas_export .=  '<li>  -'.$value2['marca'].'</li>';
       }
 
-      $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio, COUNT(idcompra_proyecto) as cantidad FROM detalle_compra WHERE idproducto='$id';";
+      $sql = "SELECT  AVG(dc.precio_con_igv) AS promedio_precio, COUNT(dc.idcompra_proyecto) as cantidad 
+      FROM detalle_compra as dc
+      inner join compra_por_proyecto as cpp on cpp.idcompra_proyecto = dc.idcompra_proyecto
+      WHERE dc.idproducto='$id' and cpp.estado = '1' and cpp.estado_delete='1';";
       $prom_cant = ejecutarConsultaSimpleFila($sql);  if ($prom_cant['status'] == false){ return $prom_cant; }
 
       $data[] = Array(
