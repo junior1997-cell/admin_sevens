@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion_v2.php";
 
-class Almacen
+class Almacen_activos
 {
   //Implementamos nuestro variable global
 	public $id_usr_sesion;
@@ -261,7 +261,7 @@ class Almacen
     INNER JOIN producto as prod ON prod.idproducto = ar.idproducto
     INNER JOIN categoria_insumos_af AS ci ON ci.idcategoria_insumos_af = prod.idcategoria_insumos_af
     INNER JOIN unidad_medida AS um ON um.idunidad_medida = prod.idunidad_medida
-    WHERE ar.idproyecto =  '$idproyecto' AND ci.idcategoria_insumos_af='1'  $filtro_nombre_insumo ORDER BY prod.nombre ASC;";    
+    WHERE ar.idproyecto =  '$idproyecto' AND ci.idcategoria_insumos_af  !='1'  $filtro_nombre_insumo ORDER BY prod.nombre ASC;";    
     $producto = ejecutarConsultaArray($sql_0); if ($producto['status'] == false) { return $producto; }   
 
     foreach ($producto['data'] as $key1 => $val1) { 
@@ -531,7 +531,7 @@ class Almacen
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    WHERE ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af ='1' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY left(p.nombre, 2) ASC, ar.total_stok DESC;";    
+    WHERE ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af  !='1' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY left(p.nombre, 2) ASC, ar.total_stok DESC;";    
    return ejecutarConsultaArray($sql_0); 
 
   } 
@@ -549,7 +549,7 @@ class Almacen
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    WHERE ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af ='1' AND ar.total_stok > 0 AND ar.estado = '1' AND ar.estado_delete = '1' $filtro_unidad_medida $filtro_categoria $filtro_es_epp
+    WHERE ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af  !='1' AND ar.total_stok > 0 AND ar.estado = '1' AND ar.estado_delete = '1' $filtro_unidad_medida $filtro_categoria $filtro_es_epp
     ORDER BY ar.total_stok DESC;";    
     return ejecutarConsultaArray($sql_0); 
 
@@ -664,7 +664,7 @@ class Almacen
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    WHERE ar.tipo <> 'EPP' AND ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af ='1' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre  ASC;";    
+    WHERE ar.tipo <> 'EPP' AND ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af  !='1' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre  ASC;";    
     $producto = ejecutarConsultaArray($sql_0);
     
     foreach ($producto['data'] as $key => $val1) {      
@@ -697,7 +697,7 @@ class Almacen
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    WHERE ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af ='1' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre  ASC;";    
+    WHERE ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af  !='1' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY p.nombre  ASC;";    
     $producto = ejecutarConsultaArray($sql_0);
     
     foreach ($producto['data'] as $key => $val1) {      
