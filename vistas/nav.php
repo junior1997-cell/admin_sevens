@@ -46,6 +46,17 @@
       </div>
     </li>
 
+    
+    <!-- MODULO - ALMACEN -->
+    <li class="nav-item d-none d-sm-inline-block">
+      <a class="nav-link"  href="asistencia_obrero.php" role="button" data-toggle="tooltip" data-original-title="Ir a: Asistencia Obrero">
+        <!-- <i class="fa-solid fa-list-check nav-icon"></i> -->
+        <!-- <i class="fa-solid fa-clipboard-list"></i> -->
+        <!-- <i class="fa-solid fa-table-list"></i> -->
+        <i class="fa-regular fa-rectangle-list"></i>
+      </a>
+    </li>
+
     <!-- MODULO - ALMACEN -->
     <li class="nav-item d-none d-sm-inline-block">
       <a class="nav-link"  href="almacen.php" role="button" data-toggle="tooltip" data-original-title="Ir a: Almacén">

@@ -1551,7 +1551,7 @@ function mostrar_he(ids_q_asistencia, f1, f2, i, cant_dias_asistencia, class_btn
 function calcular_hn( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario, sueldo_hora, cant_trabajador , sabatical_manual_1, sabatical_manual_2, tipo_hora) {
  
   var suma_hn = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0;
-  var sueldo_1 = 0, sueldo_2 = 0;
+  var sueldo_1 = 0, sueldo_2 = 0; var total_horas=0;
   // validamos el adicional descuento                                                                                                
   if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) {
     adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val()); 
@@ -1565,29 +1565,31 @@ function calcular_hn( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
   // calcular pago quincenal
   for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { 
     var val_input_hn = $(`.input_HN_${id_trabajador}_${index}`).val() == 0 || $(`.input_HN_${id_trabajador}_${index}`).val() == '' || $(`.input_HN_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HN_${id_trabajador}_${index}`).val());
-    var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val());
+    // var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val());
     if (val_input_hn > 0 ) { 
       suma_hn = suma_hn + val_input_hn;      
-      if (index == 0) {  sueldo_ant = val_sueldo;  }    
-      if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } 
+      // if (index == 0) {  sueldo_ant = val_sueldo;  }    
+      // if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } 
     }
-    console.log(`dias_asistidos: ${dias_asistidos}  | suma_hn: ${suma_hn} sueldo_ant: ${sueldo_ant} | sueldo_ant: ${val_sueldo} | dias_1_sueldo: ${dias_1_sueldo}`);  
+    // console.log(`dias_asistidos: ${dias_asistidos}  | suma_hn: ${suma_hn} sueldo_ant: ${sueldo_ant} | sueldo_ant: ${val_sueldo} | dias_1_sueldo: ${dias_1_sueldo}`);  
+    total_horas += val_input_hn;
   }  
   
   if (domingo_1 >=4 && suma_hn>=30 ) { dias_asistidos = redondear_mas((suma_hn / 8)); } else if (suma_hn>=36 ) { dias_asistidos = roundToHalf((suma_hn / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_hn / 8)); }  
   
-  dias_2_sueldo = dias_asistidos - dias_1_sueldo; 
-  if ( dias_asistidos >= 0 && dias_asistidos <= 1) {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
-  } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); 
-  } else {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); 
-  }    
+  // dias_2_sueldo = dias_asistidos - dias_1_sueldo; 
+  // if ( dias_asistidos >= 0 && dias_asistidos <= 1) {
+  //   pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
+  // } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
+  //   pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); 
+  // } else {
+  //   pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); 
+  // }    
   
-  pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); 
+  // pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); 
+  pago_parcial_v2 =  (parseFloat(total_horas) * sueldo_hora); 
   //  pago_parcial_HN_1
-  $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(1));  
+  $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(2));  
   
   $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`);  
 
@@ -1610,7 +1612,7 @@ function calcular_hn( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
 function calcular_he( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario, sueldo_hora, cant_trabajador , sabatical_manual_1, sabatical_manual_2, tipo_hora) {
  
   var suma_he = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0;
-  var sueldo_1 = 0, sueldo_2 = 0;
+  var sueldo_1 = 0, sueldo_2 = 0; var total_horas=0;
 
   // Val domingo
   var domingo_1 = $(`.input_HE_${id_trabajador}_0`).val(); 
@@ -1620,26 +1622,29 @@ function calcular_he( fecha, id_trabajador, cant_dias_asistencia, sueldo_diario,
     var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val());
     if (val_input_he > 0 ) { 
       suma_he = suma_he + val_input_he;
-      if (index == 0) {  sueldo_ant = val_sueldo;  }    
-      if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } 
+      // if (index == 0) {  sueldo_ant = val_sueldo;  }    
+      // if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } 
     }
-    console.log(`sueldo_ant: ${sueldo_ant} | sueldo_ant: ${val_sueldo} | dias_1_sueldo: ${dias_1_sueldo}`);  
+    // console.log(`sueldo_ant: ${sueldo_ant} | sueldo_ant: ${val_sueldo} | dias_1_sueldo: ${dias_1_sueldo}`);  
+    total_horas += val_input_he;
   }  
   
   if (domingo_1 >=4 && suma_he>=30 ) { dias_asistidos = redondear_mas((suma_he / 8)); } else if (suma_he>=36 ) { dias_asistidos = roundToHalf((suma_he / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_he / 8)); }  
 
-  dias_2_sueldo = dias_asistidos - dias_1_sueldo; console.log(`dias_2_sueldo: ${dias_2_sueldo} = dias_asistidos: ${dias_asistidos} - dias_1_sueldo: ${dias_1_sueldo}`);
-  if ( dias_asistidos >= 0 && dias_asistidos <= 1) {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
-  }else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
-  } else {
-    pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1);
-  }  
-  pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2);  
+  // dias_2_sueldo = dias_asistidos - dias_1_sueldo; console.log(`dias_2_sueldo: ${dias_2_sueldo} = dias_asistidos: ${dias_asistidos} - dias_1_sueldo: ${dias_1_sueldo}`);
+  // if ( dias_asistidos >= 0 && dias_asistidos <= 1) {
+  //   pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
+  // }else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) {
+  //   pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1);
+  // } else {
+  //   pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1);
+  // }  
+
+  // pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2);  
+  pago_parcial_v2 =  (parseFloat(total_horas) * sueldo_hora); 
 
   //  pago_parcial_HN_1  
-  $(`.total_HE_${id_trabajador}`).html(suma_he.toFixed(1));
+  $(`.total_HE_${id_trabajador}`).html(suma_he.toFixed(2));
 
   $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`);
 
@@ -2187,12 +2192,14 @@ function agregar_horas_por_dia_multiples(e) {
 
 function calcular_todos_hn(horas, fecha, id_trabajador, cant_dias_asistencia, sueldo_diario, sueldo_hora, cant_trabajador , sabatical_manual_1, sabatical_manual_2, tipo_hora) {
   /* para que corra una bala */ 
-  var suma_hn = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) { adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val()); } else { adicional_descuento = 0; toastr.error(`El dato adicional/descuento:: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`); } var domingo_1 = $(`.input_HN_${id_trabajador}_0`).val(); for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { var val_input_hn = $(`.input_HN_${id_trabajador}_${index}`).val() == 0 || $(`.input_HN_${id_trabajador}_${index}`).val() == '' || $(`.input_HN_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HN_${id_trabajador}_${index}`).val()); var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val()); if (val_input_hn > 0 ) { suma_hn = suma_hn + val_input_hn; if (index == 0) {  sueldo_ant = val_sueldo;  } if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } } } if (domingo_1 >=4 && suma_hn>=30 ) { dias_asistidos = redondear_mas((suma_hn / 8)); } else if (suma_hn>=36 ) { dias_asistidos = roundToHalf((suma_hn / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_hn / 8)); } dias_2_sueldo = dias_asistidos - dias_1_sueldo; if ( dias_asistidos >= 0 && dias_asistidos <= 1) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); } pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(1)); $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`); $(`.pago_parcial_HN_${id_trabajador}`).html(formato_miles(pago_parcial_v2)); var pago_quincenal_v2 = pago_parcial_v2 + adicional_descuento; $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2)); var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) { suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena)); return true;
+  var suma_hn = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; var total_horas=0; if (parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) >= 0 || parseFloat($(`.adicional_descuento_${id_trabajador}`).val()) <= 0 ) { adicional_descuento =   parseFloat($(`.adicional_descuento_${id_trabajador}`).val());  } else { adicional_descuento = 0; toastr.error(`El dato adicional/descuento:: <h3 class=""> ${$(`.adicional_descuento_${id_trabajador}`).val()} </h3> no es NUMÉRICO, ingrese un número cero o un positivo o un negativo.`);  } var domingo_1 = $(`.input_HN_${id_trabajador}_0`).val();  for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { var val_input_hn = $(`.input_HN_${id_trabajador}_${index}`).val() == 0 || $(`.input_HN_${id_trabajador}_${index}`).val() == '' || $(`.input_HN_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HN_${id_trabajador}_${index}`).val()); if (val_input_hn > 0 ) {  suma_hn = suma_hn + val_input_hn;  }  total_horas += val_input_hn; } if (domingo_1 >=4 && suma_hn>=30 ) { dias_asistidos = redondear_mas((suma_hn / 8)); } else if (suma_hn>=36 ) { dias_asistidos = roundToHalf((suma_hn / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_hn / 8)); }  pago_parcial_v2 =  (parseFloat(total_horas) * sueldo_hora);   $(`.total_HN_${id_trabajador}`).html(suma_hn.toFixed(2));    $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`);    $(`.pago_parcial_HN_${id_trabajador}`).html(formato_miles(pago_parcial_v2));  var pago_quincenal_v2 = pago_parcial_v2 + adicional_descuento;  $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2));  var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) { suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena));
+
 }
 
 function calcular_todos_he( horas, fecha, id_trabajador, cant_dias_asistencia, sueldo_diario, sueldo_hora, cant_trabajador , sabatical_manual_1, sabatical_manual_2, tipo_hora) {
   /* para que corra una bala */
-  var suma_he = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; var domingo_1 = $(`.input_HE_${id_trabajador}_0`).val(); for (let index = 0; index < parseInt(cant_dias_asistencia); index++) { var val_input_he = $(`.input_HE_${id_trabajador}_${index}`).val() == 0 || $(`.input_HE_${id_trabajador}_${index}`).val() == '' || $(`.input_HE_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HE_${id_trabajador}_${index}`).val()); var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val()); if (val_input_he > 0 ) { suma_he = suma_he + val_input_he; if (index == 0) {  sueldo_ant = val_sueldo;  } if (sueldo_ant == val_sueldo) { dias_1_sueldo++; sueldo_ant = val_sueldo; sueldo_1 = val_sueldo; }  else{ sueldo_2 = val_sueldo; } } } if (domingo_1 >=4 && suma_he>=30 ) { dias_asistidos = redondear_mas((suma_he / 8)); } else if (suma_he>=36 ) { dias_asistidos = roundToHalf((suma_he / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_he / 8)); } dias_2_sueldo = dias_asistidos - dias_1_sueldo; if ( dias_asistidos >= 0 && dias_asistidos <= 1) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else if (dias_asistidos >= 1.5 && dias_asistidos <= 3.5 ) { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_asistidos) * sueldo_1); } else { pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_1_sueldo) * sueldo_1); } pago_parcial_v2 = pago_parcial_v2 + (parseFloat(dias_2_sueldo) * sueldo_2); $(`.total_HE_${id_trabajador}`).html(suma_he.toFixed(1)); $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`); $(`.pago_parcial_HE_${id_trabajador}`).html(formato_miles(pago_parcial_v2));  var pago_quincenal_v2 = pago_parcial_v2 ; $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2)); var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) { suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text())); } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena)); return true;
+  var suma_he = 0; var dias_asistidos = 0, sueldo_ant = 0 ; var dias_1_sueldo = 0, dias_2_sueldo = 0; var adicional_descuento = 0;  var pago_parcial_v2 = 0; var sueldo_1 = 0, sueldo_2 = 0; var total_horas=0; var domingo_1 = $(`.input_HE_${id_trabajador}_0`).val();  for (let index = 0; index < parseInt(cant_dias_asistencia); index++) {  var val_input_he = $(`.input_HE_${id_trabajador}_${index}`).val() == 0 || $(`.input_HE_${id_trabajador}_${index}`).val() == '' || $(`.input_HE_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_HE_${id_trabajador}_${index}`).val()); var val_sueldo = $(`.input_PD_${id_trabajador}_${index}`).val() == 0 || $(`.input_PD_${id_trabajador}_${index}`).val() == '' || $(`.input_PD_${id_trabajador}_${index}`).val() == null ? 0 : parseFloat($(`.input_PD_${id_trabajador}_${index}`).val()); if (val_input_he > 0 ) { suma_he = suma_he + val_input_he; } total_horas += val_input_he; }  if (domingo_1 >=4 && suma_he>=30 ) { dias_asistidos = redondear_mas((suma_he / 8)); } else if (suma_he>=36 ) { dias_asistidos = roundToHalf((suma_he / 8)) -0.5; }else{ dias_asistidos = roundToHalf((suma_he / 8)); } pago_parcial_v2 =  (parseFloat(total_horas) * sueldo_hora);   $(`.total_HE_${id_trabajador}`).html(suma_he.toFixed(2));  $(`.dias_asistidos_${id_trabajador}`).html( `${dias_asistidos}`);  $(`.pago_parcial_HE_${id_trabajador}`).html(formato_miles(pago_parcial_v2));   var pago_quincenal_v2 = pago_parcial_v2 ; $(`.pago_quincenal_${id_trabajador}`).html(formato_miles(pago_quincenal_v2)); var suma_total_quincena = 0; for (let k = 1; k <= parseInt(cant_trabajador); k++) {  suma_total_quincena = suma_total_quincena + parseFloat(quitar_formato_miles($(`.val_pago_quincenal_${k}`).text()));  } $(`.pago_total_quincenal`).html(formato_miles(suma_total_quincena));
+
 }
 
 function select_dia_multiple(fecha_i, fecha_f) {
@@ -3436,17 +3443,22 @@ function pocision_scroll_btn() {
 }
 
 // ══════════════════════════════════════ tamaño de tabla - asistencia  ══════════════════════════════════════
-
 function scroll_tabla_asistencia() {
-  var height_tabla = $('.tabla_sistencia_obrero').height(); console.log('Alto pantalla: '+height_tabla);
-  var width_tabla = $('.tabla_sistencia_obrero').width(); console.log('Ancho pantalla: '+width_tabla);
-  if (height_tabla <= 600) {
-    $('#ver_asistencia').css({'height':`${redondearExp((height_tabla+50),0)}px`});
-  } else {
-    var alto_real = (width_tabla/2) - 100;
-    $('#ver_asistencia').css({'height':`${redondearExp(alto_real,0)}px`});
-  }
+  var windowHeight = window.innerHeight;                              // Altura de la ventana  
+  var new_espacio = redondearExp( ( (windowHeight * 30) / 100) ,2) ;  // Optenemos dinamicamente el tamaño a reducir
+  var availableHeight = windowHeight - new_espacio ;                  // Altura disponible con margen-top de: 30%
+  $('#ver_asistencia').css({'height':`${availableHeight}px`});
 }
+// function scroll_tabla_asistencia() {
+//   var height_tabla = $('.tabla_sistencia_obrero').height(); console.log('Alto pantalla: '+height_tabla);
+//   var width_tabla = $('.tabla_sistencia_obrero').width(); console.log('Ancho pantalla: '+width_tabla);
+//   if (height_tabla <= 600) {
+//     $('#ver_asistencia').css({'height':`${redondearExp((height_tabla+50),0)}px`});
+//   } else {
+//     var alto_real = (width_tabla/2) - 100;
+//     $('#ver_asistencia').css({'height':`${redondearExp(alto_real,0)}px`});
+//   }
+// }
 
 // voy a eliminar esta funcion cuando no lo NECESITE -----------------------
 function convertir_a_hora(hora_n) {

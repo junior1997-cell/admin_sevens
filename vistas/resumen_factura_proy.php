@@ -447,7 +447,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
-        <script type="text/javascript" src="scripts/resumen_factura_proy.js?version_jdl=1.6"></script>
+        <script type="text/javascript" src="scripts/resumen_factura_proy.js?version_jdl=1.7"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         
