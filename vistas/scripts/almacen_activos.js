@@ -7,7 +7,7 @@ function init() {
 
   $("#bloc_Tecnico").addClass("menu-open");
   $("#mTecnico").addClass("active");
-  $("#lAlmacen").addClass("active bg-primary");
+  $("#lAlmacen_act").addClass("active bg-primary");
 
   var idproyecto =  localStorage.getItem("nube_idproyecto");
   listar_botones_q_s(idproyecto);
