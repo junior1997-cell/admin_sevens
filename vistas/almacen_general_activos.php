@@ -647,7 +647,7 @@ if (!isset($_SESSION["nombre"])) {
     <!-- /.content-wrapper -->
     <?php require 'script.php'; ?>
 
-    <script type="text/javascript" src="scripts/almacen_general_activos.js?version_jdl=1.6"></script>
+    <script type="text/javascript" src="scripts/almacen_general_activos.js?version_jdl=1.7"></script>
 
     <script>
       $(function() {
