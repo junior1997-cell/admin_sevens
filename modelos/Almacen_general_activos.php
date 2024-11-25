@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion_v2.php";
 
-class Almacen_general
+class Almacen_general_activos
 {
   //Implementamos nuestro variable global
   public $id_usr_sesion;
@@ -17,14 +17,14 @@ class Almacen_general
   public function insertar($nombre, $descripcion)
   {
 
-    $sql = "SELECT nombre_almacen, descripcion, tipo_almacen, estado, estado_delete FROM almacen_general WHERE tipo_almacen='Insumos' and nombre_almacen = '$nombre';";
+    $sql = "SELECT nombre_almacen, descripcion,tipo_almacen, estado, estado_delete FROM almacen_general WHERE tipo_almacen='Activos' and nombre_almacen = '$nombre';";
     $buscando = ejecutarConsultaArray($sql);
     if ($buscando['status'] == false) {
       return $buscando;
     }
 
     if (empty($buscando['data'])) {
-      $sql = "INSERT INTO almacen_general(nombre_almacen, descripcion,tipo_almacen, user_created ) VALUES ('$nombre','$descripcion','Insumos', '$this->id_usr_sesion')";
+      $sql = "INSERT INTO almacen_general(nombre_almacen, descripcion,tipo_almacen, user_created ) VALUES ('$nombre','$descripcion','Activos', '$this->id_usr_sesion')";
       $insertar =  ejecutarConsulta_retornarID($sql, 'C');
       return $insertar;
     } else {
@@ -47,7 +47,7 @@ class Almacen_general
   //Implementamos un método para editar registros
   public function editar($idalmacen_general, $nombre, $descripcion)
   {
-    $sql = "UPDATE almacen_general SET nombre_almacen='$nombre', descripcion='$descripcion',tipo_almacen='Insumos', user_updated = '$this->id_usr_sesion'
+    $sql = "UPDATE almacen_general SET nombre_almacen='$nombre', descripcion='$descripcion',tipo_almacen='Activos', user_updated = '$this->id_usr_sesion'
 		WHERE idalmacen_general = '$idalmacen_general';";
     $editar =  ejecutarConsulta($sql, 'U');
     return $editar;
@@ -84,7 +84,7 @@ class Almacen_general
   public function tabla_principal()
   {
     $sql = "SELECT idalmacen_general, nombre_almacen, descripcion, estado, estado_delete 
-    FROM almacen_general WHERE tipo_almacen='Insumos' AND  estado='1' AND estado_delete='1' ORDER BY nombre_almacen ASC;";
+    FROM almacen_general WHERE tipo_almacen='Activos' AND  estado='1' AND estado_delete='1' ORDER BY nombre_almacen ASC;";
     return ejecutarConsulta($sql);
   }
 
@@ -106,7 +106,7 @@ class Almacen_general
     INNER JOIN producto as p on agr.idproducto = p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    WHERE agr.idalmacen_general='$id_almacen'  $stock AND ag.tipo_almacen='Insumos' AND c.idcategoria_insumos_af ='1' AND agr.estado = '1' AND agr.estado_delete = '1'";
+    WHERE agr.idalmacen_general='$id_almacen'  $stock AND ag.tipo_almacen='Activos' AND c.idcategoria_insumos_af !='1' AND agr.estado = '1' AND agr.estado_delete = '1'";
     return ejecutarConsulta($sql);
   }
 
@@ -158,7 +158,7 @@ class Almacen_general
   public function lista_de_categorias()
   {
     $sql = "SELECT idalmacen_general as idcategoria, nombre_almacen as nombre 
-    FROM almacen_general WHERE tipo_almacen='Insumos' AND estado='1' AND estado_delete='1' ; ";
+    FROM almacen_general WHERE tipo_almacen='Activos' AND estado='1' AND estado_delete='1' ; ";
     return ejecutarConsultaArray($sql);
   }
 
@@ -174,7 +174,7 @@ class Almacen_general
     INNER JOIN producto as p on ar.idproducto=p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    where ar.idproyecto='$idproyecto' AND c.idcategoria_insumos_af ='1' and ar.total_stok>'0' ORDER BY p.nombre ASC;";
+    where ar.idproyecto='$idproyecto' AND c.idcategoria_insumos_af !='1' and ar.total_stok>'0' ORDER BY p.nombre ASC;";
     return ejecutarConsultaArray($sql);
   }
 
@@ -538,7 +538,7 @@ class Almacen_general
     INNER JOIN producto as p on agr.idproducto = p.idproducto
     INNER JOIN unidad_medida um on p.idunidad_medida=um.idunidad_medida
     INNER JOIN categoria_insumos_af c on p.idcategoria_insumos_af=c.idcategoria_insumos_af
-    WHERE agr.idalmacen_general='$id_almacen' AND c.idcategoria_insumos_af ='1' AND agr.total_stok>'0' AND agr.estado = '1' AND agr.estado_delete = '1';";
+    WHERE agr.idalmacen_general='$id_almacen' AND c.idcategoria_insumos_af !='1' AND agr.total_stok>'0' AND agr.estado = '1' AND agr.estado_delete = '1';";
 
 
     $sql_return = ejecutarConsultaArray($sql);
@@ -691,7 +691,7 @@ class Almacen_general
       }
     } else {
       $sql = "SELECT idalmacen_general  as id ,nombre_almacen as nombre 
-      FROM almacen_general where  idalmacen_general<>'$id_almacen_g' AND AND tipo_almacen='Insumos' AND estado = '1' AND estado_delete = '1'  ORDER BY idalmacen_general desc;";
+      FROM almacen_general where  idalmacen_general<>'$id_almacen_g' AND tipo_almacen='Activos' AND estado = '1' AND estado_delete = '1'  ORDER BY idalmacen_general desc;";
 
       $sql_return = ejecutarConsulta($sql);
       if ($sql_return['status'] == false) {
@@ -708,7 +708,7 @@ class Almacen_general
     $sql_0 = "SELECT pr.idproducto, pr.nombre AS nombre_producto, um.nombre_medida, um.abreviacion,  pr.modelo, ci.nombre as clasificacion    
 		FROM  producto AS pr, categoria_insumos_af AS ci, unidad_medida AS um 
 		WHERE pr.idcategoria_insumos_af = ci.idcategoria_insumos_af AND um.idunidad_medida  = pr.idunidad_medida 
-    AND pr.estado = '1' AND ci.idcategoria_insumos_af ='1' AND pr.estado_delete = '1' ORDER BY pr.nombre ASC;";
+    AND pr.estado = '1' AND ci.idcategoria_insumos_af !='1' AND pr.estado_delete = '1' ORDER BY pr.nombre ASC;";
     return ejecutarConsultaArray($sql_0);
   }
 

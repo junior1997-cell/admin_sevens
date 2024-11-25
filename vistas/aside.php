@@ -183,6 +183,13 @@
                   <p>Almacenes</p>
                 </a>
               </li>
+              <!-- almacen general de activos -->
+              <li class="nav-item ">
+                <a href="almacen_general_activos.php" class="nav-link" id="lAlmacenGeneral_a">
+                  <i class="nav-icon fas fa-box-open"></i>
+                  <p>Almacenes Activos</p>
+                </a>
+              </li>
 
               <!-- Datos Generales Bancos y color -->
               <li class="nav-item ">
