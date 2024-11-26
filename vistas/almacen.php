@@ -119,7 +119,7 @@ if (!isset($_SESSION["nombre"])) {
     </style>
   </head>
 
-  <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+  <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed  pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
     
     <div class="wrapper">
       <!-- Preloader -->
@@ -1036,7 +1036,7 @@ if (!isset($_SESSION["nombre"])) {
     <script src="../plugins/jszip/dist/jszip-utils.js"></script>
     <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
 
-    <script type="text/javascript" src="scripts/almacen.js?version_jdl=1.7"></script>
+    <script type="text/javascript" src="scripts/almacen.js?version_jdl=1.8"></script>
     <!-- <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script> -->
 
     <script>

@@ -839,7 +839,7 @@
 
           $bg_resaltar = ($id_insumo == $reg['idproducto']? $class_resaltar_insumo : "" );
           $ficha = empty($reg['ficha_tecnica']) ? ( '<i class="fa-regular fa-file-pdf fa-2x '. $bg_resaltar.' text-gray-50"></i>') : ( '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
-          $img_product = 'dist/docs/material/img_perfil/'. (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
+          $img_product = '../dist/docs/material/img_perfil/'. (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
 
           $tbody .= '<tr class="filas ">
             <td class="text-center p-6px">' . $cont++ . '</td>
@@ -1008,7 +1008,7 @@
 
           $bg_resaltar = ($id_activo_fijo == $reg['idproducto']? $class_resaltar_insumo : "" );
           $ficha = empty($reg['ficha_tecnica']) ? ( '<i class="fa-regular fa-file-pdf fa-2x '. $bg_resaltar.' text-gray-50"></i>') : ( '<a target="_blank" href="dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="fa-regular fa-file-pdf fa-2x text-primary"></i></a>');
-          $img_product = 'dist/docs/material/img_perfil/'. (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
+          $img_product = '../dist/docs/material/img_perfil/'. (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
 
           $tbody .= '<tr class="filas ">
             <td class="text-center p-6px">' . $cont++ . '</td>

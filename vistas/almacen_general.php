@@ -41,7 +41,7 @@ if (!isset($_SESSION["nombre"])) {
     </style>
   </head>
 
-  <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+  <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
     <!-- Content Wrapper. Contains page content -->
     <div class="wrapper">
       <?php
@@ -188,6 +188,7 @@ if (!isset($_SESSION["nombre"])) {
                                         </div>
 
                                         <div class="tabla_detalle_almacen_g" style="display: none; ">
+                                          <h4 class="widget-user-username nombre_producto"><span class="spinner-border spinner-border-md"></span></h4>
                                           <h6>Movimientos por Insumos </h6>
                                           <table id="tabla_detalle_almacen_general" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
                                             <thead>
@@ -646,7 +647,7 @@ if (!isset($_SESSION["nombre"])) {
     <!-- /.content-wrapper -->
     <?php require 'script.php'; ?>
 
-    <script type="text/javascript" src="scripts/almacen_general.js?version_jdl=1.7"></script>
+    <script type="text/javascript" src="scripts/almacen_general.js?version_jdl=1.8"></script>
 
     <script>
       $(function() {

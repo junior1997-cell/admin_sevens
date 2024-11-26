@@ -16,7 +16,7 @@
         <?php $title = "Estado Financiero"; require 'head.php'; ?>
 
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         
         <div class="wrapper">
           <!-- Preloader -->
@@ -525,7 +525,7 @@
 
         <script type="text/javascript" src="../plugins/xlsx/xlsx.full.min.js"></script>
 
-        <script type="text/javascript" src="scripts/estado_financiero.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/estado_financiero.js?version_jdl=1.8"></script>
          
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

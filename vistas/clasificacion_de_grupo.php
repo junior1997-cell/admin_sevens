@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
       </head>
-      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <div class="reload-all" id="reload-all" style="display: none;"><img src="../dist/svg/reload.svg" class="rounded-circle" width="80px"> </div>
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
@@ -543,7 +543,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>         
 
-        <script type="text/javascript" src="scripts/clasificacion_de_grupo.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/clasificacion_de_grupo.js?version_jdl=1.8"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>               
 

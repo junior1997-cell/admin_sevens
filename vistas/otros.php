@@ -20,7 +20,7 @@
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
       </head>
-      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
@@ -1329,15 +1329,15 @@
 
         <?php  require 'script.php'; ?>
         
-        <script type="text/javascript" src="scripts/otros.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/bancos.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/color.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/unidades_m.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/ocupacion.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/tipo.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/desempenio.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/categoria_af.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/marca.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/otros.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/bancos.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/color.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/unidades_m.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/ocupacion.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/tipo.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/desempenio.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/categoria_af.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/marca.js?version_jdl=1.8"></script>
         <!-- <script type="text/javascript" src="scripts/glosa.js"></script> -->
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>

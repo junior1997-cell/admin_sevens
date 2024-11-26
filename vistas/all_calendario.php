@@ -40,7 +40,7 @@
         <link rel="stylesheet" href="../dist/css/go-to.css">
 
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
@@ -280,12 +280,12 @@
         <script src="../dist/js/demo.js"></script> 
                
         <!-- hora sesion-->
-        <script src="../dist/js/sesion.js?version_jdl=1.7"></script> 
+        <script src="../dist/js/sesion.js?version_jdl=1.8"></script> 
 
         <!-- Funciones Crud -->
-        <script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=1.8"></script>
         <!-- Funciones Generales -->
-        <script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=1.8"></script>
 
         <script type="text/javascript" src="scripts/all_calendario.js?version_jdl=1.3"></script>
         

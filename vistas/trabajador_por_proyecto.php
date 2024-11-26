@@ -22,7 +22,7 @@
           #sortable li span { position: absolute !important; margin-left: -1.3em !important; }
         </style>
       </head> 
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper"> 
           <?php
@@ -820,7 +820,7 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/trabajador_por_proyecto.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/trabajador_por_proyecto.js?version_jdl=1.8"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         

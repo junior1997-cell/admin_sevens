@@ -213,7 +213,7 @@ class Proyecto
     $sql_estado = "";
     if ($estado == 3) { $sql_estado = "p.estado >= 0 "; } else { $sql_estado = "p.estado = '$estado'"; }
 
-    $sql = "SELECT p.idproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, 
+    $sql = "SELECT p.idproyecto, LPAD(p.idproyecto, 3, '0') as codproyecto, p.idempresa_a_cargo, p.tipo_documento, p.numero_documento, p.empresa, 
     CASE WHEN LENGTH(p.empresa) <= 15 THEN p.empresa ELSE CONCAT(LEFT(p.empresa, 15), '...') END AS empresa_recorte_20, 
     p.nombre_proyecto, p.nombre_codigo, CASE WHEN LENGTH(p.nombre_codigo) <= 15 THEN p.nombre_codigo ELSE CONCAT(LEFT(p.nombre_codigo, 15), '...') END AS nombre_codigo_recorte_20, 
     p.ubicacion, p.actividad_trabajo, p.empresa_acargo, p.costo, p.garantia, p.fecha_inicio_actividad, p.fecha_fin_actividad, p.plazo_actividad, 

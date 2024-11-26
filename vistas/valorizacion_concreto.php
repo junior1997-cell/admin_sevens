@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="../plugins/bootstrap-table/dist/bootstrap-table.min.css">
         <!-- <link rel="stylesheet" href="../plugins/excel-preview/css/excel-preview.css"> -->
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
@@ -260,7 +260,7 @@
         <script src="../plugins/excel-preview/js/src/util.js" type="text/javascript" ></script>
 	      <script src="../plugins/excel-preview/js/src/excel-preview.js" type="text/javascript" ></script>
 
-        <script type="text/javascript" src="scripts/valorizacion_concreto.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/valorizacion_concreto.js?version_jdl=1.8"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
 

@@ -16,7 +16,7 @@
         <?php $title = "Resumen de Activos Fijos"; require 'head.php'; ?>
         
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Preloader - new -->
         <div class="reload-all" id="reload-all" style="display: none;"><img src="../dist/svg/reload.svg" class="rounded-circle" width="80px"> </div>
         
@@ -447,7 +447,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
-        <script type="text/javascript" src="scripts/resumen_factura_proy.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/resumen_factura_proy.js?version_jdl=1.8"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

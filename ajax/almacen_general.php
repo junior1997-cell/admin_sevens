@@ -81,6 +81,12 @@ if (!isset($_SESSION["nombre"])) {
         echo json_encode($rspta, true);
       break;
 
+      case 'ver_producto_x_agr':
+        $rspta = $almacen_general->ver_producto_x_agr($_GET["idalmacen_general_resumen"], $_GET["id_almacen_transf"]);
+        //Codificar el resultado utilizando json
+        echo json_encode($rspta, true);
+      break;
+
       case 'tabla_principal':
         $rspta = $almacen_general->tabla_principal($_GET["id_categoria"]);
         //Vamos a declarar un array

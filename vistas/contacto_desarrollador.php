@@ -132,8 +132,9 @@
                 <tr>
                   <th>#</th>
                   <th class="">OP</th>
+                  <th class="">Cod</th>
                   <th>Empresa</th>
-                  <th>Código</th>                     
+                  <th>Nombre Código</th>                     
                   <th>Costo</th>                  
                   <th>Estado</th>
                 </tr>
@@ -143,8 +144,9 @@
                 <tr>
                   <th>#</th>
                   <th class="">OP</th>
+                  <th class="">Cod</th>
                   <th>Empresa</th>
-                  <th>Código</th>                      
+                  <th>Nombre Código</th>                      
                   <th>Costo</th>                  
                   <th>Estado</th>
                 </tr>
@@ -264,12 +266,16 @@
       createdRow: function (row, data, ixdex) {
         // columna: #
         if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); }
-        // empresa
+        // CodProyecto
         if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
-        // codigo
+        // Empresa
         if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+        // NombreCodigo
+        if (data[4] != '') { $("td", row).eq(4).addClass("text-nowrap"); }
         // columna: costo
-        if (data[4] != '') { $("td", row).eq(4).addClass("text-right text-nowrap"); }
+        if (data[5] != '') { $("td", row).eq(5).addClass("text-right text-nowrap"); }
+        // NombreCodigo
+        if (data[6] != '') { $("td", row).eq(6).addClass("text-nowrap"); }
       },
       language: {
         lengthMenu: "Mostrar: _MENU_ registros",
@@ -280,7 +286,7 @@
       iDisplayLength: 10,//Paginación
       order: [[ 0, "asc" ]],//Ordenar (columna,orden)
       columnDefs: [
-      { targets: [4], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<div class="text-nowrap"><span >S/</span> <span class=" ${color} "> ${number} </span></div>`; } return number; }, },
+      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<div class="text-nowrap"><span >S/</span> <span class=" ${color} "> ${number} </span></div>`; } return number; }, },
 
         // { targets: [6], visible: false, searchable: false, },             
       ],

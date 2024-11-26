@@ -67,7 +67,9 @@
 <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script> -->
- 
+
+<!-- pace-progress -->
+<script src="../../plugins/pace-progress/pace.min.js"></script> 
 
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.min.js"></script>
@@ -87,12 +89,12 @@
 <script type="text/javascript" src="../plugins/jquery-zoom/jquery.zoom.js"></script>
 
 <!-- hora sesion-->
-<script src="../dist/js/sesion.js?version_jdl=1.7"></script> 
+<script src="../dist/js/sesion.js?version_jdl=1.8"></script> 
 
 <!-- Funciones Crud -->
-<script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=1.7"></script>
+<script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=1.8"></script>
 <!-- Funciones Generales -->
-<script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=1.7"></script>
+<script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=1.8"></script>
 
 <?php require 'contacto_desarrollador.php'; ?>
 

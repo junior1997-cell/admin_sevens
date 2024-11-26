@@ -21,7 +21,7 @@
           .class_text{ font-weight: 200; font-size: unset; }
         </style>
       </head>
-      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php  
@@ -509,7 +509,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
         
-        <script type="text/javascript" src="scripts/formato_varios.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/formato_varios.js?version_jdl=1.8"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

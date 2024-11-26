@@ -27,7 +27,7 @@
         * sidebar-collapse
         * sidebar-mini
       -->
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <div class="wrapper">
           <?php
             require 'nav.php';
@@ -499,7 +499,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script> 
         
-        <script type="text/javascript" src="scripts/chart_compra_insumo.js?version_jdl=1.7"></script>         
+        <script type="text/javascript" src="scripts/chart_compra_insumo.js?version_jdl=1.8"></script>         
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

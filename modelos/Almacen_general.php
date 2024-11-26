@@ -80,6 +80,16 @@ class Almacen_general
     return ejecutarConsultaSimpleFila($sql);
   }
 
+  //Implementar un método para mostrar los datos de un registro a modificar
+  public function ver_producto_x_agr($idresumen, $idalmacen)
+  {
+    $sql = "SELECT agr.idalmacen_general, p.* 
+    FROM almacen_general_resumen as agr 
+    INNER JOIN producto as p on p.idproducto = agr.idproducto
+    where agr.idalmacen_general_resumen = $idresumen and agr.idalmacen_general = $idalmacen; ";
+    return ejecutarConsultaSimpleFila($sql);
+  }
+
   //Implementar un método para listar los registros
   public function tabla_principal()
   {
@@ -691,7 +701,7 @@ class Almacen_general
       }
     } else {
       $sql = "SELECT idalmacen_general  as id ,nombre_almacen as nombre 
-      FROM almacen_general where  idalmacen_general<>'$id_almacen_g' AND AND tipo_almacen='Insumos' AND estado = '1' AND estado_delete = '1'  ORDER BY idalmacen_general desc;";
+      FROM almacen_general where  idalmacen_general<>'$id_almacen_g' AND tipo_almacen='Insumos' AND estado = '1' AND estado_delete = '1'  ORDER BY idalmacen_general desc;";
 
       $sql_return = ejecutarConsulta($sql);
       if ($sql_return['status'] == false) {

@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="../dist/css/leyenda.css" />
           
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <div class="wrapper">
           <!-- Preloader -->
           <!-- <div class="preloader flex-column justify-content-center align-items-center">
@@ -1200,7 +1200,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>        
 
-        <script type="text/javascript" src="scripts/compra_activos_fijos.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/compra_activos_fijos.js?version_jdl=1.8"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         

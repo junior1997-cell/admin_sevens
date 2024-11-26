@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
         
       </head>
-      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
@@ -887,8 +887,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
         
-        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=1.7"></script>
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=1.8"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

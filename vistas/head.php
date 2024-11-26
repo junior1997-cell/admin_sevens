@@ -40,6 +40,9 @@
 <!-- Tempusdominus Bootstrap 4 -->
 <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.css">
 
+<!-- pace-progress -->
+<link rel="stylesheet" href="../../plugins/pace-progress/themes/black/pace-theme-flat-top.css">
+
 <!-- Theme style -->
 <link rel="stylesheet" href="../dist/css/adminlte.min.css" />
 

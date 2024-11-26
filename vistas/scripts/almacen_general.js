@@ -339,6 +339,11 @@ function tabla_detalle(id_categoria, nombre, stock) {
 
 function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen, nombre_producto) {
 
+  $.getJSON(`../ajax/almacen_general.php?op=ver_producto_x_agr`, { id_almacen_transf, idalmacen_general_resumen},  function (e, textStatus, jqXHR) {
+      console.log(e);
+      
+  });
+
   tabla_detalle_almacen_general = $("#tabla_detalle_almacen_general").dataTable({
     responsive: true,
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
@@ -348,7 +353,7 @@ function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen, n
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3 btn btn-sm btn-outline-info", action: function (e, dt, node, config) { if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
       { extend: 'copy', exportOptions: { columns: [0, 1, 2, 3, 4], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true, },
-      { extend: 'excel', exportOptions: { columns: [0, 1, 2, 3, 4], }, title: `MOVIMIENTOS DEL PRODUCTO ${nombre_producto}`, text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0, 1, 2, 3, 4], }, title: `MOVIMIENTOS DEL PRODUCTO - ${removeCaracterEspecial(decodeHtml(nombre_producto))}`, text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true, },
     ],
     ajax: {
       url: `../ajax/almacen_general.php?op=tabla_detalle_almacen_general&id_almacen_transf=${id_almacen_transf}&idalmacen_general_resumen=${idalmacen_general_resumen}`,

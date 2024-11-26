@@ -16,7 +16,7 @@
         <?php $title = "Pagos de Administradores"; require 'head.php'; ?>
         
       </head>
-      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         
         <div class="wrapper">
           <!-- Preloader -->
@@ -673,7 +673,7 @@
         </div>
         <?php require 'script.php'; ?>         
 
-        <script type="text/javascript" src="scripts/pago_administrador.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/pago_administrador.js?version_jdl=1.8"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }) </script>
         

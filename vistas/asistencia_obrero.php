@@ -33,7 +33,7 @@
         </style>
 
       </head>
-      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
+      <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php  
@@ -929,7 +929,7 @@
         <!-- moment locale -->
         <script src="../plugins/moment/locales.js"></script>
 
-        <script type="text/javascript" src="scripts/asistencia_obrero.js?version_jdl=1.7"></script>
+        <script type="text/javascript" src="scripts/asistencia_obrero.js?version_jdl=1.8"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         
