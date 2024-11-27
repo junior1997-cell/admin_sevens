@@ -83,7 +83,7 @@ class Almacen_general
   //Implementar un método para mostrar los datos de un registro a modificar
   public function ver_producto_x_agr($idresumen, $idalmacen)
   {
-    $sql = "SELECT agr.idalmacen_general, p.* 
+    $sql = "SELECT agr.idalmacen_general, p.*, LPAD(p.idproducto, 5, '0') as idproducto_v2
     FROM almacen_general_resumen as agr 
     INNER JOIN producto as p on p.idproducto = agr.idproducto
     where agr.idalmacen_general_resumen = $idresumen and agr.idalmacen_general = $idalmacen; ";
@@ -109,7 +109,7 @@ class Almacen_general
       $stock = "";
     }
 
-    $sql = "SELECT agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
+    $sql = "SELECT agr.idproducto, LPAD(agr.idproducto, 5, '0') as idproducto_v2, agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
     FROM almacen_general_resumen AS agr
     INNER JOIN almacen_general as ag on agr.idalmacen_general = ag.idalmacen_general
     -- INNER JOIN almacen_resumen as ar on agr.idalmacen_resumen=ar.idalmacen_resumen

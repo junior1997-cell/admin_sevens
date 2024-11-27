@@ -482,7 +482,7 @@
 
         <?php require 'script.php'; ?>
 
-        <script type="text/javascript" src="scripts/otro_gasto.js?version_jdl=1.8"></script>
+        <script type="text/javascript" src="scripts/otro_gasto.js?version_jdl=1.9"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

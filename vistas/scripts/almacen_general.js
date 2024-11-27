@@ -282,7 +282,7 @@ function tabla_detalle(id_categoria, nombre, stock) {
   $('.btn_add_almacen').hide(); $('.btn_add_prod_almacen').show();
 
   tabla_almacen_detalle = $("#tabla-detalle-almacen").dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
@@ -323,7 +323,7 @@ function tabla_detalle(id_categoria, nombre, stock) {
       if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_",
+      lengthMenu: "Mostrar: _MENU_", search: "",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
     },
@@ -341,6 +341,7 @@ function detalle_almacen_general(id_almacen_transf, idalmacen_general_resumen, n
 
   $.getJSON(`../ajax/almacen_general.php?op=ver_producto_x_agr`, { id_almacen_transf, idalmacen_general_resumen},  function (e, textStatus, jqXHR) {
       console.log(e);
+      $('.nombre_producto').html(`<u>${e.data.idproducto_v2} - ${e.data.nombre}</u>`);
       
   });
 

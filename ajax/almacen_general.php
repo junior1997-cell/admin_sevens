@@ -146,7 +146,7 @@ if (!isset($_SESSION["nombre"])) {
           foreach ($rspta['data'] as $key => $reg) {
             $data[] = [
               "0" => $cont++,
-              "1" => '<textarea cols="70" rows="2" class="textarea_datatable bg-light w-100 " readonly="" style=" font-size: 11px;">' . $reg['nombre_producto'] . ' - ' . $reg['abreviacion'] . '</textarea>',
+              "1" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >Cod: ' . $reg['idproducto_v2'] .'<br>'. $reg['nombre_producto'] . ' - ' . $reg['abreviacion'] . '</div>',
               "2" => $reg['total_stok'],
               "3" =>  $reg['total_ingreso'],
               "4" =>  $reg['total_egreso'],

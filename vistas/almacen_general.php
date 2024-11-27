@@ -137,42 +137,43 @@ if (!isset($_SESSION["nombre"])) {
                                           <button type="button" class="btn btn-warning btn-block btn-sm" onclick="limpiar_Transferencia(); listar_productos_transferencia();"><i class="fa fa-exchange"></i> Transferencia (Enviar)</button>
                                         </div>
                                       </div>
-                                      <table id="tabla-detalle-almacen" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
 
-
-                                        <div class="row mb-2 mt-2">
-                                          <div class="col-sm-4">
-                                            <h6><i class="nav-icon fas fa-box-open"></i> Tabla Insumos</h6>
+                                      <div class="card-body table-responsive p-0">                                      
+                                        <table id="tabla-detalle-almacen" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
+                                          <div class="row mb-2 mt-2">
+                                            <div class="col-sm-4">
+                                              <h6><i class="nav-icon fas fa-box-open"></i> Tabla Insumos</h6>
+                                            </div>
+                                            <div class="col-sm-8">
+                                              <h6 class="float-sm-right" style=" padding: 3px !important; margin-bottom: 0px !important;">
+                                                <button class="btn btn-info btn-sm mayor_cero" onclick="stock('1');">Stok > 0</button>
+                                                <button class="btn btn-secondary  btn-sm include_cero" onclick="stock('0');">Stock Incluido 0</button>
+                                              </h6>
+                                            </div>
                                           </div>
-                                          <div class="col-sm-8">
-                                            <h6 class="float-sm-right" style=" padding: 3px !important; margin-bottom: 0px !important;">
-                                              <button class="btn btn-info btn-sm mayor_cero" onclick="stock('1');">Stok > 0</button>
-                                              <button class="btn btn-secondary  btn-sm include_cero" onclick="stock('0');">Stock Incluido 0</button>
-                                            </h6>
-                                          </div>
-                                        </div>
-                                        <thead>
-                                          <tr>
-                                            <th class="text-center">#</th>
-                                            <th class="">Producto</th>
-                                            <th class="">Stock</th>
-                                            <th class="">Ingreso</th>
-                                            <th class="">Salida</th>
-                                            <th class="">Ver</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                        <tfoot>
-                                          <tr>
-                                            <th class="text-center">#</th>
-                                            <th class="">Producto</th>
-                                            <th class="">Stock</th>
-                                            <th class="">Ingreso</th>
-                                            <th class="">Salida</th>
-                                            <th class="">Ver</th>
-                                          </tr>
-                                        </tfoot>
-                                      </table>
+                                          <thead>
+                                            <tr>
+                                              <th class="text-center">#</th>
+                                              <th class="">Producto</th>
+                                              <th class="">Stock</th>
+                                              <th class="">Ingreso</th>
+                                              <th class="">Salida</th>
+                                              <th class="">Ver</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody></tbody>
+                                          <tfoot>
+                                            <tr>
+                                              <th class="text-center">#</th>
+                                              <th class="">Producto</th>
+                                              <th class="">Stock</th>
+                                              <th class="">Ingreso</th>
+                                              <th class="">Salida</th>
+                                              <th class="">Ver</th>
+                                            </tr>
+                                          </tfoot>
+                                        </table>
+                                      </div>
                                     </div>
 
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-7">
@@ -188,7 +189,7 @@ if (!isset($_SESSION["nombre"])) {
                                         </div>
 
                                         <div class="tabla_detalle_almacen_g" style="display: none; ">
-                                          <h4 class="widget-user-username nombre_producto"><span class="spinner-border spinner-border-md"></span></h4>
+                                          <h6 class="widget-user-username nombre_producto text-center"><span class="spinner-border spinner-border-md"></span></h6>
                                           <h6>Movimientos por Insumos </h6>
                                           <table id="tabla_detalle_almacen_general" class="table table-bordered table-striped display style_tabla_datatable" style="width: 100% !important;">
                                             <thead>
@@ -647,7 +648,7 @@ if (!isset($_SESSION["nombre"])) {
     <!-- /.content-wrapper -->
     <?php require 'script.php'; ?>
 
-    <script type="text/javascript" src="scripts/almacen_general.js?version_jdl=1.8"></script>
+    <script type="text/javascript" src="scripts/almacen_general.js?version_jdl=1.9"></script>
 
     <script>
       $(function() {
