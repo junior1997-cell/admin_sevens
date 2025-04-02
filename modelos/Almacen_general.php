@@ -135,6 +135,7 @@ class Almacen_general
         WHEN 'IGP' THEN 'INGRESO A ALMACEN GENERAL DE PROYECTO'
         WHEN 'EGP' THEN 'EGRESO DE ALMACEN GENERAL E INGRESO A UN PROYECTO' 
         WHEN 'IDAG' THEN 'INGRESO DIRECTO A ALMACEN GENERAL'
+        WHEN 'ED' THEN 'EGRESO POR DETERIORO'
     END AS tipo_movimiento ,
     ad.fecha, 
     ad.name_day, 
@@ -146,6 +147,7 @@ class Almacen_general
         WHEN 'IGP' THEN ad.cantidad
         WHEN 'EGP' THEN -1*ad.cantidad
         WHEN 'IDAG' THEN ad.cantidad
+        WHEN 'ED' THEN -1*ad.cantidad
     END AS cantidad, 
     ad.stok_anterior, 
     ad.stok_actual,

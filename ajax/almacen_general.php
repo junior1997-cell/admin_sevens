@@ -150,7 +150,10 @@ if (!isset($_SESSION["nombre"])) {
               "2" => $reg['total_stok'],
               "3" =>  $reg['total_ingreso'],
               "4" =>  $reg['total_egreso'],
-              "5" => '<button type="button" class="btn btn-info btn-sm" onclick="detalle_almacen_general(' . $reg['idalmacen_general'] . ', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\', \'' . encodeCadenaHtml($reg['nombre_producto']) . '\')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="far fa-eye"></i></button>'.$toltip
+              "5" => '<button type="button" class="btn btn-info btn-sm" onclick="detalle_almacen_general(' . $reg['idalmacen_general'] . ', \'' . encodeCadenaHtml($reg['idalmacen_general_resumen']) . '\', \'' . encodeCadenaHtml($reg['nombre_producto']) . '\')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="far fa-eye"></i></button>'.$toltip,
+              "6" => $reg['idproducto_v2'],
+              "7" => $reg['nombre_producto'],
+              "8" => $reg['abreviacion']
             ];
           }
           $results = [

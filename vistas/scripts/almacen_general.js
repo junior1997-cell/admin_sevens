@@ -289,8 +289,8 @@ function tabla_detalle(id_categoria, nombre, stock) {
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla    
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3 btn btn-sm btn-outline-info", action: function (e, dt, node, config) { if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
-      { extend: 'copy', exportOptions: { columns: [0, 1, 2, 3, 4], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true, },
-      { extend: 'excel', exportOptions: { columns: [0, 1, 2, 3, 4], }, title: `LISTA DE PRODUCTOS ${nombre_almacen_transf}`, text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true, },
+      { extend: 'copy', exportOptions: { columns: [0, 6, 7, 8, 2, 3, 4], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true, },
+      { extend: 'excel', exportOptions: { columns: [0, 6, 7 ,8, 2, 3, 4], }, title: `LISTA DE PRODUCTOS ALMACEN GENERAL ${nombre_almacen_transf}`, text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true, },
     ],
     ajax: {
       url: `../ajax/almacen_general.php?op=tabla_detalle&id_almacen=${id_categoria}&id_proyecto=${localStorage.getItem("nube_idproyecto")}&stock=${stock}`,
@@ -331,7 +331,7 @@ function tabla_detalle(id_categoria, nombre, stock) {
     iDisplayLength: 10, //Paginación
     order: [[0, "asc"]], //Ordenar (columna,orden)
     columnDefs: [
-      // { targets: [5], visible: false, searchable: false, },
+       { targets: [6,7,8], visible: false, searchable: false, },
     ],
   }).DataTable();
   // $('.tabla_detalle_almacen_g').show();  $('.alerta_inicial').hide();

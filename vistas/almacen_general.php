@@ -159,6 +159,10 @@ if (!isset($_SESSION["nombre"])) {
                                               <th class="">Ingreso</th>
                                               <th class="">Salida</th>
                                               <th class="">Ver</th>
+
+                                              <th class="">Código</th>
+                                              <th class="">Nombre</th>
+                                              <th class="">Unidad</th>
                                             </tr>
                                           </thead>
                                           <tbody></tbody>
@@ -170,6 +174,10 @@ if (!isset($_SESSION["nombre"])) {
                                               <th class="">Ingreso</th>
                                               <th class="">Salida</th>
                                               <th class="">Ver</th>
+
+                                              <th class="">Código</th>
+                                              <th class="">Nombre</th>
+                                              <th class="">Unidad</th>
                                             </tr>
                                           </tfoot>
                                         </table>

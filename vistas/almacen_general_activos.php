@@ -80,8 +80,8 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="card-header">
                       <h3 class="card-title">
                         <button type="button" class="btn bg-gradient-success btn_add_almacen" data-toggle="modal" data-target="#modal-agregar-almacen-general" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Almacén</button>
-                        <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Traer insumos</button>
-                        <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiar_ing_di();"><i class="fas fa-plus-circle"></i> Agresar insumo</button>
+                        <button type="button" class="btn bg-gradient-primary btn_add_prod_almacen" style="display: none; padding-left: 2px;" data-toggle="modal" data-target="#modal-agregar-otro-almacen" onclick="limpiar();"><i class="fas fa-plus-circle"></i> Traer Activos</button>
+                        <button type="button" class="btn btn-secondary btn-flat btn_ing_d_almacen" style="padding-left: 2px;" data-toggle="modal" data-target="#modal-ingreso-directo" onclick="limpiar_ing_di();"><i class="fas fa-plus-circle"></i> Agresar Activos</button>
                         Administra de manera eficiente a tus almacenes.
                       </h3>
                     </div>
@@ -159,6 +159,10 @@ if (!isset($_SESSION["nombre"])) {
                                             <th class="">Ingreso</th>
                                             <th class="">Salida</th>
                                             <th class="">Ver</th>
+
+                                            <th class="">Código</th>
+                                            <th class="">Nombre</th>
+                                            <th class="">Unidad</th>
                                           </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -170,6 +174,10 @@ if (!isset($_SESSION["nombre"])) {
                                             <th class="">Ingreso</th>
                                             <th class="">Salida</th>
                                             <th class="">Ver</th>
+
+                                            <th class="">Código</th>
+                                            <th class="">Nombre</th>
+                                            <th class="">Unidad</th>
                                           </tr>
                                         </tfoot>
                                       </table>
@@ -447,6 +455,7 @@ if (!isset($_SESSION["nombre"])) {
                               <select name="tranferencia" id="tranferencia" class="form-control" onchange="select_tipo_transferencia(this);">
                                 <option value="Otro_Almacen">Otro Almacen</option>
                                 <option value="Proyecto">Proyecto</option>
+                                <option value="egreso_defecto">Egreso por Deterioro</option>
                               </select>
                             </div>
                           </div>

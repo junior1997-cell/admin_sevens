@@ -99,7 +99,8 @@ class Almacen_general_activos
       $stock = "";
     }
 
-    $sql = "SELECT agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria
+    $sql = "SELECT agr.idalmacen_general_resumen,agr.tipo,agr.total_stok,agr.total_ingreso,agr.total_egreso, ag.idalmacen_general,p.nombre as nombre_producto, 
+    um.nombre_medida as unidad_medida,um.abreviacion, c.nombre as categoria, LPAD(agr.idproducto, 5, '0') as idproducto_v2
     FROM almacen_general_resumen AS agr
     INNER JOIN almacen_general as ag on agr.idalmacen_general = ag.idalmacen_general
     -- INNER JOIN almacen_resumen as ar on agr.idalmacen_resumen=ar.idalmacen_resumen
@@ -124,7 +125,7 @@ class Almacen_general_activos
         WHEN 'EEA' THEN 'EGRESO ENTRE ALMACENES'
         WHEN 'IGP' THEN 'INGRESO A ALMACEN GENERAL DE PROYECTO'
         WHEN 'EGP' THEN 'EGRESO DE ALMACEN GENERAL E INGRESO A UN PROYECTO' 
-        WHEN 'IDAG' THEN 'INGRESO DIRECTO A ALMACEN GENERAL'
+        WHEN 'ED' THEN 'EGRESO POR DETERIORO'
     END AS tipo_movimiento ,
     ad.fecha, 
     ad.name_day, 
@@ -136,6 +137,8 @@ class Almacen_general_activos
         WHEN 'IGP' THEN ad.cantidad
         WHEN 'EGP' THEN -1*ad.cantidad
         WHEN 'IDAG' THEN ad.cantidad
+        WHEN 'EGP' THEN -1*ad.cantidad
+        WHEN 'ED' THEN -1*ad.cantidad
     END AS cantidad, 
     ad.stok_anterior, 
     ad.stok_actual,
@@ -403,7 +406,6 @@ class Almacen_general_activos
         }
         return $retorno = ['status' => true, 'message' => 'todo oka ps', 'data' => ''];
       }
-
 
       // -----------------------------
       //ACTUALIZAR EL ALMACEN RESUMEN GENERAL ... listo
@@ -689,9 +691,17 @@ class Almacen_general_activos
       if ($sql_return['status'] == false) {
         return $sql_return;
       }
-    } else {
+    } elseif ($tipo_transf === "Otro_Almacen") {
       $sql = "SELECT idalmacen_general  as id ,nombre_almacen as nombre 
       FROM almacen_general where  idalmacen_general<>'$id_almacen_g' AND tipo_almacen='Activos' AND estado = '1' AND estado_delete = '1'  ORDER BY idalmacen_general desc;";
+
+      $sql_return = ejecutarConsulta($sql);
+      if ($sql_return['status'] == false) {
+        return $sql_return;
+      }
+    }else{
+      $sql = "SELECT idalmacen_general  as id ,nombre_almacen as nombre 
+      FROM almacen_general where  idalmacen_general='$id_almacen_g' AND tipo_almacen='Activos' AND estado = '1' AND estado_delete = '1'  ORDER BY idalmacen_general desc;";
 
       $sql_return = ejecutarConsulta($sql);
       if ($sql_return['status'] == false) {
