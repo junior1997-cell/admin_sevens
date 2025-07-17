@@ -306,7 +306,7 @@ class Almacen_general_activos
     $idalmacen_general_origen,
     $tranferencia,
     $name_alm_proyecto,
-    $fecha_transf_proy_alm,
+    $fecha_transf_proy_alm
   ) {
     $array_data_trns = json_decode($array_data_g, true);
 
@@ -575,7 +575,7 @@ class Almacen_general_activos
                                <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env' . $cont . '"/>',
 
           'activar'         => '<div class="custom-control custom-switch">
-                                  <input class="custom-control-input checked_all " type="checkbox" id="customCheckbox' . $cont . '" onchange="update_valueChec(' . $cont . ',' . $value['total_stok'] . ')" >
+                                  <input class="custom-control-input checked_all " type="checkbox" id="customCheckbox' . $cont . '" onchange="update_valueChec(' . $cont . ',\'' .$value['total_stok']. '\' )" >
                                   <input type="hidden" class="estadochecked_all input_checkted" name="ValorCheck_trns[]" id="ValorCheck' . $cont . '">
                                   <label for="customCheckbox' . $cont . '" class="custom-control-label"></label>
                                 </div>',

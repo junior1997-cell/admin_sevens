@@ -482,6 +482,7 @@ if (!isset($_SESSION["nombre"])) {
                           </div>
                           <div class="col-12">
                             <div class="table-responsive" style="width: 100%;" >
+                              <!-- Tabla de productos  PARA TRANSFERIR-->
                               <table id="tabla-producto_tra" class="table table-bordered table-striped display" style="width: 100% !important;">
                                 <thead>
                                   <tr>

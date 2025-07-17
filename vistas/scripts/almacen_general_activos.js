@@ -844,7 +844,9 @@ function guardar_tranf_almacenes_generales(e) {
             $("#modal-transferencia_aproyecto").modal("hide");
             if (table_producto_transferencia) {table_producto_transferencia.destroy(); }
             limpiar_Transferencia();
-
+            array_data_g = [];
+            array_verif_env_not_vacio = [];
+            
             Swal.fire("Correcto!", "Transferencia guardado correctamente", "success");
 
           } else {
