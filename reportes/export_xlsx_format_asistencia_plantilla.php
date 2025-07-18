@@ -17,6 +17,9 @@ require_once "../modelos/Formatos_varios.php";
 $formatos_varios = new FormatosVarios();
 
 $proyecto = $formatos_varios->datos_proyecto($_GET["id_proyecto"]);
+
+// echo json_encode($proyecto, true); die();
+
 // var_dump($proyecto['ee']['data']); die();
 $n_f_i_p          = $proyecto['data']['datos_proyecto']['fecha_inicio'];
 $n_f_f_p          = $proyecto['data']['datos_proyecto']['fecha_fin'];
@@ -88,7 +91,8 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
     $hojaActiva->setCellValue('H8',"$f_i_dia de $mes_f_i al $f_f_dia de $mes_f_f"); //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
 
     $rspta_t = $formatos_varios->ver_detalle_sem_quin($ids_q_asistencia,$fechaInicio_sc, $fechaFin_sc, $id_proyecto, $n_f_i_p, $n_f_f_p);
-    //echo json_encode($rspta_t['data'][0]['asistencia'],true);die();
+    // echo json_encode($rspta_t['data'][0]['asistencia'],true);die();
+    // echo json_encode($rspta_t['data'],true);die();
 
     $fila_9=9;    $fila_10=9;
     $cont=0;

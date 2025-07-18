@@ -6,6 +6,12 @@
   use PhpOffice\PhpSpreadsheet\Style\Color;
 
 
+  require_once "../modelos/Formatos_varios.php"; 
+  $formatos_varios=new FormatosVarios();  
+
+  $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
+
+
   $spreadsheet = new Spreadsheet();
   $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Temperatura");
   
@@ -102,12 +108,9 @@
   $hojaActiva->setCellValue('L9', "T (°C) \n (34°-37.5°)");
   $hojaActiva->setCellValue('M9', "%S.O. \n (87-100)");
 
-  $hojaActiva->setCellValue('C7', 'SEVEN´S INGENIEROS SELVA  S.A.C.                      RUC : 20609935651');
+  $hojaActiva->setCellValue('C7', $rspta['proyecto']['eac_razon_social'] . '                      RUC :'. $rspta['proyecto']['eac_numero_documento']);
 
-  require_once "../modelos/Formatos_varios.php"; 
-  $formatos_varios=new FormatosVarios();  
 
-  $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
   // echo json_encode($rspta, true);
   $hojaActiva->setCellValue('C3', $rspta['proyecto']['nombre_proyecto']);
   $hojaActiva->setCellValue('C5', $rspta['proyecto']['nombre_proyecto']);
