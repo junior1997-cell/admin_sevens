@@ -5,6 +5,11 @@
   use PhpOffice\PhpSpreadsheet\Style\Border;
   use PhpOffice\PhpSpreadsheet\Style\Color;
 
+  require_once "../modelos/Formatos_varios.php"; 
+  $formatos_varios=new FormatosVarios();    
+  $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
+
+  // echo json_encode($rspta['proyecto']); die();
 
   $spreadsheet = new Spreadsheet();
   $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Ats");
@@ -77,10 +82,10 @@
   $hojaActiva->setCellValue('A4', 'TAREA A REALIZAR:');
   $hojaActiva->setCellValue('C4', 'TRABAJOS DE CONTRUCCÍON');
   $hojaActiva->setCellValue('A5', 'RAZÓN SOCIAL:');
-  $hojaActiva->setCellValue('C5', 'SEVEN´S INGENIEROS SELVA S.A.C.');
+  $hojaActiva->setCellValue('C5', $rspta['proyecto']['eac_razon_social']);
 
   $hojaActiva->setCellValue('D5', 'RUC:');
-  $hojaActiva->setCellValue('E5', '20609935651');
+  $hojaActiva->setCellValue('E5', $rspta['proyecto']['eac_numero_documento']);
   $hojaActiva->setCellValue('F5', 'LUGAR:');
   $hojaActiva->setCellValue('I5', 'N° DE REGISTRO:');
 
@@ -94,11 +99,8 @@
   $hojaActiva->setCellValue('G8', 'Apellidos y Nombres');
   $hojaActiva->setCellValue('I8', 'Firma');
 
-  require_once "../modelos/Formatos_varios.php"; 
-  $formatos_varios=new FormatosVarios();  
-  // 20609935651 ruc de la empresa
-  $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
-  // echo json_encode($rspta, true);
+
+  
   //datos de lugar
   $hojaActiva->setCellValue('G5', $rspta['proyecto']['ubicacion']);
 

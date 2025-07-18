@@ -303,7 +303,7 @@
                             <!--Asistencia trabajador-->
                             <div class="tab-pane fade " id="custom-content-below-asistencia" role="tabpanel" aria-labelledby="custom-content-below-asistencia-tab">
                               <!-- tabla ASISTENCIA - TRABAJADOR -->
-                              <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-asistencia_trabajador"> <i class="fa-regular fa-file-excel"></i> export </a>
+                              <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-asistencia_trabajador" target="_blank"> <i class="fa-regular fa-file-excel"></i> export </a>
                               <div class="table-responsive pb-3">
                                   <!--TABLA EXPORT ASISTENCIA TRABAJADOR-->
                               </div>

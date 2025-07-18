@@ -5,6 +5,11 @@
   use PhpOffice\PhpSpreadsheet\Style\Border;
   use PhpOffice\PhpSpreadsheet\Style\Color;
 
+  require_once "../modelos/Formatos_varios.php"; 
+  $formatos_varios=new FormatosVarios();  
+
+  $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
+
 
   $spreadsheet = new Spreadsheet();
   $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Check List");
@@ -183,16 +188,14 @@
   $hojaActiva->setCellValue('AD8', "NO");
 
 
-  require_once "../modelos/Formatos_varios.php"; 
-  $formatos_varios=new FormatosVarios();  
+  
 
-  $rspta=$formatos_varios->formato_ats($_GET["id_proyecto"]);
   // echo json_encode($rspta, true);
   $spreadsheet->getActiveSheet()->getStyle('D2')->getFont()->setBold(true);
   $hojaActiva->setCellValue('D2', $rspta['proyecto']['nombre_proyecto']);
 
-  $hojaActiva->setCellValue('A6', $rspta['proyecto']['empresa']);
-  $hojaActiva->setCellValue('G6', $rspta['proyecto']['numero_documento']);
+  $hojaActiva->setCellValue('A6', $rspta['proyecto']['eac_razon_social']);
+  $hojaActiva->setCellValue('G6', $rspta['proyecto']['eac_numero_documento']);
   $hojaActiva->setCellValue('K6', $rspta['proyecto']['ubicacion']);
   $hojaActiva->getStyle('K6')->getAlignment()->setWrapText(true);
 
