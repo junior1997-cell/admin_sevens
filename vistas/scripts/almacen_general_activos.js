@@ -574,6 +574,9 @@ var array_id_a_g_r = [];
 let array_verif_env_not_vacio = [];
 var tipo_transf ="";
 
+//Función para guardar o editar
+let array_data_g = [];
+
 function select_tipo_transferencia(tipo) {
 
   $("#modal-transferencia_aproyecto").modal("show");
@@ -611,66 +614,6 @@ function listar_productos_transferencia() {
     if (e.status == true) {
 
       $('.head_list').show();
-
-     /* e.data.forEach((val, index) => {
-
-        array_id_a_g_r.push(val.idalmacen_general_resumen);
-
-        //     agr.idalmacen_general_resumen,--------------
-        // p.idproducto,--------------
-        // agr.tipo,------------------
-        // agr.total_stok,
-        // agr.total_ingreso,
-        // agr.total_egreso,
-        // ag.idalmacen_general,
-        // p.nombre as nombre_producto,
-        // um.nombre_medida as unidad_medida,
-        // um.abreviacion,
-
-        $('#html_producto_transf').append(`
-        <div class="col-lg-12"></div>
-        <div class="col-12 col-sm-12 col-md-12 col-lg-5" >
-          <input type="hidden" name="idalmacen_general_trns[]"  id="${val.idalmacen_general}" value="${val.idalmacen_general}"/>
-          <input type="hidden" name="idalmacen_general_origen"  value="${id_almacen_transf}"/>
-          <input type="hidden" name="idproducto_trns[]" id="${val.idproducto}" value="${val.idproducto}"/>
-          <input type="hidden" name="idalmacen_general_resumen_trns[]" id="${val.idalmacen_general_resumen}" value="${val.idalmacen_general_resumen}"/>
-          <input type="hidden" name="tipo_trns[]" id="${val.tipo}" value="${val.tipo}"/>
-          <input type="hidden" name="categoria_trns[]" id="${val.categoria}" value="${val.categoria}"/>
-          <div class="form-group">
-            <label class="ver" style="display:none" > Producto </label> 
-            <textarea class="form-control textarea_datatable" rows="1"> ${val.nombre_producto} ${val.abreviacion}</textarea>                                  
-          </div>
-        </div> 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
-          <div class="form-group">
-            <label class="ver" style="display:none" > Unidad Medida </label> 
-            <textarea class="form-control textarea_datatable" rows="1"> ${val.unidad_medida} </textarea>                                  
-          </div>      
-        </div> 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
-          <div class="form-group">
-            <label class="ver" style="display:none" > Stock </label> 
-            <textarea class="form-control textarea_datatable" rows="1"> ${val.total_stok} </textarea>                                  
-          </div>      
-        </div> 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-2">
-          <div class="form-group">
-            <label class="ver" style="display:none" > Cantidad a Transferir </label> 
-            <input type="number" class="form-control cant_g" name="cantidad_tr${val.idalmacen_general_resumen}" id="cantidad__trns${val.idalmacen_general_resumen}" onkeyup="replicar_cantidad_a_r(${val.idalmacen_general_resumen})" readonly placeholder="cantidad"  min="0" step="0.01" max="${val.total_stok}"/>
-            <input type="hidden" name="cantidad_trns[]" class="form-control" id="cantidad__trns_env${val.idalmacen_general_resumen}"/>
-          </div>      
-        </div> 
-        <div class="col-12 col-sm-12 col-md-12 col-lg-1">
-        <label class="ver" style="display:none" > Activar </label> 
-          <div class="custom-control custom-switch">
-            <input class="custom-control-input checked_all" type="checkbox" id="customCheckbox${val.idalmacen_general_resumen}" onchange="update_valueChec(${val.idalmacen_general_resumen},${val.total_stok})" >
-            <input type="hidden" class="estadochecked_all" name="ValorCheck_trns[]" id="ValorCheck${val.idalmacen_general_resumen}">
-            <label for="customCheckbox${val.idalmacen_general_resumen}" class="custom-control-label"></label>
-          </div>         
-        </div> 
-        <hr style=" height: 1px; width: 100%; background-color: black; display:none" class="ver"/>`);
-
-      });*/
 
       table_producto_transferencia = $('#tabla-producto_tra').DataTable({
         
@@ -711,7 +654,24 @@ function listar_productos_transferencia() {
 
 }
 
-function replicar_cantidad_a_r(id) { $(`#cantidad__trns_env${id}`).val($(`#cantidad__trns${id}`).val()); }
+function replicar_cantidad_a_r(id) { 
+
+  const nuevo_valor = $(`#cantidad__trns${id}`).val();
+
+  // Actualiza el campo en el array
+  const index = array_data_g.findIndex(item => item.id === `${id}`);
+  if (index !== -1) {
+    array_data_g[index].cantidad__trns_env = nuevo_valor;
+  } else {
+    console.warn(`ID ${id} no encontrado en array_data_g`);
+  }
+
+  // Actualiza también el input visual
+  $(`#cantidad__trns_env${id}`).val(nuevo_valor);
+
+  console.log("Array actualizado:", array_data_g);
+
+}
 
 function update_valueChec(id,total_stok) {
 
@@ -721,6 +681,17 @@ function update_valueChec(id,total_stok) {
     $(`#cantidad__trns_env${id}`).val(total_stok);
 
     $(`#ValorCheck${id}`).val(1);
+
+    array_data_g.push({
+      'id': `${id}`,
+      'cantidad__trns_env': $(`#cantidad__trns_env${id}`).val(),
+      'idalmacen_general_trns': $(`#idalmacen_general_trns${id}`).val(),
+      'idproducto_trns': $(`#idproducto_trns${id}`).val(),
+      'idalmacen_general_resumen_trns': $(`#idalmacen_general_resumen_trns${id}`).val(),
+      'tipo_trns': $(`#tipo_trns${id}`).val(),
+      'categoria_trns': $(`#categoria_trns${id}`).val()
+    });
+
     $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 1", max: " Stock Máximo {0}" } });
     $(`#cantidad__trns${id}`).prop("disabled", false);
     // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
@@ -742,6 +713,10 @@ function update_valueChec(id,total_stok) {
       // Eliminar el elemento en el índice encontrado
       array_verif_env_not_vacio.splice(indice, 1);
     }
+
+    array_data_g = array_data_g.filter(item => item.id !== `${id}`);
+    console.log(`Elemento con id ${id} eliminado del array.`);
+     console.log("array_data_g actualizado elemneto eliminado:", array_data_g);
 
     $("#form_proyecto_almacen").valid();
   }
@@ -795,125 +770,77 @@ function limpiar_Transferencia() {
   $("#tranferencia").val("").trigger("change");
 }
 
-//Función para guardar o editar
-let array_data_g = [];
+
+
 function guardar_tranf_almacenes_generales(e) {
 
+  setTimeout(() => {
+    if (array_verif_env_not_vacio.length > 0) {
+      // e.preventDefault(); //No se activará la acción predeterminada del evento
+      //var formData = new FormData($("#form_proyecto_almacen")[0]);
+      
+      $.ajax({
+        url: "../ajax/almacen_general_activos.php?op=guardar_transf_almacen_proyecto",
+        type: "POST",
+        data: {
 
+          'array_data_g'             : JSON.stringify(array_data_g),
+          'idalmacen_general_origen' : id_almacen_transf,
+          'tranferencia'             : tipo_transf,
+          'name_alm_proyecto'        : $(`#name_alm_proyecto`).val(),
+          'fecha_transf_proy_alm'    : $(`#fecha_transf_proy_alm`).val()
+        },
+        success: function (e) {
+          try {
+            e = JSON.parse(e); console.log(e);
+            if (e.status == true) {
 
- /* $('#tabla-producto_tra tbody tr td').each(function () {
-  let cantidad_venta                  = $(this).find('.textarea_datatable').val(); 
-  let input_checkted                = $(this).find('.input_checkted').val();
-    console.log(cantidad_venta);
-    console.log(input_checkted);
-  
-  
-  });*/
+              if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false); }
+              if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); }
+              
+            // listar_productos_transferencia();
+              $("#modal-transferencia_aproyecto").modal("hide");
+              if (table_producto_transferencia) {table_producto_transferencia.destroy(); }
+              limpiar_Transferencia();
+              array_data_g = [];
+              array_verif_env_not_vacio = [];
+              
+              Swal.fire("Correcto!", "Transferencia guardado correctamente", "success");
 
-  let indices = array_verif_env_not_vacio.map(campo => {
-    let match = campo.match(/\d+$/);
-    return match ? match[0] : null;
-  });
+            } else {
+              ver_errores(e);
+            }
+          } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!", 'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }
 
-
-  indices.forEach(index => {
-    array_data_g.push({
-      'cantidad__trns_env'             : $(`#cantidad__trns_env${index}`).val(),
-      'idalmacen_general_trns'         : $(`#idalmacen_general_trns${index}`).val(),
-      'idproducto_trns'                : $(`#idproducto_trns${index}`).val(),
-      'idalmacen_general_resumen_trns' : $(`#idalmacen_general_resumen_trns${index}`).val(),
-      'tipo_trns'                      : $(`#tipo_trns${index}`).val(),
-      'categoria_trns'                 : $(`#categoria_trns${index}`).val()
-    });
-  });
-
-
-  /*$('.input_checkted').each(function (key, val) {  
-
-    if ($(this).val()=='1' ) {
-
-      array_data_g.push({
-        'cantidad__trns_env'             :$(`#cantidad__trns_env${key+1}`).val(),
-        'idalmacen_general_trns'         :$(`#idalmacen_general_trns${key+1}`).val(),
-        'idproducto_trns'                :$(`#idproducto_trns${key+1}`).val(),
-        'idalmacen_general_resumen_trns' :$(`#idalmacen_general_resumen_trns${key+1}`).val(),
-        'tipo_trns'                      :$(`#tipo_trns${key+1}`).val(),
-        'categoria_trns'                 :$(`#categoria_trns${key+1}`).val(),
-        //'idalmacen_general_trns'         :$(`#idalmacen_general_trns${key+1}`).val(),
-        
+          $("#guardar_registro_trans_almacen").html('Guardar Cambios').removeClass('disabled');
+        },
+        xhr: function () {
+          var xhr = new window.XMLHttpRequest();
+          xhr.upload.addEventListener("progress", function (evt) {
+            if (evt.lengthComputable) {
+              var percentComplete = (evt.loaded / evt.total) * 100;
+              /*console.log(percentComplete + '%');*/
+              $("#barra_progress_trans_almacen").css({ "width": percentComplete + '%' }).text(percentComplete.toFixed(2) + " %");
+            }
+          }, false);
+          return xhr;
+        },
+        beforeSend: function () {
+          $("#barra_progress_trans_almacen").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+          $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+        },
+        complete: function () {
+          $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+        },
+        error: function (jqXhr) { ver_errores(jqXhr); },
       });
+
+    }else{
+
+      toastr_error("Error temporal!!", 'No tienes productos marcados para enviar', 700);
+      
     }
-    
-  });*/
-  console.log(array_data_g);
-  console.log( array_verif_env_not_vacio);
-
-  if (array_verif_env_not_vacio.length > 0) {
-    // e.preventDefault(); //No se activará la acción predeterminada del evento
-    //var formData = new FormData($("#form_proyecto_almacen")[0]);
-    
-    $.ajax({
-      url: "../ajax/almacen_general_activos.php?op=guardar_transf_almacen_proyecto",
-      type: "POST",
-      data: {
-
-        'array_data_g'             : JSON.stringify(array_data_g),
-        'idalmacen_general_origen' : id_almacen_transf,
-        'tranferencia'             : tipo_transf,
-        'name_alm_proyecto'        : $(`#name_alm_proyecto`).val(),
-        'fecha_transf_proy_alm'    : $(`#fecha_transf_proy_alm`).val()
-      },
-      success: function (e) {
-        try {
-          e = JSON.parse(e); console.log(e);
-          if (e.status == true) {
-
-            if (tabla_almacen_detalle) { tabla_almacen_detalle.ajax.reload(null, false); }
-            if (tabla_detalle_almacen_general) { tabla_detalle_almacen_general.ajax.reload(null, false); }
-            
-           // listar_productos_transferencia();
-            $("#modal-transferencia_aproyecto").modal("hide");
-            if (table_producto_transferencia) {table_producto_transferencia.destroy(); }
-            limpiar_Transferencia();
-            array_data_g = [];
-            array_verif_env_not_vacio = [];
-            
-            Swal.fire("Correcto!", "Transferencia guardado correctamente", "success");
-
-          } else {
-            ver_errores(e);
-          }
-        } catch (err) { console.log('Error: ', err.message); toastr_error("Error temporal!!", 'Puede intentalo mas tarde, o comuniquese con:<br> <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>', 700); }
-
-        $("#guardar_registro_trans_almacen").html('Guardar Cambios').removeClass('disabled');
-      },
-      xhr: function () {
-        var xhr = new window.XMLHttpRequest();
-        xhr.upload.addEventListener("progress", function (evt) {
-          if (evt.lengthComputable) {
-            var percentComplete = (evt.loaded / evt.total) * 100;
-            /*console.log(percentComplete + '%');*/
-            $("#barra_progress_trans_almacen").css({ "width": percentComplete + '%' }).text(percentComplete.toFixed(2) + " %");
-          }
-        }, false);
-        return xhr;
-      },
-      beforeSend: function () {
-        $("#barra_progress_trans_almacen").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-        $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").addClass('progress-bar-striped progress-bar-animated');
-      },
-      complete: function () {
-        $("#barra_progress_trans_almacen").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
-      },
-      error: function (jqXhr) { ver_errores(jqXhr); },
-    });
-
-  }else{
-
-    toastr_error("Error temporal!!", 'No tienes productos marcados para enviar', 700);
-    
-  }
-
+  }, 100); // espera 100ms
 
 }
 

@@ -564,7 +564,7 @@ class Almacen_general_activos
                                 
                                 <input type="hidden" name="idproducto_trns[]" id="idproducto_trns' . $cont . '" value="' . $value['idproducto'] . '"/>
                                 <input type="hidden" name="idalmacen_general_resumen_trns[]" id="idalmacen_general_resumen_trns' . $cont . '" value="' . $value['idalmacen_general_resumen'] . '"/>
-                                <input type="hidden" name="tipo_trns[]" id="tipo_trns' . $cont . '" value="' . $value['tipo'] . '"/>
+                                <input type="text" name="tipo_trns[]" id="tipo_trns' . $cont . '" value="' . $value['tipo'] . '"/>
                                 <input type="hidden" name="categoria_trns[]" id="categoria_trns' . $cont . '" value="' . $value['categoria'] . '"/>',
 
           'unidad'          => $value['unidad_medida'],

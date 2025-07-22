@@ -719,7 +719,10 @@ function listar_productos_transferencia() {
 
 function replicar_cantidad_a_r(id) { $(`#cantidad__trns_env${id}`).val($(`#cantidad__trns${id}`).val()); }
 
-function update_valueChec(id,total_stok) {
+function update_valueChec(id,total_stok,idalmacen_general_trns,idproducto_trns,idalmacen_general_resumen_trns,tipo_trns,categoria_trns) {
+
+  console.log('hola');
+  
 
   if ($(`#customCheckbox${id}`).is(':checked')) {
     array_verif_env_not_vacio.push(`cantidad__trns${id}`);
@@ -727,10 +730,32 @@ function update_valueChec(id,total_stok) {
     $(`#cantidad__trns_env${id}`).val(total_stok);
 
     $(`#ValorCheck${id}`).val(1);
+
+    array_data_g.push({
+      'id': `${id}`,
+      'cantidad__trns_env': $(`#cantidad__trns_env${id}`).val(),
+      'idalmacen_general_trns': $(`#idalmacen_general_trns${id}`).val(),
+      'idproducto_trns': $(`#idproducto_trns${id}`).val(),
+      'idalmacen_general_resumen_trns': $(`#idalmacen_general_resumen_trns${id}`).val(),
+      'tipo_trns': $(`#tipo_trns${idx}`).val(),
+      'categoria_trns': $(`#categoria_trns${id}`).val()
+    });
+
+    console.log('array_data_g');
+    console.log(array_data_g);
+    
+
     $(`#cantidad__trns${id}`).rules("add", { required: true, min: 0, messages: { required: `Campo requerido.`, min: "Mínimo 1", max: " Stock Máximo {0}" } });
     $(`#cantidad__trns${id}`).prop("disabled", false);
     // $('.btn_g_proy_alm').removeAttr('disabled').attr('id', 'guardar_registro_proyecto_almacen');
     $("#form_proyecto_almacen").valid();
+
+
+
+
+
+
+
 
   } else {
 
@@ -810,6 +835,12 @@ function guardar_tranf_almacenes_generales(e) {
     return match ? match[0] : null;
   });
 
+  console.log('array_verif_env_not_vacio');
+  console.log(array_verif_env_not_vacio);
+
+  console.log('indices');
+  console.log(indices);
+  
 
   indices.forEach(index => {
     array_data_g.push({
