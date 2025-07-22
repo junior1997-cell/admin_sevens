@@ -799,9 +799,39 @@ function limpiar_Transferencia() {
 let array_data_g = [];
 function guardar_tranf_almacenes_generales(e) {
 
-  $('.input_checkted').each(function (key, val) {  
-    
+
+
+ /* $('#tabla-producto_tra tbody tr td').each(function () {
+  let cantidad_venta                  = $(this).find('.textarea_datatable').val(); 
+  let input_checkted                = $(this).find('.input_checkted').val();
+    console.log(cantidad_venta);
+    console.log(input_checkted);
+  
+  
+  });*/
+
+  let indices = array_verif_env_not_vacio.map(campo => {
+    let match = campo.match(/\d+$/);
+    return match ? match[0] : null;
+  });
+
+
+  indices.forEach(index => {
+    array_data_g.push({
+      'cantidad__trns_env'             : $(`#cantidad__trns_env${index}`).val(),
+      'idalmacen_general_trns'         : $(`#idalmacen_general_trns${index}`).val(),
+      'idproducto_trns'                : $(`#idproducto_trns${index}`).val(),
+      'idalmacen_general_resumen_trns' : $(`#idalmacen_general_resumen_trns${index}`).val(),
+      'tipo_trns'                      : $(`#tipo_trns${index}`).val(),
+      'categoria_trns'                 : $(`#categoria_trns${index}`).val()
+    });
+  });
+
+
+  /*$('.input_checkted').each(function (key, val) {  
+
     if ($(this).val()=='1' ) {
+
       array_data_g.push({
         'cantidad__trns_env'             :$(`#cantidad__trns_env${key+1}`).val(),
         'idalmacen_general_trns'         :$(`#idalmacen_general_trns${key+1}`).val(),
@@ -809,13 +839,14 @@ function guardar_tranf_almacenes_generales(e) {
         'idalmacen_general_resumen_trns' :$(`#idalmacen_general_resumen_trns${key+1}`).val(),
         'tipo_trns'                      :$(`#tipo_trns${key+1}`).val(),
         'categoria_trns'                 :$(`#categoria_trns${key+1}`).val(),
-        'idalmacen_general_trns'         :$(`#idalmacen_general_trns${key+1}`).val(),
+        //'idalmacen_general_trns'         :$(`#idalmacen_general_trns${key+1}`).val(),
         
       });
     }
     
-  });
+  });*/
   console.log(array_data_g);
+  console.log( array_verif_env_not_vacio);
 
   if (array_verif_env_not_vacio.length > 0) {
     // e.preventDefault(); //No se activará la acción predeterminada del evento
@@ -882,6 +913,8 @@ function guardar_tranf_almacenes_generales(e) {
     toastr_error("Error temporal!!", 'No tienes productos marcados para enviar', 700);
     
   }
+
+
 }
 
 /**------------------------------------------------------------------
