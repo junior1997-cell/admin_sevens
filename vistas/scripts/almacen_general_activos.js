@@ -669,8 +669,6 @@ function replicar_cantidad_a_r(id) {
   // Actualiza también el input visual
   $(`#cantidad__trns_env${id}`).val(nuevo_valor);
 
-  console.log("Array actualizado:", array_data_g);
-
 }
 
 function update_valueChec(id,total_stok) {
@@ -715,8 +713,6 @@ function update_valueChec(id,total_stok) {
     }
 
     array_data_g = array_data_g.filter(item => item.id !== `${id}`);
-    console.log(`Elemento con id ${id} eliminado del array.`);
-     console.log("array_data_g actualizado elemneto eliminado:", array_data_g);
 
     $("#form_proyecto_almacen").valid();
   }
