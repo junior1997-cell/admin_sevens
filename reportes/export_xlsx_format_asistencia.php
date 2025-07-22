@@ -88,6 +88,11 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
 
     $fila_9=9;    $fila_10=9;
 
+    // Validamos si tiene datos
+    if ( isset($rspta_t['data']) && isset($rspta_t['data'][0]) && isset($rspta_t['data'][0]['asistencia']) && is_array($rspta_t['data'][0]['asistencia']) ) { } else {      
+      continue;
+    }
+
     foreach ($rspta_t['data'][0]['asistencia'] as $k => $val) {
 
       $partes = explode("-",  $val['fecha_asistencia']);
@@ -142,6 +147,11 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
     //  echo json_encode($rspta_t['data'][0]['asistencia'],true);die();
 
     $fila_9=9;    $fila_10=9;
+
+    // Validamos si tiene datos
+    if ( isset($rspta_t['data']) && isset($rspta_t['data'][0]) && isset($rspta_t['data'][0]['asistencia']) && is_array($rspta_t['data'][0]['asistencia']) ) { } else {      
+      continue;
+    }
 
     foreach ($rspta_t['data'][0]['asistencia'] as $k => $val) {
 

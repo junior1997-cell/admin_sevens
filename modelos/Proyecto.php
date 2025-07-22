@@ -4,10 +4,12 @@ require "../config/Conexion_v2.php";
 
 class Proyecto
 {
-
+  public $id_usr_sesion; public $id_proyecto_sesion;
   //Implementamos nuestro constructor
   public function __construct()
   {
+    $this->id_usr_sesion =  isset($_SESSION['idusuario']) ? $_SESSION["idusuario"] : 0;
+		$this->id_proyecto_sesion = isset($_SESSION['idproyecto'] ) ? $_SESSION['idproyecto']  : 0;
   }
 
   //Implementamos un método para insertar registros
@@ -26,7 +28,17 @@ class Proyecto
     $sql2 = "INSERT INTO bitacora_bd( nombre_tabla, id_tabla, accion, id_user) VALUES ('proyecto','" . $id_proyect['data'] . "','Registrar','" . $_SESSION['idusuario'] . "')";
     $bitacora1 = ejecutarConsulta($sql2);  if ( $bitacora1['status'] == false) {return $bitacora1; }
 
-
+    // CREAMOS EL HORARIO ----------------------------------------------------------
+    $sql = "INSERT INTO `horario` ( `idproyecto`, `nombre`, `turno`, `domingo`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `estado`, `estado_delete`, `created_at`, `updated_at`, `user_trash`, `user_delete`, `user_created`, `user_updated`) VALUES
+    ( '{$id_proyect['data']}', 'HORARIO NORMAL', 'MAÑANA', '07:30 - 12:00', '07:30 - 12:30', '07:30 - 12:30', '07:30 - 12:30', '07:30 - 12:30', '07:30 - 12:30', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL),
+    ( '{$id_proyect['data']}', 'HORARIO NORMAL', 'ALMUERZO', '', '12:30 - 01:30', '12:30 - 01:30', '12:30 - 01:30', '12:30 - 01:30', '12:30 - 01:30', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL),
+    ( '{$id_proyect['data']}', 'HORARIO NORMAL', 'TARDE', '', '01:30 - 05:30', '01:30 - 05:30', '01:30 - 05:30', '01:30 - 05:30', '01:30 - 04:00', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL),
+    ( '{$id_proyect['data']}', 'HORARIO NORMAL', 'HORAS ACUMULADAS', '4.5', '9', '9', '9', '9', '7.5', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL),
+    ( '{$id_proyect['data']}', 'HORARIO EXTRA', 'TARDE', '', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL),
+    ( '{$id_proyect['data']}', 'HORARIO EXTRA', 'CENA', '', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL),
+    ( '{$id_proyect['data']}', 'HORARIO EXTRA', 'NOCHE', '', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '00:00 - 00:00', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL),
+    ( '{$id_proyect['data']}', 'HORARIO EXTRA', 'HORAS ACUMULADAS', '0', '0', '0', '0', '0', '0', '1', '1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, '$this->id_usr_sesion', NULL);";
+    $horario = ejecutarConsulta($sql);  if ( $horario['status'] == false) {return $horario; }
 
     // CREAMOS FECHAS DE VALORIZACION ----------------------------------------------------------
     if ($fecha_valorizacion == "quincenal") {

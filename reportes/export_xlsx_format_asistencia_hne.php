@@ -5,6 +5,10 @@
   use PhpOffice\PhpSpreadsheet\IOFactory;
   use PhpOffice\PhpSpreadsheet\Style\Border;
   use PhpOffice\PhpSpreadsheet\Style\Color;
+  use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+  use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+  use PhpOffice\PhpSpreadsheet\Style\Alignment;
+  use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
   $spreadsheet = new Spreadsheet();
   $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Asistencia de obreros");
@@ -64,6 +68,7 @@
     $hojaActiva->setCellValue('H8',"$d_i de $f_i AL $d_f de $f_f"); //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL  
     $total_q = 0;
     $dias_sem = ['0'=>'H','1'=>'I','2'=>'J','3'=>'K','4'=>'L','5'=>'M','6'=>'N'];
+    
     foreach ($data_asistencia['data'][0]['asistencia'] as $key2 => $val2) {       
       $hojaActiva->setCellValue($dias_sem[$key2] . '9' , substr($val2['fecha_asistencia'], 8, 2));
       $hojaActiva->setCellValue($dias_sem[$key2] .'10', nombre_dia_semana_v1($val2['fecha_asistencia']));           
@@ -71,16 +76,20 @@
     
     foreach ($data_asistencia['data'] as $key => $reg) {
 
-      if ( !empty($reg['imagen_perfil']) ) {
-        // Add png image to comment background
-        $drawing = $drawing = new PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-        $drawing->setName($reg['nombres']);
-        $drawing->setPath('../dist/docs/all_trabajador/perfil/'.$reg['imagen_perfil']);
-        $drawing->setWidthAndHeight(150, 150);
-        $comment = $hojaActiva->getComment('B' . $fila_1);
-        $comment->setBackgroundImage($drawing);
-        // Set the size of the comment equal to the size of the image 
-        $comment->setSizeAsBackgroundImage();
+      $imagen_perfil = '../dist/docs/all_trabajador/perfil/'.$reg['imagen_perfil'];
+
+      if (file_exists($imagen_perfil)) {
+        if ( !empty($reg['imagen_perfil']) ) {
+          // Add png image to comment background
+          $drawing = $drawing = new PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+          $drawing->setName($reg['nombres']);
+          $drawing->setPath( $imagen_perfil );
+          $drawing->setWidthAndHeight(150, 150);
+          $comment = $hojaActiva->getComment('B' . $fila_1);
+          $comment->setBackgroundImage($drawing);
+          // Set the size of the comment equal to the size of the image 
+          $comment->setSizeAsBackgroundImage();
+        }
       }
 
       $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1)->getAlignment()->setHorizontal('center');
@@ -101,6 +110,11 @@
 
       $hojaActiva->mergeCells('G' . $fila_1 . ':G' . $fila_1 + 1);          # unir columnas ---
       $hojaActiva->setCellValue('G' . $fila_1, $reg['nombre_ocupacion']);   # Ocupacion
+
+      // Validamos si tiene datos
+      if ( isset($reg['asistencia']) && is_array( $reg['asistencia'] ) ) { } else {      
+        continue;
+      }
 
       foreach ($reg['asistencia'] as $key3 => $val3) {
         $hojaActiva->setCellValue($dias_sem[$key3] . $fila_1, $val3['horas_normal_dia']); 
@@ -381,11 +395,18 @@
   }
 
   function plantilla_logo($spreadsheet) {
-    // Add png image to comment background
-    $drawing = $drawing = new PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-    $drawing->setName('Paid');
-    $drawing->setDescription('Paid');
-    $drawing->setPath('../dist/img/logo-principal.png'); // put your path and image here
+
+    $logoPath = '../dist/img/logo-principal.png';
+
+    if (!file_exists($logoPath)) {
+      // Opcional: log error o simplemente no insertar el logo
+      return;
+    }
+
+    $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+    $drawing->setName('Logo');
+    $drawing->setDescription('Logo');
+    $drawing->setPath($logoPath);
     $drawing->setCoordinates('A1');
     $drawing->setWidthAndHeight(90, 90);
     $drawing->setOffsetY(5);
@@ -394,4 +415,6 @@
     $drawing->getShadow()->setVisible(true);
     $drawing->getShadow()->setDirection(45);
     $drawing->setWorksheet($spreadsheet->getActiveSheet());
+
+    
   }

@@ -94,11 +94,11 @@ function extraer_nombre_mes(fecha) {
 }
 
 // convierte de una fecha(aa-mm-dd): 2021-12-23 a una fecha(dd-mm-aa): 23-12-2021
-function format_d_m_a(fecha) {
+function format_d_m_a(fecha, ext= '-') {
   var format = "";
   if (fecha == '' || fecha == null || fecha == '0000-00-00') { format = "-"; } else {
     let splits = fecha.split("-"); //console.log(splits);
-    format = `${splits[2]}-${splits[1]}-${splits[0]}`;
+    format = `${splits[2]}${ext}${splits[1]}${ext}${splits[0]}`;
   } 
   return format;
 }

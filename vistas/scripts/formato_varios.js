@@ -167,6 +167,58 @@ function export_excel_detalle_temperatura() {
 
 }
 
+function asistencia(nube_idproyecto) {
+   $.post("../ajax/formatos_varios.php?op=data_format_ats", {'nube_idproyecto': nube_idproyecto}, function (e, status) {
+
+    e = JSON.parse(e);  
+
+    if (e.status == true) {   
+      var html_asistencia = '';
+      e.data.forEach((val, key) => {
+        
+        // DATA TEMPERATURA
+        html_asistencia = html_asistencia.concat(`
+          
+
+          <tr>
+                                      <td rowspan="2" >${key+1}</td>
+                                      <td rowspan="2">${val.trabajador}</td>
+                                      <td rowspan="2">${val.numero_documento}</td>
+                                      <td rowspan="2">${ format_d_m_a(val.fecha_inicio, '/')}</td>
+                                      <td rowspan="2">${val.nombre_ocupacion}</td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>                                      
+                                      <td rowspan="2"></td>
+                                    </tr>
+                                    <tr>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>    
+                                    </tr>
+        `);
+        
+      });
+
+      $('.tabla_sistencia_obrero tbody').html(html_asistencia);
+     
+    } else {
+      ver_errores(e);
+    }
+
+  }).fail( function(e) { ver_errores(e); } );
+}
+
+asistencia(localStorage.getItem('nube_idproyecto'));
+
 function export_excel_control_equipos() {
   $tabla = document.querySelector("#formato_check_list_epps");
   let tableExport = new TableExport($tabla, {

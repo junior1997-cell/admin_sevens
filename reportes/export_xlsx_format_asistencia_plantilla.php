@@ -5,6 +5,10 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $spreadsheet = new Spreadsheet();
 $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Asistencia de obreros");
@@ -33,7 +37,7 @@ $dia_regular = 0; $estado_regular = false;
 // Generar hojas por quincena
 foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
 
-  $ids_q_asistencia =$reg['ids_q_asistencia']; 
+  $ids_q_asistencia =$reg['ids_q_asistencia']; // echo $ids_q_asistencia . '<br>'; 
   $numero_q_s =$reg['numero_q_s']; 
   // solo el dia ejem: 06 
   $f_i_dia               = date("d", strtotime($reg['fecha_q_s_inicio']));
@@ -90,24 +94,27 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
 
     $hojaActiva->setCellValue('H8',"$f_i_dia de $mes_f_i al $f_f_dia de $mes_f_f"); //fecha ejem : 23 DE ABRIL AL 28 DE ABRIL
 
-    $rspta_t = $formatos_varios->ver_detalle_sem_quin($ids_q_asistencia,$fechaInicio_sc, $fechaFin_sc, $id_proyecto, $n_f_i_p, $n_f_f_p);
-    // echo json_encode($rspta_t['data'][0]['asistencia'],true);die();
-    // echo json_encode($rspta_t['data'],true);die();
+    $rspta_t = $formatos_varios->ver_detalle_sem_quin($ids_q_asistencia,$fechaInicio_sc, $fechaFin_sc, $id_proyecto, $n_f_i_p, $n_f_f_p);    
 
     $fila_9=9;    $fila_10=9;
     $cont=0;
     $totalCant = count($rspta_t['data']);
-    // echo json_encode($totalCantidad,true);die();
+
+    // Validamos si tiene datos
+    if ( isset($rspta_t['data']) && isset($rspta_t['data'][0]) && isset($rspta_t['data'][0]['asistencia']) && is_array($rspta_t['data'][0]['asistencia']) ) { } else {      
+      continue;
+    }
+
     foreach ($rspta_t['data'][0]['asistencia'] as $k => $val) {
 
-      $partes = explode("-",  $val['fecha_asistencia']);
+      $partes = explode("-",  $val['fecha_asistencia']);  
       $dia = $partes[2];
-      $nombre_d=$val['nombre_dia'] =="Sábado"?substr($val['nombre_dia'], 0, 1)."a":substr($val['nombre_dia'], 0, 2);
+      $nombre_d=$val['nombre_dia'] =="Sábado"?substr($val['nombre_dia'], 0, 1)."a":substr($val['nombre_dia'], 0, 2);      
 
-      $hojaActiva->setCellValue($Colum_Semana[$k]  ."9",$nombre_d );
+      $hojaActiva->setCellValue($Colum_Semana[$k] ."9", $nombre_d );
       $hojaActiva->setCellValue($Colum_Semana[$k]  ."10", $dia );
 
-    }
+    }  //die();
     
     foreach ($rspta_t['data'] as $key => $reg) {
       $cont=$key + 1;
@@ -119,15 +126,26 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
       $spreadsheet->getActiveSheet()->getStyle('F' . $fila_1)->getAlignment()->setVertical('center');
       $spreadsheet->getActiveSheet()->getStyle('G' . $fila_1)->getAlignment()->setVertical('center');
 
-      $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(34);
-      $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1 . ':O' . $fila_1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+      $spreadsheet->getActiveSheet()->getRowDimension($fila_1)->setRowHeight(20);
+      $spreadsheet->getActiveSheet()->getRowDimension($fila_1+1)->setRowHeight(20);
+      $spreadsheet->getActiveSheet()->getStyle('A' . $fila_1 . ':O' . $fila_1 +1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
 
-      $hojaActiva->setCellValue('A' . $fila_1, ($cont));                 # Auto increment
-      $hojaActiva->mergeCells('B' . $fila_1 . ':D' . $fila_1);              # unir columnas - apellidos y nombres
-      $hojaActiva->setCellValue('B' . $fila_1, $reg['nombres']);            # apellidos y nombres   
+      $hojaActiva->setCellValue('A' . $fila_1, ($cont));                    # Auto increment
+      $hojaActiva->mergeCells('A' . $fila_1 . ':A' . $fila_1 + 1);          # unir columnas - Auto increment
+
+      $hojaActiva->mergeCells('B' . $fila_1 . ':D' . $fila_1 + 1);          # unir columnas - apellidos y nombres      
+      $hojaActiva->setCellValue('B' . $fila_1, $reg['nombres']);            # apellidos y nombres  
+
+      $hojaActiva->mergeCells('E' . $fila_1 . ':E' . $fila_1 + 1);          # unir columnas - DNI
       $hojaActiva->setCellValue('E' . $fila_1, $reg['numero_documento']);   # DNI
+
+      $hojaActiva->mergeCells('F' . $fila_1 . ':F' . $fila_1 + 1);          # unir columnas - Fecha incio trabajo
       $hojaActiva->setCellValue('F' . $fila_1, $reg['fecha_inicio_t']);     # Fecha incio trabajo
+
+       $hojaActiva->mergeCells('G' . $fila_1 . ':G' . $fila_1 + 1);         # unir columnas - Ocupacion
       $hojaActiva->setCellValue('G' . $fila_1, $reg['nombre_ocupacion']);   # Ocupacion
+
+      
 
       //$Colum_Semana = array('H', 'I', 'J', 'K', 'L', 'M');
       foreach ($reg['asistencia'] as $key2 => $reg2) {
@@ -138,32 +156,42 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
       //PROCESO PARA PINTAR FILAS VACIAS
       if ($cont==$totalCant) {
 
-        $fila_2=$fila_1+1;
+        $fila_2=$fila_1;
 
         for ($i = $cont; $i < $cont+10; $i++) {
 
           $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
-          $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(34);
-          $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':O' . $fila_2)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+          $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(20);
+          $spreadsheet->getActiveSheet()->getRowDimension($fila_2+1)->setRowHeight(20);
+          $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':O' . $fila_2 +1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
     
           // echo json_encode($fila_1,true);die();
           $hojaActiva->setCellValue('A' . $fila_2, ($i+1));                 # Auto increment
-          $hojaActiva->mergeCells('B' . $fila_2 . ':D' . $fila_2);              # unir columnas - apellidos y nombres
+          $hojaActiva->mergeCells('A' . $fila_2 . ':A' . $fila_2 + 1);          # unir columnas - Auto increment
+
+          $hojaActiva->mergeCells('B' . $fila_2 . ':D' . $fila_2 +1);              # unir columnas - apellidos y nombres
           $hojaActiva->setCellValue('B' . $fila_2, '');   # apellidos y nombres   
+
+          $hojaActiva->mergeCells('E' . $fila_2 . ':E' . $fila_2 + 1);          # unir columnas - DNI
           $hojaActiva->setCellValue('E' . $fila_2, '');   # DNI
+
+          $hojaActiva->mergeCells('F' . $fila_2 . ':F' . $fila_2 + 1);          # unir columnas - Fecha incio trabajo
           $hojaActiva->setCellValue('F' . $fila_2, '');   # Fecha incio trabajo
+
+          $hojaActiva->mergeCells('G' . $fila_2 . ':G' . $fila_2 + 1);         # unir columnas - Ocupacion
           $hojaActiva->setCellValue('G' . $fila_2, '');   # Ocupacion
 
-          $fila_2++;
+          $fila_2 +=2;
         }
 
       }
 
-      $fila_1++;
+      $fila_1  += 2;
 
       
     }  
-        // echo json_encode($fila_1,true);die();
+    
+    // echo json_encode($fila_1,true);die();
     
   } else if ($fecha_pago_obrero == 'quincenal') {
 
@@ -179,6 +207,11 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
     $fila_9=9;    $fila_10=9;
     $cont=0;
     $totalCant = count($rspta_t['data']);
+
+    // Validamos si tiene datos
+    if ( isset($rspta_t['data']) && isset($rspta_t['data'][0]) && isset($rspta_t['data'][0]['asistencia']) && is_array($rspta_t['data'][0]['asistencia']) ) { } else {      
+      continue;
+    }
 
     foreach ($rspta_t['data'][0]['asistencia'] as $k => $val) {
 
@@ -240,12 +273,15 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
   $contador++;  
 }
 
+// die();
+
 // redirect output to client browser
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="Asistencia_trabajador.xlsx"');
 header('Cache-Control: max-age=0');
 
-$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+$writer = new Xlsx($spreadsheet);
+
 $writer->save('php://output');
 
 function plantilla($hoja, $fecha_pago_obrero) {
@@ -367,11 +403,17 @@ function plantilla_nombre_head($hojaActiva, $fecha_pago_obrero) {
 }
 
 function plantilla_logo($hoja) {
-  // Add png image to comment background
-  $drawing = $drawing = new PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-  $drawing->setName('Paid');
-  $drawing->setDescription('Paid');
-  $drawing->setPath('../dist/img/logo-principal.png'); // put your path and image here
+  $logoPath = '../dist/img/logo-principal.png';
+
+  if (!file_exists($logoPath)) {
+    // Opcional: log error o simplemente no insertar el logo
+    return;
+  }
+
+  $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+  $drawing->setName('Logo');
+  $drawing->setDescription('Logo');
+  $drawing->setPath($logoPath);
   $drawing->setCoordinates('A1');
   $drawing->setWidthAndHeight(90, 90);
   $drawing->setOffsetY(5);

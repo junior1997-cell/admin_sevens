@@ -305,7 +305,40 @@
                               <!-- tabla ASISTENCIA - TRABAJADOR -->
                               <a type="button" class="btn bg-gradient-success btn-sm my-3" id="btn-export-asistencia_trabajador" target="_blank"> <i class="fa-regular fa-file-excel"></i> export </a>
                               <div class="table-responsive pb-3">
-                                  <!--TABLA EXPORT ASISTENCIA TRABAJADOR-->
+                                <!--TABLA EXPORT ASISTENCIA TRABAJADOR-->
+                                <table class="table table-hover table-head-fixed text-nowrap tabla_sistencia_obrero" style="border: black 1px solid;">
+                                  <thead class="bg-white" >
+                                    <tr class="celda-b-t-1px ">
+                                      <th rowspan="3" class="stile-celda inicio_tabla">N°</th>
+                                      <th rowspan="3" class="stile-celda ">Nombre</th>
+                                      <th rowspan="3" class="stile-celda ">DNI</th>
+                                      <th rowspan="3" class="stile-celda ">FECHA INGRESO</th>
+                                      <th rowspan="3" class="stile-celda ">OCUPACIÓN</th>
+                                      <th colspan="7" class="text-center py-1" style="border: black 1px solid;">                                    
+                                        Horas de trabajo por día                                        
+                                      </th>
+                                      <th rowspan="3" class="stile-celda table_title_hne">Descripción</th>                                      
+                                    </tr>
+                                    
+                                    <tr class="table-dias data-dia-semana">   
+                                                                    
+                                      <th class="py-1"> Do </th>
+                                      <th class="py-1"> Lu </th>
+                                      <th class="py-1"> Ma </th>
+                                      <th class="py-1"> Mi </th>
+                                      <th class="py-1"> Ju </th>
+                                      <th class="py-1"> Vi </th>
+                                      <th class="py-1 bg-color-acc3c7"> Sa </th>                                  
+                                    </tr>
+                                    <tr class="table-dias data-numero-semana">                                      
+                                      <th class="py-1">01</th> <th class="py-1">02</th> <th class="py-1">03</th> <th class="py-1">04</th> <th class="py-1">05</th> <th class="py-1">06</th> <th class="py-1">07</th> 
+                                    </tr>
+                                  </thead>
+                                  <tbody class="tcuerpo data_table_body" >
+                                    
+                                    
+                                  </tbody>
+                                </table>
                               </div>
                               <!-- /.table-responsive -->                                
                             </div>
