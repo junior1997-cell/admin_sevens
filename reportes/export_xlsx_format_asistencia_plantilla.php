@@ -153,43 +153,44 @@ foreach ($proyecto['data']['s_q_asistencia'] as $key => $reg){
       }
 
       $spreadsheet->getActiveSheet()->getStyle('O' . $fila_1)->getBorders()->getRight()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-      //PROCESO PARA PINTAR FILAS VACIAS
-      if ($cont==$totalCant) {
-
-        $fila_2=$fila_1;
-
-        for ($i = $cont; $i < $cont+10; $i++) {
-
-          $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
-          $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(20);
-          $spreadsheet->getActiveSheet()->getRowDimension($fila_2+1)->setRowHeight(20);
-          $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':O' . $fila_2 +1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
-    
-          // echo json_encode($fila_1,true);die();
-          $hojaActiva->setCellValue('A' . $fila_2, ($i+1));                 # Auto increment
-          $hojaActiva->mergeCells('A' . $fila_2 . ':A' . $fila_2 + 1);          # unir columnas - Auto increment
-
-          $hojaActiva->mergeCells('B' . $fila_2 . ':D' . $fila_2 +1);              # unir columnas - apellidos y nombres
-          $hojaActiva->setCellValue('B' . $fila_2, '');   # apellidos y nombres   
-
-          $hojaActiva->mergeCells('E' . $fila_2 . ':E' . $fila_2 + 1);          # unir columnas - DNI
-          $hojaActiva->setCellValue('E' . $fila_2, '');   # DNI
-
-          $hojaActiva->mergeCells('F' . $fila_2 . ':F' . $fila_2 + 1);          # unir columnas - Fecha incio trabajo
-          $hojaActiva->setCellValue('F' . $fila_2, '');   # Fecha incio trabajo
-
-          $hojaActiva->mergeCells('G' . $fila_2 . ':G' . $fila_2 + 1);         # unir columnas - Ocupacion
-          $hojaActiva->setCellValue('G' . $fila_2, '');   # Ocupacion
-
-          $fila_2 +=2;
-        }
-
-      }
+      
 
       $fila_1  += 2;
-
       
     }  
+
+    //PROCESO PARA PINTAR FILAS VACIAS
+    if ($cont==$totalCant) {
+
+      $fila_2=$fila_1;
+
+      for ($i = $cont; $i < $cont+10; $i++) {
+
+        $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2)->getAlignment()->setHorizontal('center');
+        $spreadsheet->getActiveSheet()->getRowDimension($fila_2)->setRowHeight(20);
+        $spreadsheet->getActiveSheet()->getRowDimension($fila_2+1)->setRowHeight(20);
+        $spreadsheet->getActiveSheet()->getStyle('A' . $fila_2 . ':O' . $fila_2 +1)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color('000000'));
+  
+        // echo json_encode($fila_1,true);die();
+        $hojaActiva->setCellValue('A' . $fila_2, ($i+1));                 # Auto increment
+        $hojaActiva->mergeCells('A' . $fila_2 . ':A' . $fila_2 + 1);          # unir columnas - Auto increment
+
+        $hojaActiva->mergeCells('B' . $fila_2 . ':D' . $fila_2 +1);              # unir columnas - apellidos y nombres
+        $hojaActiva->setCellValue('B' . $fila_2, '');   # apellidos y nombres   
+
+        $hojaActiva->mergeCells('E' . $fila_2 . ':E' . $fila_2 + 1);          # unir columnas - DNI
+        $hojaActiva->setCellValue('E' . $fila_2, '');   # DNI
+
+        $hojaActiva->mergeCells('F' . $fila_2 . ':F' . $fila_2 + 1);          # unir columnas - Fecha incio trabajo
+        $hojaActiva->setCellValue('F' . $fila_2, '');   # Fecha incio trabajo
+
+        $hojaActiva->mergeCells('G' . $fila_2 . ':G' . $fila_2 + 1);         # unir columnas - Ocupacion
+        $hojaActiva->setCellValue('G' . $fila_2, '');   # Ocupacion
+
+        $fila_2 +=2;
+      }
+
+    }
     
     // echo json_encode($fila_1,true);die();
     
