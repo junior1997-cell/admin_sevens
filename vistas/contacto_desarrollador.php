@@ -130,24 +130,25 @@
             <table id="tabla-para-todos-los-modulos-proyecto" class="table table-bordered table-striped display" style="width: 100% !important;">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th class="">OP</th>
                   <th class="">Cod</th>
+                  <th class="">OP</th>
+                  
                   <th>Empresa</th>
                   <th>Nombre Código</th>                     
                   <th>Costo</th>                  
+                  <th>Gasto</th>                  
                   <th>Estado</th>
                 </tr>
               </thead>
               <tbody>  </tbody>
               <tfoot>
                 <tr>
-                  <th>#</th>
-                  <th class="">OP</th>
                   <th class="">Cod</th>
+                  <th class="">OP</th>
                   <th>Empresa</th>
                   <th>Nombre Código</th>                      
-                  <th>Costo</th>                  
+                  <th>Costo</th>  
+                  <th>Gasto</th>                 
                   <th>Estado</th>
                 </tr>
               </tfoot>
@@ -284,9 +285,9 @@
       },
       bDestroy: true,
       iDisplayLength: 10,//Paginación
-      order: [[ 0, "asc" ]],//Ordenar (columna,orden)
+      order: [[ 0, "desc" ]],//Ordenar (columna,orden)
       columnDefs: [
-      { targets: [5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<div class="text-nowrap"><span >S/</span> <span class=" ${color} "> ${number} </span></div>`; } return number; }, },
+      { targets: [4,5], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<div class="text-nowrap"><span >S/</span> <span class=" ${color} "> ${number} </span></div>`; } return number; }, },
 
         // { targets: [6], visible: false, searchable: false, },             
       ],

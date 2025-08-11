@@ -852,7 +852,7 @@
         <script src="../plugins/jquery-ui/jquery-ui.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/valorizacion.js?version_jdl=1.9"></script>
+        <script type="text/javascript" src="scripts/valorizacion.js?version_jdl=2.01"></script>
 
         <script> 
           $(function () { 

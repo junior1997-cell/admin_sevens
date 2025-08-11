@@ -1165,7 +1165,7 @@ if (!isset($_SESSION["nombre"])) {
     <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
     <!-- <script type="text/javascript" src="scripts/moment.min.js"></script>-->
-    <script type="text/javascript" src="scripts/resumen_general.js?version_jdl=1.9"></script>
+    <script type="text/javascript" src="scripts/resumen_general.js?version_jdl=2.01"></script>
 
     <script>
       $(function() {
