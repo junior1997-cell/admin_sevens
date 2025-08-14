@@ -60,37 +60,37 @@
         case 'tabla_almacen':         
 
           $rspta = $almacen->tbla_principal($_POST["id_proyecto"], $_POST["nombre_insumo"], $_POST["fip"], $_POST["ffp"], $_POST["fpo"] );
-          // echo json_encode($rspta, true); die();
+          //echo json_encode($rspta, true); die();
           // $rspta = $almacen->tbla_principal(6, '2023-04-18', '2023-04-22', 'semanal' );
 
           $codigoHTMLbodyProducto =''; 
           $codigoHTMLhead1=""; $codigoHTMLhead2=""; $codigoHTMLhead3=""; $codigoHTMLhead4=""; $codigoHTMLhead5="" ;          
 
           foreach ($rspta['data']['fechas'] as $key => $val) {
-            $codigoHTMLhead1 .= '<th colspan="'.$val['cantidad_dias'].'">'.$val['name_month'] . ' - ' . $val['name_year'].'</th>';
+            $codigoHTMLhead1 .= '<th class="py-0 " colspan="'.$val['cantidad_dias'].'">'.$val['name_month'] . ' - ' . $val['name_year'].'</th>';
             foreach ($val['dia'] as $key => $val2) {
-              $codigoHTMLhead2 .= '<th class="style-head">'.$val2['number_day'].'</th>';     
-              $codigoHTMLhead4 .= '<th class="style-head">'.$val2['name_day_abrev'].'</th>';
+              $codigoHTMLhead2 .= '<th class="py-0">'.$val2['number_day'].'</th>';     
+              $codigoHTMLhead4 .= '<th class="py-0">'.$val2['name_day_abrev'].'</th>';
             }
           }          
 
           echo '<thead class="st_tr_style bg-white">
           <tr class="thead-f1">
-            <th rowspan="4">#</th> 
-            <th rowspan="4">Code</th> 
-            <th rowspan="4">Producto</th>
-            <th rowspan="4">UND</th> 
-            <th rowspan="4">TIPO </th>           
+            <th class="py-0 " rowspan="4">#</th> 
+            <th class="py-0 " rowspan="4">Code</th> 
+            <th class="py-0 " rowspan="4">Producto</th>
+            <th class="py-0 " rowspan="4">UND</th> 
+            <th class="py-0 " rowspan="4">TIPO </th>           
             '.$codigoHTMLhead1.'
-            <th rowspan="4">ENTRADA/ <br> SALIDA</th> 
-            <th rowspan="4">SALDO</th>
+            <th class="py-0 " rowspan="4">ENTRADA/ <br> SALIDA</th> 
+            <th class="py-0 " rowspan="4">SALDO</th>
           </tr>';
 
-          echo '<tr class="thead-f2">'. $codigoHTMLhead2 . '</tr>';
-          echo '<tr class="thead-f3">'; 
-            foreach ($rspta['data']['data_sq'] as $key => $val) { echo '<th class="text-nowrap" colspan="'.$val['colspan'].'">'.$val['nombre_sq'].' '. $val['num_sq'].'</th>'; }
+          echo '<tr class="py-0 thead-f2">'. $codigoHTMLhead2 . '</tr>';
+          echo '<tr class="py-0 thead-f3">'; 
+            foreach ($rspta['data']['data_sq'] as $key => $val) { echo '<th class="py-0 text-nowrap" colspan="'.$val['colspan'].'">'.$val['nombre_sq'].' '. $val['num_sq'].'</th>'; }
           echo'</tr>';
-          echo '<tr class="thead-f4">'. $codigoHTMLhead4 . '</tr>';
+          echo '<tr class="py-0 thead-f4">'. $codigoHTMLhead4 . '</tr>';
           // echo $codigoHTMLhead5;                                             
           echo '</thead>'; //die();
 
@@ -102,23 +102,23 @@
             $html_dias_entrada = ''; $html_dias_salida = ''; 
 
             foreach ($val['almacen'] as $key2 => $val2) {              
-              $html_dias_entrada .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$val2['entrada_group'].'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idalmacen_resumen'] .'\', \'ENTRADA\');">'.$val2['entrada_cant'].'</td>';
-              $html_dias_salida .= '<td class="cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$val2['salida_group'].'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idalmacen_resumen'] .'\', \'SALIDA\');">'.$val2['salida_cant'].'</td>';
+              $html_dias_entrada .= '<td class="py-0 text-success cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$val2['entrada_group'].'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idalmacen_resumen'] .'\', \'ENTRADA\');">'.$val2['entrada_cant'].'</td>';
+              $html_dias_salida .= '<td class="py-0 text-danger cursor-pointer '.$color_filas.'" data-toggle="tooltip" data-original-title="'.$val2['salida_group'].'" onclick="modal_ver_almacen(\''.$val2['fecha'].'\', \''.$val['idalmacen_resumen'] .'\', \'SALIDA\');">'.$val2['salida_cant'].'</td>';
             }
 
             $saldo = floatval($val['stok']) ;
             $codigoHTMLbodyProducto = '<tr class="text-nowrap '.$color_filas.'">
-              <td rowspan="2">'.($key +1).'</td>
-              <td rowspan="2">'.$val['idproducto'].'</td> 
-              <td class="text_producto text-nowrap" rowspan="2"> <span class="name_producto_'.$val['idproducto'].'">'.$val['nombre_producto'].'</span> <br> <small><b>Clasf:</b> '.$val['categoria'].' </small></td>
-              <td rowspan="2">'.$val['um_abreviacion'].'</td>
-              <td > Entrada </td>          
+              <td class="py-0" rowspan="2">'.($key +1).'</td>
+              <td class="py-0" rowspan="2">'.$val['idproducto'].'</td> 
+              <td class="py-0 text_producto text-nowrap" rowspan="2"> <span class="name_producto_'.$val['idproducto'].'">'.$val['nombre_producto'].'</span> <br> <small><b>Clasf:</b> '.$val['categoria'].' </small></td>
+              <td class="py-0 " rowspan="2">'.$val['um_abreviacion'].'</td>
+              <td class="py-0 "> Entrada </td>          
               '.$html_dias_entrada.'          
-              <td> <span class="entrada_total_'.$val['idproducto'].'">'.number_format($val['total_entrada'] , 2,',','.').'</span> </td>
-              <td rowspan="2" class="'.($saldo < 0 ? 'text-danger' : '').'"><span class="saldo_total_'.$val['idproducto'].'">'.number_format($saldo, 2,',','.').'</span></td>
+              <td class="py-0"> <span class="entrada_total_'.$val['idproducto'].'">'.number_format($val['total_entrada'] , 2,',','.').'</span> </td>
+              <td class="py-0 '.($saldo < 0 ? 'text-danger' : '').'" rowspan="2"><span class="saldo_total_'.$val['idproducto'].'">'.number_format($saldo, 2,',','.').'</span></td>
             </tr>';
 
-            echo $codigoHTMLbodyProducto .' <tr><td class="'.$color_filas.'">Salida</td>  '.$html_dias_salida.'<td class="'.$color_filas.'"><span class="salida_total_'.$val['idproducto'].'">'.number_format($val['total_salida'], 2,',','.').'</span></td> </tr>';             
+            echo $codigoHTMLbodyProducto .' <tr><td class="py-0 '.$color_filas.'">Salida</td>  '.$html_dias_salida.'<td class="py-0 '.$color_filas.'"><span class="salida_total_'.$val['idproducto'].'">'.number_format($val['total_salida'], 2,',','.').'</span></td> </tr>';             
 
           }
 
@@ -141,7 +141,7 @@
           
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>'<button class="btn btn-info btn-sm" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
+                "1"=>'<button class="btn btn-info btn-sm py-0" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
                 "2"=> $val['idproducto_f'],
                 "3"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['nombre_producto'] .'</p></span> </div>',
                 "4"=> $val['um_abreviacion'],

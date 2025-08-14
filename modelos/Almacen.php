@@ -244,7 +244,7 @@ class Almacen
     $cant_dias = count($dias_rango['data']); $sumando = $dia_regular; $estado = true; $count_sq = 1; $colspan = $dia_regular;
     //  ($cant_dias - ($sumando - $cant_sq) )
     while ($estado == true) {      
-      if ( $cant_dias < $cant_sq ) {        #validamos si el rango de fechas en menor a: $cant_sq
+      if ( $colspan < $cant_sq ) {        #validamos si el rango de fechas en menor a: $cant_sq
         $data_sq[] = ['colspan'  =>  $dia_regular, 's'  => $sumando, 'c'  => $cant_dias, 'w'  => $weekday_regular, 'nombre_sq'  => $nombre_sq, 'num_sq'  => $count_sq, ];
         $estado = false;   
       } else if ( $sumando < $cant_dias ) { #semana regulada
@@ -273,24 +273,24 @@ class Almacen
       FROM fechas_de_calendario as fc
       LEFT JOIN ( 
         select SUM(cantidad) AS cant, fecha 
-        from almacen_detalle where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar 
-          AND tipo_mov IN ('IPC', 'IEP', 'IPG') 
+        from almacen_detalle where estado = '1' AND estado_delete = '1' AND tipo_mov IN ('IPC', 'IEP', 'IPG') AND idalmacen_resumen = $id_ar 
+        GROUP BY fecha
       ) as ad_ic on ad_ic.fecha = fc.fecha 
       LEFT JOIN ( 
         SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN 		ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2)) END SEPARATOR ', ') as cant_group, ad.fecha 
         FROM almacen_detalle as ad 
-        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar AND tipo_mov IN ('IPC', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar AND tipo_mov IN ('IPC', 'IEP', 'IPG') GROUP BY ad.idalmacen_resumen, ad.fecha 
       ) as ad_ig on ad_ig.fecha = fc.fecha 
 
       LEFT JOIN ( 
         select SUM(cantidad) AS cant, fecha 
-        from almacen_detalle where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar 
-          AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') 
+        from almacen_detalle where estado = '1' AND estado_delete = '1' AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') AND idalmacen_resumen = $id_ar 
+        GROUP BY fecha
       ) as ad_sc on ad_sc.fecha = fc.fecha 
       LEFT JOIN ( 
-        SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN 		ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2)) END SEPARATOR ', ') as cant_group, ad.fecha 
+        SELECT  GROUP_CONCAT(CASE WHEN ad.cantidad = FLOOR(ad.cantidad) THEN ROUND(ad.cantidad, 0) WHEN ad.cantidad = ROUND(ad.cantidad, 1) THEN ROUND(ad.cantidad, 1) ELSE TRIM(TRAILING '0' FROM ROUND(ad.cantidad, 2)) END SEPARATOR ', ') as cant_group, ad.fecha 
         FROM almacen_detalle as ad 
-        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen
+        where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = $id_ar AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen, ad.fecha 
       ) as ad_sg on ad_sg.fecha = fc.fecha 
       WHERE fc.fecha BETWEEN '$fip' AND '$ffp';";
       $data_almacen = ejecutarConsultaArray($sql_1); if ($data_almacen['status'] == false) { return $data_almacen; }      

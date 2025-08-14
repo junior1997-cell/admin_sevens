@@ -54,77 +54,70 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="card card-primary card-outline">
-                        <div class="row">
-                          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                            <div class="card-header">
-                              <h3 class="card-title display" id="btn-agregar">
-                                <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="mostrar_form_table(1); limpiar(); "><i class="fas fa-plus-circle"></i> Agregar</button>
-                                Administra tus servicios.
-                              </h3>
+                        
+                        <div class="card-header">
+                          <h3 class="card-title display" id="btn-agregar">
+                            <button type="button" class="btn bg-gradient-success" data-toggle="modal" data-target="#modal-agregar-servicio" onclick="mostrar_form_table(1); limpiar(); "><i class="fas fa-plus-circle"></i> Agregar</button>
+                            Administra tus servicios.
+                          </h3>
+                          <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2">
                               <button id="btn-regresar" type="button" class="btn bg-gradient-warning" style="display: none;" onclick="mostrar_form_table(1);"><i class="fas fa-arrow-left"></i> Regresar</button>
                               <button type="button" id="btn-pagar" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-pago" onclick="limpiar_c_pagos();">
                                 <i class="fas fa-dollar-sign"></i> Agregar Pago
                               </button>
-                              <button type="button" id="btn-factura" class="btn bg-gradient-success" data-toggle="modal" style="display: none;" data-target="#modal-agregar-factura" onclick="limpiar_factura();">
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2" id="btn-factura" style="display: none;">
+                              <button type="button"  class="btn bg-gradient-success" data-toggle="modal"  data-target="#modal-agregar-factura" onclick="limpiar_factura();">
                                 <i class="fas fa-file-invoice"></i> Agregar Factura
                               </button>
                             </div>
-                          </div>
-                        </div>
-                          <!-- filtros -->
-                        <div class="card-body filtros-inputs row pt-3 pb-0">
 
-                          <!-- filtro por: fecha inicial -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">    
-                            <div class="form-group">
-                              <!-- <label for="filtro_fecha_inicio" >Fecha inicio </label> -->
-                              <div class="input-group date"  >
-                                <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
-                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            <!-- filtro por: fecha inicial -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2 filtros-inputs" style="display: none;">    
+                              <div class="form-group">
+                                <!-- <label for="filtro_fecha_inicio" >Fecha inicio </label> -->
+                                <div class="input-group date"  >
+                                  <div class="input-group-append cursor-pointer click-btn-fecha-inicio" >
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                                  <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
                                 </div>
-                                <input type="text" class="form-control"  id="filtro_fecha_inicio" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
-                              </div>
-                            </div>                                
-                          </div>
-
-                          <!-- filtro por: fecha final -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-2">                                
-                            <div class="form-group">
-                              <!-- <label for="filtro_fecha_inicio" >Fecha fin </label> -->
-                              <div class="input-group date"  >
-                                <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
-                                  <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                                <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
-                              </div>
-                            </div> 
-                          </div>
-
-                          <!-- filtro por: proveedor -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                            <div class="form-group">
-                              <!-- <label for="filtros" class="cargando_proveedor">Proveedor &nbsp;<i class="text-dark fas fa-spinner fa-pulse fa-lg"></i><br /></label> -->
-                              <select id="filtro_proveedor" disabled class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"> 
-                              </select>
-                            </div>                          
-                          </div>
-
-                          <!-- filtro por: comprobante -->
-                          <div class="col-12 col-sm-6 col-md-6 col-lg-2" >
-                            <div class="form-group">
-                              <!-- <label for="filtros" >Tipo comprobante </label> -->
-                              <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
-                                <option value="0">Todos</option>
-                                <option value="Ninguno">Ninguno</option>
-                                <option value="Boleta">Boleta</option>
-                                <option value="Factura">Factura</option>
-                                <option value="Nota de venta">Nota de venta</option>
-                              </select>
+                              </div>                                
                             </div>
-                            
-                          </div>
-                        </div>
 
+                            <!-- filtro por: fecha final -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2 filtros-inputs" style="display: none;">                                
+                              <div class="form-group">
+                                <!-- <label for="filtro_fecha_inicio" >Fecha fin </label> -->
+                                <div class="input-group date"  >
+                                  <div class="input-group-append cursor-pointer click-btn-fecha-fin" >
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                  </div>
+                                  <input type="text" class="form-control"  id="filtro_fecha_fin" onchange="cargando_search(); delay(function(){filtros()}, 50 );" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask autocomplete="off" />                                    
+                                </div>
+                              </div> 
+                            </div>                         
+
+                            <!-- filtro por: comprobante -->
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2 filtros-inputs" style="display: none;" >
+                              <div class="form-group">
+                                <!-- <label for="filtros" >Tipo comprobante </label> -->
+                                <select id="filtro_tipo_comprobante" class="form-control select2" onchange="cargando_search(); delay(function(){filtros()}, 50 );" style="width: 100%;"  > 
+                                  <option value="0">Todos</option>
+                                  <option value="Ninguno">Ninguno</option>
+                                  <option value="Boleta">Boleta</option>
+                                  <option value="Factura">Factura</option>
+                                  <option value="Nota de venta">Nota de venta</option>
+                                </select>
+                              </div>                            
+                            </div>
+
+                          </div>
+                          
+                          
+                        </div>                          
+                          
                         <!--===============Tabla Principal =========-->
                         <div class="card-body display" id="tabla_principal">
                           <table id="tabla-servicio" class="table table-bordered table-striped display" style="width: 100% !important;">
@@ -893,7 +886,7 @@
         <!-- /.content-wrapper -->
         <?php require 'script.php'; ?>
 
-        <script type="text/javascript" src="scripts/servicio_equipos.js?version_jdl=2.01"></script>
+        <script type="text/javascript" src="scripts/servicio_equipos.js?version_jdl=2.02"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

@@ -199,7 +199,7 @@ class ResumenGasto
     } 
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
+    $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.tipo_comprobante, f.fecha_emision, f.monto, f.subtotal, f.igv,
     f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
@@ -217,7 +217,7 @@ class ResumenGasto
           "bd_nombre_tabla"   => 'factura',
           "bd_nombre_id_tabla"=> 'idfactura',
           "fecha"             => $value['fecha_emision'],
-          "tipo_comprobante"  => 'Factura',
+          "tipo_comprobante"  => $value['tipo_comprobante'],
           "serie_comprobante" => $value['codigo'],
           "proveedor"         => $value['razon_social'],
           "total"             => $value['monto'],          
@@ -273,7 +273,7 @@ class ResumenGasto
     } 
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
-    $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.fecha_emision, f.monto, f.subtotal, f.igv,
+    $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo,  f.tipo_comprobante, f.fecha_emision, f.monto, f.subtotal, f.igv,
     f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
@@ -291,7 +291,7 @@ class ResumenGasto
           "bd_nombre_tabla"   => 'factura',
           "bd_nombre_id_tabla"=> 'idfactura',
           "fecha"             => $value['fecha_emision'],
-          "tipo_comprobante"  => 'Factura',
+          "tipo_comprobante"  => $value['tipo_comprobante'],
           "serie_comprobante" => $value['codigo'],
           "proveedor"         => $value['razon_social'],
           "total"             => $value['monto'],          

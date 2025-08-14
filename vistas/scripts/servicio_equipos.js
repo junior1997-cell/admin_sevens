@@ -170,8 +170,9 @@ function listar(nube_idproyecto) {
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, 
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6], } }, {extend: "colvis"} ,   
-       "colvis"],
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6], } }, 
+      {extend: "colvis"} ,   
+    ],
     ajax: {
       url: "../ajax/servicio_equipos.php?op=listar&nube_idproyecto=" + nube_idproyecto,
       type: "get",

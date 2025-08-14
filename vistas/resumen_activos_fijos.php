@@ -845,8 +845,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/resumen_activos_fijos.js?version_jdl=2.01"></script>
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.01"></script>
+        <script type="text/javascript" src="scripts/resumen_activos_fijos.js?version_jdl=2.02"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.02"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         

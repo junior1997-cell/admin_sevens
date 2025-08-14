@@ -1,3 +1,10 @@
+<style>
+  #tabla-para-todos-los-modulos-proyecto td, #tabla-para-todos-los-modulos-proyecto th {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+      }
+</style>
+
 <!-- MDOAL - AGREGAR USUARIO -->
 <div class="modal fade" id="modal-contacto-desarrollador">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -157,7 +164,7 @@
         </div>
       </div>
 
-      <div class="modal-footer justify-content-between">
+      <div class="modal-footer justify-content-between py-1">
         <button type="button" class="btn bg-dark" onclick="salir_proyecto_para_todos_los_modulos();" >Salir de proyecto</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div>
