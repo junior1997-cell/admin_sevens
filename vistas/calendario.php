@@ -321,14 +321,14 @@
         <script src="../dist/js/demo.js"></script>  
 
         <!-- hora sesion-->
-        <script src="../dist/js/sesion.js?version_jdl=2.02"></script> 
+        <script src="../dist/js/sesion.js?version_jdl=2.03"></script> 
 
-        <script type="text/javascript" src="scripts/calendario.js?version_jdl=2.02"></script>
+        <script type="text/javascript" src="scripts/calendario.js?version_jdl=2.03"></script>
 
         <!-- Funciones Crud -->
-        <script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=2.02"></script>
+        <script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=2.03"></script>
         <!-- Funciones Generales -->
-        <script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=2.02"></script>
+        <script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=2.03"></script>
 
         <?php require 'go_to.php'; ?>
 

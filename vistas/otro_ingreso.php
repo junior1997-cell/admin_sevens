@@ -513,7 +513,7 @@
         <?php require 'script.php'; ?>
         
         <!-- Funciones del modulo -->
-        <script type="text/javascript" src="scripts/otro_ingreso.js?version_jdl=2.02"></script>
+        <script type="text/javascript" src="scripts/otro_ingreso.js?version_jdl=2.03"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

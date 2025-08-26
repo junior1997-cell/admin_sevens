@@ -117,6 +117,7 @@
         
       </div>
     </li>
+    
     <!-- Notifications Dropdown Menu -->
     <li class="nav-item dropdown d-none d-sm-inline-block">
       <a class="nav-link" data-toggle="dropdown" href="#">

@@ -10,7 +10,7 @@ $id_empresa_sesion  = isset($_SESSION['idproyecto']) ? $_SESSION["idproyecto"] :
 
 mysqli_query($conexion, 'SET NAMES "' . DB_ENCODE . '"');         # Para el tipo de datos, ejemlo: UTF8
 mysqli_query($conexion, "SET @id_usr_sesion ='$id_usr_sesion' "); # Para saber quien hizo el CRUD
-mysqli_query($conexion, "SET time_zone = 'America/Lima';");       # Cambia el horario local: America/Lima
+mysqli_query($conexion, "SET time_zone = '-05:00';");       # Cambia el horario local: America/Lima
 mysqli_query($conexion, "SET lc_time_names = 'es_ES';");          # Cambia el idioma a español en fechas
 
 //Si tenemos un posible error en la conexión lo mostramos
