@@ -9,6 +9,7 @@
   use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
   use PhpOffice\PhpSpreadsheet\Style\Alignment;
   use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+  use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
   $spreadsheet = new Spreadsheet();
   $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Asistencia de obreros");
@@ -143,7 +144,8 @@
       $hojaActiva->setCellValue('R' . $fila_1, $reg['sueldo_diario']);            # Sueldo diario
 
       $hojaActiva->mergeCells('S' . $fila_1 . ':S' . $fila_1 + 1);                # unir columnas ---
-      $hojaActiva->setCellValue('S' . $fila_1, $reg['sueldo_hora']);              # Sueldo hora
+      $hojaActiva->setCellValue('S' . $fila_1, (float)$reg['sueldo_hora']);              # Sueldo hora
+      $hojaActiva->getStyle('S' . $fila_1)->getNumberFormat()->setFormatCode('0.000');
 
       $hojaActiva->mergeCells('T' . $fila_1 . ':T' . $fila_1 + 1);                # unir columnas ---
       $hojaActiva->setCellValue('T' . $fila_1, $reg['sabatical']);                # Sueldo hora

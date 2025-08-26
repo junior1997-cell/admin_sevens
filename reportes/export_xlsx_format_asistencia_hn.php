@@ -5,6 +5,8 @@
   use PhpOffice\PhpSpreadsheet\IOFactory;
   use PhpOffice\PhpSpreadsheet\Style\Border;
   use PhpOffice\PhpSpreadsheet\Style\Color;
+    use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+
 
   $spreadsheet = new Spreadsheet();
   $spreadsheet->getProperties()->setCreator("Sevens Ingenieros")->setTitle("Formato Asistencia de obreros");
@@ -107,6 +109,7 @@
       $hojaActiva->setCellValue('Q' . $fila_1, $reg['sueldo_semanal']);           # Sueldo Semanal
       $hojaActiva->setCellValue('R' . $fila_1, $reg['sueldo_diario']);            # Sueldo diario
       $hojaActiva->setCellValue('S' . $fila_1, $reg['sueldo_hora']);              # Sueldo hora
+      $hojaActiva->getStyle('S' . $fila_1)->getNumberFormat()->setFormatCode('0.000');
       $hojaActiva->setCellValue('T' . $fila_1, $reg['sabatical']);                # Sueldo hora
       $hojaActiva->setCellValue('U' . $fila_1, $reg['pago_parcial_hn']);          # Pago parcial
       $hojaActiva->setCellValue('V' . $fila_1, $reg['adicional_descuento_hn']);      # Adicional descuento
