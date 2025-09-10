@@ -178,6 +178,34 @@ if (!function_exists('ejecutarConsulta')) {
     return $diferencia;
   }
 
+  function fechas_valorizacion_semana($fecha_inicial, $fecha_final) {
+    
+    $fecha_ii = $fecha_inicial;
+    $fecha_ff = "";
+    $fecha_iterativa = $fecha_inicial;
+    $fechas_array = [];
+    $i = 1;
+    $cal_mes = false;
+  
+    while ($cal_mes == false) {
+  
+      $dia_mes = extraer_dia_mes($fecha_ii);
+      if ($dia_mes < 7) {
+        $fecha_ff = format_a_m($fecha_ii).'-7';
+      } else if ($dia_mes >= 7 ) {
+        $fecha_ff =  ultimo_dia_mes($fecha_ii);
+      }    
+      
+      if (validar_fecha_menor_que( $fecha_ff, $fecha_final) == false) { $cal_mes = true; $fecha_ff = $fecha_final; }
+  
+      array_push($fechas_array, [ 'fecha_inicio'=> $fecha_ii, 'fecha_fin'=>$fecha_ff, 'num_q_s'=> $i, ]);
+      
+      $fecha_ii = sumar_dias(1, $fecha_ff);
+      $i++;
+    }
+    return $fechas_array;
+  }
+
   function fechas_valorizacion_quincena($fecha_inicial, $fecha_final) {
     $fecha_ii = $fecha_inicial;
     $fecha_ff = "";

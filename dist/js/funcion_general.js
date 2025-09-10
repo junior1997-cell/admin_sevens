@@ -1509,6 +1509,53 @@ function DocExist(url) {
   return http.status;
 }
 
+function fechas_valorizacion_semana(fecha_inicial_str, fecha_final_str) {
+
+  
+  const fechas_array = [];
+  let fechaInicio = moment(fecha_inicial_str);
+  const fechaFin = moment(fecha_final_str);
+  let numSemana = 1;
+
+  // 🟡 Primera semana: desde fecha_inicio hasta el sábado de esa semana (si no es domingo)
+  const diaSemana = fechaInicio.day(); // 0 = domingo, 6 = sábado
+
+  if (diaSemana !== 0) {
+    const finPrimera = moment(fechaInicio).add(6 - diaSemana, 'days');
+
+    const finReal = finPrimera.isAfter(fechaFin) ? moment(fechaFin) : finPrimera;
+
+    fechas_array.push({
+      fecha_inicio: fechaInicio.format('DD-MM-YYYY'),
+      fecha_fin: finReal.format('DD-MM-YYYY'),
+      num_q_s: numSemana++,
+    });
+
+    // siguiente bloque inicia al día siguiente
+    fechaInicio = finReal.clone().add(1, 'day');
+  }
+
+  // 🟢 Semanas completas: domingo a sábado
+  while (fechaInicio.isSameOrBefore(fechaFin)) {
+    const finSemana = moment(fechaInicio).add(6, 'days');
+
+    const finReal = finSemana.isAfter(fechaFin) ? moment(fechaFin) : finSemana;
+
+    fechas_array.push({
+      fecha_inicio: fechaInicio.format('DD-MM-YYYY'),
+      fecha_fin: finReal.format('DD-MM-YYYY'),
+      num_q_s: numSemana++,
+    });
+
+    fechaInicio = fechaInicio.add(7, 'days');
+  }
+
+  return fechas_array;
+}
+
+
+
+
 function fechas_valorizacion_quincena(fecha_inicial, fecha_final) {
   var fecha_ii = format_d_m_a(fecha_inicial);
   var fecha_ff = "";
