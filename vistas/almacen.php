@@ -24,6 +24,17 @@ if (!isset($_SESSION["nombre"])) {
     <link rel="stylesheet" href="../dist/css/leyenda.css" />
 
     <style>
+
+      #tabla-almacen-resumen td, #tabla-almacen-resumen th {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+      }
+
+      #tabla-ver-almacen td, #tabla-ver-almacen th {
+        padding-top: 2px !important;
+        padding-bottom: 2px !important;
+      }
+
       .table-container {
         /* max-height: 560px; */
         /* Ajusta la altura máxima según tus necesidades */
@@ -49,13 +60,16 @@ if (!isset($_SESSION["nombre"])) {
 
       .style-head { padding-bottom: 4px !important; padding-top: 4px !important; padding-right: 10px !important; padding-left: 10px !important; }
       .st_tr_style{
-        /* background: #fff;  */
-        border-bottom: 0;
-        box-shadow: inset 0 1px 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-        position: -webkit-sticky;
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 10;                 /* encima de las filas */
+        background: #fff;
+
+        /* Mantener el “borde” visible al hacer scroll: */
+        /* borde superior e inferior simulados con sombras internas */
+        box-shadow:
+          inset 0 1px 0 #dee2e6,     /* “borde” superior */
+          inset 0 -1px 0 #dee2e6;    /* “borde” inferior */
       }
       .text_producto{  text-align: inherit !important; }
 
@@ -243,7 +257,7 @@ if (!isset($_SESSION["nombre"])) {
                         </div>
                       </div>
 
-                      <div id="div_tabla_almacen_search" >
+                      <div id="div_tabla_almacen_search" style="display: none;" >
                         <div class="row">
                           <div class="col-4">
                             <div class="form-group" >
@@ -958,10 +972,10 @@ if (!isset($_SESSION["nombre"])) {
                       <button type="submit" style="display: none;" id="submit-form-almacen-x-dia">Submit</button>
                     </form>
                   </div>
-                  <div class="modal-footer justify-content-between">
+                  <!-- <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-danger" onclick="limpiar_form_almacen_x_dia();" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success" id="guardar_registro_almacen_x_dia" style="display: none;">Guardar Cambios</button>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -1036,7 +1050,7 @@ if (!isset($_SESSION["nombre"])) {
     <script src="../plugins/jszip/dist/jszip-utils.js"></script>
     <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
 
-    <script type="text/javascript" src="scripts/almacen.js?version_jdl=1.9"></script>
+    <script type="text/javascript" src="scripts/almacen.js?version_jdl=2.03"></script>
     <!-- <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script> -->
 
     <script>

@@ -673,7 +673,7 @@
         </div>
         <?php require 'script.php'; ?>         
 
-        <script type="text/javascript" src="scripts/pago_administrador.js?version_jdl=1.9"></script>
+        <script type="text/javascript" src="scripts/pago_administrador.js?version_jdl=2.03"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }) </script>
         

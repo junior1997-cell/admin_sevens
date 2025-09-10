@@ -54,10 +54,10 @@ function init() {
   $('#nacimiento_all').datetimepicker({ locale: 'es', /*format: 'L',*/ format: 'DD-MM-YYYY', /*defaultDate: "",*/ });
   //$('#nacimiento_all').datepicker({ format: "dd-mm-yyyy", language: "es", autoclose: true, endDate: moment().format('DD/MM/YYYY'), clearBtn: true, weekStart: 0, orientation: "bottom auto", todayBtn: true });
   // ══════════════════════════════════════ I N I T I A L I Z E   N U M B E R   F O R M A T ══════════════════════════════════════
-  $('.sueldo_mensual_0').number( true, 2 );
-  $('.sueldo_semanal_0').number( true, 2 );
-  $('.sueldo_diario_0').number( true, 2 );
-  $('.sueldo_hora_0').number( true, 2 );
+  $('.sueldo_mensual_0').number( true, 3 );
+  $('.sueldo_semanal_0').number( true, 3 );
+  $('.sueldo_diario_0').number( true, 3 );
+  $('.sueldo_hora_0').number( true, 3 );
   
   $("[data-mask]").inputmask();  
 }
@@ -72,7 +72,7 @@ function templateBanco (state) {
   var onerror = `onerror="this.src='../dist/docs/banco/logo/logo-sin-banco.svg';"`;
   var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
   return $state;
-};
+}
 
 function templateTrabajador(state) {
   //console.log(state);
@@ -81,20 +81,6 @@ function templateTrabajador(state) {
   var onerror = `onerror="this.src='../dist/svg/user_default.svg';"`;
   var $state = $(`<span><img src="${baseUrl}" class="img-circle mr-2 w-25px" ${onerror} />${state.text}</span>`);
   return $state;
-};
-
-
-function sueld_mensual(){
-
-  var sueldo_mensual = $('#sueldo_mensual').val();
-
-  var sueldo_diario=(sueldo_mensual/30).toFixed(2);
-
-  var sueldo_horas=(sueldo_diario/8).toFixed(2);
-
-  $("#sueldo_diario").val(sueldo_diario);
-
-  $("#sueldo_hora").val(sueldo_horas);
 }
 
 function show_hide_form(flag) {
@@ -153,6 +139,16 @@ function limpiar_form_trabajador() {
   $('#cantidad_dias').removeClass('input-no-valido input-valido');
   $(`.fecha_inicial`).attr({ "min" : format_a_m_d(fecha_incial_proyecto),"max" : format_a_m_d(fecha_final_proyecto) });
   $(`.fecha_final`).attr({ "min" : format_a_m_d(fecha_incial_proyecto),"max" : format_a_m_d(fecha_final_proyecto) });
+
+  $(`.fecha_desde_0`).rules("add", {
+    required: true,   
+    messages: {required: "Campo requerido", min: "Fecha minima {0}",  max: "Fecha maxima {0}"  }
+  });
+
+  $(`.fecha_hasta_0`).rules("add", {
+    required: true,    
+    messages: {required: "Campo requerido", min: "Fecha minima {0}",  max: "Fecha maxima {0}"  }
+  });
 
   // Limpiamos las validaciones
   $(".form-control").removeClass('is-valid');
@@ -457,7 +453,7 @@ function mostrar(idtrabajador,idtipo) {
       $("#cantidad_dias").val(e.data.cantidad_dias);
     
       e.data.detalle_sueldo.forEach(function(val, index){         
-        
+        validar_fecha_rango( e.data.fecha_inicio, e.data.fecha_fin)
         if ( index > 0 ) { 
           add_sueldo();
           $(`.sueldo_mensual_${index}`).val(val.sueldo_mensual);  
@@ -559,14 +555,16 @@ function calcular_dias_trabajo() {
     $('#cantidad_dias').removeClass('input-valido').addClass('input-no-valido');
     $('#cantidad_dias').val(0);
   }  
+
+  validar_fecha_rango(format_a_m_d( fecha_i), format_a_m_d(fecha_f));
 }
 
 // .....::::::::::::::::::::::::::::::::::::: S U E L D O   M U L T I P L E  :::::::::::::::::::::::::::::::::::::::..
 
 function add_sueldo() {
-    // FECHAS DEFINIDAS DEL CONTRATO
-    var fecha_inicio = format_a_m_d($("#fecha_inicio").val());  
-    var fecha_fin = format_a_m_d($("#fecha_fin").val());
+  // FECHAS DEFINIDAS DEL CONTRATO
+  var fecha_inicio = format_a_m_d($("#fecha_inicio").val());  
+  var fecha_fin = format_a_m_d($("#fecha_fin").val());
 
   $('#lista_sueldo').append(` 
     <!-- Sueldo(Semanal) -->
@@ -621,10 +619,20 @@ function add_sueldo() {
       <button type="button" class="btn bg-gradient-danger btn-sm"  onclick="remove_sueldo(${cant_sueldo_multimple});"><i class="far fa-trash-alt"></i></button>      
   </div>`);
 
-  $(`.sueldo_mensual_${cant_sueldo_multimple}`).number( true, 2 );
-  $(`.sueldo_semanal_${cant_sueldo_multimple}`).number( true, 2 );
-  $(`.sueldo_diario_${cant_sueldo_multimple}`).number( true, 2 );
-  $(`.sueldo_hora_${cant_sueldo_multimple}`).number( true, 2 );
+  $(`.sueldo_mensual_${cant_sueldo_multimple}`).number( true, 3 );
+  $(`.sueldo_semanal_${cant_sueldo_multimple}`).number( true, 3 );
+  $(`.sueldo_diario_${cant_sueldo_multimple}`).number( true, 3 );
+  $(`.sueldo_hora_${cant_sueldo_multimple}`).number( true, 3 );
+
+  $(`.fecha_inicial.fecha_desde_${cant_sueldo_multimple}`).rules("add", {
+    required: true,    
+    messages: {required: "Campo requerido", min: "Fecha minima {0}",  max: "Fecha maxima {0}"  }
+  });
+
+  $(`.fecha_final.fecha_hasta_${cant_sueldo_multimple}`).rules("add", {
+    required: true,    
+    messages: {required: "Campo requerido", min: "Fecha minima {0}",  max: "Fecha maxima {0}"  }
+  });
 
   $('[data-toggle="tooltip"]').tooltip();
   cant_sueldo_multimple++;    
@@ -633,28 +641,21 @@ function add_sueldo() {
 function remove_sueldo(id) { $(`.delete_sueldo_multiple_${id}`).remove(); }
 
 function salary_semanal(id){
-console.log('---id  '+id);
+  console.log('---id  '+id);
   var val_diario  = $(`.sueldo_diario_${id}`).val();
 
-  var val_mensual = (val_diario*30).toFixed(1);
-  var val_semanal = (val_diario*6).toFixed(1);
-  var val_horas   = (val_diario/8).toFixed(1);
+  var val_mensual = (val_diario*30).toFixed(3);
+  var val_semanal = (val_diario*6).toFixed(3);
+  var val_horas   = (val_diario/8).toFixed(3);
 
   $(`.sueldo_mensual_${id}`).val(val_mensual);
   $(`.sueldo_semanal_${id}`).val(val_semanal);
   $(`.sueldo_hora_${id}`).val(val_horas);
 }
 
-function validar_fecha_rango() {
-
-  // FECHAS DEFINIDAS DEL CONTRATO
-  var fecha_inicio = format_a_m_d($("#fecha_inicio").val());  
-  var fecha_fin = format_a_m_d($("#fecha_fin").val());
-
-  // console.log(fecha_incial_proyecto +'201' );
+function validar_fecha_rango( fecha_inicio, fecha_fin) {
   $(`.fecha_inicial`).attr({ "min" : fecha_inicio,"max" : fecha_fin });
-  $(`.fecha_final`).attr({ "min" : fecha_inicio,"max" : fecha_fin });
-
+  $(`.fecha_final`).attr({ "min" : fecha_inicio,"max" : fecha_fin });  
 }
 
 function replicar_sueldo_actual(id) { console.log('entramos a replicar');
@@ -1130,6 +1131,7 @@ $(function () {
       sueldo_mensual: { required: "Campo requerido.", },
       sueldo_diario:  { required: "Campo requerido.", },
       sueldo_hora:    { required: "Campo requerido.", },
+      'fecha_hasta[]': { min: "Fecha minima: {0}", max: "Fecha maxima: {0}", },
     },
         
     errorElement: "span",

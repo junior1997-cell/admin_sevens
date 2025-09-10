@@ -20,6 +20,9 @@
           #sortable { list-style-type: none !important; margin: 0 !important; padding: 0 !important; width: 60% !important; }
           #sortable li { margin: 0 3px 3px 3px !important; padding: 0.4em !important; padding-left: 1.5em !important; font-size: 1.4em !important; height: 18px !important; }
           #sortable li span { position: absolute !important; margin-left: -1.3em !important; }
+
+          #tabla-trabajador td { padding-top: 3px !important; padding-bottom: 3px !important; }
+
         </style>
       </head> 
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
@@ -238,7 +241,7 @@
                                     <div class="form-group">
                                       <label>Fecha Inicio:</label>
                                       <div class="input-group date"  data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo(); validar_fecha_rango();" autocomplete="off" />
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_inicio" id="fecha_inicio" name="fecha_inicio" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo(); " autocomplete="off" />
                                         <div class="input-group-append" data-target="#fecha_inicio" data-toggle="datetimepicker">
                                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -251,7 +254,7 @@
                                     <div class="form-group">
                                       <label>Fecha Fin:</label>
                                       <div class="input-group date"  data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo(); validar_fecha_rango(0);" />
+                                        <input type="text" class="form-control datetimepicker-input" data-target="#fecha_fin" id="fecha_fin" name="fecha_fin" data-inputmask-alias="datetime" data-inputmask-inputformat="dd-mm-yyyy" data-mask onchange="calcular_dias_trabajo();" />
                                         <div class="input-group-append" data-target="#fecha_fin" data-toggle="datetimepicker">
                                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -820,7 +823,7 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/trabajador_por_proyecto.js?version_jdl=1.9"></script>
+        <script type="text/javascript" src="scripts/trabajador_por_proyecto.js?version_jdl=2.03"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         

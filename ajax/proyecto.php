@@ -336,7 +336,7 @@
 
         case 'tbla_principal_para_todos_los_modulos':
 
-          $rspta = $proyecto->tbla_principal($_GET["estado"]);
+          $rspta = $proyecto->tbla_proyecto_principal($_GET["estado"]);
           //Vamos a declarar un array
           $data= Array();  $cont=1;
 
@@ -363,19 +363,19 @@
               $color_text = $_SESSION['idproyecto']==$value['idproyecto'] ? "text-primary" : "text-muted";
 
               $data[]=array(
-                "0"=>$cont++,
+                "0"=> '<div class="'.$color_text.'">'. $value['codproyecto'] . '</div>' ,
                 "1"=>'<div class="asignar_paint_'.$value['idproyecto'].'"> 
                   <button class="btn '.$color_abierto.' btn-sm" onclick="abrir_proyecto_para_todos_los_modulos('.$abrir_proyecto.')" data-toggle="tooltip" data-original-title="Abrir proyecto" id="icon_folder_'.$value['idproyecto'].'">
                     <i class="fas fa-folder"></i>
                   </button> 
-                </div>',
-                "2" => '<div class="'.$color_text.'">'. $value['codproyecto'] . '</div>',
-                "3"=>'<div class="user-block asignar_paint_'.$value['idproyecto'].'">                  
+                </div>',                
+                "2"=>'<div class="user-block asignar_paint_'.$value['idproyecto'].'">                  
                   <span class="username ml-0"><p class="'.$color_text.' m-02rem cursor-pointer" data-toggle="tooltip" data-original-title="'. $value['empresa'] .'" >'. $value['empresa_recorte_20'] .'</p></span>
                   <span class="description '.$color_text.' ml-0">'. $value['tipo_documento'] .': '. $value['numero_documento'] .' </span>
                 </div>',              
-                "4"=> '<div class="asignar_paint_'.$value['idproyecto'].'" data-toggle="tooltip" data-original-title="'. $value['nombre_codigo'] .'">  <span class="description '.$color_text.'" >'.$value['nombre_codigo_recorte_20'].'</span> </div>' ,
-                "5"=>  $value['costo'],                 
+                "3"=> '<div class="asignar_paint_'.$value['idproyecto'].'" data-toggle="tooltip" data-original-title="'. $value['nombre_codigo'] .'">  <span class="description '.$color_text.'" >'.$value['nombre_codigo_recorte_20'].'</span> </div>' ,
+                "4"=>  $value['costo'],                 
+                "5"=>  $value['gasto'],                 
                 "6"=> '<div class="asignar_paint_'.$value['idproyecto'].'">'. $estado.'</div>'.$toltip
               );
             }

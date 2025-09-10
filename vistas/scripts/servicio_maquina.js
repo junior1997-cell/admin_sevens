@@ -174,7 +174,7 @@ function listar(nube_idproyecto) {
     buttons: [
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, 
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,3,4,5,6], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6], } }, {extend: "colvis"} ,   
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,3,4,5,6], } },   
        "colvis"],
     ajax: {
       url: "../ajax/servicio_maquina.php?op=listar&nube_idproyecto=" + nube_idproyecto,
@@ -228,12 +228,17 @@ function listar_detalle(idmaquinaria,idproyecto,unidad_medida,maquina,fecha_i,fe
   }
   // console.log(hideen_colums);
   tabla2 = $("#tabla-detalle-m").dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true }, { extend: 'excelHtml5', footer: true }, { extend: 'pdfHtml5', footer: true }, "colvis"],
+    buttons: [
+      { extend: 'copyHtml5', footer: true }, 
+      { extend: 'excelHtml5', footer: true }, 
+      { extend: 'pdfHtml5', footer: true }, 
+      "colvis"
+    ],
     ajax: {
       url: `../ajax/servicio_maquina.php?op=ver_detalle_maquina&idmaquinaria=${idmaquinaria}&idproyecto=${idproyecto}&fecha_i=${fecha_i_r}&fecha_f=${fecha_f_r}`,
       type: "get",

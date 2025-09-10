@@ -239,6 +239,21 @@ class Proyecto
     return ejecutarConsulta($sql);
   }
 
+  public function tbla_proyecto_principal($estado)  {
+    # 0: terminado
+    # 1: en proceso
+    # 2: no empezado
+    # 3: listar todos
+
+    $sql_estado = "";
+    if ($estado == 3) { $sql_estado = "vw_p.estado >= 0 "; } else { $sql_estado = "vw_p.estado = '$estado'"; }
+
+    $sql = "SELECT vw_p.*
+    FROM vw_proyecto_gasto as vw_p
+    WHERE vw_p.idproyecto > 1 and $sql_estado ORDER BY vw_p.idproyecto DESC;";
+    return ejecutarConsulta($sql);
+  }
+
   //Implementar un método para listar los registros de proyectos terminados
   public function listar_proyectos_terminados()  {
     $sql = "SELECT * FROM proyecto as p WHERE p.estado = 0;";
