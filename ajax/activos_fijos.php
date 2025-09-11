@@ -153,7 +153,7 @@
                 "3" =>'<div class="user-block">'.
                   '<img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
                   <span class="username"><p class="mb-0">' . $reg['nombre'] . '</p></span>
-                  <span class="description"><b>--</b> </span>
+                  <span class="description"><b>UM:</b> '.$reg['nombre_medida'].' </span>
                 </div>',
                 "4" => $reg['categoria'], 
                 "5" => $reg['nombre_medida'], 
