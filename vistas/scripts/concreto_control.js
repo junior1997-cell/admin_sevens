@@ -403,7 +403,7 @@ $(".nombre_general").text(` - SEMANA ${i}`);
                   <td class="text-center s_general ${item.nivel == '1' ? 'mi_style_n1' : ''} text-nowrap">
                     ${add_segun_nivel}
                     <button class="btn btn-warning btn-xs" onclick="mostrar_grupo_nivel(${item.idcontrol_concreto},'${item.codigo}','${item.nivel}')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button> 
-                    <button class="btn btn-danger btn-xs  " onclick="eliminar_grupo_nivel(${item.idcontrol_concreto},'${item.codigo}','${item.nivel}')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>
+                    <button class="btn btn-danger btn-xs  " onclick="eliminar_grupo_nivel(${item.idcontrol_concreto},'${item.codigo}','${item.nivel}','${item.descripcion}')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>
                   </td>
                   <td class="text-center s_general ${item.nivel == '1' ? 'mi_style_n1' : ''} text-nowrap"> ${ fecha_segun_nivel}</td>
                   <td class=" s_general ${item.nivel == '1' ? 'mi_style_n1' : ''} text-nowrap">${item.descripcion}</td>
@@ -454,10 +454,12 @@ $(".nombre_general").text(` - SEMANA ${i}`);
 function mostrar_grupo_nivel(idcontrol_concreto,codigo,nivel) {
 
   $.post("../ajax/concreto_control.php?op=mostrar_concreto", { idcontrol_concreto: idcontrol_concreto, nivel:nivel }, function (e, status) {
-    e = JSON.parse(e);  console.log(e);
+    e = JSON.parse(e);  //console.log(e);
     if (e.status == true) {
       // Pintamos los datos
       if (nivel=='1') {
+
+        show_add_nivel1();
        
         $('#idcontrol_concreto').val(e.data.idcontrol_concreto);
         $('#idproyectocontrol_concreto').val(e.data.idproyecto);
@@ -470,10 +472,9 @@ function mostrar_grupo_nivel(idcontrol_concreto,codigo,nivel) {
         $('#hora_inicio').val(e.data.r_hora_inicio);
         $('#hora_termino').val(e.data.r_hora_termino);
         $('#duracion_vaciado').val(e.data.r_duracion_vaciado);
+       
+        $('#modal-agregar-sub_nivel').modal('hide');
 
-
-         show_add_nivel1();
-         $('#modal-agregar-sub_nivel').modal('hide');
       } else {
         hide_add_nivel1();
         limpiar_form_sub_nivel();
@@ -544,6 +545,17 @@ function limpiar_form_sub_nivel() {
   $('#alto_sn').val('');
   $('#calidad_fc_kg_cm2_sn').val('');
 
+  $('#bolsas_m3_sn').val('');
+  $('#piedra_m3_sn').val('');
+  $('#arena_m3_sn').val('');
+  $('#hormigon_m3_sn').val('');
+  $('#hormigon_m3_sn').val('');
+  $('#dosificacion_sn').val('');
+
+  
+  $('#concreto_proyectado_m3_sn').val('');
+  $('#cemento_proyectado_m3_sn').val('');
+
 }
 
 function asignar_sub_nivel(idcontrol_concreto,codigo,descripcion,drm_fecha,prefijo,idproyecto){ 
@@ -590,8 +602,6 @@ function calcularTotalconcreto() {
 
   // Multiplicación
   let total = cantidad * largo * ancho * alto;
-console.log('concreto_proyectado_m3_sn');
-console.log(total);
 
   // Redondear a 2 decimales
   total = Math.round(total * 100) / 100;
@@ -703,23 +713,35 @@ function calcularDuracion() {
 $('#hora_inicio, #hora_termino').on('input', calcularDuracion);
 
 
-function eliminar_grupo_nivel(idcontrol_concreto,codigo,nivel) {
+function eliminar_grupo_nivel(idcontrol_concreto,codigo,nivel,descripcion) {
 
   Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
+    title: `Eliminar ${descripcion} - Nivel ${nivel}`,
+    html: `<b class="text-danger">El registro se eliminara de manera permanente</b>!`,
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
+    confirmButtonText: "Si, Eliminar!",
+    showLoaderOnConfirm: true,
+    preConfirm: (input) => {       
+      return fetch(`../ajax/concreto_control.php?op=eliminar_concreto_control&idcontrol_concreto=${idcontrol_concreto}&codigo=${codigo}&nivel=${nivel}`).then(response => {
+        console.log(response);
+        if (!response.ok) { throw new Error(response.statusText) }
+        return response.json();
+      }).catch(error => { Swal.showValidationMessage(`<b>Solicitud fallida:</b> ${error}`); })
+    },
+    allowOutsideClick: () => !Swal.isLoading()
   }).then((result) => {
     if (result.isConfirmed) {
-      Swal.fire({
-        title: "Deleted!",
-        text: "Your file has been deleted.",
-        icon: "success"
-      });
+      if (result.value.status) {
+        Swal.fire("Papelera!", "El registro fue eliminado <b>Correctamente</b>.", "success");
+        listar_concreto_control(fecha_i_r, fecha_f_r, i_r);
+
+        $(".tooltip").removeClass("show").addClass("hidde");
+      }else{
+        ver_errores(result.value);
+      }
     }
   });
 

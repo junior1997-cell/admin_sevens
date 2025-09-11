@@ -498,7 +498,7 @@
                         </form>
                       </div>
                       <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar();">Close</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_sub_nivel();">Close</button>
                         <button type="submit" class="btn btn-success" id="guardar_registro_sub_nivel">Guardar Cambios</button>
                       </div>
                     </div>

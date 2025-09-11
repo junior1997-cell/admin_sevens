@@ -94,8 +94,8 @@ class Concreto_control
     $edit =  ejecutarConsulta($sql);
 
     $sql_1="SELECT ( SELECT cc1.drm_bolsas_m3 FROM control_concreto AS cc1 WHERE cc1.codigo LIKE CONCAT(cc0.codigo, '%') AND cc1.nivel = '2' LIMIT 1 ) AS drm_bolsas_m3,
-            ( SELECT SUM( cc1.`e_concreto_proyectado`) as total_e_concreto_proyectado FROM control_concreto AS cc1 WHERE cc1.codigo LIKE CONCAT(cc0.codigo, '%') AND cc1.nivel = '2' LIMIT 1 ) AS total_e_concreto_proyectado,
-            ( SELECT SUM( cc1.`e_cemento_proyectado`) as total_e_cemento_proyectado FROM control_concreto AS cc1 WHERE cc1.codigo LIKE CONCAT(cc0.codigo, '%') AND cc1.nivel = '2' LIMIT 1 ) AS total_e_cemento_proyectado
+            ( SELECT SUM( cc1.e_concreto_proyectado) as total_e_concreto_proyectado FROM control_concreto AS cc1 WHERE cc1.codigo LIKE CONCAT(cc0.codigo, '%') AND cc1.nivel = '2' LIMIT 1 ) AS total_e_concreto_proyectado,
+            ( SELECT SUM( cc1.e_cemento_proyectado) as total_e_cemento_proyectado FROM control_concreto AS cc1 WHERE cc1.codigo LIKE CONCAT(cc0.codigo, '%') AND cc1.nivel = '2' LIMIT 1 ) AS total_e_cemento_proyectado
             FROM control_concreto AS cc0 WHERE cc0.idcontrol_concreto = '$idcontrol_concreto' AND cc0.idproyecto = '$idproyectocontrol_concreto';";
 
     $res_selec_cod = ejecutarConsultaSimpleFila($sql_1); if ( $res_selec_cod['status'] == false) {return $res_selec_cod; }
@@ -218,6 +218,56 @@ class Concreto_control
     WHERE p.idproyecto = '$nube_idproyecto' AND p.fecha_inicio != p.fecha_fin";
 
     return ejecutarConsultaSimpleFila($sql);
+  }
+
+
+  public function eliminar_concreto_control($idcontrol_concreto,$codigo,$nivel){
+
+    if ($nivel=='1') {
+      $slq_0 = "DELETE FROM control_concreto WHERE codigo LIKE '$codigo%';";
+      return ejecutarConsulta($slq_0);
+    }else {
+      //eliminamos
+      $sql_1 = "DELETE FROM control_concreto WHERE idcontrol_concreto = '$idcontrol_concreto';";     
+      $delete_concreto = ejecutarConsulta($sql_1); if ( $delete_concreto['status'] == false) {return $delete_concreto; }
+
+      /**----------------------------------- */
+
+      $sql_select = "SELECT idcontrol_concreto, prefijo, SUBSTRING(codigo, 1, 4) AS codigo_padre FROM control_concreto WHERE codigo = SUBSTRING('$codigo', 1, 4) ;";
+
+      $res_selec_cod = ejecutarConsultaSimpleFila($sql_select); if ( $res_selec_cod['status'] == false) {return $res_selec_cod; };
+
+      $prefijo_sn = $res_selec_cod['data']['prefijo'];
+      $codigo_padre_sn = $res_selec_cod['data']['codigo_padre'];
+      $idcontrol_concreto_p_sn = $res_selec_cod['data']['idcontrol_concreto'];
+
+      $sql_2 ="UPDATE control_concreto t
+      JOIN ( SELECT SUM(e_concreto_proyectado) AS total, SUBSTRING(codigo, 1, LENGTH('$codigo_padre_sn')) AS padre FROM control_concreto WHERE codigo LIKE CONCAT('$codigo_padre_sn', '%') AND nivel = '2' ) x ON t.codigo = x.padre
+      SET t.e_concreto_proyectado = x.total WHERE t.idcontrol_concreto = '$idcontrol_concreto_p_sn';";
+
+      $upt_concreto = ejecutarConsulta($sql_2); if ( $upt_concreto['status'] == false) {return $upt_concreto; }
+
+      $sql_2_1 ="UPDATE control_concreto t JOIN ( SELECT SUM(e_cemento_proyectado) AS total, SUBSTRING(codigo, 1, LENGTH('$codigo_padre_sn')) AS padre FROM control_concreto WHERE codigo LIKE CONCAT('$codigo_padre_sn','%') AND nivel = '2' ) x ON t.codigo = x.padre
+      SET t.e_cemento_proyectado = x.total WHERE t.idcontrol_concreto = '$idcontrol_concreto_p_sn';";
+
+      $upt_cemento = ejecutarConsulta($sql_2_1); if ( $upt_cemento['status'] == false) {return $upt_cemento; }
+
+      
+      $sql_concreto_u = " UPDATE control_concreto t2
+                          JOIN (SELECT ((r1.r_cemento_usado / r2.drm_bolsas_m3)) AS r_concreto_usado, ((r1.r_cemento_usado / r2.drm_bolsas_m3))* r2.drm_hormigon  AS r_hormigon_m3,(((r1.r_cemento_usado / r2.drm_bolsas_m3))-r1.e_concreto_proyectado) AS desperdicio_concreto_m3,
+                          (r1.r_cemento_usado-r1.e_cemento_proyectado) AS desperdicio_cemento, ((r1.r_cemento_usado-r1.e_cemento_proyectado)/r1.e_cemento_proyectado)*100 AS porcentaje_desperdicio
+                              FROM control_concreto r1
+                              JOIN control_concreto r2 ON r1.prefijo = '$prefijo_sn' AND r1.nivel = 1 AND r1.codigo = '$codigo_padre_sn' AND r2.prefijo = '$prefijo_sn' AND r2.nivel = 2 AND r2.codigo LIKE '$codigo_padre_sn%'
+                              LIMIT 1 ) subq
+                          SET t2.r_concreto_usado = subq.r_concreto_usado, t2.r_hormigon = subq.r_hormigon_m3, t2.a_desperdicio_concreto = subq.desperdicio_concreto_m3, t2.a_desperdicio_cemento = subq.desperdicio_cemento, t2.a_porcentaje_desperdicio = subq.porcentaje_desperdicio
+                          WHERE t2.nivel = 1 AND t2.prefijo = '$prefijo_sn' AND t2.codigo = '$codigo_padre_sn'; ";
+
+      $upt_concreto_u = ejecutarConsulta($sql_concreto_u); if ( $upt_concreto_u['status'] == false) {return $upt_concreto_u; }
+
+
+      return $delete_concreto;
+    };
+
   }
 
 

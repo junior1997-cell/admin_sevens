@@ -123,6 +123,12 @@
           echo json_encode($rspta, true) ;
 
         break;
+
+        case 'eliminar_concreto_control':
+          $rspta = $concreto_control->eliminar_concreto_control($_GET["idcontrol_concreto"], $_GET["codigo"], $_GET["nivel"] );
+          //Codificar el resultado utilizando json
+          echo json_encode($rspta, true) ;
+        break;
         
         case 'mostrar-docs-quincena':          
 
