@@ -444,7 +444,7 @@
           }
         </style>    
 
-        <script type="text/javascript" src="scripts/break.js?version_jdl=2.03"></script>
+        <script type="text/javascript" src="scripts/break.js?version_jdl=2.04"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 

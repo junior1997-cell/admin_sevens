@@ -1168,7 +1168,7 @@
         <!-- <script src="../plugins/moment/moment.min.js"></script> -->
         <!-- <script src="../plugins/moment/locales.js"></script> -->
         <!-- <script src="../plugins/moment/locale/es.js"></script> -->
-        <script type="text/javascript" src="scripts/proyecto.js?version_jdl=2.03"></script>
+        <script type="text/javascript" src="scripts/proyecto.js?version_jdl=2.04"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

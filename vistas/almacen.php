@@ -1050,7 +1050,7 @@ if (!isset($_SESSION["nombre"])) {
     <script src="../plugins/jszip/dist/jszip-utils.js"></script>
     <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
 
-    <script type="text/javascript" src="scripts/almacen.js?version_jdl=2.03"></script>
+    <script type="text/javascript" src="scripts/almacen.js?version_jdl=2.04"></script>
     <!-- <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script> -->
 
     <script>

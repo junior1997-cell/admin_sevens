@@ -1329,15 +1329,15 @@
 
         <?php  require 'script.php'; ?>
         
-        <script type="text/javascript" src="scripts/otros.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/bancos.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/color.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/unidades_m.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/ocupacion.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/tipo.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/desempenio.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/categoria_af.js?version_jdl=2.03"></script>
-        <script type="text/javascript" src="scripts/marca.js?version_jdl=2.03"></script>
+        <script type="text/javascript" src="scripts/otros.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/bancos.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/color.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/unidades_m.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/ocupacion.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/tipo.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/desempenio.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/categoria_af.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/marca.js?version_jdl=2.04"></script>
         <!-- <script type="text/javascript" src="scripts/glosa.js"></script> -->
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
