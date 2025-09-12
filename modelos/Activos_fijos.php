@@ -186,15 +186,16 @@ class Activos_fijos
       $tipo_categoria = "AND p.idcategoria_insumos_af = '$id_categoria'";
     }
     
-    $sql = "SELECT p.idproducto, p.idunidad_medida, p.nombre, p.imagen, p.ficha_tecnica, p.estado, p.descripcion, um.nombre_medida, 
+    $sql = "SELECT p.idproducto, LPAD(p.idproducto, 5, '0') AS idproducto_format, p.idunidad_medida, p.nombre, p.imagen, p.ficha_tecnica, p.estado, p.descripcion, um.nombre_medida, 
     ciaf.nombre as categoria
     FROM producto p, unidad_medida as um, categoria_insumos_af AS ciaf
     WHERE um.idunidad_medida=p.idunidad_medida AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
     $tipo_categoria AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC;";
-    $activo_fijo = ejecutarConsulta($sql); 
+    $activo_fijo = ejecutarConsultaArray($sql); 
 
-    foreach ($activo_fijo['data'] as $key => $value) {
-      $id = $value['idproducto'];      
+    foreach ($activo_fijo['data'] as &$detalle) {
+
+      $id = $detalle['idproducto'];      
       
       //listar detalle_marca
       $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
@@ -212,24 +213,13 @@ class Activos_fijos
       $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
       $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
 
-      $data[] = Array(
-        'idproducto'      => $value['idproducto'],
-        'idunidad_medida' => $value['idunidad_medida'],
-        'nombre'          => $value['nombre'],        
-        'nombre_medida'   => $value['nombre_medida'],
-        'categoria'       => $value['categoria'],
-        'imagen'          => ( empty($value['imagen']) ? '' : $value['imagen']),
-        'ficha_tecnica'   => ( empty($value['ficha_tecnica']) ? '' : $value['ficha_tecnica']),
-        'descripcion'     => ( empty($value['descripcion']) ? '' : $value['descripcion']),
-        'estado'          => $value['estado'],
-
-        'marca'           => '<ol class="pl-3">'.$datalle_marcas. '</ol>',
-        'marca_export'    => $datalle_marcas_export,
-        'promedio_precio' =>  (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ),        
-      );
+      $detalle['marca']           = '<ol class="pl-3">'.$datalle_marcas. '</ol>';
+      $detalle['marca_export']    = $datalle_marcas_export;
+      $detalle['promedio_precio'] = (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ) ;
+      
     }
 
-    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];
+    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $activo_fijo['data'] ];
   }
 
   //Seleccionar Trabajador Select2

@@ -149,14 +149,14 @@
                   ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg['idproducto'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
                   '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idproducto'] . ')"><i class="fa fa-pencil-alt"></i></button>' .
                   ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg['idproducto'] . ')"><i class="fa fa-check"></i></button>',
-                "2" => $reg['idproducto'],
+                "2" => $reg['idproducto_format'],
                 "3" =>'<div class="user-block">'.
                   '<img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
-                  <span class="username"><p class="mb-0">' . $reg['nombre'] . '</p></span>
+                  <span class="username"><p class="mb-0 text-nowrap">' . $reg['nombre'] . '</p></span>
                   <span class="description"><b>UM:</b> '.$reg['nombre_medida'].' </span>
                 </div>',
                 "4" => $reg['categoria'], 
-                "5" => $reg['nombre_medida'], 
+                "5" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproducto'] .')" data-toggle="tooltip" data-original-title="Ver facturas"><i class="far fa-eye"></i></button>', 
                 "6" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['marca'] .'</div>',
                 "7" =>  $reg['promedio_precio'],
                 "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['descripcion'] . '</textarea>',

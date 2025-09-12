@@ -1,4 +1,4 @@
-var tabla;
+var tabla_activos_fijos;
 
 //Función que se ejecuta al inicio
 function init() {  
@@ -137,13 +137,14 @@ function lista_de_items() {
 
 //Función Listar
 function tabla_principal(id_categoria) {
-  tabla = $("#tabla-activos").dataTable({
-    responsive: true,
+  tabla_activos_fijos = $("#tabla-activos").dataTable({
+    responsive: false,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
     dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
     buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload ", action: function ( e, dt, node, config ) { if (tabla_activos_fijos) { tabla_activos_fijos.ajax.reload(null, false); } } },
       { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,10,4,5,11,7,8], } }, 
       { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,10,4,5,11,7,8], } }, 
       { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,10,4,5,11,7,8], } },      
@@ -163,6 +164,9 @@ function tabla_principal(id_categoria) {
       if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
       // columna: code
       if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+
+      // columna: compra
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
     },
     language: {
       lengthMenu: "Mostrar: _MENU_ registros",
@@ -223,7 +227,7 @@ function guardaryeditar(e) {
       e = JSON.parse(e);  console.log(e);  
       if (e.status == true) {         
         Swal.fire("Correcto!", "Trabajador guardado correctamente", "success");
-        tabla.ajax.reload(null, false);
+        tabla_activos_fijos.ajax.reload(null, false);
         limpiar();
         $("#modal-agregar-activos-fijos").modal("hide");
         $("#guardar_registro").html('Guardar Cambios').removeClass('disabled');
@@ -446,7 +450,7 @@ function eliminar(idproducto, nombre) {
     `<b class="text-danger"><del>${nombre}</del></b> <br> En <b>papelera</b> encontrará este registro! <br> Al <b>eliminar</b> no tendrá acceso a recuperar este registro!`, 
     function(){ sw_success('♻️ Papelera! ♻️', "Tu registro ha sido reciclado." ) }, 
     function(){ sw_success('Eliminado!', 'Tu registro ha sido Eliminado.' ) }, 
-    function(){ tabla.ajax.reload(null, false) },
+    function(){ tabla_activos_fijos.ajax.reload(null, false) },
     false, 
     false, 
     false,
@@ -455,8 +459,68 @@ function eliminar(idproducto, nombre) {
 
 }
 
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+// ═══════                                         V E R   C O M P R A   S E G U N   P R O D U C T O                                               ═══════
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+function tabla_detalle_compra(id_categoria) {
+
+  tabla_activos_fijos = $("#tabla-activos").dataTable({
+    responsive: true,
+    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
+    aProcessing: true, //Activamos el procesamiento del datatables
+    aServerSide: true, //Paginación y filtrado realizados por el servidor
+    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    buttons: [
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload btn btn-outline-info btn-wave ", action: function ( e, dt, node, config ) { if (tabla_activos_fijos) { tabla_activos_fijos.ajax.reload(null, false); } } },
+      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,10,4,5,11,7,8], } }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,10,4,5,11,7,8], } }, 
+      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,10,4,5,11,7,8], } },      
+    ],
+    ajax: {
+      url: `../ajax/activos_fijos.php?op=tabla_principal&id_categoria=${id_categoria}`,
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
+      },
+    },
+    createdRow: function (row, data, ixdex) {         
+      // columna: #
+      if (data[0] != '') { $("td", row).eq(0).addClass("text-center"); } 
+      // columna: op
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      // columna: code
+      if (data[2] != '') { $("td", row).eq(2).addClass("text-nowrap"); }
+
+      // columna: compra
+      if (data[5] != '') { $("td", row).eq(5).addClass("text-center"); }
+    },
+    language: {
+      lengthMenu: "Mostrar: _MENU_ registros",
+      buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+    },
+    bDestroy: true,
+    iDisplayLength: 10, //Paginación
+    order: [[0, "asc"]], //Ordenar (columna,orden)
+    columnDefs: [
+      { targets: [10,11], visible: false, searchable: false, },
+      { targets: [7], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+    ],
+  }).DataTable();
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+// ═══════                                        I N I T                                                                                           ═══════
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
 
 init();
+
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+// ═══════                                         F O R M   V A L I D A T E                                                                        ═══════
+// ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
 
 $(function () {
 

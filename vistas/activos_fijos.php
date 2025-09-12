@@ -55,7 +55,8 @@
               <section class="content">
                 <div class="container-fluid">
                   <div class="row">
-                    <div class="col-12">
+
+                    <div class="col-12" id="div-tabla-principal">
                       <div class="card card-primary card-outline">
                         <div class="card-header">
                           <h3 class="card-title">
@@ -79,45 +80,44 @@
                                   <div class="tab-content" id="tabs-for-tabContent">
                                     <!-- TABLA - RESUMEN -->
                                     <div class="tab-pane fade show active" id="tabs-for-activo-fijo" role="tabpanel" aria-labelledby="tabs-for-activo-fijo-tab">
-                                      <div class="row">                                        
-                                        <div class="col-12">
-                                          <table id="tabla-activos" class="table table-bordered table-striped display" style="width: 100% !important;">
-                                            <thead> 
-                                              <tr>
-                                                <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th class="">Code</th>
-                                                <th>Nombre</th>
-                                                <th>Categoria</th>
-                                                <th data-toggle="tooltip" data-original-title="Unidad Medida">UM</th>
-                                                <th  >Marcas</th>
-                                                <th class="text-center" >Precio promedio</th>
-                                                <th class="text-center" >Descripción</th>
-                                                <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
-                                                <th>Nombre</th>
-                                                <th>Marca</th>
-                                              </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                            <tfoot>
-                                              <tr>
-                                                <th class="text-center">#</th>
-                                                <th class="">Acciones</th>
-                                                <th class="">Code</th>
-                                                <th>Nombre</th>
-                                                <th>Categoria</th>
-                                                <th data-toggle="tooltip" data-original-title="Unidad Medida">UM</th>
-                                                <th  >Marcas</th>
-                                                <th class="text-center" >Precio promedio</th>
-                                                <th class="text-center" >Descripción</th>
-                                                <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
-                                                <th>Nombre</th>
-                                                <th>Marca</th>
-                                              </tr>
-                                            </tfoot>
-                                          </table>
-                                        </div>
-                                        <!-- /.col -->
+                                      <div class="table-responsive">                                        
+                                        
+                                        <table id="tabla-activos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                          <thead> 
+                                            <tr>
+                                              <th class="text-center">#</th>
+                                              <th class="">Acciones</th>
+                                              <th class="">Code</th>
+                                              <th>Nombre</th>
+                                              <th>Categoria</th>
+                                              <th data-toggle="tooltip" data-original-title="Unidad Medida">Compras</th>
+                                              <th  >Marcas</th>
+                                              <th class="text-center" >Promedio</th>
+                                              <th class="text-center" >Descripción</th>
+                                              <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
+                                              <th>Nombre</th>
+                                              <th>Marca</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody></tbody>
+                                          <tfoot>
+                                            <tr>
+                                              <th class="text-center">#</th>
+                                              <th class="">Acciones</th>
+                                              <th class="">Code</th>
+                                              <th>Nombre</th>
+                                              <th>Categoria</th>
+                                              <th data-toggle="tooltip" data-original-title="Unidad Medida">Compras</th>
+                                              <th  >Marcas</th>
+                                              <th class="text-center" >Promedio</th>
+                                              <th class="text-center" >Descripción</th>
+                                              <th data-toggle="tooltip" data-original-title="Ficha técnica">FT</th>
+                                              <th>Nombre</th>
+                                              <th>Marca</th>
+                                            </tr>
+                                          </tfoot>
+                                        </table>
+                                        
                                       </div>
                                       <!-- /.row -->
                                     </div>                                    
@@ -133,8 +133,14 @@
                         </div>
                         <!-- /.card-body -->
                       </div>
-                      <!-- /.card -->
+                      <!-- /.card --> 
                     </div>
+
+                    <div class="col-lg-12" id="div-detalle-compras" >
+
+                    </div>
+
+
                     <!-- /.col -->
                   </div>
                   <!-- /.row -->
