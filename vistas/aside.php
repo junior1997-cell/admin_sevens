@@ -566,7 +566,7 @@
             <?php if ($_SESSION['valorizacion_concreto']==1) {  ?>
             <!-- CONCRETO -->       
             <li class="nav-item ver-otros-modulos-1">
-              <a href="concreto_control.php" class="nav-link pl-2" id="lConcretoControl">
+              <a href="concreto_control.php" class="nav-link pl-2" id="lConcretoControlconcreto">
                 <!-- <i class="nav-icon fas fa-dumpster"></i> -->
                 <img src="../dist/svg/concreto-agregado-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
                 <p>Concreto control</p>

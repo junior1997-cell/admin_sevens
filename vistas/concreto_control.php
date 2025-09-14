@@ -99,8 +99,8 @@
                             <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="dosificacion_concreto();" ><i class="fa-regular fa-rectangle-list"></i> <span class="d-none d-sm-inline-block">Dosificación Concreto</span> </button>
                           </h3>
                           <!-- vertodos -->
-                          <h3 class="card-title mr-3" >
-                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px" onclick="delay(function(){show_add_nivel1()}, 100 );" data-toggle="tooltip" data-original-title="Asignar nivel" ><i class="fa-regular fa-rectangle-list"></i> <span class="d-none d-sm-inline-block">Asignar Nivel 1</span> </button>
+                          <h3 class="card-title mr-3 h3_btn_add_nivel_1">
+                            <button type="button" class="btn bg-gradient-warning btn-sm h-50px btn_add_nivel_1" onclick="delay(function(){show_add_nivel1()}, 100 );" data-toggle="tooltip" data-original-title="Asignar nivel"  ><i class="fa-regular fa-rectangle-list"></i> <span class="d-none d-sm-inline-block">Asignar Nivel 1</span> </button>
                           </h3>
 
                           <!-- listar quincenas -->
@@ -123,7 +123,7 @@
                                         <div class="col-12 col-md-3 col-lg-3">
                                           <div class="form-group">
                                             <label for="fecha_concreto">Fecha</label>
-                                            <input type="date" class="form-control" id="fecha_concreto" name="fecha_concreto" value="<?php echo date('Y-m-d'); ?>" />
+                                            <input type="date" class="form-control" id="fecha_concreto" name="fecha_concreto" />
                                           </div>
                                         </div>
                                         <div class="col-12 col-md-3 col-lg-3">
@@ -183,6 +183,31 @@
                                 </div>
                               </div>
 
+                            </div>
+                            <div class="col-12 div_inicial_control_Concreto" >
+                              <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
+                                <div class="card bg-light d-flex flex-fill">
+                                  <div class="card-header text-muted border-bottom-0">
+                                    Concreto - Semanal
+                                  </div>
+                                  <div class="card-body pt-0">
+                                    <div class="row">
+                                      <div class="col-7">
+                                        <h2 ><b>Vista Inicial</b></h2>
+                                        <p class="text-muted text-sm"><b>Tienes: </b>que seleccionar una semana para poder ver, insertar nuevos registros y eliminar</p>
+                                      </div>
+                                      <div class="col-5 text-center">
+                                        <img src="../dist/svg/logo-icono.svg" alt="user-avatar" class="img-fluid" style=" width: 40%; ">
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="card-footer">
+                                    <div class="text-right">
+      
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
 
                             <div class="col-12 div-docs-por-valorizacion" style="display: none;">

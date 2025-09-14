@@ -18,12 +18,12 @@ function init() {
 
   $("#mTecnico").addClass("active");
 
-  $("#lConcretoValorizacion").addClass("active bg-primary");
+  $("#lConcretoControlconcreto").addClass("active bg-primary");
 
 
   $("#idproyectocontrol_concreto").val(localStorage.getItem('nube_idproyecto')); 
 
-
+  $(".h3_btn_add_nivel_1").hide();
 
   //$("#idproyecto").val(localStorage.getItem('nube_idproyecto')); 
 
@@ -362,11 +362,19 @@ function guardar_y_editar_nivel1(e) {
 
 // funcion para listar los documentos de concreto control
 function listar_concreto_control(fecha_i, fecha_f, i) {
-pintar_btn_selecionado(i);
-$(".div-docs-por-valorizacion").show(); 
-$(".nombre_general").text(` - SEMANA ${i}`);
+  parametrizar_concreto_control(fecha_i, fecha_f);
+
+
+
+  pintar_btn_selecionado(i);
+  $(".div-docs-por-valorizacion").show(); 
+  $(".nombre_general").text(` - SEMANA ${i}`);
+
   fecha_i_r = fecha_i, fecha_f_r = fecha_f; i_r = i;
-  console.log(i_r);
+
+  $(".h3_btn_add_nivel_1").show();
+  $(".div_inicial_control_Concreto").hide();
+  
   
   $("#tabla_concreto_control_semana").html(`<tr> <td colspan="30" class="text-center" style="border:1px solid #ccc; background:#f9f9f9;"> <i class="fas fa-spinner fa-pulse fa-2x"></i> <h6>Cargando...</h6> </td> </tr>`);
 
@@ -749,10 +757,65 @@ function eliminar_grupo_nivel(idcontrol_concreto,codigo,nivel,descripcion) {
 }
 
 
+/**----------------------------------------------------------------- */
 
+// --- Helpers puros JS + jQuery ---
+function toISO(str){
+  // Acepta: 'YYYY-MM-DD' o 'DD/MM/YYYY'
+  if (typeof str !== 'string') throw new Error('Fecha inválida');
+  str = str.trim();
 
+  // YYYY-MM-DD
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
 
+  // DD/MM/YYYY
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(str)) {
+    const [d,m,y] = str.split('/').map(Number);
+    const dd = String(d).padStart(2,'0');
+    const mm = String(m).padStart(2,'0');
+    return `${y}-${mm}-${dd}`;
+  }
 
+  throw new Error('Formato no soportado: use YYYY-MM-DD o DD/MM/YYYY');
+}
+
+function isoToday(){
+  const d = new Date();
+  const z = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+}
+
+function isoLess(a,b){ return a < b; } // seguro porque YYYY-MM-DD es lexicográfico
+function isoClamp(v, min, max){
+  if (isoLess(v, min)) return min;
+  if (isoLess(max, v)) return max;
+  return v;
+}
+
+// --- Tu función ---
+function parametrizar_concreto_control(fecha_i, fecha_f){
+  const $inp = $('#fecha_concreto');
+  if ($inp.length === 0) { console.error('#fecha_concreto no existe'); return; }
+
+  let minISO = toISO(fecha_i);
+  let maxISO = toISO(fecha_f);
+
+  // Corrige si vienen invertidas
+  if (isoLess(maxISO, minISO)) { const t = minISO; minISO = maxISO; maxISO = t; }
+
+  // Forzar a input type="date" y fijar rango
+  $inp.attr({ type: 'date', min: minISO, max: maxISO });
+
+  // Tomar valor actual o hoy
+  let currentISO = $inp.val() ? toISO($inp.val()) : isoToday();
+
+  // Clampear y setear
+  currentISO = isoClamp(currentISO, minISO, maxISO);
+  $inp.val(currentISO).trigger('change');
+
+  // Aquí puedes usar "i" si lo necesitas para tu listado…
+  // cargarListado(i, currentISO); // ejemplo
+}
 
 
 
