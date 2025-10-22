@@ -262,7 +262,9 @@
                   "5"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.
                    '<b>Desc.: </b>'. $val['descripcion'] . '<br>'.
                    '<b>Dia: </b>'. $val['name_day'] . '<br>'.
-                   '<b>Marca: </b>'. $val['marca'] . 
+                   '<b>Marca: </b>'. $val['marca'] . '<br>'.
+                   '<b>Cod. Movimiento: </b>'. $val['idalmacen_detalle_v2'] . '<br>'.
+                   '<b>Cod. Almacen Prod.: </b>'. $val['idalmacen_resumen_v2'] . '<br>'.
                   '</div>',            
                 );
               }

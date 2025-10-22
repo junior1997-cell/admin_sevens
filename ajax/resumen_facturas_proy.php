@@ -52,7 +52,12 @@
                   ($value['estado_user_vb_rf'] ? ' <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-original-title="Quitar visto bueno" onclick="visto_bueno(\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'quitar\', \''. $tipo_comprobante .'\')" ><i class="fas fa-times"></i></button>'  : ' <button class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick="visto_bueno(\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'agregar\', \''. $tipo_comprobante .'\')" ><i class="fas fa-check"></i></button>' ).
                   ' <button class="btn btn-danger btn-sm" onclick="eliminar_permanente('.$eliminar.')" data-toggle="tooltip" data-original-title="Eliminar permanente"><i class="far fa-trash-alt"></i></button>'.
                 '</div>',
-                "2" => $value['estado_user_vb_rf'] ? '<img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_user_vb_rf'].  '" width="30" data-toggle="tooltip" data-original-title="'.$value['nombre_user_vb_rf'].'" alt="User Image" onerror="' . $imagen_error . '">' : '<i class="far fa-hand-point-left texto-parpadeante"></i>'  ,
+                "2" => $value['estado_user_vb_rf'] ? 
+                '<div class="user-block">
+                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_user_vb_rf'].  '" width="30" data-toggle="tooltip" data-original-title="'.$value['nombre_user_vb_rf'].'" alt="User Image" onerror="' . $imagen_error . '">
+                  <div class="description pt-2">'. $value['nombre_user_vb_rf'] .'</div>
+                  <div class="description "> <span class="font-size-10px text-muted">'. $value['updated_at_vb_rf']  .'</span>  </div>
+                </div>' : '<i class="far fa-hand-point-left texto-parpadeante"></i>'  ,
                 "3" => $value['fecha'],
                 "4" => '<center>'.$value['tipo_comprobante'].'</center>',
                 "5" => $value['serie_comprobante'],

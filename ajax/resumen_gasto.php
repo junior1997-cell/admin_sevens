@@ -57,12 +57,20 @@
                   ($value['estado_user_vb'] ? ' <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-original-title="Quitar visto bueno" onclick="visto_bueno(\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'quitar\', \''. $tipo_comprobante .'\')" ><i class="fas fa-times"></i></button>'  : ' <button class="btn btn-outline-success btn-sm" data-toggle="tooltip" data-original-title="Dar visto bueno" onclick="visto_bueno(\''.$value['bd_nombre_tabla'].'\', \''.$value['bd_nombre_id_tabla'] .'\', \''.$value['idtabla'] .'\', \'agregar\', \''. $tipo_comprobante .'\')" ><i class="fas fa-check"></i></button>' ).
                   ' <button class="btn btn-danger btn-sm" onclick="eliminar_permanente('.$eliminar.')" data-toggle="tooltip" data-original-title="Eliminar permanente"><i class="far fa-trash-alt"></i></button>'.
                 '</div>' ,
-                "2" => $value['estado_user_vb'] ? '<img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_user_vb'].  '" width="30" data-toggle="tooltip" data-original-title="'.$value['nombre_user_vb'].'" alt="User Image" onerror="' . $imagen_error . '">' : '<i class="far fa-hand-point-left texto-parpadeante"></i>'  ,
+                "2" => // $value['estado_user_vb'] ? '<img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_user_vb'].  '" width="30" data-toggle="tooltip" data-original-title="'.$value['nombre_user_vb'].'" alt="User Image" onerror="' . $imagen_error . '">' : '<i class="far fa-hand-point-left texto-parpadeante"></i>'  ,
+
+                $value['estado_user_vb'] ? 
+                '<div class="user-block">
+                  <img class="img-circle" src="../dist/docs/all_trabajador/perfil/'. $value['imagen_user_vb'].  '" width="30" data-toggle="tooltip" data-original-title="'.$value['nombre_user_vb'].'" alt="User Image" onerror="' . $imagen_error . '">
+                  <div class="description pt-2">'. $value['nombre_user_vb'] .'</div>
+                  <div class="description "> <span class="font-size-10px text-muted">'. $value['updated_at_vb']  .'</span>  </div>
+                </div>' : '<i class="far fa-hand-point-left texto-parpadeante"></i>'  ,
+
                 "3" => $value['fecha'] ,
                 "4" => $tipo_comprobante,
                 "5" => $value['modulo'],
                 "6" => $value['glosa'],
-                "7" => '<span class="text-primary font-weight-bold">' . $value['proveedor'] . '</span>',                
+                "7" => '<span class="text-primary text-nowrap font-weight-bold">' . $value['proveedor'] . '</span>',                
                 "8" => $subtotal,
                 "9" => $igv,
                 "10" => $total,

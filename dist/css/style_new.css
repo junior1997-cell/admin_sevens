@@ -635,6 +635,11 @@ table th { vertical-align: top !important; }
 
 
 
+/*  ══════════════════════════════════════════ - B O R D E - ══════════════════════════════════════════ */
+.border-orange {
+  border-color: #ff6600 !important;
+}
+
 /*  ══════════════════════════════════════════ - B O R D E  H R - ══════════════════════════════════════════ */
 /* plomo */
 .borde-arriba-0000001a{ border-top: 1px solid #0000001a; }

@@ -14,6 +14,26 @@
         <title> Resumen de Factura | Admin Sevens</title>
 
         <?php $title = "Resumen de Activos Fijos"; require 'head.php'; ?>
+
+        <style>
+          #tabla-principal_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tabla-principal_filter label { width: 100% !important;  }
+          #tabla-principal_filter label input { width: 100% !important;   }
+
+          #tabla-principal-visto-bueno_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tabla-principal-visto-bueno_filter label { width: 100% !important;  }
+          #tabla-principal-visto-bueno_filter label input { width: 100% !important;   }
+
+          .description{
+            max-width: 100px;      /* ajusta al ancho de tu tarjeta */
+            white-space: nowrap;   /* no permite salto de línea */
+            overflow: hidden;      /* oculta lo que sobra */
+            text-overflow: ellipsis; /* agrega … */
+            line-height: 1.2;
+            font-size: 12px;       /* baja el tamaño si lo ves muy grande */
+            /* text-transform: uppercase;  si quieres todo en mayúsculas */
+          }
+        </style>
         
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">

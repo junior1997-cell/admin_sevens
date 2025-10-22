@@ -39,7 +39,7 @@ class ResumenGasto
 
     $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante,	cpp.serie_comprobante, cpp.descripcion, 
     cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, cpp.glosa, cpp.tipo_gravada, cpp.comprobante,
-    cpp.id_user_vb, cpp.nombre_user_vb, cpp.imagen_user_vb, cpp.estado_user_vb
+    cpp.id_user_vb, cpp.nombre_user_vb, cpp.imagen_user_vb, cpp.estado_user_vb,  DATE_FORMAT(cpp.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
 		FROM compra_por_proyecto as cpp, proveedor as p 
 		WHERE cpp.idproveedor=p.idproveedor AND cpp.estado = '1' AND cpp.estado_delete = '1' AND cpp.$estado_vb AND  cpp.idproyecto = $idproyecto
     $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
@@ -77,6 +77,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => true,
           "comprobante_multiple" => true,
           'cant_comprobante' => (empty($cant_comprob['data']) ? 0 : (empty($cant_comprob['data']['cant']) ? 0 : floatval($cant_comprob['data']['cant']) ) ),
@@ -200,7 +201,7 @@ class ResumenGasto
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
     $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo, f.tipo_comprobante, f.fecha_emision, f.monto, f.subtotal, f.igv,
-    f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
+    f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb, DATE_FORMAT(f.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' AND f.$estado_vb AND f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -234,6 +235,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"            => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -274,7 +276,7 @@ class ResumenGasto
     if (empty($id_proveedor) ) {  $filtro_proveedor = ""; } else { $filtro_proveedor = "AND prov.ruc = '$id_proveedor'"; }
 
     $sql2 = "SELECT f.idfactura, f.idproyecto, f.codigo,  f.tipo_comprobante, f.fecha_emision, f.monto, f.subtotal, f.igv,
-    f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb
+    f.nota, mq.nombre, mq.tipo, prov.razon_social, f.descripcion, f.imagen, f.id_user_vb, f.nombre_user_vb, f.imagen_user_vb, f.estado_user_vb, DATE_FORMAT(f.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
     FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
     WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
     AND f.estado = '1' AND f.estado_delete = '1' AND f.$estado_vb AND mq.tipo = '2' AND  f.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -308,6 +310,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"            => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -347,7 +350,7 @@ class ResumenGasto
     
     $sql3 = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
     s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.comprobante, p.razon_social, p.tipo_documento, 
-    p.ruc, s.id_user_vb, s.nombre_user_vb, s.imagen_user_vb, s.estado_user_vb    
+    p.ruc, s.id_user_vb, s.nombre_user_vb, s.imagen_user_vb, s.estado_user_vb, DATE_FORMAT(s.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb    
     FROM subcontrato AS s, proveedor as p
     WHERE s.idproveedor = p.idproveedor and s.estado = '1' AND s.estado_delete = '1' AND s.$estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
     $sub_contrato =  ejecutarConsultaArray($sql3);
@@ -379,6 +382,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -415,7 +419,7 @@ class ResumenGasto
     }
     
     $sql3 = "SELECT mdo.idmano_de_obra, mdo.idproyecto, mdo.idproveedor, mdo.fecha_inicial, mdo.fecha_final, mdo.fecha_deposito, mdo.tipo_comprobante, 
-    mdo.numero_comprobante, mdo.monto, mdo.glosa, mdo.tipo_gravada, mdo.descripcion, mdo.id_user_vb, mdo.nombre_user_vb, mdo.imagen_user_vb, mdo.estado_user_vb,
+    mdo.numero_comprobante, mdo.monto, mdo.glosa, mdo.tipo_gravada, mdo.descripcion, mdo.id_user_vb, mdo.nombre_user_vb, mdo.imagen_user_vb, mdo.estado_user_vb, DATE_FORMAT(mdo.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb,
     p.razon_social, p.tipo_documento, p.ruc
     FROM mano_de_obra AS mdo, proveedor as p
     WHERE mdo.idproveedor = p.idproveedor  and mdo.estado = '1' AND mdo.estado_delete = '1' AND mdo.$estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY mdo.fecha_deposito DESC;";
@@ -448,6 +452,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -489,7 +494,8 @@ class ResumenGasto
 
     $sql3 = "SELECT ps.idplanilla_seguro, ps.idproyecto, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
     ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante, ps.glosa,
-    ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc
+    ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb, DATE_FORMAT(ps.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb,
+    prov.razon_social, prov.tipo_documento, prov.ruc
     FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
     WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1' AND ps.$estado_vb
     AND ps.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY ps.fecha_p_s DESC;";
@@ -522,6 +528,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -562,7 +569,7 @@ class ResumenGasto
     }
 
     $sql3 = "SELECT idproyecto, idotro_gasto, razon_social, tipo_comprobante, numero_comprobante, fecha_g, 
-    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
+    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb, DATE_FORMAT(updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
     FROM otro_gasto 
     WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY fecha_g DESC;";
     $otro_gasto =  ejecutarConsultaArray($sql3);
@@ -594,6 +601,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -634,7 +642,7 @@ class ResumenGasto
     }
 
     $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, t.tipo_comprobante, t.numero_comprobante, t.fecha_viaje, t.precio_parcial, 
-    t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada, t.id_user_vb, t.nombre_user_vb, t.imagen_user_vb, t.estado_user_vb
+    t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada, t.id_user_vb, t.nombre_user_vb, t.imagen_user_vb, t.estado_user_vb, DATE_FORMAT(t.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
     FROM transporte AS t, proveedor AS p
     WHERE t.idproveedor = p.idproveedor  AND t.estado = '1' AND t.estado_delete = '1' AND t.$estado_vb AND  t.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY t.fecha_viaje DESC;";
@@ -667,6 +675,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -707,7 +716,7 @@ class ResumenGasto
     }
 
     $sql5 = "SELECT  idhospedaje, idproyecto, razon_social, fecha_comprobante, tipo_comprobante, numero_comprobante, subtotal, igv, 
-    precio_parcial, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
+    precio_parcial, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb,  DATE_FORMAT(updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
     FROM hospedaje 
     WHERE estado = '1' AND estado_delete = '1' AND $estado_vb AND  idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comprobante DESC;";
@@ -740,6 +749,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -781,7 +791,8 @@ class ResumenGasto
 
     $sql6 = "SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_inicial, dp.fecha_final, dp.cantidad_persona, dp.subtotal, dp.igv, 
     dp.val_igv, dp.precio_parcial, dp.forma_pago, dp.tipo_comprobante, dp.fecha_emision, dp.tipo_gravada, dp.glosa, dp.numero_comprobante, dp.descripcion, 
-    dp.comprobante, dp.id_user_vb, dp.nombre_user_vb, dp.imagen_user_vb, dp.estado_user_vb, prov.razon_social, p.idproyecto
+    dp.comprobante, dp.id_user_vb, dp.nombre_user_vb, dp.imagen_user_vb, dp.estado_user_vb, DATE_FORMAT(dp.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb,
+    prov.razon_social, p.idproyecto
     FROM detalle_pension as dp, pension as p, proveedor as prov
     WHERE dp.idpension = p.idpension AND p.idproveedor = prov.idproveedor AND dp.estado = '1' AND dp.estado_delete = '1' AND p.estado = '1' AND p.estado_delete = '1'
     AND dp.$estado_vb AND  p.idproyecto = $idproyecto $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -815,6 +826,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -855,7 +867,7 @@ class ResumenGasto
     }
 
     $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social,  
-    fb.monto, fb.subtotal, fb.igv, fb.glosa, fb.comprobante, fb.tipo_gravada, fb.id_user_vb, fb.nombre_user_vb, fb.imagen_user_vb, fb.estado_user_vb
+    fb.monto, fb.subtotal, fb.igv, fb.glosa, fb.comprobante, fb.tipo_gravada, fb.id_user_vb, fb.nombre_user_vb, fb.imagen_user_vb, fb.estado_user_vb, DATE_FORMAT(fb.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
 		FROM factura_break as fb, semana_break as sb
 		WHERE  fb.idsemana_break = sb.idsemana_break  
     AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' AND fb.$estado_vb AND  sb.idproyecto = $idproyecto
@@ -890,6 +902,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"            => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -930,7 +943,7 @@ class ResumenGasto
     }
 
     $sql8 = "SELECT idproyecto, idcomida_extra, fecha_comida, tipo_comprobante, numero_comprobante, razon_social, 
-    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb
+    costo_parcial, subtotal, igv, glosa, comprobante, tipo_gravada, id_user_vb, nombre_user_vb, imagen_user_vb, estado_user_vb, DATE_FORMAT(updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
 		FROM comida_extra
 		WHERE  estado = '1' AND estado_delete = '1' AND $estado_vb AND idproyecto = '$idproyecto' $filtro_proveedor $filtro_comprobante $filtro_fecha
     ORDER BY fecha_comida DESC;";
@@ -963,6 +976,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -1151,7 +1165,7 @@ class ResumenGasto
 
     $sql9 = "SELECT tpp.idproyecto, pxma.idpagos_x_mes_administrador, pxma.idfechas_mes_pagos_administrador, pxma.cuenta_deposito, pxma.forma_de_pago, pxma.monto, 
     pxma.fecha_pago, pxma.baucher, pxma.descripcion, fmpa.recibos_x_honorarios, fmpa.tipo_comprobante, fmpa.numero_comprobante, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento,
-    pxma.id_user_vb, pxma.nombre_user_vb, pxma.imagen_user_vb, pxma.estado_user_vb
+    pxma.id_user_vb, pxma.nombre_user_vb, pxma.imagen_user_vb, pxma.estado_user_vb, DATE_FORMAT(pxma.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
     FROM pagos_x_mes_administrador as pxma, fechas_mes_pagos_administrador as fmpa, trabajador_por_proyecto as tpp, trabajador t
     WHERE pxma.idfechas_mes_pagos_administrador = fmpa.idfechas_mes_pagos_administrador AND fmpa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
     AND tpp.idtrabajador = t.idtrabajador AND pxma.estado = '1' AND pxma.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' AND pxma.$estado_vb
@@ -1186,6 +1200,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,
@@ -1227,7 +1242,7 @@ class ResumenGasto
 
     $sql9 = "SELECT tpp.idproyecto, pqso.idpagos_q_s_obrero, pqso.idresumen_q_s_asistencia, pqso.cuenta_deposito, pqso.forma_de_pago, pqso.monto_deposito, 
     pqso.fecha_pago, pqso.baucher, pqso.descripcion, rqsa.recibos_x_honorarios, rqsa.tipo_comprobante, rqsa.numero_comprobante, t.nombres as trabajador, t.imagen_perfil, t.tipo_documento, t.numero_documento,
-    pqso.id_user_vb, pqso.nombre_user_vb, pqso.imagen_user_vb, pqso.estado_user_vb
+    pqso.id_user_vb, pqso.nombre_user_vb, pqso.imagen_user_vb, pqso.estado_user_vb,  DATE_FORMAT(pqso.updated_at_vb, '%d/%m/%Y %h:%i %p') as updated_at_vb
     FROM pagos_q_s_obrero as pqso, resumen_q_s_asistencia as rqsa, trabajador_por_proyecto as tpp, trabajador t
     WHERE pqso.idresumen_q_s_asistencia = rqsa.idresumen_q_s_asistencia AND rqsa.idtrabajador_por_proyecto = tpp.idtrabajador_por_proyecto
     AND tpp.idtrabajador = t.idtrabajador AND pqso.estado = '1' AND pqso.estado_delete = '1' AND tpp.idproyecto = '$idproyecto' AND pqso.$estado_vb
@@ -1262,6 +1277,7 @@ class ResumenGasto
           "nombre_user_vb"    => $value['nombre_user_vb'],
           "imagen_user_vb"    => $value['imagen_user_vb'],
           "estado_user_vb"    => $value['estado_user_vb'],
+          "updated_at_vb"    => $value['updated_at_vb'],
           "detalle"           => false,
           "comprobante_multiple" => false,
           "cant_comprobante" => 0,

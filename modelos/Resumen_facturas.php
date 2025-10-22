@@ -31,7 +31,7 @@ class Resumenfacturas
 
       $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, cpp.fecha_compra, cpp.tipo_comprobante,	cpp.serie_comprobante, cpp.descripcion, 
       cpp.total, cpp.subtotal, cpp.igv,  p.razon_social, p.tipo_documento, p.ruc, cpp.glosa, cpp.tipo_gravada, cpp.comprobante,
-      cpp.id_user_vb_rf, cpp.nombre_user_vb_rf, cpp.imagen_user_vb_rf, cpp.estado_user_vb_rf
+      cpp.id_user_vb_rf, cpp.nombre_user_vb_rf, cpp.imagen_user_vb_rf, cpp.estado_user_vb_rf, cpp.updated_at_vb_rf
       FROM compra_por_proyecto as cpp, proyecto AS pry, proveedor as p 
       WHERE cpp.idproveedor=p.idproveedor and pry.idproyecto = cpp.idproyecto AND cpp.estado = '1' AND cpp.estado_delete = '1' 
       and pry.$idempresa_a_cargo AND cpp.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY cpp.fecha_compra DESC;";
@@ -75,6 +75,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => true,
             'cant_comprobante' => (empty($cant_comprob['data']) ? 0 : (empty($cant_comprob['data']['cant']) ? 0 : floatval($cant_comprob['data']['cant']) ) ),
           );
@@ -113,7 +114,7 @@ class Resumenfacturas
           ELSE 'OTRO'
       END AS tipo_compr,
       prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
-      f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
+      f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf, f.updated_at_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
       AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '1' and p.$idempresa_a_cargo AND f.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -149,6 +150,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -186,7 +188,7 @@ class Resumenfacturas
           WHEN f.tipo_comprobante = 'Factura' THEN 'FT'
           ELSE 'OTRO'
       END AS tipo_compr, mq.nombre, prov.razon_social, prov.tipo_documento, prov.ruc, f.descripcion, f.imagen,
-      f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf
+      f.id_user_vb_rf, f.nombre_user_vb_rf, f.imagen_user_vb_rf, f.estado_user_vb_rf, f.updated_at_vb_rf
       FROM factura as f, proyecto as p, maquinaria as mq, proveedor as prov
       WHERE f.idmaquinaria=mq.idmaquinaria AND mq.idproveedor=prov.idproveedor AND f.idproyecto=p.idproyecto 
       AND f.estado = '1' AND f.estado_delete = '1' AND mq.tipo = '2' and p.$idempresa_a_cargo AND f.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -222,6 +224,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -255,7 +258,7 @@ class Resumenfacturas
       $sql3 = "SELECT s.idsubcontrato, s.idproyecto, s.idproveedor, s.tipo_comprobante, s.numero_comprobante, s.forma_de_pago, 
       s.fecha_subcontrato, s.val_igv, s.subtotal, s.igv, s.costo_parcial, s.descripcion, s.glosa, s.tipo_gravada, s.comprobante, p.razon_social, p.tipo_documento, 
       p.ruc, s.id_user_vb, s.nombre_user_vb, s.imagen_user_vb, s.estado_user_vb,
-      s.id_user_vb_rf, s.nombre_user_vb_rf, s.imagen_user_vb_rf, s.estado_user_vb_rf    
+      s.id_user_vb_rf, s.nombre_user_vb_rf, s.imagen_user_vb_rf, s.estado_user_vb_rf, s.updated_at_vb_rf 
       FROM subcontrato AS s, proveedor as p, proyecto AS pry
       WHERE s.idproveedor = p.idproveedor and pry.idproyecto = s.idproyecto and s.estado = '1' AND s.estado_delete = '1' 
       and pry.$idempresa_a_cargo AND s.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY s.fecha_subcontrato DESC;";
@@ -293,6 +296,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -326,7 +330,7 @@ class Resumenfacturas
       $sql3 = "SELECT ps.idplanilla_seguro, ps.idproyecto, ps.tipo_comprobante, ps.numero_comprobante, ps.forma_de_pago, 
       ps.fecha_p_s, ps.subtotal, ps.igv, ps.costo_parcial, ps.descripcion, ps.val_igv, ps.tipo_gravada, ps.comprobante, ps.glosa,
       ps.id_user_vb, ps.nombre_user_vb, ps.imagen_user_vb, ps.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc,
-      ps.id_user_vb_rf, ps.nombre_user_vb_rf, ps.imagen_user_vb_rf, ps.estado_user_vb_rf
+      ps.id_user_vb_rf, ps.nombre_user_vb_rf, ps.imagen_user_vb_rf, ps.estado_user_vb_rf, ps.updated_at_vb_rf
       FROM planilla_seguro as ps, proyecto as p, proveedor as prov 
       WHERE ps.idproyecto = p.idproyecto and ps.idproveedor = prov.idproveedor and ps.estado ='1' and ps.estado_delete = '1' 
       and p.$idempresa_a_cargo AND ps.$estado_vb
@@ -365,6 +369,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -396,7 +401,7 @@ class Resumenfacturas
 
       $sql3 = "SELECT og.idproyecto, og.idotro_gasto, og.razon_social, og.ruc, og.tipo_comprobante, og.numero_comprobante, og.fecha_g, 
       og.costo_parcial, og.subtotal, og.igv, og.glosa, og.comprobante, og.tipo_gravada,
-      og.id_user_vb_rf, og.nombre_user_vb_rf, og.imagen_user_vb_rf, og.estado_user_vb_rf
+      og.id_user_vb_rf, og.nombre_user_vb_rf, og.imagen_user_vb_rf, og.estado_user_vb_rf, og.updated_at_vb_rf
       FROM otro_gasto as og, proyecto AS pry 
       WHERE pry.idproyecto = og.idproyecto and og.estado = '1' AND og.estado_delete = '1'
       and pry.$idempresa_a_cargo AND og.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha ORDER BY og.fecha_g DESC;";
@@ -434,6 +439,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -465,7 +471,7 @@ class Resumenfacturas
 
       $sql4 = "SELECT t.idtransporte, t.idproyecto, p.razon_social, p.tipo_documento, p.ruc, t.tipo_comprobante, t.numero_comprobante, 
       t.fecha_viaje, t.precio_parcial, t.subtotal, t.igv,  t.comprobante , t.glosa , t.tipo_gravada,
-      t.id_user_vb_rf, t.nombre_user_vb_rf, t.imagen_user_vb_rf, t.estado_user_vb_rf
+      t.id_user_vb_rf, t.nombre_user_vb_rf, t.imagen_user_vb_rf, t.estado_user_vb_rf, t.updated_at_vb_rf
       FROM transporte AS t, proveedor AS p, proyecto AS pry 
       WHERE t.idproveedor = p.idproveedor and pry.idproyecto = t.idproyecto AND t.estado = '1' AND t.estado_delete = '1' 
       and pry.$idempresa_a_cargo AND t.$estado_vb 
@@ -504,6 +510,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -535,7 +542,7 @@ class Resumenfacturas
 
       $sql5 = "SELECT h.idhospedaje, h.idproyecto, h.razon_social, h.ruc, h.fecha_comprobante, h.tipo_comprobante, h.numero_comprobante, h.subtotal, h.igv, 
       precio_parcial, h.glosa, h.comprobante, h.tipo_gravada,
-      id_user_vb_rf, h.nombre_user_vb_rf, h.imagen_user_vb_rf, h.estado_user_vb_rf
+      id_user_vb_rf, h.nombre_user_vb_rf, h.imagen_user_vb_rf, h.estado_user_vb_rf, h.updated_at_vb_rf
       FROM hospedaje as h, proyecto AS pry 
       WHERE pry.idproyecto = h.idproyecto and h.estado = '1' AND h.estado_delete = '1' 
       and pry.$idempresa_a_cargo AND h.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -574,6 +581,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -606,7 +614,7 @@ class Resumenfacturas
       $sql6 = "SELECT dp.iddetalle_pension, dp.idpension, dp.fecha_inicial, dp.fecha_final, dp.cantidad_persona, dp.subtotal, dp.igv, 
       dp.val_igv, dp.precio_parcial, dp.forma_pago, dp.tipo_comprobante, dp.fecha_emision, dp.tipo_gravada, dp.glosa, dp.numero_comprobante, dp.descripcion, 
       dp.comprobante, dp.id_user_vb, dp.nombre_user_vb, dp.imagen_user_vb, dp.estado_user_vb, prov.razon_social, prov.tipo_documento, prov.ruc, p.idproyecto,
-      dp.id_user_vb_rf, dp.nombre_user_vb_rf, dp.imagen_user_vb_rf, dp.estado_user_vb_rf
+      dp.id_user_vb_rf, dp.nombre_user_vb_rf, dp.imagen_user_vb_rf, dp.estado_user_vb_rf, dp.updated_at_vb_rf
       FROM detalle_pension as dp, pension as p, proveedor as prov, proyecto AS pry 
       WHERE dp.idpension = p.idpension and pry.idproyecto = p.idproyecto AND prov.idproveedor = p.idproveedor  AND p.estado = '1' AND p.estado_delete = '1' AND dp.estado = '1' AND dp.estado_delete = '1' 
       and pry.$idempresa_a_cargo AND dp.$estado_vb
@@ -646,6 +654,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -677,7 +686,7 @@ class Resumenfacturas
 
       $sql7 = "SELECT sb.idproyecto, fb.idfactura_break, fb.fecha_emision, fb.tipo_comprobante, fb.nro_comprobante, fb.razon_social, fb.ruc, 
       fb.monto, fb.subtotal, fb.igv, fb.glosa,  fb.comprobante, fb.tipo_gravada,
-      fb.id_user_vb_rf, fb.nombre_user_vb_rf, fb.imagen_user_vb_rf, fb.estado_user_vb_rf
+      fb.id_user_vb_rf, fb.nombre_user_vb_rf, fb.imagen_user_vb_rf, fb.estado_user_vb_rf, fb.updated_at_vb_rf
       FROM factura_break as fb, semana_break as sb, proyecto AS pry 
       WHERE  fb.idsemana_break = sb.idsemana_break  and  pry.idproyecto = sb.idproyecto
       AND fb.estado = '1' AND fb.estado_delete = '1' AND sb.estado = '1' AND sb.estado_delete = '1' 
@@ -717,6 +726,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante" => 0,
           );
@@ -748,7 +758,7 @@ class Resumenfacturas
 
       $sql8 = "SELECT ce.idproyecto, ce.idcomida_extra, ce.fecha_comida, ce.tipo_comprobante, ce.numero_comprobante, ce.razon_social, ce.ruc,
       ce.costo_parcial, ce.subtotal, ce.igv, ce.glosa, ce.comprobante, ce.tipo_gravada,
-      ce.id_user_vb_rf, ce.nombre_user_vb_rf, ce.imagen_user_vb_rf, ce.estado_user_vb_rf
+      ce.id_user_vb_rf, ce.nombre_user_vb_rf, ce.imagen_user_vb_rf, ce.estado_user_vb_rf, ce.updated_at_vb_rf
       FROM comida_extra as ce, proyecto AS pry 
       WHERE pry.idproyecto = ce.idproyecto and ce.estado = '1' AND ce.estado_delete = '1' 
       and pry.$idempresa_a_cargo AND ce.$estado_vb $filtro_proveedor $filtro_comprobante $filtro_fecha
@@ -787,6 +797,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante"  => 0,
           );
@@ -804,8 +815,10 @@ class Resumenfacturas
         }
       }
     }
-//==============================================================
-    // FACTURAS - OTRA FACTURA PROYECTO ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    //==============================================================
+    // FACTURAS - OTRA FACTURA PROYECTO 
+    //════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ($modulo == 'todos' || $modulo == 'otra_factura_proyecto') {    
@@ -818,7 +831,7 @@ class Resumenfacturas
 
       $sql9 = "SELECT otfp.idotra_factura_proyecto, otfp.fecha_emision, otfp.tipo_comprobante, otfp.numero_comprobante, p.razon_social, p.tipo_documento, p.ruc,
       otfp.costo_parcial, otfp.subtotal, otfp.igv, otfp.glosa, otfp.comprobante , otfp.tipo_gravada,
-      otfp.id_user_vb_rf, otfp.nombre_user_vb_rf, otfp.imagen_user_vb_rf, otfp.estado_user_vb_rf
+      otfp.id_user_vb_rf, otfp.nombre_user_vb_rf, otfp.imagen_user_vb_rf, otfp.estado_user_vb_rf, otfp.updated_at_vb_rf
       FROM otra_factura_proyecto AS otfp, proveedor p, empresa_a_cargo as ec
       WHERE otfp.idempresa_a_cargo = ec.idempresa_a_cargo and otfp.idproveedor = p.idproveedor AND otfp.estado = '1' AND otfp.estado_delete = '1' 
       and ec.$idempresa_a_cargo AND otfp.$estado_vb
@@ -857,6 +870,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante"  => 0,
           );
@@ -874,9 +888,11 @@ class Resumenfacturas
         }
       }
     }
-//==============================================================
 
-    // FACTURAS - OTRA FACTURA ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+    //==============================================================
+    // FACTURAS - OTRA FACTURA 
+    //═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
     $filtro_proveedor = ""; $filtro_fecha = ""; $filtro_comprobante = "";
 
     if ($modulo == 'todos' || $modulo == 'otra_factura') {    
@@ -889,7 +905,7 @@ class Resumenfacturas
 
       $sql9 = "SELECT ofp.idotra_factura, ofp.fecha_emision, ofp.tipo_comprobante, ofp.numero_comprobante, p.razon_social, p.tipo_documento, p.ruc,
       ofp.costo_parcial, ofp.subtotal, ofp.igv, ofp.glosa, ofp.comprobante , ofp.tipo_gravada,
-      ofp.id_user_vb_rf, ofp.nombre_user_vb_rf, ofp.imagen_user_vb_rf, ofp.estado_user_vb_rf
+      ofp.id_user_vb_rf, ofp.nombre_user_vb_rf, ofp.imagen_user_vb_rf, ofp.estado_user_vb_rf, ofp.updated_at_vb_rf
       FROM otra_factura AS ofp, proveedor p, empresa_a_cargo as ec
       WHERE ofp.idempresa_a_cargo = ec.idempresa_a_cargo and ofp.idproveedor = p.idproveedor AND ofp.estado = '1' AND ofp.estado_delete = '1' 
       and ec.$idempresa_a_cargo AND ofp.$estado_vb
@@ -928,6 +944,7 @@ class Resumenfacturas
             "nombre_user_vb_rf" => $value['nombre_user_vb_rf'],
             "imagen_user_vb_rf" => $value['imagen_user_vb_rf'],
             "estado_user_vb_rf" => $value['estado_user_vb_rf'],
+            "updated_at_vb_rf" => $value['updated_at_vb_rf'],
             "comprobante_multiple" => false,
             "cant_comprobante"  => 0,
           );
@@ -1446,6 +1463,15 @@ class Resumenfacturas
 		$bitacora = ejecutarConsulta($sql); if ( $bitacora['status'] == false) {return $bitacora; }  
 		
 		return $eliminar;
+  }
+
+
+  public function ver_movimiento($nombre_tabla, $nombre_id_tabla, $id_tabla) {
+    $sql = "select bdb.accion, bdb.created_at 
+    from bitacora_bd as bdb
+    where bdb.nombre_tabla = '$nombre_tabla' and bdb.id_tabla = '$id_tabla'";
+		return  ejecutarConsultaSimpleFila($sql);
+		
   }
 
   // ════════════════════════════════════════ S E L E C T 2   -   P R O V E E D O R ════════════════════════════════════════

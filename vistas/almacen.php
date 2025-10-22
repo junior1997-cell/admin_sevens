@@ -25,38 +25,14 @@ if (!isset($_SESSION["nombre"])) {
 
     <style>
 
-      #tabla-almacen-resumen td, #tabla-almacen-resumen th {
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-      }
+      #tabla-almacen-resumen td, #tabla-almacen-resumen th { padding-top: 2px !important; padding-bottom: 2px !important; }
+      #tabla-ver-almacen td, #tabla-ver-almacen th { padding-top: 2px !important; padding-bottom: 2px !important;  }
 
-      #tabla-ver-almacen td, #tabla-ver-almacen th {
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-      }
-
-      .table-container {
-        /* max-height: 560px; */
-        /* Ajusta la altura máxima según tus necesidades */
-        overflow-y: scroll;
-      }
-
+      .table-container {   overflow-y: scroll;    }
       .custom-table { border-collapse: collapse; width: 100%; }
-
       .custom-table th, .custom-table td { border: 1px solid black; padding: 8px; text-align: center; }
-
-      .custom-table th, .custom-table td {
-        padding: 6px;
-        /* Ajusta el valor del padding según tus necesidades */
-      }
-
-      .custom-table th {
-        text-align: center;
-        width: auto;
-        /* Opcional: ajusta el ancho del encabezado según tus necesidades */
-        /* vertical-align: middle; Centra verticalmente el contenido del encabezado */
-        vertical-align: middle !important;
-      }
+      .custom-table th, .custom-table td {  padding: 6px;  }
+      .custom-table th { text-align: center; width: auto; vertical-align: middle !important; }
 
       .style-head { padding-bottom: 4px !important; padding-top: 4px !important; padding-right: 10px !important; padding-left: 10px !important; }
       .st_tr_style{

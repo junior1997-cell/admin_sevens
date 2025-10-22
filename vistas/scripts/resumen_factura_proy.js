@@ -55,21 +55,17 @@ function tbla_principal(nube_idproyecto, empresa_a_cargo, fecha_1, fecha_2, id_p
   var name_export = `Resumen de facturas Sevens ${moment().format('DD-MM-YYYY')}`;
 
   tabla_principal = $('#tabla-principal').dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } }, 
-      { extend: 'excelHtml5', title: name_export, footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
-        action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando EXCEL<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.excelHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); });  }, 1000); }
-      }, 
-      { extend: 'pdfHtml5', title: name_export, footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
-        action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando PDF<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.pdfHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); }); }, 1000); }
-      }, 
+    dom:"<'row'<'col-md-7 col-lg-7 col-xl-8 pt-2'f><'col-md-5 col-lg-5 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
+    buttons: [{ 
+      extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], }, text: `<i class="fas fa-copy" ></i>`, className: "ml-2" }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], },  text: `<i class="far fa-file-excel fa-lg" ></i>` }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], }, text: `<i class="far fa-file-pdf fa-lg"></i>` }, 
       "colvis"
-    ],
+    ],    
     ajax:	{
       url: `../ajax/resumen_facturas_proy.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&empresa_a_cargo=${empresa_a_cargo}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&visto_bueno='0'&modulo=${modulo}`,
       type : "get",
@@ -92,9 +88,10 @@ function tbla_principal(nube_idproyecto, empresa_a_cargo, fecha_1, fecha_2, id_p
       //if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total").html(formato_miles( total += parseFloat(data[10]) )); }      
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
     },
     footerCallback: function( tfoot, data, start, end, display ) {
       var api = this.api(); var subtotal = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
@@ -106,6 +103,10 @@ function tbla_principal(nube_idproyecto, empresa_a_cargo, fecha_1, fecha_2, id_p
       var api = this.api(); var igv = api.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
     
+    },
+    initComplete: function () {
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('ml-0 border border-orange bg-light ');// Agregar clase bg-light al input de búsqueda
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
@@ -164,21 +165,17 @@ function tbla_principal_visto_bueno(nube_idproyecto, empresa_a_cargo, fecha_1, f
   var name_export = `Resumen de facturas Sevens ${moment().format('DD-MM-YYYY')}`;
 
   tabla_visto_bueno = $('#tabla-principal-visto-bueno').dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } }, 
-      { extend: 'excelHtml5', title: name_export, footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
-        action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando EXCEL<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.excelHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); });  }, 1000); }
-      }, 
-      { extend: 'pdfHtml5', title: name_export, footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], } ,
-        action: function(e, dt, node, config) { var that = this; Swal.fire('Descargando PDF<span class="texto-parpadeante"> ...</span> '); setTimeout(function() { var descargando = $.fn.DataTable.ext.buttons.pdfHtml5.action.call(that, e, dt, node, config); $(descargando).ready(function () { Swal.close(); }); }, 1000); }
-      }, 
+    dom:"<'row'<'col-md-7 col-lg-7 col-xl-8 pt-2'f><'col-md-5 col-lg-5 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
+    buttons: [{ 
+      extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], }, text: `<i class="fas fa-copy" ></i>`, className: "ml-2" }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], },  text: `<i class="far fa-file-excel fa-lg" ></i>` }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,4,5,6,7,8,9,10,11,12], }, text: `<i class="far fa-file-pdf fa-lg"></i>` }, 
       "colvis"
-    ],
+    ], 
     ajax:	{
       url: `../ajax/resumen_facturas_proy.php?op=listar_facturas_compras&id_proyecto=${nube_idproyecto}&empresa_a_cargo=${empresa_a_cargo}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&visto_bueno='1'&modulo=${modulo}`,
       type : "get",
@@ -198,9 +195,10 @@ function tbla_principal_visto_bueno(nube_idproyecto, empresa_a_cargo, fecha_1, f
       //if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); $(".total-total-visto-bueno").html(formato_miles( total += parseFloat(data[10]) )); }     
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
     },
     footerCallback: function( tfoot, data, start, end, display ) {
       var api = this.api(); var subtotal = api.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
@@ -212,6 +210,10 @@ function tbla_principal_visto_bueno(nube_idproyecto, empresa_a_cargo, fecha_1, f
       var api = this.api(); var igv = api.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
     
+    },
+    initComplete: function () {
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('ml-0 border border-orange bg-light ');// Agregar clase bg-light al input de búsqueda
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación

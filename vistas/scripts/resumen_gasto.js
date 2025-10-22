@@ -36,14 +36,16 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
   var total_subtotal = 0, total_igv = 0, total = 0;
 
   tabla_principal = $('#tabla-principal').dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, 
-      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, "colvis"
+    dom:"<'row'<'col-md-7 col-lg-7 col-xl-8 pt-2'f><'col-md-5 col-lg-5 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
+    buttons: [{ 
+      extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], }, text: `<i class="fas fa-copy" ></i>`, className: "ml-2" }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], },  text: `<i class="far fa-file-excel fa-lg" ></i>` }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], }, text: `<i class="far fa-file-pdf fa-lg"></i>` }, 
+      "colvis"
     ],
     ajax:	{
       url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='0'`,
@@ -56,6 +58,10 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
+      // columna: #
+      if (data[4] != '') { $("td", row).eq(4).addClass('text-nowrap'); }
+      // columna: #
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-center text-nowrap'); }
       // columna: sub total
       if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
       // columna: igv
@@ -66,9 +72,10 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
     },
     footerCallback: function( tfoot, data, start, end, display ) {
       var api_1 = this.api(); var total_1 = api_1.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
@@ -90,6 +97,10 @@ function tbla_principal(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprob
       var api_6 = this.api(); var total_6 = api_6.column( 17 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api_6.column( 17 ).footer() ).html( ` <span class="float-right">${formato_miles(total_6)}</span>` );
     
+    },
+    initComplete: function () {
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('ml-0 border border-orange bg-light ');// Agregar clase bg-light al input de búsqueda
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
@@ -132,7 +143,7 @@ function sumas_totales(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comproba
 
 //Función Listar - tabla compras
 function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {
-   
+
   $('.total-subtotal-visto-bueno').html('0.00');
   $('.total-igv-visto-bueno').html('0.00');
   $('.total-total-visto-bueno').html('0.00');
@@ -140,78 +151,90 @@ function tbla_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, compr
   var total_subtotal = 0, total_igv = 0, total = 0;
 
   tabla_visto_bueno = $('#tabla-visto-bueno').dataTable({
-    responsive: true,
-    lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
+    responsive: false,
+    lengthMenu: [[-1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200,]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-    buttons: [{ extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17 ], } }, 
-      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], } }, "colvis"],
-    ajax:	{
+    dom:"<'row'<'col-md-7 col-lg-7 col-xl-8 pt-2'f><'col-md-5 col-lg-5 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
+    buttons: [{ 
+      extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], }, text: `<i class="fas fa-copy" ></i>`, className: "ml-2" }, 
+      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], },  text: `<i class="far fa-file-excel fa-lg" ></i>` }, 
+      { extend: 'pdfHtml5', footer: true, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,3,13,14,5,6,7,15,16,17], }, text: `<i class="far fa-file-pdf fa-lg"></i>` }, 
+      "colvis"
+    ],
+    ajax: {
       url: `../ajax/resumen_gasto.php?op=tabla_principal&id_proyecto=${nube_idproyecto}&fecha_1=${fecha_1}&fecha_2=${fecha_2}&id_proveedor=${id_proveedor}&comprobante=${comprobante}&estado_vb='1'`,
-      type : "get",
-      dataType : "json",						
-      error: function(e){
-        console.log(e.responseText);	ver_errores(e);	
+      type: "get",
+      dataType: "json",
+      error: function (e) {
+        console.log(e.responseText); ver_errores(e);
       }
-		},
+    },
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[3] != '') { $("td", row).eq(3).addClass('text-center text-nowrap'); }
+      // columna: #
+      if (data[4] != '') { $("td", row).eq(4).addClass('text-nowrap'); }
+      // columna: #
+      if (data[5] != '') { $("td", row).eq(5).addClass('text-nowrap'); }
       // columna: sub total
       if (data[8] != '') { $("td", row).eq(8).addClass('text-right'); }
       // columna: igv
-      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }  
+      if (data[9] != '') { $("td", row).eq(9).addClass('text-right'); }
       // columna: total
       if (data[10] != '') { $("td", row).eq(10).addClass('text-right'); }
       // columna: 4
       if (data[12] == '1') { $("td", row).eq(4).addClass('bg-gradient-warning'); }
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
     },
-    footerCallback: function( tfoot, data, start, end, display ) {
-      var api_1 = this.api(); var total_1 = api_1.column( 8 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api_1.column( 8 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_1)}</span>` );
+    footerCallback: function (tfoot, data, start, end, display) {
+      var api_1 = this.api(); var total_1 = api_1.column(8).data().reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0)
+      $(api_1.column(8).footer()).html(` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_1)}</span>`);
       // console.log('footer: '+total);
-      var api_2 = this.api(); var total_2 = api_2.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api_2.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_2)}</span>` );
+      var api_2 = this.api(); var total_2 = api_2.column(9).data().reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0)
+      $(api_2.column(9).footer()).html(` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_2)}</span>`);
 
-      var api_3 = this.api(); var total_3 = api_3.column( 10 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api_3.column( 10 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_3)}</span>` );
+      var api_3 = this.api(); var total_3 = api_3.column(10).data().reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0)
+      $(api_3.column(10).footer()).html(` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_3)}</span>`);
 
       //----------------
-      var api_4 = this.api(); var total_4 = api_4.column( 15 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api_4.column( 15 ).footer() ).html( ` <span class="float-right">${formato_miles(total_4)}</span>` );
+      var api_4 = this.api(); var total_4 = api_4.column(15).data().reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0)
+      $(api_4.column(15).footer()).html(` <span class="float-right">${formato_miles(total_4)}</span>`);
       // console.log('footer: '+total);
-      var api_5 = this.api(); var total_5 = api_5.column( 16 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api_5.column( 16 ).footer() ).html( ` <span class="float-right">${formato_miles(total_5)}</span>` );
+      var api_5 = this.api(); var total_5 = api_5.column(16).data().reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0)
+      $(api_5.column(16).footer()).html(` <span class="float-right">${formato_miles(total_5)}</span>`);
 
-      var api_6 = this.api(); var total_6 = api_6.column( 17 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
-      $( api_6.column( 17 ).footer() ).html( ` <span class="float-right">${formato_miles(total_6)}</span>` );
-    
+      var api_6 = this.api(); var total_6 = api_6.column(17).data().reduce(function (a, b) { return parseFloat(a) + parseFloat(b); }, 0)
+      $(api_6.column(17).footer()).html(` <span class="float-right">${formato_miles(total_6)}</span>`);
+
+    },
+    initComplete: function () {
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('ml-0 border border-orange bg-light ');// Agregar clase bg-light al input de búsqueda
     },
     bDestroy: true,
     iDisplayLength: 10,//Paginación
-    order: [[ 0, "asc" ]],//Ordenar (columna,orden)
-    columnDefs: [ 
+    order: [[0, "asc"]],//Ordenar (columna,orden)
+    columnDefs: [
       { targets: [3], render: $.fn.dataTable.render.moment('YYYY-MM-DD', 'DD/MM/YYYY'), },
-      { targets: [12,13,14,15,16,17], visible: false, searchable: false },
+      { targets: [12, 13, 14, 15, 16, 17], visible: false, searchable: false },
       // { targets: [8,9,10], render: $.fn.dataTable.render.number(',', '.', 2) },
-      { targets: [8,9,10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) {color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
+      { targets: [8, 9, 10], render: function (data, type) { var number = $.fn.dataTable.render.number(',', '.', 2).display(data); if (type === 'display') { let color = 'numero_positivos'; if (data < 0) { color = 'numero_negativos'; } return `<span class="float-left">S/</span> <span class="float-right ${color} "> ${number} </span>`; } return number; }, },
 
     ],
   }).DataTable();
-  
-  $( tabla_principal ).ready(function() {
+
+  $(tabla_principal).ready(function () {
     //umas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante);
     $('.cargando').hide();
     $('.btn-zip').removeClass('disabled');
   });
-  
+
 }
 
 function sumas_totales_visto_bueno(nube_idproyecto, fecha_1, fecha_2, id_proveedor, comprobante) {

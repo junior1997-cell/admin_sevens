@@ -361,7 +361,8 @@ class Almacen
     $sql_fecha    = empty($fecha) || $fecha == 'null'  ? '' : "AND ad.fecha = '$fecha'";
     $sql_tipo_mov = empty($tipo_mov) || $tipo_mov == 'null'  ? '' :  ($tipo_mov == 'ENTRADA' ? "AND ad.tipo_mov IN ('IPC', 'IEP', 'IPG')" : ($tipo_mov == 'SALIDA' ? "AND ad.tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG')" : ""));
 
-    $sql_0 = "SELECT idalmacen_detalle, ad.idalmacen_resumen, ad.idproyecto_destino, ad.idalmacen_general, ad.tipo_mov, ad.marca, ad.fecha, ad.name_day, ad.name_month, 
+    $sql_0 = "SELECT idalmacen_detalle, LPAD(idalmacen_detalle, 5, '0') as idalmacen_detalle_v2, ad.idalmacen_resumen, LPAD(ad.idalmacen_resumen, 5, '0') as idalmacen_resumen_v2, 
+    ad.idproyecto_destino, ad.idalmacen_general, ad.tipo_mov, ad.marca, ad.fecha, ad.name_day, ad.name_month, 
     ad.name_year,  ad.cantidad, CASE  WHEN ad.tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') THEN ad.cantidad * -1 ELSE  ad.cantidad END AS cantidad_real,
     ad.stok_anterior, ad.stok_actual, ad.descripcion, ad.estado, ar.tipo, 
     CASE ad.tipo_mov

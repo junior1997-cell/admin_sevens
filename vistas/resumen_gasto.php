@@ -18,6 +18,26 @@
 
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
+        <style>
+          #tabla-principal_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tabla-principal_filter label { width: 100% !important;  }
+          #tabla-principal_filter label input { width: 100% !important;   }
+
+          #tabla-visto-bueno_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tabla-visto-bueno_filter label { width: 100% !important;  }
+          #tabla-visto-bueno_filter label input { width: 100% !important;   }
+
+          .description{
+            max-width: 100px;      /* ajusta al ancho de tu tarjeta */
+            white-space: nowrap;   /* no permite salto de línea */
+            overflow: hidden;      /* oculta lo que sobra */
+            text-overflow: ellipsis; /* agrega … */
+            line-height: 1.2;
+            font-size: 12px;       /* baja el tamaño si lo ves muy grande */
+            /* text-transform: uppercase;  si quieres todo en mayúsculas */
+          }
+        </style>
+
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
@@ -113,116 +133,122 @@
                           <!-- tabla resumen facturas compras -->
                           <div class="pb-3">
                             <!-- <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3> -->
-                            <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th colspan="18" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-                                </tr>
-                                <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th class="text-center">OP</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Aprobado por:">V°B°</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th>Tipo compr.</th>
-                                  <th class="text-center">Módulo</th>
-                                  <th class="text-center">Glosa</th>
-                                  <th>Razón social</th>                                  
-                                  <th class="text-center ">Subtotal</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-center">Total</th> 
-                                  <th class="text-center">CFDI.</th>  
+                            <div class="table-responsive">
 
-                                  <th class="text-center">Estado</th>                                    
-                                  <th class="text-center ">Tipo Compro.</th> 
-                                  <th class="text-center ">Num. Compro.</th>                                   
-                                  <th class="text-center ">Subtotal</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-center">Total</th>  
-                                </tr>
-                              </thead>
-                              <tbody> </tbody>
-                              <tfoot> 
-                                <tr> 
-                                  <th class="text-center text-black-50">#</th> 
-                                  <th class="text-center text-black-50">OP</th>
-                                  <th class="text-center text-black-50">V°B°</th>
-                                  <th class="text-center text-black-50">Fecha</th>
-                                  <th class="text-center text-black-50">Tipo compr.</th>
-                                  <th class="text-center text-black-50">Módulo</th>
-                                  <th class="text-center text-black-50">Glosa</th>
-                                  <th class="text-black-50">Razón social</th>                                  
-                                  <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
-                                  <th class="text-right text-nowrap total-igv">IGV</th>
-                                  <th class="text-right text-nowrap total-total">Total</th>  
-                                  <th class="text-center text-black-50">CFDI.</th>
+                             
+                              <table id="tabla-principal" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="18" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                  </tr>
+                                  <tr> 
+                                    <th class="text-center">#</th> 
+                                    <th class="text-center">OP</th>
+                                    <th class="text-center" data-toggle="tooltip" data-original-title="Aprobado por:">V°B°</th>
+                                    <th class="text-center">Fecha</th>
+                                    <th>Tipo compr.</th>
+                                    <th class="text-center">Módulo</th>
+                                    <th class="text-center">Glosa</th>
+                                    <th>Razón social</th>                                  
+                                    <th class="text-center ">Subtotal</th>                                
+                                    <th class="text-center">IGV</th>
+                                    <th class="text-center">Total</th> 
+                                    <th class="text-center">CFDI.</th>  
 
-                                  <th class="text-center">Estado</th> 
-                                  <th class="text-center ">Tipo Compro.</th> 
-                                  <th class="text-center ">Num. Compro.</th> 
-                                  <th class="text-center ">Subtotal</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-center">Total</th>  
-                                </tr>
-                              </tfoot>
-                            </table>
+                                    <th class="text-center">Estado</th>                                    
+                                    <th class="text-center ">Tipo Compro.</th> 
+                                    <th class="text-center ">Num. Compro.</th>                                   
+                                    <th class="text-center ">Subtotal</th>                                
+                                    <th class="text-center">IGV</th>
+                                    <th class="text-center">Total</th>  
+                                  </tr>
+                                </thead>
+                                <tbody> </tbody>
+                                <tfoot> 
+                                  <tr> 
+                                    <th class="text-center text-black-50">#</th> 
+                                    <th class="text-center text-black-50">OP</th>
+                                    <th class="text-center text-black-50">V°B°</th>
+                                    <th class="text-center text-black-50">Fecha</th>
+                                    <th class="text-center text-black-50">Tipo compr.</th>
+                                    <th class="text-center text-black-50">Módulo</th>
+                                    <th class="text-center text-black-50">Glosa</th>
+                                    <th class="text-black-50">Razón social</th>                                  
+                                    <th class="text-right text-nowrap total-subtotal">Subtotal</th>                                
+                                    <th class="text-right text-nowrap total-igv">IGV</th>
+                                    <th class="text-right text-nowrap total-total">Total</th>  
+                                    <th class="text-center text-black-50">CFDI.</th>
+
+                                    <th class="text-center">Estado</th> 
+                                    <th class="text-center ">Tipo Compro.</th> 
+                                    <th class="text-center ">Num. Compro.</th> 
+                                    <th class="text-center ">Subtotal</th>                                
+                                    <th class="text-center">IGV</th>
+                                    <th class="text-center">Total</th>  
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
 
                           <!-- tabla resumen facturas compras -->
                           <div class="pb-3">
                             <h4><b>Lista de Gastos Aceptados</b></h4>
                             <!-- <h3 class="card-title mb-2">Resumen facturas: <b>Compras</b>    </h3> -->
-                            <table id="tabla-visto-bueno" class="table table-bordered  table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th colspan="18" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
-                                </tr>
-                                <tr> 
-                                  <th class="text-center">#</th> 
-                                  <th class="text-center">OP</th>
-                                  <th class="text-center" data-toggle="tooltip" data-original-title="Aprobado por:">V°B°</th>
-                                  <th class="text-center">Fecha</th>
-                                  <th>Tipo compr.</th>
-                                  <th class="text-center">Módulo</th>
-                                  <th class="text-center">Glosa</th>
-                                  <th>Razón social</th>                                  
-                                  <th class="text-center ">Subtotal</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-center">Total</th> 
-                                  <th class="text-center">CFDI.</th>  
+                            <div class="table-responsive">
+                              <table id="tabla-visto-bueno" class="table table-bordered  table-striped display" style="width: 100% !important;">
+                                <thead>
+                                  <tr>
+                                    <th colspan="18" class="cargando text-center bg-danger"><i class="fas fa-spinner fa-pulse fa-sm"></i> Buscando... </th>
+                                  </tr>
+                                  <tr> 
+                                    <th class="text-center">#</th> 
+                                    <th class="text-center">OP</th>
+                                    <th class="text-center" data-toggle="tooltip" data-original-title="Aprobado por:">V°B°</th>
+                                    <th class="text-center">Fecha</th>
+                                    <th>Tipo compr.</th>
+                                    <th class="text-center">Módulo</th>
+                                    <th class="text-center">Glosa</th>
+                                    <th>Razón social</th>                                  
+                                    <th class="text-center ">Subtotal</th>                                
+                                    <th class="text-center">IGV</th>
+                                    <th class="text-center">Total</th> 
+                                    <th class="text-center">CFDI.</th>  
 
-                                  <th class="text-center">Estado</th> 
-                                  <th class="text-center ">Tipo Compro.</th> 
-                                  <th class="text-center ">Num. Compro.</th> 
-                                  <th class="text-center ">Subtotal</th>                                
-                                  <th class="text-center">IGV</th>
-                                  <th class="text-center">Total</th>                                                  
-                                </tr>
-                              </thead>
-                              <tbody> </tbody>
-                              <tfoot> 
-                                <tr> 
-                                  <th class="text-center text-black-50">#</th> 
-                                  <th class="text-center text-black-50">OP</th>
-                                  <th class="text-center text-black-50">V°B°</th>
-                                  <th class="text-center text-black-50">Fecha</th>
-                                  <th class="text-center text-black-50">Tipo compr.</th>
-                                  <th class="text-center text-black-50">Módulo</th>
-                                  <th class="text-center text-black-50">Glosa</th>
-                                  <th class=" text-black-50">Razón social</th>                                  
-                                  <th class="text-right text-nowrap ">Subtotal</th>                                
-                                  <th class="text-right text-nowrap ">IGV</th>
-                                  <th class="text-right text-nowrap ">Total</th>  
-                                  <th class="text-center text-black-50">CFDI.</th>
-                                  
-                                  <th class="text-center">Estado</th>
-                                  <th class="text-center ">Tipo Compro.</th> 
-                                  <th class="text-center ">Num. Compro.</th> 
-                                  <th class="text-right text-nowrap ">Subtotal</th>                                
-                                  <th class="text-right text-nowrap ">IGV</th>
-                                  <th class="text-right text-nowrap ">Total</th>  
-                                </tr>
-                              </tfoot>
-                            </table>
+                                    <th class="text-center">Estado</th> 
+                                    <th class="text-center ">Tipo Compro.</th> 
+                                    <th class="text-center ">Num. Compro.</th> 
+                                    <th class="text-center ">Subtotal</th>                                
+                                    <th class="text-center">IGV</th>
+                                    <th class="text-center">Total</th>                                                  
+                                  </tr>
+                                </thead>
+                                <tbody> </tbody>
+                                <tfoot> 
+                                  <tr> 
+                                    <th class="text-center text-black-50">#</th> 
+                                    <th class="text-center text-black-50">OP</th>
+                                    <th class="text-center text-black-50">V°B°</th>
+                                    <th class="text-center text-black-50">Fecha</th>
+                                    <th class="text-center text-black-50">Tipo compr.</th>
+                                    <th class="text-center text-black-50">Módulo</th>
+                                    <th class="text-center text-black-50">Glosa</th>
+                                    <th class=" text-black-50">Razón social</th>                                  
+                                    <th class="text-right text-nowrap ">Subtotal</th>                                
+                                    <th class="text-right text-nowrap ">IGV</th>
+                                    <th class="text-right text-nowrap ">Total</th>  
+                                    <th class="text-center text-black-50">CFDI.</th>
+                                    
+                                    <th class="text-center">Estado</th>
+                                    <th class="text-center ">Tipo Compro.</th> 
+                                    <th class="text-center ">Num. Compro.</th> 
+                                    <th class="text-right text-nowrap ">Subtotal</th>                                
+                                    <th class="text-right text-nowrap ">IGV</th>
+                                    <th class="text-right text-nowrap ">Total</th>  
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
 
                         </div>
