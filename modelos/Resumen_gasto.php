@@ -7,6 +7,7 @@ class ResumenGasto
   //Implementamos nuestro constructor
   public function __construct()
   {
+    date_default_timezone_set('America/Lima');
   }
 
   public function tabla_principal($idproyecto, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $visto_bueno) {
@@ -1917,8 +1918,11 @@ class ResumenGasto
 
     $id_user_vb = $_SESSION["idusuario"]; $nombre_user_vb = $_SESSION["nombre"]; $imagen_user_vb = $_SESSION["imagen"];
 
+    $fecha = new DateTime();
+    $fecha_update_vb = $fecha->format('Y-m-d H:i:s');
+
     if ($accion == 'agregar') {
-      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb = '$id_user_vb', nombre_user_vb = '$nombre_user_vb', 
+      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb = '$id_user_vb', updated_at_vb='$fecha_update_vb', nombre_user_vb = '$nombre_user_vb', 
       imagen_user_vb = '$imagen_user_vb', estado_user_vb = '1'
       WHERE $nombre_id_tabla ='$id_tabla' ";
       $agregar = ejecutarConsulta($sql); if ( $agregar['status'] == false) {return $agregar; } 

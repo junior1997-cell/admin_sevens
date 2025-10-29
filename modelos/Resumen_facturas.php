@@ -4,9 +4,12 @@ require "../config/Conexion_v2.php";
 
 class Resumenfacturas
 {
+
+
   //Implementamos nuestro constructor
   public function __construct()
   {
+      date_default_timezone_set('America/Lima');
   }
 
   public function facturas_compras($idproyecto, $empresa_a_cargo, $fecha_1, $fecha_2, $id_proveedor, $comprobante, $visto_bueno, $modulo) {
@@ -1279,8 +1282,11 @@ class Resumenfacturas
 
     $id_user_vb = $_SESSION["idusuario"]; $nombre_user_vb = $_SESSION["nombre"]; $imagen_user_vb = $_SESSION["imagen"];
 
+    $fecha = new DateTime();
+    $fecha_update_vb = $fecha->format('Y-m-d H:i:s');
+
     if ($accion == 'agregar') {
-      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb_rf = '$id_user_vb', nombre_user_vb_rf = '$nombre_user_vb',user_updated= '" . $_SESSION['idusuario'] . "', 
+      $sql = "UPDATE $nombre_tabla SET estado='1', id_user_vb_rf = '$id_user_vb', updated_at_vb_rf='$fecha_update_vb', nombre_user_vb_rf = '$nombre_user_vb',user_updated= '" . $_SESSION['idusuario'] . "', 
       imagen_user_vb_rf = '$imagen_user_vb', estado_user_vb_rf = '1'
       WHERE $nombre_id_tabla ='$id_tabla' ";
 
