@@ -104,7 +104,7 @@
                 "2" => $reg['idproducto'],    
                 "3" => '<div class="user-block"> 
                   <img class="profile-user-img img-responsive img-circle cursor-pointer" src="' . $imagen . '" onclick="ver_img_material(\'' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre_producto']).'\');" alt="User Image" onerror="' .  $imagen_error .  '" data-toggle="tooltip" data-original-title="Ver imagen" title="Ver imagen">
-                  <span class="username"><p class="text-primary m-b-02rem" >' . $reg['nombre_producto'] . '</p></span>
+                  <div class="username"> <div class="w-300px">  <p class="text-primary font-size-13px m-b-02rem" >' . $reg['nombre_producto'] . '</p></div> </div>
                   <span class="description"> '.(empty($reg['modelo']) ? '' : '<b class="d-none">═</b> <b >Modelo:</b> ' . $reg['modelo'] ).'</span>
                 </div>',
                 "4" => $reg['grupo'],

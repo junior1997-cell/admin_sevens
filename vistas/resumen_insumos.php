@@ -84,43 +84,46 @@
                         <div class="card-body">
                           <!-- TBLA PRINCIPAL  -->
                           <div id="tabla-principal">
-                            <table id="tbla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th>  
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th data-toggle="tooltip" data-original-title="Unidad de Medida" title="Unidad de Medida">U.M.</th>
-                                  <th>Cantidad</th>
-                                  <th>Compra</th> 
-                                  <th>Precio promedio</th> 
-                                  <th>Precio actual</th>    
-                                  <th>Suma Total</th> 
-                                </tr>
-                              </thead>
-                              <tbody>                         
-                                <!-- aqui la va el detalle de la tabla -->
-                              </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th class="">Op</th>
-                                  <th>Code</th> 
-                                  <th class="">Producto</th>
-                                  <th class="">Grupo</th>
-                                  <th class="">Marca</th>
-                                  <th>U.M.</th>
-                                  <th class="text-nowrap px-2 h5"><span>00</span></th> 
-                                  <th>Compra</th>
-                                  <th>Precio promedio</th>
-                                  <th>Precio actual</th>   
-                                  <th class="text-nowrap px-2 h5"><span>S/ 00</span></th>                               
-                                </tr>
-                              </tfoot>
-                            </table>
+                            <div class="table-responsive">
+                            
+                              <table id="tbla-resumen-insumos" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                <thead>
+                                  <tr>
+                                    <th class="">#</th>
+                                    <th class="">Op</th>
+                                    <th>Code</th>  
+                                    <th class="">Producto</th>
+                                    <th class="">Grupo</th>
+                                    <th class="">Marca</th>
+                                    <th data-toggle="tooltip" data-original-title="Unidad de Medida" title="Unidad de Medida">U.M.</th>
+                                    <th>Cantidad</th>
+                                    <th>Compra</th> 
+                                    <th>Precio promedio</th> 
+                                    <th>Precio actual</th>    
+                                    <th>Suma Total</th> 
+                                  </tr>
+                                </thead>
+                                <tbody>                         
+                                  <!-- aqui la va el detalle de la tabla -->
+                                </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <th class="">#</th>
+                                    <th class="">Op</th>
+                                    <th>Code</th> 
+                                    <th class="">Producto</th>
+                                    <th class="">Grupo</th>
+                                    <th class="">Marca</th>
+                                    <th>U.M.</th>
+                                    <th class="text-nowrap px-2 h5"><span>00</span></th> 
+                                    <th>Compra</th>
+                                    <th>Precio promedio</th>
+                                    <th>Precio actual</th>   
+                                    <th class="text-nowrap px-2 h5"><span>S/ 00</span></th>                               
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
 
                           <!-- TBLA FACTURAS  -->

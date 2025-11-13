@@ -141,7 +141,8 @@
           
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>'<button class="btn btn-info btn-sm py-0" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
+                "1"=>'<button class="btn bg-gradient-dark btn-sm" onclick="agregar_grupos(' . $reg['idproducto'] .', '.$reg['idclasificacion_grupo'] . ')" data-toggle="tooltip" data-original-title="Agregar grupo" title="Agregar grupo"><i class="fa-solid fa-layer-group"></i></button>
+                <button class="btn btn-info btn-sm py-0" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
                 "2"=> $val['idproducto_f'],
                 "3"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['nombre_producto'] .'</p></span> </div>',
                 "4"=> $val['um_abreviacion'],
@@ -383,6 +384,15 @@
           }
           echo '</tbody>  </table>';
           
+        break;
+
+         // :::::::::::::::::::::::::: S E C C I O N   G R U P O S ::::::::::::::::::::::::::
+        case 'actualizar_grupo':
+            
+          $rspta = $resumen_insumos->actualizar_grupo( $_POST["idproducto_g"], $_POST["idclasificacion_grupo_g"], $_POST['idproyecto_grp']);
+          //var_dump($idactivos_fijos,$idproveedor);
+          echo json_encode($rspta, true);          
+      
         break;
 
         // ══════════════════════════════════════ SELECT 2 ══════════════════════════════════════ 

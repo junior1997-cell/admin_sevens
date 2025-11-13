@@ -83,12 +83,28 @@
               $disabed_uso_general = ($reg->idclasificacion_grupo == 1 ? 'disabled' : '');
               $funcion_eliminar = ($reg->idclasificacion_grupo > 1 ? 'eliminar_grupo(' . $reg->idclasificacion_grupo .', \''.encodeCadenaHtml($reg->nombre).'\')' : '');
               $message_tooltip = ($reg->idclasificacion_grupo == 1 ? 'No se puede eliminar' : 'Eliminar o papelera');
+              $check_activo = empty($reg->idproyecto) ? '' : 'checked';
+
               $data[] = [
                 "0"=>$cont++,
-                "1" =>  ' <button class="btn bg-gradient-dark btn-sm" onclick="mostrar_proyectos_asignados(' . $reg->idclasificacion_grupo. ');" data-toggle="tooltip" data-original-title="Asignar a un proyecto"><i class="fa-solid fa-file-import"></i></button>' .
-                ' <button class="btn btn-warning btn-sm" onclick="mostrar_grupo(' . $reg->idclasificacion_grupo. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                ($reg->estado ? ' <button class="btn btn-danger btn-sm '. $disabed_uso_general.' " onclick="'.$funcion_eliminar.'" data-toggle="tooltip" data-original-title="'.$message_tooltip.'"><i class="fas fa-skull-crossbones"></i></button>' : 
-                ' <button class="btn btn-success btn-sm" onclick="activar_grupo(' . $reg->idclasificacion_grupo .', \''.encodeCadenaHtml($reg->nombre).'\')" data-toggle="tooltip" data-original-title="Activar"><i class="fa-solid fa-check"></i></button>'),
+                "1" =>  ' <div class="btn-group" data-toggle="tooltip" data-original-title="'.(empty($reg->idproyecto) ? 'Asignar proyecto' : 'Remover proyecto').'">
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="id_proyecto_grupo_' . $reg->idclasificacion_grupo . '"  value="' . $reg->idproyecto. '" '.$check_activo.' onchange="asignar_o_remover_proyecto_grupo(this, ' . $reg->idclasificacion_grupo . ',\'' . $reg->idproyecto. '\');">
+                    <label class="custom-control-label" for="id_proyecto_grupo_' . $reg->idclasificacion_grupo . '"></label>
+                  </div>
+                </div>
+                <button class="btn btn-warning btn-sm" onclick="mostrar_grupo(' . $reg->idclasificacion_grupo. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button> ' .                
+                '<div class="btn-group">
+                  <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown"><i class="fa-solid fa-gear"></i> </button>
+                  <div class="dropdown-menu" role="menu" style="box-shadow: 0px 0rem 2rem 8px rgb(0 0 0 / 64%) !important;">                    
+                    <a class="dropdown-item" href="#" onclick="mostrar_proyectos_asignados(' . $reg->idclasificacion_grupo. ');"><i class="fa fa-eye text-info"></i> Ver proyectos</a>
+                    <div class="dropdown-divider"></div>'.
+                    ($reg->estado ?
+                    '<a class="dropdown-item" href="#" '. $disabed_uso_general.' " onclick="'.$funcion_eliminar.'" ><i class="fas fa-skull-crossbones text-danger"></i> '.$message_tooltip.'</a>':
+                    '<a class="dropdown-item" href="#" onclick="activar_grupo(' . $reg->idclasificacion_grupo .', \''.encodeCadenaHtml($reg->nombre).'\')"><i class="fa-solid fa-check text-success"></i> Activar</a>'
+                    ).
+                  '</div>
+                </div>',
                 "2" => $reg->nombre,                
                 "3" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg->descripcion . '</textarea>',
                 "4" => ($reg->estado ? '<span class="text-center badge badge-success">Activo</span>' : '<span class="text-center badge badge-danger">Desactivado</span>') . $toltip,
@@ -169,6 +185,17 @@
             echo json_encode( $retorno, true) ;
           }
         break;
+        
+        case 'asignar_proyecto_grupo':          
+          $rspta = $clasificacion_de_grupo->asignar_proyecto_grupo($_GET["idclasificacion_grupo"],$_GET["idproyecto_asignar"]);            
+          echo json_encode( $rspta, true);         
+        break;
+
+        case 'remover_proyecto_grupo':          
+          $rspta = $clasificacion_de_grupo->remover_proyecto_grupo($_GET["idclasificacion_grupo"],$_GET["idproyecto_asignar"]);            
+          echo json_encode( $rspta, true);         
+        break;
+
 
         // :::::::::::::::::::::::::: S E C C I O N    C O M P R A   Y   S U B C O N T R A T O ::::::::::::::::::::::::::
 

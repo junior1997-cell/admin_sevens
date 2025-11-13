@@ -102,7 +102,7 @@ function show_hide_form_table(flag) {
 //Función Listar
 function tbla_principal_grupo(id_proyecto) {
   tabla_item = $("#tabla-grupo").dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
@@ -259,6 +259,34 @@ function activar_grupo(idclasificacion_grupo, nombre) {
     false,
     false
   );
+}
+
+function asignar_o_remover_proyecto_grupo(input_check, idclasificacion_grupo, idproyecto_actual) {
+  var idproyecto_asignar = idproyecto_actual == '' || idproyecto_actual == null ? localStorage.getItem('nube_idproyecto') : idproyecto_actual;
+  if ($(input_check).prop("checked")) {
+    $.getJSON(`../ajax/clasificacion_de_grupo.php?op=asignar_proyecto_grupo`, {idclasificacion_grupo, idproyecto_asignar},   function (e, textStatus, jqXHR) {
+      if (e.status == true) {
+        toastr_success('Asignado!!', 'Grupo asignado al proyecto correctamente', 400);
+        $(".tooltip").remove();
+        tabla_item.ajax.reload(null, false);
+        lista_de_grupo(localStorage.getItem('nube_idproyecto'));      
+      } else {
+        ver_errores(e);
+      }
+    }).fail( function(e) { ver_errores(e); } );
+  }else{
+    $.getJSON(`../ajax/clasificacion_de_grupo.php?op=remover_proyecto_grupo`, {idclasificacion_grupo, idproyecto_asignar},   function (e, textStatus, jqXHR) {
+      if (e.status == true) {
+        toastr_success('Removido!!', 'Grupo removido del proyecto correctamente', 400);
+        $(".tooltip").remove();
+        tabla_item.ajax.reload(null, false);
+        lista_de_grupo(localStorage.getItem('nube_idproyecto'));      
+      } else {
+        ver_errores(e);
+      }
+    }).fail( function(e) { ver_errores(e); } );
+  }  
+
 }
 
 

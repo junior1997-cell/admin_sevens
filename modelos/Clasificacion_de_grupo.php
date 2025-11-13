@@ -71,7 +71,10 @@ class Clasificacion_de_grupo
 
   //Implementar un método para listar los registros
   public function tbla_principal_grupo($id_proyecto) {
-    $sql = "SELECT * FROM clasificacion_grupo WHERE estado_delete='1' ORDER BY estado DESC, nombre ASC";
+    $sql = "SELECT dpcg.idproyecto, cg.* 
+    FROM clasificacion_grupo as cg
+    LEFT JOIN detalle_p_cg as dpcg on dpcg.idclasificacion_grupo=cg.idclasificacion_grupo and dpcg.idproyecto = '$id_proyecto'
+    WHERE cg.estado_delete='1' ORDER BY cg.estado DESC, cg.nombre ASC";
     return ejecutarConsulta($sql);
   }
   
@@ -143,6 +146,17 @@ class Clasificacion_de_grupo
     return $delete;
   }
   
+
+  public function asignar_proyecto_grupo($idclasificacion_grupo,$id_proyecto) {    
+    $sql = "INSERT INTO detalle_p_cg(idproyecto, idclasificacion_grupo) VALUES ( '$id_proyecto', '$idclasificacion_grupo')";
+    return  ejecutarConsulta($sql);
+  }
+
+  public function remover_proyecto_grupo($idclasificacion_grupo,$id_proyecto) {    
+    $sql = "DELETE FROM detalle_p_cg WHERE idproyecto = '$id_proyecto' AND idclasificacion_grupo = '$idclasificacion_grupo'";
+    return  ejecutarConsulta($sql);
+  }
+
   // :::::::::::::::::::::::::: S E C C I O N   C O M P R A   Y   S U B C O N T R A T O ::::::::::::::::::::::::::
 
   //Implementar un método para listar los registros

@@ -242,7 +242,12 @@
                   <div class="modal-dialog modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                       <div class="modal-header"> 
-                        <h4 class="modal-title titulo-comprobante-compra">Lista de Grupos</h4>
+                        <h4 class="modal-title titulo-comprobante-compra">
+                                                      <button type="button" class="btn btn-warning btn-sm btn-regresar" data-toggle="tooltip" data-original-title="Regresar" data-placement="top" onclick="show_hide_form_table(1);" style="display: none;"><i class="fa-solid fa-arrow-left"></i></button>
+
+                          Lista de Grupos
+
+                        </h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span class="text-danger" aria-hidden="true">&times;</span>
                         </button>                        
@@ -252,32 +257,34 @@
                         <div class="row">                        
                           <div class="col-12">
                             <button type="button" class="btn btn-success btn-sm btn-add-grupo" data-toggle="modal"  data-target="#modal-agregar-grupo" onclick="limpiar_form_grupo();" >Agregar Item</button>
-                            <button type="button" class="btn btn-warning btn-sm btn-regresar" data-toggle="tooltip" data-original-title="Regresar" data-placement="top" onclick="show_hide_form_table(1);" style="display: none;"><i class="fa-solid fa-arrow-left"></i></button>
-                            <button type="button" class="btn btn-success btn-sm btn-add-proyecto"  style="display: none;" >Guardar</button>
+                            <!-- <button type="button" class="btn btn-success btn-sm btn-add-proyecto"  style="display: none;" >Guardar</button> -->
                           </div>
                           <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3" id="div-tabla-grupo">
-                            <table id="tabla-grupo" class="table table-bordered table-striped display " style="width: 100% !important;">
-                              <thead>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                  <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                  <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
-                                  <th >Estado</th>
-                                                          
-                                </tr>
-                              </thead>
-                              <tbody></tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="">#</th>
-                                  <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
-                                  <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
-                                  <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
-                                  <th >Estado</th>                                  
-                                </tr>
-                              </tfoot>
-                            </table>
+                            <div class="table-responsive" >                             
+                            
+                              <table id="tabla-grupo" class="table table-bordered table-striped display " style="width: 100% !important;">
+                                <thead>
+                                  <tr>
+                                    <th class="">#</th>
+                                    <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                    <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
+                                    <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
+                                    <th >Estado</th>
+                                                            
+                                  </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                  <tr>
+                                    <th class="">#</th>
+                                    <th data-toggle="tooltip" data-original-title="Opciones">OP</th>
+                                    <th data-toggle="tooltip" data-original-title="Nombre Grupo">Nombre</th>
+                                    <th data-toggle="tooltip" data-original-title="Descripción">Descripción</th>
+                                    <th >Estado</th>                                  
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
                           <div class="col-lg-12 col-md-12 col-sm-12 col-xl-12 mt-3" id="div-form-proyectos" style="display: none;"> 
                             <form id="form-grupo-proyecto" name="form-grupo-proyecto" method="POST">
@@ -297,10 +304,7 @@
                             </form>
                           </div>
                         </div>
-                      </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                      </div>
+                      </div>                      
                     </div>
                   </div>
                 </div>
@@ -369,9 +373,9 @@
                           <button type="submit" style="display: none;" id="submit-form-grupo">Submit</button>
                         </form>
                       </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_grupo();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_grupo">Guardar Cambios</button>
+                      <div class="modal-footer justify-content-between py-1">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" onclick="limpiar_form_grupo();">Close</button>
+                        <button type="submit" class="btn btn-sm btn-success" id="guardar_registro_grupo">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>

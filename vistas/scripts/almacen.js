@@ -1215,6 +1215,73 @@ function cambiar_de_almacen(input) {
   }, 500);
 }
 
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::: SECCION AGREGAR GRUPOS ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+function limpiar_form_grupos() {
+  $("#idclasificacion_grupo_g").val('').trigger('change');
+}
+
+function agregar_grupos(id_producto, id_grupo) {
+  $("#idproducto_g").val(id_producto);
+  $("#idproyecto_grp").val(localStorage.getItem('nube_idproyecto'));
+  $("#idclasificacion_grupo_g").val(id_grupo).trigger('change');
+  $('#modal-agregar-grupos').modal('show');
+}
+
+//Función para guardar o editar
+function guardar_grupos(e) {
+  // e.preventDefault(); //No se activará la acción predeterminada del evento
+  var formData = new FormData($("#form-grupos")[0]);
+
+  $.ajax({
+    url: "../ajax/resumen_insumos.php?op=actualizar_grupo",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (e) {
+      try {
+        e = JSON.parse(e);  console.log(e);  
+        if (e.status == true) {
+          Swal.fire("Correcto!", "Grupo guardado correctamente", "success");   
+          if (dt_tabla_principal) { dt_tabla_principal.ajax.reload(null, false); }  
+          $("#modal-agregar-grupos").modal("hide");
+        } else {
+         ver_errores(e);
+        }
+      } catch (err) { console.log('Error: ', err.message); toastr.error('<h5 class="font-size-16px">Error temporal!!</h5> puede intentalo mas tarde, o comuniquese con <i><a href="tel:+51921305769" >921-305-769</a></i> ─ <i><a href="tel:+51921487276" >921-487-276</a></i>'); }      
+
+      $("#guardar_registro_grupos").html('Guardar Cambios').removeClass('disabled');
+    },
+    xhr: function () {
+      var xhr = new window.XMLHttpRequest();
+      xhr.upload.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+          var percentComplete = (evt.loaded / evt.total)*100;
+          /*console.log(percentComplete + '%');*/
+          $("#barra_progress_grupos").css({"width": percentComplete+'%'});
+          $("#barra_progress_grupos").text(percentComplete.toFixed(2)+" %");
+        }
+      }, false);
+      return xhr;
+    },
+    beforeSend: function () {
+      $("#guardar_registro_grupos").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
+      $("#barra_progress_grupos").css({ width: "0%",  });
+      $("#barra_progress_grupos").text("0%").addClass('progress-bar-striped progress-bar-animated');
+    },
+    complete: function () {
+      $("#barra_progress_grupos").css({ width: "0%", });
+      $("#barra_progress_grupos").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+    },
+    error: function (jqXhr) { ver_errores(jqXhr); },
+  });
+}
+
+// .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..
+
+
 init();
 
 // .....::::::::::::::::::::::::::::::::::::: V A L I D A T E   F O R M  :::::::::::::::::::::::::::::::::::::::..

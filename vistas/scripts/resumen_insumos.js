@@ -154,7 +154,7 @@ function table_show_hide(flag) {
 // TABLA - PRINCIPAL
 function tbla_principal(id_proyecto) {
 	dt_tabla_principal =$('#tbla-resumen-insumos').dataTable({
-		responsive: true,
+		responsive: false,
 		lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
 		aProcessing: true,//Activamos el procesamiento del datatables
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
