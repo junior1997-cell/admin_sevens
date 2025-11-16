@@ -499,7 +499,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script> 
         
-        <script type="text/javascript" src="scripts/chart_compra_insumo.js?version_jdl=2.04"></script>         
+        <script type="text/javascript" src="scripts/chart_compra_insumo.js?version_jdl=2.05"></script>         
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

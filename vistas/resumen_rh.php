@@ -135,7 +135,7 @@
         <script src="../plugins/jszip/dist/jszip-utils.js"></script>
         <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
 
-        <script type="text/javascript" src="scripts/resumen_rh.js?version_jdl=2.04"></script>
+        <script type="text/javascript" src="scripts/resumen_rh.js?version_jdl=2.05"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

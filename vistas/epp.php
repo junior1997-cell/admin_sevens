@@ -429,7 +429,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <?php require 'script.php'; ?>
 
-    <script type="text/javascript" src="scripts/epp.js?version_jdl=2.04"></script>
+    <script type="text/javascript" src="scripts/epp.js?version_jdl=2.05"></script>
 
     <script>
       $(function() {
