@@ -20,7 +20,8 @@ function init() {
 
   lista_select2(`../ajax/almacen.php?op=select2UnidadMedida`, '#filtro_tm_unidad_medida', null, '.cargando_proyecto_tep');
   lista_select2(`../ajax/almacen.php?op=select2Categoria`, '#filtro_tm_categoria', null, '.cargando_proyecto_tep');
-  
+
+  lista_select2("../ajax/ajax_general.php?op=select2ClasificacionGrupo", '#idclasificacion_grupo_g', null);
   // lista_select2(`../ajax/almacen.php?op=select2ProductosTodos&idproyecto=${idproyecto}`, '#producto_xp', null, '.cargando_productos');
 
   // ══════════════════════════════════════ G U A R D A R   F O R M ══════════════════════════════════════
@@ -32,6 +33,8 @@ function init() {
 
   $(".btn-guardar-tm").on("click", function (e) { if ($(this).hasClass('send-data') == false) { $("#submit-form-almacen-tm").submit(); } });
 
+  $("#guardar_registro_grupos").on("click", function (e) {  $("#submit-form-grupos").submit(); });
+
   // ══════════════════════════════════════ INITIALIZE SELECT2 ══════════════════════════════════════
   $("#producto_tup").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });                                   // tranferencia uso de obra  
   $("#producto_tep").select2({theme: "bootstrap4", placeholder: "Selecione producto", allowClear: true, });                                   // tranferencia entre proyectos
@@ -42,6 +45,8 @@ function init() {
   $("#filtro_tm_unidad_medida").select2({theme: "bootstrap4", placeholder: "Unidad Medida", allowClear: true, });
   $("#filtro_tm_categoria").select2({theme: "bootstrap4", placeholder: "Categoria", allowClear: true, });
   $("#filtro_tm_es_epp").select2({theme: "bootstrap4", placeholder: "EPP", allowClear: true, });
+
+  $("#idclasificacion_grupo_g").select2({theme: "bootstrap4", placeholder: "Seleccionar", allowClear: true, });
   
 
   $("#idproyecto_xp").val(localStorage.getItem("nube_idproyecto"));
@@ -148,22 +153,22 @@ function tabla_resumen() {
   var fpo =  localStorage.getItem("nube_fecha_pago_obrero");
 
   tbla_resumen = $('#tabla-almacen-resumen').dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    dom:"<'row'<'col-sm-12 col-md-6 col-lg-7 col-xl-8 pt-2'f><'col-sm-12 col-md-6 col-lg-7 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
     // buttons: [
     //   { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
     //   { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
     //   { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,9,10,11,3,4,12,13,14,15,16,5,], } }, 
     // ],
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3 btn btn-sm btn-outline-info", action: function ( e, dt, node, config ) { if (tbla_resumen) { tbla_resumen.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
-      { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6,7], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6,7], }, title: 'Lista de Almacen', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true,  }, 
-      { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6,7], }, title: 'Lista de Almacen', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-3 btn btn-sm btn-outline-danger", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
-      { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-3 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3", action: function ( e, dt, node, config ) { if (dt) { dt.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
+      { text: `<i class="fas fa-copy" ></i>`,extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6,7,8], },  className: "px-3 ", footer: true,  }, 
+      { text: `<i class="far fa-file-excel fa-lg" ></i>`,extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6,7,8], }, title: 'Lista de Almacen',  className: "px-3", footer: true,  }, 
+      { text: `<i class="far fa-file-pdf fa-lg"></i>`,extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6,7,8], }, title: 'Lista de Almacen',  className: "px-3", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
+      { text: `<i class="fas fa-outdent"></i>`, extend: "colvis", className: "px-3 ", exportOptions: { columns: "th:not(:last-child)", }, },
     ],
     ajax:{
       url: `../ajax/almacen.php?op=tabla-almacen-resumen&id_proyecto=${idproyecto}&fip=${fip}&ffp=${ffp}&fpo=${fpo}`,
@@ -188,9 +193,14 @@ function tabla_resumen() {
       if (data[1] != '') { $("td", row).eq(1).addClass('text-nowrap text-center'); }
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
+    },
+    initComplete: function () {
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('border border-primary bg-light m-0');// Agregar clase bg-light al input de búsqueda
     },
     bDestroy: true,
     iDisplayLength: 25,//Paginación
@@ -343,11 +353,11 @@ function modal_ver_almacen(fecha, idalmacen_resumen, tipo_mov = '') {
     lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
     aProcessing: true,//Activamos el procesamiento del datatables
     aServerSide: true,//Paginación y filtrado realizados por el servidor
-    dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    dom:"<'row'<'col-sm-12 col-md-6 col-lg-7 col-xl-8 pt-2'f><'col-sm-12 col-md-6 col-lg-7 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
     buttons: [
-      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3 btn btn-sm btn-outline-info", action: function ( e, dt, node, config ) { if (tabla_x_dia) { tabla_x_dia.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
-      { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3 btn btn-sm btn-outline-dark", footer: true,  }, 
-      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Almacen', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3 btn btn-sm btn-outline-success", footer: true,  }, 
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3", action: function ( e, dt, node, config ) { if (dt) { dt.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
+      { extend: 'copy', exportOptions: { columns: [0,2,3,4,5,6], }, text: `<i class="fas fa-copy" ></i>`, className: "px-3", footer: true,  }, 
+      { extend: 'excel', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Almacen', text: `<i class="far fa-file-excel fa-lg" ></i>`, className: "px-3", footer: true,  }, 
       // { extend: 'pdf', exportOptions: { columns: [0,2,3,4,5,6], }, title: 'Lista de Almacen', text: `<i class="far fa-file-pdf fa-lg"></i>`, className: "px-3 btn btn-sm btn-outline-danger", footer: false, orientation: 'landscape', pageSize: 'LEGAL',  },
       // { extend: "colvis", text: `<i class="fas fa-outdent"></i>`, className: "px-3 btn btn-sm btn-outline-primary", exportOptions: { columns: "th:not(:last-child)", }, },
     ],    
@@ -370,14 +380,21 @@ function modal_ver_almacen(fecha, idalmacen_resumen, tipo_mov = '') {
     createdRow: function (row, data, ixdex) {
       // columna: #
       if (data[0] != '') { $("td", row).eq(0).addClass('text-center'); }      
-      // columna: 3
+      // columna: 2
       if (data[2] != '') { $("td", row).eq(2).addClass('text-nowrap'); }
+       // columna: 3
+      if (data[3] != '') { $("td", row).eq(3).addClass('text-nowrap'); }
       
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
+    },
+    initComplete: function () {
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('border border-primary bg-light m-0');// Agregar clase bg-light al input de búsqueda
     },
     footerCallback: function( tfoot, data, start, end, display ) {
       var api1 = this.api(); var total1 = api1.column( 4 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 );      
@@ -1222,11 +1239,16 @@ function limpiar_form_grupos() {
   $("#idclasificacion_grupo_g").val('').trigger('change');
 }
 
-function agregar_grupos(id_producto, id_grupo) {
-  $("#idproducto_g").val(id_producto);
-  $("#idproyecto_grp").val(localStorage.getItem('nube_idproyecto'));
-  $("#idclasificacion_grupo_g").val(id_grupo).trigger('change');
-  $('#modal-agregar-grupos').modal('show');
+function agregar_grupos(id_producto, id_grupo, iddetalle_compra) {
+  if (iddetalle_compra == '' || iddetalle_compra == null) {
+    toastr_warning('Sin Compras', 'El producto no tiene ingresos por compra, no se puede asignar grupo', 700)
+  } else {
+    $("#idproducto_g").val(id_producto);
+    $("#idproyecto_grp").val(localStorage.getItem('nube_idproyecto'));
+    $("#idclasificacion_grupo_g").val(id_grupo).trigger('change');
+    $('#modal-agregar-grupos').modal('show');
+  }
+  
 }
 
 //Función para guardar o editar
@@ -1235,7 +1257,7 @@ function guardar_grupos(e) {
   var formData = new FormData($("#form-grupos")[0]);
 
   $.ajax({
-    url: "../ajax/resumen_insumos.php?op=actualizar_grupo",
+    url: "../ajax/almacen.php?op=actualizar_grupo",
     type: "POST",
     data: formData,
     contentType: false,
@@ -1245,7 +1267,7 @@ function guardar_grupos(e) {
         e = JSON.parse(e);  console.log(e);  
         if (e.status == true) {
           Swal.fire("Correcto!", "Grupo guardado correctamente", "success");   
-          if (dt_tabla_principal) { dt_tabla_principal.ajax.reload(null, false); }  
+          if (tbla_resumen) { tbla_resumen.ajax.reload(null, false); }  
           $("#modal-agregar-grupos").modal("hide");
         } else {
          ver_errores(e);
@@ -1468,6 +1490,35 @@ $(function () {
     },
     submitHandler: function (e) {
       guardar_y_editar_tm(e);
+    },
+  });
+
+  $("#form-grupos").validate({
+    rules: {
+      idclasificacion_grupo_g: { required: true },
+    },
+    messages: {
+      idclasificacion_grupo_g: { required: "Campo requerido", },
+    },
+
+    errorElement: "span",
+
+    errorPlacement: function (error, element) {
+      error.addClass("invalid-feedback");
+      element.closest(".form-group").append(error);
+    },
+
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass("is-invalid");
+    },
+
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass("is-invalid").addClass("is-valid");
+    },
+
+    submitHandler: function (e) {
+      $(".modal-body").animate({ scrollTop: $(document).height() }, 600); // Scrollea hasta abajo de la página
+      guardar_grupos(e);
     },
   });
 

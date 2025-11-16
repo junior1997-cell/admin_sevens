@@ -17,7 +17,7 @@ class ResumenInsumos
   public function tbla_principal($idproyecto) {
 
     $resumen_producto = [];
-    $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, um.nombre_medida,  um.nombre_medida, um.abreviacion,
+    $sql = "SELECT cpp.idproyecto, cpp.idcompra_proyecto, dc.iddetalle_compra, dc.idproducto, LPAD(dc.idproducto, 5, '0') AS idproducto_v2, um.nombre_medida,  um.nombre_medida, um.abreviacion,
 		pr.nombre AS nombre_producto, pr.modelo, pr.marca, cg.idclasificacion_grupo, cg.nombre as grupo,  pr.imagen, pr.precio_total AS precio_actual,
 		SUM(dc.cantidad) AS cantidad_total, SUM(dc.precio_con_igv) AS precio_con_igv, SUM(dc.descuento) AS descuento_total, 
 		SUM(dc.subtotal) precio_total , COUNT(dc.idproducto) AS count_productos, AVG(dc.precio_con_igv) AS promedio_precio
@@ -47,8 +47,9 @@ class ResumenInsumos
         'idcompra_proyecto' => $value['idcompra_proyecto'],
         'iddetalle_compra'  => $value['iddetalle_compra'],
         'idproducto'        => $value['idproducto'],
+        'idproducto_v2'     => $value['idproducto_v2'],
         'nombre_medida'     => $value['nombre_medida'],
-        'abreviacion'     => $value['abreviacion'],
+        'abreviacion'       => $value['abreviacion'],
         'nombre_producto'   => $value['nombre_producto'],
         'modelo'            => $value['modelo'],
         'marca'             => $value['marca'],
@@ -175,11 +176,7 @@ class ResumenInsumos
 
     //var_dump($idproducto, $idgrupo, $idproyecto_grp); die();
     $sql = "UPDATE detalle_compra SET idclasificacion_grupo='$idgrupo' WHERE idproducto = '$idproducto'";
-
-    $upd_grupo =  ejecutarConsulta($sql);
-
-    if ( $upd_grupo['status'] == false ) { return $upd_grupo; }
-    
+    $upd_grupo =  ejecutarConsulta($sql);   if ( $upd_grupo['status'] == false ) { return $upd_grupo; }    
 
     if ($idgrupo==11) {
       $sql_u = "UPDATE almacen_resumen SET tipo='EPP' WHERE idproyecto='$idproyecto_grp' and idproducto='$idproducto'";

@@ -101,7 +101,7 @@
                 "1" => '<button class="btn bg-gradient-dark btn-sm" onclick="agregar_grupos(' . $reg['idproducto'] .', '.$reg['idclasificacion_grupo'] . ')" data-toggle="tooltip" data-original-title="Agregar grupo" title="Agregar grupo"><i class="fa-solid fa-layer-group"></i></button>
                   <button class="btn btn-warning btn-sm" onclick="mostrar_material(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Editar" title="Editar"><i class="fas fa-pencil-alt"></i></button>
                   <button class="btn btn-info btn-sm" onclick="mostrar_detalle_material(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle insumo" title="Ver detalle insumo"><i class="far fa-eye"></i></button>',       
-                "2" => $reg['idproducto'],    
+                "2" => $reg['idproducto_v2'],    
                 "3" => '<div class="user-block"> 
                   <img class="profile-user-img img-responsive img-circle cursor-pointer" src="' . $imagen . '" onclick="ver_img_material(\'' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre_producto']).'\');" alt="User Image" onerror="' .  $imagen_error .  '" data-toggle="tooltip" data-original-title="Ver imagen" title="Ver imagen">
                   <div class="username"> <div class="w-300px">  <p class="text-primary font-size-13px m-b-02rem" >' . $reg['nombre_producto'] . '</p></div> </div>

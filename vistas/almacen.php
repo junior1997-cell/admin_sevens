@@ -24,6 +24,13 @@ if (!isset($_SESSION["nombre"])) {
     <link rel="stylesheet" href="../dist/css/leyenda.css" />
 
     <style>
+      #tabla-almacen-resumen_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+      #tabla-almacen-resumen_filter label { width: 100% !important;  }
+      #tabla-almacen-resumen_filter label input { width: 100% !important;   }
+
+      #tabla-ver-almacen_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+      #tabla-ver-almacen_filter label { width: 100% !important;  }
+      #tabla-ver-almacen_filter label input { width: 100% !important;   }
 
       #tabla-almacen-resumen td, #tabla-almacen-resumen th { padding-top: 2px !important; padding-bottom: 2px !important; }
       #tabla-ver-almacen td, #tabla-ver-almacen th { padding-top: 2px !important; padding-bottom: 2px !important;  }
@@ -201,33 +208,37 @@ if (!isset($_SESSION["nombre"])) {
                       <div class="" id="div_tabla_principal">
                         <div class="row">                                        
                           <div class="col-12">
-                            <table id="tabla-almacen-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead> 
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="">Acciones</th>
-                                  <th class="">Código</th>
-                                  <th class="">Nombre almacen</th>
-                                  <th class="text-center" >UND</th>
-                                  <th class="text-center" >Entrada</th>
-                                  <th class="text-center" >Salida</th>
-                                  <th class="text-center" >Saldo</th>
-                                </tr>
-                              </thead>
-                              <tbody></tbody> 
-                              <tfoot>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="">Acciones</th>
-                                  <th class="">Código</th>
-                                  <th class="">Nombre almacen</th>
-                                  <th class="text-center" >UND</th>
-                                  <th class="text-center" >Entrada</th>
-                                  <th class="text-center" >Salida</th>
-                                  <th class="text-center" >Saldo</th>
-                                </tr>
-                              </tfoot>
-                            </table>
+                            <div class="table-responsive">                            
+                              <table id="tabla-almacen-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                <thead> 
+                                  <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="">Acciones</th>
+                                    <th class="">Código</th>
+                                    <th class="">Nombre Producto</th>
+                                     <th class="text-center" >Grupo</th>
+                                    <th class="text-center" >UND</th>                                   
+                                    <th class="text-center" >Entrada</th>
+                                    <th class="text-center" >Salida</th>
+                                    <th class="text-center" >Saldo</th>
+                                  </tr>
+                                </thead>
+                                <tbody></tbody> 
+                                <tfoot>
+                                  <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="">Acciones</th>
+                                    <th class="">Código</th>
+                                    <th class="">Nombre Producto</th>
+                                    <th class="text-center" >Grupo</th>
+                                    <th class="text-center" >UND</th>
+                                    <th class="text-center" >Entrada</th>
+                                    <th class="text-center" >Salida</th>
+                                    <th class="text-center" >Saldo</th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
                           <!-- /.col -->
                         </div>
@@ -999,6 +1010,67 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
+
+            <!-- MODAL - AGREGAR GRUPOS -->                 
+            <div class="modal fade" id="modal-agregar-grupos">
+              <div class="modal-dialog modal-dialog-scrollable modal-md">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Asignar Grupos</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span class="text-danger" aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+                    <!-- form start -->
+                    <form id="form-grupos" name="form-grupos" method="POST">
+                     
+                      <div class="row" id="cargando-7-fomulario">
+
+                        <!-- idproducto -->
+                        <input type="hidden" name="idproducto_g" id="idproducto_g" />
+                        <input type="hidden" name="idproyecto_grp" id="idproyecto_grp" />
+
+                        <!-- Grupo -->
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                          <div class="form-group">
+                            <label for="idclasificacion_grupo_g">Grupo <sup class="text-danger">(unico*)</sup></label>
+                            <select name="idclasificacion_grupo_g" id="idclasificacion_grupo_g" class="form-control select2" style="width: 100%;"> 
+                            </select>
+                          </div>
+                        </div>
+
+                        <!-- barprogress --> 
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                          <div class="progress" id="barra_progress_grupos_div">
+                            <div id="barra_progress_grupos" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                              0%
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="row" id="cargando-8-fomulario" style="display: none;">
+                        <div class="col-lg-12 text-center">
+                          <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                          <br />
+                          <h4>Cargando...</h4>
+                        </div>
+                      </div>
+                      
+                     
+                      <button type="submit" style="display: none;" id="submit-form-grupos">Submit</button>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-content-between py-1">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" onclick="limpiar_form_grupos();">Close</button>
+                    <button type="submit" class="btn btn-sm btn-success" id="guardar_registro_grupos">Guardar Cambios</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             
 
           </section>

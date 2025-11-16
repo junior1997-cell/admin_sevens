@@ -158,11 +158,12 @@ function tbla_principal(id_proyecto) {
 		lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
 		aProcessing: true,//Activamos el procesamiento del datatables
 	  aServerSide: true,//Paginación y filtrado realizados por el servidor
-	  dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    dom:"<'row'<'col-sm-12 col-md-6 col-lg-7 col-xl-8 pt-2'f><'col-sm-12 col-md-6 col-lg-7 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
 	  buttons: [ 
-      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], }  }, 
-      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], } }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3", action: function ( e, dt, node, config ) { if (dt) { dt.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
+      { text: '<i class="fa-regular fa-copy fa-lg"></i>', extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], }  }, 
+      { text: '<i class="fa-regular fa-file-excel fa-lg"></i>', extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], } }, 
+      { text: '<i class="fa-regular fa-file-pdf fa-lg"></i>', extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,3,4,5,6,7,9,10,11], }, orientation: 'landscape', pageSize: 'LEGAL', }
     ],
 		ajax:	{
       url: '../ajax/resumen_insumos.php?op=tbla_principal&id_proyecto='+id_proyecto,
@@ -191,16 +192,23 @@ function tbla_principal(id_proyecto) {
       if (data[11] != '') { $("td", row).eq(11).addClass("text-right");  }
 
     },
-		language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+		language: {     
+
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
     },
     footerCallback: function( tfoot, data, start, end, display ) {
       var api_1 = this.api(); var total_1 = api_1.column( 7 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api_1.column( 7 ).footer() ).html( `<span class="float-right">${formato_miles(total_1)}</span>` );
       var api_2 = this.api(); var total_2 = api_2.column( 11 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api_2.column( 11 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(total_2)}</span>` );
+    },
+    initComplete: function () {
+
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('border border-primary bg-light m-0');// Agregar clase bg-light al input de búsqueda
     },
 		bDestroy: true,
 		iDisplayLength: 10,//Paginación

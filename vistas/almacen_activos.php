@@ -24,20 +24,20 @@ if (!isset($_SESSION["nombre"])) {
     <link rel="stylesheet" href="../dist/css/leyenda.css" />
 
     <style>
-      .table-container {
-        /* max-height: 560px; */
-        /* Ajusta la altura máxima según tus necesidades */
-        overflow-y: scroll;
-      }
 
+      #tabla-almacen-resumen_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+      #tabla-almacen-resumen_filter label { width: 100% !important;  }
+      #tabla-almacen-resumen_filter label input { width: 100% !important;   }
+
+      #tabla-ver-almacen_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+      #tabla-ver-almacen_filter label { width: 100% !important;  }
+      #tabla-ver-almacen_filter label input { width: 100% !important;   }
+
+
+      .table-container { overflow-y: scroll;  }
       .custom-table { border-collapse: collapse; width: 100%; }
-
       .custom-table th, .custom-table td { border: 1px solid black; padding: 8px; text-align: center; }
-
-      .custom-table th, .custom-table td {
-        padding: 6px;
-        /* Ajusta el valor del padding según tus necesidades */
-      }
+      .custom-table th, .custom-table td { padding: 6px; }
 
       .custom-table th {
         text-align: center;
@@ -211,39 +211,43 @@ if (!isset($_SESSION["nombre"])) {
                       <div class="" id="div_tabla_principal">
                         <div class="row">                                        
                           <div class="col-12">
-                            <table id="tabla-almacen-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
-                              <thead> 
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="">Acciones</th>
-                                  <th class="">Código</th>
-                                  <th class="">Nombre almacen</th>
-                                  <th class="text-center" >UND</th>
-                                  <th class="text-center" >Entrada</th>
-                                  <th class="text-center" >Salida</th>
-                                  <th class="text-center" >Saldo</th>
-                                </tr>
-                              </thead>
-                              <tbody></tbody> 
-                              <tfoot>
-                                <tr>
-                                  <th class="text-center">#</th>
-                                  <th class="">Acciones</th>
-                                  <th class="">Código</th>
-                                  <th class="">Nombre almacen</th>
-                                  <th class="text-center" >UND</th>
-                                  <th class="text-center" >Entrada</th>
-                                  <th class="text-center" >Salida</th>
-                                  <th class="text-center" >Saldo</th>
-                                </tr>
-                              </tfoot>
-                            </table>
+                            <div class="table-responsive">                            
+                              <table id="tabla-almacen-resumen" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                <thead> 
+                                  <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="">Acciones</th>
+                                    <th class="">Código</th>
+                                    <th class="">Nombre almacen</th>
+                                    <th class="text-center" >Grupo</th>
+                                    <th class="text-center" >UND</th>
+                                    <th class="text-center" >Entrada</th>
+                                    <th class="text-center" >Salida</th>
+                                    <th class="text-center" >Saldo</th>
+                                  </tr>
+                                </thead>
+                                <tbody></tbody> 
+                                <tfoot>
+                                  <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="">Acciones</th>
+                                    <th class="">Código</th>
+                                    <th class="">Nombre almacen</th>
+                                    <th class="text-center" >Grupo</th>
+                                    <th class="text-center" >UND</th>
+                                    <th class="text-center" >Entrada</th>
+                                    <th class="text-center" >Salida</th>
+                                    <th class="text-center" >Saldo</th>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
                           </div>
                           <!-- /.col -->
                         </div>
                       </div>
 
-                      <div id="div_tabla_almacen_search" >
+                      <div id="div_tabla_almacen_search" style="display: none;" >
                         <div class="row">
                           <div class="col-4">
                             <div class="form-group" >

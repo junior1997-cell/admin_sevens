@@ -141,14 +141,15 @@
           
               $data[]=array(
                 "0"=>$cont++,
-                "1"=>'<button class="btn bg-gradient-dark btn-sm" onclick="agregar_grupos(' . $reg['idproducto'] .', '.$reg['idclasificacion_grupo'] . ')" data-toggle="tooltip" data-original-title="Agregar grupo" title="Agregar grupo"><i class="fa-solid fa-layer-group"></i></button>
-                <button class="btn btn-info btn-sm py-0" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
+                "1"=>'<button class="btn bg-gradient-dark btn-sm py-0" onclick="agregar_grupos(' . $val['idproducto'] .', \''.$val['idclasificacion_grupo'] .'\', \''. $val['iddetalle_compra'] . '\')" data-toggle="tooltip" data-original-title="Agregar grupo" title="Agregar grupo"><i class="fa-solid fa-layer-group"></i></button>
+                  <button class="btn btn-info btn-sm py-0" onclick="modal_ver_almacen(null, '. $val['idalmacen_resumen'].')" data-toggle="tooltip" data-original-title="Ver Movimientos"><i class="fas fa-eye"></i></button>' . $toltip,
                 "2"=> $val['idproducto_f'],
                 "3"=>'<div > <span class="username"><p class="text-primary m-b-02rem" >'. $val['nombre_producto'] .'</p></span> </div>',
-                "4"=> $val['um_abreviacion'],
-                "5"=> $val['total_ingreso'],
-                "6"=> $val['total_egreso'],
-                "7"=> $val['total_stok'] ,       
+                "4"=> empty($val['iddetalle_compra']) ? 'Sin compras' : ($val['nombre_clasificacion_grupo'] == null ? 'por clasificar' :  $val['nombre_clasificacion_grupo'] ),
+                "5"=> $val['um_abreviacion'],
+                "6"=> $val['total_ingreso'],
+                "7"=> $val['total_egreso'],
+                "8"=> $val['total_stok'] ,       
               );
             }
             $results = array(
@@ -260,7 +261,7 @@
                   "2"=> '<div > <span class="'. $val['class_tipo_mov'] .'">'. $val['tipo_mov_1'] .'</span> <span>'. $val['tipo_mov_2'] .'</span> </div>',
                   "3"=>  $val['destino'] ,
                   "4"=> $val['cantidad_real'],
-                  "5"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'.
+                  "5"=> '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 25px;" >'.
                    '<b>Desc.: </b>'. $val['descripcion'] . '<br>'.
                    '<b>Dia: </b>'. $val['name_day'] . '<br>'.
                    '<b>Marca: </b>'. $val['marca'] . '<br>'.
