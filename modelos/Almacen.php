@@ -528,19 +528,12 @@ class Almacen
   public function tbla_principal_resumen($idproyecto) {    
         
     $sql_0 = "SELECT ar.*, LPAD(p.idproducto, 5, '0') AS idproducto_f , p.nombre as nombre_producto, um.nombre_medida, um.abreviacion as um_abreviacion, ciaf.nombre as categoria,
-    cg.nombre_clasificacion_grupo, cg.idclasificacion_grupo, cg.iddetalle_compra
+    cg.nombre as nombre_clasificacion_grupo, cg.idclasificacion_grupo
     FROM almacen_resumen AS ar
     INNER JOIN producto AS p ON p.idproducto = ar.idproducto
     INNER JOIN unidad_medida as um ON um.idunidad_medida = p.idunidad_medida
     INNER JOIN categoria_insumos_af as ciaf ON ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    LEFT JOIN (
-        select cg.nombre as nombre_clasificacion_grupo, cg.idclasificacion_grupo, MAX(dc.iddetalle_compra) as iddetalle_compra, dc.idproducto
-        from detalle_compra as dc 
-        INNER JOIN compra_por_proyecto as cpp on cpp.idcompra_proyecto = dc.idcompra_proyecto 
-        LEFT JOIN clasificacion_grupo as cg on cg.idclasificacion_grupo = dc.idclasificacion_grupo
-        where cpp.idproyecto = '$idproyecto'
-        GROUP BY cg.nombre, cg.idclasificacion_grupo,  dc.idproducto
-    ) as cg on cg.idproducto = ar.idproducto
+    LEFT JOIN  clasificacion_grupo as cg on cg.idclasificacion_grupo = ar.idclasificacion_grupo    
     WHERE ar.idproyecto = '$idproyecto' AND ciaf.idcategoria_insumos_af ='1' AND ar.estado = '1' AND ar.estado_delete = '1' ORDER BY left(p.nombre, 2) ASC, ar.total_stok DESC; ";    
    return ejecutarConsultaArray($sql_0); 
 

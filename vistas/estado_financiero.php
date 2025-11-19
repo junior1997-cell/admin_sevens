@@ -525,7 +525,7 @@
 
         <script type="text/javascript" src="../plugins/xlsx/xlsx.full.min.js"></script>
 
-        <script type="text/javascript" src="scripts/estado_financiero.js?version_jdl=2.05"></script>
+        <script type="text/javascript" src="scripts/estado_financiero.js?version_jdl=2.06"></script>
          
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

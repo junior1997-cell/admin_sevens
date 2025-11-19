@@ -893,12 +893,12 @@ function guardar_grupos(e) {
     },
     beforeSend: function () {
       $("#guardar_registro_grupos").html('<i class="fas fa-spinner fa-pulse fa-lg"></i>').addClass('disabled');
-      $("#barra_progress_grupos").css({ width: "0%",  });
-      $("#barra_progress_grupos").text("0%").addClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_grupos").css({ width: "0%",  }).text("0%").addClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_grupos_div").show();
     },
     complete: function () {
-      $("#barra_progress_grupos").css({ width: "0%", });
-      $("#barra_progress_grupos").text("0%").removeClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_grupos").css({ width: "0%", }).text("0%").removeClass('progress-bar-striped progress-bar-animated');
+      $("#barra_progress_grupos_div").hide();
     },
     error: function (jqXhr) { ver_errores(jqXhr); },
   });

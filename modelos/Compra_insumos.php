@@ -39,7 +39,11 @@ class Compra_insumos
           $subtotal_producto = (floatval($cantidad[$ii]) * floatval($precio_con_igv[$ii])) - $descuento[$ii];
 
           // ::::::::::: buscando grupo para asignar :::::::::::
-          $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$ii]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
+          $sql_4 = "SELECT dc.idproducto, dc.idclasificacion_grupo
+          from detalle_compra as dc
+          INNER JOIN compra_por_proyecto as cpp on cpp.idcompra_proyecto = dc.idcompra_proyecto
+          where cpp.idproyecto = '$idproyecto' and dc.idproducto = '$idproducto[$ii]' AND dc.idclasificacion_grupo != 1 
+          GROUP BY dc.idproducto, dc.idclasificacion_grupo;";
           $grupo =  ejecutarConsultaSimpleFila($sql_4); if ($grupo['status'] == false) { return  $grupo;}
           $id_grupo = (empty($grupo['data']) ? 1 : (empty($grupo['data']['idclasificacion_grupo']) ? 1 : $grupo['data']['idclasificacion_grupo'] ) );
 
@@ -135,7 +139,11 @@ class Compra_insumos
         $subtotal_producto = (floatval($cantidad[$ii]) * floatval($precio_con_igv[$ii])) - $descuento[$ii];
 
         // buscando grupo
-        $sql_4 = "SELECT * FROM detalle_compra WHERE idproducto = '$idproducto[$ii]' AND idclasificacion_grupo != 1 GROUP BY idproducto;";
+        $sql_4 = "SELECT dc.idproducto, dc.idclasificacion_grupo
+        from detalle_compra as dc
+        INNER JOIN compra_por_proyecto as cpp on cpp.idcompra_proyecto = dc.idcompra_proyecto
+        where cpp.idproyecto = '$idproyecto' and dc.idproducto = '$idproducto[$ii]' AND dc.idclasificacion_grupo != 1 
+        GROUP BY dc.idproducto, dc.idclasificacion_grupo;";        
         $grupo =  ejecutarConsultaSimpleFila($sql_4); if ($grupo['status'] == false) { return  $grupo;}
         $id_grupo = (empty($grupo['data']) ? 1 : (empty($grupo['data']['idclasificacion_grupo']) ? 1 : $grupo['data']['idclasificacion_grupo'] ) );
 

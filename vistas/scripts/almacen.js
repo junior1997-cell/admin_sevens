@@ -1239,15 +1239,13 @@ function limpiar_form_grupos() {
   $("#idclasificacion_grupo_g").val('').trigger('change');
 }
 
-function agregar_grupos(id_producto, id_grupo, iddetalle_compra) {
-  if (iddetalle_compra == '' || iddetalle_compra == null) {
-    toastr_warning('Sin Compras', 'El producto no tiene ingresos por compra, no se puede asignar grupo', 700)
-  } else {
+function agregar_grupos(id_producto, id_grupo) {
+  
     $("#idproducto_g").val(id_producto);
     $("#idproyecto_grp").val(localStorage.getItem('nube_idproyecto'));
     $("#idclasificacion_grupo_g").val(id_grupo).trigger('change');
     $('#modal-agregar-grupos').modal('show');
-  }
+  
   
 }
 

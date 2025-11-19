@@ -1441,8 +1441,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
         
-        <script type="text/javascript" src="scripts/compra_insumos.js?version_jdl=2.05"></script>   
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.05"></script>      
+        <script type="text/javascript" src="scripts/compra_insumos.js?version_jdl=2.06"></script>   
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.06"></script>      
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         

@@ -825,48 +825,48 @@
                       <div class="modal-body">
                         <!-- form start -->
                         <form id="form-grupos" name="form-grupos" method="POST">
-                          <div class="card-body">
-                            <div class="row" id="cargando-7-fomulario">
+                          
+                          <div class="row" id="cargando-7-fomulario">
 
-                              <!-- idproducto -->
-                              <input type="hidden" name="idproducto_g" id="idproducto_g" />
-                              <input type="hidden" name="idproyecto_grp" id="idproyecto_grp" />
+                            <!-- idproducto -->
+                            <input type="hidden" name="idproducto_g" id="idproducto_g" />
+                            <input type="hidden" name="idproyecto_grp" id="idproyecto_grp" />
 
-                              <!-- Grupo -->
-                              <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="form-group">
-                                  <label for="idclasificacion_grupo_g">Grupo <sup class="text-danger">(unico*)</sup></label>
-                                  <select name="idclasificacion_grupo_g" id="idclasificacion_grupo_g" class="form-control select2" style="width: 100%;"> 
-                                  </select>
-                                </div>
+                            <!-- Grupo -->
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                              <div class="form-group">
+                                <label for="idclasificacion_grupo_g">Grupo <sup class="text-danger">(unico*)</sup></label>
+                                <select name="idclasificacion_grupo_g" id="idclasificacion_grupo_g" class="form-control select2" style="width: 100%;"> 
+                                </select>
                               </div>
-
-                              <!-- barprogress --> 
-                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
-                                <div class="progress" id="barra_progress_grupos_div">
-                                  <div id="barra_progress_grupos" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                                    0%
-                                  </div>
-                                </div>
-                              </div>
-
                             </div>
 
-                            <div class="row" id="cargando-8-fomulario" style="display: none;">
-                              <div class="col-lg-12 text-center">
-                                <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
-                                <br />
-                                <h4>Cargando...</h4>
+                            <!-- barprogress --> 
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="barra_progress_grupos_div" style="margin-top:20px; display: none;">
+                              <div class="progress" >
+                                <div id="barra_progress_grupos" class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
+                                  0%
+                                </div>
                               </div>
+                            </div>
+
+                          </div>
+
+                          <div class="row" id="cargando-8-fomulario" style="display: none;">
+                            <div class="col-lg-12 text-center">
+                              <i class="fas fa-spinner fa-pulse fa-6x"></i><br />
+                              <br />
+                              <h4>Cargando...</h4>
                             </div>
                           </div>
+                          
                           <!-- /.card-body -->
                           <button type="submit" style="display: none;" id="submit-form-grupos">Submit</button>
                         </form>
                       </div>
-                      <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="limpiar_form_grupos();">Close</button>
-                        <button type="submit" class="btn btn-success" id="guardar_registro_grupos">Guardar Cambios</button>
+                      <div class="modal-footer justify-content-between py-0">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" onclick="limpiar_form_grupos();">Close</button>
+                        <button type="submit" class="btn btn-sm btn-success" id="guardar_registro_grupos">Guardar Cambios</button>
                       </div>
                     </div>
                   </div>
@@ -897,8 +897,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
         
-        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=2.05"></script>
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.05"></script>
+        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.06"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

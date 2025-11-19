@@ -175,17 +175,20 @@ class ResumenInsumos
   {
 
     //var_dump($idproducto, $idgrupo, $idproyecto_grp); die();
-    $sql = "UPDATE detalle_compra SET idclasificacion_grupo='$idgrupo' WHERE idproducto = '$idproducto'";
+    $sql = "UPDATE detalle_compra dc
+    JOIN compra_por_proyecto cpp  ON dc.idcompra_proyecto = cpp.idcompra_proyecto
+    SET dc.idclasificacion_grupo = '$idgrupo' 
+    WHERE cpp.idproyecto = '$idproyecto_grp' AND dc.idproducto = '$idproducto'";
     $upd_grupo =  ejecutarConsulta($sql);   if ( $upd_grupo['status'] == false ) { return $upd_grupo; }    
 
     if ($idgrupo==11) {
-      $sql_u = "UPDATE almacen_resumen SET tipo='EPP' WHERE idproyecto='$idproyecto_grp' and idproducto='$idproducto'";
-      $up_gr_tbl_almacen_r = ejecutarConsulta($sql_u);
-      if ( $up_gr_tbl_almacen_r['status'] == false ) { return $up_gr_tbl_almacen_r; }
+      $sql_u = "UPDATE almacen_resumen SET tipo='EPP', idclasificacion_grupo ='$idgrupo' WHERE idproyecto='$idproyecto_grp' and idproducto='$idproducto'";
+      $up_gr_tbl_almacen_r = ejecutarConsulta($sql_u); if ( $up_gr_tbl_almacen_r['status'] == false ) { return $up_gr_tbl_almacen_r; }
+      
     }else {
-      $sql_u = "UPDATE almacen_resumen SET tipo='PN' WHERE idproyecto='$idproyecto_grp' and idproducto='$idproducto'";
-      $up_gr_tbl_almacen_r = ejecutarConsulta($sql_u);
-      if ( $up_gr_tbl_almacen_r['status'] == false ) { return $up_gr_tbl_almacen_r; }
+      $sql_u = "UPDATE almacen_resumen SET tipo='PN', idclasificacion_grupo ='$idgrupo' WHERE idproyecto='$idproyecto_grp' and idproducto='$idproducto'";
+      $up_gr_tbl_almacen_r = ejecutarConsulta($sql_u); if ( $up_gr_tbl_almacen_r['status'] == false ) { return $up_gr_tbl_almacen_r; }
+      
     }
 
     return $upd_grupo;

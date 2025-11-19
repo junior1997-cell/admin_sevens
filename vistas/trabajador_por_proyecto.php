@@ -823,7 +823,7 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/trabajador_por_proyecto.js?version_jdl=2.05"></script>
+        <script type="text/javascript" src="scripts/trabajador_por_proyecto.js?version_jdl=2.06"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         
