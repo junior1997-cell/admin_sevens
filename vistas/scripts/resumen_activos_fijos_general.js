@@ -1195,7 +1195,7 @@ function editar_detalle_compras( id, op) {
         $("#idproyecto").val("");
         $('.detraccion_visible').hide();
       } else {
-        $("#idcompra_proyecto").val(e.data.idcompra_x_proyecto);
+        $("#idcompra_proyecto").val(e.data.idcompra_proyecto);
         $("#idcompra_af_general").val("");
         $("#idproyecto").val(e.data.idproyecto);
 

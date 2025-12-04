@@ -186,38 +186,34 @@ class Activos_fijos
       $tipo_categoria = "AND p.idcategoria_insumos_af = '$id_categoria'";
     }
     
-    $sql = "SELECT p.idproducto, LPAD(p.idproducto, 5, '0') AS idproducto_format, p.idunidad_medida, p.nombre, p.imagen, p.ficha_tecnica, p.estado, p.descripcion, um.nombre_medida, 
-    ciaf.nombre as categoria
-    FROM producto p, unidad_medida as um, categoria_insumos_af AS ciaf
-    WHERE um.idunidad_medida=p.idunidad_medida AND ciaf.idcategoria_insumos_af = p.idcategoria_insumos_af 
-    $tipo_categoria AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC;";
-    $activo_fijo = ejecutarConsultaArray($sql); 
-
-    foreach ($activo_fijo['data'] as &$detalle) {
-
-      $id = $detalle['idproducto'];      
-      
-      //listar detalle_marca
-      $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
-      FROM detalle_marca as dm, marca as m 
-      WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$id' AND dm.estado='1' AND dm.estado_delete='1' ORDER BY dm.iddetalle_marca ASC;";
-      $detalle_marca = ejecutarConsultaArray($sql);   if ($detalle_marca['status'] == false){ return $detalle_marca; }
-      
-      $datalle_marcas = ""; $datalle_marcas_export = "";
-      foreach ($detalle_marca['data'] as $key => $value2) {
-        $datalle_marcas .=  '<li >'.$value2['marca'].'</li>';
-        $datalle_marcas_export .=  '<li>  -'.$value2['marca'].'</li>';
-      }
-
-      //sacar promedio de producto de  detalle compra
-      $sql = "SELECT  AVG(precio_con_igv) AS promedio_precio FROM detalle_compra WHERE idproducto='$id';";
-      $precio = ejecutarConsultaSimpleFila($sql);  if ($precio['status'] == false){ return $precio; }
-
-      $detalle['marca']           = '<ol class="pl-3">'.$datalle_marcas. '</ol>';
-      $detalle['marca_export']    = $datalle_marcas_export;
-      $detalle['promedio_precio'] = (empty($precio['data']) ? 0 : ( empty($precio['data']['promedio_precio']) ? 0 : floatval($precio['data']['promedio_precio'])) ) ;
-      
-    }
+    $sql = "SELECT p.idproducto, p.idunidad_medida, p.nombre, p.imagen, p.ficha_tecnica, p.estado, um.nombre_medida, p.descripcion,
+    -- marcas en lista HTML
+    IFNULL(
+      CONCAT( '<ol class=\'pl-3\' style=\'font-size: 12px;\'>',
+      GROUP_CONCAT(CONCAT('<li>', m.nombre_marca, '</li>') ORDER BY m.nombre_marca SEPARATOR ''),
+      '</ol>'), 
+      ''
+    ) AS marca,
+    -- marcas para exportar
+    IFNULL( GROUP_CONCAT(CONCAT('-', m.nombre_marca) ORDER BY m.nombre_marca SEPARATOR '\n'),  '' ) AS marca_export,
+    -- promedio de precios
+    IFNULL(AVG(dc.precio_con_igv), 0) AS promedio_precio,
+    -- cantidad de compras
+    COUNT(dc.idcompra_proyecto) AS cantidad_fact
+    FROM producto p
+    JOIN unidad_medida um          ON um.idunidad_medida = p.idunidad_medida
+    LEFT JOIN detalle_marca dm     ON dm.idproducto = p.idproducto AND dm.estado='1' AND dm.estado_delete='1'
+    LEFT JOIN marca m              ON m.idmarca = dm.idmarca
+    LEFT JOIN ( 
+      select deco.idproducto, deco.precio_con_igv, deco.idcompra_proyecto from detalle_compra deco 
+      inner join compra_por_proyecto cpp  ON cpp.idcompra_proyecto = deco.idcompra_proyecto  
+      where cpp.estado='1' AND cpp.estado_delete='1'
+    ) as dc ON dc.idproducto = p.idproducto
+    WHERE   p.estado='1'  AND p.estado_delete='1' $tipo_categoria
+    GROUP BY p.idproducto
+    ORDER BY p.nombre ASC;";
+    $activo_fijo = ejecutarConsultaArray($sql);  
+    
 
     return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $activo_fijo['data'] ];
   }

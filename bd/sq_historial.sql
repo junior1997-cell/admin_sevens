@@ -83,3 +83,8 @@ LEFT JOIN (
 	where estado = '1' AND estado_delete = '1' AND idalmacen_resumen = 4564 AND tipo_mov IN ('EPO', 'EPT', 'EEP', 'EPG') GROUP BY ad.idalmacen_resumen
 ) as ad_sg on ad_sg.fecha = fc.fecha 
 WHERE fc.fecha BETWEEN '2024-09-08' AND '2024-11-07';
+
+
+-- mover compra general a una sola tabla
+
+select * from compra_af_general

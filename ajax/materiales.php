@@ -208,7 +208,7 @@
                 "1" => '<button class="btn btn-info btn-sm" onclick="ver_detalle_compras(' . $reg['idcompra_proyecto'] . ', ' .$reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle compra"><i class="fa fa-eye"></i></button>' .
                 ' <button class="btn btn-warning btn-sm" onclick="mostrar_compra_insumo(' . $reg['idcompra_proyecto'] .  ')" data-toggle="tooltip" data-original-title="Editar compra"><i class="fas fa-pencil-alt"></i></button>'. $toltip ,
                 "2" => '<span class="text-primary font-weight-bold" >' . $reg['proveedor']. '</span>',    
-                "3" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',  
+                "3" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> <br>'.$reg['serie_comprobante'].'</span>',  
                 "4" => $reg['nombre_codigo'],
                 "5" => $reg['fecha_compra'],
                 "6" => $reg['cantidad'],

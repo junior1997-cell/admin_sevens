@@ -17,7 +17,7 @@
         <!-- UI - css -->
         <link rel="stylesheet" href="../plugins/jquery-ui/jquery-ui.min.css">
 
-        <?php $title = "Resumen Insumos"; require 'head.php';  ?>
+        <?php $title = "Resumen Insumos"; require 'template/head.php';  ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -33,10 +33,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['compra_insumos']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>   
           
             <!-- Content Wrapper. Contains page content -->
@@ -186,6 +186,7 @@
                                   <!-- id proyecto -->
                                   <input type="hidden" name="idproyecto" id="idproyecto" />
                                   <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
+                                  <input type="hidden" name="tipo_compra" id="tipo_compra" value="GENERAL" /> 
 
                                   <!-- Proveedor -->
                                   <div class="col-sm-10 col-md-10 col-lg-5">
@@ -879,14 +880,14 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper --> 
 
-        <?php require 'script.php';  ?>
+        <?php require 'template/script.php';  ?>
 
         <!-- table export -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
@@ -897,8 +898,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
         
-        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/resumen_insumos.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.07"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Prestamos | Admin Sevens</title>
 
-        <?php $title = "Prestamos"; require 'head.php'; ?>
+        <?php $title = "Prestamos"; require 'template/head.php'; ?>
         
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange " idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
@@ -25,8 +25,8 @@
           </div> -->
         
           <?php
-            require 'nav.php';
-            require 'aside.php';
+            require 'template/nav.php';
+            require 'template/aside.php';
             if ($_SESSION['prestamo']==1){
               // require 'endesarrollo.php';
               ?>           
@@ -726,16 +726,16 @@
               <!--Fin-Contenido-->
               <?php
             }else{
-              require 'noacceso.php';
+              require 'template/noacceso.php';
             }
-            require 'footer.php';
+            require 'template/footer.php';
           ?>
 
         </div>
 
-        <?php require 'script.php'; ?>         
+        <?php require 'template/script.php'; ?>         
 
-        <script type="text/javascript" src="scripts/prestamo.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/prestamo.js?version_jdl=2.07"></script>
          
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }) </script>
         

@@ -129,40 +129,42 @@
 
         case 'tabla_principal':
           $rspta = $activos_fijos->tabla_principal($_GET["id_categoria"]);
-          //Vamos a declarar un array
-          $data = [];         
-          $cont=1;          
+         //Vamos a declarar un array
+          $data = [];
+          $imagen_error = "this.src='../dist/svg/404-v2.svg'";
+          $cont=1;
+          $toltip = '<script> $(function () { $(\'[data-toggle="tooltip"]\').tooltip(); }); </script>';
 
-          if ($rspta['status'] == true) {
+          if ($rspta['status'] == true) {            
+            
             foreach ($rspta['data'] as $key => $reg) {
-              
-              $imagen = (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen'] );
-  
-              $ficha_tecnica = empty($reg['ficha_tecnica'])
-                ? ( '<div><center><a type="btn btn-danger" class=""><i class="far fa-file-pdf fa-2x text-gray-50"></i></a></center></div>')
-                : ( '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-2x" style="color:#ff0000c4"></i></a></center>');
 
+              $imagen = (empty($reg['imagen']) ? 'producto-sin-foto.svg' : $reg['imagen']) ;
+              
+              $ficha_tecnica = empty($reg['ficha_tecnica']) ? ( '<center><i class="far fa-file-pdf fa-2x text-gray-50"></i></center>') : ( '<center><a target="_blank" href="../dist/docs/material/ficha_tecnica/' . $reg['ficha_tecnica'] . '"><i class="far fa-file-pdf fa-2x text-danger" ></i></a></center>');
+              
+              $monto_igv = (empty($reg['precio_igv']) ?  '-' :  $reg['precio_igv']);
+              
               $data[] = [
                 "0"=>$cont++,
-                "1" => $reg['estado'] ? '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg['idproducto'] .', \''.encodeCadenaHtml($reg['nombre']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'. 
-                  ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg['idproducto'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>':
-                  '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idproducto'] . ')"><i class="fa fa-pencil-alt"></i></button>' .
-                  ' <button class="btn btn-primary btn-sm" onclick="activar(' . $reg['idproducto'] . ')"><i class="fa fa-check"></i></button>',
-                "2" => $reg['idproducto_format'],
-                "3" =>'<div class="user-block">'.
-                  '<img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
-                  <span class="username"><p class="mb-0 text-nowrap">' . $reg['nombre'] . '</p></span>
-                  <span class="description"><b>UM:</b> '.$reg['nombre_medida'].' </span>
-                </div>',
-                "4" => $reg['categoria'], 
-                "5" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproducto'] .')" data-toggle="tooltip" data-original-title="Ver facturas"><i class="far fa-eye"></i></button>', 
-                "6" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 45px;" >'. $reg['marca'] .'</div>',
-                "7" =>  $reg['promedio_precio'],
-                "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly="">' . $reg['descripcion'] . '</textarea>',
-                "9" => $ficha_tecnica . $toltip ,
-                
-                "10" => $reg['nombre'],
+                "1" => '<button class="btn btn-warning btn-sm" onclick="mostrar(' . $reg['idproducto']. ')" data-toggle="tooltip" data-original-title="Editar"><i class="fas fa-pencil-alt"></i></button>' .
+                ' <button class="btn btn-danger btn-sm" onclick="eliminar(' . $reg['idproducto'] .', \''.encodeCadenaHtml($reg['nombre']).'\')" data-toggle="tooltip" data-original-title="Eliminar o papelera"><i class="fas fa-skull-crossbones"></i></button>'. 
+                ' <button class="btn btn-info btn-sm" onclick="verdatos('.$reg['idproducto'].')" data-toggle="tooltip" data-original-title="Ver datos"><i class="far fa-eye"></i></button>',
+                "2" => $reg['idproducto'],
+                "3" =>
+                  '<div class="user-block">
+                    <img class="profile-user-img img-responsive img-circle cursor-pointer" src="../dist/docs/material/img_perfil/' . $imagen . '" alt="user image" onerror="'.$imagen_error.'" onclick="ver_perfil(\'../dist/docs/material/img_perfil/' . $imagen . '\', \''.encodeCadenaHtml($reg['nombre']).'\');" data-toggle="tooltip" data-original-title="Ver imagen">
+                    <span class="username"><p class="mb-0" >' . decodeCadenaHtml($reg['nombre']) . '</p></span>
+                    <span class="description">' . '...</span>
+                  </div>',
+                "4" => $reg['nombre_medida'],
+                "5" => '<div class="bg-color-242244245 " style="overflow: auto; resize: vertical; height: 55px; width: 100px;" >'. $reg['marca'] .'</div>',  
+                "6" => $reg['promedio_precio'],
+                "7" => '<button class="btn btn-info btn-sm mb-2" onclick="tbla_facuras(' . $reg['idproducto'] . ', \'' .  htmlspecialchars($reg['nombre'], ENT_QUOTES) . '\', \'' .  $reg['promedio_precio'] . '\')" data-toggle="tooltip" data-original-title="Ver compras"><i class="far fa-eye"> </i> - ' . $reg['cantidad_fact'].'</button>'. $toltip,
+                "8" => $ficha_tecnica . $toltip, 
+                               
+                "9" => decodeCadenaHtml($reg['nombre']),
+                "10" => $reg['descripcion'],
                 "11" => $reg['marca_export'],
               ];
             }
@@ -174,7 +176,7 @@
               "data" => $data,
             ];
   
-            echo json_encode($results);
+            echo json_encode( $results, true) ;
           } else {
             echo $rspta['code_error'] .' - '. $rspta['message'] .' '. $rspta['data'];
           }

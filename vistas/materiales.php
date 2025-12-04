@@ -14,19 +14,29 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Insumos | Admin Sevens</title>
-        <?php $title = "Insumos"; require 'head.php';  ?>       
+        <?php $title = "Insumos"; require 'template/head.php';  ?>       
 
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
+
+        <style>
+          #tabla-materiales_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tabla-materiales_filter label { width: 100% !important;  }
+          #tabla-materiales_filter label input { width: 100% !important;   }
+
+          #tbla-facura_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tbla-facura_filter label { width: 100% !important;  }
+          #tbla-facura_filter label input { width: 100% !important;   }
+        </style>
 
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['recurso']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -67,7 +77,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                          <div id="div_materiales">
+                          <div class="table-responsive" id="div_materiales">
                             <table id="tabla-materiales" class="table table-bordered table-striped display" style="width: 100% !important;">
                               <thead>
                                 <tr>
@@ -106,47 +116,47 @@
                           </div>
 
                           <div id="div_facturas" style="display: none;">
-
-                            <table id="tbla-facura" class="table table-bordered table-striped display" style="width: 100% !important;">
-                                <thead>
-                                  <tr>
-                                    <th>#</th>
-                                    <th>Op.</th>
-                                    <th>Proveedor</th>
-                                    <th>N° Comprob.</th>
-                                    <th>Proyecto</th>
-                                    <th>Fecha compra</th>
-                                    <th data-toggle="tooltip" data-original-title="Centidad">Cant.</th>
-                                    <th>Precio</th>  
-                                    <th data-toggle="tooltip" data-original-title="Descuento">Dcto.</th>
-                                    <th>SubTotal</th>
-                                    <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>    
-                                    <th>Tipo</th>
-                                    <th>N° Comprob</th>
-                                  </tr>
-                                </thead>
-                                <tbody>                         
-                                  
-                                </tbody>
-                                <tfoot>
-                                  <tr>
-                                    <th>#</th>
-                                    <th>Op.</th>
-                                    <th>Proveedor</th>
-                                    <th>N° Comprob.</th>
-                                    <th>Proyecto</th>
-                                    <th >Fecha compra</th>
-                                    <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
-                                    <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
-                                    <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
-                                    <th class="text-nowrap px-2"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
-                                    <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                            
-                                    <th>Tipo</th>
-                                    <th>N° Comprob</th>
-                                  </tr>
-                                </tfoot>
-                            </table>
-
+                            <div class="table-responsive">
+                              <table id="tbla-facura" class="table table-bordered table-striped display" style="width: 100% !important;">
+                                  <thead>
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Op.</th>
+                                      <th>Proveedor</th>
+                                      <th>N° Comprob.</th>
+                                      <th>Proyecto</th>
+                                      <th>Fecha compra</th>
+                                      <th data-toggle="tooltip" data-original-title="Centidad">Cant.</th>
+                                      <th>Precio</th>  
+                                      <th data-toggle="tooltip" data-original-title="Descuento">Dcto.</th>
+                                      <th>SubTotal</th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>    
+                                      <th>Tipo</th>
+                                      <th>N° Comprob</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>                         
+                                    
+                                  </tbody>
+                                  <tfoot>
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Op.</th>
+                                      <th>Proveedor</th>
+                                      <th>N° Comprob.</th>
+                                      <th>Proyecto</th>
+                                      <th >Fecha compra</th>
+                                      <th class="cantidad_x_producto text-center"><i class="fas fa-spinner fa-pulse fa-sm"></i></th>
+                                      <th class="text-nowrap px-2 h5"><div class="formato-numero-conta"><span>S/</span><span class="precio_promedio">0.00</span></div></th>  
+                                      <th class="text-nowrap px-2"><div class="formato-numero-conta"><span>S/</span><span class="descuento_x_producto">0.00</span></div></th> 
+                                      <th class="text-nowrap px-2"> <div class="formato-numero-conta"><span>S/</span><span class="subtotal_x_producto">0.00</span></div></th>
+                                      <th data-toggle="tooltip" data-original-title="Comprobante">CFDI.</th>                            
+                                      <th>Tipo</th>
+                                      <th>N° Comprob</th>
+                                    </tr>
+                                  </tfoot>
+                              </table>
+                            </div>
                           </div>
 
                           <!-- TBLA EDITAR FACTURA -->
@@ -159,6 +169,7 @@
                                   <!-- id proyecto -->
                                   <input type="hidden" name="idproyecto" id="idproyecto" />
                                   <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
+                                  <input type="hidden" name="tipo_compra" id="tipo_compra" value="GENERAL" /> 
 
                                   <!-- Proveedor -->
                                   <div class="col-sm-12 col-md-12 col-lg-6">
@@ -678,21 +689,21 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper -->
 
-        <?php  require 'script.php'; ?>         
+        <?php  require 'template/script.php'; ?>         
 
         <!-- Jquery UI -->
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/materiales.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/materiales.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.07"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 

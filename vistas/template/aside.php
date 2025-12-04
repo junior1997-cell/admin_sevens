@@ -82,11 +82,35 @@
           </li>
         <?php  }  ?>
 
+        <?php
+          // Rutas del bloque "Recursos"
+          $arrar_li_recursos = [ "all_trabajador.php", "all_proveedor.php", "all_maquinas.php",  "materiales.php",
+            // SUBMENÚ ACTIVO FIJO
+            "activos_fijos.php", "compra_activos_fijos.php", "resumen_activos_fijos_general.php",
+            // RUTAS ADICIONALES DEL BLOQUE RECURSO
+            "all_calendario.php", "almacen_general.php", "almacen_general_activos.php", "otros.php"
+          ];
 
-        <?php if ($_SESSION['recurso']==1) {  ?>
+          // Página actual
+          $currentPage = basename($_SERVER['PHP_SELF']);
+
+          // Si la página pertenece al bloque recurso
+          $isRecursoActive = in_array($currentPage, $arrar_li_recursos);
+
+          // Submenú: Activos Fijos
+          $arrar_activo_fijo = [
+            "activos_fijos.php",
+            "compra_activos_fijos.php",
+            "resumen_activos_fijos_general.php"
+          ];
+
+          $isActivoFijoActive = in_array($currentPage, $arrar_activo_fijo);
+        ?>
+
+        <?php if ($_SESSION['recurso']==1) { ?>
           <!-- Recursos -->
-          <li class="nav-item  b-radio-3px" id="bloc_Recurso">
-            <a href="#" class="nav-link pl-2" id="mRecurso">
+          <li class="nav-item b-radio-3px <?php echo $isRecursoActive ? 'menu-open bg-color-191f24' : ''; ?>" id="bloc_Recurso">
+            <a href="#" class="nav-link pl-2 <?php echo $isRecursoActive ? 'active' : ''; ?>" id="mRecurso">
               <i class="nav-icon fas fa-project-diagram"></i>
               <p>
                 Recursos
@@ -94,40 +118,44 @@
                 <span class="badge badge-info right">7</span>
               </p>
             </a>
-            <ul class="nav nav-treeview ">
+
+            <ul class="nav nav-treeview">
+
               <!-- Usuarios del sistema -->
-              <li class="nav-item ">
-                <a href="all_trabajador.php" class="nav-link" id="lAllTrabajador">
+              <li class="nav-item">
+                <a href="all_trabajador.php" class="nav-link <?php echo $currentPage == 'all_trabajador.php' ? 'active' : ''; ?>" id="lAllTrabajador">
                   <i class="nav-icon fas fa-users"></i>
                   <p>All-Trabajador</p>
                 </a>
               </li>
+
               <!-- Proveedores de la empresa -->
-              <li class="nav-item ">
-                <a href="all_proveedor.php" class="nav-link" id="lAllProveedor">
+              <li class="nav-item">
+                <a href="all_proveedor.php" class="nav-link <?php echo $currentPage == 'all_proveedor.php' ? 'active' : ''; ?>" id="lAllProveedor">
                   <i class="nav-icon fas fa-truck"></i>
                   <p>All-Proveedor</p>
                 </a>
-              </li>  
-              <!-- Maquinas de la empresa -->
-              <li class="nav-item ">
-                <a href="all_maquinas.php" class="nav-link" id="lAllMaquinas">
+              </li>
+
+              <!-- Maquinas -->
+              <li class="nav-item">
+                <a href="all_maquinas.php" class="nav-link <?php echo $currentPage == 'all_maquinas.php' ? 'active' : ''; ?>" id="lAllMaquinas">
                   <i class="nav-icon fas fa-tractor"></i>
                   <p>Máquinas-Equipos</p>
                 </a>
               </li>
-              <!-- Materiales para la empresa -->
-              <li class="nav-item ">
-                <a href="materiales.php" class="nav-link" id="lAllMateriales">
-                  
-                <img src="../dist/svg/palana-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+
+              <!-- Materiales -->
+              <li class="nav-item">
+                <a href="materiales.php" class="nav-link <?php echo $currentPage == 'materiales.php' ? 'active' : ''; ?>" id="lAllMateriales">
+                  <img src="../dist/svg/palana-ico.svg" class="nav-icon" style="width:21px !important;">
                   <p>All-Insumos</p>
                 </a>
-              </li>              
+              </li>
 
-              <!-- Contable -->
-              <li class="nav-item  b-radio-3px" id="bloc_ActivoFijo">
-                <a href="#" class="nav-link pl-3" id="mActivoFijo">
+              <!-- Contable (submenú) -->
+              <li class="nav-item b-radio-3px <?php echo $isActivoFijoActive ? 'menu-open bg-color-02020280' : ''; ?>" id="bloc_ActivoFijo">
+                <a href="#" class="nav-link pl-3 <?php echo $isActivoFijoActive ? 'active bg-primary' : ''; ?>" id="mActivoFijo">
                   <i class="nav-icon fas fa-project-diagram"></i>
                   <p>
                     All-Activos fijos
@@ -135,72 +163,73 @@
                     <span class="badge badge-info right">3</span>
                   </p>
                 </a>
-                <ul class="nav nav-treeview ">  
-                    
-                  <!-- Activos fijos -->
-                  <li class="nav-item ">
-                    <a href="activos_fijos.php" class="nav-link pl-4" id="lActivosfijos">
-                    <i class="nav-icon fas fa-truck-pickup"></i>
+
+                <ul class="nav nav-treeview">
+
+                  <li class="nav-item">
+                    <a href="activos_fijos.php" class="nav-link pl-4 <?php echo $currentPage == 'activos_fijos.php' ? 'active' : ''; ?>" id="lActivosfijos">
+                      <i class="nav-icon fas fa-truck-pickup"></i>
                       <p>Activos fijos</p>
                     </a>
                   </li>
-                    
-                  <?php if ($_SESSION['compra_activo_fijo']==1) {  ?>
-                    <!-- ALL ACTIVOS FIJOS -->
+
+                  <?php if ($_SESSION['compra_activo_fijo'] == 1) { ?>
                     <li class="nav-item">
-                      <a href="compra_activos_fijos.php" class="nav-link pl-4" id="lCompraActivoFijo">
+                      <a href="compra_activos_fijos.php" class="nav-link pl-4 <?php echo $currentPage == 'compra_activos_fijos.php' ? 'active' : ''; ?>" id="lCompraActivoFijo">
                         <i class="nav-icon fas fa-hand-holding-usd"></i>
                         <p>Compras de activos fijos</p>
                       </a>
                     </li>
-                  <?php  }  ?>
+                  <?php } ?>
 
-                  <?php if ($_SESSION['resumen_activo_fijo_general']==1) {  ?>
-                    <!-- RESUMEN ACTIVOS FIJOS GENERAL-->
+                  <?php if ($_SESSION['resumen_activo_fijo_general'] == 1) { ?>
                     <li class="nav-item">
-                      <a href="resumen_activos_fijos_general.php" class="nav-link pl-4" id="lResumenActivosFijosGeneral">
+                      <a href="resumen_activos_fijos_general.php" class="nav-link pl-4 <?php echo $currentPage == 'resumen_activos_fijos_general.php' ? 'active' : ''; ?>" id="lResumenActivosFijosGeneral">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>Resumen activos fijos</p>
                       </a>
                     </li>
-                  <?php  }  ?>
+                  <?php } ?>
 
                 </ul>
-              </li>       
+              </li>
 
-              <!-- Calendario de la empresa -->
-              <li class="nav-item ">
-                <a href="all_calendario.php" class="nav-link" id="lAllCalendario">
-                <i class="nav-icon far fa-calendar-alt"></i>
+              <!-- Calendario -->
+              <li class="nav-item">
+                <a href="all_calendario.php" class="nav-link <?php echo $currentPage == 'all_calendario.php' ? 'active' : ''; ?>" id="lAllCalendario">
+                  <i class="nav-icon far fa-calendar-alt"></i>
                   <p>All-Calendario</p>
                 </a>
               </li>
 
-              <!-- Calendario de la empresa -->
-              <li class="nav-item ">
-                <a href="almacen_general.php" class="nav-link" id="lAlmacenGeneral">
+              <!-- Almacén -->
+              <li class="nav-item">
+                <a href="almacen_general.php" class="nav-link <?php echo $currentPage == 'almacen_general.php' ? 'active' : ''; ?>" id="lAlmacenGeneral">
                   <i class="nav-icon fas fa-box-open"></i>
                   <p>Almacenes</p>
                 </a>
               </li>
-              <!-- almacen general de activos -->
-              <li class="nav-item ">
-                <a href="almacen_general_activos.php" class="nav-link" id="lAlmacenGeneral_a">
+
+              <!-- Almacén Activos -->
+              <li class="nav-item">
+                <a href="almacen_general_activos.php" class="nav-link <?php echo $currentPage == 'almacen_general_activos.php' ? 'active' : ''; ?>" id="lAlmacenGeneral_a">
                   <i class="nav-icon fas fa-box-open"></i>
                   <p>Almacenes Activos</p>
                 </a>
               </li>
 
-              <!-- Datos Generales Bancos y color -->
-              <li class="nav-item ">
-                <a href="otros.php" class="nav-link" id="lOtros">
+              <!-- Otros -->
+              <li class="nav-item">
+                <a href="otros.php" class="nav-link <?php echo $currentPage == 'otros.php' ? 'active' : ''; ?>" id="lOtros">
                   <i class="nav-icon fas fa-coins"></i>
                   <p>Otros</p>
                 </a>
               </li>
+
             </ul>
           </li>
-        <?php  }  ?>        
+        <?php } ?>
+   
 
         <!-- Contable -->
         <li class="nav-item  b-radio-3px" id="bloc_Contable">
@@ -264,190 +293,259 @@
         </li>                
 
         <!-- <li class="nav-header bg-color-2c2c2c">LOGÍSTICA Y ADQUISICIONES</li> -->
+        <?php
+          // Página actual
+          $currentPage = basename($_SERVER['PHP_SELF']);
+
+          // RUTAS DEL BLOQUE LOGÍSTICA Y ADQUISICIONES
+          $arrar_logistica = [
+            "trabajador_por_proyecto.php",
+            
+            // compras
+            "compra_insumos.php",
+            "resumen_insumos.php",
+            "resumen_activos_fijos.php",
+            "chart_compra_insumo.php",
+
+            // servicios
+            "servicio_maquina.php",
+            "servicio_equipos.php",
+
+            // subcontrato
+            "sub_contrato.php",
+
+            // mano de obra
+            "mano_de_obra.php",
+
+            // planillas
+            "planillas_seguros.php",
+
+            // otros gastos
+            "otro_gasto.php",
+
+            // viáticos
+            "transporte.php",
+            "hospedaje.php",
+            "pension.php",
+            "comidas_extras.php",
+
+            // resumen general
+            "resumen_general.php"
+          ];
+
+          // Detecta si el bloque Logística debe estar abierto
+          $isLogisticaActive = in_array($currentPage, $arrar_logistica);
+
+          // SUBMENÚ COMPRAS
+          $arrar_compras = [
+            "compra_insumos.php",
+            "resumen_insumos.php",
+            "resumen_activos_fijos.php",
+            "chart_compra_insumo.php"
+          ];
+          $isComprasActive = in_array($currentPage, $arrar_compras);
+
+          // SUBMENÚ VIÁTICOS
+          $arrar_viaticos = [
+            "transporte.php",
+            "hospedaje.php",
+            "pension.php",
+            "comidas_extras.php"
+          ];
+          $isViaticosActive = in_array($currentPage, $arrar_viaticos);
+
+          // SUBMENÚ VIÁTICOS > COMIDAS
+          $arrar_viaticos_comidas = [
+            "pension.php",
+            "comidas_extras.php"
+          ];
+          $isComidasActive = in_array($currentPage, $arrar_viaticos_comidas);
+        ?>
         
         <!-- LOGÍSTICA Y ADQUISICIONES -->      
-        <li class="nav-item ver-otros-modulos-1" id="bloc_LogisticaAdquisiciones">
-          <a href="#" class="nav-link bg-color-2c2c2c" id="mLogisticaAdquisiciones" style="padding-left: 7px;">
+        <li class="nav-item ver-otros-modulos-1 <?php echo $isLogisticaActive ? 'menu-open' : ''; ?>" id="bloc_LogisticaAdquisiciones">
+          <a href="#" class="nav-link bg-color-2c2c2c <?php echo $isLogisticaActive ? 'active' : ''; ?>" id="mLogisticaAdquisiciones" style="padding-left: 7px;">
             <i class="nav-icon far fa-circle"></i>
             <p class="font-size-14px">LOGÍSTICA Y ADQUISICIONES <i class="fas fa-angle-left right"></i></p>
           </a>
+
           <ul class="nav nav-treeview">
 
-            <?php if ($_SESSION['trabajador']==1) {  ?>
-              <!-- TRABAJADORES -->
+            <!-- TRABAJADORES -->
+            <?php if ($_SESSION['trabajador']==1) { ?>
               <li class="nav-item ver-otros-modulos-1">
-                <a href="trabajador_por_proyecto.php" class="nav-link pl-2" id="lTrabajador">
-                  <!-- <i class="nav-icon fas fa-hard-hat"></i> -->
-                  <img src="../dist/svg/constructor-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+                <a href="trabajador_por_proyecto.php" class="nav-link pl-2 <?php echo $currentPage=='trabajador_por_proyecto.php' ? 'active' : ''; ?>" id="lTrabajador">
+                  <img src="../dist/svg/constructor-ico.svg" class="nav-icon" style="width: 21px !important;">
                   <p>Trabajadores</p>
                 </a>
               </li>
-            <?php  }  ?>
+            <?php } ?>
 
-            <?php if ($_SESSION['compra_insumos']==1) {  ?>   
-              <!-- COMPRAS -->      
-              <li class="nav-item ver-otros-modulos-1 b-radio-3px" id="bloc_Compras">
-                <a href="#" class="nav-link pl-2" id="mCompra">
+            <!-- COMPRAS -->
+            <?php if ($_SESSION['compra_insumos']==1) { ?>   
+              <li class="nav-item ver-otros-modulos-1 b-radio-3px <?php echo $isComprasActive ? 'menu-open bg-color-191f24' : ''; ?>" id="bloc_Compras">
+                <a href="#" class="nav-link pl-2 <?php echo $isComprasActive ? 'active bg-primary' : ''; ?>" id="mCompra">
                   <i class="fas fa-shopping-cart nav-icon"></i>
                   <p>Compras <i class="fas fa-angle-left right"></i> <span class="badge badge-info right">4</span></p>
                 </a>
+
                 <ul class="nav nav-treeview">
-                  <!-- Compras del proyecto -->
-                  <li class="nav-item ">
-                    <a href="compra_insumos.php" class="nav-link" id="lCompras">
-                      <i class="nav-icon fas fa-cart-plus"></i> <p>Compras</p>
+                  <li class="nav-item">
+                    <a href="compra_insumos.php" class="nav-link <?php echo $currentPage=='compra_insumos.php'?'active':''; ?>">
+                      <i class="nav-icon fas fa-cart-plus"></i>
+                      <p>Compras</p>
                     </a>
                   </li>
-                  <!-- Resumend de Insumos -->
-                  <li class="nav-item ">
-                    <a href="resumen_insumos.php" class="nav-link" id="lResumenInsumos">
-                      <i class="nav-icon fas fa-tasks"></i> <p>Resumen de insumos</p>
+
+                  <li class="nav-item">
+                    <a href="resumen_insumos.php" class="nav-link <?php echo $currentPage=='resumen_insumos.php'?'active':''; ?>">
+                      <i class="nav-icon fas fa-tasks"></i>
+                      <p>Resumen de insumos</p>
                     </a>
-                  </li> 
-                  <!-- Resumend de Insumos -->
-                  <li class="nav-item ">
-                    <a href="resumen_activos_fijos.php" class="nav-link" id="lResumenActivosFijos">
-                      <i class="nav-icon fas fa-tasks"></i> <p>Resumen de Activos Fijos</p>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="resumen_activos_fijos.php" class="nav-link <?php echo $currentPage=='resumen_activos_fijos.php'?'active':''; ?>">
+                      <i class="nav-icon fas fa-tasks"></i>
+                      <p>Resumen de Activos Fijos</p>
                     </a>
-                  </li> 
-                  <!-- graficos insumos -->
-                  <li class="nav-item ">
-                    <a href="chart_compra_insumo.php" class="nav-link" id="lChartCompraInsumo">
-                      <i class="nav-icon fas fa-chart-line"></i> <p>Gráficos</p>
+                  </li>
+
+                  <li class="nav-item">
+                    <a href="chart_compra_insumo.php" class="nav-link <?php echo $currentPage=='chart_compra_insumo.php'?'active':''; ?>">
+                      <i class="nav-icon fas fa-chart-line"></i>
+                      <p>Gráficos</p>
                     </a>
-                  </li> 
+                  </li>
                 </ul>
               </li>
-            <?php  }  ?>           
+            <?php } ?>
 
-            <?php if ($_SESSION['servicio_maquina']==1) {  ?>  
-              <!-- SERVICIO -->       
+            <!-- SERVICIO MAQUINA -->
+            <?php if ($_SESSION['servicio_maquina']==1) { ?>
               <li class="nav-item ver-otros-modulos-1">
-                <a href="servicio_maquina.php" class="nav-link pl-2" id="lMaquina">
-                  <!-- <i class="nav-icon fas fa-tractor"></i> -->
-                  <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                  <p>Servicio - Máquina </p>
+                <a href="servicio_maquina.php" class="nav-link pl-2 <?php echo $currentPage=='servicio_maquina.php'?'active':''; ?>">
+                  <img src="../dist/svg/excabadora-ico.svg" class="nav-icon" style="width: 21px !important;">
+                  <p>Servicio - Máquina</p>
                 </a>
               </li>
-            <?php  }  ?>
+            <?php } ?>
 
-            <?php if ($_SESSION['servicio_equipo']==1) {  ?>  
-              <!-- EQUIPOS -->       
+            <!-- SERVICIO EQUIPOS -->
+            <?php if ($_SESSION['servicio_equipo']==1) { ?>
               <li class="nav-item ver-otros-modulos-1">
-                <a href="servicio_equipos.php" class="nav-link pl-2" id="lEquipo">
-                  <!-- <i class="nav-icon fas fa-tractor"></i> -->
-                  <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
-                  <p>Servicio - Equipos </p>
+                <a href="servicio_equipos.php" class="nav-link pl-2 <?php echo $currentPage=='servicio_equipos.php'?'active':''; ?>">
+                  <img src="../dist/svg/estacion-total-ico.svg" class="nav-icon" style="width: 21px !important;">
+                  <p>Servicio - Equipos</p>
                 </a>
               </li>
-            <?php  }  ?>
+            <?php } ?>
 
-            <?php if ($_SESSION['subcontrato']==1) {  ?>  
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="sub_contrato.php" class="nav-link pl-2" id="lSubContrato">
-                <i class="nav-icon fas fa-hands-helping"></i>
-                <p>Sub Contrato </p>
-              </a>
-            </li>
-            <?php  }  ?>      
-            
-            <?php if ($_SESSION['mano_obra']==1) {  ?>  
-            <li class="nav-item ver-otros-modulos-1">
-              <a href="mano_de_obra.php" class="nav-link pl-2" id="lManodeObra">
-                <i class="nav-icon fa-solid fa-person-digging"></i>
-                <p>Mano de Obra </p>
-              </a>
-            </li>
-            <?php  }  ?>     
-            
-            <?php if ($_SESSION['planilla_seguro']==1) {  ?>
-              <!-- PLANILLAS Y SEGUROS -->       
+            <!-- SUB CONTRATO -->
+            <?php if ($_SESSION['subcontrato']==1) { ?>
               <li class="nav-item ver-otros-modulos-1">
-                <a href="planillas_seguros.php" class="nav-link pl-2" id="lPlanillaSeguro">
-                  <!--<i class="nav-icon fas fa-map-marked-alt"></i>lanilla-seguro-ico.svg-->
-                  <img src="../dist/svg/planilla-seguro-ico.svg" class="nav-icon" alt="" style="width: 21px !important;" >
+                <a href="sub_contrato.php" class="nav-link pl-2 <?php echo $currentPage=='sub_contrato.php'?'active':''; ?>">
+                  <i class="nav-icon fas fa-hands-helping"></i>
+                  <p>Sub Contrato</p>
+                </a>
+              </li>
+            <?php } ?>
+
+            <!-- MANO DE OBRA -->
+            <?php if ($_SESSION['mano_obra']==1) { ?>
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="mano_de_obra.php" class="nav-link pl-2 <?php echo $currentPage=='mano_de_obra.php'?'active':''; ?>">
+                  <i class="nav-icon fa-solid fa-person-digging"></i>
+                  <p>Mano de Obra</p>
+                </a>
+              </li>
+            <?php } ?>
+
+            <!-- PLANILLAS Y SEGUROS -->
+            <?php if ($_SESSION['planilla_seguro']==1) { ?>
+              <li class="nav-item ver-otros-modulos-1">
+                <a href="planillas_seguros.php" class="nav-link pl-2 <?php echo $currentPage=='planillas_seguros.php'?'active':''; ?>">
+                  <img src="../dist/svg/planilla-seguro-ico.svg" class="nav-icon" style="width:21px!important;">
                   <p>Planillas y seguros</p>
                 </a>
               </li>
-            <?php  }  ?>
+            <?php } ?>
 
-            <?php if ($_SESSION['otro_gasto']==1) {  ?>
-              <!-- OTROS GASTOS -->       
+            <!-- OTROS GASTOS -->
+            <?php if ($_SESSION['otro_gasto']==1) { ?>
               <li class="nav-item ver-otros-modulos-1">
-                <a href="otro_gasto.php" class="nav-link pl-2" id="lOtroGasto">
+                <a href="otro_gasto.php" class="nav-link pl-2 <?php echo $currentPage=='otro_gasto.php'?'active':''; ?>">
                   <i class="nav-icon fas fa-network-wired"></i>
-                  <p>Otros Gastos </p>
+                  <p>Otros Gastos</p>
                 </a>
               </li>
-            <?php  }  ?>
+            <?php } ?>
 
-            
-            
-            <?php if ($_SESSION['viatico']==1) {  ?>
-              <!-- BIÁTICOS -->
-              <li class="nav-item ver-otros-modulos-1"  id="bloc_Viaticos">
-                <a href="#" class="nav-link pl-2" id="mViatico">
+            <!-- VIÁTICOS -->
+            <?php if ($_SESSION['viatico']==1) { ?>
+              <li class="nav-item ver-otros-modulos-1 <?php echo $isViaticosActive ? 'menu-open' : ''; ?>" id="bloc_Viaticos">
+                <a href="#" class="nav-link pl-2 <?php echo $isViaticosActive ? 'active' : ''; ?>" id="mViatico">
                   <i class="nav-icon fas fa-plane"></i>
-                  <p>Viáticos <i class="right fas fa-angle-left"></i> <span class="badge badge-info right">3</span> </p>
+                  <p>Viáticos <i class="right fas fa-angle-left"></i> <span class="badge badge-info right">3</span></p>
                 </a>
+
                 <ul class="nav nav-treeview">
-                  <!-- TRANSPORTE -->
+
                   <li class="nav-item">
-                    <a href="transporte.php" class="nav-link" id="lTransporte">
+                    <a href="transporte.php" class="nav-link <?php echo $currentPage=='transporte.php'?'active':''; ?>">
                       <i class="fas fa-shuttle-van nav-icon"></i>
                       <p>Transporte</p>
                     </a>
                   </li>
-                  <!-- HOSPEDAJE -->
+
                   <li class="nav-item">
-                    <a href="hospedaje.php" class="nav-link" id="lHospedaje"> 
+                    <a href="hospedaje.php" class="nav-link <?php echo $currentPage=='hospedaje.php'?'active':''; ?>">
                       <i class="fas fa-hotel nav-icon"></i>
                       <p>Hospedaje</p>
                     </a>
                   </li>
-                  <!-- COMIDA -->
-                  <li class="nav-item  b-radio-3px" id="sub_bloc_comidas">
-                    <a href="#" class="nav-link"  id="sub_mComidas">
+
+                  <!-- COMIDAS -->
+                  <li class="nav-item b-radio-3px <?php echo $isComidasActive ? 'menu-open' : ''; ?>" id="sub_bloc_comidas">
+                    <a href="#" class="nav-link <?php echo $isComidasActive ? 'active' : ''; ?>" id="sub_mComidas">
                       <i class="fas fa-fish nav-icon"></i>
-                      <p>Comida <i class="right fas fa-angle-left"></i> <span class="badge badge-info right">3</span></p>
+                      <p>Comida <i class="right fas fa-angle-left"></i></p>
                     </a>
+
                     <ul class="nav nav-treeview">
                       <li class="nav-item">
-                        <a href="pension.php" class="nav-link" id="lPension">
+                        <a href="pension.php" class="nav-link <?php echo $currentPage=='pension.php'?'active':''; ?>">
                           <i class="fas fa-utensils nav-icon"></i>
                           <p>Pensión</p>
                         </a>
                       </li>
-                      <!-- <li class="nav-item">
-                        <a href="break.php" class="nav-link" id="lBreak" >
-                          <i class="fas fa-hamburger nav-icon"></i>
-                          <p>Break</p>
-                        </a>
-                      </li> -->
+
                       <li class="nav-item">
-                        <a href="comidas_extras.php" class="nav-link" id="lComidasExtras" >
+                        <a href="comidas_extras.php" class="nav-link <?php echo $currentPage=='comidas_extras.php'?'active':''; ?>">
                           <i class="fas fa-drumstick-bite nav-icon"></i>
                           <p>Comidas - extras</p>
                         </a>
                       </li>
                     </ul>
-                  </li>              
+                  </li>
+
                 </ul>
               </li>
-            <?php  }  ?>
+            <?php } ?>
 
-            <?php if ($_SESSION['resumen_general']==1) {  ?>
-              <!-- OTROS SERVICIOS -->       
+            <!-- RESUMEN GENERAL -->
+            <?php if ($_SESSION['resumen_general']==1) { ?>
               <li class="nav-item ver-otros-modulos-1">
-                <a href="resumen_general.php" class="nav-link pl-2" id="lresumen_general">                  
+                <a href="resumen_general.php" class="nav-link pl-2 <?php echo $currentPage=='resumen_general.php'?'active':''; ?>">
                   <i class="nav-icon fas fa-list-ul"></i>
-                  <p>Resumen general </p>
+                  <p>Resumen general</p>
                 </a>
               </li>
-            <?php  }  ?>
+            <?php } ?>
 
           </ul>
-        </li>       
+        </li>
+      
         
         <!-- <li class="nav-header bg-color-2c2c2c">TÉCNICO</li>  -->
          

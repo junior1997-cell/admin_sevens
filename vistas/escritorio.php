@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Escritorio | Admin Sevens</title>
 
-        <?php $title = "Escritorio"; require 'head.php'; ?>
+        <?php $title = "Escritorio"; require 'template/head.php'; ?>
      
         <link rel="stylesheet" href="../dist/css/switch_domingo.css">
       </head>
@@ -26,10 +26,10 @@
           </div>
         
           <?php
-            require 'nav.php';
-            require 'aside.php';
+            require 'template/nav.php';
+            require 'template/aside.php';
             if ($_SESSION['escritorio']==1){
-              //require 'enmantenimiento.php';
+              //require 'template/enmantenimiento.php';
               ?>           
               <!--Contenido-->
               <div class="content-wrapper">
@@ -1156,19 +1156,19 @@
               <!--Fin-Contenido-->
               <?php
             }else{
-              require 'noacceso.php';
+              require 'template/noacceso.php';
             }
-            require 'footer.php';
+            require 'template/footer.php';
           ?>
 
         </div>
 
-        <?php require 'script.php'; ?>
+        <?php require 'template/script.php'; ?>
 
         <!-- <script src="../plugins/moment/moment.min.js"></script> -->
         <!-- <script src="../plugins/moment/locales.js"></script> -->
         <!-- <script src="../plugins/moment/locale/es.js"></script> -->
-        <script type="text/javascript" src="scripts/proyecto.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/proyecto.js?version_jdl=2.07"></script>
 
         <script>  $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

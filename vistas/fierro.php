@@ -14,7 +14,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Fierro | Admin Sevens</title>
-        <?php $title = "Fierro"; require 'head.php';  ?>       
+        <?php $title = "Fierro"; require 'template/head.php';  ?>       
 
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
@@ -23,10 +23,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['recurso']==1){
-            //require 'enmantenimiento.php'; 
+            //require 'template/enmantenimiento.php'; 
             require 'endesarrollo.php';
             ?>
 
@@ -389,16 +389,16 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper -->
 
-        <?php  require 'script.php'; ?>        
+        <?php  require 'template/script.php'; ?>        
 
-        <script type="text/javascript" src="scripts/fierro.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/fierro.js?version_jdl=2.07"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
 

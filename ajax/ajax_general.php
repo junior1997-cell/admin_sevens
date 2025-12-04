@@ -28,6 +28,7 @@
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
     $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
     $idcompra_proyecto  = isset($_POST["idcompra_proyecto"]) ? limpiarCadena($_POST["idcompra_proyecto"]) : "";
+    $tipo_compra        = isset($_POST["tipo_compra"]) ? limpiarCadena($_POST["tipo_compra"]) : "PROYECTO";
     $idproveedor        = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
     $fecha_compra       = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
     $glosa              = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
@@ -679,10 +680,10 @@
             $data_btn = 'btn-add-producto-'.$reg['idproducto'];
             $datas[] = [
               "0" => '<button class="btn btn-warning '.$data_btn.'" onclick="agregarDetalleComprobante(' . $reg['idproducto'] . ')" data-toggle="tooltip" data-original-title="Agregar Activo"><span class="fa fa-plus"></span></button>',
-              "1" => '<div class="user-block w-250px">'.
+              "1" => '<div class="user-block w-350px">'.
                 '<img class="profile-user-img img-responsive img-circle cursor-pointer" src="'.$img.'" onclick="ver_img_material(\''.$img.'\', \''.encodeCadenaHtml($reg['nombre']).'\')" alt="user image" onerror="' . $imagen_error .  '">'.
-                '<span class="username"><p class="mb-0" >' . $reg['nombre'] . '</p></span>
-                <span class="description"><b>UM: </b>' . $reg['nombre_medida'] . '</span>
+                '<div class=" font-weight-bold font-size-11px">' . $reg['nombre'] . '</div>
+                <div class="font-size-11px"><b>UM: </b>' . $reg['nombre_medida'] . '</div>
                 <span style="display: none;" class="promedio_precio_'.$reg['idproducto'].'">' . $reg['promedio_precio'] . '</span>'.
               '</div>',
               "2" => '<select onchange="buscar_precio_x_marca(this, ' . $reg['idproducto'] . ');" name="marca_table" id="marca_table_'.$reg['idproducto'].'">'.$reg['marcas_html'].'</select>',
@@ -924,14 +925,14 @@
       // :::::::::::::::::::::::::: S E C C I O N   C O M P R A ::::::::::::::::::::::::::
       case 'guardar_y_editar_compra':
         if (empty($idcompra_proyecto)) {
-          $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
+          $rspta = $compra_insumos->insertar( $idproyecto, $tipo_compra, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
           $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"]);
           //precio_sin_igv,precio_igv,precio_total
           echo json_encode($rspta, true);
         } else {
-          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
+          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $tipo_compra, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
           $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );

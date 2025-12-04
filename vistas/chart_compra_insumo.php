@@ -15,7 +15,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Graficos | Admin Sevens</title>
 
-        <?php $title = "Compras  de Insumos"; require 'head.php'; ?>
+        <?php $title = "Compras  de Insumos"; require 'template/head.php'; ?>
 
       </head>
       <!--
@@ -30,10 +30,10 @@
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <div class="wrapper">
           <?php
-            require 'nav.php';
-            require 'aside.php';
+            require 'template/nav.php';
+            require 'template/aside.php';
             if ($_SESSION['compra_insumos']==1){
-              //require 'enmantenimiento.php';
+              //require 'template/enmantenimiento.php';
               ?>
 
               <!-- Content Wrapper. Contains page content -->
@@ -470,16 +470,16 @@
 
               <?php
             }else{
-              require 'noacceso.php';
+              require 'template/noacceso.php';
             }
-            require 'footer.php';
+            require 'template/footer.php';
           ?>
         </div>
         <!-- ./wrapper -->
 
         <!-- REQUIRED SCRIPTS -->
 
-        <?php require 'script.php'; ?>
+        <?php require 'template/script.php'; ?>
         
         
         <!-- OPTIONAL SCRIPTS -->
@@ -499,7 +499,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script> 
         
-        <script type="text/javascript" src="scripts/chart_compra_insumo.js?version_jdl=2.06"></script>         
+        <script type="text/javascript" src="scripts/chart_compra_insumo.js?version_jdl=2.07"></script>         
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

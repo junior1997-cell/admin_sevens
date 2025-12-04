@@ -16,7 +16,7 @@
 
         <title>Formato | Admin Sevens</title>
 
-        <?php $title = "Formato"; require 'head.php'; ?>
+        <?php $title = "Formato"; require 'template/head.php'; ?>
         <style>
           .class_text{ font-weight: 200; font-size: unset; }
         </style>
@@ -25,11 +25,11 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php  
-          require 'nav.php'; 
-          require 'aside.php'; 
+          require 'template/nav.php'; 
+          require 'template/aside.php'; 
 
           if ($_SESSION['asistencia_obrero']==1){  
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
@@ -528,21 +528,21 @@
 
             <?php  
           }else{ 
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           } 
-          require 'footer.php'; 
+          require 'template/footer.php'; 
           ?>
         </div>
 
         <!-- /.content-wrapper -->
-        <?php  require 'script.php';  ?> 
+        <?php  require 'template/script.php';  ?> 
         
         <!-- table export EXCEL -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
         
-        <script type="text/javascript" src="scripts/formato_varios.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/formato_varios.js?version_jdl=2.07"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

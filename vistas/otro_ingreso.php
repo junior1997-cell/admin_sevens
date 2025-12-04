@@ -15,17 +15,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Otros Ingresos | Admin Sevens</title>
         
-        <?php $title = "Otros Ingresos"; require 'head.php'; ?>
+        <?php $title = "Otros Ingresos"; require 'template/head.php'; ?>
           
       </head>
       <body class="hold-transition sidebar-collapse sidebar-mini layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['otro_gasto']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -503,17 +503,17 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper -->
 
-        <?php require 'script.php'; ?>
+        <?php require 'template/script.php'; ?>
         
         <!-- Funciones del modulo -->
-        <script type="text/javascript" src="scripts/otro_ingreso.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/otro_ingreso.js?version_jdl=2.07"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

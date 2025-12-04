@@ -46,10 +46,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['calendario']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -270,9 +270,9 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
           
         </div>
@@ -321,14 +321,14 @@
         <script src="../dist/js/demo.js"></script>  
 
         <!-- hora sesion-->
-        <script src="../dist/js/sesion.js?version_jdl=2.06"></script> 
+        <script src="../dist/js/sesion.js?version_jdl=2.07"></script> 
 
-        <script type="text/javascript" src="scripts/calendario.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/calendario.js?version_jdl=2.07"></script>
 
         <!-- Funciones Crud -->
-        <script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="../dist/js/funcion_crud.js?version_jdl=2.07"></script>
         <!-- Funciones Generales -->
-        <script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="../dist/js/funcion_general.js?version_jdl=2.07"></script>
 
         <?php require 'go_to.php'; ?>
 

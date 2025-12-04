@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Servicio - Equipos | Admin Sevens</title>
 
-        <?php $title = "Servicios - Equipos"; require 'head.php'; ?>
+        <?php $title = "Servicios - Equipos"; require 'template/head.php'; ?>
 
         <link rel="stylesheet" href="../dist/css/leyenda.css" />
       </head>
@@ -22,10 +22,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['servicio_equipo']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -878,15 +878,15 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper -->
-        <?php require 'script.php'; ?>
+        <?php require 'template/script.php'; ?>
 
-        <script type="text/javascript" src="scripts/servicio_equipos.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/servicio_equipos.js?version_jdl=2.07"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

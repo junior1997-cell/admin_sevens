@@ -17,7 +17,7 @@ if (!isset($_SESSION["nombre"])) {
     <title> Almacén | Admin Sevens </title>
 
     <?php $title = "Almacén";
-    require 'head.php'; ?>
+    require 'template/head.php'; ?>
 
     <!--CSS  switch_MATERIALES-->
     <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -125,10 +125,10 @@ if (!isset($_SESSION["nombre"])) {
           </div> -->
 
       <?php
-      require 'nav.php';
-      require 'aside.php';
+      require 'template/nav.php';
+      require 'template/aside.php';
       if ($_SESSION['compra_insumos'] == 1) {
-        //require 'enmantenimiento.php';
+        //require 'template/enmantenimiento.php';
       ?>
         <!--Contenido-->
         <div class="content-wrapper">
@@ -1080,13 +1080,13 @@ if (!isset($_SESSION["nombre"])) {
 
       <?php
       } else {
-        require 'noacceso.php';
+        require 'template/noacceso.php';
       }
-      require 'footer.php';
+      require 'template/footer.php';
       ?>
     </div>
 
-    <?php require 'script.php'; ?>
+    <?php require 'template/script.php'; ?>
 
     <!-- table export EXCEL -->
     <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
@@ -1098,7 +1098,7 @@ if (!isset($_SESSION["nombre"])) {
     <script src="../plugins/jszip/dist/jszip-utils.js"></script>
     <script src="../plugins/FileSaver/dist/FileSaver.js"></script>
 
-    <script type="text/javascript" src="scripts/almacen.js?version_jdl=2.06"></script>
+    <script type="text/javascript" src="scripts/almacen.js?version_jdl=2.07"></script>
     <!-- <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js"></script> -->
 
     <script>

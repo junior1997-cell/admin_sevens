@@ -16,7 +16,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title> Compras | Admin Sevens </title>
 
-        <?php $title = "Compras"; require 'head.php'; ?>
+        <?php $title = "Compras"; require 'template/head.php'; ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -24,6 +24,20 @@
 
         <!-- UI - css -->
         <link rel="stylesheet" href="../plugins/jquery-ui/jquery-ui.min.css">
+
+        <style>
+          #tabla-compra_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tabla-compra_filter label { width: 100% !important;  }
+          #tabla-compra_filter label input { width: 100% !important;   }
+
+          #tabla-compra-proveedor_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #tabla-compra-proveedor_filter label { width: 100% !important;  }
+          #tabla-compra-proveedor_filter label input { width: 100% !important;   }
+
+          #detalles-tabla-compra-prov_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
+          #detalles-tabla-compra-prov_filter label { width: 100% !important;  }
+          #detalles-tabla-compra-prov_filter label input { width: 100% !important;   }
+        </style>
       </head>
       <body class="hold-transition sidebar-mini sidebar-collapse layout-fixed layout-navbar-fixed pace-orange" idproyecto="<?php echo $_SESSION['idproyecto']; ?>">
         <div class="wrapper">
@@ -33,10 +47,10 @@
           </div> -->
 
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['compra_insumos']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
             <!--Contenido-->
             <div class="content-wrapper">
@@ -99,7 +113,7 @@
                           <div id="div_tabla_compra">
                             <h5><b>Lista de compras Por Facturas</b></h5>
                             <!-- filtros -->
-                            <div class="filtros-inputs row mb-4">
+                            <div class="filtros-inputs row mb-1">
 
                               <!-- filtro por: fecha inicial -->
                               <div class="col-12 col-sm-6 col-md-6 col-lg-2">    
@@ -258,6 +272,7 @@
                                   <!-- id proyecto -->
                                   <input type="hidden" name="idproyecto" id="idproyecto" />
                                   <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
+                                  <input type="hidden" name="tipo_compra" id="tipo_compra" value="PROYECTO" /> 
 
                                   <!-- Tipo de Empresa -->
                                   <div class="col-lg-5">
@@ -1419,13 +1434,13 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         
-        <?php require 'script.php'; ?>
+        <?php require 'template/script.php'; ?>
 
         <!-- table export EXCEL -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
@@ -1441,8 +1456,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
         
-        <script type="text/javascript" src="scripts/compra_insumos.js?version_jdl=2.06"></script>   
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.06"></script>      
+        <script type="text/javascript" src="scripts/compra_insumos.js?version_jdl=2.07"></script>   
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.07"></script>      
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         

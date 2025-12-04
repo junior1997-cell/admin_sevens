@@ -15,7 +15,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Otros | Admin Sevens</title>
 
-        <?php $title = "Otros"; require 'head.php'; ?>
+        <?php $title = "Otros"; require 'template/head.php'; ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -24,10 +24,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['recurso']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -1320,24 +1320,24 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper -->
 
-        <?php  require 'script.php'; ?>
+        <?php  require 'template/script.php'; ?>
         
-        <script type="text/javascript" src="scripts/otros.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/bancos.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/color.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/unidades_m.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/ocupacion.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/tipo.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/desempenio.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/categoria_af.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/marca.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/otros.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/bancos.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/color.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/unidades_m.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/ocupacion.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/tipo.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/desempenio.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/categoria_af.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/marca.js?version_jdl=2.07"></script>
         <!-- <script type="text/javascript" src="scripts/glosa.js"></script> -->
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>

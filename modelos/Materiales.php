@@ -183,52 +183,35 @@ class Materiales
   public function tbla_principal() {
     $data = Array();
 
-
-    $sql = "SELECT p.idproducto, p.idunidad_medida, p.nombre, p.imagen, p.ficha_tecnica, p.estado,	um.nombre_medida, p.descripcion
-    FROM producto p, unidad_medida as um
-    WHERE um.idunidad_medida=p.idunidad_medida AND p.idcategoria_insumos_af = '1' AND p.estado='1' AND p.estado_delete='1' ORDER BY p.nombre ASC;";
-    $data_tabla_p= ejecutarConsultaArray($sql);    if ($data_tabla_p['status'] == false){ return $data_tabla_p; }
-
-    foreach ($data_tabla_p['data'] as $key => $value) {
-
-      $id = $value['idproducto'];
-
-      //listar detalle_marca
-      $sql = "SELECT dm.iddetalle_marca, dm.idproducto, dm.idmarca, m.nombre_marca as marca 
-      FROM detalle_marca as dm, marca as m 
-      WHERE dm.idmarca = m.idmarca AND dm.idproducto = '$id' AND dm.estado='1' AND dm.estado_delete='1' ORDER BY dm.iddetalle_marca ASC;";
-      $detalle_marca = ejecutarConsultaArray($sql);   if ($detalle_marca['status'] == false){ return $detalle_marca; }
-      //sacar promedio de producto de  detalle compra
-      $datalle_marcas = ""; $datalle_marcas_export = "";
-      foreach ($detalle_marca['data'] as $key => $value2) {
-        $datalle_marcas .=  '<li >'.$value2['marca'].'</li>';
-        $datalle_marcas_export .=  '<li>  -'.$value2['marca'].'</li>';
-      }
-
-      $sql = "SELECT  AVG(dc.precio_con_igv) AS promedio_precio, COUNT(dc.idcompra_proyecto) as cantidad 
-      FROM detalle_compra as dc
-      inner join compra_por_proyecto as cpp on cpp.idcompra_proyecto = dc.idcompra_proyecto
-      WHERE dc.idproducto='$id' and cpp.estado = '1' and cpp.estado_delete='1';";
-      $prom_cant = ejecutarConsultaSimpleFila($sql);  if ($prom_cant['status'] == false){ return $prom_cant; }
-
-      $data[] = Array(
-        'idproducto'      =>  $value['idproducto'],
-        'idunidad_medida' =>  $value['idunidad_medida'],
-        'cantidad_fact'   => ( empty($prom_cant['data']['cantidad']) ? '0' : floatval($prom_cant['data']['cantidad'])),
-        'nombre'          => ( empty($value['nombre']) ? '' : decodeCadenaHtml($value['nombre'])),
-        'imagen'          => ( empty($value['imagen']) ? '' : $value['imagen']),
-        'ficha_tecnica'   => ( empty($value['ficha_tecnica']) ? '' : $value['ficha_tecnica']),
-        'estado'          => ( empty($value['estado']) ? '' : $value['estado']),
-        'nombre_medida'   => ( empty($value['nombre_medida']) ? '' : $value['nombre_medida']),
-        'marca'           => '<ol class="pl-3" style="font-size: 12px; ">'.$datalle_marcas. '</ol>',
-        'marca_export'    => $datalle_marcas_export,
-        'promedio_precio' => ( empty($prom_cant['data']['promedio_precio']) ? '0.00' : floatval($prom_cant['data']['promedio_precio'])),        
-        'descripcion'     => ( empty($value['descripcion']) ? '' : $value['descripcion'])
-      );
-
-    }
-      //var_dump($data);die();
-    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data ];
+    $sql = "SELECT p.idproducto, p.idunidad_medida, p.nombre, p.imagen, p.ficha_tecnica, p.estado, um.nombre_medida, p.descripcion,
+    -- marcas en lista HTML
+    IFNULL(
+      CONCAT( '<ol class=\'pl-3\' style=\'font-size: 12px;\'>',
+      GROUP_CONCAT(CONCAT('<li>', m.nombre_marca, '</li>') ORDER BY m.nombre_marca SEPARATOR ''),
+      '</ol>'), 
+      ''
+    ) AS marca,
+    -- marcas para exportar
+    IFNULL( GROUP_CONCAT(CONCAT('-', m.nombre_marca) ORDER BY m.nombre_marca SEPARATOR '\n'),  '' ) AS marca_export,
+    -- promedio de precios
+    IFNULL(AVG(dc.precio_con_igv), 0) AS promedio_precio,
+    -- cantidad de compras
+    COUNT(dc.idcompra_proyecto) AS cantidad_fact
+    FROM producto p
+    JOIN unidad_medida um          ON um.idunidad_medida = p.idunidad_medida
+    LEFT JOIN detalle_marca dm     ON dm.idproducto = p.idproducto AND dm.estado='1' AND dm.estado_delete='1'
+    LEFT JOIN marca m              ON m.idmarca = dm.idmarca
+    LEFT JOIN ( 
+      select deco.idproducto, deco.precio_con_igv, deco.idcompra_proyecto from detalle_compra deco 
+      inner join compra_por_proyecto cpp  ON cpp.idcompra_proyecto = deco.idcompra_proyecto  
+      where cpp.estado='1' AND cpp.estado_delete='1'
+    ) as dc ON dc.idproducto = p.idproducto
+    WHERE  p.idcategoria_insumos_af = '1' AND p.estado='1'  AND p.estado_delete='1'
+    GROUP BY p.idproducto
+    ORDER BY p.nombre ASC;";
+    $data_tabla_p= ejecutarConsultaArray($sql);    if ($data_tabla_p['status'] == false){ return $data_tabla_p; }    
+     
+    return $retorno = ['status'=> true, 'message' => 'Salió todo ok,', 'data' => $data_tabla_p['data'] ];
   }
   
   //Seleccionar Trabajador Select2
@@ -251,13 +234,15 @@ class Materiales
   public function tbla_facturas($idproducto) {
     $data = [];
     $sql = "SELECT cpp.idproyecto,cpp.idcompra_proyecto, cpp.fecha_compra, dc.ficha_tecnica_producto AS ficha_tecnica, 
-		dc.idproducto, pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
-		dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor, p.nombre_codigo, p.nombre_proyecto
-		FROM proyecto AS p, compra_por_proyecto AS cpp, detalle_compra AS dc, producto AS pr, proveedor AS prov
-		WHERE p.idproyecto = cpp.idproyecto AND cpp.idcompra_proyecto = dc.idcompra_proyecto 
-		AND dc.idproducto = pr.idproducto AND cpp.estado = '1' AND cpp.estado_delete = '1'
-		AND cpp.idproveedor = prov.idproveedor AND dc.idproducto = '$idproducto' 
-		ORDER BY cpp.fecha_compra DESC;";
+    dc.idproducto, pr.nombre AS nombre_producto, dc.cantidad, cpp.tipo_comprobante, cpp.serie_comprobante,
+    dc.precio_con_igv, dc.descuento, dc.subtotal, prov.razon_social AS proveedor, case when p.nombre_codigo is null then 'General' else p.nombre_codigo end as nombre_codigo, p.nombre_proyecto
+    FROM compra_por_proyecto AS cpp
+    left join proyecto AS p on p.idproyecto = cpp.idproyecto   
+    inner join  detalle_compra AS dc on dc.idcompra_proyecto = cpp.idcompra_proyecto
+    inner join producto AS pr on dc.idproducto = pr.idproducto
+    inner join proveedor AS prov on cpp.idproveedor = prov.idproveedor
+    WHERE cpp.estado = '1' AND cpp.estado_delete = '1' AND dc.idproducto = '$idproducto' 
+    ORDER BY cpp.fecha_compra DESC";
     // return ejecutarConsulta($sql);
     $compra = ejecutarConsultaArray($sql); if ($compra['status'] == false) { return $compra; }
 

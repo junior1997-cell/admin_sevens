@@ -524,8 +524,9 @@ function mostrar_compra_insumo(idcompra_proyecto) {
         //$(".content-descripcion").removeClass("col-lg-7").addClass("col-lg-4");
       }
 
+      $("#tipo_compra").val(e.data.tipo_compra);
       $("#idproyecto").val(e.data.idproyecto);
-      $("#idcompra_proyecto").val(e.data.idcompra_x_proyecto);
+      $("#idcompra_proyecto").val(e.data.idcompra_proyecto);
       $("#idproveedor").val(e.data.idproveedor).trigger("change");
       $("#fecha_compra").val(e.data.fecha_compra);
       $("#tipo_comprobante").val(e.data.tipo_comprobante).trigger("change");

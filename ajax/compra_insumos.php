@@ -30,6 +30,7 @@ if (!isset($_SESSION["nombre"])) {
     // :::::::::::::::::::::::::::::::::::: D A T O S   C O M P R A ::::::::::::::::::::::::::::::::::::::
     $idproyecto         = isset($_POST["idproyecto"]) ? limpiarCadena($_POST["idproyecto"]) : "";
     $idcompra_proyecto  = isset($_POST["idcompra_proyecto"]) ? limpiarCadena($_POST["idcompra_proyecto"]) : "";
+    $tipo_compra        = isset($_POST["tipo_compra"]) ? limpiarCadena($_POST["tipo_compra"]) : "PROYECTO";
     $idproveedor        = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
     $fecha_compra       = isset($_POST["fecha_compra"]) ? limpiarCadena($_POST["fecha_compra"]) : "";
     $glosa              = isset($_POST["glosa"]) ? limpiarCadena($_POST["glosa"]) : "";
@@ -216,7 +217,7 @@ if (!isset($_SESSION["nombre"])) {
 
         if (empty($idcompra_proyecto)) {
 
-          $rspta = $compra_insumos->insertar( $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
+          $rspta = $compra_insumos->insertar( $idproyecto, $tipo_compra, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, $descripcion, 
           $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -224,7 +225,7 @@ if (!isset($_SESSION["nombre"])) {
           echo json_encode($rspta, true);
         } else {
 
-          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
+          $rspta = $compra_insumos->editar( $idcompra_proyecto, $idproyecto, $tipo_compra, $idproveedor, $fecha_compra,  $tipo_comprobante, $serie_comprobante,$slt2_serie_comprobante, $val_igv, 
           $descripcion, $glosa, $total_venta, $subtotal_compra, $igv_compra, $estado_detraccion, $_POST["idproducto"], $_POST["unidad_medida"], 
           $_POST["nombre_color"], $_POST["nombre_marca"], $_POST["cantidad"], $_POST["precio_sin_igv"], $_POST["precio_igv"],  $_POST["precio_con_igv"], $_POST["descuento"], 
           $tipo_gravada, $_POST["ficha_tecnica_producto"] );
@@ -257,7 +258,7 @@ if (!isset($_SESSION["nombre"])) {
       break;
     
       case 'tbla_principal':
-        $rspta = $compra_insumos->tbla_principal($_GET["nube_idproyecto"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
+        $rspta = $compra_insumos->tbla_principal($_GET["nube_idproyecto"], $_GET["tipo_compra"], $_GET["fecha_1"], $_GET["fecha_2"], $_GET["id_proveedor"], $_GET["comprobante"]);
         
         //Vamos a declarar un array
         $data = []; $cont = 1;
@@ -274,71 +275,7 @@ if (!isset($_SESSION["nombre"])) {
         $num_comprob = "";
         
         if ($rspta['status'] == true) {
-          foreach ($rspta['data'] as $key => $reg) {
-      
-            $saldo = $reg['total'] - $reg['total_pago_compras'];       
-      
-            if ($saldo == $reg['total']) {
-              $estado = '<span class="text-center badge badge-danger">Sin pagar</span>';
-              $c = "danger";
-              $nombre = "Pagar";
-              $icon = "dollar-sign";
-              $cc = "danger";
-            } else {
-              if ($saldo < $reg['total'] && $saldo > "0") {
-                $estado = '<span class="text-center badge badge-warning">En proceso</span>';
-                $c = "warning";
-                $nombre = "Pagar";
-                $icon = "dollar-sign";
-                $cc = "warning";
-              } else {
-                if ($saldo <= "0" || $saldo == "0") {
-                  $estado = '<span class="text-center badge badge-success">Pagado</span>';
-                  $c = "success";
-                  $nombre = "Ver";
-                  $info = "info";
-                  $icon = "eye";
-                  $cc = "success";
-                } else {
-                  $estado = '<span class="text-center badge badge-success">Error</span>';
-                }
-                //$estado = '<span class="text-center badge badge-success">Terminado</span>';
-              }
-            }
-      
-            if ($reg['estado_detraccion'] == "1") {
-      
-              $deposito_Actual = 0;
-      
-              if ($reg['total_pago_compras'] == null || empty($reg['total_pago_compras'])) {
-                $deposito_Actual = 0;
-              } else {
-                $deposito_Actual = $reg['total_pago_compras'];
-              }
-      
-              $list_segun_estado_detracc = '<div class="text-center formato-numero-conta"> <button class="btn btn-' .  $c . ' btn-xs" onclick="listar_pagos_detraccion(' . $reg['idcompra_proyecto'] . ',' . $reg['idproyecto'] . ',' . $reg['total'] . ',' . $deposito_Actual .')">'.
-                  '<i class="fas fa-' . $icon .' nav-icon"></i> ' .$nombre .
-                '</button>' .
-                ' <button style="font-size: 14px;" class="btn btn-' . $cc . ' btn-sm">' . number_format($reg['total_pago_compras'], 2, '.', ',') . '</button>'.
-              '</div>';
-      
-            } else {
-      
-              $deposito_Actual = 0;
-      
-              if ($reg['total_pago_compras'] == null || empty($reg['total_pago_compras'])) {
-                $deposito_Actual = 0;
-              } else {
-                $deposito_Actual = $reg['total_pago_compras'];
-              }
-      
-              $list_segun_estado_detracc = '<div class="text-center text-nowrap formato-numero-conta">'. 
-                '<button class="btn btn-' . $c . ' btn-xs m-t-2px" onclick="listar_pagos(' . $reg['idcompra_proyecto'] . ',' .  $reg['idproyecto'] .  ',' .    $reg['total'] . ', ' .  $deposito_Actual . ')">'.
-                  '<i class="fas fa-' . $icon . ' nav-icon"></i> ' . $nombre . 
-                '</button>' .
-                ' <button style="font-size: 14px;" class="btn btn-' .  $cc . ' btn-sm">' .  number_format($reg['total_pago_compras'], 2, '.', ',') . '</button>'.
-              '</div>';
-            }
+          foreach ($rspta['data'] as $key => $reg) {      
       
             $vercomprobantes = '\''.$reg['idcompra_proyecto'].'\',\''.$reg['comprobante'].'\''; 
       
@@ -361,13 +298,10 @@ if (!isset($_SESSION["nombre"])) {
                 ($reg['estado'] == '1' ?' <button class="btn btn-danger  btn-sm" onclick="eliminar_compra(' . $reg['idcompra_proyecto'] .', \''.encodeCadenaHtml('<del><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</del> <del>'.$reg['razon_social'].'</del>'). '\')"><i class="fas fa-skull-crossbones"></i> </button>'
                 : ' <button class="btn btn-success btn-sm" onclick="des_anular(' . $reg['idcompra_proyecto'] . ')" data-toggle="tooltip" data-original-title="Recuperar Compra" title="Recuperar Compra"><i class="fas fa-check"></i></button>'),
               "2" => $reg['fecha_compra'],
-              "3" => '<span class="text-primary font-weight-bold" >' . $reg['razon_social'] . '</span>',
-              "4" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b> '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante']).'</span>',
+              "3" => '<span class="text-muted" >' .($reg["tipo_compra"] =='GENERAL' ?  'General' : $reg['nombre_codigo'] ).'<br></span><span class="text-primary font-weight-bold" >' . $reg['razon_social'] . '</span>',
+              "4" =>'<span class="" ><b>' . $reg['tipo_comprobante'] .  '</b>'.(empty($reg['serie_comprobante']) ?  "" :  $reg['serie_comprobante']).'</span>',
               "5" => $reg['glosa'],
-              "6" => $total,
-              // "7" => $list_segun_estado_detracc,
-              // "8" => number_format($reg['total_pago_compras'], 2, '.', ','),
-              // "9" => number_format($saldo, 2, '.', ','),
+              "6" => $total,              
               "7" => '<center> <button class="btn '.$btn_tipo.' btn-sm" onclick="comprobante_compras(' . $vercomprobantes . ', \''.$cont.'\', \''.encodeCadenaHtml($reg['tipo_comprobante'].' '.(empty($reg['serie_comprobante']) ?  "" :  '- '.$reg['serie_comprobante'])).'\', \''.$reg['razon_social'].'\', \''.format_d_m_a($reg['fecha_compra']).'\')" data-toggle="tooltip" data-original-title="'.$descrip_toltip.'" title="'.$descrip_toltip.'"><i class="fas fa-file-invoice fa-lg"></i></button> </center>',
               "8" => '<textarea cols="30" rows="1" class="textarea_datatable" readonly >'.$reg['descripcion'].'</textarea>',
               "9" => '<div class="custom-control custom-checkbox">
@@ -394,7 +328,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'listar_compraxporvee':
         $nube_idproyecto = $_GET["nube_idproyecto"];
-        $rspta = $compra_insumos->listar_compraxporvee($nube_idproyecto);
+        $rspta = $compra_insumos->listar_compraxporvee($nube_idproyecto, $_GET["tipo_compra"]);
         //Vamos a declarar un array
         $data = []; $cont = 1;
         $c = "info";
@@ -406,7 +340,7 @@ if (!isset($_SESSION["nombre"])) {
           foreach ($rspta['data'] as $key => $value) {
             $data[] = [
               "0" => $cont++,
-              "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $value['idproveedor'] . ',' . $value['idproyecto'] . ')" data-toggle="tooltip" data-original-title="Ver detalle" title="Ver detalle"><i class="fa fa-eye"></i></button>',
+              "1" => '<button class="btn btn-info btn-sm" onclick="listar_facuras_proveedor(' . $value['idproveedor'] . ',\'' . (empty($value['idproyecto']) ? '' : $value['idproyecto'] )  . '\')" data-toggle="tooltip" data-original-title="Ver detalle" title="Ver detalle"><i class="fa fa-eye"></i></button>',
               "2" => $value['razon_social'],
               "3" => '<center>'.$value['cantidad'].'</center>',
               "4" => $value['telefono'],
@@ -428,7 +362,7 @@ if (!isset($_SESSION["nombre"])) {
     
       case 'listar_detalle_compraxporvee':
         
-        $rspta = $compra_insumos->listar_detalle_comprax_provee($_GET["idproyecto"], $_GET["idproveedor"]);
+        $rspta = $compra_insumos->listar_detalle_comprax_provee($_GET["idproyecto"], $_GET["idproveedor"], $_GET["ti_compra"]);
         //Vamos a declarar un array
         $data = []; $cont = 1;
         

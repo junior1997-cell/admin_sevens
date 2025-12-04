@@ -192,8 +192,7 @@ function tbla_principal(id_proyecto) {
       if (data[11] != '') { $("td", row).eq(11).addClass("text-right");  }
 
     },
-		language: {     
-
+		language: {
       lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
       sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',

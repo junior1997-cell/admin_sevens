@@ -14,7 +14,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Manual de Usuario | Admin Sevens</title>
-        <?php $title = "Manual de usuario"; require 'head.php';  ?>       
+        <?php $title = "Manual de usuario"; require 'template/head.php';  ?>       
 
         <link rel="stylesheet" href="../dist/css/switch_materiales.css">
 
@@ -23,10 +23,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['recurso']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>
 
             <!-- Content Wrapper. Contains page content -->
@@ -996,16 +996,16 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper -->
 
-        <?php  require 'script.php'; ?>        
+        <?php  require 'template/script.php'; ?>        
 
-        <script type="text/javascript" src="scripts/manual_de_usuario.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/manual_de_usuario.js?version_jdl=2.07"></script>
 
         <script> $(function () {  $('[data-toggle="tooltip"]').tooltip(); }); </script>
 

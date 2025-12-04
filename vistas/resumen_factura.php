@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title> Resumen de Factura | Admin Sevens</title>
 
-        <?php $title = "Resumen de Activos Fijos"; require 'head.php'; ?>
+        <?php $title = "Resumen de Activos Fijos"; require 'template/head.php'; ?>
 
         <style>
           #tabla-principal_filter { width: calc(100% - 10px) !important; display: flex !important; justify-content: space-between !important; }
@@ -48,10 +48,10 @@
           </div> -->
         
           <?php
-            require 'nav.php';
-            require 'aside.php';
+            require 'template/nav.php';
+            require 'template/aside.php';
             if ($_SESSION['resumen_factura']==1){
-              //require 'enmantenimiento.php';
+              //require 'template/enmantenimiento.php';
               ?>     
 
               <!--Contenido-->
@@ -452,14 +452,14 @@
 
               <?php
             }else{
-              require 'noacceso.php';
+              require 'template/noacceso.php';
             }
-            require 'footer.php';
+            require 'template/footer.php';
           ?>
 
         </div>
 
-        <?php require 'script.php'; ?>    
+        <?php require 'template/script.php'; ?>    
         
         <!-- ZIP -->
         <script src="../plugins/jszip/jszip.js"></script>
@@ -471,7 +471,7 @@
         <script src="../plugins/export-xlsx/FileSaver.min.js"></script>
         <script src="../plugins/export-xlsx/tableexport.min.js"></script>
 
-        <script type="text/javascript" src="scripts/resumen_factura.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/resumen_factura.js?version_jdl=2.07"></script>
         
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip(); }); </script>
         

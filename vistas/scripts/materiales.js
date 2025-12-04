@@ -190,16 +190,16 @@ function table_show_hide(estado) {
 //Función Listar
 function tbla_principal() {
   tabla = $("#tabla-materiales").dataTable({
-    responsive: true,
+    responsive: false,
     lengthMenu: [[ -1, 10, 25, 50, 100, 200, 500], ["Todos", 10, 25, 50, 100, 200, 500 ]], //mostramos el menú de registros a revisar
     aProcessing: true, //Activamos el procesamiento del datatables
     aServerSide: true, //Paginación y filtrado realizados por el servidor
-    dom: "<Bl<f>rtip>", //Definimos los elementos del control de tabla
+    dom:"<'row'<'col-sm-12 col-md-6 col-lg-7 col-xl-8 pt-2'f><'col-sm-12 col-md-6 col-lg-7 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
     buttons: [
       { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload buttons-html5 px-2 buttons-copy", action: function ( e, dt, node, config ) { if (tabla) { tabla.ajax.reload(null, false); } } },
-      { extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,9,4,11,6,10], } }, 
-      { extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,9,4,11,6,10], } }, 
-      { extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,9,4,11,6,10], } },
+      { text: '<i class="fa-regular fa-copy fa-lg"></i>', extend: 'copyHtml5', footer: true, exportOptions: { columns: [0,2,9,4,11,6,10], } }, 
+      { text: '<i class="fa-regular fa-file-excel fa-lg"></i>', extend: 'excelHtml5', footer: true, exportOptions: { columns: [0,2,9,4,11,6,10], } }, 
+      { text: '<i class="fa-regular fa-file-pdf fa-lg"></i>', extend: 'pdfHtml5', footer: false, orientation: 'landscape', pageSize: 'LEGAL', exportOptions: { columns: [0,2,9,4,11,6,10], } },
     ],
     ajax: {
       url: "../ajax/materiales.php?op=tbla_principal",
@@ -225,9 +225,15 @@ function tbla_principal() {
 
     },
     language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
+    },
+    initComplete: function () {
+
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('border border-primary bg-light m-0');// Agregar clase bg-light al input de búsqueda
     },
     bDestroy: true,
     iDisplayLength: 25, //Paginación
@@ -531,15 +537,16 @@ function tbla_facuras( idproducto, nombre_producto, precio_promedio) {
   $(".nombre-insumo").html(`Insumo :<b>${nombre_producto}</b>`);
 
 	tabla_factura = $('#tbla-facura').dataTable({
-		responsive: true,
+		responsive: false,
 		lengthMenu: [[ -1, 5, 10, 25, 75, 100, 200,], ["Todos", 5, 10, 25, 75, 100, 200, ]],//mostramos el menú de registros a revisar
 		aProcessing: true,//Activamos el procesamiento del datatables
 		aServerSide: true,//Paginación y filtrado realizados por el servidor
-		dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+    dom:"<'row'<'col-sm-12 col-md-6 col-lg-7 col-xl-8 pt-2'f><'col-sm-12 col-md-6 col-lg-7 col-xl-4 pt-2 d-flex justify-content-end align-items-center'<'length'l><'buttons'B>>>r t <'row'<'col-md-6'i><'col-md-6'p>>",
 		buttons: [ 
-      { extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]} }, 
-      { extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]} }, 
-      { extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]}, orientation: 'landscape', pageSize: 'LEGAL', }
+      { text: '<i class="fa-solid fa-arrows-rotate"></i> ', className: "buttons-reload px-3", action: function ( e, dt, node, config ) { if (dt) { dt.ajax.reload(null, false); toastr_success('Actualizado', 'Tabla actualizada'); } } },
+      { text: '<i class="fa-regular fa-copy fa-lg"></i>', extend: 'copyHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]} }, 
+      { text: '<i class="fa-regular fa-file-excel fa-lg"></i>', extend: 'excelHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]} }, 
+      { text: '<i class="fa-regular fa-file-pdf fa-lg"></i>', extend: 'pdfHtml5', footer: true,exportOptions: { columns: [0,2,10,11,4,5,6,8]}, orientation: 'landscape', pageSize: 'LEGAL', }
     ],
 		ajax:	{
       url: `../ajax/materiales.php?op=tbla_facturas&idproducto=${idproducto}`,
@@ -551,17 +558,21 @@ function tbla_facuras( idproducto, nombre_producto, precio_promedio) {
     },
     createdRow: function (row, data, ixdex) {
       // columna: Cantidad
+      if (data[1] != '') { $("td", row).eq(1).addClass("text-nowrap"); }
+      // columna: Cantidad
+      if (data[3] != '') { $("td", row).eq(3).addClass("text-nowrap"); }
+      // columna: Cantidad
       if (data[6] != '') { $("td", row).eq(6).addClass("text-center"); }
       // columna: Precio promedio
       if (data[7] != '') { $("td", row).eq(7).addClass("text-bold h5"); }
     },
 		language: {
-      lengthMenu: "Mostrar: _MENU_ registros",
+      lengthMenu: "_MENU_",
       buttons: { copyTitle: "Tabla Copiada", copySuccess: { _: "%d líneas copiadas", 1: "1 línea copiada", }, },
-      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...'
+      sLoadingRecords: '<i class="fas fa-spinner fa-pulse fa-lg"></i> Cargando datos...',
+      search: "",
     },
 		bDestroy: true,
-
     footerCallback: function( tfoot, data, start, end, display ) {
       var api = this.api(); var subtotal = api.column( 6 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api.column( 6 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(subtotal)}</span>` );
@@ -575,6 +586,10 @@ function tbla_facuras( idproducto, nombre_producto, precio_promedio) {
       var api = this.api(); var igv = api.column( 9 ).data().reduce( function ( a, b ) { return parseFloat(a) + parseFloat(b); }, 0 )
       $( api.column( 9 ).footer() ).html( ` <span class="float-left">S/</span> <span class="float-right">${formato_miles(igv)}</span>` );
     
+    },
+    initComplete: function () {
+      var api = this.api();      
+      $(api.table().container()).find('.dataTables_filter input').addClass('border border-primary bg-light m-0');// Agregar clase bg-light al input de búsqueda
     },
 		iDisplayLength: 10,//Paginación
 		order: [[ 0, "asc" ]],//Ordenar (columna,orden)

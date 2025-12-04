@@ -17,7 +17,7 @@ if (!isset($_SESSION["nombre"])) {
     <title>E.P.P | Admin Sevens</title>
 
     <?php $title = "Equipos de Protección Personal";
-    require 'head.php'; ?>
+    require 'template/head.php'; ?>
 
   </head>
 
@@ -25,10 +25,10 @@ if (!isset($_SESSION["nombre"])) {
     <!-- Content Wrapper. Contains page content -->
     <div class="wrapper">
       <?php
-      require 'nav.php';
-      require 'aside.php';
+      require 'template/nav.php';
+      require 'template/aside.php';
       if ($_SESSION['otro_gasto'] == 1) {
-        //require 'enmantenimiento.php';
+        //require 'template/enmantenimiento.php';
       ?>
 
         <!-- Content Wrapper. Contains page content -->
@@ -420,16 +420,16 @@ if (!isset($_SESSION["nombre"])) {
 
       <?php
       } else {
-        require 'noacceso.php';
+        require 'template/noacceso.php';
       }
-      require 'footer.php';
+      require 'template/footer.php';
       ?>
     </div>
     <!-- /.content-wrapper -->
 
-    <?php require 'script.php'; ?>
+    <?php require 'template/script.php'; ?>
 
-    <script type="text/javascript" src="scripts/epp.js?version_jdl=2.06"></script>
+    <script type="text/javascript" src="scripts/epp.js?version_jdl=2.07"></script>
 
     <script>
       $(function() {

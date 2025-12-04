@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Resumen Activos Fijos | Admin Sevens</title>       
 
-        <?php $title = "Resumen de Activos Fijos";  require 'head.php';  ?>
+        <?php $title = "Resumen de Activos Fijos";  require 'template/head.php';  ?>
 
         <!--CSS  switch_MATERIALES-->
         <link rel="stylesheet" href="../dist/css/switch_materiales.css" />
@@ -24,10 +24,10 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="wrapper">
           <?php
-          require 'nav.php';
-          require 'aside.php';
+          require 'template/nav.php';
+          require 'template/aside.php';
           if ($_SESSION['compra_insumos']==1){
-            //require 'enmantenimiento.php';
+            //require 'template/enmantenimiento.php';
             ?>   
           
             <!-- Content Wrapper. Contains page content -->
@@ -199,6 +199,7 @@
                                   <!-- id proyecto -->
                                   <input type="hidden" name="idproyecto" id="idproyecto" />
                                   <input type="hidden" name="idcompra_proyecto" id="idcompra_proyecto" /> 
+                                  <input type="hidden" name="tipo_compra" id="tipo_compra" value="GENERAL" /> 
 
                                   <!-- Tipo de Empresa -->
                                   <div class="col-lg-5">
@@ -827,14 +828,14 @@
 
             <?php
           }else{
-            require 'noacceso.php';
+            require 'template/noacceso.php';
           }
-          require 'footer.php';
+          require 'template/footer.php';
           ?>
         </div>
         <!-- /.content-wrapper --> 
 
-        <?php require 'script.php';  ?>
+        <?php require 'template/script.php';  ?>
 
         <!-- table export -->
         <script src="../plugins/export-xlsx/xlsx.full.min.js"></script>
@@ -845,8 +846,8 @@
         <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
         <script src="../plugins/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 
-        <script type="text/javascript" src="scripts/resumen_activos_fijos.js?version_jdl=2.06"></script>
-        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.06"></script>
+        <script type="text/javascript" src="scripts/resumen_activos_fijos.js?version_jdl=2.07"></script>
+        <script type="text/javascript" src="scripts/js_compra_insumo_repetido.js?version_jdl=2.07"></script>
 
         <script> $(function () { $('[data-toggle="tooltip"]').tooltip();  }); </script>
         
